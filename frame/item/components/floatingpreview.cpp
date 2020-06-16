@@ -60,6 +60,7 @@ FloatingPreview::FloatingPreview(QWidget *parent)
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
+    setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_closeBtn3D, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
 }
