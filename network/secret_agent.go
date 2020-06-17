@@ -300,6 +300,15 @@ type getSecretsReply struct {
 	Secrets []string `json:"secrets"`
 }
 
+func isSecretDialogExist() bool {
+	out, err := exec.Command("/bin/sh", "-c", "ps -ef |grep dnetwork-secret-dialog").CombinedOutput()
+	if err != nil {
+		logger.Error(err)
+		return false
+	}
+	return strings.Contains(string(out), "/usr/lib/deepin-daemon/dnetwork-secret-dialog")
+}
+
 func (sa *SecretAgent) askPasswords(connPath dbus.ObjectPath,
 	connectionData map[string]map[string]dbus.Variant,
 	connUUID, settingName string, settingKeys []string, requestNew bool) (map[string]string, error) {
@@ -325,7 +334,10 @@ func (sa *SecretAgent) askPasswords(connPath dbus.ObjectPath,
 		return nil, err
 	}
 	logger.Debugf("reqJSON: %s", reqJSON)
-
+	//true : exist -> return
+	if isSecretDialogExist() {
+		return nil, err
+	}
 	cmd := exec.Command(nmSecretDialogBin)
 	cmd.Stdin = bytes.NewReader(reqJSON)
 	var cmdOutBuf bytes.Buffer
