@@ -304,14 +304,29 @@ void DockSettings::showDockSettingsMenu()
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
 
-    m_settingsMenu.exec(QCursor::pos());
+    m_settingsMenu.show();
+    updateGeometry();
 
     setAutoHide(true);
 }
 
 void DockSettings::updateGeometry()
 {
+    int width = m_settingsMenu.width();
+    int height = m_settingsMenu.height();
 
+    switch (m_position) {
+        case Top:
+        case Left:
+            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y());
+            break;
+        case Bottom:
+            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y() - height);
+            break;
+        case Right:
+            m_settingsMenu.move(QCursor::pos().x() - width, QCursor::pos().y());
+            break;
+    }
 }
 
 void DockSettings::setAutoHide(const bool autoHide)
