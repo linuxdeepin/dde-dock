@@ -226,8 +226,6 @@ void AdapterItem::deviceChangeState(const Device::State state)
                     int index = m_sortUnConnect.indexOf(deviceItem);
                     if (index < 0)
                         m_sortConnected.removeOne(deviceItem);
-                    else
-                        m_sortUnConnect.removeOne(deviceItem);
                 }
                     break;
                 case Device::StateConnected: {
