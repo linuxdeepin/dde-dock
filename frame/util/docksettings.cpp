@@ -209,34 +209,40 @@ const QRect DockSettings::primaryRect() const
     return rect;
 }
 
-const QRect DockSettings::currentRect()
+const QRect DockSettings::currentRect(const bool beNarrow)
 {
     QRect rect;
     QString currentScrName;
-    if (m_isMouseMoveCause) {
-        rect = m_mouseCauseDockScreen->rect();
-        currentScrName = m_mouseCauseDockScreen->name();
-    } else {
-        bool positionAllowed = false;
-        QList<Monitor*> monitors = m_monitors.keys();
-        for (Monitor *monitor : monitors) {
-            switch (m_position) {
-            case Top:       positionAllowed = monitor->dockPosition().topDock;      break;
-            case Right:     positionAllowed = monitor->dockPosition().rightDock;    break;
-            case Bottom:    positionAllowed = monitor->dockPosition().bottomDock;   break;
-            case Left:      positionAllowed = monitor->dockPosition().leftDock;     break;
-            }
-            if (positionAllowed) {
-                rect = monitor->rect();
-                currentScrName = monitor->name();
-                if (monitor->isPrimary())
-                    break;
+    if (!beNarrow) {
+        if (m_isMouseMoveCause) {
+            rect = m_mouseCauseDockScreen->rect();
+            currentScrName = m_mouseCauseDockScreen->name();
+        } else {
+            bool positionAllowed = false;
+            QList<Monitor*> monitors = m_monitors.keys();
+            for (Monitor *monitor : monitors) {
+                switch (m_position) {
+                case Top:       positionAllowed = monitor->dockPosition().topDock;      break;
+                case Right:     positionAllowed = monitor->dockPosition().rightDock;    break;
+                case Bottom:    positionAllowed = monitor->dockPosition().bottomDock;   break;
+                case Left:      positionAllowed = monitor->dockPosition().leftDock;     break;
+                }
+                if (positionAllowed) {
+                    rect = monitor->rect();
+                    currentScrName = monitor->name();
+                    if (monitor->isPrimary())
+                        break;
+                }
             }
         }
+
+        m_currentScreen = currentScrName;
+        m_currentRawRect = rect;
+
+    } else {
+        rect = m_currentRawRect;
     }
 
-    m_currentScreen = currentScrName;
-    m_currentRawRect = rect;
     qreal scale = qApp->primaryScreen()->devicePixelRatio();
     rect.setWidth(std::round(qreal(rect.width()) / scale));
     rect.setHeight(std::round(qreal(rect.height()) / scale));
@@ -256,7 +262,7 @@ const int DockSettings::dockMargin() const
 //    return m_mainWindowSize;
 //}
 
-const QRect DockSettings::windowRect(const Position position, const bool hide)
+const QRect DockSettings::windowRect(const Position position, const bool hide, const bool beNarrow)
 {
     QSize size = m_mainWindowSize;
     if (hide) {
@@ -268,7 +274,8 @@ const QRect DockSettings::windowRect(const Position position, const bool hide)
         }
     }
 
-    const QRect primaryRect = this->currentRect();
+
+    const QRect primaryRect = this->currentRect(beNarrow);
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
     int margin = hide ?  0 : this->dockMargin();

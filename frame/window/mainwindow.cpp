@@ -231,7 +231,7 @@ MainWindow::MainWindow(QWidget *parent)
         // dock的宽度或高度
         int val = value.toInt();
         // dock隐藏后的rect
-        const QRect windowRect = m_settings->windowRect(m_dockPosition, false);
+        const QRect windowRect = m_settings->windowRect(m_dockPosition, false, true);
         const int margin = m_settings->dockMargin();
 
         if (!m_mouseCauseDock) {
