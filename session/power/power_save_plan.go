@@ -21,6 +21,7 @@ package power
 
 import (
 	"errors"
+	"math"
 	"os"
 	"strings"
 	"sync"
@@ -154,7 +155,8 @@ func (psp *powerSavePlan) Start() error {
 	return nil
 }
 
-func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasValue bool, lowerValue uint32) { // 节能模式降低亮度的比例,并降低亮度
+// 节能模式降低亮度的比例,并降低亮度
+func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasValue bool, lowerValue uint32) {
 	if !hasValue {
 		return
 	}
@@ -214,7 +216,12 @@ func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasV
 	}
 }
 
-func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) { //节能模式变化后的亮度修改
+//节能模式变化后的亮度修改
+func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) {
+	const (
+		multiLevelAdjustmentScale     = 0.2 // 分级调节时，默认按照20%亮度调节值调整亮度，并在亮度显示的设置分级中，归到所在分级
+		multiLevelAdjustmentThreshold = 100 // 分级调节判断阈值，最大亮度值小于等于该值且不为0时，调节方式为分级调节
+	)
 	if !hasValue {
 		return
 	}
@@ -233,13 +240,27 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 		logger.Warning(err)
 		return
 	}
+	maxBacklightBrightness, err := psp.manager.helper.Display.MaxBacklightBrightness().Get(0)
+	if err != nil {
+		logger.Warning(err)
+	}
+	// 判断亮度调节方式是分级调节还是百分比滑动：最大亮度小于等于100且最大亮度不为0时，为分级调节
+	isMultiLevelAdjustment := maxBacklightBrightness <= multiLevelAdjustmentThreshold && maxBacklightBrightness != 0
 	// 判断亮度修改是手动调节亮度还是调节了节能选项
 	brightnessChangedByManual := psp.isBrightnessChangedByManual(brightnessTable)
 	lowerBrightnessScale := 1 - float64(psp.manager.savingModeBrightnessDropPercent.Get())/100
+	oneStepValue := 1 / float64(maxBacklightBrightness)
+	numSteps := math.Round(float64(maxBacklightBrightness) * multiLevelAdjustmentScale)
 	if enabled {
 		// reduce brightness when enabled saveMode
 		for key, value := range brightnessTable {
-			value = value * lowerBrightnessScale
+			if isMultiLevelAdjustment {
+				// 分级调节,减去需要降低的亮度
+				value -= oneStepValue * numSteps
+			} else {
+				// 非分级调节
+				value *= lowerBrightnessScale
+			}
 			if value < 0.1 {
 				value = 0.1
 			}
@@ -250,7 +271,13 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 			logger.Debug("not manual adjust brightness")
 			// increase brightness when disabled saveMode
 			for key, value := range brightnessTable {
-				value = value / lowerBrightnessScale
+				if isMultiLevelAdjustment {
+					// 分级调节,加上需要提升的亮度
+					value += oneStepValue * numSteps
+				} else {
+					// 非分级调节
+					value /= lowerBrightnessScale
+				}
 				if value > 1 {
 					value = 1
 				}
