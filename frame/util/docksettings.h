@@ -70,6 +70,7 @@ public:
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
+    void hideDockSettingsMenu();
     void updateFrontendGeometry();
     
     QSize m_mainWindowSize;

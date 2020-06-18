@@ -30,6 +30,8 @@
 #include <DApplication>
 #include <QScreen>
 
+#define WINDOWS_MENU 0x00000082
+
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
 
@@ -304,6 +306,9 @@ void DockSettings::showDockSettingsMenu()
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
 
+    Qt::WindowFlags flags = (Qt::WindowFlags)WINDOWS_MENU;
+    m_settingsMenu.setWindowFlags(m_settingsMenu.windowFlags() | flags);
+
     m_settingsMenu.show();
     updateGeometry();
 
@@ -327,6 +332,10 @@ void DockSettings::updateGeometry()
             m_settingsMenu.move(QCursor::pos().x() - width, QCursor::pos().y());
             break;
     }
+}
+
+void DockSettings::hideDockSettingsMenu() {
+    m_settingsMenu.hide();
 }
 
 void DockSettings::setAutoHide(const bool autoHide)
