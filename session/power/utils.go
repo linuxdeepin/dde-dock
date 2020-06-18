@@ -345,11 +345,10 @@ func brightnessRound(x float64) string {
 	return fmt.Sprintf("%.2f", x)
 }
 
-const powerSettingsIcon = "preferences-system"
-
 func (m *Manager) initGSettingsConnectChanged() {
-
-	gsettings.ConnectChanged(gsSchemaPower, "*", func(key string) { // 监听session power属性的改变,并发送通知
+	const powerSettingsIcon = "preferences-system"
+	// 监听 session power 的属性的改变,并发送通知
+	gsettings.ConnectChanged(gsSchemaPower, "*", func(key string) {
 		logger.Debug("Power Settings Changed :", key)
 		switch key {
 		case settingKeyLinePowerLidClosedAction:
@@ -373,9 +372,11 @@ func (m *Manager) initGSettingsConnectChanged() {
 }
 
 func getNotifyString(option string, action int32) string {
-	var notifyString string
-	var firstPart string
-	var secondPart string
+	var (
+		notifyString string
+		firstPart    string
+		secondPart   string
+	)
 	switch option {
 	case
 		settingKeyLinePowerLidClosedAction,

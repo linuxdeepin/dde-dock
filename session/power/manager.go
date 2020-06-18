@@ -164,7 +164,6 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.BatteryLockDelay.Bind(m.settings, settingKeyBatteryLockDelay)
 	m.ScreenBlackLock.Bind(m.settings, settingKeyScreenBlackLock)
 	m.SleepLock.Bind(m.settings, settingKeySleepLock)
-	//m.LidClosedSleep.Bind(m.settings, settingKeyLinePowerLidClosedAction)  // 弃用
 
 	m.LinePowerLidClosedAction.Bind(m.settings, settingKeyLinePowerLidClosedAction)
 	m.LinePowerPressPowerBtnAction.Bind(m.settings, settingKeyLinePowerPressPowerBtnAction)

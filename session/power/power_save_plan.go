@@ -203,8 +203,9 @@ func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasV
 			brightnessTable[key] = value
 		}
 	} else {
+		//else中(非节能状态下的调节)不需要做响应,需要降低亮度的预设值在之前已经保存了
 		return
-	} //else中(非节能状态下的调节)不需要做响应,需要降低亮度的预设值在之前已经保存了
+	}
 	psp.manager.setAndSaveDisplayBrightness(brightnessTable)
 	psp.savingModeBrightnessTable, err = psp.manager.helper.Display.GetBrightness(0)
 	if err != nil {
@@ -236,7 +237,7 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 	brightnessChangedByManual := psp.isBrightnessChangedByManual(brightnessTable)
 	lowerBrightnessScale := 1 - float64(psp.manager.savingModeBrightnessDropPercent.Get())/100
 	if enabled {
-		// reduce brightness by lowerBrightnessScale
+		// reduce brightness when enabled saveMode
 		for key, value := range brightnessTable {
 			value = value * lowerBrightnessScale
 			if value < 0.1 {
@@ -247,7 +248,7 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 	} else {
 		if !brightnessChangedByManual {
 			logger.Debug("not manual adjust brightness")
-			// increase brightness by lowerBrightnessScale
+			// increase brightness when disabled saveMode
 			for key, value := range brightnessTable {
 				value = value / lowerBrightnessScale
 				if value > 1 {

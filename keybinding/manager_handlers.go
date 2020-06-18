@@ -21,10 +21,10 @@ package keybinding
 
 import (
 	"fmt"
-	power "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
 	"time"
 
 	sys_network "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
+	power "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	dbus "pkg.deepin.io/lib/dbus1"
 )

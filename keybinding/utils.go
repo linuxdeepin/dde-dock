@@ -148,15 +148,15 @@ func (m *Manager) systemShutdown() {
 func (m *Manager) systemTurnOffScreen() {
 	logger.Info("DPMS Off")
 	var err error
-	var UseWayland bool
+	var useWayland bool
 	if len(os.Getenv("WAYLAND_DISPLAY")) != 0 {
-		UseWayland = true
+		useWayland = true
 	} else {
-		UseWayland = false
+		useWayland = false
 	}
 
-	if UseWayland {
-		_, err = exec.Command("dde_wldpms", "-s", "Off").Output()
+	if useWayland {
+		err = exec.Command("dde_wldpms", "-s", "Off").Run()
 	} else {
 		xConn, err := x.NewConn()
 		if err != nil {
