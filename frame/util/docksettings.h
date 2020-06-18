@@ -84,7 +84,7 @@ public:
     bool m_menuVisible;
 
 signals:
-    void dataChanged() const;
+    void primaryScreenChanged() const;
     void positionChanged() const;
     void autoHideChanged(const bool autoHide) const;
     void displayModeChanegd() const;
@@ -106,7 +106,7 @@ private slots:
     void hideModeChanged();
     void hideStateChanged();
     void dockItemCountChanged();
-    void primaryScreenChanged();
+    void onPrimaryScreenChanged();
     void resetFrontendGeometry();
     void onOpacityChanged(const double value);
     void trayVisableCountChanged(const int &count);

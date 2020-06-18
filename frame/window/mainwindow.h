@@ -146,7 +146,7 @@ private:
     QSize m_size;
     DragWidget *m_dragWidget;
     Position m_dockPosition;
-    bool m_mouseCauseDock;
+    bool m_primaryScreenChanged;
 };
 
 #endif // MAINWINDOW_H
