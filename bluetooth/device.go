@@ -31,10 +31,10 @@ import (
 )
 
 const (
-	deviceStateDisconnected  = 0
-	deviceStateConnecting    = 1
-	deviceStateConnected     = 2
-	deviceStateDisconnecting = 1
+	deviceStateDisconnected = 0
+	// device state is connecting or disconnecting, mark them as device state doing
+	deviceStateDoing     = 1
+	deviceStateConnected = 2
 )
 
 type deviceState uint32
@@ -43,7 +43,7 @@ func (s deviceState) String() string {
 	switch s {
 	case deviceStateDisconnected:
 		return "Disconnected"
-	case deviceStateConnecting:
+	case deviceStateDoing:
 		return "doing"
 	case deviceStateConnected:
 		return "Connected"
@@ -94,6 +94,10 @@ type device struct {
 	// if is pc, then do not need to show notification window
 	// else show notification window
 	isInitiativeConnect bool
+	// remove device when device state is connecting or disconnecting may cause blueZ crash
+	// to avoid this situation, remove device only allowed when connected or disconnected finished
+	needRemove bool
+	removeLock sync.Mutex
 }
 
 type connectPhase uint32
@@ -171,14 +175,18 @@ func (d *device) getConnectPhase() connectPhase {
 
 func (d *device) agentWorkStart() {
 	logger.Debugf("%s agent work start", d)
+	d.mu.Lock()
 	d.agentWorking = true
+	d.mu.Unlock()
 	d.updateState()
 	d.notifyDevicePropertiesChanged()
 }
 
 func (d *device) agentWorkEnd() {
 	logger.Debugf("%s agent work end", d)
+	d.mu.Lock()
 	d.agentWorking = false
+	d.mu.Unlock()
 	d.updateState()
 	d.notifyDevicePropertiesChanged()
 }
@@ -248,6 +256,18 @@ func (d *device) connectProperties() {
 		d.connected = connected
 
 		needNotify := true
+
+		// check if device need to be removed, if is, remove device
+		needRemove := d.getAndResetNeedRemove()
+		if needRemove {
+			// start remove device
+			err := d.adapter.core.RemoveDevice(0, d.Path)
+			if err != nil {
+				logger.Warningf("failed to remove device %q from adapter %q: %v",
+					d.adapter.Path, d.Path, err)
+			}
+			return
+		}
 
 		if connected {
 			d.ConnectState = true
@@ -422,15 +442,17 @@ func (d *device) updateState() {
 }
 
 func (d *device) getState() deviceState {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.agentWorking {
-		return deviceStateConnecting
+		return deviceStateDoing
 	}
 
 	if d.connectPhase != connectPhaseNone {
-		return deviceStateConnecting
+		return deviceStateDoing
 
 	} else if d.disconnectPhase != connectPhaseNone {
-		return deviceStateDisconnecting
+		return deviceStateDoing
 
 	} else {
 		if d.connected {
@@ -566,6 +588,24 @@ func (d *device) doPair() error {
 
 	logger.Warningf("%s pair succeeded", d)
 	return nil
+}
+
+func (d *device) markNeedRemove(need bool) {
+	d.removeLock.Lock()
+	d.needRemove = need
+	d.removeLock.Unlock()
+}
+
+// get and reset needRemove
+func (d *device) getAndResetNeedRemove() bool {
+	d.removeLock.Lock()
+	defer d.removeLock.Unlock()
+	needRemove := d.needRemove
+	// if needRemove is true, reset needRemove
+	if needRemove == true {
+		d.needRemove = false
+	}
+	return needRemove
 }
 
 func (d *device) audioA2DPWorkaround() {

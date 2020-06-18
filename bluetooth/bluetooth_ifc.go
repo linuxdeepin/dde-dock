@@ -30,14 +30,25 @@ func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) *dbus.Error {
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-
-	err = a.core.RemoveDevice(0, dpath)
+	// find remove device from map
+	removeDev, err := b.getDevice(dpath)
 	if err != nil {
-		logger.Warningf("failed to remove device %q from adapter %q: %v",
-			dpath, apath, err)
+		logger.Warningf("failed to get device, err: %v", err)
 		return dbusutil.ToError(err)
 	}
-
+	// check if device connect state is connecting or disconnecting, if is, mark remove state as true
+	deviceState := removeDev.getState()
+	if deviceState == deviceStateDoing {
+		removeDev.markNeedRemove(true)
+	} else {
+		// connection finish, allow to remove device directly
+		err = a.core.RemoveDevice(0, dpath)
+		if err != nil {
+			logger.Warningf("failed to remove device %q from adapter %q: %v",
+				dpath, apath, err)
+			return dbusutil.ToError(err)
+		}
+	}
 	return nil
 }
 
