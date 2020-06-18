@@ -70,6 +70,7 @@ public:
     qreal dockRatio() const;
 
     void showDockSettingsMenu();
+    void hideDockSettingsMenu();
     void updateFrontendGeometry();
     
     QSize m_mainWindowSize;
@@ -89,7 +90,6 @@ signals:
     void trayCountChanged() const;
 
 public slots:
-    void updateGeometry();
     void setAutoHide(const bool autoHide);
 
 private slots:
@@ -118,6 +118,7 @@ private:
     void calculateWindowConfig();
     void gtkIconThemeChanged();
     void checkService();
+    void updateGeometry();
 
 private:
     int m_dockWindowSize;
