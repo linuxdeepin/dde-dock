@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/strv"
 )
 
 type Interface interface {
@@ -27,6 +28,11 @@ type Config struct {
 		Set func() `in:"data"`
 	}
 }
+
+const (
+	serviceName = "com.deepin.sync.Daemon"
+	servicePath = "/com/deepin/sync/Daemon"
+)
 
 func NewConfig(name string, core Interface, sessionSigLoop *dbusutil.SignalLoop,
 	path dbus.ObjectPath, logger *log.Logger) *Config {
@@ -62,7 +68,16 @@ func (c *Config) Register() error {
 		return err
 	}
 
-	obj := sessionBus.Object("com.deepin.sync.Daemon", "/com/deepin/sync/Daemon")
+	activatableNames, err := ofdbus.NewDBus(sessionBus).ListActivatableNames(0)
+	if err != nil {
+		return err
+	}
+	if !strv.Strv(activatableNames).Contains(serviceName) {
+		c.logger.Debug("sync daemon not exists")
+		return nil
+	}
+
+	obj := sessionBus.Object(serviceName, servicePath)
 	err = obj.Call("com.deepin.sync.Daemon.Register", 0, c.name, c.path).Err
 	return err
 }

@@ -26,7 +26,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/xdg/basedir"
@@ -83,15 +83,21 @@ func (m *Manager) init() {
 	cfg, err := loadConfig(m.jsonFile)
 	logger.Debug("load proxychains config file:", m.jsonFile)
 	if err != nil {
-		logger.Warning("load proxychains config failed:", err)
+		if os.IsNotExist(err) {
+			logger.Debug("proxychans config file not found")
+		} else {
+			logger.Warning("load proxychains config failed:", err)
+		}
 		m.Type = defaultType
-	} else {
-		m.Type = cfg.Type
-		m.IP = cfg.IP
-		m.Port = cfg.Port
-		m.User = cfg.User
-		m.Password = cfg.Password
+
+		return
 	}
+
+	m.Type = cfg.Type
+	m.IP = cfg.IP
+	m.Port = cfg.Port
+	m.User = cfg.User
+	m.Password = cfg.Password
 
 	changed := m.fixConfig()
 	logger.Debug("fixConfig changed:", changed)
