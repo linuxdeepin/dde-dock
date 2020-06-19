@@ -376,7 +376,6 @@ void DockSettings::menuActionClicked(QAction *action)
         return m_dockInter->setDisplayMode(Efficient);
 
     m_isMouseMoveCause = false;
-    calculateMultiScreensPos();
     if (action == &m_topPosAct)
         return m_dockInter->setPosition(Top);
     if (action == &m_bottomPosAct)
@@ -423,6 +422,9 @@ void DockSettings::onPositionChanged()
     if (m_position == nextPos)
         return;
     m_position = nextPos;
+
+    // 位置改变 重新计算可停靠任务栏的位置
+    calculateMultiScreensPos();
 
     // 通知主窗口改变位置
     emit positionChanged();
