@@ -25,7 +25,7 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/daemon/grub_common"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -214,6 +214,8 @@ func (g *Grub2) Reset(sender dbus.Sender) *dbus.Error {
 		modifyTasks = append(modifyTasks,
 			getModifyTaskEnableTheme(defaultEnableTheme, lang, g.gfxmodeDetectState))
 	}
+
+	g.setPropThemeFile(defaultGrubTheme)
 
 	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(defaultGrubDefaultInt)
 	if g.setPropDefaultEntry(cfgDefaultEntry) {
