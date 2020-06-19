@@ -155,10 +155,10 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_itemManager, &DockItemManager::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemManager, &DockItemManager::trayVisableCountChanged, this, &DockSettings::trayVisableCountChanged, Qt::QueuedConnection);
 
-    connect(m_displayInter, &DisplayInter::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DisplayInter::PrimaryRectChanged, this, &DockSettings::onPrimaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DisplayInter::ScreenHeightChanged, this, &DockSettings::onPrimaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DisplayInter::ScreenWidthChanged, this, &DockSettings::onPrimaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &DockSettings::onPrimaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DisplayInter::MonitorsChanged, this, &DockSettings::onMonitorListChanged);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
     QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
@@ -468,7 +468,7 @@ void DockSettings::dockItemCountChanged()
 //    emit windowGeometryChanged();
 }
 
-void DockSettings::primaryScreenChanged()
+void DockSettings::onPrimaryScreenChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_primaryRawRect = m_displayInter->primaryRect();
@@ -481,7 +481,7 @@ void DockSettings::primaryScreenChanged()
         return;
     }
     calculateMultiScreensPos();
-    emit dataChanged();
+    emit primaryScreenChanged();
     calculateWindowConfig();
 
     // 主屏切换时，如果缩放比例不一样，需要刷新item的图标(bug:3176)
@@ -956,4 +956,14 @@ void DockSettings::onMonitorListChanged(const QList<QDBusObjectPath> &mons)
     for (const auto op : ops)
         if (!pathList.contains(op))
             monitorRemoved(op);
+
+    QMapIterator<Monitor *, MonitorInter *> iterator(m_monitors);
+    while (iterator.hasNext()) {
+        iterator.next();
+        Monitor *monitor = iterator.key();
+        if (monitor) {
+            m_mouseCauseDockScreen = monitor;
+            break;
+        }
+    }
 }

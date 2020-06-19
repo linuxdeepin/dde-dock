@@ -146,7 +146,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
     , m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
     , m_dragWidget(new DragWidget(this))
-    , m_mouseCauseDock(false)
+    , m_primaryScreenChanged(false)
 {
     setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
@@ -233,9 +233,7 @@ MainWindow::MainWindow(QWidget *parent)
         // dock隐藏后的rect
         const QRect windowRect = m_settings->windowRect(m_dockPosition, false, true);
         const int margin = m_settings->dockMargin();
-
-        if (!m_mouseCauseDock) {
-            switch (m_dockPosition) {
+        switch (m_dockPosition) {
             case Dock::Top:
                 m_mainPanel->move(0, val - windowRect.height());
                 QWidget::move(windowRect.left(), windowRect.top() - margin);
@@ -252,10 +250,7 @@ MainWindow::MainWindow(QWidget *parent)
                 m_mainPanel->move(0, 0);
                 QWidget::move(windowRect.right() - val + margin, windowRect.top());
                 break;
-            default: break;
-            }
         }
-
         if (m_dockPosition == Dock::Top || m_dockPosition == Dock::Bottom) {
             QWidget::setFixedHeight(val);
         } else {
@@ -263,27 +258,27 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
-//    connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
-//    });
+    connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
+        const QRect windowRect = m_settings->windowRect(m_dockPosition);
+        QWidget::move(windowRect.topLeft());
+        QWidget::setFixedSize(windowRect.size());
+        m_mainPanel->move(QPoint(0, 0));
+        qDebug() << "Show animation finished:" << frameGeometry();
+        qDebug() << "Show animation finished not frame:" << geometry();
+    });
 
     connect(m_panelHideAni, &QVariantAnimation::finished, [ this ]() {
-        m_mouseCauseDock = false;
-        Position settingPosition = m_settings->position();
-        // 位置是否更新
-        if (m_dockPosition != settingPosition) {
-            // 动画完成更新dock位置
-            m_dockPosition = settingPosition;
-            // 动画完成更新dock设置
-            m_settings->posChangedUpdateSettings();
+        // 动画完成更新dock位置
+        m_dockPosition = m_settings->position();
+        // 动画完成更新dock设置
+        m_settings->posChangedUpdateSettings();
 
-            m_mainPanel->move(QPoint(0, 0));
-        }
-
-        m_settings->calculateWindowConfig();
         const QRect windowRect = m_settings->windowRect(m_dockPosition, true);
         QWidget::move(windowRect.topLeft());
         QWidget::setFixedSize(windowRect.size());
-        m_mainPanel->setFixedSize(windowRect.size());
+        m_mainPanel->move(QPoint(0, 0));
+
+        qDebug() << "Hide animation finished" << frameGeometry();
     });
 
     updateRegionMonitorWatch();
@@ -466,7 +461,11 @@ void MainWindow::internalMove(const QPoint &p)
 
 void MainWindow::initConnections()
 {
-    connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::primaryScreenChanged, [&](){
+        m_primaryScreenChanged = true;
+        updatePosition();
+        m_primaryScreenChanged = false;
+    });
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
@@ -541,6 +540,7 @@ void MainWindow::initConnections()
 void MainWindow::positionChanged()
 {
     // paly hide animation and disable other animation
+    qDebug() << "start positionChange:" << frameGeometry();
     clearStrutPartial();
     narrow();
 
@@ -550,7 +550,7 @@ void MainWindow::positionChanged()
 void MainWindow::updatePosition()
 {
     // all update operation need pass by timer
-    Q_ASSERT(sender() == m_positionUpdateTimer);
+//    Q_ASSERT(sender() == m_positionUpdateTimer);
 
     //clearStrutPartial();
     updateGeometry();
@@ -577,8 +577,10 @@ void MainWindow::updateGeometry()
 
     internalMove(windowRect.topLeft());
 
-    QWidget::move(windowRect.topLeft());
-    QWidget::setFixedSize(m_settings->m_mainWindowSize);
+    if (!m_primaryScreenChanged || m_settings->hideState() != Hide) {
+        QWidget::move(windowRect.topLeft());
+        QWidget::setFixedSize(m_settings->m_mainWindowSize);
+    }
 
     resizeMainPanelWindow();
 
@@ -702,6 +704,7 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
+    qDebug() << "expand";
     if (m_panelHideAni->state() == QPropertyAnimation::Running) {
         m_panelHideAni->stop();
         emit m_panelHideAni->finished();
@@ -719,6 +722,9 @@ void MainWindow::expand()
         startValue = (m_dockPosition == Top || m_dockPosition == Bottom) ? height() : width();
         endValue = (m_dockPosition == Top || m_dockPosition == Bottom) ? windowRect.height() : windowRect.width();
 
+        qDebug() << "expand     " << "start value:" << startValue
+                 << "end value:" << endValue;
+
         if (startValue > DOCK_MAX_SIZE || endValue > DOCK_MAX_SIZE) {
             return;
         }
@@ -730,13 +736,16 @@ void MainWindow::expand()
         m_panelShowAni->setEndValue(endValue);
         m_panelShowAni->start();
         m_shadowMaskOptimizeTimer->start();
+        m_settings->posChangedUpdateSettings();
     }
 }
 
 void MainWindow::narrow()
 {
+    qDebug() << "narrow";
     int startValue = ( m_dockPosition == Top || m_dockPosition == Bottom ) ? height() : width();
 
+    qDebug() << "narrow     " << "start value:" << startValue;
     m_panelShowAni->stop();
     m_panelHideAni->setStartValue(startValue);
     m_panelHideAni->setEndValue(0);
@@ -789,6 +798,7 @@ void MainWindow::updatePanelVisible()
             break;
         }
         if (!r.contains(QCursor::pos())) {
+            qDebug() << "hide narrow";
             return narrow();
         }
     }
@@ -959,7 +969,9 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
     if (m_registerKey != key)
         return;
 
-    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
+    QScreen *screen = Utils::screenAt(QPoint(x, y));
+    if (!screen)
+        return;
 
     if (screen->name() == m_settings->currentDockScreen()) {
         if (m_settings->hideMode() == KeepShowing)
@@ -972,9 +984,11 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
         expand();
     } else {
         // 移动Dock至相应屏相应位置
-        m_mouseCauseDock = true;
         if (m_settings->setDockScreen(screen->name()))
-            positionChanged();
+            if (m_settings->hideMode() == KeepShowing || m_settings->hideMode() == SmartHide)
+                positionChanged();
+            else
+                expand();
     }
 }
 
@@ -995,10 +1009,10 @@ void MainWindow::updateRegionMonitorWatch()
     int x, y, w, h;
 
     auto func = [&](MonitRect &monitRect){
-        monitRect.x1 = int(x * scale);
-        monitRect.y1 = int(y * scale);
-        monitRect.x2 = int((x + w) * scale);
-        monitRect.y2 = int((y + h) * scale);
+        monitRect.x1 = x;
+        monitRect.y1 = y;
+        monitRect.x2 = x + w;
+        monitRect.y2 = y + h;
         monitorAreas << monitRect;
     };
 
