@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 10:26+0800\n"
+"POT-Creation-Date: 2020-06-19 15:53+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>, 2020\n"
 "Language-Team: Slovak (https://www.transifex.com/linuxdeepin/teams/3617/sk/)\n"
@@ -366,61 +366,61 @@ msgstr "Prepínanie okien v opačnom smere"
 msgid "Show desktop"
 msgstr "Ukázať plochu"
 
-#: ../../keybinding/shortcuts/id_name_map.go:95
-msgid "Switch monitors"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Maximalizovať okno"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Obnoviť okno"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Minimalizovať okno"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Zatvoriť okno"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Presunúť okno"
 
-#: ../../keybinding/shortcuts/id_name_map.go:110
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Zmeniť veľkosť okna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Prejsť na plochu vľavo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Prejsť na plochu vpravo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Prejsť na plochu hore"
 
-#: ../../keybinding/shortcuts/id_name_map.go:128
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Prejsť na plochu dole"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Zobraziť okná zo všetkých pracovných prostredí"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Zobraziť okná z aktuálného pracovného prostredia"
 
-#: ../../keybinding/shortcuts/id_name_map.go:152
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Pracovné prostredie"
+
+#: ../../keybinding/shortcuts/id_name_map.go:210
+msgid "Switch monitors"
+msgstr ""
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -1028,36 +1028,36 @@ msgstr "Kriticky nízka úroveň batérie"
 msgid "Battery low, please plug in"
 msgstr "Vybitá batéria, prosím pripojte kábel napájania"
 
-#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
-#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
+#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr "Nastavenia napájania boli zmenené"
 
-#: ../../session/power/utils.go:383
+#: ../../session/power/utils.go:384
 msgid "When the lid is closed, "
 msgstr "Po zatvorení veka,"
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:388
 msgid "When pressing the power button, "
 msgstr "Po stlačení tlačidla vypnutia,"
 
-#: ../../session/power/utils.go:397
+#: ../../session/power/utils.go:398
 msgid "your computer will shut down"
 msgstr "sa váš počítač vypne"
 
-#: ../../session/power/utils.go:399
+#: ../../session/power/utils.go:400
 msgid "your computer will suspend"
 msgstr "váš počítač prejde do režimu pozastavenia"
 
-#: ../../session/power/utils.go:401
-msgid "your computer will sleep"
-msgstr "váš počítač prejde do režimu spánku"
+#: ../../session/power/utils.go:402
+msgid "your computer will hibernate"
+msgstr ""
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:404
 msgid "your monitor will turn off"
 msgstr "váš monitor sa vypne"
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:406
 msgid "it will do nothing to your computer"
 msgstr "váš počítač nespraví nič"
 

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 10:26+0800\n"
+"POT-Creation-Date: 2020-06-19 15:53+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2020\n"
 "Language-Team: Portuguese (https://www.transifex.com/linuxdeepin/teams/3617/pt/)\n"
@@ -368,61 +368,61 @@ msgstr "Alternar janelas em ordem inversa"
 msgid "Show desktop"
 msgstr "Mostrar ambiente de trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:95
-msgid "Switch monitors"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Maximizar janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Restaurar janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Minimizar janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Fechar janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Mover janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:110
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Redimensionar janela"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Mover para área de trabalho à esquerda"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Mover para área de trabalho à direita"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Mover para área de trabalho superior"
 
-#: ../../keybinding/shortcuts/id_name_map.go:128
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Mover para área de trabalho abaixo"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Mostrar janelas de todas as áreas de trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Mostrar janelas da atual área de trabalho"
 
-#: ../../keybinding/shortcuts/id_name_map.go:152
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Mostrar área de trabalho virtual"
+
+#: ../../keybinding/shortcuts/id_name_map.go:210
+msgid "Switch monitors"
+msgstr "Alternar monitores"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -1037,36 +1037,36 @@ msgstr "Bateria em estado crítico"
 msgid "Battery low, please plug in"
 msgstr "Bateria fraca, ligue à corrente"
 
-#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
-#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
+#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr "Definições de energia alteradas"
 
-#: ../../session/power/utils.go:383
+#: ../../session/power/utils.go:384
 msgid "When the lid is closed, "
 msgstr "Ao fechar a tampa, "
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:388
 msgid "When pressing the power button, "
 msgstr "Ao pressionar o botão de energia, "
 
-#: ../../session/power/utils.go:397
+#: ../../session/power/utils.go:398
 msgid "your computer will shut down"
 msgstr "o computador será encerrado"
 
-#: ../../session/power/utils.go:399
+#: ../../session/power/utils.go:400
 msgid "your computer will suspend"
 msgstr "o computador irá suspender"
 
-#: ../../session/power/utils.go:401
-msgid "your computer will sleep"
-msgstr "o computador irá hibernar"
+#: ../../session/power/utils.go:402
+msgid "your computer will hibernate"
+msgstr ""
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:404
 msgid "your monitor will turn off"
 msgstr "o monitor será desligado"
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:406
 msgid "it will do nothing to your computer"
 msgstr "não fará nada ao computador"
 

@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 10:26+0800\n"
+"POT-Creation-Date: 2020-06-19 15:53+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Hungarian (https://www.transifex.com/linuxdeepin/teams/3617/hu/)\n"
@@ -378,61 +378,61 @@ msgstr "Ablakváltás fordított sorrendben"
 msgid "Show desktop"
 msgstr "Asztal mutatása"
 
-#: ../../keybinding/shortcuts/id_name_map.go:95
-msgid "Switch monitors"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Ablak maximalizálása"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Ablak visszaállatása "
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Ablak kicsinyítése "
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Ablak bezárása"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Ablak mozgatása"
 
-#: ../../keybinding/shortcuts/id_name_map.go:110
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Ablak méretezése "
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Áthelyezés a baloldali munkaterületre"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Áthelyezés a jobboldali munkaterületre"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Áthelyezés a felső munkaterületre "
 
-#: ../../keybinding/shortcuts/id_name_map.go:128
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Áthelyezés az alsó munkaterületre"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "A munkaterületek ablakainak megjelenítése"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "A jelenlegi munkaterület ablakainak megjelenítése"
 
-#: ../../keybinding/shortcuts/id_name_map.go:152
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Munkaterület  megjelenítése"
+
+#: ../../keybinding/shortcuts/id_name_map.go:210
+msgid "Switch monitors"
+msgstr ""
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -1056,36 +1056,36 @@ msgstr "Az akkumlátor töltöttsége kritikusan alacsony"
 msgid "Battery low, please plug in"
 msgstr "Akkutöltöttség alacsony, kérem csatlakoztassa a töltőt"
 
-#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
-#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
+#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr ""
 
-#: ../../session/power/utils.go:383
+#: ../../session/power/utils.go:384
 msgid "When the lid is closed, "
 msgstr ""
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:388
 msgid "When pressing the power button, "
 msgstr ""
 
-#: ../../session/power/utils.go:397
+#: ../../session/power/utils.go:398
 msgid "your computer will shut down"
 msgstr ""
 
-#: ../../session/power/utils.go:399
+#: ../../session/power/utils.go:400
 msgid "your computer will suspend"
 msgstr ""
 
-#: ../../session/power/utils.go:401
-msgid "your computer will sleep"
+#: ../../session/power/utils.go:402
+msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:404
 msgid "your monitor will turn off"
 msgstr ""
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:406
 msgid "it will do nothing to your computer"
 msgstr ""
 

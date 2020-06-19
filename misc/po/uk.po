@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 10:26+0800\n"
+"POT-Creation-Date: 2020-06-19 15:53+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>, 2020\n"
 "Language-Team: Ukrainian (https://www.transifex.com/linuxdeepin/teams/3617/uk/)\n"
@@ -367,61 +367,61 @@ msgstr "Перемикання між вікнами у зворотному п�
 msgid "Show desktop"
 msgstr "Показати стільницю"
 
-#: ../../keybinding/shortcuts/id_name_map.go:95
-msgid "Switch monitors"
-msgstr ""
-
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "Розгорнути вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "Відновити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "Згорнути вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:108
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "Закрити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:109
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "Перемістити вікно"
 
-#: ../../keybinding/shortcuts/id_name_map.go:110
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "Змінити розмір вікна"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "Перемістити на лівий робочий простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "Перемістити на правий робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "Перемістити на верхній робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:128
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "Перемістити на нижчій робочій простір"
 
-#: ../../keybinding/shortcuts/id_name_map.go:150
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "Відображати вікна всіх робочих просторів"
 
-#: ../../keybinding/shortcuts/id_name_map.go:151
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "Показати вікна поточного робочого простору"
 
-#: ../../keybinding/shortcuts/id_name_map.go:152
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "Показати робочій простір"
+
+#: ../../keybinding/shortcuts/id_name_map.go:210
+msgid "Switch monitors"
+msgstr "Перемкнути монітори"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -1040,36 +1040,36 @@ msgstr ""
 "Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до "
 "мережі живлення"
 
-#: ../../session/power/utils.go:358 ../../session/power/utils.go:362
-#: ../../session/power/utils.go:366 ../../session/power/utils.go:370
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
+#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr "Параметри живлення змінено"
 
-#: ../../session/power/utils.go:383
+#: ../../session/power/utils.go:384
 msgid "When the lid is closed, "
 msgstr "Якщо закрито кришку,"
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:388
 msgid "When pressing the power button, "
 msgstr "Якщо натиснуто кнопку живлення,"
 
-#: ../../session/power/utils.go:397
+#: ../../session/power/utils.go:398
 msgid "your computer will shut down"
 msgstr "ваш комп'ютер буде вимкнено"
 
-#: ../../session/power/utils.go:399
+#: ../../session/power/utils.go:400
 msgid "your computer will suspend"
 msgstr "ваш комп'ютер буде призупинено"
 
-#: ../../session/power/utils.go:401
-msgid "your computer will sleep"
-msgstr "ваш комп'ютер буде приспано"
+#: ../../session/power/utils.go:402
+msgid "your computer will hibernate"
+msgstr ""
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:404
 msgid "your monitor will turn off"
 msgstr "монітор буде вимкнено"
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:406
 msgid "it will do nothing to your computer"
 msgstr "ніяких дій із комп'ютером не буде виконано"
 
