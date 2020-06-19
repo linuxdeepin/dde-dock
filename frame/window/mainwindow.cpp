@@ -542,9 +542,11 @@ void MainWindow::positionChanged()
     // paly hide animation and disable other animation
     qDebug() << "start positionChange:" << frameGeometry();
     clearStrutPartial();
-    narrow();
 
+    //　需要在narrow之前执行，保证动画结束后能后更新界面布局的方向
     connect(m_panelHideAni, &QVariantAnimation::finished, this, &MainWindow::newPositionExpand);
+
+    narrow(); 
 }
 
 void MainWindow::updatePosition()
