@@ -128,7 +128,6 @@ private:
     DWindowManagerHelper *m_wmHelper;
     XEventMonitor *m_eventInter;
     QString m_registerKey;
-    QStringList m_registerKeys;
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

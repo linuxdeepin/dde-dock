@@ -188,9 +188,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_panelShowAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
 
+        qDebug() << m_mainPanel->width();
         if (m_panelShowAni->state() != QPropertyAnimation::Running)
             return;
-
         // dock的宽度或高度值
         int val = value.toInt();
         // 当前dock尺寸
@@ -607,8 +607,9 @@ void MainWindow::newPositionExpand()
         m_dragWidget->setCursor(Qt::SizeHorCursor);
     }
 
-    updatePanelVisible();
     disconnect(m_panelHideAni, &QVariantAnimation::finished, this, &MainWindow::newPositionExpand);
+
+    updatePanelVisible();
 }
 
 void MainWindow::clearStrutPartial()
@@ -729,7 +730,7 @@ void MainWindow::expand()
             return;
         }
 
-        if (startValue > endValue)
+        if (startValue >= endValue)
             return;
 
         m_panelShowAni->setStartValue(startValue);
@@ -770,6 +771,7 @@ void MainWindow::updatePanelVisible()
     if (m_settings->hideMode() == KeepShowing) {
         if (!m_registerKey.isEmpty()) {
             m_eventInter->UnregisterArea(m_registerKey);
+            qDebug() << "register area clear";
         }
         return expand();
     }
@@ -984,11 +986,25 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
         expand();
     } else {
         // 移动Dock至相应屏相应位置
-        if (m_settings->setDockScreen(screen->name()))
+        if (m_settings->setDockScreen(screen->name())) {
             if (m_settings->hideMode() == KeepShowing || m_settings->hideMode() == SmartHide)
                 positionChanged();
-            else
+            else {
+                int screenWidth = screen->size().width();
+                int screenHeight = screen->size().height();
+                switch (m_dockPosition) {
+                    case Dock::Top:
+                    case Dock::Bottom:
+                        setFixedWidth(screenWidth);
+                        break;
+                    case Dock::Left:
+                    case Dock::Right:
+                        setFixedHeight(screenHeight);
+                        break;
+                }
                 expand();
+            }
+        }
     }
 }
 
@@ -996,6 +1012,7 @@ void MainWindow::updateRegionMonitorWatch()
 {
     if (!m_registerKey.isEmpty()) {
         m_eventInter->UnregisterArea(m_registerKey);
+        qDebug() << "register area clear";
         m_registerKey.clear();
     }
 
@@ -1061,8 +1078,10 @@ void MainWindow::updateRegionMonitorWatch()
             break;
         }
         m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+        qDebug() << "register key" << m_registerKey;
     } else {
         m_registerKey = m_eventInter->RegisterFullScreen();
+        qDebug() << "register full screen" << m_registerKey;
     }
 }
 
