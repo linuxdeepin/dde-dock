@@ -103,6 +103,8 @@ type User struct {
 	Locked bool
 	// 是否允许此用户自动登录
 	AutomaticLogin bool
+	
+	// deprecated property
 	SystemAccount  bool
 
 	NoPasswdLogin bool
