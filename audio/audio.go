@@ -125,9 +125,10 @@ type Audio struct {
 
 	cards CardList
 
-	isSaving    bool
-	sourceIdx   uint32 //used to disable source if select a2dp profile
-	saverLocker sync.Mutex
+	isSaving     bool
+	sourceIdx    uint32 //used to disable source if select a2dp profile
+	saverLocker  sync.Mutex
+	enableSource bool //can not enable a2dp Source if card profile is "a2dp"
 
 	portLocker sync.Mutex
 

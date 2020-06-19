@@ -26,6 +26,7 @@ import (
 	"time"
 
 	dbus "github.com/godbus/dbus"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -86,12 +87,46 @@ func (a *Audio) handleStateChanged() {
 	}
 }
 
+func isDeviceValid(deviceName string) bool {
+	if strings.Contains(deviceName, "bluez") {
+		systemBus, err := dbus.SystemBus()
+		if err != nil {
+			logger.Warning("[isDeviceValid] dbus connect failed:", err)
+			return false
+		}
+		nameArray := strings.Split(deviceName, ".")
+		if len(nameArray) < 2 {
+			return false
+		}
+		var path string = "/org/bluez/hci0/dev_" + nameArray[1]
+		bluezDevice, err := bluez.NewDevice(systemBus, dbus.ObjectPath(path))
+		if err != nil {
+			logger.Warning("[isDeviceValid] new device failed:", err)
+			return false
+		}
+		icon, err := bluezDevice.Icon().Get(0)
+		if err != nil {
+			logger.Warning("[isDeviceValid] get icon failed:", err)
+			return false
+		}
+		if icon == "computer" {
+			return false
+		}
+		return true
+	} else {
+		return true
+	}
+}
+
 func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 	switch eventType {
 	case pulse.EventTypeNew:
 		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
+			return
+		}
+		if !isDeviceValid(cardInfo.Name) {
 			return
 		}
 		logger.Debugf("[Event] card #%d added %s", idx, cardInfo.Name)
@@ -127,6 +162,9 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
+		if !isDeviceValid(cardInfo.Name) {
+			return
+		}
 		logger.Debugf("[Event] card #%d changed %s", idx, cardInfo.Name)
 		a.mu.Lock()
 		card, _ := a.cards.get(idx)
@@ -136,6 +174,10 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			a.setPropCards(a.cards.string())
 			a.setPropCardsWithoutUnavailable(a.cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
+		}
+		//如果声卡配置文件是a2dp时,是不允许添加输入设备的
+		if cardInfo.ActiveProfile.Name == "a2dp_sink" {
+			a.enableSource = false
 		}
 		a.mu.Unlock()
 	}
@@ -177,6 +219,9 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		if !isPhysicalDevice(sinkInfo.Name) {
 			return
 		}
+		if !isDeviceValid(sinkInfo.Name) {
+			return
+		}
 		a.mu.Lock()
 		_, ok := a.sinks[idx]
 		a.mu.Unlock()
@@ -210,6 +255,9 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		}
 		logger.Debugf("[Event] sink #%d changed %s", idx, sinkInfo.Name)
 		if !isPhysicalDevice(sinkInfo.Name) {
+			return
+		}
+		if !isDeviceValid(sinkInfo.Name) {
 			return
 		}
 		a.mu.Lock()
@@ -351,6 +399,11 @@ func (a *Audio) handleSinkInputRemoved(idx uint32) {
 }
 
 func (a *Audio) addSource(sourceInfo *pulse.Source) {
+	//如果不能启用输入源,说明声卡配置文件是"a2dp",此时不能添加a2dp输入设备
+	if !a.enableSource {
+		a.enableSource = true
+		return
+	}
 	source := newSource(sourceInfo, a)
 
 	a.mu.Lock()
@@ -384,6 +437,9 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		logger.Debugf("[Event] source #%d added %s", idx, sourceInfo.Name)
 		if !isPhysicalDevice(sourceInfo.Name) {
+			return
+		}
+		if !isDeviceValid(sourceInfo.Name) {
 			return
 		}
 		a.mu.Lock()
@@ -434,6 +490,9 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		logger.Debugf("[Event] source #%d changed %s", idx, sourceInfo.Name)
 		if !isPhysicalDevice(sourceInfo.Name) {
+			return
+		}
+		if !isDeviceValid(sourceInfo.Name) {
 			return
 		}
 		a.mu.Lock()
