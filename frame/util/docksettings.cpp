@@ -274,7 +274,6 @@ const QRect DockSettings::windowRect(const Position position, const bool hide, c
         }
     }
 
-
     const QRect primaryRect = this->currentRect(beNarrow);
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
@@ -531,6 +530,8 @@ bool DockSettings::setDockScreen(const QString &scrName)
         break;
     }
     m_isMouseMoveCause = canBeDock;
+
+    posChangedUpdateSettings();
 
     return canBeDock;
 }
