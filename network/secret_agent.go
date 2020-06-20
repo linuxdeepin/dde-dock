@@ -558,26 +558,27 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 					isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
 				}
-			} else if secretFlags == secretFlagAgentOwned && sa.m.saveToKeyring && !requestNew {
-				resultSaved, err := sa.getAll(connUUID, settingName)
-				if err != nil {
-					return nil, err
-				}
-				logger.Debugf("getAll resultSaved: %#v", resultSaved)
-				if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
-					askItems = append(askItems, secretKey)
+			} else if secretFlags == secretFlagAgentOwned && sa.m.saveToKeyring {
+				if requestNew {
+					// check if NMSecretAgentGetSecretsFlags contains NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW
+					// if is, means the password we set last time is incorrect, new password is needed
+					if allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
+						askItems = append(askItems, secretKey)
+					}
+				} else {
+					resultSaved, err := sa.getAll(connUUID, settingName)
+					if err != nil {
+						return nil, err
+					}
+					logger.Debugf("getAll resultSaved: %#v", resultSaved)
+					if len(resultSaved) == 0 && allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
+						askItems = append(askItems, secretKey)
+					}
 				}
 			} else if !sa.m.saveToKeyring {
 				err = sa.deleteAll(connUUID)
 				if err != nil {
 					return nil, err
-				}
-			}
-			if requestNew {
-				// check if NMSecretAgentGetSecretsFlags contains NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW
-				// if is, means the password we set last time is incorrect, new password is needed
-				if allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
-					askItems = append(askItems, secretKey)
 				}
 			}
 		}
