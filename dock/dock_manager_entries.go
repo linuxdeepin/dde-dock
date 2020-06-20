@@ -101,7 +101,8 @@ func (m *Manager) initClientList() {
 	sort.Sort(winSlice)
 	m.clientList = winSlice
 	for _, win := range winSlice {
-		m.registerWindow(win)
+		winInfo := m.registerWindow(win)
+		m.attachOrDetachWindow(winInfo)
 	}
 	m.clientListInited = true
 }

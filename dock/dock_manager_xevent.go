@@ -27,7 +27,7 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 )
 
-func (m *Manager) registerWindow(win x.Window) {
+func (m *Manager) registerWindow(win x.Window) *WindowInfo {
 	logger.Debug("register window", win)
 
 	m.windowInfoMapMutex.RLock()
@@ -35,8 +35,7 @@ func (m *Manager) registerWindow(win x.Window) {
 	m.windowInfoMapMutex.RUnlock()
 	if ok {
 		logger.Debugf("register window %v failed, window existed", win)
-		m.attachOrDetachWindow(winInfo)
-		return
+		return winInfo
 	}
 
 	winInfo = NewWindowInfo(win)
@@ -45,30 +44,7 @@ func (m *Manager) registerWindow(win x.Window) {
 	m.windowInfoMapMutex.Lock()
 	m.windowInfoMap[win] = winInfo
 	m.windowInfoMapMutex.Unlock()
-
-	// 由于可能存在得不到任何可以识别窗口的信息，导致识别错误的情况，所以要循环判断是否可以获取到可用属性，循环10次，间隔100ms
-	go func() {
-		repeatCount := 0
-		for {
-			if repeatCount > 10 {
-				return
-			}
-			good := isGoodWindow(win)
-			if !good {
-				return
-			}
-			pid := getWmPid(win)
-			wmClass, _ := getWmClass(win)
-			if pid != 0 || wmClass != nil {
-				m.attachOrDetachWindow(winInfo)
-				return
-			}
-			logger.Debug("win id is: ", win)
-			logger.Debug("repeatCount is: ", repeatCount)
-			repeatCount++
-			time.Sleep(100 * time.Millisecond)
-		}
-	}()
+	return winInfo
 }
 
 func (m *Manager) isWindowRegistered(win x.Window) bool {
@@ -99,7 +75,29 @@ func (m *Manager) handleClientListChanged() {
 	if len(add) > 0 {
 		logger.Debug("client list add:", add)
 		for _, win := range add {
-			m.registerWindow(win)
+			window0 := win
+			winInfo := m.registerWindow(window0)
+			go func() {
+				repeatCount := 0
+				for {
+					if repeatCount > 10 {
+						return
+					}
+					good := isGoodWindow(window0)
+					if !good {
+						return
+					}
+					pid := getWmPid(window0)
+					wmClass, _ := getWmClass(window0)
+					if pid != 0 || wmClass != nil {
+						m.attachOrDetachWindow(winInfo)
+						return
+					}
+					repeatCount++
+					time.Sleep(100 * time.Millisecond)
+				}
+			}()
+
 		}
 	}
 
@@ -112,6 +110,7 @@ func (m *Manager) handleClientListChanged() {
 			m.windowInfoMapMutex.RUnlock()
 			if winInfo != nil {
 				m.detachWindow(winInfo)
+				winInfo.entryInnerId = ""
 			}
 		}
 	}
@@ -188,7 +187,11 @@ func (m *Manager) handleDestroyNotifyEvent(ev *x.DestroyNotifyEvent) {
 
 func (m *Manager) handleMapNotifyEvent(ev *x.MapNotifyEvent) {
 	logger.Debug("MapNotifyEvent window:", ev.Window)
-	m.registerWindow(ev.Window)
+	winInfo := m.registerWindow(ev.Window)
+	time.AfterFunc(2*time.Second, func() {
+		_, appInfo := m.identifyWindow(winInfo)
+		m.markAppLaunched(appInfo)
+	})
 }
 
 func (m *Manager) getWindowInfo(win x.Window) *WindowInfo {
