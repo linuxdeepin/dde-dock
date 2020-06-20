@@ -535,7 +535,6 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 		setting["secrets"] = dbus.MakeVariant(vpnSecretsData)
 
 	} else if secretKeys, ok := secretSettingKeys[settingName]; ok {
-
 		var askItems []string
 		for _, secretKey := range secretKeys {
 			secretFlags, _ := getConnectionDataUint32(connectionData, settingName,
@@ -559,7 +558,7 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 					isMustAsk(connectionData, settingName, secretKey) {
 					askItems = append(askItems, secretKey)
 				}
-			} else if secretFlags == secretFlagAgentOwned && sa.m.saveToKeyring {
+			} else if secretFlags == secretFlagAgentOwned && sa.m.saveToKeyring && !requestNew {
 				resultSaved, err := sa.getAll(connUUID, settingName)
 				if err != nil {
 					return nil, err
@@ -574,8 +573,14 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 					return nil, err
 				}
 			}
+			if requestNew {
+				// check if NMSecretAgentGetSecretsFlags contains NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW
+				// if is, means the password we set last time is incorrect, new password is needed
+				if allowInteraction && isMustAsk(connectionData, settingName, secretKey) {
+					askItems = append(askItems, secretKey)
+				}
+			}
 		}
-
 		if allowInteraction && len(askItems) > 0 {
 			resultAsk, err := sa.askPasswords(connectionPath, connectionData, connUUID,
 				settingName, askItems, requestNew)
@@ -605,8 +610,8 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 				}
 			}
 		}
-
-		if !sa.m.saveToKeyring {
+		// when requestNew is true or dont save secretKey here
+		if !sa.m.saveToKeyring || requestNew {
 			for _, item := range sa.m.items {
 				secretFlags, _ := getConnectionDataUint32(connectionData, item.settingName,
 					getSecretFlagsKeyName(item.settingKey))
