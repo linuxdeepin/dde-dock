@@ -691,6 +691,8 @@ void DockSettings::monitorAdded(const QString &path)
     connect(inter, &MonitorInter::YChanged, mon, &Monitor::setY);
     connect(inter, &MonitorInter::WidthChanged, mon, &Monitor::setW);
     connect(inter, &MonitorInter::HeightChanged, mon, &Monitor::setH);
+    connect(inter, &MonitorInter::WidthChanged, this, &DockSettings::requestUpdateRegionWatch);
+    connect(inter, &MonitorInter::HeightChanged, this, &DockSettings::requestUpdateRegionWatch);
     connect(inter, &MonitorInter::MmWidthChanged, mon, &Monitor::setMmWidth);
     connect(inter, &MonitorInter::MmHeightChanged, mon, &Monitor::setMmHeight);
     connect(inter, &MonitorInter::RotationChanged, mon, &Monitor::setRotate);

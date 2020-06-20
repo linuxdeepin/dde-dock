@@ -93,6 +93,8 @@ signals:
     void windowGeometryChanged() const;
     void opacityChanged(const quint8 value) const;
     void trayCountChanged() const;
+    // 分标率发生变化，需要更新XEventMonitor的监视区域
+    void requestUpdateRegionWatch();
 
 public slots:
     void updateGeometry();
