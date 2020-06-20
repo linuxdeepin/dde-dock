@@ -270,6 +270,9 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 			if isMultiLevelAdjustment {
 				// 分级调节,减去需要降低的亮度
 				value -= oneStepValue * numSteps
+				if value < oneStepValue {
+					value = oneStepValue
+				}
 			} else {
 				// 非分级调节
 				value *= lowerBrightnessScale
