@@ -504,6 +504,7 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
     connect(m_eventInter, &XEventMonitor::CursorMove, this, &MainWindow::onRegionMonitorChanged);
+    connect(m_settings,&DockSettings::requestUpdateRegionWatch,this,&MainWindow::updateRegionMonitorWatch);
 }
 
 //const QPoint MainWindow::x11GetWindowPos()
