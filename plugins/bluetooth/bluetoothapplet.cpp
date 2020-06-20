@@ -192,6 +192,16 @@ void BluetoothApplet::addAdapter(Adapter *adapter)
     }
 
     QString adapterId = adapter->id();
+    //dde-session-daemon重启的时候，同一个Id的蓝牙设备会再次添加一次，因此需要先移除以前的
+    if (m_adapterItems.contains(adapterId)) {
+       AdapterItem *adapterItem = m_adapterItems.value(adapterId);
+       if (adapterItem) {
+           m_adapterLayout->removeWidget(adapterItem);
+           delete  adapterItem;
+           m_adapterItems.remove(adapterId);
+       }
+    }
+
     auto adatpterItem = new AdapterItem(m_adaptersManager, adapter, this);
     m_adapterItems[adapterId] = adatpterItem;
     m_adapterLayout->addWidget(adatpterItem);
