@@ -146,6 +146,7 @@ func (m *Manager) systemShutdown() {
 }
 
 func (m *Manager) systemTurnOffScreen() {
+	const settingKeyScreenBlackLock = "screen-black-lock"
 	logger.Info("DPMS Off")
 	var err error
 	var useWayland bool
@@ -153,6 +154,9 @@ func (m *Manager) systemTurnOffScreen() {
 		useWayland = true
 	} else {
 		useWayland = false
+	}
+	if m.gsPower.GetBoolean(settingKeyScreenBlackLock) {
+		m.doLock(true)
 	}
 
 	if useWayland {
@@ -284,4 +288,12 @@ func readTinyFile(file string) ([]byte, error) {
 func shouldUseDDEKwin() bool {
 	_, err := os.Stat("/usr/bin/kwin_no_scale")
 	return err == nil
+}
+
+func (m *Manager) doLock(autoStartAuth bool) {
+	logger.Info("Lock Screen")
+	err := m.lockFront.ShowAuth(0, autoStartAuth)
+	if err != nil {
+		logger.Warning("failed to call lockFront ShowAuth:", err)
+	}
 }

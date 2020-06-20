@@ -214,6 +214,9 @@ func (m *Manager) doHibernate() {
 }
 
 func (m *Manager) doTurnOffScreen() {
+	if m.ScreenBlackLock.Get() {
+		m.doLock(true)
+	}
 	logger.Info("Turn off screen")
 	m.setDPMSModeOff()
 }
