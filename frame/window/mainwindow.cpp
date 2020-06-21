@@ -187,8 +187,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     connect(m_panelShowAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
-
-        qDebug() << m_mainPanel->width();
         if (m_panelShowAni->state() != QPropertyAnimation::Running)
             return;
         // dock的宽度或高度值
@@ -213,7 +211,7 @@ MainWindow::MainWindow(QWidget *parent)
             m_mainPanel->move(0, 0);
             QWidget::move(windowRect.right() - val, windowRect.top());
             break;
-        default: break;
+            Q_UNREACHABLE();
         }
 
         if (m_dockPosition == Dock::Top || m_dockPosition == Dock::Bottom) {
@@ -224,7 +222,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(m_panelHideAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
-
         if (m_panelHideAni->state() != QPropertyAnimation::Running)
             return;
 
@@ -234,22 +231,22 @@ MainWindow::MainWindow(QWidget *parent)
         const QRect windowRect = m_settings->windowRect(m_dockPosition, false, true);
         const int margin = m_settings->dockMargin();
         switch (m_dockPosition) {
-            case Dock::Top:
-                m_mainPanel->move(0, val - windowRect.height());
-                QWidget::move(windowRect.left(), windowRect.top() - margin);
-                break;
-            case Dock::Bottom:
-                m_mainPanel->move(0, 0);
-                QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
-                break;
-            case Dock::Left:
-                m_mainPanel->move(val - windowRect.width(), 0);
-                QWidget::move(windowRect.left() - margin, windowRect.top());
-                break;
-            case Dock::Right:
-                m_mainPanel->move(0, 0);
-                QWidget::move(windowRect.right() - val + margin, windowRect.top());
-                break;
+        case Dock::Top:
+            m_mainPanel->move(0, val - windowRect.height());
+            QWidget::move(windowRect.left(), windowRect.top() - margin);
+            break;
+        case Dock::Bottom:
+            m_mainPanel->move(0, 0);
+            QWidget::move(windowRect.left(), windowRect.bottom() - val + margin);
+            break;
+        case Dock::Left:
+            m_mainPanel->move(val - windowRect.width(), 0);
+            QWidget::move(windowRect.left() - margin, windowRect.top());
+            break;
+        case Dock::Right:
+            m_mainPanel->move(0, 0);
+            QWidget::move(windowRect.right() - val + margin, windowRect.top());
+            break;
         }
         if (m_dockPosition == Dock::Top || m_dockPosition == Dock::Bottom) {
             QWidget::setFixedHeight(val);
@@ -299,6 +296,8 @@ void MainWindow::launch()
         setVisible(true);
         updatePanelVisible();
         resetPanelEnvironment();
+        // 用于更新界面的布局方向
+        m_shadowMaskOptimizeTimer->start();
     });
 }
 
@@ -319,24 +318,24 @@ void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
-//    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
-//    windowHandle(), [this](QScreen * new_screen) {
-//        QScreen *old_screen = windowHandle()->screen();
-//        windowHandle()->setScreen(new_screen);
-//        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
-//        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
-//        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
-//        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
-//        const qreal scale = devicePixelRatioF();
-//        const QPoint screenPos = new_screen->geometry().topLeft();
-//        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
-//        const QPoint pos = screenPos + posInScreen * scale;
-//        const QSize size = this->size() * scale;
+    //    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
+    //    windowHandle(), [this](QScreen * new_screen) {
+    //        QScreen *old_screen = windowHandle()->screen();
+    //        windowHandle()->setScreen(new_screen);
+    //        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
+    //        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
+    //        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
+    //        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
+    //        const qreal scale = devicePixelRatioF();
+    //        const QPoint screenPos = new_screen->geometry().topLeft();
+    //        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
+    //        const QPoint pos = screenPos + posInScreen * scale;
+    //        const QSize size = this->size() * scale;
 
-//        windowHandle()->handle()->setGeometry(QRect(pos, size));
-//    }, Qt::UniqueConnection);
+    //        windowHandle()->handle()->setGeometry(QRect(pos, size));
+    //    }, Qt::UniqueConnection);
 
-//    windowHandle()->setScreen(qGuiApp->primaryScreen());
+    //    windowHandle()->setScreen(qGuiApp->primaryScreen());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
@@ -433,15 +432,16 @@ void MainWindow::compositeChanged()
     const bool composite = m_wmHelper->hasComposite();
     setComposite(composite);
 
-// NOTE(justforlxz): On the sw platform, there is an unstable
-// display position error, disable animation solution
+    // NOTE(justforlxz): On the sw platform, there is an unstable
+    // display position error, disable animation solution
 #ifndef DISABLE_SHOW_ANIMATION
     const int duration = composite ? 300 : 0;
 #else
     const int duration = 0;
 #endif
 
-    m_panelHideAni->setDuration(duration);
+    //TODO 隐藏动画暂时不设置时间了，后面动画相关的代码需要进行重构，目前的逻辑太复杂，不容易分析和定位问题
+    m_panelHideAni->setDuration(0);
     m_panelShowAni->setDuration(duration);
 
     m_shadowMaskOptimizeTimer->start();
@@ -461,7 +461,7 @@ void MainWindow::internalMove(const QPoint &p)
 
 void MainWindow::initConnections()
 {
-    connect(m_settings, &DockSettings::primaryScreenChanged, [&](){
+    connect(m_settings, &DockSettings::primaryScreenChanged, [&]() {
         m_primaryScreenChanged = true;
         updatePosition();
         m_primaryScreenChanged = false;
@@ -504,7 +504,7 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
     connect(m_eventInter, &XEventMonitor::CursorMove, this, &MainWindow::onRegionMonitorChanged);
-    connect(m_settings,&DockSettings::requestUpdateRegionWatch,this,&MainWindow::updateRegionMonitorWatch);
+    connect(m_settings, &DockSettings::requestUpdateRegionWatch, this, &MainWindow::updateRegionMonitorWatch);
 }
 
 //const QPoint MainWindow::x11GetWindowPos()
@@ -547,13 +547,13 @@ void MainWindow::positionChanged()
     //　需要在narrow之前执行，保证动画结束后能后更新界面布局的方向
     connect(m_panelHideAni, &QVariantAnimation::finished, this, &MainWindow::newPositionExpand);
 
-    narrow(); 
+    narrow();
 }
 
 void MainWindow::updatePosition()
 {
     // all update operation need pass by timer
-//    Q_ASSERT(sender() == m_positionUpdateTimer);
+    //    Q_ASSERT(sender() == m_positionUpdateTimer);
 
     //clearStrutPartial();
     updateGeometry();
@@ -733,7 +733,7 @@ void MainWindow::expand()
             return;
         }
 
-        if (startValue >= endValue)
+        if (startValue > endValue)
             return;
 
         m_panelShowAni->setStartValue(startValue);
@@ -747,7 +747,7 @@ void MainWindow::expand()
 void MainWindow::narrow()
 {
     qDebug() << "narrow";
-    int startValue = ( m_dockPosition == Top || m_dockPosition == Bottom ) ? height() : width();
+    int startValue = (m_dockPosition == Top || m_dockPosition == Bottom) ? height() : width();
 
     qDebug() << "narrow     " << "start value:" << startValue;
     m_panelShowAni->stop();
@@ -897,7 +897,7 @@ void MainWindow::resizeMainPanelWindow()
     case Dock::Right:
         m_dragWidget->setGeometry(0, 0, DRAG_AREA_SIZE, height());
         break;
-    default: break;
+        Q_UNREACHABLE();
     }
 }
 
@@ -974,9 +974,21 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
     if (m_registerKey != key)
         return;
 
+    // 同一个坐标，只响应一次
+    static QPoint lastPos(0, 0);
+    if (lastPos == QPoint(x, y)) {
+        return;
+    }
+    lastPos = QPoint(x, y);
+
     QScreen *screen = Utils::screenAt(QPoint(x, y));
     if (!screen)
         return;
+
+    if (Utils::onScreenEdge(QPoint(x, y))) {
+        qDebug() << "screen not changed";
+        return;
+    }
 
     if (screen->name() == m_settings->currentDockScreen()) {
         if (m_settings->hideMode() == KeepShowing)
@@ -996,14 +1008,24 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
                 int screenWidth = screen->size().width();
                 int screenHeight = screen->size().height();
                 switch (m_dockPosition) {
-                    case Dock::Top:
-                    case Dock::Bottom:
-                        setFixedWidth(screenWidth);
-                        break;
-                    case Dock::Left:
-                    case Dock::Right:
-                        setFixedHeight(screenHeight);
-                        break;
+                case Dock::Top:
+                case Dock::Bottom: {
+                    // 特殊处理，arm机器上，setFixedSize响应有点慢，能看到明显的界面从短变长的过程
+                    const int height = this->height();
+                    setFixedHeight(0);
+                    setFixedWidth(screenWidth);
+                    setFixedHeight(height);
+                }
+                break;
+                case Dock::Left:
+                case Dock::Right: {
+                    // 同上
+                    const int width = this->width();
+                    setFixedWidth(0);
+                    setFixedHeight(screenHeight);
+                    setFixedWidth(width);
+                }
+                break;
                 }
                 expand();
             }
@@ -1024,11 +1046,10 @@ void MainWindow::updateRegionMonitorWatch()
     QList<QRect> screensRect = m_settings->monitorsRect();
     QList<MonitRect> monitorAreas;
 
-    const qreal scale = devicePixelRatioF();
     int val = 3;
     int x, y, w, h;
 
-    auto func = [&](MonitRect &monitRect){
+    auto func = [&](MonitRect & monitRect) {
         monitRect.x1 = x;
         monitRect.y1 = y;
         monitRect.x2 = x + w;
@@ -1048,7 +1069,7 @@ void MainWindow::updateRegionMonitorWatch()
                 func(monitRect);
             }
         }
-            break;
+        break;
         case Dock::Bottom: {
             for (QRect rect : screensRect) {
                 x = rect.x();
@@ -1058,7 +1079,7 @@ void MainWindow::updateRegionMonitorWatch()
                 func(monitRect);
             }
         }
-            break;
+        break;
         case Dock::Left: {
             for (QRect rect : screensRect) {
                 x = rect.x();
@@ -1068,7 +1089,7 @@ void MainWindow::updateRegionMonitorWatch()
                 func(monitRect);
             }
         }
-            break;
+        break;
         case Dock::Right: {
             for (QRect rect : screensRect) {
                 x = rect.x() + rect.width() - val;
@@ -1078,9 +1099,9 @@ void MainWindow::updateRegionMonitorWatch()
                 func(monitRect);
             }
         }
-            break;
+        break;
         }
-        m_registerKey = m_eventInter->RegisterAreas(monitorAreas , flags);
+        m_registerKey = m_eventInter->RegisterAreas(monitorAreas, flags);
         qDebug() << "register key" << m_registerKey;
     } else {
         m_registerKey = m_eventInter->RegisterFullScreen();

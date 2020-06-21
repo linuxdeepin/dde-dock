@@ -161,7 +161,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &DockSettings::onPrimaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DisplayInter::MonitorsChanged, this, &DockSettings::onMonitorListChanged);
     connect(GSettingsByTrash(), &QGSettings::changed, this, &DockSettings::onTrashGSettingsChanged);
-    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
+    QTimer::singleShot(0, this, [ = ] {onGSettingsChanged("enable");});
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -173,7 +173,7 @@ DockSettings::DockSettings(QWidget *parent)
     resetFrontendGeometry();
 
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 }
@@ -219,7 +219,7 @@ const QRect DockSettings::currentRect(const bool beNarrow)
             currentScrName = m_mouseCauseDockScreen->name();
         } else {
             bool positionAllowed = false;
-            QList<Monitor*> monitors = m_monitors.keys();
+            QList<Monitor *> monitors = m_monitors.keys();
             for (Monitor *monitor : monitors) {
                 switch (m_position) {
                 case Top:       positionAllowed = monitor->dockPosition().topDock;      break;
@@ -299,7 +299,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide, c
 
 void DockSettings::showDockSettingsMenu()
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
     });
 
@@ -411,7 +411,7 @@ void DockSettings::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuVisible=isEnable && setting->get("enable").toBool();
+        m_menuVisible = isEnable && setting->get("enable").toBool();
     }
 }
 
@@ -440,7 +440,7 @@ void DockSettings::onDisplayModeChanged()
     emit displayModeChanegd();
     calculateWindowConfig();
 
-   //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
+    //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }
 
 void DockSettings::hideModeChanged()
@@ -478,7 +478,7 @@ void DockSettings::onPrimaryScreenChanged()
 
     //为了防止当后端发送错误值，然后发送正确值时，任务栏没有移动在相应的位置
     //当ｑｔ没有获取到屏幕资源时候，move函数会失效。可以直接return
-    if (m_screenRawHeight == 0 || m_screenRawWidth == 0){
+    if (m_screenRawHeight == 0 || m_screenRawWidth == 0) {
         return;
     }
     calculateMultiScreensPos();
@@ -508,7 +508,7 @@ void DockSettings::updateFrontendGeometry()
 
 bool DockSettings::setDockScreen(const QString &scrName)
 {
-    QList<Monitor*> monitors = m_monitors.keys();
+    QList<Monitor *> monitors = m_monitors.keys();
     for (Monitor *monitor : monitors) {
         if (monitor && monitor->name() == scrName) {
             m_mouseCauseDockScreen = monitor;
@@ -668,11 +668,11 @@ void DockSettings::calculateMultiScreensPos()
     case 0:
         break;
     case 1: {
-        QList<Monitor*>screens = m_monitors.keys();
-        Monitor* s1 = screens.at(0);
+        QList<Monitor *>screens = m_monitors.keys();
+        Monitor *s1 = screens.at(0);
         s1->setDockPosition(Monitor::DockPosition(true, true, true, true));
     }
-        break;
+    break;
     case 2:
         twoScreensCalPos();
         break;
@@ -691,6 +691,9 @@ void DockSettings::monitorAdded(const QString &path)
     connect(inter, &MonitorInter::YChanged, mon, &Monitor::setY);
     connect(inter, &MonitorInter::WidthChanged, mon, &Monitor::setW);
     connect(inter, &MonitorInter::HeightChanged, mon, &Monitor::setH);
+    //  当屏幕的大小或者坐标信息发生变化后，需要更新一下监听区域．防止无法唤醒任务栏
+    connect(inter, &MonitorInter::XChanged, this, &DockSettings::requestUpdateRegionWatch);
+    connect(inter, &MonitorInter::YChanged, this, &DockSettings::requestUpdateRegionWatch);
     connect(inter, &MonitorInter::WidthChanged, this, &DockSettings::requestUpdateRegionWatch);
     connect(inter, &MonitorInter::HeightChanged, this, &DockSettings::requestUpdateRegionWatch);
     connect(inter, &MonitorInter::MmWidthChanged, mon, &Monitor::setMmWidth);
@@ -748,9 +751,9 @@ void DockSettings::monitorRemoved(const QString &path)
 
 void DockSettings::twoScreensCalPos()
 {
-    QList<Monitor*>screens = m_monitors.keys();
-    Monitor* s1 = screens.at(0);
-    Monitor* s2 = screens.at(1);
+    QList<Monitor *>screens = m_monitors.keys();
+    Monitor *s1 = screens.at(0);
+    Monitor *s2 = screens.at(1);
     if (!s1 && !s2)
         return;
 
@@ -776,10 +779,10 @@ void DockSettings::twoScreensCalPos()
 
 void DockSettings::treeScreensCalPos()
 {
-    QList<Monitor*>screens = m_monitors.keys();
-    Monitor* s1 = screens.at(0);
-    Monitor* s2 = screens.at(1);
-    Monitor* s3 = screens.at(2);
+    QList<Monitor *>screens = m_monitors.keys();
+    Monitor *s1 = screens.at(0);
+    Monitor *s2 = screens.at(1);
+    Monitor *s3 = screens.at(2);
     if (!s1 && !s2 && !s3)
         return;
 
@@ -836,31 +839,27 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
     // 左右拼
     if (s1->bottom() > s2->top() && s1->top() < s2->bottom()) {
         // s1左 s2右
-        if (s1->right() == s2->left() ) {
+        if (s1->right() == s2->left()) {
             isAligment = (s1->topRight() == s2->topLeft())
-                    && (s1->bottomRight() == s2->bottomLeft());
+                         && (s1->bottomRight() == s2->bottomLeft());
             if (isAligment) {
                 s1->dockPosition().rightDock = false;
                 s2->dockPosition().leftDock = false;
             } else {
-                if (!s1->isPrimary())
-                    s1->dockPosition().rightDock = false;
-                if (!s2->isPrimary())
-                    s2->dockPosition().leftDock = false;
+                s1->dockPosition().rightDock = false;
+                s2->dockPosition().leftDock = false;
             }
         }
         // s1右 s2左
         if (s1->left() == s2->right()) {
             isAligment = (s1->topLeft() == s2->topRight())
-                    && (s1->bottomLeft() == s2->bottomRight());
+                         && (s1->bottomLeft() == s2->bottomRight());
             if (isAligment) {
                 s1->dockPosition().leftDock = false;
                 s2->dockPosition().rightDock = false;
             } else {
-                if (!s1->isPrimary())
-                    s1->dockPosition().leftDock = false;
-                if (!s2->isPrimary())
-                    s2->dockPosition().rightDock = false;
+                s1->dockPosition().leftDock = false;
+                s2->dockPosition().rightDock = false;
             }
         }
     }
@@ -869,37 +868,33 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
         // s1上 s2下
         if (s1->bottom() == s2->top()) {
             isAligment = (s1->bottomLeft() == s2->topLeft())
-                    && (s1->bottomRight() == s2->topRight());
+                         && (s1->bottomRight() == s2->topRight());
             if (isAligment) {
                 s1->dockPosition().bottomDock = false;
                 s2->dockPosition().topDock = false;
             } else {
-                if (!s1->isPrimary())
-                    s1->dockPosition().bottomDock = false;
-                if (!s2->isPrimary())
-                    s2->dockPosition().topDock = false;
+                s1->dockPosition().bottomDock = false;
+                s2->dockPosition().topDock = false;
             }
         }
         // s1下 s2上
         if (s1->top() == s2->bottom()) {
             isAligment = (s1->topLeft() == s2->bottomLeft())
-                    && (s1->topRight() == s2->bottomRight());
+                         && (s1->topRight() == s2->bottomRight());
             if (isAligment) {
                 s1->dockPosition().topDock = false;
                 s2->dockPosition().bottomDock = false;
             } else {
-                if (!s1->isPrimary())
-                    s1->dockPosition().topDock = false;
-                if (!s2->isPrimary())
-                    s2->dockPosition().bottomDock = false;
+                s1->dockPosition().topDock = false;
+                s2->dockPosition().bottomDock = false;
             }
         }
     }
     // 对角拼
     bool isDiagonal = (s1->topLeft() == s2->bottomRight())
-            || (s1->topRight() == s2->bottomLeft())
-            ||  (s1->bottomLeft() == s2->topRight())
-            || (s1->bottomRight() == s2->topLeft());
+                      || (s1->topRight() == s2->bottomLeft())
+                      || (s1->bottomLeft() == s2->topRight())
+                      || (s1->bottomRight() == s2->topLeft());
     if (isDiagonal) {
         auto position = Monitor::DockPosition(false, false, false, false);
         if (s1->isPrimary())
@@ -937,7 +932,7 @@ void DockSettings::onTrashGSettingsChanged(const QString &key)
     QGSettings *setting = GSettingsByTrash();
 
     if (setting->keys().contains("enable")) {
-         m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
+        m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
     }
 }
 
