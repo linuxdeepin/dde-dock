@@ -499,6 +499,8 @@ void DockSettings::resetFrontendGeometry()
 
     m_frontendRect = QRect(p.x(), p.y(), w, h);
     m_dockInter->SetFrontendWindowRect(p.x(), p.y(), w, h);
+
+    emit requestUpdateDockGeometry(m_frontendRect);
 }
 
 void DockSettings::updateFrontendGeometry()

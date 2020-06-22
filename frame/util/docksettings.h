@@ -95,6 +95,7 @@ signals:
     void trayCountChanged() const;
     // 分标率发生变化，需要更新XEventMonitor的监视区域
     void requestUpdateRegionWatch();
+    void requestUpdateDockGeometry(const QRect &rect);
 
 public slots:
     void updateGeometry();
