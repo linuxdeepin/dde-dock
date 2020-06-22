@@ -26,6 +26,7 @@
 #include "../widgets/tipswidget.h"
 #include "util/utils.h"
 #include "util/statebutton.h"
+#include "util/imageutil.h"
 
 #include <DGuiApplicationHelper>
 
@@ -49,17 +50,9 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     , m_wiredIcon(new QLabel(this))
     , m_stateButton(new StateButton(this))
     , m_loadingStat(new DSpinner(this))
+    , m_freshWiredIcon(new QTimer(this))
 {
     setFixedHeight(ItemHeight);
-
-    bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
-
-    auto pixpath = QString(":/wired/resources/wired/network-wired-symbolic");
-    pixpath = isLight ? pixpath + "-dark.svg" : pixpath + LightType;
-
-    auto iconPix = Utils::renderSVG(pixpath, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), devicePixelRatioF());
-    m_wiredIcon->setPixmap(iconPix);
-    m_wiredIcon->setVisible(false);
 
     m_stateButton->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_stateButton->setType(StateButton::Check);
@@ -78,8 +71,9 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
-    itemLayout->addSpacing(3);
+    itemLayout->addSpacing(16);
     itemLayout->addWidget(m_wiredIcon);
+    itemLayout->addSpacing(8);
     itemLayout->addWidget(m_connectedName);
     itemLayout->addWidget(m_stateButton);
     itemLayout->addWidget(m_loadingStat);
@@ -87,10 +81,15 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     connectionLayout->addLayout(itemLayout);
     setLayout(connectionLayout);
 
+    connect(m_freshWiredIcon, &QTimer::timeout, this, &WiredItem::setWiredStateIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(const bool) const>(&NetworkDevice::enableChanged),
             this, &WiredItem::enableChanged);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::deviceStateChanged);
+    connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
+            this, &WiredItem::setWiredStateIcon);
+    connect(m_device, static_cast<void (NetworkDevice::*)(bool) const>(&NetworkDevice::enableChanged),
+            this, &WiredItem::setWiredStateIcon);
 
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
             this, &WiredItem::changedActiveWiredConnectionInfo);
@@ -101,6 +100,7 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     });
 
     deviceStateChanged(m_device->status());
+    setWiredStateIcon();
 }
 
 void WiredItem::setTitle(const QString &name)
@@ -166,9 +166,86 @@ void WiredItem::setThemeType(DGuiApplicationHelper::ColorType themeType)
     m_wiredIcon->setPixmap(iconPix);
 }
 
+void WiredItem::setWiredStateIcon()
+{
+    QPixmap pixmap;
+    QString iconString;
+    QString stateString;
+
+    auto ratio =  devicePixelRatioF();
+
+    switch (m_deviceState) {
+        case NetworkDevice::Unknow:
+        case NetworkDevice::Unmanaged:
+        case NetworkDevice::Unavailable: {
+            stateString = "error";
+            iconString = QString("network-%1-symbolic").arg(stateString);
+        }
+            break;
+        case NetworkDevice::Disconnected: {
+            stateString = "none";
+            iconString = QString("network-%1-symbolic").arg(stateString);
+        }
+            break;
+        case NetworkDevice::Deactivation:
+        case NetworkDevice::Failed: {
+            stateString = "offline";
+            iconString = QString("network-%1-symbolic").arg(stateString);
+        }
+            break;
+        case NetworkDevice::Prepare:
+        case NetworkDevice::Config:
+        case NetworkDevice::NeedAuth:
+        case NetworkDevice::IpConfig:
+        case NetworkDevice::IpCheck:
+        case NetworkDevice::Secondaries: {
+            m_freshWiredIcon->start(200);
+            const int index = QTime::currentTime().msec() / 200 % 10;
+            const int num = index + 1;
+            qDebug() << num;
+            iconString = QString("network-wired-symbolic-connecting%1").arg(num);
+            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+                iconString.append(PLUGIN_MIN_ICON_NAME);
+            pixmap = ImageUtil::loadSvg(iconString, ":/", PLUGIN_ICON_MAX_SIZE, ratio);
+            m_wiredIcon->setPixmap(pixmap);
+            update();
+            return;
+        }
+        case NetworkDevice::Activated: {
+            stateString = "online";
+            iconString = QString("network-%1-symbolic").arg(stateString);
+        }
+            break;
+    }
+
+    m_freshWiredIcon->stop();
+
+    if (m_deviceState == NetworkDevice::Activated && NetworkModel::connectivity() != Connectivity::Full) {
+        stateString = "warning";
+        iconString = QString("network-%1-symbolic").arg(stateString);
+    }
+
+    if (!m_device->enabled()) {
+        stateString = "disabled";
+        iconString = QString("network-%1-symbolic").arg(stateString);
+    }
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconString.append(PLUGIN_MIN_ICON_NAME);
+
+    pixmap = ImageUtil::loadSvg(iconString, ":/", PLUGIN_ICON_MAX_SIZE, ratio);
+    m_wiredIcon->setPixmap(pixmap);
+    update();
+}
+
+void WiredItem::refreshConnectivity()
+{
+    setWiredStateIcon();
+}
+
 void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
-    QPixmap iconPix;
+    m_deviceState = state;
     switch (state) {
         case NetworkDevice::Unknow:
         case NetworkDevice::Unmanaged:

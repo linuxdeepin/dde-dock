@@ -234,6 +234,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         }
 
         connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
+        connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
     }
 
