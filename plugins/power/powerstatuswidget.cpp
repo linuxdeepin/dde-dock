@@ -67,14 +67,14 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint value = uint(qMin(100.0, qMax(0.0, data.value("Display"))));
     const int percentage = int(std::round(value));
+    // onBattery应该表示的是当前是否使用电池在供电，为true表示没插入电源
     const bool plugged = !m_powerInter->onBattery();
+    const BatteryState batteryState = static_cast<BatteryState>(m_powerInter->batteryState()["Display"]);
 
     /*根据新需求，电池电量显示分别是*/
     /* 0-5%、6-10%、11%-20%、21-30%、31-40%、41-50%、51-60%、61%-70%、71-80%、81-90%、91-100% */
     QString percentageStr;
-    if (percentage < 0) {
-        percentageStr = "000";
-    } else if (percentage <= 5 && percentage >= 0) {
+    if (percentage <= 5) {
         percentageStr = "000";
     } else if (percentage <= 10) {
         percentageStr = "010";
@@ -100,9 +100,14 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         percentageStr = "100";
     }
 
-    QString iconStr = QString("battery-%1-%2")
-                      .arg(percentageStr)
-                      .arg(plugged ? "plugged-symbolic" : "symbolic");
+    QString iconStr;
+    if (batteryState == BatteryState::FULLY_CHARGED && plugged) {
+        iconStr = QString("battery-full-charged-symbolic");
+    } else {
+        iconStr = QString("battery-%1-%2")
+                  .arg(percentageStr)
+                  .arg(plugged ? "plugged-symbolic" : "symbolic");
+    }
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconStr.append(PLUGIN_MIN_ICON_NAME);

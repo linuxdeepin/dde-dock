@@ -1037,8 +1037,8 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
 void MainWindow::updateRegionMonitorWatch()
 {
     if (!m_registerKey.isEmpty()) {
-        m_eventInter->UnregisterArea(m_registerKey);
-        qDebug() << "register area clear";
+        bool ret = m_eventInter->UnregisterArea(m_registerKey);
+        qDebug() << "register area clear:" << ret;
         m_registerKey.clear();
     }
 
