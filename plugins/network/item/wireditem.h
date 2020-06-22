@@ -67,6 +67,8 @@ public:
     QJsonObject getActiveWiredConnectionInfo();
     inline QString &deviceName() { return m_deviceName; }
     void setThemeType(DGuiApplicationHelper::ColorType themeType);
+    void setWiredStateIcon();
+    void refreshConnectivity() override;
 
 signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
@@ -86,6 +88,8 @@ private:
     DSpinner *m_loadingStat;
 
     HorizontalSeperator *m_line;
+    QTimer *m_freshWiredIcon;
+    NetworkDevice::DeviceStatus m_deviceState;
 };
 
 #endif // WIREDITEM_H

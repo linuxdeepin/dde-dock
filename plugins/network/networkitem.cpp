@@ -385,10 +385,10 @@ void NetworkItem::refreshIcon()
         return;
     }
     case Bconnecting: {
-        m_timer->start();
-        const quint64 index = QTime::currentTime().msec() / 10 % 100;
-        const int num = (index % 5) + 1;
-        iconString = QString("network-wired-symbolic-connecting%1.svg").arg(num);
+        m_timer->start(200);
+        const int index = QTime::currentTime().msec() / 200 % 10;
+        const int num = index + 1;
+        iconString = QString("network-wired-symbolic-connecting%1").arg(num);
         if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                 && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
             iconString.append(PLUGIN_MIN_ICON_NAME);
