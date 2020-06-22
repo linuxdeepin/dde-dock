@@ -117,7 +117,7 @@ WirelessItem::WirelessStatus WirelessItem::getDeviceState()
     }
 
     switch (m_device->status()) {
-    case NetworkDevice::Unknow:        return Unknow;
+    case NetworkDevice::Unknown:       return Unknown;
     case NetworkDevice::Unmanaged:
     case NetworkDevice::Unavailable:
     case NetworkDevice::Disconnected:  return Disconnected;

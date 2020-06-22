@@ -409,7 +409,7 @@ void NetworkItem::refreshIcon()
         stateString = "none";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
-    case Unknow:
+    case Unknown:
     case Nocable:
         stateString = "error";//待图标 暂用错误图标
         iconString = QString("network-%1-symbolic").arg(stateString);
@@ -525,7 +525,7 @@ void NetworkItem::getPluginState()
     // 按如下顺序得到当前无线设备状态
     temp = state;
     if (!temp)
-        wirelessState = WirelessItem::Unknow;
+        wirelessState = WirelessItem::Unknown;
     temp = state;
     if ((temp & WirelessItem::Disabled) >> 17)
         wirelessState = WirelessItem::Disabled;
@@ -559,7 +559,7 @@ void NetworkItem::getPluginState()
     }
     temp = state;
     if (!temp)
-        wiredState = WiredItem::Unknow;
+        wiredState = WiredItem::Unknown;
     temp = state;
     if ((temp & WiredItem::Nocable) >> 9)
         wiredState = WiredItem::Nocable;
@@ -582,7 +582,7 @@ void NetworkItem::getPluginState()
 
     switch (wirelessState | wiredState) {
     case 0:
-        m_pluginState = Unknow;
+        m_pluginState = Unknown;
         break;
     case 0x00000001:
         m_pluginState = Bdisconnected;
@@ -980,7 +980,7 @@ void NetworkItem::getPluginState()
     }
 
     switch (m_pluginState) {
-    case Unknow:
+    case Unknown:
     case Disabled:
     case Connected:
     case Disconnected:
@@ -1219,7 +1219,7 @@ void NetworkItem::refreshTips()
     case Bfailed:
         m_tipsWidget->setText(tr("Network cable unplugged"));
         break;
-    case Unknow:
+    case Unknown:
     case Nocable:
         m_tipsWidget->setText(tr("Network cable unplugged"));
         break;
@@ -1235,7 +1235,7 @@ bool NetworkItem::isShowControlCenter()
 
     if (onlyOneTypeDevice) {
         switch (m_pluginState) {
-        case Unknow:
+        case Unknown:
         case Nocable:
         case Bfailed:
         case AconnectNoInternet:
@@ -1250,7 +1250,7 @@ bool NetworkItem::isShowControlCenter()
         }
     } else {
         switch (m_pluginState) {
-        case Unknow:
+        case Unknown:
         case Nocable:
         case Bfailed:
         case ConnectNoInternet:

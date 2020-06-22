@@ -344,7 +344,7 @@ void WirelessList::updateIndicatorPos()
             continue;
         }
         // the State of Active Connection
-        // 0:Unknow, 1:Activating, 2:Activated, 3:Deactivating, 4:Deactivated
+        // 0:Unknown, 1:Activating, 2:Activated, 3:Deactivating, 4:Deactivated
         if (activeConnObj.value("State").toInt(0) != 1) {
             break;
         }

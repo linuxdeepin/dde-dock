@@ -24,7 +24,7 @@ class NetworkItem : public QWidget
 
     enum PluginState
     {
-        Unknow              = 0,
+        Unknown             = 0,
         // A 无线 B 有线
         Disabled,
         Connected,
