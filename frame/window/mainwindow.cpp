@@ -306,7 +306,7 @@ bool MainWindow::event(QEvent *e)
     switch (e->type()) {
     case QEvent::Move:
         if (!e->spontaneous())
-            QTimer::singleShot(1, this, &MainWindow::positionCheck);
+            QTimer::singleShot(100, this, &MainWindow::positionCheck);
         break;
     default:;
     }
@@ -824,7 +824,6 @@ void MainWindow::adjustShadowMask()
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
-
     m_platformWindowHandle.setWindowRadius(composite && isFasion ? radius : 0);
 }
 
@@ -839,7 +838,9 @@ void MainWindow::positionCheck()
         return;
 
     // this may cause some position error and animation caton
-    //internalMove();
+    bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
+    const QRect windowRect = m_settings->windowRect(m_dockPosition, isHide);
+    internalMove(windowRect.topLeft());
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
