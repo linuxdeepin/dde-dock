@@ -42,6 +42,7 @@ public:
     virtual QWidget *itemApplet();
     virtual QWidget *itemTips();
     virtual void invokeMenuItem(const QString &menuId);
+    virtual void refreshConnectivity() {}
 
 signals:
     void requestSetDeviceEnable(const QString &path, const bool enable) const;
