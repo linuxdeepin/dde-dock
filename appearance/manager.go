@@ -890,7 +890,9 @@ func (m *Manager) saveWSConfig(monitorSpace string, t time.Time) error {
 	cfg, _ := loadWSConfig(wsConfigFile)
 	var tempCfg WSConfig
 	tempCfg.LastChange = t
-	tempCfg.Showed = m.wsLoopMap[monitorSpace].GetShowed()
+	if m.wsLoopMap[monitorSpace] != nil {
+		tempCfg.Showed = m.wsLoopMap[monitorSpace].GetShowed()
+	}
 	if cfg == nil {
 		cfg = make(mapMonitorWorkspaceWSConfig)
 	}
@@ -900,6 +902,9 @@ func (m *Manager) saveWSConfig(monitorSpace string, t time.Time) error {
 
 func (m *Manager) autoChangeBg(monitorSpace string, t time.Time) {
 	logger.Debug("autoChangeBg", monitorSpace, t)
+	if m.wsLoopMap[monitorSpace] == nil {
+		return
+	}
 	file := m.wsLoopMap[monitorSpace].GetNext()
 	if file == "" {
 		logger.Warning("file is empty")
@@ -944,7 +949,9 @@ func (m *Manager) initWallpaperSlideshow() {
 	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if err == nil {
 		for icfg := range cfg {
-			m.wsSchedulerMap[icfg].fn = m.autoChangeBg
+			if m.wsSchedulerMap[icfg] != nil {
+				m.wsSchedulerMap[icfg].fn = m.autoChangeBg
+			}
 			policy := cfg[icfg]
 			if isValidWSPolicy(policy) {
 				if policy == wsPolicyLogin {
@@ -954,7 +961,7 @@ func (m *Manager) initWallpaperSlideshow() {
 					}
 				} else {
 					nSec, err := strconv.ParseUint(policy, 10, 32)
-					if err == nil {
+					if err == nil && m.wsSchedulerMap[icfg] != nil {
 						m.wsSchedulerMap[icfg].updateInterval(icfg, time.Duration(nSec)*time.Second)
 					}
 				}
@@ -1047,14 +1054,14 @@ func (m *Manager) updateWSPolicy(policy string) {
 			if m.curMonitorSpace == icfg && isValidWSPolicy(policy) {
 				nSec, err := strconv.ParseUint(policy, 10, 32)
 				if err == nil {
-					m.wsSchedulerMap[m.curMonitorSpace].lastSetBg = time.Now()
-					m.wsSchedulerMap[m.curMonitorSpace].updateInterval(icfg, time.Duration(nSec)*time.Second)
-					err = m.saveWSConfig(m.curMonitorSpace, time.Now())
+					m.wsSchedulerMap[icfg].lastSetBg = time.Now()
+					m.wsSchedulerMap[icfg].updateInterval(icfg, time.Duration(nSec)*time.Second)
+					err = m.saveWSConfig(icfg, time.Now())
 					if err != nil {
 						logger.Warning(err)
 					}
 				} else {
-					m.wsSchedulerMap[m.curMonitorSpace].stop()
+					m.wsSchedulerMap[icfg].stop()
 				}
 			}
 		}

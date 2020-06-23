@@ -168,7 +168,7 @@ func (m *Manager) set(ty, value string) error {
 		}
 	case TypeBackground: //old change wallpaple interface (no used)
 		file, err := m.doSetBackground(value)
-		if err == nil {
+		if err == nil && m.wsLoopMap[m.curMonitorSpace] != nil {
 			m.wsLoopMap[m.curMonitorSpace].AddToShowed(file)
 		}
 	case TypeGreeterBackground:
@@ -215,8 +215,10 @@ func (m *Manager) SetMonitorBackground(monitorName string, imageFile string) *db
 	if err == nil {
 		idx, err := m.wm.GetCurrentWorkspace(0)
 		if err == nil {
-			m.wsLoopMap[monitorName + "&&" + strconv.Itoa(int(idx))].AddToShowed(file)
-			return dbusutil.ToError(err)
+			wsLoop := m.wsLoopMap[monitorName + "&&" + strconv.Itoa(int(idx))]
+			if wsLoop != nil {
+				wsLoop.AddToShowed(file)
+			}
 		}
 	}
 	return dbusutil.ToError(err)
@@ -228,7 +230,7 @@ func (m *Manager) SetWallpaperSlideShow(monitorName string, wallpaperSlideShow s
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) GetWallpaperSlideShow(monitorName string)(string, *dbus.Error) {
+func (m *Manager) GetWallpaperSlideShow(monitorName string) (string, *dbus.Error) {
 	logger.Debugf("Get Current Workspace Wallpaper SlideShow For Monitor '%s'", monitorName)
 	slideShow, err := m.doGetWallpaperSlideShow(monitorName)
 	return slideShow, dbusutil.ToError(err)
