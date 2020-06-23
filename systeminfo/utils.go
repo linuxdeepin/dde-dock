@@ -28,8 +28,9 @@ import (
 )
 
 const (
-	memKeyTotal = "MemTotal"
-	memKeyDelim = ":"
+	memKeyTotal   = "MemTotal"
+	memKeyDelim   = ":"
+	lscpuKeyDelim = ":"
 )
 
 func getMemoryFromFile(file string) (uint64, error) {
@@ -59,6 +60,27 @@ func systemBit() string {
 
 	v := strings.TrimRight(string(output), "\n")
 	return v
+}
+
+func runLscpu() (map[string]string, error) {
+	cmd := exec.Command("lscpu")
+	out, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(out), "\n")
+	res := make(map[string]string, len(lines))
+	for _, line := range lines {
+		items := strings.Split(line, lscpuKeyDelim)
+		if len(items) != 2 {
+			continue
+		}
+
+		res[items[0]] = strings.TrimSpace(items[1])
+	}
+
+	return res, nil
 }
 
 func parseInfoFile(file, delim string) (map[string]string, error) {

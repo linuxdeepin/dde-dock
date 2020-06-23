@@ -156,12 +156,23 @@ func (info *SystemInfo) init() {
 		logger.Warning("Get disk capacity failed:", err)
 	}
 
-	go func() {
-		info.CPUMaxMHz, err = GetCPUMaxMHz(int(info.SystemType))
+	lscpuRes, err := runLscpu()
+	if err != nil {
+		logger.Warning("run lscpu failed:", err)
+		return
+	}
+
+	info.CPUMaxMHz, err = getCPUMaxMHzByLscpu(lscpuRes)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	if info.Processor == "" {
+		info.Processor, err = getProcessorByLscpu(lscpuRes)
 		if err != nil {
-			logger.Warning("Get CPU Max MHz failed:", err)
+			logger.Warning(err)
 		}
-	}()
+	}
 }
 
 func (info *SystemInfo) isValidity() bool {
