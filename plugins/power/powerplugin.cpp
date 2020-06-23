@@ -243,7 +243,7 @@ void PowerPlugin::refreshTipsData()
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
 
-    if (m_preChargeTimer->isActive()) {
+    if (m_preChargeTimer->isActive() && m_showTimeToFull) {
         // 插入电源后，20秒内算作预充电时间，此时计算剩余充电时间是不准确的
         QString tips = tr("Capacity %1 ...").arg(value);
         m_tipsLabel->setText(tips);
@@ -256,24 +256,16 @@ void PowerPlugin::refreshTipsData()
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
-        if (hour == 0) {
-            if (min == 0)
-                tips = tr("Charged");
-            else {
-                if (m_showTimeToFull)
-                    tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
-                else {
-                    tips = tr("Capacity %1").arg(value);
-                }
-            }
+        if (!m_showTimeToFull) {
+            tips = tr("Capacity %1").arg(value);
         } else {
-            if (m_showTimeToFull)
+            if (hour == 0) {
+                min == 0 ? tips = tr("Charged")
+                         : tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
+            } else {
                 tips = tr("Capacity %1, %2 hr %3 min remaining").arg(value).arg(hour).arg(min);
-            else {
-                tips = tr("Capacity %1").arg(value);
             }
         }
-
         m_tipsLabel->setText(tips);
     } else if (batteryState == BatteryState::FULLY_CHARGED || percentage == 100.) {
         m_tipsLabel->setText(tr("Capacity %1, fully charged").arg(value));
@@ -283,22 +275,16 @@ void PowerPlugin::refreshTipsData()
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
         QString tips;
-        if (timeToFull == 0) {  // 电量已充満或电量计算中,剩余充满时间会返回0
-            tips = tr("Capacity %1 ...").arg(value);
-        } else if (hour == 0) {
-            if (m_showTimeToFull)
-                tips = tr("Charging %1, %2 min until full").arg(value).arg(min);
-            else {
-                tips = tr("Charging %1").arg(value);
-            }
+        if (!m_showTimeToFull) {
+            tips = tr("Charging %1").arg(value);
         } else {
-            if (m_showTimeToFull)
-                tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
-            else {
-                tips = tr("Charging %1").arg(value);
+            if (timeToFull == 0) {  // 电量已充満或电量计算中,剩余充满时间会返回0
+                tips = tr("Capacity %1 ...").arg(value);
+            } else {
+                hour == 0 ? tips = tr("Charging %1, %2 min until full").arg(value).arg(min)
+                          : tips = tr("Charging %1, %2 hr %3 min until full").arg(value).arg(hour).arg(min);
             }
         }
-
         m_tipsLabel->setText(tips);
     }
 }
