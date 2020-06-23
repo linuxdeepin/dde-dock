@@ -233,7 +233,7 @@ func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasV
 func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bool) {
 	const (
 		multiLevelAdjustmentScale     = 0.2 // 分级调节时，默认按照20%亮度调节值调整亮度，并在亮度显示的设置分级中，归到所在分级
-		multiLevelAdjustmentThreshold = 100 // 分级调节判断阈值，最大亮度值小于等于该值且不为0时，调节方式为分级调节
+		multiLevelAdjustmentThreshold = 100 // 分级调节判断阈值，最大亮度值小于该值且不为0时，调节方式为分级调节
 	)
 	if !hasValue {
 		return
@@ -257,8 +257,8 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 	if err != nil {
 		logger.Warning(err)
 	}
-	// 判断亮度调节方式是分级调节还是百分比滑动：最大亮度小于等于100且最大亮度不为0时，为分级调节
-	isMultiLevelAdjustment := maxBacklightBrightness <= multiLevelAdjustmentThreshold && maxBacklightBrightness != 0
+	// 判断亮度调节方式是分级调节还是百分比滑动：最大亮度小于100且最大亮度不为0时，为分级调节
+	isMultiLevelAdjustment := maxBacklightBrightness < multiLevelAdjustmentThreshold && maxBacklightBrightness != 0
 	// 判断亮度修改是手动调节亮度还是调节了节能选项
 	brightnessChangedByManual := psp.isBrightnessChangedByManual()
 	lowerBrightnessScale := 1 - float64(psp.manager.savingModeBrightnessDropPercent.Get())/100
