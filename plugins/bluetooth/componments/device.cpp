@@ -51,6 +51,11 @@ Device::Device(QObject *parent)
 {
 }
 
+Device::~Device()
+{
+    emit stateChanged(StateUnavailable);
+}
+
 void Device::setId(const QString &id)
 {
     m_id = id;
