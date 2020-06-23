@@ -375,7 +375,6 @@ void DockSettings::menuActionClicked(QAction *action)
     if (action == &m_efficientModeAct)
         return m_dockInter->setDisplayMode(Efficient);
 
-    m_isMouseMoveCause = false;
     if (action == &m_topPosAct)
         return m_dockInter->setPosition(Top);
     if (action == &m_bottomPosAct)
@@ -423,6 +422,7 @@ void DockSettings::onPositionChanged()
         return;
     m_position = nextPos;
 
+    m_isMouseMoveCause = false;
     // 位置改变 重新计算可停靠任务栏的位置
     calculateMultiScreensPos();
 
@@ -499,8 +499,6 @@ void DockSettings::resetFrontendGeometry()
 
     m_frontendRect = QRect(p.x(), p.y(), w, h);
     m_dockInter->SetFrontendWindowRect(p.x(), p.y(), w, h);
-
-    emit requestUpdateDockGeometry(m_frontendRect);
 }
 
 void DockSettings::updateFrontendGeometry()
@@ -847,9 +845,6 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
             if (isAligment) {
                 s1->dockPosition().rightDock = false;
                 s2->dockPosition().leftDock = false;
-            } else {
-                s1->dockPosition().rightDock = false;
-                s2->dockPosition().leftDock = false;
             }
         }
         // s1右 s2左
@@ -857,9 +852,6 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
             isAligment = (s1->topLeft() == s2->topRight())
                          && (s1->bottomLeft() == s2->bottomRight());
             if (isAligment) {
-                s1->dockPosition().leftDock = false;
-                s2->dockPosition().rightDock = false;
-            } else {
                 s1->dockPosition().leftDock = false;
                 s2->dockPosition().rightDock = false;
             }
@@ -874,9 +866,6 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
             if (isAligment) {
                 s1->dockPosition().bottomDock = false;
                 s2->dockPosition().topDock = false;
-            } else {
-                s1->dockPosition().bottomDock = false;
-                s2->dockPosition().topDock = false;
             }
         }
         // s1下 s2上
@@ -884,9 +873,6 @@ void DockSettings::calculateRelativePos(Monitor *s1, Monitor *s2)
             isAligment = (s1->topLeft() == s2->bottomLeft())
                          && (s1->topRight() == s2->bottomRight());
             if (isAligment) {
-                s1->dockPosition().topDock = false;
-                s2->dockPosition().bottomDock = false;
-            } else {
                 s1->dockPosition().topDock = false;
                 s2->dockPosition().bottomDock = false;
             }
