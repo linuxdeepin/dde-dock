@@ -28,6 +28,15 @@
 
 #define POWER_KEY "power"
 
+// from https://upower.freedesktop.org/docs/Device.html#Device:State
+enum BatteryState {
+    UNKNOWN = 0,        // 未知
+    CHARGING = 1,       // 充电中
+    DIS_CHARGING = 2,   // 放电
+    NOT_CHARGED = 3,    // 未充
+    FULLY_CHARGED = 4   // 充满
+};
+
 class PowerStatusWidget : public QWidget
 {
     Q_OBJECT
