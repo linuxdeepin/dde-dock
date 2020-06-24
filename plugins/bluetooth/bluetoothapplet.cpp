@@ -325,3 +325,11 @@ void BluetoothApplet::setAdapterRefresh()
             adapterItem->refresh();
     }
 }
+
+void BluetoothApplet::setAdapterRefresh()
+{
+    for (AdapterItem *adapterItem : m_adapterItems) {
+        if (adapterItem)
+            adapterItem->refresh();
+    }
+}
