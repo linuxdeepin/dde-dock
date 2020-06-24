@@ -41,6 +41,7 @@ class BluetoothApplet : public QScrollArea
 public:
     explicit BluetoothApplet(QWidget *parent = nullptr);
     void setAdapterPowered(bool powered);
+    void setAdapterRefresh();
     bool poweredInitState();
     bool hasAadapter();
     QStringList connectedDevsName();

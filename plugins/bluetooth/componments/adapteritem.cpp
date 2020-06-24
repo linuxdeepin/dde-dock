@@ -49,7 +49,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered(),false);
     m_switchItem->setLoading(adapter->discover());
-    m_adaptersManager->setAdapterPowered(m_adapter, adapter->powered());
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
@@ -343,6 +342,8 @@ void AdapterItem::showDevices(bool powered)
 
 void AdapterItem::refresh()
 {
+    if (m_adapter->discover())
+        return;
     m_adaptersManager->adapterRefresh(m_adapter);
 }
 

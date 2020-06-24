@@ -68,6 +68,8 @@ QWidget *BluetoothItem::tipsWidget()
 
 QWidget *BluetoothItem::popupApplet()
 {
+    if (m_applet && m_applet->hasAadapter())
+        m_applet->setAdapterRefresh();
     return m_applet->hasAadapter() ? m_applet : nullptr;
 }
 
