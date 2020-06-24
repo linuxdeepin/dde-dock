@@ -159,7 +159,11 @@ void DockItem::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton) {
         if (perfectIconRect().contains(e->pos())) {
-            return showContextMenu();
+            return showContextMenu(mapToGlobal(e->pos()));
+        }
+    } else if (e->button() == Qt::LeftButton) {
+        if (perfectIconRect().contains(e->pos())) {
+            hideContextMenu();
         }
     }
 
@@ -216,7 +220,7 @@ const QRect DockItem::perfectIconRect() const
     return iconRect;
 }
 
-void DockItem::showContextMenu()
+void DockItem::showContextMenu(QPoint pos)
 {
     const QString menuJson = contextMenu();
     if (menuJson.isEmpty())
@@ -244,9 +248,37 @@ void DockItem::showContextMenu()
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.popup(QCursor::pos());
+    Qt::WindowFlags flags = (Qt::WindowFlags)WINDOWS_MENU;
+    m_contextMenu.setWindowFlags(m_contextMenu.windowFlags() | flags);
+
+    m_contextMenu.show();
+    updateContextMenuGeometry(pos);
 
     onContextMenuAccepted();
+}
+
+void DockItem::hideContextMenu()
+{
+    m_contextMenu.hide();
+}
+
+void DockItem::updateContextMenuGeometry(QPoint pos)
+{
+    int width = m_contextMenu.width();
+    int height = m_contextMenu.height();
+
+    switch (DockPosition) {
+        case Top:
+        case Left:
+            m_contextMenu.move(pos.x(), pos.y());
+            break;
+        case Bottom:
+            m_contextMenu.move(pos.x(), pos.y() - height);
+            break;
+        case Right:
+            m_contextMenu.move(pos.x() - width, pos.y());
+            break;
+    }
 }
 
 void DockItem::menuActionClicked(QAction *action)

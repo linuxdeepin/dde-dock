@@ -69,7 +69,7 @@ public:
     const QRect windowRect(const Position position, const bool hide = false) const;
     qreal dockRatio() const;
 
-    void showDockSettingsMenu();
+    void showDockSettingsMenu(QPoint pos);
     void hideDockSettingsMenu();
     void updateFrontendGeometry();
     
@@ -118,7 +118,7 @@ private:
     void calculateWindowConfig();
     void gtkIconThemeChanged();
     void checkService();
-    void updateGeometry();
+    void updateDockMenuGeometry(QPoint pos);
 
 private:
     int m_dockWindowSize;

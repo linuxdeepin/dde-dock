@@ -61,6 +61,8 @@ public:
     QSize sizeHint() const override;
     virtual QString accessibleName();
 
+    void showContextMenu(QPoint pos);
+
 public slots:
     virtual void refershIcon() {}
 
@@ -98,11 +100,12 @@ protected:
     virtual void gestureEvent(QGestureEvent *event);
 
 protected slots:
-    void showContextMenu();
     void onContextMenuAccepted();
 
 private:
+    void hideContextMenu();
     void updatePopupPosition();
+    void updateContextMenuGeometry(QPoint pos);
     void menuActionClicked(QAction *action);
 
 protected:
