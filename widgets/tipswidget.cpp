@@ -78,3 +78,15 @@ void TipsWidget::paintEvent(QPaintEvent *event)
         break;
     }
 }
+
+bool TipsWidget::event(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        if (!m_text.trimmed().isEmpty()) {
+             setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
+             update();
+        }
+    }
+
+    return QFrame::event(event);
+}

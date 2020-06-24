@@ -21,6 +21,7 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     QString m_text;
