@@ -110,6 +110,13 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
                     qWarning() << call.error().message();
                 }
             });
+        } else {
+            QDBusPendingCall call = m_bluetoothInter->ClearUnpairedDevice();
+            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+            connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
+                if (call.isError())
+                    qWarning() << call.error().message();
+            });
         }
     }
 }
