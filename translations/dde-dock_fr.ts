@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Le plugin %1 n&apos;est pas compatible avec le système</translation>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Cliquer pour afficher les icônes cachés</translation>
+        <translation>L&apos;extension %1 n&apos;est pas compatible avec le système</translation>
     </message>
 </context>
 <context>
@@ -126,18 +119,6 @@
         <translation>Droite</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Grand</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Moyen</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Petit</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Maintenir affiché</translation>
     </message>
@@ -158,12 +139,8 @@
         <translation>Emplacement</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Taille</translation>
-    </message>
-    <message>
         <source>Status</source>
-        <translation>Status </translation>
+        <translation>Statut</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Lanceur</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vue multitâche</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Enlever du dock</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Options d&apos;alimentation</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Chargé à %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacité : %1, %2 minutes restantes</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Capacité : %1, %2 heures et %3 minutes restantes</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Chargé à %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>En charge (%1), %2 minutes avant la charge complète</translation>
+        <translation>En charge %1, %2 minutes avant la charge complète</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>En charge (%1), %2 heures et %3 minutes avant la charge complète</translation>
+        <translation>En charge %1, %2 heures et %3 minutes avant la charge complète</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Afficher le bureau</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Détacher du dock</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Connexion sans fil : %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connecté mais pas d’accès internet</translation>
     </message>
 </context>
 <context>

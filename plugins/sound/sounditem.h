@@ -26,6 +26,7 @@
 #include "dbus/dbussink.h"
 
 #include <QWidget>
+#include <QIcon>
 
 #define SOUND_KEY "sound-item-key"
 
@@ -49,7 +50,6 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
     void paintEvent(QPaintEvent *e);

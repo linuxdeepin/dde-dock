@@ -38,9 +38,6 @@ public:
     void updateIcon() Q_DECL_OVERRIDE;
     const QImage trayImage() Q_DECL_OVERRIDE;
     void sendClick(uint8_t, int, int) Q_DECL_OVERRIDE;
-
-    QSize sizeHint() const Q_DECL_OVERRIDE;
-
     static QString toIndicatorKey(const QString &indicatorName) { return QString("indicator:%1").arg(indicatorName); }
     static bool isIndicatorKey(const QString &itemKey) { return itemKey.startsWith("indicator:"); }
 

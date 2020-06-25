@@ -38,6 +38,7 @@
 #include <QCoreApplication>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
 const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
@@ -115,7 +116,6 @@ void PopupControlWidget::clearTrashFloder()
         d.addButton(buttonTexts[0], true, DDialog::ButtonNormal);
         d.addButton(buttonTexts[1], false, DDialog::ButtonWarning);
         d.setDefaultButton(1);
-        d.getButton(1)->setFocus();
         d.moveToCenter();
         execCode = d.exec();
     }

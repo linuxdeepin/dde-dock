@@ -25,20 +25,19 @@
 #include "dockitem.h"
 #include "pluginsiteminterface.h"
 
+class QGSettings;
 class PluginsItem : public DockItem
 {
     Q_OBJECT
 
 public:
-    explicit PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent = 0);
-    ~PluginsItem();
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    ~PluginsItem() override;
 
     int itemSortKey() const;
     void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
-    bool allowContainer() const;
-    bool isInContainer() const;
     void setInContainer(const bool container);
 
     QString pluginName() const;
@@ -46,14 +45,16 @@ public:
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
 
-    inline ItemType itemType() const override {return Plugins;}
+    ItemType itemType() const override;
     QSize sizeHint() const override;
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     QWidget *centralWidget() const;
 
+    virtual void setDraging(bool bDrag) override;
+
 public slots:
     void refershIcon() override;
+    void onGSettingsChanged(const QString &key);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -62,25 +63,28 @@ protected:
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
-    void showPopupWindow(QWidget * const content, const bool model = false) override;
+    void showPopupWindow(QWidget *const content, const bool model = false) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void startDrag();
     void mouseClicked();
+    bool checkGSettingsControl() const;
 
 private:
-    PluginsItemInterface * const m_pluginInter;
+    PluginsItemInterface *const m_pluginInter;
     QWidget *m_centralWidget;
 
     const QString m_itemKey;
     bool m_dragging;
-    bool m_hover;
 
     static QPoint MousePressPoint;
+    QGSettings *m_gsettings;
 };
 
 #endif // PLUGINSITEM_H

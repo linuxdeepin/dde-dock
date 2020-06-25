@@ -41,6 +41,14 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
             return;
 
     SystemTrayItem *item = new SystemTrayItem(itemInter, itemKey);
+    connect(item, &SystemTrayItem::itemVisibleChanged, this, [=] (bool visible){
+        if (visible) {
+            emit pluginItemAdded(itemKey, item);
+        }
+        else {
+            emit pluginItemRemoved(itemKey, item);
+        }
+    }, Qt::QueuedConnection);
 
     item->setVisible(false);
 

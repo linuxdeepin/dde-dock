@@ -71,6 +71,9 @@ static QPair<QGraphicsView *, QGraphicsItemAnimation *> SwingEffect(
         QWidget *parent, const QPixmap &icon, const QRect & rect, const qreal devicePixelRatio)
 {
     QGraphicsView *swingEffectView = new QGraphicsView(parent);
+    swingEffectView->viewport()->setAutoFillBackground(false);
+    swingEffectView->setFrameShape(QFrame::NoFrame);
+
     QGraphicsScene *itemScene = new QGraphicsScene(parent);
     QGraphicsItemAnimation *itemAnimation = new QGraphicsItemAnimation(parent);
 

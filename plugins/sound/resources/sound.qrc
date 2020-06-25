@@ -30,5 +30,9 @@
         <file>audio-volume-muted-symbolic.svg</file>
         <file>slider_bg.png</file>
         <file>slider_handle.svg</file>
+        <file>audio-volume-muted-symbolic-dark.svg</file>
+        <file>audio-volume-low-symbolic-dark.svg</file>
+        <file>audio-volume-medium-symbolic-dark.svg</file>
+        <file>audio-volume-high-symbolic-dark.svg</file>
     </qresource>
 </RCC>

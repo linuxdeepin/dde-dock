@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/user-trash.svg</file>
+    </qresource>
+</RCC>

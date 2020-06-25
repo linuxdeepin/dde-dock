@@ -24,11 +24,12 @@
 
 #include "dbus/dbussinkinput.h"
 #include "componments/volumeslider.h"
+#include "../widgets/tipswidget.h"
 
 #include <QFrame>
-
-#include <dimagebutton.h>
 #include <QPainter>
+
+#include <DImageButton>
 
 class SinkInputWidget : public QWidget
 {
@@ -42,12 +43,19 @@ private slots:
     void setMute();
     void setMuteIcon();
     void onPlaySoundEffect();
+    void onVolumeChanged();
+
+private:
+    void refreshIcon();
 
 private:
     DBusSinkInput *m_inputInter;
 
-    Dtk::Widget::DImageButton *m_volumeIcon;
+    Dtk::Widget::DImageButton *m_appBtn;
+    Dtk::Widget::DImageButton *m_volumeBtnMin;
+    QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
+    TipsWidget *m_volumeLabel;
 };
 
 #endif // SINKINPUTWIDGET_H

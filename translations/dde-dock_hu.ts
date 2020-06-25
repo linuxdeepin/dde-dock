@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Kattintson a rejtett ikon megjelenítéséhez</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Jobb</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Nagy</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Közepes</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Kicsi</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Megjelenítve tartás</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Hely</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Méret</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Állapot</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Indító</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Multitasking nézet</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Eltávolítás a Dokkról</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>Energiagazdálkodási beállítások</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>Akkukapacitás %1, %2 perc van még hátra</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>Akkukapacitás %1, %2 óra %3 perc van még hátra</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>Töltve %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Töltés %1, %2 perc van a feltöltés befejezéséig</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>Töltés %1, %2 óra %3 perc van a feltöltés befejezéséig</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Asztal megjelenítése</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Eltávolítás a Dokkról</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Vezeték nélküli kapcsolat: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Csatlakozva helyi hálózathoz</translation>
     </message>
 </context>
 <context>

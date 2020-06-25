@@ -3,21 +3,14 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>クリックして隠しアイコンを表示する</translation>
+        <translation>プラグイン %1 はこのシステムと互換性がありません。</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>キーボードレイアウトの追加</translation>
+        <translation>キーボードレイアウトを追加</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>%1 項目を空にしてもよろしいですか？</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -70,7 +63,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>この操作は元に戻す事ができません</translation>
+        <translation>この操作は元に戻せません</translation>
     </message>
 </context>
 <context>
@@ -103,11 +96,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>ファッション・モード</translation>
+        <translation>ファッションモード</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>エフィシェント・モード</translation>
+        <translation>エフィシェントモード</translation>
     </message>
     <message>
         <source>Top</source>
@@ -126,28 +119,16 @@
         <translation>右</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>大</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>中</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>小</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation>表示したままにする</translation>
+        <translation>常に表示</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>隠したままにする</translation>
+        <translation>常に非表示</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>スマート非表示</translation>
+        <translation>賢く非表示にする</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -156,10 +137,6 @@
     <message>
         <source>Location</source>
         <translation>位置</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>サイズ</translation>
     </message>
     <message>
         <source>Status</source>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Onboard</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -199,15 +187,11 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>パワー</translation>
+        <translation>電源</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation>電源設定</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation>充電完了 %1</translation>
+        <translation>電源の設定</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -218,6 +202,10 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>充電完了 %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
@@ -225,12 +213,27 @@
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>デスクトップを表示</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>パワー</translation>
+        <translation>電源</translation>
     </message>
     <message>
         <source>Shut down</source>
@@ -258,11 +261,11 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>アカウントの切り替え</translation>
+        <translation>アカウントを切り替え</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation>電源設定</translation>
+        <translation>電源の設定</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>無線接続: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>接続済み、インターネットアクセスなし</translation>
     </message>
 </context>
 <context>

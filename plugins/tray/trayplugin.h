@@ -54,11 +54,8 @@ public:
     QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemPopupApplet(const QString &itemKey) Q_DECL_OVERRIDE;
-    bool itemAllowContainer(const QString &itemKey) Q_DECL_OVERRIDE;
-    bool itemIsInContainer(const QString &itemKey) Q_DECL_OVERRIDE;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
-    void setItemIsInContainer(const QString &itemKey, const bool container) Q_DECL_OVERRIDE;
     void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
     void pluginSettingsChanged() override;
 
@@ -71,6 +68,7 @@ private:
     void loadIndicator();
     bool isSystemTrayItem(const QString &itemKey);
     QString itemKeyOfTrayWidget(AbstractTrayWidget *trayWidget);
+    Dock::DisplayMode displayMode();
 
 private slots:
     void initXEmbed();
@@ -101,6 +99,7 @@ private:
     QMap<QString, IndicatorTray*> m_indicatorMap;
 
     TipsWidget *m_tipsLabel;
+    bool m_pluginLoaded;
 };
 
 #endif // TRAYPLUGIN_H

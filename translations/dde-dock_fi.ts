@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Näytä piilotettut kuvakeet napsauttamalla</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -24,7 +17,7 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Päivänaika</translation>
+        <translation>Kello</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -43,7 +36,7 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ota verkkoyhteys käyttöön</translation>
+        <translation>Verkkoyhteys käyttöön</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -126,18 +119,6 @@
         <translation>Oikea</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Suuri</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Keskikokoinen</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pieni</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Pidä näkyvänä</translation>
     </message>
@@ -158,12 +139,8 @@
         <translation>Sijainti</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Koko</translation>
-    </message>
-    <message>
         <source>Status</source>
-        <translation>Näkyvyys</translation>
+        <translation>Tila</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Työpöydät</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Irrota</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Näppis</translation>
+        <translation>Näppäimistö</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,11 +191,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Virta-asetukset</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation>Ladattu: %1</translation>
+        <translation>Asetukset virta</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -218,12 +202,31 @@
         <translation>Akku %1, %2 t %3 min jäljellä</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Ladattu: %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Lataa %1, %2 min täyteen</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Lataa %1, %2 t %3 min täyteen</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Näytä työpöytä</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Irrota</translation>
     </message>
 </context>
 <context>
@@ -262,7 +265,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Virta-asetukset</translation>
+        <translation>Asetukset virta</translation>
     </message>
 </context>
 <context>
@@ -280,7 +283,7 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Vapauta</translation>
+        <translation>Ääntä</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -292,7 +295,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Äänenvoimakkuus: %1</translation>
+        <translation>Äänitaso %1</translation>
     </message>
 </context>
 <context>
@@ -343,7 +346,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Langallinen yhteys: %1</translation>
+        <translation>Kaapeli kytketty: %1</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Langaton yhteys: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Yhdistetty, mutta ei internet osoitetta</translation>
     </message>
 </context>
 <context>

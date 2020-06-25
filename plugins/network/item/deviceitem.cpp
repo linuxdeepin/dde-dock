@@ -26,9 +26,8 @@
 
 using namespace dde::network;
 
-DeviceItem::DeviceItem(dde::network::NetworkDevice *device)
-    : QWidget(nullptr),
-
+DeviceItem::DeviceItem(dde::network::NetworkDevice *device, QWidget *parent)
+    : QWidget(parent),
       m_device(device),
       m_path(device->path())
 {
@@ -93,8 +92,9 @@ void DeviceItem::invokeMenuItem(const QString &menuId)
                 .service("com.deepin.dde.ControlCenter")
                 .interface("com.deepin.dde.ControlCenter")
                 .path("/com/deepin/dde/ControlCenter")
-                .method("ShowModule")
+                .method("ShowPage")
                 .arg(QString("network"))
+                .arg(m_path)
                 .call();
 
     else if (menuId == "enable")

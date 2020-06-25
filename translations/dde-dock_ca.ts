@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Cliqueu per veure la icona amagada</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -66,7 +59,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Esborra</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -126,18 +119,6 @@
         <translation>A la dreta</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Gros</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mitjà</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Petit</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Mantén visible</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Ubicació</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Mida</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Llançador</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista de multitasca</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Treu de l&apos;acoblador</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>Configuració de l&apos;energia</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>Capacitat: %1, %2 min restants</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>Capacitat: %1, %2 h %3 min restants</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>Càrrega: %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacitat %1, %2 min restants</translation>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacitat %1, %2 h %3 min restants</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>S&apos;està carregant %1, %2 min fins càrrega completa</translation>
+        <translation>Es carrega %1, %2 min per completar-la.</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>S&apos;està carregant %1, %2 h %3 min fins càrrega completa</translation>
+        <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostra l&apos;escriptori</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Treu de l&apos;acoblador</translation>
     </message>
 </context>
 <context>
@@ -234,7 +237,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Atura</translation>
+        <translation>Atura&apos;t</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Connexió sense fil: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connectat però sense accés a Internet</translation>
     </message>
 </context>
 <context>

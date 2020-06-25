@@ -11,7 +11,9 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
     "../../frame/util/pluginloader.h" "../../frame/util/pluginloader.cpp"
     "../../frame/dbus/sni/*.h" "../../frame/dbus/sni/*.cpp"
     "../../frame/dbus/dbusmenu.h" "../../frame/dbus/dbusmenu.cpp"
-    "../../frame/dbus/dbusmenumanager.h" "../../frame/dbus/dbusmenumanager.cpp")
+    "../../frame/dbus/dbusmenumanager.h" "../../frame/dbus/dbusmenumanager.cpp"
+     "../../widgets/*.h" "../../widgets/*.cpp"
+     "../../frame/util/imageutil.h" "../../frame/util/imageutil.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -35,7 +37,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
                                                  ../../interfaces
-                                                 ../../frame)
+                                                 ../../frame )
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}

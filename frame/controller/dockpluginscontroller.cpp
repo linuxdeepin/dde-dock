@@ -25,6 +25,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QDrag>
 
 DockPluginsController::DockPluginsController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -32,7 +33,7 @@ DockPluginsController::DockPluginsController(QObject *parent)
     setObjectName("DockPlugin");
 }
 
-void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
@@ -47,20 +48,18 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
         if (item->graphicsEffect()) {
             item->graphicsEffect()->setEnabled(false);
         }
-        connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::fashionTraySizeChanged,
-                this, &DockPluginsController::fashionTraySizeChanged, Qt::UniqueConnection);
+        connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::trayVisableCountChanged,
+                this, &DockPluginsController::trayVisableCountChanged, Qt::UniqueConnection);
     } else {
         item = new PluginsItem(itemInter, itemKey);
     }
-
-    item->setVisible(false);
 
     mPluginsMap[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);
 }
 
-void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::itemUpdate(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
     PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -71,7 +70,7 @@ void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, c
     emit pluginItemUpdated(item);
 }
 
-void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::itemRemoved(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
     PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -87,11 +86,15 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     // do not delete the itemWidget object(specified in the plugin interface)
     item->centralWidget()->setParent(nullptr);
 
+    if (item->isDragging()) {
+        QDrag::cancel();
+    }
+
     // just delete our wrapper object(PluginsItem)
     item->deleteLater();
 }
 
-void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+void DockPluginsController::requestWindowAutoHide(PluginsItemInterface *const itemInter, const QString &itemKey, const bool autoHide)
 {
     PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -100,7 +103,7 @@ void DockPluginsController::requestWindowAutoHide(PluginsItemInterface * const i
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
-void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
     PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -109,7 +112,7 @@ void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface * c
     Q_EMIT item->requestRefreshWindowVisible();
 }
 
-void DockPluginsController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const itemInter, const QString &itemKey, const bool visible)
 {
     PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -128,7 +131,8 @@ void DockPluginsController::startLoader()
     loadSystemPlugins();
 }
 
-void DockPluginsController::loadLocalPlugins() {
+void DockPluginsController::loadLocalPlugins()
+{
     QString pluginsDir(QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()));
 
     if (!QDir(pluginsDir).exists()) {
@@ -140,7 +144,8 @@ void DockPluginsController::loadLocalPlugins() {
     AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }
 
-void DockPluginsController::loadSystemPlugins() {
+void DockPluginsController::loadSystemPlugins()
+{
     QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
     if (!QDir(pluginsDir).exists()) {
         pluginsDir = "/usr/lib/dde-dock/plugins";

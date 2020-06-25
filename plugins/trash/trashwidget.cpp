@@ -34,31 +34,24 @@
 #include <QJsonDocument>
 #include <QApplication>
 
-DWIDGET_USE_NAMESPACE
-
 TrashWidget::TrashWidget(QWidget *parent)
-    : QWidget(parent),
-
-      m_popupApplet(new PopupControlWidget(this))
+    : QWidget(parent)
+    , m_popupApplet(new PopupControlWidget(this))
 {
-//    QIcon::setThemeName("deepin");
-
     m_popupApplet->setVisible(false);
 
-    connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIcon);
+    connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIconAndRefresh);
 
-    updateIcon();
     setAcceptDrops(true);
+
+    m_defaulticon = QIcon::fromTheme(":/icons/user-trash.svg");
+
+    setMinimumSize(PLUGIN_ICON_MIN_SIZE, PLUGIN_ICON_MIN_SIZE);
 }
 
 QWidget *TrashWidget::popupApplet()
 {
     return m_popupApplet;
-}
-
-QSize TrashWidget::sizeHint() const
-{
-    return QSize(26, 26);
 }
 
 const QString TrashWidget::contextMenu() const
@@ -72,8 +65,7 @@ const QString TrashWidget::contextMenu() const
     open["isActive"] = true;
     items.push_back(open);
 
-    if (!m_popupApplet->empty())
-    {
+    if (!m_popupApplet->empty()) {
         QMap<QString, QVariant> empty;
         empty["itemId"] = "empty";
         empty["itemText"] = tr("Empty");
@@ -109,18 +101,20 @@ void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
     if (e->mimeData()->hasFormat("RequestDock")) {
         // accept prevent the event from being propgated to the dock main panel
         // which also takes drag event;
-        e->accept();
 
         if (!e->mimeData()->hasFormat("Removable")) {
             // show the forbit dropping cursor.
             e->setDropAction(Qt::IgnoreAction);
+        } else {
+            e->setDropAction(Qt::MoveAction);
+            e->accept();
         }
 
         return;
     }
 
     if (!e->mimeData()->hasUrls())
-        e->ignore();
+        return e->ignore();
 
     e->setDropAction(Qt::MoveAction);
 
@@ -169,20 +163,18 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
-    QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center() / devicePixelRatioF(), m_icon);
-}
-
-void TrashWidget::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-
     updateIcon();
+
+    QPainter painter(this);
+    const QRectF &rf = QRectF(rect());
+    const QRectF &rfp = QRectF(m_icon.rect());
+    painter.drawPixmap(rf.center() - rfp.center() / devicePixelRatioF(), m_icon);
 }
 
 void TrashWidget::updateIcon()
 {
-    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    //    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    Dock::DisplayMode displayMode = Dock::Fashion;
 
     QString iconString = "user-trash";
     if (!m_popupApplet->empty())
@@ -190,10 +182,26 @@ void TrashWidget::updateIcon()
     if (displayMode == Dock::Efficient)
         iconString.append("-symbolic");
 
-    const int size = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-    QIcon icon = QIcon::fromTheme(iconString);
-    m_icon = icon.pixmap(size * devicePixelRatioF(), size * devicePixelRatioF());
-    m_icon.setDevicePixelRatio(devicePixelRatioF());
+    int size = std::min(width(), height());
+    if (size < PLUGIN_ICON_MIN_SIZE)
+        size = PLUGIN_ICON_MIN_SIZE;
+    if (size > PLUGIN_BACKGROUND_MAX_SIZE) {
+        size *= ((Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) ? 0.8 : 0.7);
+        if (size < PLUGIN_BACKGROUND_MAX_SIZE)
+            size = PLUGIN_BACKGROUND_MAX_SIZE;
+    }
+
+
+    QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
+
+    const auto ratio = devicePixelRatioF();
+    m_icon = icon.pixmap(size * ratio, size * ratio);
+    m_icon.setDevicePixelRatio(ratio);
+}
+
+void TrashWidget::updateIconAndRefresh()
+{
+    updateIcon();
     update();
 }
 

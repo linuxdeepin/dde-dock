@@ -24,14 +24,15 @@
 
 #include "accesspoint.h"
 
+#include <DImageButton>
+#include <NetworkDevice>
+
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QDBusObjectPath>
 
-#include <dimagebutton.h>
-#include <NetworkDevice>
-
+class StateLabel;
 class SsidButton : public QLabel
 {
     Q_OBJECT
@@ -77,15 +78,19 @@ private:
 private slots:
     void ssidClicked();
     void disconnectBtnClicked();
+    void buttonEnter();
+    void buttonLeave();
+
 
 private:
     dde::network::NetworkDevice::DeviceStatus m_activeState;
 
     AccessPoint m_ap;
     SsidButton *m_ssidBtn;
-    Dtk::Widget::DImageButton *m_disconnectBtn;
+//    Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityLabel;
     QLabel *m_strengthLabel;
+    StateLabel *m_stateButton;
 
     QPixmap m_securityPixmap;
     QSize m_securityIconSize;

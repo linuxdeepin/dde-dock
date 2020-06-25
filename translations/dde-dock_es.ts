@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Haga clic para mostrar el icono oculto</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -28,11 +21,11 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>Horario de 12 horas</translation>
+        <translation>Formato de 12 horas</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>Horario de 24 horas</translation>
+        <translation>Formato de 24 horas</translation>
     </message>
     <message>
         <source>Time Settings</source>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>¿Estás seguro de vaciar %1 elementos?</translation>
+        <translation>¿Está seguro de vaciar %1 elementos?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -115,7 +108,7 @@
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Inferior</translation>
+        <translation>Abajo</translation>
     </message>
     <message>
         <source>Left</source>
@@ -124,18 +117,6 @@
     <message>
         <source>Right</source>
         <translation>Derecha</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mediano</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeño</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -158,10 +139,6 @@
         <translation>Ubicación</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Tamaño</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista multitarea</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Desanclar</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Teclado en pantalla</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -206,10 +194,6 @@
         <translation>Ajustes de energía</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Cargado %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacidad %1, %2 min restante</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Capacidad %1, %2 h %3 min restante</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Cargado %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Cargando % 1, %2 min para completarse</translation>
+        <translation>Cargando %1, %2 min para completarse</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostrar escritorio</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Desanclar</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Conexión inalámbrica: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectado pero sin acceso a internet</translation>
     </message>
 </context>
 <context>

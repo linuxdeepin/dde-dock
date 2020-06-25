@@ -30,23 +30,25 @@
 #include <QMouseEvent>
 #include <QDrag>
 #include <QMimeData>
+#include <QGSettings>
 
 #define PLUGIN_ITEM_DRAG_THRESHOLD      20
 
 QPoint PluginsItem::MousePressPoint = QPoint();
 
-PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
-    : DockItem(parent),
-      m_pluginInter(pluginInter),
-      m_centralWidget(m_pluginInter->itemWidget(itemKey)),
-      m_itemKey(itemKey),
-      m_dragging(false),
-      m_hover(false)
+PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
+    : DockItem(parent)
+    , m_pluginInter(pluginInter)
+    , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_itemKey(itemKey)
+    , m_dragging(false)
+    , m_gsettings(nullptr)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
+    m_centralWidget->setAccessibleName("centralwidget");
     m_centralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
@@ -57,6 +59,20 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     setLayout(hLayout);
     setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
+
+    const QByteArray &schema{
+        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
+    };
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        m_gsettings = new QGSettings(schema);
+        m_gsettings->setParent(this);
+        connect(m_gsettings, &QGSettings::changed, this,
+                &PluginsItem::onGSettingsChanged);
+    }
+    else {
+        m_gsettings = nullptr;
+    }
 }
 
 PluginsItem::~PluginsItem()
@@ -80,30 +96,18 @@ void PluginsItem::detachPluginWidget()
         widget->setParent(nullptr);
 }
 
-bool PluginsItem::allowContainer() const
-{
-    if (DockDisplayMode == Dock::Fashion)
-        return false;
-
-    return m_pluginInter->itemAllowContainer(m_itemKey);
-}
-
-bool PluginsItem::isInContainer() const
-{
-    if (DockDisplayMode == Dock::Fashion)
-        return false;
-
-    return m_pluginInter->itemIsInContainer(m_itemKey);
-}
-
-void PluginsItem::setInContainer(const bool container)
-{
-    m_pluginInter->setItemIsInContainer(m_itemKey, container);
-}
-
 QString PluginsItem::pluginName() const
 {
     return m_pluginInter->pluginName();
+}
+
+DockItem::ItemType PluginsItem::itemType() const
+{
+    if (m_pluginInter->type() == PluginsItemInterface::Normal) {
+        return Plugins;
+    } else {
+        return FixedPlugin;
+    }
 }
 
 QSize PluginsItem::sizeHint() const
@@ -111,40 +115,19 @@ QSize PluginsItem::sizeHint() const
     return m_centralWidget->sizeHint();
 }
 
-void PluginsItem::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-
-    DisplayMode displayMode = m_pluginInter->displayMode();
-
-    if (displayMode == Dock::DisplayMode::Fashion) {
-        return;
-    }
-    if (!m_hover || m_dragging) {
-        return;
-    }
-
-    // draw hover background
-    QRect destRect;
-    destRect.setSize(m_centralWidget->sizeHint());
-    destRect.moveCenter(rect().center());
-
-    QPainterPath path;
-    path.addRoundedRect(destRect, 6, 6);
-
-    QColor color;
-    color = QColor::fromRgb(255, 255, 255);
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setOpacity(0.1);
-
-    painter.fillPath(path, color);
-}
-
 void PluginsItem::refershIcon()
 {
     m_pluginInter->refreshIcon(m_itemKey);
+}
+
+void PluginsItem::onGSettingsChanged(const QString& key) {
+    if (key != "enable" || !m_gsettings) {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        setVisible(m_gsettings->get("enable").toBool());
+    }
 }
 
 QWidget *PluginsItem::centralWidget() const
@@ -152,12 +135,23 @@ QWidget *PluginsItem::centralWidget() const
     return m_centralWidget;
 }
 
+void PluginsItem::setDraging(bool bDrag)
+{
+    DockItem::setDraging(bDrag);
+
+    m_centralWidget->setVisible(!bDrag);
+}
+
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_hover = false;
     update();
 
-    if (!isInContainer() && PopupWindow->isVisible())
+    if (PopupWindow->isVisible())
         hideNonModel();
 
     if (e->button() == Qt::LeftButton)
@@ -169,6 +163,10 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (e->buttons() != Qt::LeftButton)
         return DockItem::mouseMoveEvent(e);
 
@@ -181,12 +179,16 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 
 void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     DockItem::mouseReleaseEvent(e);
 
     if (e->button() != Qt::LeftButton)
         return;
 
-    if (checkAndResetTapHoldGestureState()&& e->source() == Qt::MouseEventSynthesizedByQt) {
+    if (checkAndResetTapHoldGestureState() && e->source() == Qt::MouseEventSynthesizedByQt) {
         qDebug() << "tap and hold gesture detected, ignore the synthesized mouse release event";
         return;
     }
@@ -200,6 +202,10 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 
 void PluginsItem::enterEvent(QEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_hover = true;
     update();
 
@@ -212,17 +218,30 @@ void PluginsItem::leaveEvent(QEvent *event)
     // here we should check the mouse position to ensure the mouse is really leaved
     // because this leaveEvent will also be called if setX11PassMouseEvent(false) is invoked
     // in XWindowTrayWidget::sendHoverEvent()
-    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
         m_hover = false;
         update();
-    }
 
     DockItem::leaveEvent(event);
+}
+
+void PluginsItem::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(0, this, [ = ] {
+        onGSettingsChanged("enable");
+    });
+
+    return DockItem::showEvent(event);
 }
 
 bool PluginsItem::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_centralWidget) {
+        if (event->type() == QEvent::MouseButtonPress ||
+                event->type() == QEvent::MouseButtonRelease) {
+            if (checkGSettingsControl()) {
+                return true;
+            }
+        }
         if (event->type() == QEvent::MouseButtonRelease) {
             m_hover = false;
             update();
@@ -237,11 +256,8 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
-void PluginsItem::showPopupWindow(QWidget * const content, const bool model)
+void PluginsItem::showPopupWindow(QWidget *const content, const bool model)
 {
-    if (isInContainer())
-        return;
-
     DockItem::showPopupWindow(content, model);
 }
 
@@ -252,11 +268,24 @@ const QString PluginsItem::contextMenu() const
 
 QWidget *PluginsItem::popupTips()
 {
+    if (checkGSettingsControl()) {
+        return nullptr;
+    }
+
     return m_pluginInter->itemTipsWidget(m_itemKey);
+}
+
+void PluginsItem::resizeEvent(QResizeEvent *event)
+{
+    setMaximumSize(m_centralWidget->maximumSize());
+    return DockItem::resizeEvent(event);
 }
 
 void PluginsItem::startDrag()
 {
+    // 拖拽已放到MainPanelControl处理
+    return;
+
     const QPixmap pixmap = grab();
 
     m_dragging = true;
@@ -286,8 +315,7 @@ void PluginsItem::startDrag()
 void PluginsItem::mouseClicked()
 {
     const QString command = m_pluginInter->itemCommand(m_itemKey);
-    if (!command.isEmpty())
-    {
+    if (!command.isEmpty()) {
         QProcess *proc = new QProcess(this);
 
         connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
@@ -300,4 +328,11 @@ void PluginsItem::mouseClicked()
     QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey);
     if (w)
         showPopupApplet(w);
+}
+
+bool PluginsItem::checkGSettingsControl() const
+{
+    return m_gsettings ? m_gsettings->keys().contains("control") &&
+                             m_gsettings->get("control").toBool()
+                       : false;
 }

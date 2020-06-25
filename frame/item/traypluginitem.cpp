@@ -22,6 +22,7 @@
 #include "traypluginitem.h"
 
 #include <QEvent>
+#include <QGSettings>
 
 TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : PluginsItem(pluginInter, itemKey, parent)
@@ -41,16 +42,33 @@ void TrayPluginItem::setRightSplitVisible(const bool visible)
     QMetaObject::invokeMethod(centralWidget(), "setRightSplitVisible", Qt::QueuedConnection, Q_ARG(bool, visible));
 }
 
+int TrayPluginItem::trayVisableItemCount()
+{
+    return m_trayVisableItemCount;
+}
+
 bool TrayPluginItem::eventFilter(QObject *watched, QEvent *e)
 {
     // 时尚模式下
     // 监听插件Widget的"FashionTraySize"属性
     // 当接收到这个属性变化的事件后，重新计算和设置dock的大小
 
+    if (watched == centralWidget()) {
+        if (e->type() == QEvent::MouseButtonPress ||
+                e->type() == QEvent::MouseButtonRelease) {
+            QGSettings settings("com.deepin.dde.dock.module.systemtray");
+            if (settings.keys().contains("control")
+                    && settings.get("control").toBool()) {
+                return true;
+            }
+        }
+    }
+
     if (watched == centralWidget() && e->type() == QEvent::DynamicPropertyChange) {
         const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName();
-        if (propertyName == "FashionTraySize") {
-            Q_EMIT fashionTraySizeChanged(watched->property("FashionTraySize").toSize());
+        if (propertyName == "TrayVisableItemCount") {
+            m_trayVisableItemCount = watched->property("TrayVisableItemCount").toInt();
+            Q_EMIT trayVisableCountChanged(m_trayVisableItemCount);
         }
     }
 

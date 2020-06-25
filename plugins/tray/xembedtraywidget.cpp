@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "constants.h"
 #include "xembedtraywidget.h"
 
 #include <QWindow>
@@ -43,7 +44,7 @@
 #define WINE_WINDOW_PROP_NAME "__wine_prefix"
 #define IS_WINE_WINDOW_BY_WM_CLASS "explorer.exe"
 
-static const qreal iconSize = 16;
+static const qreal iconSize = PLUGIN_ICON_MAX_SIZE;
 
 // this static var hold all suffix of tray widget keys.
 // that is in order to fix can not show multiple trays provide by one application,
@@ -112,11 +113,6 @@ const QImage XEmbedTrayWidget::trayImage()
     return m_image;
 }
 
-QSize XEmbedTrayWidget::sizeHint() const
-{
-    return QSize(26, 26);
-}
-
 void XEmbedTrayWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
@@ -133,9 +129,6 @@ void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-#ifdef QT_DEBUG
-//    painter.fillRect(rect(), Qt::red);
-#endif
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_image.rect());
@@ -183,8 +176,10 @@ void XEmbedTrayWidget::wrapWindow()
 
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    if (clientGeom.isNull())
+    if (clientGeom.isNull()) {
+        m_valid = false;
         return;
+    }
 
     //create a container window
     const auto ratio = devicePixelRatioF();
@@ -411,7 +406,7 @@ void XEmbedTrayWidget::refershIconImage()
     if (qimage.isNull())
         return;
 
-    m_image = qimage.scaled(16 * ratio, 16 * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_image = qimage.scaled(iconSize * ratio, iconSize * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_image.setDevicePixelRatio(ratio);
 
     update();

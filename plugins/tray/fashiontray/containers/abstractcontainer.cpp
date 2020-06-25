@@ -1,14 +1,35 @@
+/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:
+ *
+ * Maintainer:  zhaolong <zhaolong@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "abstractcontainer.h"
 #include "../fashiontrayconstants.h"
 
 AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_trayPlugin(trayPlugin),
-      m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+      m_wrapperLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
       m_currentDraggingWrapper(nullptr),
       m_expand(true),
       m_dockPosition(Dock::Position::Bottom),
-      m_wrapperSize(QSize(TrayWidgetWidthMin, TrayWidgetHeightMin))
+      m_wrapperSize(QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE))
 {
     setAcceptDrops(true);
 
@@ -16,10 +37,25 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
     m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
     m_wrapperLayout->setSpacing(TraySpace);
 
-    m_wrapperLayout->setAlignment(Qt::AlignCenter);
-
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_wrapperLayout);
+
+    setMinimumWidth(TraySpace);
+    setMinimumHeight(TraySpace);
+}
+
+void AbstractContainer::refreshVisible()
+{
+    if (!m_wrapperList.isEmpty()) {
+        //非空保留两边边距
+        if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
+            m_wrapperLayout->setContentsMargins(TraySpace, 0, TraySpace, 0);
+        } else {
+            m_wrapperLayout->setContentsMargins(0, TraySpace, 0, TraySpace);
+        }
+    } else {
+        // 空，保留最小size，可以拖入
+        m_wrapperLayout->setContentsMargins(0, 0, 0, 0);
+    }
 }
 
 void AbstractContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
@@ -33,7 +69,6 @@ void AbstractContainer::addWrapper(FashionTrayWidgetWrapper *wrapper)
     m_wrapperList.insert(index, wrapper);
 
     wrapper->setAttention(false);
-    wrapper->setFixedSize(m_wrapperSize);
 
     connect(wrapper, &FashionTrayWidgetWrapper::attentionChanged, this, &AbstractContainer::onWrapperAttentionhChanged, static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
     connect(wrapper, &FashionTrayWidgetWrapper::dragStart, this, &AbstractContainer::onWrapperDragStart, Qt::UniqueConnection);
@@ -52,7 +87,12 @@ bool AbstractContainer::removeWrapper(FashionTrayWidgetWrapper *wrapper)
 
     // do not delete real tray object, just delete it's wrapper object
     // the real tray object should be deleted in TrayPlugin class
-    w->absTrayWidget()->setParent(nullptr);
+    if (!w->absTrayWidget().isNull())
+        w->absTrayWidget()->setParent(nullptr);
+
+    if (w->isDragging()) {
+        w->cancelDragging();
+    }
     w->deleteLater();
 
     refreshVisible();
@@ -95,7 +135,7 @@ void AbstractContainer::setDockPosition(const Dock::Position pos)
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
         m_wrapperLayout->setDirection(QBoxLayout::Direction::LeftToRight);
-    } else{
+    } else {
         m_wrapperLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
 
@@ -109,33 +149,53 @@ void AbstractContainer::setExpand(const bool expand)
     refreshVisible();
 }
 
+//QSize AbstractContainer::sizeHint() const
+//{
+//    return totalSize();
+//}
+
+void AbstractContainer::setItemSize(int itemSize)
+{
+    m_itemSize = itemSize;
+
+    for (auto w : wrapperList()) {
+        if (dockPosition() == Dock::Top || dockPosition() == Dock::Bottom)
+            w->setFixedSize(m_itemSize, QWIDGETSIZE_MAX);
+        else
+            w->setFixedSize(QWIDGETSIZE_MAX, m_itemSize);
+    }
+}
+
 QSize AbstractContainer::totalSize() const
 {
     QSize size;
 
-    const int wrapperWidth = m_wrapperSize.width();
-    const int wrapperHeight = m_wrapperSize.height();
-
     if (m_dockPosition == Dock::Position::Top || m_dockPosition == Dock::Position::Bottom) {
+
+        int itemSize = qBound(PLUGIN_BACKGROUND_MIN_SIZE, parentWidget()->height(), PLUGIN_BACKGROUND_MAX_SIZE);
+        if (itemSize > m_itemSize)
+            itemSize = m_itemSize;
+
         size.setWidth(
-                    m_wrapperList.size() * wrapperWidth // 所有托盘图标
-                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-                    );
+            (expand() ? (m_wrapperList.size() * itemSize         // 所有托盘图标
+                         + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
+            )           + TraySpace
+        );
         size.setHeight(height());
     } else {
+        int itemSize = qBound(PLUGIN_BACKGROUND_MIN_SIZE, parentWidget()->width(), PLUGIN_BACKGROUND_MAX_SIZE);
+        if (itemSize > m_itemSize)
+            itemSize = m_itemSize;
+
         size.setWidth(width());
         size.setHeight(
-                    m_wrapperList.size() * wrapperHeight // 所有托盘图标
-                    + m_wrapperList.size() * TraySpace // 所有托盘图标之间 + 一个尾部的 space
-                    );
+            (expand() ? (m_wrapperList.size() * itemSize // 所有托盘图标
+                         + m_wrapperList.size() * TraySpace) : 0 // 所有托盘图标之间 + 一个尾部的 space
+            ) + TraySpace
+        );
     }
 
     return size;
-}
-
-QSize AbstractContainer::sizeHint() const
-{
-    return totalSize();
 }
 
 void AbstractContainer::clearWrapper()
@@ -158,18 +218,14 @@ void AbstractContainer::saveCurrentOrderToConfig()
     }
 }
 
-void AbstractContainer::setWrapperSize(QSize size)
-{
-    m_wrapperSize = size;
-
-    for (auto w : m_wrapperList) {
-        w->setFixedSize(size);
-    }
-}
-
 bool AbstractContainer::isEmpty()
 {
     return m_wrapperList.isEmpty();
+}
+
+int AbstractContainer::itemCount()
+{
+    return m_wrapperList.count();
 }
 
 bool AbstractContainer::containsWrapper(FashionTrayWidgetWrapper *wrapper)
@@ -228,7 +284,7 @@ int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
     }
 
     //根据配置文件记录的顺序排序
-    const int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
+    int destSortKey = m_trayPlugin->itemSortKey(wrapper->itemKey());
 
     if (destSortKey < -1) {
         return 0;
@@ -236,6 +292,9 @@ int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
     if (destSortKey == -1) {
         return m_wrapperList.size();
     }
+
+    if (wrapper->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray)
+        destSortKey += m_wrapperList.size();
 
     // 当目标插入位置为列表的大小时将从最后面追加到列表中
     int destIndex = m_wrapperList.size();
@@ -297,6 +356,13 @@ void AbstractContainer::dragEnterEvent(QDragEnterEvent *event)
     }
 
     QWidget::dragEnterEvent(event);
+}
+
+void AbstractContainer::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+
+    QPainter p(this);
 }
 
 void AbstractContainer::onWrapperAttentionhChanged(const bool attention)

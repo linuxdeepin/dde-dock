@@ -32,6 +32,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
+#include <DGuiApplicationHelper>
 
 #include <com_deepin_dde_daemon_dock_entry.h>
 
@@ -48,15 +49,13 @@ public:
     const QString appId() const;
     const bool isValid() const;
     void updateWindowIconGeometries();
-    static void setIconBaseSize(const int size);
-    static int iconBaseSize();
-    static int itemBaseHeight();
-    static int itemBaseWidth();
     void undock();
     QWidget *appDragWidget();
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
 
     inline ItemType itemType() const Q_DECL_OVERRIDE { return App; }
+    QPixmap appIcon(){ return m_appIcon; }
+    virtual QString accessibleName();
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -82,7 +81,6 @@ private:
     void invokedMenuItem(const QString &itemId, const bool checked) Q_DECL_OVERRIDE;
     const QString contextMenu() const Q_DECL_OVERRIDE;
     QWidget *popupTips() Q_DECL_OVERRIDE;
-
     void startDrag();
     bool hasAttention() const;
 
@@ -96,6 +94,9 @@ private slots:
     void playSwingEffect();
     void stopSwingEffect();
     void checkAttentionEffect();
+    void onGSettingsChanged(const QString& key);
+    bool checkGSettingsControl() const;
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     TipsWidget *m_appNameTips;
@@ -112,6 +113,7 @@ private:
     bool m_dragging;
     bool m_active;
     int m_retryTimes;
+    unsigned long m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
     QString m_id;
@@ -126,8 +128,8 @@ private:
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;
+    DGuiApplicationHelper::ColorType m_themeType;
 
-    static int IconBaseSize;
     static QPoint MousePressPos;
 };
 

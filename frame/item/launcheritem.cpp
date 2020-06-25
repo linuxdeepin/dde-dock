@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <DDBusSender>
 #include <QApplication>
+#include <QGSettings>
 
 DCORE_USE_NAMESPACE
 
@@ -35,12 +36,15 @@ LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
+    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.launcher"))
 {
     m_launcherInter->setSync(true, false);
 
-    setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
+    m_tips->setAccessibleName("launchertips");
+
+    connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
 }
 
 void LauncherItem::refershIcon()
@@ -48,14 +52,20 @@ void LauncherItem::refershIcon()
     const int iconSize = qMin(width(), height());
     if (DockDisplayMode == Efficient)
     {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9, devicePixelRatioF());
+        m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
     } else {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6, devicePixelRatioF());
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
+        m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
     }
 
     update();
+}
+
+void LauncherItem::showEvent(QShowEvent* event) {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
+    return DockItem::showEvent(event);
 }
 
 void LauncherItem::paintEvent(QPaintEvent *e)
@@ -67,13 +77,11 @@ void LauncherItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
-    const QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
-
     const auto ratio = devicePixelRatioF();
-    const int iconX = rect().center().x() - pixmap.rect().center().x() / ratio;
-    const int iconY = rect().center().y() - pixmap.rect().center().y() / ratio;
+    const int iconX = rect().center().x() - m_icon.rect().center().x() / ratio;
+    const int iconY = rect().center().y() - m_icon.rect().center().y() / ratio;
 
-    painter.drawPixmap(iconX, iconY, pixmap);
+    painter.drawPixmap(iconX, iconY, m_icon);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)
@@ -85,6 +93,10 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     hidePopup();
 
     return QWidget::mousePressEvent(e);
@@ -92,6 +104,10 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
 
 void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (e->button() != Qt::LeftButton)
         return;
 
@@ -102,6 +118,26 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 
 QWidget *LauncherItem::popupTips()
 {
+    if (checkGSettingsControl()) {
+        return nullptr;
+    }
+
     m_tips->setText(tr("Launcher"));
     return m_tips;
+}
+
+void LauncherItem::onGSettingsChanged(const QString& key) {
+    if (key != "enable") {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        setVisible(m_gsettings->get("enable").toBool());
+    }
+}
+
+bool LauncherItem::checkGSettingsControl() const
+{
+    return m_gsettings->keys().contains("control")
+            && m_gsettings->get("control").toBool();
 }

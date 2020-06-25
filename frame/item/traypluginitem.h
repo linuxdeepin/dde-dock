@@ -35,12 +35,16 @@ public:
 
     void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
+    int trayVisableItemCount();
 
 Q_SIGNALS:
-    void fashionTraySizeChanged(const QSize &traySize) const;
+    void trayVisableCountChanged(const int &count) const;
 
 private:
     bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
+
+private:
+    int m_trayVisableItemCount = 0;
 };
 
 #endif // TRAYPLUGINITEM_H

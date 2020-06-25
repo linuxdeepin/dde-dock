@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Spustelėkite, norėdami rodyti paslėptą piktogramą</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Dešinė</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Didelis</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Vidutinis</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Mažas</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Laikyti rodomą</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Vieta</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Dydis</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Būsena</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Leistukas</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Daugiaprogramio apdorojimo rodinys</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Atskirti nuo doko</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Energijos nustatymai</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Įkrauta %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Talpa %1, liko %2 min.</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Talpa %1, liko %2 val. %3 min.</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Įkrauta %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Įkraunama %1, iki pilnos liko %2 min.</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Įkraunama %1, iki pilnos liko %2 val. %3 min.</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Rodyti darbalaukį</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Atskirti nuo doko</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Belaidis ryšys: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Prisijungta, bet nėra prieigos prie interneto</translation>
     </message>
 </context>
 <context>

@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Kliknij, aby wyświetlić ukrytą ikonę</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Do prawej</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Duże</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Średni</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Małe</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Zawsze wyświetlaj</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Położenie</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Rozmiar</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Stan</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Aktywator</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Widok wielozadaniowości</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Odepnij</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Ustawienia zasilania</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Naładowana %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Poziom: %1, pozostało: %2min</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Poziom: %1, pozostało: %2:%3</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Naładowana %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Ładowanie %1, %2min do końca</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Ładowanie %1, %2:%3 do końca</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Wyświetl pulpit</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Odepnij</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Połączenie bezprzewodowe: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Połączono, ale brak dostępu do Internetu</translation>
     </message>
 </context>
 <context>

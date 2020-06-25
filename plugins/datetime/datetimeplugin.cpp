@@ -24,13 +24,20 @@
 #include <DDBusSender>
 #include <QLabel>
 #include <QDebug>
+#include <QDBusConnectionInterface>
+
+#include <unistd.h>
 
 #define PLUGIN_STATE_KEY "enable"
-#define TIME_FORMAT_KEY "24HourFormat"
+#define TIME_FORMAT_KEY "Use24HourFormat"
 
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
+    , m_pluginLoaded(false)
+    , m_interface(nullptr)
 {
+    QDBusConnection sessionBus = QDBusConnection::sessionBus();
+    sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -60,14 +67,15 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
         return;
     }
 
-    m_dateTipsLabel = new TipsWidget;
-    m_refershTimer = new QTimer(this);
-    m_dateTipsLabel->setObjectName("datetime");
+    loadPlugin();
+}
 
-    m_refershTimer->setInterval(1000);
-    m_refershTimer->start();
+void DatetimePlugin::loadPlugin()
+{
+    if (m_pluginLoaded)
+        return;
 
-    m_centralWidget = new DatetimeWidget;
+    m_pluginLoaded = true;
     m_dateTipsLabel = new TipsWidget;
     m_refershTimer = new QTimer(this);
     m_dateTipsLabel->setObjectName("datetime");
@@ -78,12 +86,11 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     m_centralWidget = new DatetimeWidget;
 
     connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
-
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
-    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
 
-    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
     m_proxyInter->itemAdded(this, pluginName());
+
+    pluginSettingsChanged();
 }
 
 void DatetimePlugin::pluginStateSwitched()
@@ -102,21 +109,15 @@ int DatetimePlugin::itemSortKey(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1").arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 3).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, -1).toInt();
-    }
+    const QString key = QString("pos_%1").arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 5).toInt();
 }
 
 void DatetimePlugin::setSortKey(const QString &itemKey, const int order)
 {
     Q_UNUSED(itemKey);
 
-    const QString key = QString("pos_%1").arg(displayMode());
+    const QString key = QString("pos_%1").arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 
@@ -178,22 +179,28 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "open") {
         DDBusSender()
-            .service("com.deepin.dde.ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .method(QString("ShowModule"))
-            .arg(QString("datetime"))
-            .call();
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("datetime"))
+        .call();
     } else {
-        const bool value = m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool();
-        m_proxyInter->saveValue(this, TIME_FORMAT_KEY, !value);
+        const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
+        timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);
         m_centralWidget->set24HourFormat(!value);
     }
 }
 
 void DatetimePlugin::pluginSettingsChanged()
 {
-    m_centralWidget->set24HourFormat(m_proxyInter->getValue(this, TIME_FORMAT_KEY, true).toBool());
+    if (!m_pluginLoaded)
+        return;
+
+    const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
+
+    m_proxyInter->saveValue(this, TIME_FORMAT_KEY, value);
+    m_centralWidget->set24HourFormat(value);
 
     refreshPluginItemsVisible();
 }
@@ -207,7 +214,7 @@ void DatetimePlugin::updateCurrentTimeString()
     else
         m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
 
-    const QString currentString = currentDateTime.toString("mm");
+    const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
     if (currentString == m_currentTimeString)
         return;
@@ -218,8 +225,35 @@ void DatetimePlugin::updateCurrentTimeString()
 
 void DatetimePlugin::refreshPluginItemsVisible()
 {
-    if (!pluginIsDisable())
+    if (!pluginIsDisable()) {
+
+        if (!m_pluginLoaded) {
+            loadPlugin();
+            return;
+        }
         m_proxyInter->itemAdded(this, pluginName());
-    else
+    } else {
         m_proxyInter->itemRemoved(this, pluginName());
+    }
+}
+
+void DatetimePlugin::propertiesChanged()
+{
+    pluginSettingsChanged();
+}
+
+QDBusInterface* DatetimePlugin::timedateInterface()
+{
+    if (!m_interface) {
+        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.daemon.Timedate")) {
+            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate");
+        } else {
+            const QString path = QString("/com/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
+            QDBusInterface * systemInterface = new QDBusInterface("com.deepin.daemon.Accounts", path, "com.deepin.daemon.Accounts.User",
+                                      QDBusConnection::systemBus(), this);
+            return systemInterface;
+        }
+    }
+
+    return m_interface;
 }

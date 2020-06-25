@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <filter id="deepin-multitasking-view-a" width="131%" height="132.5%" x="-15.5%" y="-16.2%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
+      <feMerge>
+        <feMergeNode in="shadowMatrixOuter1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="deepin-multitasking-view-b" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFBF7D"/>
+      <stop offset="100%" stop-color="#FF5959"/>
+    </linearGradient>
+    <linearGradient id="deepin-multitasking-view-e" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#FFF" stop-opacity=".6"/>
+    </linearGradient>
+    <path id="deepin-multitasking-view-d" d="M31.0081158,22 C32.1082031,22 33,22.8958578 33,23.9973917 L33,29.0026083 C33,30.1057373 32.1066027,31 31.0081158,31 L19.9918842,31 C18.8917969,31 18,30.1041422 18,29.0026083 L18,23.9973917 C18,22.8942627 18.8933973,22 19.9918842,22 L31.0081158,22 Z M12.0020869,22 C13.1055038,22 14,22.8958578 14,23.9973917 L14,29.0026083 C14,30.1057373 13.1017394,31 12.0020869,31 L9.99791312,31 C8.89449617,31 8,30.1041422 8,29.0026083 L8,23.9973917 C8,22.8942627 8.89826062,22 9.99791312,22 L12.0020869,22 Z M18.9941413,9 C20.1019465,9 21,9.89585781 21,10.9973917 L21,16.0026083 C21,17.1057373 20.1029399,18 18.9941413,18 L9.00585866,18 C7.89805351,18 7,17.1041422 7,16.0026083 L7,10.9973917 C7,9.89426273 7.89706013,9 9.00585866,9 L18.9941413,9 Z M32,9 C33.1045695,9 34,9.8954305 34,11 L34,16 C34,17.1045695 33.1045695,18 32,18 L27,18 C25.8954305,18 25,17.1045695 25,16 L25,11 C25,9.8954305 25.8954305,9 27,9 L32,9 Z"/>
+    <filter id="deepin-multitasking-view-c" width="103.7%" height="109.1%" x="-1.9%" y="-2.3%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0.784313725   0 0 0 0 0.0392156863   0 0 0 0 0.0392156863  0 0 0 0.2 0"/>
+    </filter>
+  </defs>
+  <g fill="none" filter="url(#deepin-multitasking-view-a)" transform="translate(3 4)">
+    <rect width="42" height="40" fill="url(#deepin-multitasking-view-b)" rx="8"/>
+    <use fill="#000" filter="url(#deepin-multitasking-view-c)" xlink:href="#deepin-multitasking-view-d"/>
+    <use fill="url(#deepin-multitasking-view-e)" xlink:href="#deepin-multitasking-view-d"/>
+  </g>
+</svg>

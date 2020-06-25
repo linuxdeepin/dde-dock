@@ -107,14 +107,14 @@ void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 int SoundPlugin::itemSortKey(const QString &itemKey)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
-    return m_proxyInter->getValue(this, key, displayMode() == Dock::DisplayMode::Fashion ? 1 : 1).toInt();
+    return m_proxyInter->getValue(this, key, 1).toInt();
 }
 
 void SoundPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     m_proxyInter->saveValue(this, key, order);
 }

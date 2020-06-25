@@ -30,6 +30,7 @@ OnboardPlugin::OnboardPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
+      m_startupState(false),
       m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setText(tr("Onboard"));
@@ -78,7 +79,7 @@ void OnboardPlugin::pluginStateSwitched()
 
 bool OnboardPlugin::pluginIsDisable()
 {
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, false).toBool();
+    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 }
 
 const QString OnboardPlugin::itemCommand(const QString &itemKey)
@@ -111,8 +112,38 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId == "onboard-settings")
-        QProcess::startDetached("onboard-settings");
+    if (menuId != "onboard-settings") return;
+    if(!m_startupState) {
+        QProcess *process = new QProcess;
+        connect(process,&QProcess::started, this, [ = ] {
+            m_startupState = true;
+        });
+
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+              [ = ](int exitCode, QProcess::ExitStatus exitStatus){
+            Q_UNUSED(exitCode)
+            Q_UNUSED(exitStatus)
+
+            m_startupState = false;
+            process->close();
+            process->deleteLater();
+        });
+        process->start("onboard-settings");
+    }
+
+    DBusDock DockInter("com.deepin.dde.daemon.Dock",
+                       "/com/deepin/dde/daemon/Dock",
+                       QDBusConnection::sessionBus(), this);
+
+    for (auto entry : DockInter.entries()) {
+        DockEntryInter AppInter("com.deepin.dde.daemon.Dock",
+                                entry.path(),
+                                QDBusConnection::sessionBus(), this);
+        if(AppInter.name() == "Onboard-Settings" && !AppInter.isActive()) {
+            AppInter.Activate(0);
+            break;
+        }
+    }
 }
 
 void OnboardPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
@@ -126,19 +157,13 @@ void OnboardPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 
 int OnboardPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 1).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, 4).toInt();
-    }
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 3).toInt();
 }
 
 void OnboardPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 

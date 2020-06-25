@@ -1,8 +1,29 @@
+/*
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:
+ *
+ * Maintainer:  zhaolong <zhaolong@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef ABSTRACTCONTAINER_H
 #define ABSTRACTCONTAINER_H
 
 #include "constants.h"
-#include "trayplugin.h"
+#include "../../trayplugin.h"
 #include "../fashiontraywidgetwrapper.h"
 
 #include <QWidget>
@@ -14,7 +35,7 @@ public:
     explicit AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent = nullptr);
 
     virtual bool acceptWrapper(FashionTrayWidgetWrapper *wrapper) = 0;
-    virtual void refreshVisible() = 0;
+    virtual void refreshVisible();
 
     virtual void addWrapper(FashionTrayWidgetWrapper *wrapper);
     virtual bool removeWrapper(FashionTrayWidgetWrapper *wrapper);
@@ -23,12 +44,12 @@ public:
     virtual void setDockPosition(const Dock::Position pos);
     virtual void setExpand(const bool expand);
     virtual QSize totalSize() const;
+    virtual int itemCount();
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
-
+    int itemSize() {return m_itemSize;}
+    void setItemSize(int itemSize);
     void clearWrapper();
     void saveCurrentOrderToConfig();
-    void setWrapperSize(QSize size);
     bool isEmpty();
     bool containsWrapper(FashionTrayWidgetWrapper *wrapper);
     bool containsWrapperByTrayWidget(AbstractTrayWidget *trayWidget);
@@ -55,6 +76,7 @@ protected:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) override;
 
 private Q_SLOTS:
     void onWrapperAttentionhChanged(const bool attention);
@@ -73,6 +95,7 @@ private:
     Dock::Position m_dockPosition;
 
     QSize m_wrapperSize;
+    int m_itemSize = 40;
 };
 
 #endif // ABSTRACTCONTAINER_H

@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>छिपा आइकन प्रदर्शित करने के लिए क्लिक करें</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>दाएँ</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>बड़ा</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>मध्यम</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>छोटा</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>दृश्यमान रखें</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>स्थान</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>आकार</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>स्थिति</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>लॉन्चर </translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>पॉवर सेटिंग्स</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>चार्ज है %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +202,30 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>चार्ज है %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>डेस्कटॉप दिखाएँ</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>बेतार कनेक्शन : %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>कनेक्टेड लेकिन इंटरनेट आक्सेस नही है</translation>
     </message>
 </context>
 <context>

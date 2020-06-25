@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>%1 uygulama eki bu sistem ile uyumlu değil.</translation>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Gizli simgeyi görüntülemek için tıkla</translation>
+        <translation>%1 eklentisi sistemle uyumlu değil.</translation>
     </message>
 </context>
 <context>
@@ -126,18 +119,6 @@
         <translation>Sağ</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Büyük</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Orta</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Küçük</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Sürekli Göster</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Konum</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Boyut</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Durum</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Başlatıcı</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Çoklu Görev Görünümü</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Ayır</translation>
     </message>
 </context>
 <context>
@@ -206,16 +194,16 @@
         <translation>Güç ayarları</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 Şarj Oldu</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 dakika kaldı</translation>
+        <translation>%1 ve azalıyor, %2 dakika kaldı</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 saat %3 dakika kaldı</translation>
+        <translation>%1 ve azalıyor, %2 saat %3 dakika kaldı</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>%1 Şarj Oldu</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -224,6 +212,21 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Masaüstünü Görüntüle</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Ayır</translation>
     </message>
 </context>
 <context>
@@ -292,7 +295,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Geçerli Ses Düzeyi %1</translation>
+        <translation>Mevcut Ses Düzeyi %1</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Kablosuz Bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Bağlı ancak İnternet erişimi yok</translation>
     </message>
 </context>
 <context>

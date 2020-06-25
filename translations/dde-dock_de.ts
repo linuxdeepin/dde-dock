@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klicken Sie zum Anzeigen des ausgeblendeten Symbols</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -103,11 +96,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Mode-Modus</translation>
+        <translation>Design-Modus</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Effizienter Modus</translation>
+        <translation>Leistungs-Modus</translation>
     </message>
     <message>
         <source>Top</source>
@@ -124,18 +117,6 @@
     <message>
         <source>Right</source>
         <translation>Rechts</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Groß</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mittel</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Klein</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -158,10 +139,6 @@
         <translation>Ort</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Größe</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Status</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Starter</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Multitask-Ansicht</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Abdocken</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Energieeinstellungen</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Kapazität %1, %2 Min. verbleibend</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Kapazität %1, %2 Std. %3 Min. verbleibend</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>%1 aufgeladen</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation>Lade %1, %2 Min. bis geladen</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Lade %1, %2 Std. %3 Min. bis geladen</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Desktop anzeigen</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Abdocken</translation>
     </message>
 </context>
 <context>
@@ -242,7 +245,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Bereitschaftszustand</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Drahtlosverbindung: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Verbunden, aber kein Internetzugang</translation>
     </message>
 </context>
 <context>

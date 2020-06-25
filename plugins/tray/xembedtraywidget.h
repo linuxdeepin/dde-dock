@@ -32,7 +32,7 @@ class XEmbedTrayWidget : public AbstractTrayWidget
     Q_OBJECT
 
 public:
-    explicit XEmbedTrayWidget(quint32 winId, QWidget *parent = 0);
+    explicit XEmbedTrayWidget(quint32 winId, QWidget *parent = nullptr);
     ~XEmbedTrayWidget();
 
     QString itemKeyForConfig() override;
@@ -44,9 +44,9 @@ public:
     static QString getWindowProperty(quint32 winId, QString propName);
     static QString toXEmbedKey(quint32 winId);
     static bool isXEmbedKey(const QString &itemKey);
+    virtual bool isValid() override {return m_valid;}
 
 private:
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -54,7 +54,6 @@ private:
 
     void wrapWindow();
     void sendHoverEvent();
-//    void hideIcon();
     void refershIconImage();
 
     static QString getAppNameForWindow(quint32 winId);
@@ -74,6 +73,7 @@ private:
 
     QTimer *m_updateTimer;
     QTimer *m_sendHoverEvent;
+    bool m_valid = true;
 };
 
 #endif // XEMBEDTRAYWIDGET_H

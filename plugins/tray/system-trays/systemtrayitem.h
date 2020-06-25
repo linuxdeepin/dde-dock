@@ -23,13 +23,14 @@
 #define SYSTEMTRAYITEM_H
 
 #include "constants.h"
-#include "abstracttraywidget.h"
+#include "../abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
-#include "dbus/dbusmenumanager.h"
 #include "pluginsiteminterface.h"
 
 #include <QGestureEvent>
+#include <QMenu>
 
+class QGSettings;
 class SystemTrayItem : public AbstractTrayWidget
 {
     Q_OBJECT
@@ -61,12 +62,16 @@ public:
     void showPopupApplet(QWidget * const applet);
     void hidePopup();
 
+signals:
+    void itemVisibleChanged(bool visible);
+
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent* event) override;
 
 protected:
     const QPoint popupMarkPoint() const;
@@ -86,13 +91,16 @@ protected Q_SLOTS:
 
 private:
     void updatePopupPosition();
+    void onGSettingsChanged(const QString &key);
+    bool checkGSettingsControl() const;
+    void menuActionClicked(QAction *action);
 
 private:
     bool m_popupShown;
     bool m_tapAndHold;
+    QMenu m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
-    DBusMenuManager *m_menuManagerInter;
     QWidget *m_centralWidget;
 
     QTimer *m_popupTipsDelayTimer;
@@ -103,6 +111,7 @@ private:
 
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
+    QGSettings* m_gsettings;
 };
 
 #endif // SYSTEMTRAYITEM_H

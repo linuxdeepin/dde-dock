@@ -87,14 +87,6 @@ void IndicatorTrayWidget::sendClick(uint8_t buttonIndex, int x, int y)
     Q_EMIT clicked(buttonIndex, x, y);
 }
 
-QSize IndicatorTrayWidget::sizeHint() const
-{
-    auto sz = AbstractTrayWidget::sizeHint();
-    sz.setHeight(26);
-    sz.setWidth(26);
-    return sz;
-}
-
 void IndicatorTrayWidget::setPixmapData(const QByteArray &data)
 {
     auto rawPixmap = QPixmap::fromImage(QImage::fromData(data));

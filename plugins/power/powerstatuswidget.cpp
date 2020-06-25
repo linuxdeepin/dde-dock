@@ -21,10 +21,13 @@
 
 #include "powerstatuswidget.h"
 #include "powerplugin.h"
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+
+DGUI_USE_NAMESPACE
 
 PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     : QWidget(parent),
@@ -36,16 +39,14 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
     connect(m_powerInter, &DBusPower::BatteryStateChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
     connect(m_powerInter, &DBusPower::OnBatteryChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
+    });
 }
 
 void PowerStatusWidget::refreshIcon()
 {
     update();
-}
-
-QSize PowerStatusWidget::sizeHint() const
-{
-    return QSize(26, 26);
 }
 
 void PowerStatusWidget::paintEvent(QPaintEvent *e)
@@ -69,16 +70,18 @@ QPixmap PowerStatusWidget::getBatteryIcon()
     const int batteryState = m_powerInter->batteryState()["Display"];
     const bool plugged = !m_powerInter->onBattery();
 
+    /*根据新需求，电池电量显示分别是*/
+    /* 0-5%; 6-20%  21-40% 41-60% 61-80% 81-100% */
     QString percentageStr;
-    if (percentage < 10 && percentage >= 0) {
+    if (percentage <= 5 && percentage >= 0) {
         percentageStr = "000";
-    } else if (percentage < 30) {
+    } else if (percentage <= 20) {
         percentageStr = "020";
-    } else if (percentage < 50) {
+    } else if (percentage <= 40) {
         percentageStr = "040";
-    } else if (percentage < 70) {
+    } else if (percentage <= 60) {
         percentageStr = "060";
-    } else if (percentage < 90) {
+    } else if (percentage < 80) {
         percentageStr = "080";
     } else if (percentage <= 100){
         percentageStr = "100";
@@ -86,12 +89,31 @@ QPixmap PowerStatusWidget::getBatteryIcon()
         percentageStr = "000";
     }
 
-    const QString iconStr = QString("battery-%1-%2")
+    QString iconStr = QString("battery-%1-%2")
                                 .arg(percentageStr)
                                 .arg(plugged ? "plugged-symbolic" : "symbolic");
+
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconStr.append(PLUGIN_MIN_ICON_NAME);
+
     const auto ratio = devicePixelRatioF();
-    QPixmap pix = QIcon::fromTheme(iconStr).pixmap(QSize(16, 16) * ratio);
+    QPixmap pix = QIcon::fromTheme(iconStr).pixmap(QSize(20, 20) * ratio);
     pix.setDevicePixelRatio(ratio);
 
     return pix;
+}
+
+void PowerStatusWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 }
