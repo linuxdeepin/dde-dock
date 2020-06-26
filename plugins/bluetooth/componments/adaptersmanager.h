@@ -43,6 +43,7 @@ public:
     bool defaultAdapterInitPowerState();
     int adaptersCount();
     void adapterRefresh(const Adapter *adapter);
+    void disconnectDevice(Device *device);
 
 signals:
     void adapterIncreased(Adapter *adapter);

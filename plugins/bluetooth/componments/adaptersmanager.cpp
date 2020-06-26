@@ -295,3 +295,11 @@ void AdaptersManager::adapterRefresh(const Adapter *adapter)
     m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
     m_bluetoothInter->RequestDiscovery(dPath);
 }
+
+void AdaptersManager::disconnectDevice(Device *device)
+{
+    if (device) {
+        QDBusObjectPath path(device->id());
+        m_bluetoothInter->DisconnectDevice(path);
+    }
+}
