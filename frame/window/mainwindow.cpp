@@ -302,6 +302,9 @@ MainWindow::MainWindow(QWidget *parent)
         m_mainPanel->move(QPoint(0, 0));
 
         resizeMainPanelWindow();
+        qDebug() << "Show animation finished:" << frameGeometry();
+        qDebug() << "Show animation finished not frame:" << geometry();
+        QWidget::update();
     });
 
     connect(m_panelHideAni, &QVariantAnimation::finished, [ this ]() {
@@ -310,9 +313,15 @@ MainWindow::MainWindow(QWidget *parent)
 
         QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
+
         m_mainPanel->move(QPoint(0, 0));
+
         if (m_settings->hideMode() != KeepShowing)
             this->setVisible(false);
+
+        qDebug() << "Hide animation finished" << frameGeometry();
+        qDebug() << "Hide animation finished not frame:" << geometry();
+        QWidget::update();
     });
 
     updateRegionMonitorWatch();
