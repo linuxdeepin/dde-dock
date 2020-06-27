@@ -17,4 +17,54 @@
         <file>resources/icons/battery_plugged.svg</file>
         <file>resources/icons/battery_unknow.svg</file>
     </qresource>
+    <qresource prefix="/batteryicons">
+	<file>resources/batteryicons/battery-000-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-000-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-000-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-000-symbolic.svg</file>
+	<file>resources/batteryicons/battery-010-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-010-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-010-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-010-symbolic.svg</file>
+	<file>resources/batteryicons/battery-020-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-020-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-020-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-020-symbolic.svg</file>
+	<file>resources/batteryicons/battery-030-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-030-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-030-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-030-symbolic.svg</file>
+	<file>resources/batteryicons/battery-040-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-040-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-040-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-040-symbolic.svg</file>
+	<file>resources/batteryicons/battery-050-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-050-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-050-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-050-symbolic.svg</file>
+	<file>resources/batteryicons/battery-060-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-060-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-060-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-060-symbolic.svg</file>
+	<file>resources/batteryicons/battery-070-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-070-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-070-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-070-symbolic.svg</file>
+	<file>resources/batteryicons/battery-080-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-080-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-080-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-080-symbolic.svg</file>
+	<file>resources/batteryicons/battery-090-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-090-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-090-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-090-symbolic.svg</file>
+	<file>resources/batteryicons/battery-100-plugged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-100-plugged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-100-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-100-symbolic.svg</file>
+	<file>resources/batteryicons/battery-full-charged-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-full-charged-symbolic.svg</file>
+	<file>resources/batteryicons/battery-unknow-symbolic-dark.svg</file>
+	<file>resources/batteryicons/battery-unknow-symbolic.svg</file>
+    </qresource>
 </RCC>
