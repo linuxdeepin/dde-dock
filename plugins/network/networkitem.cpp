@@ -1140,6 +1140,7 @@ void NetworkItem::refreshTips()
         break;
     case Connected: {
         QString strTips;
+        QStringList textList;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
@@ -1149,6 +1150,8 @@ void NetworkItem::refreshTips()
                 if (!ipv4.contains("Address"))
                     break;
                 strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
             }
         }
         for (auto wiredItem : m_connectedWiredDevice) {
@@ -1160,10 +1163,11 @@ void NetworkItem::refreshTips()
                 if (!ipv4.contains("Address"))
                     break;
                 strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
             }
         }
-        strTips.chop(1);
-        m_tipsWidget->setText(strTips);
+        m_tipsWidget->setTextList(textList);
     }
     break;
     case Aconnected: {
