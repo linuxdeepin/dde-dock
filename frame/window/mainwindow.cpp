@@ -777,6 +777,8 @@ void MainWindow::updatePanelVisible()
         if (!m_registerKey.isEmpty()) {
             m_eventInter->UnregisterArea(m_registerKey);
             qDebug() << "register area clear";
+            //清空registerKey
+            m_registerKey.clear();
         }
         return expand();
     }
