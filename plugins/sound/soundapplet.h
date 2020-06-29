@@ -41,6 +41,7 @@ public:
     explicit SoundApplet(QWidget *parent = 0);
 
     int volumeValue() const;
+    int maxVolumeValue() const;
     VolumeSlider *mainSlider();
 signals:
     void volumeChanged(const int value) const;

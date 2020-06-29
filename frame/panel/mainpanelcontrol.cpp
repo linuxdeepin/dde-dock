@@ -82,11 +82,18 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     setAcceptDrops(true);
     setMouseTracking(true);
     m_desktopWidget->setMouseTracking(true);
+    m_desktopWidget->setObjectName("showdesktoparea");
 
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
     m_desktopWidget->installEventFilter(this);
+
+    //在设置每条线大小前，应该设置fixedsize(0,0)
+    //应为paintEvent函数会先调用设置背景颜色，大小为随机值
+    m_fixedSpliter->setFixedSize(0,0);
+    m_appSpliter ->setFixedSize(0,0);
+    m_traySpliter->setFixedSize(0,0);
 }
 
 MainPanelControl::~MainPanelControl()
@@ -96,9 +103,9 @@ MainPanelControl::~MainPanelControl()
 void MainPanelControl::init()
 {
     // 主窗口
-    m_fixedSpliter->setAccessibleName("spliter_fix");
-    m_appSpliter->setAccessibleName("spliter_app");
-    m_traySpliter->setAccessibleName("spliter_tray");
+    m_fixedSpliter->setObjectName("spliter_fix");
+    m_appSpliter->setObjectName("spliter_app");
+    m_traySpliter->setObjectName("spliter_tray");
 
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
@@ -117,28 +124,28 @@ void MainPanelControl::init()
 
     // 固定区域
     m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
-    m_fixedAreaWidget->setAccessibleName("fixedarea");
+    m_fixedAreaWidget->setObjectName("fixedarea");
     m_fixedAreaLayout->setMargin(0);
     m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_fixedAreaLayout->setSpacing(0);
 
     // 应用程序
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
-    m_appAreaSonWidget->setAccessibleName("apparea");
+    m_appAreaSonWidget->setObjectName("apparea");
     m_appAreaSonLayout->setMargin(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonLayout->setSpacing(0);
 
     // 托盘
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
-    m_trayAreaWidget->setAccessibleName("trayarea");
+    m_trayAreaWidget->setObjectName("trayarea");
     m_trayAreaLayout->setMargin(0);
     m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_trayAreaLayout->setSpacing(0);
 
     // 插件
     m_pluginAreaWidget->setLayout(m_pluginLayout);
-    m_pluginAreaWidget->setAccessibleName("pluginarea");
+    m_pluginAreaWidget->setObjectName("pluginarea");
     m_pluginLayout->setMargin(0);
     m_pluginLayout->setSpacing(10);
 
@@ -217,12 +224,22 @@ void MainPanelControl::updateMainPanelLayout()
 
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
+    if(m_position == Position::Top || m_position == Position::Bottom){
+        wdg->setMaximumSize(height(),height());
+    } else {
+        wdg->setMaximumSize(width(),width());
+    }
     m_fixedAreaLayout->insertWidget(index, wdg);
     resizeDockIcon();
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
+    if(m_position == Position::Top || m_position == Position::Bottom){
+        wdg->setMaximumSize(height(),height());
+    } else {
+        wdg->setMaximumSize(width(),width());
+    }
     m_appAreaSonLayout->insertWidget(index, wdg);
     resizeDockIcon();
 }

@@ -203,7 +203,7 @@
     </message>
     <message>
         <source>Charged %1</source>
-        <translation>Napolnjeno %1</translation>
+        <translation type="vanished">Napolnjeno %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -216,6 +216,10 @@
     <message>
         <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charged</source>
+        <translation>Napolnjen</translation>
     </message>
 </context>
 <context>
@@ -249,7 +253,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>Mirovanje</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -361,7 +365,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="unfinished"/>
+        <translation>Povezano brez dostopa do interneta</translation>
     </message>
 </context>
 <context>

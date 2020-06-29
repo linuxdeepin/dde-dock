@@ -72,16 +72,19 @@ private:
     void updateBatteryVisible();
     void loadPlugin();
     void refreshPluginItemsVisible();
+    void onGSettingsChanged(const QString &key);
     void refreshTipsData();
 
 private:
     bool m_pluginLoaded;
+    bool m_showTimeToFull;
 
     PowerStatusWidget *m_powerStatusWidget;
     TipsWidget *m_tipsLabel;
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
+    QTimer *m_delayTimer;
 };
 
 #endif // POWERPLUGIN_H

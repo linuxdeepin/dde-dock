@@ -82,6 +82,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     appLayout->setSpacing(0);
     appLayout->setMargin(0);
 
+
     // 音量图标+slider
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->addSpacing(2);
@@ -103,7 +104,6 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::onVolumeChanged);
 //    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
-    connect(m_appBtn, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_volumeBtnMin, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
     connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [ = ] {
@@ -163,9 +163,9 @@ void SinkInputWidget::setMuteIcon()
         p.drawPixmap(0, 0, muteIcon);
 
         appIconSource.setDevicePixelRatio(ratio);
-        m_appBtn->setPixmap(appIconSource);
+        m_volumeBtnMin->setPixmap(appIconSource);
     } else {
-        m_appBtn->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+        m_volumeBtnMin->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
     }
 
     refreshIcon();
@@ -182,22 +182,7 @@ void SinkInputWidget::refreshIcon()
     if (!m_inputInter)
         return;
 
-    const float volume = m_inputInter->volume();
-    const bool mute = m_inputInter->mute();
-
-    QString volumeString;
-
-    if (mute) {
-        volumeString = "muted";
-    } else if (volume >= double(2) / 3) {
-        volumeString = "high";
-    } else if (volume >= double(1) / 3) {
-        volumeString = "medium";
-    } else {
-        volumeString = "low";
-    }
-
-    QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
+    QString iconLeft = QString(m_inputInter->mute() ? "audio-volume-muted-symbolic" : "audio-volume-low-symbolic");
     QString iconRight = QString("audio-volume-high-symbolic");
 
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
@@ -211,7 +196,6 @@ void SinkInputWidget::refreshIcon()
 
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
     m_volumeBtnMin->setPixmap(ret);
-
 }
 
 void SinkInputWidget:: onVolumeChanged()
