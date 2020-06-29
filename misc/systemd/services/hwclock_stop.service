@@ -1,0 +1,10 @@
+[Unit]
+Description=sync RTC from system time
+Before=shutdown.target
+
+[Service]
+ExecStop=hwclock -w
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
