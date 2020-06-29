@@ -25,14 +25,15 @@
 #include "pluginsiteminterface.h"
 #include "powerstatuswidget.h"
 #include "dbus/dbuspower.h"
-#include "../widgets/tipswidget.h"
 
 #include <com_deepin_system_systempower.h>
 
 #include <QLabel>
 
 using SystemPowerInter = com::deepin::system::Power;
-
+namespace Dock {
+class TipsWidget;
+}
 class PowerPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -70,7 +71,7 @@ private:
     bool m_showTimeToFull;
 
     PowerStatusWidget *m_powerStatusWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;

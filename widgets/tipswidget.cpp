@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
-
+namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
     , m_width(0)
@@ -102,4 +102,5 @@ bool TipsWidget::event(QEvent *event)
         }
     }
     return QFrame::event(event);
+}
 }

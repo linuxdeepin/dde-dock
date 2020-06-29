@@ -20,11 +20,12 @@
  */
 
 #include "showdesktopplugin.h"
+#include "../widgets/tipswidget.h"
 
 #include <QIcon>
 
 #define PLUGIN_STATE_KEY    "enable"
-
+using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)

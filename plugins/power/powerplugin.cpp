@@ -21,6 +21,7 @@
 
 #include "powerplugin.h"
 #include "dbus/dbusaccount.h"
+#include "../widgets/tipswidget.h"
 
 #include <QIcon>
 #include <QGSettings>
@@ -28,6 +29,7 @@
 #define PLUGIN_STATE_KEY    "enable"
 #define DELAYTIME           (20 * 1000)
 
+using namespace Dock;
 static QGSettings *GSettingsByApp()
 {
     static QGSettings settings("com.deepin.dde.dock.module.power");

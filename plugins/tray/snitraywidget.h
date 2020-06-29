@@ -25,7 +25,6 @@
 #include "constants.h"
 #include "abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
-#include "../../widgets/tipswidget.h"
 
 #include <org_kde_statusnotifieritem.h>
 
@@ -34,7 +33,9 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 class DBusMenuImporter;
-
+namespace Dock {
+class TipsWidget;
+}
 //using namespace com::deepin::dde;
 using namespace org::kde;
 
@@ -67,7 +68,7 @@ public:
 
     void showHoverTips();
     const QPoint topleftPoint() const;
-    void showPopupWindow(QWidget * const content, const bool model = false);
+    void showPopupWindow(QWidget *const content, const bool model = false);
     const QPoint popupMarkPoint() const;
 
     static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
@@ -83,18 +84,18 @@ private Q_SLOTS:
     void refreshAttentionIcon();
     void showContextMenu(int x, int y);
     // SNI property change slot
-    void onSNIAttentionIconNameChanged(const QString & value);
+    void onSNIAttentionIconNameChanged(const QString &value);
     void onSNIAttentionIconPixmapChanged(DBusImageList  value);
-    void onSNIAttentionMovieNameChanged(const QString & value);
-    void onSNICategoryChanged(const QString & value);
-    void onSNIIconNameChanged(const QString & value);
+    void onSNIAttentionMovieNameChanged(const QString &value);
+    void onSNICategoryChanged(const QString &value);
+    void onSNIIconNameChanged(const QString &value);
     void onSNIIconPixmapChanged(DBusImageList  value);
-    void onSNIIconThemePathChanged(const QString & value);
-    void onSNIIdChanged(const QString & value);
-    void onSNIMenuChanged(const QDBusObjectPath & value);
-    void onSNIOverlayIconNameChanged(const QString & value);
+    void onSNIIconThemePathChanged(const QString &value);
+    void onSNIIdChanged(const QString &value);
+    void onSNIMenuChanged(const QDBusObjectPath &value);
+    void onSNIOverlayIconNameChanged(const QString &value);
     void onSNIOverlayIconPixmapChanged(DBusImageList  value);
-    void onSNIStatusChanged(const QString & value);
+    void onSNIStatusChanged(const QString &value);
     void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
@@ -138,7 +139,7 @@ private:
     QTimer *m_popupTipsDelayTimer;
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     bool m_popupShown;
 };
 

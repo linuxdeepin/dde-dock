@@ -2,7 +2,7 @@
 #define TIPSWIDGET_H
 
 #include <QFrame>
-
+namespace Dock {
 class TipsWidget : public QFrame
 {
     Q_OBJECT
@@ -29,5 +29,6 @@ private:
     int m_width;
     ShowType m_type;
 };
+}
 
 #endif // TIPSWIDGET_H

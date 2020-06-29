@@ -39,6 +39,8 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+using namespace Dock;
+
 BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))

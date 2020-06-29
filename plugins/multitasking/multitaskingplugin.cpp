@@ -20,11 +20,13 @@
  */
 
 #include "multitaskingplugin.h"
+#include "../widgets/tipswidget.h"
 
 #include <QIcon>
 
 #define PLUGIN_STATE_KEY    "enable"
 
+using namespace Dock;
 MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)

@@ -14,7 +14,9 @@ DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class PluginState;
+namespace Dock {
 class TipsWidget;
+}
 class WiredItem;
 class WirelessItem;
 class HorizontalSeperator;
@@ -82,7 +84,7 @@ private:
     int getStrongestAp();
 
 private:
-    TipsWidget *m_tipsWidget;
+    Dock::TipsWidget *m_tipsWidget;
     QScrollArea *m_applet;
 
     QLabel *m_wiredTitle;

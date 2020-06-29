@@ -40,7 +40,7 @@ extern void initFontColor(QWidget *widget)
 
 NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
-    , m_tipsWidget(new TipsWidget(this))
+    , m_tipsWidget(new Dock::TipsWidget(this))
     , m_applet(new QScrollArea(this))
     , m_switchWire(true)
     , m_timer(new QTimer(this))

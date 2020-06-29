@@ -20,12 +20,14 @@
  */
 
 #include "onboardplugin.h"
+#include "../widgets/tipswidget.h"
 
 #include <QIcon>
 #include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
 
+using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
     : QObject(parent),
 

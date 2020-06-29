@@ -25,12 +25,15 @@
  */
 
 #include "trashplugin.h"
+#include "../../widgets/tipswidget.h"
 
 #include <DApplication>
 
 #define PLUGIN_STATE_KEY    "enable"
 
 DWIDGET_USE_NAMESPACE
+
+using namespace Dock;
 
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent)

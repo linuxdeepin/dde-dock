@@ -40,7 +40,7 @@
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
 
 using org::kde::StatusNotifierWatcher;
-
+using namespace Dock;
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)

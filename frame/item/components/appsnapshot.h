@@ -25,7 +25,6 @@
 #include <QWidget>
 #include <QDebug>
 #include <QTimer>
-#include "../widgets/tipswidget.h"
 
 #include <DIconButton>
 #include <DWindowManagerHelper>
@@ -41,6 +40,10 @@ DGUI_USE_NAMESPACE
 struct SHMInfo;
 struct _XImage;
 typedef _XImage XImage;
+
+namespace Dock {
+class TipsWidget;
+}
 
 class AppSnapshot : public QWidget
 {
@@ -89,7 +92,7 @@ private:
     QImage m_snapshot;
     QRectF m_snapshotSrcRect;
 
-    TipsWidget *m_title;
+    Dock::TipsWidget *m_title;
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
