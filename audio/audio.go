@@ -152,6 +152,7 @@ func newAudio(service *dbusutil.Service) *Audio {
 		service:     service,
 		meters:      make(map[string]*Meter),
 		MaxUIVolume: pulse.VolumeUIMax,
+		enableSource: true,
 	}
 
 	a.settings = gio.NewSettings(gsSchemaAudio)
