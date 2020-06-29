@@ -21,7 +21,7 @@ var logger = log.NewLogger("backlight_helper/ddcci")
 
 type Manager struct {
 	service *dbusutil.Service
-	ddcci   *DDCCI
+	ddcci   *ddcci
 
 	PropsMu         sync.RWMutex
 	configTimestamp x.Timestamp
