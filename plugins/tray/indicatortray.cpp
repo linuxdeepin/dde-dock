@@ -175,7 +175,7 @@ void IndicatorTrayPrivate::initDBus(const QString &indicatorName)
         }
 
         const QJsonObject action = config.value("action").toObject();
-        if (!action.isEmpty())
+        if (!action.isEmpty() && indicatorTrayWidget)
             q->connect(indicatorTrayWidget, &IndicatorTrayWidget::clicked, q, [ = ](uint8_t button_index, int x, int y) {
                 std::thread t([=]() -> void {
                     auto triggerConfig = action.value("trigger").toObject();
