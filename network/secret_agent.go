@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/nm"
@@ -56,6 +57,9 @@ type SecretAgent struct {
 
 	saveSecretsTasks   map[saveSecretsTaskKey]saveSecretsTask
 	saveSecretsTasksMu sync.Mutex
+
+	// sleep for 2 seconds when trying to get keyring in the first boot
+	needSleep bool
 
 	m *Manager
 
@@ -145,6 +149,7 @@ func newSecretAgent(secServiceObj *secrets.Service, manager *Manager) (*SecretAg
 	sa.secretService = secServiceObj
 	sa.saveSecretsTasks = make(map[saveSecretsTaskKey]saveSecretsTask)
 	sa.m = manager
+	sa.needSleep = true
 	logger.Debug("session path:", sessionPath)
 	return sa, nil
 }
@@ -182,6 +187,11 @@ func (sa *SecretAgent) deleteAll(uuid string) error {
 }
 
 func (sa *SecretAgent) getAll(uuid, settingName string) (map[string]string, error) {
+	if sa.needSleep {
+		time.Sleep(2 * time.Second)
+		sa.needSleep = false
+	}
+
 	attributes := map[string]string{
 		keyringTagConnUUID:    uuid,
 		keyringTagSettingName: settingName,

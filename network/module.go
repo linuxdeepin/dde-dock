@@ -141,7 +141,7 @@ func (d *Module) Stop() error {
 	if manager == nil {
 		return nil
 	}
-
+	
 	service := loader.GetService()
 
 	err := service.ReleaseName(dbusServiceName)
