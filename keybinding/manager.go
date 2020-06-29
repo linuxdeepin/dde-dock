@@ -95,6 +95,7 @@ type Manager struct {
 
 	sessionSigLoop  *dbusutil.SignalLoop
 	systemSigLoop   *dbusutil.SignalLoop
+	sessionMaganer  *sessionmanager.SessionManager
 	startManager    *sessionmanager.StartManager
 	sessionManager  *sessionmanager.SessionManager
 	backlightHelper *backlight.Backlight
@@ -111,11 +112,11 @@ type Manager struct {
 
 	shortcutManager *shortcuts.ShortcutManager
 	// shortcut action handlers
-	handlers            []shortcuts.KeyEventFunc
-	lastKeyEventTime    time.Time
-	lastExecCmdTime     time.Time
-	lastMethodCalledTime    time.Time
-	grabScreenKeystroke *shortcuts.Keystroke
+	handlers             []shortcuts.KeyEventFunc
+	lastKeyEventTime     time.Time
+	lastExecCmdTime      time.Time
+	lastMethodCalledTime time.Time
+	grabScreenKeystroke  *shortcuts.Keystroke
 
 	// for switch kbd layout
 	switchKbdLayoutState SKLState
@@ -256,6 +257,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.audioController = NewAudioController(sessionBus, m.backlightHelper)
 	m.mediaPlayerController = NewMediaPlayerController(m.systemSigLoop, sessionBus)
 
+	m.sessionMaganer = sessionmanager.NewSessionManager(sessionBus)
 	m.startManager = sessionmanager.NewStartManager(sessionBus)
 	m.sessionManager = sessionmanager.NewSessionManager(sessionBus)
 	m.keyboard = inputdevices.NewKeyboard(sessionBus)
@@ -395,6 +397,16 @@ func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
 		logger.Warning("action is nil")
 		return
 	}
+
+	shortcutID := ev.Shortcut.GetId()
+	if strings.HasPrefix(shortcutID, "screenshot") {
+		locked, _ := m.sessionMaganer.Locked().Get(0)
+		if locked {
+			logger.Debugf("locked filter %s", shortcutID)
+			return
+		}
+	}
+
 	if handler := m.handlers[int(action.Type)]; handler != nil {
 		handler(ev)
 	} else {
