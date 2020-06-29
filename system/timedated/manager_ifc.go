@@ -27,13 +27,15 @@ import (
 // SetTime set the current time and date,
 // pass a value of microseconds since 1 Jan 1970 UTC
 func (m *Manager) SetTime(sender dbus.Sender, usec int64, relative bool, msg string) *dbus.Error {
+	/*
 	err := m.checkAuthorization("SetTime", msg, sender)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
+	*/
 
 	// TODO: check usec validity
-	err = m.core.SetTime(0, usec, relative, false)
+	err := m.core.SetTime(0, usec, relative, false)
 	return dbusutil.ToError(err)
 }
 
@@ -78,10 +80,12 @@ func (m *Manager) SetLocalRTC(sender dbus.Sender, enabled bool, fixSystem bool, 
 
 // SetNTP to control whether the system clock is synchronized with the network
 func (m *Manager) SetNTP(sender dbus.Sender, enabled bool, msg string) *dbus.Error {
+	/*
 	err := m.checkAuthorization("SetNTP", msg, sender)
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
+	*/
 
 	currentNTPEnabled, err := m.core.NTP().Get(0)
 	if err != nil {
