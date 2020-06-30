@@ -68,11 +68,11 @@ func (c *Config) Register() error {
 		return err
 	}
 
-	activatableNames, err := ofdbus.NewDBus(sessionBus).ListActivatableNames(0)
+	availableServices, err := ofdbus.NewDBus(sessionBus).ListNames(0)
 	if err != nil {
 		return err
 	}
-	if !strv.Strv(activatableNames).Contains(serviceName) {
+	if !strv.Strv(availableServices).Contains(serviceName) {
 		c.logger.Debug("sync daemon not exists")
 		return nil
 	}
