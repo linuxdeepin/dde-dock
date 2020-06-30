@@ -25,9 +25,10 @@ type Manager struct {
 	configTimestamp x.Timestamp
 
 	methods *struct {
-		CheckSupport  func() `in:"edidChecksum" out:"support"`
-		GetBrightness func() `in:"edidChecksum" out:"value"`
-		SetBrightness func() `in:"edidChecksum,value"`
+		CheckSupport    func() `in:"edidChecksum" out:"support"`
+		GetBrightness   func() `in:"edidChecksum" out:"value"`
+		SetBrightness   func() `in:"edidChecksum,value"`
+		RefreshDisplays func()
 	}
 }
 
@@ -69,4 +70,9 @@ func (m *Manager) SetBrightness(edidChecksum string, value int32) *dbus.Error {
 
 	err := m.ddcci.SetBrightness(edidChecksum, int(value))
 	return dbusutil.ToError(err)
+}
+
+func (m *Manager) RefreshDisplays() *dbus.Error {
+	m.ddcci.RefreshDisplays()
+	return dbusutil.ToError(nil)
 }
