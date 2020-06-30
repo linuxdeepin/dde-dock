@@ -70,7 +70,9 @@ func (k Key) String() string {
 }
 
 func (k Key) ToKeystroke(keySymbols *keysyms.KeySymbols) *Keystroke {
-	str, ok := keySymbols.LookupString(x.Keycode(k.Code), uint16(k.Mods))
+	mods := k.Mods
+	mods &^= keysyms.ModMaskShift
+	str, ok := keySymbols.LookupString(x.Keycode(k.Code), uint16(mods))
 	if !ok {
 		return nil
 	}
