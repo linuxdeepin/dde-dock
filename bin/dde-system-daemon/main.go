@@ -27,13 +27,13 @@ import (
 	_ "pkg.deepin.io/dde/daemon/apps"
 	_ "pkg.deepin.io/dde/daemon/fprintd"
 	_ "pkg.deepin.io/dde/daemon/image_effect"
+	_ "pkg.deepin.io/dde/daemon/system/airplane_mode"
 	_ "pkg.deepin.io/dde/daemon/system/gesture"
 	_ "pkg.deepin.io/dde/daemon/system/network"
 	_ "pkg.deepin.io/dde/daemon/system/power"
 	_ "pkg.deepin.io/dde/daemon/system/swapsched"
-	_ "pkg.deepin.io/dde/daemon/system/timedated"
-	_ "pkg.deepin.io/dde/daemon/system/airplane_mode"
 	_ "pkg.deepin.io/dde/daemon/system/systeminfo"
+	_ "pkg.deepin.io/dde/daemon/system/timedated"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/gir/glib-2.0"
@@ -102,6 +102,7 @@ func main() {
 		logger.Fatal("failed to request name:", err)
 	}
 
+	startBacklightHelperAsync(service.Conn())
 	loader.SetService(service)
 	loader.StartAll()
 	defer loader.StopAll()
