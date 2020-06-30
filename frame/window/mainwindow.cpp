@@ -539,7 +539,7 @@ void MainWindow::initConnections()
     connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
     connect(m_settings, &DockSettings::displayModeChanegd, this, &MainWindow::updateDisplayMode, Qt::QueuedConnection);
 
-    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
+    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);  //+ 6-22-1
     connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
     connect(m_leaveDelayTimer, &QTimer::timeout, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
@@ -633,7 +633,17 @@ void MainWindow::updatePosition()
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
     //clearStrutPartial();
-    updateGeometry();
+    setStrutPartial();
+    m_mainPanel->setDisplayMode(m_settings->displayMode());
+    m_mainPanel->setPositonValue(m_curDockPos);
+
+    if (DisplayMode::Efficient == m_settings->displayMode()) {
+        QWidget::setFixedSize(m_settings->m_mainWindowSize);
+    }
+
+    resizeMainPanelWindow();
+    m_mainPanel->update();
+    m_leaveDelayTimer->start();
 }
 
 void MainWindow::updateGeometry()
@@ -752,7 +762,7 @@ void MainWindow::setStrutPartial()
 //        return;
 //    }
 
-    //m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
+//    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
 }
 
 void MainWindow::expand()
