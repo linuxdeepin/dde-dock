@@ -525,3 +525,11 @@ func (v *Audio) setPropCards(value string) (changed bool) {
 func (v *Audio) emitPropChangedCards(value string) error {
 	return v.service.EmitPropertyChanged(v, "Cards", value)
 }
+
+func (v *Audio) emitPropChangedReduceNoise(enable bool) error {
+	return v.service.EmitPropertyChanged(v, "ReduceNoise", enable)
+}
+
+func (v *Audio) emitPropChangedMaxUIVolume(maxUIVolume float64) error {
+	return v.service.EmitPropertyChanged(v, "MaxUIVolume", maxUIVolume)
+}

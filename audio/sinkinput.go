@@ -101,7 +101,7 @@ func getSinkInputVisible(sinkInputInfo *pulse.SinkInput) bool {
 	case "animation", "production", "phone":
 		//TODO: what's the meaning of this type? Should we filter this SinkInput?
 		return true
-	case "event", "a11y", "test":
+	case "event", "a11y", "test", "filter":
 		return false
 	default:
 		return true

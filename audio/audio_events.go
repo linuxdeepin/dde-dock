@@ -19,13 +19,15 @@
 
 package audio
 
-import "pkg.deepin.io/lib/pulse"
 import (
 	"sort"
 	"strconv"
 	"time"
+	"strings"
 
 	"pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/pulse"
+	"pkg.deepin.io/lib/gsettings"
 )
 
 func (a *Audio) handleEvent() {
@@ -87,12 +89,12 @@ func (a *Audio) handleStateChanged() {
 func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 	switch eventType {
 	case pulse.EventTypeNew:
-		logger.Debugf("[Event] card #%d added", idx)
 		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
+		logger.Debugf("[Event] card #%d added %s", idx, cardInfo.Name)
 		cards, added := a.cards.add(newCard(cardInfo))
 		if added {
 			a.PropsMu.Lock()
@@ -106,8 +108,8 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			logger.Debug("After select profile:", cardInfo.ActiveProfile.Name)
 		})
 	case pulse.EventTypeRemove:
-		logger.Debugf("[Event] card #%d removed", idx)
 		cards, deleted := a.cards.delete(idx)
+		logger.Debugf("[Event] card #%d removed %s", idx, cards.string())
 		if deleted {
 			a.PropsMu.Lock()
 			a.setPropCards(cards.string())
@@ -115,12 +117,12 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			a.cards = cards
 		}
 	case pulse.EventTypeChange:
-		logger.Debugf("[Event] card #%d changed", idx)
 		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
+		logger.Debugf("[Event] card #%d changed %s", idx, cardInfo.Name)
 		a.mu.Lock()
 		card, _ := a.cards.get(idx)
 		if card != nil {
@@ -160,13 +162,15 @@ func (a *Audio) addSink(sinkInfo *pulse.Sink) {
 func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 	switch eventType {
 	case pulse.EventTypeNew:
-		logger.Debugf("[Event] sink #%d added", idx)
 		sinkInfo, err := a.ctx.GetSink(idx)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
-
+		logger.Debugf("[Event] sink #%d added %s", idx, sinkInfo.Name)
+		if !isPhysicalDevice(sinkInfo.Name) {
+			return
+		}
 		a.mu.Lock()
 		_, ok := a.sinks[idx]
 		a.mu.Unlock()
@@ -176,14 +180,13 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		a.addSink(sinkInfo)
 
 	case pulse.EventTypeRemove:
-		logger.Debugf("[Event] sink #%d removed", idx)
-
 		a.mu.Lock()
 		sink, ok := a.sinks[idx]
 		if !ok {
 			a.mu.Unlock()
 			return
 		}
+		logger.Debugf("[Event] sink #%d removed %s", idx, sink.Name)
 		delete(a.sinks, idx)
 		a.mu.Unlock()
 		a.updatePropSinks()
@@ -194,13 +197,15 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		}
 
 	case pulse.EventTypeChange:
-		logger.Debugf("[Event] sink #%d changed", idx)
 		sinkInfo, err := a.ctx.GetSink(idx)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
-
+		logger.Debugf("[Event] sink #%d changed %s", idx, sinkInfo.Name)
+		if !isPhysicalDevice(sinkInfo.Name) {
+			return
+		}
 		a.mu.Lock()
 		sink, ok := a.sinks[idx]
 		a.mu.Unlock()
@@ -221,13 +226,12 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 		logger.Debugf("[Event] sink-input #%d removed", idx)
 		a.handleSinkInputRemoved(idx)
 	case pulse.EventTypeChange:
-		logger.Debugf("[Event] sink-input #%d changed", idx)
 		sinkInputInfo, err := a.ctx.GetSinkInput(idx)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
-
+		logger.Debugf("[Event] sink-input #%d changed %s", idx, sinkInputInfo.Name)
 		a.mu.Lock()
 		sinkInput, ok := a.sinkInputs[idx]
 		a.mu.Unlock()
@@ -298,8 +302,8 @@ func (a *Audio) addSinkInput(sinkInputInfo *pulse.SinkInput) {
 	}
 	a.updatePropSinkInputs()
 
-	logger.Debugf("sink-input #%d play with sink #%d", sinkInputInfo.Index,
-		sinkInputInfo.Sink)
+	logger.Debugf("sink-input (#%d) %s play with sink #%d", sinkInputInfo.Index,
+		sinkInputInfo.Name, sinkInputInfo.Sink)
 }
 
 func (a *Audio) handleSinkInputAdded(idx uint32) {
@@ -308,7 +312,7 @@ func (a *Audio) handleSinkInputAdded(idx uint32) {
 		logger.Warning(err)
 		return
 	}
-
+	logger.Debugf("[Event] sink-input #%d added %s", idx, sinkInputInfo.Name)
 	a.mu.Lock()
 	_, ok := a.sinkInputs[idx]
 	a.mu.Unlock()
@@ -326,6 +330,7 @@ func (a *Audio) handleSinkInputRemoved(idx uint32) {
 		a.mu.Unlock()
 		return
 	}
+	logger.Debugf("[Event] sink-input #%d removed %s", idx, sinkInput.Name)
 	delete(a.sinkInputs, idx)
 	a.mu.Unlock()
 
@@ -366,13 +371,15 @@ func (a *Audio) addSource(sourceInfo *pulse.Source) {
 func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 	switch eventType {
 	case pulse.EventTypeNew:
-		logger.Debugf("[Event] source #%d added", idx)
 		sourceInfo, err := a.ctx.GetSource(idx)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
-
+		logger.Debugf("[Event] source #%d added %s", idx, sourceInfo.Name)
+		if !isPhysicalDevice(sourceInfo.Name) {
+			return
+		}
 		a.mu.Lock()
 		_, ok := a.sources[idx]
 		a.mu.Unlock()
@@ -381,15 +388,18 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		a.addSource(sourceInfo)
 
+		err = setReduceNoise(a.ReduceNoise.Get())
+		if err != nil {
+			logger.Debug("reduce physical device noise failed:", err)
+		}
 	case pulse.EventTypeRemove:
-		logger.Debugf("[Event] source #%d removed", idx)
-
 		a.mu.Lock()
 		source, ok := a.sources[idx]
 		if !ok {
 			a.mu.Unlock()
 			return
 		}
+		logger.Debugf("[Event] source #%d removed %s", idx, source.Name)
 		delete(a.sources, idx)
 		a.mu.Unlock()
 		a.updatePropSources()
@@ -399,15 +409,23 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 			logger.Warning(err)
 			return
 		}
-
+		// 移除物理设备需要关闭虚拟通道，后面切换
+		if isPhysicalDevice(source.Name) {
+			err = setReduceNoise(false)
+			if err != nil {
+				logger.Warning("set reduce noise fail:", err)
+			}
+		}
 	case pulse.EventTypeChange:
-		logger.Debugf("[Event] source #%d changed", idx)
 		sourceInfo, err := a.ctx.GetSource(idx)
 		if err != nil {
 			logger.Warning(err)
 			return
 		}
-
+		logger.Debugf("[Event] source #%d changed %s", idx, sourceInfo.Name)
+		if !isPhysicalDevice(sourceInfo.Name) {
+			return
+		}
 		a.mu.Lock()
 		source, ok := a.sources[idx]
 		a.mu.Unlock()
@@ -420,6 +438,17 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 	}
 }
 
+func isPhysicalDevice(deviceName string) bool {
+	for _, virtualDeviceKey := range []string{
+		"echoCancelSource", "echo-cancel", "Echo-Cancel", // virtual key
+	} {
+		if strings.Contains(deviceName, virtualDeviceKey) {
+			return false
+		}
+	}
+	return  true
+}
+
 func (a *Audio) handleServerEvent(eventType int) {
 	switch eventType {
 	case pulse.EventTypeChange:
@@ -428,14 +457,37 @@ func (a *Audio) handleServerEvent(eventType int) {
 			logger.Error(err)
 			return
 		}
-
 		logger.Debugf("[Event] server changed: default sink: %s, default source: %s",
 			server.DefaultSinkName, server.DefaultSourceName)
 
 		a.defaultSinkName = server.DefaultSinkName
 		a.defaultSourceName = server.DefaultSourceName
-
 		a.updateDefaultSink(server.DefaultSinkName)
 		a.updateDefaultSource(server.DefaultSourceName)
 	}
+}
+
+func (a *Audio) listenGSettingVolumeIncreaseChanged() {
+	gsettings.ConnectChanged(gsSchemaAudio, gsKeyVolumeIncrease, func(val string) {
+		volInc := a.settings.GetBoolean(gsKeyVolumeIncrease)
+		if volInc {
+			a.MaxUIVolume = increaseMaxVolume
+		} else {
+			a.MaxUIVolume = normalMaxVolume
+		}
+		gMaxUIVolume = a.MaxUIVolume
+		err := a.emitPropChangedMaxUIVolume(a.MaxUIVolume)
+		if err != nil {
+			logger.Warning("changed Max UI Volume failed: %v", err)
+		}
+	})
+}
+
+func (a *Audio) listenGSettingReduceNoiseChanged() {
+	gsettings.ConnectChanged(gsSchemaAudio, gsKeyReduceNoise, func(val string) {
+		err := setReduceNoise(a.ReduceNoise.Get())
+		if err != nil {
+			logger.Warning("set Reduce Noise failed: %v", err)
+		}
+	})
 }

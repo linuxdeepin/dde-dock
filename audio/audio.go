@@ -25,7 +25,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"strings"
 	"sync"
 	"time"
@@ -35,7 +34,7 @@ import (
 	"pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/gsettings"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -47,6 +46,7 @@ const (
 	gsKeyHeadphoneOutputVolume    = "headphone-output-volume"
 	gsKeyHeadphoneUnplugAutoPause = "headphone-unplug-auto-pause"
 	gsKeyVolumeIncrease           = "volume-increase"
+	gsKeyReduceNoise              = "reduce-input-noise"
 
 	gsSchemaSoundEffect  = "com.deepin.dde.sound-effect"
 	gsKeyEnabled         = "enabled"
@@ -135,6 +135,8 @@ type Audio struct {
 
 	noRestartPulseAudio bool
 
+	ReduceNoise gsprop.Bool `prop:"access:rw"`
+
 	methods *struct {
 		SetPort func() `in:"cardId,portName,direction"`
 	}
@@ -151,6 +153,7 @@ func newAudio(service *dbusutil.Service) *Audio {
 	a.settings.Reset(gsKeyInputVolume)
 	a.settings.Reset(gsKeyOutputVolume)
 	a.IncreaseVolume.Bind(a.settings, gsKeyVolumeIncrease)
+	a.ReduceNoise.Bind(a.settings, gsKeyReduceNoise)
 	a.headphoneUnplugAutoPause = a.settings.GetBoolean(gsKeyHeadphoneUnplugAutoPause)
 	if a.IncreaseVolume.Get() {
 		a.MaxUIVolume = increaseMaxVolume
@@ -158,17 +161,8 @@ func newAudio(service *dbusutil.Service) *Audio {
 		a.MaxUIVolume = normalMaxVolume
 	}
 	gMaxUIVolume = a.MaxUIVolume
-	gsettings.ConnectChanged(gsSchemaAudio, gsKeyVolumeIncrease, func(val string) {
-		tm := a.settings.GetBoolean(gsKeyVolumeIncrease)
-		if tm {
-			a.MaxUIVolume = increaseMaxVolume
-		} else {
-			a.MaxUIVolume = normalMaxVolume
-		}
-		gMaxUIVolume = a.MaxUIVolume
-		a.service.EmitPropertyChanged(a, "MaxUIVolume", a.MaxUIVolume)
-	})
-
+	a.listenGSettingReduceNoiseChanged()
+	a.listenGSettingVolumeIncreaseChanged()
 	a.sessionSigLoop = dbusutil.NewSignalLoop(service.Conn(), 10)
 	a.syncConfig = dsync.NewConfig("audio", &syncConfig{a: a},
 		a.sessionSigLoop, dbusPath, logger)
@@ -345,6 +339,12 @@ func (a *Audio) init() error {
 
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
+
+	err = setReduceNoise(a.ReduceNoise.Get())
+	if err != nil {
+		logger.Warning("set reduce noise fail:", err)
+	}
+
 	return nil
 }
 
@@ -645,13 +645,20 @@ func (*Audio) GetInterfaceName() string {
 
 func (a *Audio) updateDefaultSink(sinkName string) {
 	sinkInfo := a.getSinkInfoByName(sinkName)
+
 	if sinkInfo == nil {
 		logger.Warning("failed to get sinkInfo for name:", sinkName)
 		return
 	}
 	logger.Debugf("updateDefaultSink #%d %s", sinkInfo.Index, sinkName)
 	a.moveSinkInputsToSink(sinkInfo.Index)
-
+	if !isPhysicalDevice(sinkName) {
+		sinkInfo = a.getSinkInfoByName(sinkInfo.PropList["device.master_device"])
+		if sinkInfo == nil {
+			logger.Warning("failed to get virtual device sinkInfo for name:", sinkName)
+			return
+		}
+	}
 	a.mu.Lock()
 	sink, ok := a.sinks[sinkInfo.Index]
 	if !ok {
@@ -677,7 +684,18 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 		return
 	}
 	logger.Debugf("updateDefaultSource #%d %s", sourceInfo.Index, sourceName)
-
+	if isPhysicalDevice(sourceName) {
+		err := setReduceNoise(a.ReduceNoise.Get())
+		if err != nil {
+			logger.Warning("set reduce noise fail:", err)
+		}
+	} else {
+		sourceInfo = a.getSourceInfoByName(sourceInfo.Proplist["device.master_device"])
+		if sourceInfo == nil {
+			logger.Warning("failed to get virtual device sourceInfo for name:", sourceName)
+			return
+		}
+	}
 	a.mu.Lock()
 	source, ok := a.sources[sourceInfo.Index]
 	if !ok {

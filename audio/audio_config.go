@@ -21,6 +21,7 @@ package audio
 
 import (
 	"os"
+	"os/exec"
 	"time"
 
 	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
@@ -202,7 +203,6 @@ func (a *Audio) doSaveConfig() {
 		info.SourceVolume = sourceInfo.Volume.Avg()
 		break
 	}
-
 	_, err := readConfig()
 	if err != nil && !os.IsNotExist(err) {
 		logger.Warning(err)
@@ -216,6 +216,24 @@ func (a *Audio) doSaveConfig() {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+}
+
+func setReduceNoise(enable bool) error {
+	logger.Debug("set reduce noise :", enable)
+	var err error
+	if enable {
+		out, err := exec.Command("/bin/sh", "/usr/share/dde-daemon/audio/echoCancelEnable.sh").CombinedOutput()
+		if err != nil {
+			logger.Warningf("failed to enable reduce noise %v %s", err, out)
+		}
+	} else {
+		out, err := exec.Command("pactl", "unload-module", "module-echo-cancel").CombinedOutput()
+		if err != nil {
+			logger.Warningf("failed to disable reduce noise %v %s", err, out)
+		}
+	}
+	return err
 }
 
 func (a *Audio) saveAudioState() error {
