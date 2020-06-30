@@ -270,15 +270,14 @@ func (l *Lastore) createUpdateActions() []NotifyAction {
 			Name: gettext.Tr("Update Now"),
 			Callback: func() {
 				go func() {
-					err := exec.Command("dde-control-center","-m", "update", "-p", "Checking").Run()
+					err := exec.Command("dde-control-center", "-m", "update", "-p", "Checking").Run()
 					if err != nil {
-						logger.Warningf("createUpdateActions: %v",err)
+						logger.Warningf("createUpdateActions: %v", err)
 					}
 				}()
 			},
 		},
 	}
-
 
 	return ac
 }
@@ -314,7 +313,8 @@ func (l *Lastore) notifyJob(path dbus.ObjectPath) {
 		}
 	case UpdateSourceJobType:
 		val, _ := l.core.UpdatablePackages().Get(0)
-		if status == EndStatus && len(val) > 0 {
+		if status == SucceedStatus && len(val) > 0 &&
+			strings.Contains(info.Name, "+notify") {
 			l.notifyUpdateSource(l.createUpdateActions())
 		}
 	}
