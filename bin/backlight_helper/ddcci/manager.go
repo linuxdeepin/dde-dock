@@ -73,6 +73,6 @@ func (m *Manager) SetBrightness(edidChecksum string, value int32) *dbus.Error {
 }
 
 func (m *Manager) RefreshDisplays() *dbus.Error {
-	m.ddcci.RefreshDisplays()
-	return dbusutil.ToError(nil)
+	err := m.ddcci.RefreshDisplays()
+	return dbusutil.ToError(err)
 }
