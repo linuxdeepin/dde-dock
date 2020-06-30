@@ -165,7 +165,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     const QString &pluginApi = meta.value("api").toString();
     bool pluginIsValid = true;
     if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi)) {
-        qWarning() << objectName()
+        qDebug() << objectName()
                    << "plugin api version not matched! expect versions:" << CompatiblePluginApiList
                    << ", got version:" << pluginApi
                    << ", the plugin file is:" << pluginFile;
@@ -175,7 +175,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
 
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
     if (!interface) {
-        qWarning() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
+        qDebug() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
 
         pluginLoader->unload();
         pluginLoader->deleteLater();

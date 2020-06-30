@@ -686,8 +686,8 @@ void MainWindow::setStrutPartial()
             ++count;
     }
     if (count > 0) {
-        qWarning() << "strutArea is intersects with another screen.";
-        qWarning() << maxScreenHeight << maxScreenWidth << m_dockPosition << p << s;
+        qDebug() << "strutArea is intersects with another screen.";
+        qDebug() << maxScreenHeight << maxScreenWidth << m_dockPosition << p << s;
         return;
     }
 

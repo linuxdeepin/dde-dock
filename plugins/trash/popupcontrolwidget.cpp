@@ -127,7 +127,7 @@ void PopupControlWidget::clearTrashFloder()
     if (DTrashManager::instance()->cleanTrash()) {
         DDesktopServices::playSystemSoundEffect(DDesktopServices::SSE_EmptyTrash);
     } else {
-        qWarning() << "Clear trash failed";
+        qDebug() << "Clear trash failed";
     }
 //    DFMGlobal::instance()->clearTrash();
 }

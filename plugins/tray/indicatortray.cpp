@@ -84,13 +84,13 @@ public:
             callback(v);
             return;
         } else if (3 != arguments.count()) {
-            qWarning() << "arguments count must be 3";
+            qDebug() << "arguments count must be 3";
             return;
         }
 
         QString interfaceName = msg.arguments().at(0).toString();
         if (interfaceName != propertyInterfaceNames.value(key)) {
-            qWarning() << "interfaceName mismatch" << interfaceName << propertyInterfaceNames.value(key) << key;
+            qDebug() << "interfaceName mismatch" << interfaceName << propertyInterfaceNames.value(key) << key;
             return;
         }
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
