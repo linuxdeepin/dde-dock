@@ -112,6 +112,8 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 
     if (!m_launcherInter->IsVisible()) {
         m_launcherInter->Show();
+    } else {
+        m_launcherInter->Hide();
     }
 }
 
