@@ -24,10 +24,11 @@
 
 #include "pluginsiteminterface.h"
 #include "showdesktopwidget.h"
-#include "../widgets/tipswidget.h"
 
 #include <QLabel>
-
+namespace Dock{
+class TipsWidget;
+}
 class ShowDesktopPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -63,7 +64,7 @@ private:
     bool m_pluginLoaded;
 
     ShowDesktopWidget *m_showDesktopWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 };
 
 #endif // SHOWDESKTOPPLUGIN_H

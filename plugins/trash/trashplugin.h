@@ -29,11 +29,12 @@
 
 #include "pluginsiteminterface.h"
 #include "trashwidget.h"
-#include "../../widgets/tipswidget.h"
 
 #include <QLabel>
 #include <QSettings>
-
+namespace Dock{
+class TipsWidget;
+}
 class TrashPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -66,7 +67,7 @@ private:
     void refreshPluginItemsVisible();
 
     TrashWidget *m_trashWidget;
-    QPointer<TipsWidget> m_tipsLabel;
+    QPointer<Dock::TipsWidget> m_tipsLabel;
 };
 
 #endif // TRASHPLUGIN_H

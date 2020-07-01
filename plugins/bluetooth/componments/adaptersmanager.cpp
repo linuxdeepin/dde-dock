@@ -110,6 +110,13 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
                     qWarning() << call.error().message();
                 }
             });
+        } else {
+            QDBusPendingCall call = m_bluetoothInter->ClearUnpairedDevice();
+            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+            connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
+                if (call.isError())
+                    qWarning() << call.error().message();
+            });
         }
     }
 }
@@ -287,4 +294,12 @@ void AdaptersManager::adapterRefresh(const Adapter *adapter)
     m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
     m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
     m_bluetoothInter->RequestDiscovery(dPath);
+}
+
+void AdaptersManager::disconnectDevice(Device *device)
+{
+    if (device) {
+        QDBusObjectPath path(device->id());
+        m_bluetoothInter->DisconnectDevice(path);
+    }
 }

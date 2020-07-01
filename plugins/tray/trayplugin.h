@@ -36,7 +36,9 @@
 #include <QLabel>
 
 class FashionTrayItem;
+namespace Dock {
 class TipsWidget;
+}
 class TrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -98,7 +100,7 @@ private:
     QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;
     QMap<QString, IndicatorTray*> m_indicatorMap;
 
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     bool m_pluginLoaded;
 };
 

@@ -30,7 +30,9 @@
 
 #define SOUND_KEY "sound-item-key"
 
+namespace Dock {
 class TipsWidget;
+}
 class SoundItem : public QWidget
 {
     Q_OBJECT
@@ -59,7 +61,7 @@ private slots:
     void sinkChanged(DBusSink *sink);
 
 private:
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     SoundApplet *m_applet;
     DBusSink *m_sinkInter;
     QPixmap m_iconPixmap;

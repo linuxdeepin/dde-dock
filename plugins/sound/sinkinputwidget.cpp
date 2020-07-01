@@ -21,6 +21,7 @@
 
 #include "sinkinputwidget.h"
 #include "../frame/util/imageutil.h"
+#include "../widgets/tipswidget.h"
 
 #include <QHBoxLayout>
 #include <QIcon>
@@ -35,6 +36,7 @@
 #define APP_TITLE_SIZE 110
 
 DGUI_USE_NAMESPACE
+using namespace Dock;
 
 const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qreal ratio)
 {

@@ -24,7 +24,6 @@
 
 #include "dbus/dbussinkinput.h"
 #include "componments/volumeslider.h"
-#include "../widgets/tipswidget.h"
 
 #include <QFrame>
 #include <QPainter>
@@ -32,14 +31,16 @@
 #include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
-
+namespace Dock {
+    class TipsWidget;
+}
 class QLabel;
 class SinkInputWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SinkInputWidget(const QString &inputPath, QWidget *parent = 0);
+    explicit SinkInputWidget(const QString &inputPath, QWidget *parent = nullptr);
 
 private slots:
     void setVolume(const int value);
@@ -58,7 +59,7 @@ private:
     DIconButton *m_volumeBtnMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
-    TipsWidget *m_volumeLabel;
+    Dock::TipsWidget *m_volumeLabel;
 };
 
 #endif // SINKINPUTWIDGET_H

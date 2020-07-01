@@ -38,7 +38,7 @@
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
-
+using namespace Dock;
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
     , m_centralWidget(new QWidget)

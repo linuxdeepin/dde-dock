@@ -60,6 +60,8 @@ private slots:
     void addDeviceItem(const Device *constDevice);
     void deviceChangeState(const Device::State state);
     void moveDeviceItem(Device::State state, DeviceItem *item);
+
+public slots:
     void refresh();
 
 private:

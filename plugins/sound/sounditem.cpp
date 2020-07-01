@@ -39,12 +39,12 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+using namespace Dock;
 SoundItem::SoundItem(QWidget *parent)
-    : QWidget(parent),
-
-      m_tipsLabel(new TipsWidget(this)),
-      m_applet(new SoundApplet(this)),
-      m_sinkInter(nullptr)
+    : QWidget(parent)
+    , m_tipsLabel(new TipsWidget(this))
+    , m_applet(new SoundApplet(this))
+    , m_sinkInter(nullptr)
 {
     m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setAccessibleName("soundtips");

@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
-
+namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
     , m_width(0)
@@ -77,4 +77,30 @@ void TipsWidget::paintEvent(QPaintEvent *event)
     }
         break;
     }
+}
+
+bool TipsWidget::event(QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        if (m_type == SingleLine) {
+            if (!m_text.trimmed().isEmpty()) {
+                 setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
+                 update();
+            }
+        } else {
+            if (m_textList.size() > 0) {
+                int maxLength = 0;
+                setFixedHeight(fontMetrics().height() * m_textList.size());
+                for (QString text : m_textList) {
+                    int fontLength = fontMetrics().width(text) + 6;
+                    maxLength = qMax(maxLength,fontLength);
+                }
+                m_width = maxLength;
+                setFixedWidth(maxLength);
+                update();
+            }
+        }
+    }
+    return QFrame::event(event);
+}
 }

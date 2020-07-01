@@ -50,6 +50,7 @@
 #include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
+using namespace Dock;
 
 // 添加accessible
 SET_FORM_ACCESSIBLE(MainWindow, "mainwindow")

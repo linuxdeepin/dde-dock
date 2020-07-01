@@ -20,6 +20,7 @@
  */
 
 #include "datetimeplugin.h"
+#include "../../widgets/tipswidget.h"
 
 #include <DDBusSender>
 #include <QLabel>
@@ -30,7 +31,7 @@
 
 #define PLUGIN_STATE_KEY "enable"
 #define TIME_FORMAT_KEY "Use24HourFormat"
-
+using namespace Dock;
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
     , m_interface(nullptr)

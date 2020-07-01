@@ -49,7 +49,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_switchItem->setTitle(adapter->name());
     m_switchItem->setChecked(adapter->powered(),false);
     m_switchItem->setLoading(adapter->discover());
-    m_adaptersManager->setAdapterPowered(m_adapter, adapter->powered());
 
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
@@ -313,12 +312,28 @@ void AdapterItem::showDevices(bool powered)
     QList<DeviceItem *> deviceItems;
     deviceItems << m_sortConnected << m_sortUnConnect;
 
-    for (DeviceItem *deviceItem : deviceItems) {
-        if (powered)
-            m_deviceLayout->addWidget(deviceItem);
-        else
-            m_deviceLayout->removeWidget(deviceItem);
-        deviceItem->setVisible(powered);
+    // 在蓝牙关闭的时候，会出现不在connected和Unconnect列表中的设备（连接/关闭中的状态），关闭的时候使用总表参数
+    qDebug() << m_sortConnected.size() << m_sortUnConnect.size() << m_deviceItems.size();
+    if (powered) {
+        for (DeviceItem *deviceItem : deviceItems) {
+            if (deviceItem) {
+                m_deviceLayout->addWidget(deviceItem);
+                deviceItem->setVisible(powered);
+            }
+        }
+    } else {
+        for (DeviceItem *deviceItem : m_deviceItems) {
+            if (deviceItem) {
+                m_deviceLayout->removeWidget(deviceItem);
+                deviceItem->setVisible(powered);
+            }
+        }
+
+        for (DeviceItem *deviceItem : m_sortConnected) {
+            if (deviceItem) {
+                m_adaptersManager->disconnectDevice(deviceItem->device());
+            }
+        }
     }
 
     m_line->setVisible(powered);
@@ -327,6 +342,8 @@ void AdapterItem::showDevices(bool powered)
 
 void AdapterItem::refresh()
 {
+    if (m_adapter->discover())
+        return;
     m_adaptersManager->adapterRefresh(m_adapter);
 }
 

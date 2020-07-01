@@ -39,6 +39,8 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+using namespace Dock;
+
 BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
@@ -68,6 +70,8 @@ QWidget *BluetoothItem::tipsWidget()
 
 QWidget *BluetoothItem::popupApplet()
 {
+    if (m_applet && m_applet->hasAadapter())
+        m_applet->setAdapterRefresh();
     return m_applet->hasAadapter() ? m_applet : nullptr;
 }
 

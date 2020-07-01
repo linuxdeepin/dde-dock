@@ -24,11 +24,13 @@
 
 #include "pluginsiteminterface.h"
 #include "shutdownwidget.h"
-#include "../widgets/tipswidget.h"
 #include "./dbus/dbuslogin1manager.h"
 
 #include <QLabel>
 
+namespace Dock {
+class TipsWidget;
+}
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -108,7 +110,7 @@ private:
     bool m_pluginLoaded;
 
     ShutdownWidget *m_shutdownWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     DBusLogin1Manager* m_login1Inter;
 };
 

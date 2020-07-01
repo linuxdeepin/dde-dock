@@ -24,10 +24,11 @@
 
 #include "pluginsiteminterface.h"
 #include "multitaskingwidget.h"
-#include "../widgets/tipswidget.h"
 
 #include <QLabel>
-
+namespace Dock {
+class TipsWidget;
+}
 class MultitaskingPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -63,7 +64,7 @@ private:
     bool m_pluginLoaded;
 
     MultitaskingWidget *m_multitaskingWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 };
 
 #endif // MULTITASKINGPLUGIN_H

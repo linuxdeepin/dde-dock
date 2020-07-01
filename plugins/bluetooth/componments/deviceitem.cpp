@@ -102,7 +102,7 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
     deviceLayout->addLayout(itemLayout);
     setLayout(deviceLayout);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, themeChanged);
 
     changeState(m_device->state());
 }

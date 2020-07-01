@@ -21,7 +21,10 @@
 
 #include "snitraywidget.h"
 #include "util/themeappicon.h"
+#include "../../widgets/tipswidget.h"
+
 #include <dbusmenu-qt5/dbusmenuimporter.h>
+
 #include <QPainter>
 #include <QApplication>
 
@@ -34,7 +37,7 @@ const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
 const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
-
+using namespace Dock;
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     : AbstractTrayWidget(parent),
       m_dbusMenuImporter(nullptr),

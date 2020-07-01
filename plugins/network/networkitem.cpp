@@ -40,7 +40,7 @@ extern void initFontColor(QWidget *widget)
 
 NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
-    , m_tipsWidget(new TipsWidget(this))
+    , m_tipsWidget(new Dock::TipsWidget(this))
     , m_applet(new QScrollArea(this))
     , m_switchWire(true)
     , m_timer(new QTimer(this))
@@ -385,10 +385,10 @@ void NetworkItem::refreshIcon()
         return;
     }
     case Bconnecting: {
-        m_timer->start();
-        const quint64 index = QTime::currentTime().msec() / 10 % 100;
-        const int num = (index % 5) + 1;
-        iconString = QString("network-wired-symbolic-connecting%1.svg").arg(num);
+        m_timer->start(200);
+        const int index = QTime::currentTime().msec() / 200 % 10;
+        const int num = index + 1;
+        iconString = QString("network-wired-symbolic-connecting%1").arg(num);
         if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                 && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
             iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -1140,6 +1140,7 @@ void NetworkItem::refreshTips()
         break;
     case Connected: {
         QString strTips;
+        QStringList textList;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
@@ -1149,6 +1150,8 @@ void NetworkItem::refreshTips()
                 if (!ipv4.contains("Address"))
                     break;
                 strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
             }
         }
         for (auto wiredItem : m_connectedWiredDevice) {
@@ -1160,10 +1163,11 @@ void NetworkItem::refreshTips()
                 if (!ipv4.contains("Address"))
                     break;
                 strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
             }
         }
-        strTips.chop(1);
-        m_tipsWidget->setText(strTips);
+        m_tipsWidget->setTextList(textList);
     }
     break;
     case Aconnected: {

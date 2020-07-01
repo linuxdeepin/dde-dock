@@ -317,3 +317,11 @@ void BluetoothApplet::getDevieInitStatus(AdapterItem *item)
             break;
     }
 }
+
+void BluetoothApplet::setAdapterRefresh()
+{
+    for (AdapterItem *adapterItem : m_adapterItems) {
+        if (adapterItem)
+            adapterItem->refresh();
+    }
+}

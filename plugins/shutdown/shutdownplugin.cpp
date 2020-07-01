@@ -21,11 +21,14 @@
 
 #include "shutdownplugin.h"
 #include "dbus/dbusaccount.h"
+#include "../widgets/tipswidget.h"
 
 #include <QIcon>
 #include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
+
+using namespace Dock;
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),

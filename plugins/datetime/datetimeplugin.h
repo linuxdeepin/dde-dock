@@ -24,12 +24,14 @@
 
 #include "pluginsiteminterface.h"
 #include "datetimewidget.h"
-#include "../../widgets/tipswidget.h"
 
 #include <QTimer>
 #include <QLabel>
 #include <QSettings>
 
+namespace Dock{
+class TipsWidget;
+}
 class QDBusInterface;
 class DatetimePlugin : public QObject, PluginsItemInterface
 {
@@ -72,7 +74,7 @@ private:
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
-    QPointer<TipsWidget> m_dateTipsLabel;
+    QPointer<Dock::TipsWidget> m_dateTipsLabel;
     QTimer *m_refershTimer;
     QString m_currentTimeString;
     QDBusInterface *m_interface;

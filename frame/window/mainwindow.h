@@ -127,8 +127,7 @@ private:
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
     XEventMonitor *m_eventInter;
-    QString m_registerKey;
-
+    QString m_registerKey{""};
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
     QTimer *m_leaveDelayTimer;

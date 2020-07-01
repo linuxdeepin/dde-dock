@@ -21,6 +21,7 @@
 
 #include "appsnapshot.h"
 #include "previewcontainer.h"
+#include "../widgets/tipswidget.h"
 
 #include <DStyle>
 
@@ -50,6 +51,8 @@ struct SHMInfo {
         long height;
     } rect;
 };
+
+using namespace Dock;
 
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
