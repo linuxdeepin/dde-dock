@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/godbus/dbus"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
+	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 )
