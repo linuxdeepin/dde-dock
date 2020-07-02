@@ -775,7 +775,16 @@ func (m *Manager) doSetStandardFont(value string) error {
 		return fmt.Errorf("invalid font family '%v'", value)
 	}
 
-	err := fonts.SetFamily(value, m.MonospaceFont.Get(), m.FontSize.Get())
+	monoFont := m.MonospaceFont.Get()
+	if !fonts.IsFontFamily(monoFont) {
+		monoList := fonts.GetFamilyTable().ListMonospace()
+		if len(monoList) == 0 {
+			return fmt.Errorf("no valid mono font")
+		}
+		monoFont = monoList[0]
+	}
+
+	err := fonts.SetFamily(value, monoFont, m.FontSize.Get())
 	if err != nil {
 		return err
 	}
@@ -793,7 +802,16 @@ func (m *Manager) doSetMonospaceFont(value string) error {
 		return fmt.Errorf("invalid font family '%v'", value)
 	}
 
-	err := fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
+	standardFont := m.StandardFont.Get()
+	if !fonts.IsFontFamily(standardFont) {
+		standardList := fonts.GetFamilyTable().ListStandard()
+		if len(standardList) == 0 {
+			return fmt.Errorf("no valid standard font")
+		}
+		standardFont = standardList[0]
+	}
+
+	err := fonts.SetFamily(standardFont, value, m.FontSize.Get())
 	if err != nil {
 		return err
 	}
