@@ -25,12 +25,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/linuxdeepin/go-x11-client"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/ge"
 	"github.com/linuxdeepin/go-x11-client/ext/input"
 	"github.com/linuxdeepin/go-x11-client/ext/xfixes"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
@@ -334,6 +334,9 @@ func (m *Manager) handleXEvent() {
 }
 
 func (m *Manager) handleCursorEvent(x, y int32, press bool) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
 	press = !press
 	inList, outList := m.getIdList(x, y)
 	for _, id := range inList {
@@ -385,6 +388,8 @@ func (m *Manager) handleCursorEvent(x, y int32, press bool) {
 }
 
 func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 
 	list, _ := m.getIdList(x, y)
 	for _, id := range list {
@@ -418,6 +423,9 @@ func (m *Manager) keyCode2Str(key int32) string {
 }
 
 func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
 	list, _ := m.getIdList(x, y)
 	for _, id := range list {
 		array, ok := m.idAreaInfoMap[id]
