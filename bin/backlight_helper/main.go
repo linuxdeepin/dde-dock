@@ -114,10 +114,11 @@ func main() {
 	ddcciManager, err := ddcci.NewManager()
 	if err != nil {
 		logger.Warning(err)
-	}
-	err = service.Export(ddcci.DbusPath, ddcciManager)
-	if err != nil {
-		logger.Warning("failed to export:", err)
+	} else {
+		err = service.Export(ddcci.DbusPath, ddcciManager)
+		if err != nil {
+			logger.Warning("failed to export:", err)
+		}
 	}
 
 	err = service.RequestName(dbusServiceName)
