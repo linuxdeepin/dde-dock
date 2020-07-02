@@ -45,6 +45,7 @@ const (
 	settingKeyLowPowerNotifyThreshold      = "percentage-low"
 	settingKeyLowPowerAutoSleepThreshold   = "percentage-action"
 	settingKeyBrightnessDropPercent        = "brightness-drop-percent"
+	settingKeyPowerSavingEnabled           = "power-saving-mode-enabled"
 
 	settingKeyPowerButtonPressedExec = "power-button-pressed-exec"
 
