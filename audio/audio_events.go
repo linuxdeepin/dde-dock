@@ -478,7 +478,7 @@ func (a *Audio) listenGSettingVolumeIncreaseChanged() {
 		gMaxUIVolume = a.MaxUIVolume
 		err := a.emitPropChangedMaxUIVolume(a.MaxUIVolume)
 		if err != nil {
-			logger.Warning("changed Max UI Volume failed: %v", err)
+			logger.Warning("changed Max UI Volume failed: ", err)
 		}
 	})
 }
@@ -487,7 +487,7 @@ func (a *Audio) listenGSettingReduceNoiseChanged() {
 	gsettings.ConnectChanged(gsSchemaAudio, gsKeyReduceNoise, func(val string) {
 		err := setReduceNoise(a.ReduceNoise.Get())
 		if err != nil {
-			logger.Warning("set Reduce Noise failed: %v", err)
+			logger.Warning("set Reduce Noise failed: ", err)
 		}
 	})
 }
