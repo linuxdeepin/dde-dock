@@ -102,7 +102,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 
     USE_ACCESSIBLE(classname, MainWindow);
     USE_ACCESSIBLE(classname, MainPanelControl);
-    USE_ACCESSIBLE(classname, TipsWidget);
+    USE_ACCESSIBLE(QString(classname).replace("Dock::", ""), TipsWidget);
     USE_ACCESSIBLE(classname, DockPopupWindow);
     USE_ACCESSIBLE(classname, LauncherItem);
     USE_ACCESSIBLE(classname, AppItem);
