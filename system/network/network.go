@@ -677,7 +677,7 @@ func (n *Network) enableVpn(enabled bool) {
 		}
 
 		if avail {
-			n.enableVpn1()
+			// n.enableVpn1()
 		} else {
 			n.PropsMu.Lock()
 			n.delayEnableVpn = true
