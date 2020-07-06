@@ -55,7 +55,7 @@ QString DBusAdaptors::layout() const
     if (m_currentLayout.isEmpty()) {
         // refetch data
         QTimer::singleShot(1000, m_keyboard, &Keyboard::currentLayout);
-        qWarning() << Q_FUNC_INFO << "currentLayout is Empty!!";
+        qDebug() << Q_FUNC_INFO << "currentLayout is Empty!!";
     }
 
     return m_currentLayout;
@@ -103,7 +103,7 @@ void DBusAdaptors::initAllLayoutList()
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, this, [=] {
         if (call.isError()) {
-            qWarning() << "failed to get all keyboard list: " << call.error().message();
+            qDebug() << "failed to get all keyboard list: " << call.error().message();
         } else {
             QDBusReply<KeyboardLayoutList> reply = call.reply();
             m_allLayoutList = reply.value();

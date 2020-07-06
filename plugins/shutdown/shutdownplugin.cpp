@@ -302,7 +302,7 @@ bool ShutdownPlugin::checkSwap()
 
         file.close();
     } else {
-        qWarning() << "open /proc/swaps failed! please check permission!!!";
+        qDebug() << "open /proc/swaps failed! please check permission!!!";
     }
 
     return hasSwap;
