@@ -781,6 +781,11 @@ func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 	logger.Debug("AddSystem")
 	idNameMap := getSystemIdNameMap()
 	for _, id := range gsettings.ListKeys() {
+		if id == "wm-switcher" && os.Getenv("KWIN_COMPOSE") == "N" {
+			logger.Debug("filter 'wm-switcher' because KWIN_COMPOSE=N")
+			continue
+		}
+
 		name := idNameMap[id]
 		if name == "" {
 			name = id
