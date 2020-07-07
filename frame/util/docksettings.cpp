@@ -691,11 +691,6 @@ void DockSettings::monitorAdded(const QString &path)
     connect(inter, &MonitorInter::YChanged, mon, &Monitor::setY);
     connect(inter, &MonitorInter::WidthChanged, mon, &Monitor::setW);
     connect(inter, &MonitorInter::HeightChanged, mon, &Monitor::setH);
-    //  当屏幕的大小或者坐标信息发生变化后，需要更新一下监听区域．防止无法唤醒任务栏
-    connect(inter, &MonitorInter::XChanged, this, &DockSettings::requestUpdateRegionWatch);
-    connect(inter, &MonitorInter::YChanged, this, &DockSettings::requestUpdateRegionWatch);
-    connect(inter, &MonitorInter::WidthChanged, this, &DockSettings::requestUpdateRegionWatch);
-    connect(inter, &MonitorInter::HeightChanged, this, &DockSettings::requestUpdateRegionWatch);
     connect(inter, &MonitorInter::MmWidthChanged, mon, &Monitor::setMmWidth);
     connect(inter, &MonitorInter::MmHeightChanged, mon, &Monitor::setMmHeight);
     connect(inter, &MonitorInter::RotationChanged, mon, &Monitor::setRotate);
@@ -704,6 +699,14 @@ void DockSettings::monitorAdded(const QString &path)
     connect(inter, &MonitorInter::ModesChanged, mon, &Monitor::setModeList);
     connect(inter, &MonitorInter::RotationsChanged, mon, &Monitor::setRotateList);
     connect(inter, &MonitorInter::EnabledChanged, mon, &Monitor::setMonitorEnable);
+
+    //  当屏幕的大小或者坐标信息发生变化后，需要更新一下监听区域和任务栏大小
+    connect(mon, &Monitor::geometryChanged, this, [ = ] {
+        calculateWindowConfig();
+        emit windowGeometryChanged();
+        emit requestUpdateRegionWatch();
+    });
+
     connect(m_displayInter, static_cast<void (DisplayInter::*)(const QString &) const>(&DisplayInter::PrimaryChanged), mon, &Monitor::setPrimary);
 
     // NOTE: DO NOT using async dbus call. because we need to have a unique name to distinguish each monitor
