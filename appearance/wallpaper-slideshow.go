@@ -15,21 +15,24 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
+type changeBgFunc func(monitorSpace string, t time.Time)
+
 // wallpaper slideshow scheduler
 type WSScheduler struct {
 	mu              sync.Mutex
-	lastSetBg         time.Time  //last set wallpaper time
+	lastSetBg       time.Time //last set wallpaper time
 	interval        time.Duration
 	quit            chan chan struct{}
 	intervalChanged chan struct{}
 	running         bool
-	fn              func(monitorSpace string, t time.Time)
+	fn              changeBgFunc
 }
 
-func newWSScheduler() *WSScheduler {
+func newWSScheduler(fun changeBgFunc) *WSScheduler {
 	s := &WSScheduler{
 		quit:            make(chan chan struct{}),
 		intervalChanged: make(chan struct{}),
+		fn:              fun,
 	}
 	return s
 }
@@ -237,7 +240,7 @@ func (wrl *WSLoop) NotifyFsChanged() {
 }
 
 func isValidWSPolicy(policy string) bool {
-	if policy == wsPolicyWakeup || policy == wsPolicyLogin || policy == ""{
+	if policy == wsPolicyWakeup || policy == wsPolicyLogin || policy == "" {
 		return true
 	}
 
