@@ -33,11 +33,11 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 연결됨</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>연결하는 중...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>꺼짐</translation>
     </message>
 </context>
 <context>
@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>무선 연결</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>유선 연결</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>유선 연결 사용안함</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>네트워크 케이블 제거됨</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>무선 네트워크</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>유선 네트워크</translation>
     </message>
 </context>
 <context>
@@ -339,7 +339,7 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>용량 %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>용량 %1 ....</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>용량 %1, 완전히 충전됨</translation>
     </message>
 </context>
 <context>
@@ -377,7 +377,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>절전 모드</translation>
+        <translation>대기모드</translation>
     </message>
     <message>
         <source>Hibernate</source>

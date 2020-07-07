@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Connessione cablata</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Disattiva connessione cablata</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Cavo di rete scollegato</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Rete wireless</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Connessione cablata</translation>
     </message>
 </context>
 <context>

@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>无线连接</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>有线连接</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>关闭有线网络</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>未插入网线</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>无线网络</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>有线网络</translation>
     </message>
 </context>
 <context>

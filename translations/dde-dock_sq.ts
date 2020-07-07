@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation>I aktivizuar</translation>
+        <translation>I çaktivizuar</translation>
     </message>
 </context>
 <context>
@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Lidhje me fill</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Çaktivizo lidhje me fill</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Kablloja e rrjetit është e hequr</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Rrjet Pa Fill</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rrjet Me Fill</translation>
     </message>
 </context>
 <context>

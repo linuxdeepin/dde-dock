@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Połączenie bezprzewodowe</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Połączenie przewodowe</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Wyłącz połączenie przewodowe</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Kabel sieciowy jest odłączony</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Sieć bezprzewodowa</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Sieć przewodowa</translation>
     </message>
 </context>
 <context>
@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Pojemność %1...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Pojemność %1, w pełni naładowana</translation>
     </message>
 </context>
 <context>

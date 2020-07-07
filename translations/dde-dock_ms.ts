@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation type="unfinished"/>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Kabel rangkaian telah dicabut</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Rangkaian Tanpa Wayar</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rangkaian Berwayar</translation>
     </message>
 </context>
 <context>

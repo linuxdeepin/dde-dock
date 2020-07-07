@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Langaton</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Verkkokaapeli</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Poista kiinteä yhteys</translation>
     </message>
@@ -280,6 +272,14 @@
         <source>Network cable unplugged</source>
         <translation>Verkkokaapeli irrotettu</translation>
     </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Langaton verkko</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kaapeli</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -300,7 +300,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Näyttönäppäimistö</translation>
+        <translation>Näppäimistö</translation>
     </message>
     <message>
         <source>Settings</source>

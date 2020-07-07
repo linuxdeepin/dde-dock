@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Isključeno</translation>
     </message>
 </context>
 <context>
@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Bežično povezivanje</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Žično povezivanje</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Onemogući žično povezivanje</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Mrežni kabel je isključen</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Bežična mreža</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Žična mreža</translation>
     </message>
 </context>
 <context>

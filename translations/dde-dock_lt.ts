@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Belaidis ryšys</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Laidinis ryšys</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Išjungti laidinį ryšį</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Atjungtas tinklo laidas</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Belaidis tinklas</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Laidinis tinklas</translation>
     </message>
 </context>
 <context>

@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Бежична веза</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Жичана веза</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Искључи жичану везу</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Мрежни кабл је ископчан</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Бежична мрежа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Жичана мрежа</translation>
     </message>
 </context>
 <context>
@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation>Капацитет %1 ...</translation>
+        <translation>Ниво %1 ....</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Капацитет %1, напуњено</translation>
+        <translation>Ниво %1, напуњено</translation>
     </message>
 </context>
 <context>

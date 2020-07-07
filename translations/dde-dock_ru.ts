@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Беспроводное соединение</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Проводное соединение</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Отключить проводное соединение</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Сетевой кабель отключен</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Беспроводная Сеть</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Проводная Сеть</translation>
     </message>
 </context>
 <context>
@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Заряд %1 ...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Заряд %1, полностью заряжен</translation>
     </message>
 </context>
 <context>

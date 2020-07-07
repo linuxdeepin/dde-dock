@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>اتصال لاسلكي</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>اتصال سلكي</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>تعطيل الاتصال السلكي</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>سلك الشبكة غير موصول</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>شبكة لاسلكية</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>شبكة سلكية</translation>
     </message>
 </context>
 <context>

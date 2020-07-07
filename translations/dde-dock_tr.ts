@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Kablosuz bağlantı</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Kablolu bağlantı</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Kablolu bağlantıyı devre dışı bırak</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Ağ kablosu takılı değil</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Kablosuz Ağ</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablolu Ağ</translation>
     </message>
 </context>
 <context>

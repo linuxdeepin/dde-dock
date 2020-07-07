@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Бездротове підключення</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Дротове підключення</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Вимкнути дротове з&apos;єднання</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Вийнято інтернет-кабель</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Бездротова мережа</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Провідна мережа</translation>
     </message>
 </context>
 <context>
