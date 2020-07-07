@@ -170,10 +170,12 @@ func (g *Grub2) SetGfxmode(sender dbus.Sender, gfxmode string) *dbus.Error {
 func (g *Grub2) SetTimeout(sender dbus.Sender, timeout uint32) *dbus.Error {
 	g.service.DelayAutoQuit()
 
-	err := g.checkAuth(sender, polikitActionIdCommon)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
+	/*
+		err := g.checkAuth(sender, polikitActionIdCommon)
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
+	*/
 
 	if timeout > timeoutMax {
 		return dbusutil.ToError(errors.New("exceeded the maximum value"))
