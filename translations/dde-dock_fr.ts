@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Connexion filaire</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Désactiver la connexion filaire</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Câble réseau débranché</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Réseau sans fil</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Réseau filaire</translation>
     </message>
 </context>
 <context>

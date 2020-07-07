@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Trådløs forbindelse</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Kablet forbindelse</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Deaktivér kablet forbindelse</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Netværkskablet er frakoblet</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Trådløst netværk</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Kablet netværk</translation>
     </message>
 </context>
 <context>

@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Connexió amb fil</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Inhabilita la connexió amb fil</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>El cable de xarxa està desendollat.</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Xarxa sense fil</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Xarxa amb fil</translation>
     </message>
 </context>
 <context>

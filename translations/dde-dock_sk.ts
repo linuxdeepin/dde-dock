@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Bezdrôtové pripojenie</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Káblové pripojenie</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Vypnúť káblové pripojenie</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Sieťový kábel odpojený</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Bezdrôtová sieť</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Drôtová sieť</translation>
     </message>
 </context>
 <context>

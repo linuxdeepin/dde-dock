@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Wireless connection</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Wired connection</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Disable wired connection</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Network cable unplugged</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Wireless Network</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Wired Network</translation>
     </message>
 </context>
 <context>

@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Kết nội wifi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Kết nối có dây</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Tắt kết nối mạng dây</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Mạng dây đã ngắt</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Mạng không dây</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Mạng kết nối dây</translation>
     </message>
 </context>
 <context>

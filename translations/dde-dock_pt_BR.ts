@@ -70,11 +70,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>Formato de 12 Horas</translation>
+        <translation>Formato de 12 horas</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>Formato de 24 Horas</translation>
+        <translation>Formato de 24 horas</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Conexão Cabeada</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Desativar a conexão cabeada</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Cabo de rede desconectado</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Rede Wi-Fi</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rede Cabeada</translation>
     </message>
 </context>
 <context>
@@ -358,7 +358,7 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Exibir Área de Trabalho</translation>
+        <translation>Área de Trabalho</translation>
     </message>
     <message>
         <source>Undock</source>

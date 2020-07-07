@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>Conexiune fără fir</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>Conexiune prin cablu</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>Dezactivați conexiunea prin cablu</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>Cablu Reţea Deconectat</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Rețea fără fir</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Rețea conectată</translation>
     </message>
 </context>
 <context>

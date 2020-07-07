@@ -217,14 +217,6 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය</translation>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation>රැහැන් සම්බන්ධතාවය</translation>
-    </message>
-    <message>
         <source>Disable wired connection</source>
         <translation>රැහැන් සම්බන්ධතාවය අක්‍රීය කරන්න</translation>
     </message>
@@ -279,6 +271,14 @@
     <message>
         <source>Network cable unplugged</source>
         <translation>ජාල කේබලය විසන්ධි කර ඇත</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>රැහැන් රහිත ජාලය</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>රැහැන්ගත ජාලය</translation>
     </message>
 </context>
 <context>
