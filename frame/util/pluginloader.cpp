@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QLibrary>
+#include <QGSettings>
 
 PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     : QThread(parent)
@@ -35,8 +36,10 @@ void PluginLoader::run()
 {
     QDir pluginsDir(m_pluginDirPath);
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
+    static const QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
+    static const auto disable_plugins_list = gsetting.get("disable-plugins-list").toStringList();
 
-    for (const QString file : plugins)
+    for (QString file : plugins)
     {
         if (!QLibrary::isLibrary(file))
             continue;
@@ -44,6 +47,11 @@ void PluginLoader::run()
         // TODO: old dock plugins is uncompatible
         if (file.startsWith("libdde-dock-"))
             continue;
+
+        if (disable_plugins_list.contains(file)) {
+            qDebug() << "disable loading plugin:" << file;
+            continue;
+        }
 
         emit pluginFounded(pluginsDir.absoluteFilePath(file));
     }
