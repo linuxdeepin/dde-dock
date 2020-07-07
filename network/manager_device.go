@@ -21,6 +21,7 @@ package network
 
 import (
 	"fmt"
+	"net"
 	"strings"
 	"time"
 
@@ -67,7 +68,18 @@ type device struct {
 	// used for mobile device
 	MobileNetworkType   string
 	MobileSignalQuality uint32
+
+	InterfaceFlags uint32
+
+	quitFlagsCheckChan chan struct{}
 }
+
+const (
+	nmInterfaceFlagUP uint32 = 1 << iota
+	nmInterfaceFlagLowerUP
+
+	nmInterfaceFlagCarrier = 0x10000
+)
 
 func (m *Manager) initDeviceManage() {
 	m.devicesLock.Lock()
@@ -351,10 +363,51 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		logger.Warning(err)
 	}
 
+	// TODO: NetworkManager 升级 1.22 后，直接使用 NetworkManager 的 InterfaceFlags 属性
+	dev.InterfaceFlags = m.getInterfaceFlags(dev)
+	ticker := time.NewTicker(1 * time.Second)
+	dev.quitFlagsCheckChan = make(chan struct{})
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				newFlags := m.getInterfaceFlags(dev)
+				if dev.InterfaceFlags != newFlags {
+					dev.InterfaceFlags = newFlags
+
+					m.devicesLock.Lock()
+					m.updatePropDevices()
+					m.devicesLock.Unlock()
+				}
+
+			case <-dev.quitFlagsCheckChan:
+				ticker.Stop()
+				return
+			}
+		}
+	}()
+
 	return
 }
 
+func (m *Manager) getInterfaceFlags(dev *device) uint32 {
+	interfaceInfo, err := net.InterfaceByName(dev.Interface)
+	if err != nil {
+		logger.Warning("failed to get interface info:", err)
+		return 0
+	}
+
+	var flags uint32
+	if interfaceInfo.Flags&net.FlagUp != 0 {
+		flags |= nmInterfaceFlagUP
+	}
+
+	return flags
+}
+
 func (m *Manager) destroyDevice(dev *device) {
+	close(dev.quitFlagsCheckChan)
+
 	// destroy object to reset all property connects
 	if dev.mmDevModem != nil {
 		mmDestroyModem(dev.mmDevModem)
