@@ -463,10 +463,7 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
                     wirelessItem->requestWirelessScan();
                 }
             }
-            m_loadingIndicator->setLoading(true);
-            QTimer::singleShot(1000, this, [ = ] {
-                m_loadingIndicator->setLoading(false);
-            });
+            wirelessScan();
         }
     }
     return false;
@@ -1267,4 +1264,14 @@ bool NetworkItem::isShowControlCenter()
     }
 
     return false;
+}
+
+void NetworkItem::wirelessScan()
+{
+    if (m_loadingIndicator->loading())
+        return;
+    m_loadingIndicator->setLoading(true);
+    QTimer::singleShot(1000, this, [ = ] {
+        m_loadingIndicator->setLoading(false);
+    });
 }
