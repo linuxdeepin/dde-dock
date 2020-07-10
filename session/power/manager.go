@@ -270,6 +270,12 @@ func (m *Manager) init() {
 
 				m.claimOrReleaseAmbientLight()
 			}
+			if name == m.helper.LoginManager.ServiceName_() && oldOwner != "" && newOwner == "" {
+				if m.prepareSuspend == suspendStatePrepare {
+					logger.Info("auto handleWakeup if systemd-logind coredump")
+					m.handleWakeup()
+				}
+			}
 		})
 	if err != nil {
 		logger.Warning(err)
