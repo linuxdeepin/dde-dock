@@ -66,6 +66,7 @@ public:
 public slots:
     void updateSelf();
     void refreshIcon();
+    void wirelessScan();
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
