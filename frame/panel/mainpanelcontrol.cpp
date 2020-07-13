@@ -28,6 +28,7 @@
 #include "../item/pluginsitem.h"
 #include "../item/traypluginitem.h"
 #include "../controller/dockitemmanager.h"
+#include "../util/imageutil.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -815,6 +816,12 @@ void MainPanelControl::showEvent(QShowEvent *event)
     return QWidget::showEvent(event);
 }
 
+void MainPanelControl::enterEvent(QEvent *event)
+{
+    updatePanelCursor();
+    QWidget::enterEvent(event);
+}
+
 void MainPanelControl::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -1050,4 +1057,25 @@ void MainPanelControl::getTrayVisableItemCount()
 
     // 模式切换时，托盘区域宽度错误，对应任务11933
     m_trayAreaWidget->adjustSize();
+}
+
+void MainPanelControl::updatePanelCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }

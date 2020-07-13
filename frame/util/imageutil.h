@@ -25,10 +25,15 @@
 #include <QPixmap>
 #include <QSvgRenderer>
 
+class QCursor;
+
 class ImageUtil
 {
 public:
     static const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
+
+    //根据主题加载系统中的x11光标为QCursor
+    static QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
 };
 
 #endif // IMAGEUTIL_H

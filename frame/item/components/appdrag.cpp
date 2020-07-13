@@ -21,11 +21,16 @@
 
 #include "appdrag.h"
 
+#include <X11/Xcursor/Xcursor.h>
+#include <QGSettings>
+#include <QDebug>
+
 AppDrag::AppDrag(QObject *dragSource) : QDrag(dragSource)
 {
     // delete by itself
     m_appDragWidget = new AppDragWidget;
     m_appDragWidget->setVisible(false);
+    setDragMoveCursor();
 }
 
 AppDrag::~AppDrag() {
@@ -67,4 +72,24 @@ Qt::DropAction AppDrag::exec(Qt::DropActions supportedActions, Qt::DropAction de
 AppDragWidget *AppDrag::appDragWidget()
 {
     return m_appDragWidget;
+}
+
+void AppDrag::setDragMoveCursor()
+{
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    const char* cursorName = "dnd-move";
+    XcursorImages *images = XcursorLibraryLoadImages(cursorName, theme.toStdString().c_str(), cursorSize);
+    if (images == nullptr || images->images[0] == nullptr) {
+        qWarning() << "loadCursorFalied, theme =" << theme << ", cursorName=" << cursorName;
+        return;
+    }
+    const int imgW = images->images[0]->width;
+    const int imgH = images->images[0]->height;
+
+    QImage img((const uchar*)images->images[0]->pixels, imgW, imgH, QImage::Format_ARGB32);
+    QPixmap pixmap = QPixmap::fromImage(img);
+    delete images;
+    setDragCursor(pixmap, Qt::MoveAction);
 }

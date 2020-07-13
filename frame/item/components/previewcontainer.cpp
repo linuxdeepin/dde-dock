@@ -20,11 +20,14 @@
  */
 
 #include "previewcontainer.h"
+#include "../../util/imageutil.h"
 
 #include <QDesktopWidget>
 #include <QScreen>
 #include <QApplication>
 #include <QDragEnterEvent>
+#include <QCursor>
+#include <QGSettings>
 
 #define SPACING           0
 #define MARGIN            0
@@ -180,8 +183,30 @@ void PreviewContainer::appendSnapWidget(const WId wid)
         snap->fetchSnapshot();
 }
 
+void PreviewContainer::updatePreviewCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
+}
+
 void PreviewContainer::enterEvent(QEvent *e)
 {
+    updatePreviewCursor();
     QWidget::enterEvent(e);
 
     m_needActivate = false;

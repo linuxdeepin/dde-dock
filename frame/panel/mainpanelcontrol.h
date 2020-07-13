@@ -92,6 +92,8 @@ private:
     void resizeDockIcon();
     void calcuDockIconSize(const int w, const int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin);
 
+    void updatePanelCursor();
+
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
@@ -102,6 +104,7 @@ public slots:
 
 protected:
     void showEvent(QShowEvent *event) override;
+    void enterEvent(QEvent *event) override;
 private:
     QBoxLayout *m_mainPanelLayout;
     QWidget *m_fixedAreaWidget;

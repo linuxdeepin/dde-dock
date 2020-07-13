@@ -23,6 +23,7 @@
 #include "panel/mainpanelcontrol.h"
 #include "controller/dockitemmanager.h"
 #include "util/utils.h"
+#include "util/imageutil.h"
 
 #include <QDebug>
 #include <QEvent>
@@ -30,12 +31,15 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QX11Info>
+#include <QCursor>
 #include <qpa/qplatformwindow.h>
 #include <DStyle>
 #include <DPlatformWindowHandle>
+#include <QGSettings>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
+#include <X11/Xcursor/Xcursor.h>
 
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
@@ -96,8 +100,34 @@ private:
         emit dragFinished();
     }
 
+    void updateCursor()
+    {
+        QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+        QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+        Position position = DockSettings::Instance().position();
+        int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+
+        static QCursor *lastCursor = nullptr;
+        static QString lastTheme;
+        static int lastPosition = -1;
+        static int lastCursorSize = -1;
+        if (theme != lastTheme || position != lastPosition || cursorSize != lastCursorSize) {
+            lastTheme = theme;
+            lastPosition = position;
+            lastCursorSize = cursorSize;
+            const char* cursorName = (position == Bottom || position == Top) ? "v_double_arrow" : "h_double_arrow";
+            QCursor *newCursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), cursorName, cursorSize);
+            setCursor(*newCursor);
+            if (lastCursor != nullptr)
+                delete lastCursor;
+
+            lastCursor = newCursor;
+        }
+    }
+
     void enterEvent(QEvent *) override
     {
+        updateCursor();
         if (QApplication::overrideCursor() && QApplication::overrideCursor()->shape() != cursor()) {
             QApplication::setOverrideCursor(cursor());
         }
@@ -184,11 +214,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_curDockPos = m_settings->position();
     m_newDockPos = m_curDockPos;
 
-    if ((Top == m_curDockPos) || (Bottom == m_curDockPos)) {
-        m_dragWidget->setCursor(Qt::SizeVerCursor);
-    } else {
-        m_dragWidget->setCursor(Qt::SizeHorCursor);
-    }
+    ///begin: 因为klu跟随控制中心主题的临时解决方案注释掉,后期会恢复,勿删
+    // if ((Top == m_curDockPos) || (Bottom == m_curDockPos)) {
+    //     m_dragWidget->setCursor(Qt::SizeVerCursor);
+    // } else {
+    //     m_dragWidget->setCursor(Qt::SizeHorCursor);
+    // }
+    ///end
 
     connect(m_panelShowAni, &QVariantAnimation::valueChanged, [ this ](const QVariant & value) {
 
@@ -613,13 +645,15 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
         m_mainPanel->setPositonValue(m_curDockPos);
         resetPanelEnvironment(true);
 
-        if ((Top == m_curDockPos) || (Bottom == m_curDockPos))
-        {
-            m_dragWidget->setCursor(Qt::SizeVerCursor);
-        } else
-        {
-            m_dragWidget->setCursor(Qt::SizeHorCursor);
-        }
+        ///begin: 因为klu跟随控制中心主题的临时解决方案注释掉,后期会恢复,勿删
+        // if ((Top == m_curDockPos) || (Bottom == m_curDockPos))
+        // {
+        //     m_dragWidget->setCursor(Qt::SizeVerCursor);
+        // } else
+        // {
+        //     m_dragWidget->setCursor(Qt::SizeHorCursor);
+        // }
+        ///end
 
         updatePanelVisible();
     });

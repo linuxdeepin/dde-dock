@@ -20,12 +20,15 @@
  */
 
 #include "dockpopupwindow.h"
+#include "imageutil.h"
 
 #include <QScreen>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QAccessible>
 #include <QAccessibleEvent>
+#include <QCursor>
+#include <QGSettings>
 
 DWIDGET_USE_NAMESPACE
 
@@ -112,6 +115,7 @@ void DockPopupWindow::hide()
 void DockPopupWindow::showEvent(QShowEvent *e)
 {
     DArrowRectangle::showEvent(e);
+    updatePopupWindowCursor();
 
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
@@ -119,8 +123,30 @@ void DockPopupWindow::showEvent(QShowEvent *e)
 void DockPopupWindow::enterEvent(QEvent *e)
 {
     DArrowRectangle::enterEvent(e);
+    updatePopupWindowCursor();
 
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
+}
+
+void DockPopupWindow::updatePopupWindowCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }
 
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
