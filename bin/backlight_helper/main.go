@@ -21,15 +21,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
-	"pkg.deepin.io/dde/daemon/bin/backlight_helper/ddcci"
-	dbus "pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/log"
 )
 
 const (
@@ -50,13 +50,12 @@ type Manager struct {
 	}
 }
 
-var logger = log.NewLogger("backlight_helper")
-
 func (*Manager) GetInterfaceName() string {
 	return dbusInterface
 }
 
 func (m *Manager) SetBrightness(type0 byte, name string, value int32) *dbus.Error {
+	m.service.DelayAutoQuit()
 	filename, err := getBrightnessFilename(type0, name)
 	if err != nil {
 		return dbusutil.ToError(err)
@@ -100,7 +99,7 @@ func getBrightnessFilename(type0 byte, name string) (string, error) {
 func main() {
 	service, err := dbusutil.NewSystemService()
 	if err != nil {
-		logger.Fatal("failed to new system service:", err)
+		log.Fatal("failed to new system service:", err)
 	}
 
 	m := &Manager{
@@ -108,23 +107,14 @@ func main() {
 	}
 	err = service.Export(dbusPath, m)
 	if err != nil {
-		logger.Fatal("failed to export:", err)
-	}
-
-	ddcciManager, err := ddcci.NewManager()
-	if err != nil {
-		logger.Warning(err)
-	} else {
-		err = service.Export(ddcci.DbusPath, ddcciManager)
-		if err != nil {
-			logger.Warning("failed to export:", err)
-		}
+		log.Fatal("failed to export:", err)
 	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
-		logger.Fatal("failed to request name:", err)
+		log.Fatal("failed to request name:", err)
 	}
 
+	service.SetAutoQuitHandler(time.Second*10, nil)
 	service.Wait()
 }

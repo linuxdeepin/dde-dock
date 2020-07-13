@@ -44,14 +44,3 @@ func newSettingsBus() (dbus.BusObject, error) {
 	nmSettingsObj = conn.Object(nmService, nmSettingsPath)
 	return nmSettingsObj, nil
 }
-
-func startBacklightHelperAsync(conn *dbus.Conn) {
-	go func() {
-		obj := conn.Object("com.deepin.daemon.helper.Backlight", "/com/deepin/daemon/helper/Backlight")
-		err := obj.Call("org.freedesktop.DBus.Peer.Ping", 0).Err
-
-		if err != nil {
-			logger.Warning(err)
-		}
-	}()
-}
