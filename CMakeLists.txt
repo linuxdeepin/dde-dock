@@ -34,6 +34,7 @@ if (${EXIT_CODE} EQUAL 0)
     if (${ARCHITECTURE} STREQUAL "sw_64")
         # add compiler flags -mieee for mathmatic
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
+        add_definitions(-DDISABLE_SHOW_ANIMATION)
     endif()
 endif()
 
@@ -65,3 +66,6 @@ install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
 ## services files
 install(FILES frame/com.deepin.dde.Dock.service
         DESTINATION /usr/share/dbus-1/services)
+
+install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
+        DESTINATION share/glib-2.0/schemas)

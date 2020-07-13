@@ -41,20 +41,37 @@ const QString KeyboardPlugin::pluginDisplayName() const
 void KeyboardPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_dbusAdaptors = new DBusAdaptors(this);
+    if (!m_dbusAdaptors) {
 
-    QDBusConnection::sessionBus().registerService("com.deepin.dde.Keyboard");
-    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Keyboard", "com.deepin.dde.Keyboard", this);
+        QString serverName = "com.deepin.daemon.InputDevices";
+        QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
+
+        if (!ifc->isServiceRegistered(serverName)) {
+            connect(QDBusConnection::sessionBus().interface(), &QDBusConnectionInterface::serviceOwnerChanged, this,
+            [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
+                Q_UNUSED(oldOwner);
+                if (name == serverName && !newOwner.isEmpty()) {
+                    m_dbusAdaptors = new DBusAdaptors(this);
+                    disconnect(ifc);
+                }
+            });
+        } else {
+            m_dbusAdaptors = new DBusAdaptors(this);
+        }
+
+        QDBusConnection::sessionBus().registerService("com.deepin.dde.Keyboard");
+        QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Keyboard", "com.deepin.dde.Keyboard", this);
+    }
 }
 
-QWidget* KeyboardPlugin::itemWidget(const QString &itemKey)
+QWidget *KeyboardPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
     return nullptr;
 }
 
-QWidget* KeyboardPlugin::itemTipsWidget(const QString &itemKey)
+QWidget *KeyboardPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 

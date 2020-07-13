@@ -29,12 +29,15 @@
 #include <DApplication>
 #include <DDBusSender>
 #include "../widgets/tipswidget.h"
+#include "../frame/util/imageutil.h"
+#include <DGuiApplicationHelper>
 
 // menu actions
 #define MUTE     "mute"
 #define SETTINGS "settings"
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
@@ -44,12 +47,17 @@ SoundItem::SoundItem(QWidget *parent)
       m_sinkInter(nullptr)
 {
     m_tipsLabel->setObjectName("sound");
+    m_tipsLabel->setAccessibleName("soundtips");
     m_tipsLabel->setVisible(false);
 
     m_applet->setVisible(false);
 
-    connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
+    connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshIcon();
+    });
 }
 
 QWidget *SoundItem::tipsWidget()
@@ -103,22 +111,27 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINGS)
         DDBusSender()
-            .service("com.deepin.dde.ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .method(QString("ShowModule"))
-            .arg(QString("sound"))
-            .call();
-}
-
-QSize SoundItem::sizeHint() const
-{
-    return QSize(26, 26);
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("sound"))
+        .call();
 }
 
 void SoundItem::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 
     refreshIcon();
 }
@@ -148,12 +161,10 @@ void SoundItem::refreshIcon()
 
     const double volmue = m_applet->volumeValue();
     const bool mute = m_sinkInter->mute();
-//    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
-    if (displayMode == Dock::Fashion)
-    {
+    if (displayMode == Dock::Fashion) {
         QString volumeString;
         if (volmue >= 1000)
             volumeString = "100";
@@ -168,9 +179,9 @@ void SoundItem::refreshIcon()
         QString volumeString;
         if (mute)
             volumeString = "muted";
-        else if (volmue / 1000.0f >= double(2)/3)
+        else if (volmue / 1000.0f >= double(2) / 3)
             volumeString = "high";
-        else if (volmue / 1000.0f >= double(1)/3)
+        else if (volmue / 1000.0f >= double(1) / 3)
             volumeString = "medium";
         else
             volumeString = "low";
@@ -179,10 +190,11 @@ void SoundItem::refreshIcon()
     }
 
     const auto ratio = devicePixelRatioF();
-    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-    const QIcon icon = QIcon::fromTheme(iconString);
-    m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
-    m_iconPixmap.setDevicePixelRatio(ratio);
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconString.append(PLUGIN_MIN_ICON_NAME);
+
+    m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
 
     update();
 }
@@ -192,7 +204,7 @@ void SoundItem::refreshTips(const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    if(!m_sinkInter)
+    if (!m_sinkInter)
         return;
 
     QString value;

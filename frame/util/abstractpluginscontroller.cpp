@@ -23,6 +23,7 @@
 #include "pluginsiteminterface.h"
 #include "DNotifySender"
 
+#include <DSysInfo>
 #include <QDebug>
 #include <QDir>
 #include <QGSettings>
@@ -30,6 +31,7 @@
 static const QStringList CompatiblePluginApiList {
     "1.1.1",
     "1.2",
+    "1.2.1",
     DOCK_PLUGIN_API_VERSION
 };
 
@@ -45,7 +47,8 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
     connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsSynced, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
-void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) {
+void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value)
+{
     // is it necessary?
 //    refreshPluginSettings();
 
@@ -61,7 +64,8 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
     m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
-const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback) {
+const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &fallback)
+{
     // load from local cache
     QVariant v = m_pluginSettingsObject.value(itemInter->pluginName()).toObject().value(key).toVariant();
     if (v.isNull() || !v.isValid()) {
@@ -71,7 +75,7 @@ const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const i
     return v;
 }
 
-void AbstractPluginsController::removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList)
+void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList)
 {
     if (keyList.isEmpty()) {
         m_pluginSettingsObject.remove(itemInter->pluginName());
@@ -91,7 +95,7 @@ QMap<PluginsItemInterface *, QMap<QString, QObject *> > &AbstractPluginsControll
     return m_pluginsMap;
 }
 
-QObject *AbstractPluginsController::pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const
+QObject *AbstractPluginsController::pluginItemAt(PluginsItemInterface *const itemInter, const QString &itemKey) const
 {
     if (!m_pluginsMap.contains(itemInter))
         return nullptr;
@@ -133,7 +137,7 @@ void AbstractPluginsController::startLoader(PluginLoader *loader)
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
     QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(),
-                       loader, [=] { loader->start(QThread::LowestPriority); });
+                       loader, [ = ] { loader->start(QThread::LowestPriority); });
 }
 
 void AbstractPluginsController::displayModeChanged()
@@ -160,8 +164,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
     bool pluginIsValid = true;
-    if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi))
-    {
+    if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi)) {
         qWarning() << objectName()
                    << "plugin api version not matched! expect versions:" << CompatiblePluginApiList
                    << ", got version:" << pluginApi
@@ -171,8 +174,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-    if (!interface)
-    {
+    if (!interface) {
         qWarning() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
 
         pluginLoader->unload();
@@ -187,28 +189,39 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         return;
     }
 
+    if (interface->pluginName() == "multitasking") {
+        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer)
+            return;
+    }
+
     m_pluginsMap.insert(interface, QMap<QString, QObject *>());
 
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
     if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
         qDebug() << objectName() << dbusService << "daemon has not started, waiting for signal";
         connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
-            [=](const QString &name, const QString &oldOwner, const QString &newOwner) {
-                Q_UNUSED(oldOwner);
-                if (name == dbusService && !newOwner.isEmpty()) {
-                    qDebug() << objectName() << dbusService << "daemon started, init plugin and disconnect";
-                    initPlugin(interface);
-                    disconnect(m_dbusDaemonInterface);
-                }
+        [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
+            Q_UNUSED(oldOwner);
+            if (name == dbusService && !newOwner.isEmpty()) {
+                qDebug() << objectName() << dbusService << "daemon started, init plugin and disconnect";
+                initPlugin(interface);
+                disconnect(m_dbusDaemonInterface);
             }
-        );
+        }
+               );
         return;
     }
 
-    initPlugin(interface);
+    // NOTE(justforlxz): 插件的所有初始化工作都在init函数中进行，
+    // loadPlugin函数是按队列执行的，initPlugin函数会有可能导致
+    // 函数执行被阻塞。
+    QTimer::singleShot(1, this, [ = ] {
+        initPlugin(interface);
+    });
 }
 
-void AbstractPluginsController::initPlugin(PluginsItemInterface *interface) {
+void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
+{
     qDebug() << objectName() << "init plugin: " << interface->pluginName();
     interface->init(this);
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();
@@ -273,7 +286,7 @@ bool AbstractPluginsController::eventFilter(QObject *o, QEvent *e)
     if (e->type() != QEvent::DynamicPropertyChange)
         return false;
 
-    QDynamicPropertyChangeEvent * const dpce = static_cast<QDynamicPropertyChangeEvent *>(e);
+    QDynamicPropertyChangeEvent *const dpce = static_cast<QDynamicPropertyChangeEvent *>(e);
     const QString propertyName = dpce->propertyName();
 
     if (propertyName == PROP_POSITION)

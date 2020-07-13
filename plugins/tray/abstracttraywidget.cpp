@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "constants.h"
 #include "abstracttraywidget.h"
 
 #include <xcb/xproto.h>
@@ -26,8 +27,8 @@
 #include <QDebug>
 
 AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, f),
-    m_handleMouseReleaseTimer(new QTimer(this))
+    : QWidget(parent, f)
+    , m_handleMouseReleaseTimer(new QTimer(this))
 {
     m_handleMouseReleaseTimer->setSingleShot(true);
     m_handleMouseReleaseTimer->setInterval(100);
@@ -46,7 +47,7 @@ void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
     // when right button of mouse is pressed immediately in fashion mode
 
     // here we hide the right button press event when it is click in the special area
-    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos())) {
+    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos(), true)) {
         event->accept();
         return;
     }
@@ -70,8 +71,8 @@ void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
 }
 
 
-void AbstractTrayWidget::handleMouseRelease() {
-
+void AbstractTrayWidget::handleMouseRelease()
+{
     Q_ASSERT(sender() == m_handleMouseReleaseTimer);
 
     // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
@@ -107,7 +108,7 @@ void AbstractTrayWidget::handleMouseRelease() {
 const QRect AbstractTrayWidget::perfectIconRect() const
 {
     const QRect itemRect = rect();
-    const int iconSize = std::min(itemRect.width(), itemRect.height()) * 0.8;
+    const int iconSize = std::min(itemRect.width(), itemRect.height());
 
     QRect iconRect;
     iconRect.setWidth(iconSize);
@@ -115,4 +116,19 @@ const QRect AbstractTrayWidget::perfectIconRect() const
     iconRect.moveTopLeft(itemRect.center() - iconRect.center());
 
     return iconRect;
+}
+
+void AbstractTrayWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    // 保持横纵比
+    if (position == Dock::Bottom || position == Dock::Top) {
+        setMaximumWidth(height());
+        setMaximumHeight(QWIDGETSIZE_MAX);
+    } else {
+        setMaximumHeight(width());
+        setMaximumWidth(QWIDGETSIZE_MAX);
+    }
 }

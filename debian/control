@@ -14,17 +14,18 @@ Build-Depends: debhelper (>= 8.0.0),
  libxcb-icccm4-dev,
  libxtst-dev,
  libdtkwidget-dev,
- libdtkcore-dev | libdtkutil-dev,
+ libdtkcore-dev,
+ libdtkcore5-bin,
  qttools5-dev-tools,
  libxcb-icccm4-dev,
  qtbase5-private-dev,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  cmake,
- libdde-network-utils-dev (>= 0.1.4),
- libdde-network-utils-dev (<< 0.1.5),
+ libdde-network-utils-dev,
  libdbusmenu-qt5-dev,
- clang [mips64el]
+ clang [mips64el],
+ libdtkgui-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

@@ -31,7 +31,9 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_tipsLabel(new TipsWidget)
+      m_tipsLabel(new TipsWidget),
+      m_login1Inter(new DBusLogin1Manager("org.freedesktop.login1", "/org/freedesktop/login1", QDBusConnection::systemBus(), this))
+
 {
     m_tipsLabel->setVisible(false);
 }
@@ -116,19 +118,31 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(reboot);
 
 #ifndef DISABLE_POWER_OPTIONS
-    QMap<QString, QVariant> suspend;
-    suspend["itemId"] = "Suspend";
-    suspend["itemText"] = tr("Suspend");
-    suspend["isActive"] = true;
-    items.push_back(suspend);
 
-    if (checkSwap()) {
+    QProcessEnvironment enviromentVar = QProcessEnvironment::systemEnvironment();
+    bool can_sleep = enviromentVar.contains("POWER_CAN_SLEEP") ? QVariant(enviromentVar.value("POWER_CAN_SLEEP")).toBool()
+                                                         : valueByQSettings<bool>("Power", "sleep", true) &&
+                                                           m_login1Inter->CanSuspend().value().contains("yes");
+;
+    if(can_sleep){
+        QMap<QString, QVariant> suspend;
+        suspend["itemId"] = "Suspend";
+        suspend["itemText"] = tr("Suspend");
+        suspend["isActive"] = true;
+        items.push_back(suspend);
+    }
+
+    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
+                                                         : checkSwap() && m_login1Inter->CanHibernate().value().contains("yes");
+
+    if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
         hibernate["itemId"] = "Hibernate";
         hibernate["itemText"] = tr("Hibernate");
         hibernate["isActive"] = true;
         items.push_back(hibernate);
     }
+
 #endif
 
     QMap<QString, QVariant> lock;
@@ -143,8 +157,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     logout["isActive"] = true;
     items.push_back(logout);
 
-    if (DBusAccount().userList().count() > 1)
-    {
+    if (DBusAccount().userList().count() > 1) {
         QMap<QString, QVariant> switchUser;
         switchUser["itemId"] = "SwitchUser";
         switchUser["itemText"] = tr("Switch account");
@@ -177,14 +190,14 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
     else if (menuId == "Lock")
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                                           << "--dest=com.deepin.dde.lockFront"
-                                                           << "/com/deepin/dde/lockFront"
-                                                           << QString("com.deepin.dde.lockFront.Show"));
+                                << "--dest=com.deepin.dde.lockFront"
+                                << "/com/deepin/dde/lockFront"
+                                << QString("com.deepin.dde.lockFront.Show"));
     else
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                                           << "--dest=com.deepin.dde.shutdownFront"
-                                                           << "/com/deepin/dde/shutdownFront"
-                                                           << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
+                                << "--dest=com.deepin.dde.shutdownFront"
+                                << "/com/deepin/dde/shutdownFront"
+                                << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
 }
 
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
@@ -198,19 +211,13 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 
 int ShutdownPlugin::itemSortKey(const QString &itemKey)
 {
-    Dock::DisplayMode mode = displayMode();
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(mode);
-
-    if (mode == Dock::DisplayMode::Fashion) {
-        return m_proxyInter->getValue(this, key, 2).toInt();
-    } else {
-        return m_proxyInter->getValue(this, key, 5).toInt();
-    }
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+    return m_proxyInter->getValue(this, key, 6).toInt();
 }
 
 void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
 {
-    const QString key = QString("pos_%1_%2").arg(itemKey).arg(displayMode());
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
     m_proxyInter->saveValue(this, key, order);
 }
 
@@ -228,30 +235,78 @@ void ShutdownPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_shutdownWidget = new PluginWidget;
+    m_shutdownWidget = new ShutdownWidget;
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());
 }
 
+std::pair<bool, qint64> ShutdownPlugin::checkIsPartitionType(const QStringList &list)
+{
+    std::pair<bool, qint64> result{ false, -1 };
+
+    if (list.length() != 5) {
+        return result;
+    }
+
+    const QString type{ list[1] };
+    const QString size{ list[2] };
+
+    result.first  = type == "partition";
+    result.second = size.toLongLong() * 1024.0f;
+
+    return result;
+}
+
+qint64 ShutdownPlugin::get_power_image_size()
+{
+    qint64 size{ 0 };
+    QFile  file("/sys/power/image_size");
+
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        size = file.readAll().trimmed().toLongLong();
+        file.close();
+    }
+
+    return size;
+}
+
 bool ShutdownPlugin::checkSwap()
 {
+    if (!valueByQSettings<bool>("Power", "hibernate", false))
+        return false;
+
+    bool hasSwap = false;
     QFile file("/proc/swaps");
     if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
         const QString &body = file.readAll();
+        QTextStream    stream(body.toUtf8());
+        while (!stream.atEnd()) {
+            const std::pair<bool, qint64> result =
+                checkIsPartitionType(stream.readLine().simplified().split(
+                                         " ", QString::SplitBehavior::SkipEmptyParts));
+            qint64 image_size{ get_power_image_size() };
+
+            if (result.first) {
+                hasSwap = image_size < result.second;
+            }
+
+            if (hasSwap) {
+                break;
+            }
+        }
+
         file.close();
-        QRegularExpression re("\\spartition\\s");
-        QRegularExpressionMatch match = re.match(body);
-        return match.hasMatch();
+    } else {
+        qWarning() << "open /proc/swaps failed! please check permission!!!";
     }
 
-    return false;
+    return hasSwap;
 }
 
 void ShutdownPlugin::refreshPluginItemsVisible()
 {
-    if (pluginIsDisable())
-    {
+    if (pluginIsDisable()) {
         m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {

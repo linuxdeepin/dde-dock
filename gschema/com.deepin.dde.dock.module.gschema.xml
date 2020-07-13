@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/dde/dock/module/app/" id="com.deepin.dde.dock.module.app" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+            Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+            Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/activeapp/" id="com.deepin.dde.dock.module.activeapp" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/dockapp/" id="com.deepin.dde.dock.module.dockapp" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/launcher/" id="com.deepin.dde.dock.module.launcher" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/datetime/" id="com.deepin.dde.dock.module.datetime" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/network/" id="com.deepin.dde.dock.module.network" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/onboard/" id="com.deepin.dde.dock.module.onboard" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/power/" id="com.deepin.dde.dock.module.power" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/shutdown/" id="com.deepin.dde.dock.module.shutdown" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/sound/" id="com.deepin.dde.dock.module.sound" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/trash/" id="com.deepin.dde.dock.module.trash" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/systemtray/" id="com.deepin.dde.dock.module.systemtray" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/tray/" id="com.deepin.dde.dock.module.tray" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/dock/module/menu/" id="com.deepin.dde.dock.module.menu" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+  </schema>
+</schemalist>

@@ -20,16 +20,23 @@
  */
 
 #include "window/mainwindow.h"
+#include "window/accessible.h"
 #include "util/themeappicon.h"
+
+#include <QAccessible>
 
 #include <DApplication>
 #include <DLog>
 #include <DDBusSender>
 
 #include <QDir>
+#include <DGuiApplicationHelper>
 
 #include <unistd.h>
 #include "dbus/dbusdockadaptors.h"
+
+#include <sys/mman.h>
+
 DWIDGET_USE_NAMESPACE
 #ifdef DCORE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -45,8 +52,7 @@ void RegisterDdeSession()
     QByteArray cookie = qgetenv(envName.toUtf8().data());
     qunsetenv(envName.toUtf8().data());
 
-    if (!cookie.isEmpty())
-    {
+    if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
                 .interface("com.deepin.SessionManager")
                 .path("/com/deepin/SessionManager")
@@ -59,24 +65,66 @@ void RegisterDdeSession()
     }
 }
 
+QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
+{
+    QAccessibleInterface *interface = nullptr;
+
+    USE_ACCESSIBLE(classname,MainPanelControl);
+    USE_ACCESSIBLE(classname,LauncherItem);
+    USE_ACCESSIBLE(classname,AppItem);
+    USE_ACCESSIBLE(classname,PreviewContainer);
+    USE_ACCESSIBLE(classname,PluginsItem);
+    USE_ACCESSIBLE(classname,TrayPluginItem);
+    USE_ACCESSIBLE(classname,PlaceholderItem);
+    USE_ACCESSIBLE(classname,AppDragWidget);
+    USE_ACCESSIBLE(classname,AppSnapshot);
+    USE_ACCESSIBLE(classname,FloatingPreview);
+    USE_ACCESSIBLE(classname,SNITrayWidget);
+    USE_ACCESSIBLE(classname,SystemTrayItem);
+    USE_ACCESSIBLE(classname,FashionTrayItem);
+    USE_ACCESSIBLE(classname,FashionTrayWidgetWrapper);
+    USE_ACCESSIBLE(classname,FashionTrayControlWidget);
+    USE_ACCESSIBLE(classname,AttentionContainer);
+    USE_ACCESSIBLE(classname,HoldContainer);
+    USE_ACCESSIBLE(classname,NormalContainer);
+    USE_ACCESSIBLE(classname,SpliterAnimated);
+    USE_ACCESSIBLE(classname,IndicatorTrayWidget);
+    USE_ACCESSIBLE(classname,XEmbedTrayWidget);
+    USE_ACCESSIBLE(classname,ShowDesktopWidget);
+    USE_ACCESSIBLE(classname,SoundItem);
+    USE_ACCESSIBLE(classname,SoundApplet);
+    USE_ACCESSIBLE(classname,SinkInputWidget);
+    USE_ACCESSIBLE(classname,VolumeSlider);
+    USE_ACCESSIBLE(classname,HorizontalSeparator);
+    USE_ACCESSIBLE(classname,TipsWidget);
+    USE_ACCESSIBLE(classname,DatetimeWidget);
+    USE_ACCESSIBLE(classname,OnboardItem);
+    USE_ACCESSIBLE(classname,TrashWidget);
+    USE_ACCESSIBLE(classname,PopupControlWidget);
+    USE_ACCESSIBLE(classname,ShutdownWidget);
+    USE_ACCESSIBLE(classname,MultitaskingWidget);
+//    USE_ACCESSIBLE(classname,OverlayWarningWidget);
+    return interface;
+}
+
 int main(int argc, char *argv[])
 {
+    DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
+
+    // 锁定物理内存，用于国测测试
+    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
-    app.setTheme("dark");
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
-    // load dde-network-utils translator
-    QTranslator translator;
-    translator.load("/usr/share/dde-network-utils/translations/dde-network-utils_" + QLocale::system().name());
-    app.installTranslator(&translator);
+    QAccessible::installFactory(accessibleFactory);
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
@@ -109,7 +157,7 @@ int main(int argc, char *argv[])
     QTimer::singleShot(1, &mw, &MainWindow::launch);
 
     if (!parser.isSet(disablePlugOption)) {
-        DockItemController::instance()->startLoadPlugins();
+        DockItemManager::instance()->startLoadPlugins();
     }
 
     return app.exec();

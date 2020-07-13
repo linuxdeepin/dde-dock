@@ -22,34 +22,29 @@
 #include "fashiontrayitem.h"
 #include "fashiontray/fashiontrayconstants.h"
 #include "system-trays/systemtrayitem.h"
+#include "containers/abstractcontainer.h"
 
 #include <QDebug>
 #include <QResizeEvent>
 
 #define ExpandedKey "fashion-tray-expanded"
 
-int FashionTrayItem::TrayWidgetWidth = TrayWidgetWidthMin;
-int FashionTrayItem::TrayWidgetHeight = TrayWidgetHeightMin;
+int FashionTrayItem::TrayWidgetWidth = PLUGIN_BACKGROUND_MAX_SIZE;
+int FashionTrayItem::TrayWidgetHeight = PLUGIN_BACKGROUND_MAX_SIZE;
 
 FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
       m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
-      m_leftSpliter(new QLabel),
-      m_rightSpliter(new QLabel),
       m_attentionDelayTimer(new QTimer(this)),
       m_trayPlugin(trayPlugin),
       m_controlWidget(new FashionTrayControlWidget(trayPlugin->dockPosition())),
       m_currentDraggingTray(nullptr),
       m_normalContainer(new NormalContainer(m_trayPlugin)),
       m_attentionContainer(new AttentionContainer(m_trayPlugin)),
-      m_holdContainer(new HoldContainer(m_trayPlugin))
+      m_holdContainer(new HoldContainer(m_trayPlugin)),
+      m_leftSpace(new QWidget)
 {
     setAcceptDrops(true);
-
-    m_leftSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
-    m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
-
-    m_controlWidget->setFixedSize(QSize(TrayWidgetWidth, TrayWidgetHeight));
 
     m_normalContainer->setVisible(false);
     m_attentionContainer->setVisible(false);
@@ -57,20 +52,17 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
 
     m_mainBoxLayout->setMargin(0);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainBoxLayout->setSpacing(TraySpace);
+    m_mainBoxLayout->setSpacing(0);
 
-    m_mainBoxLayout->addWidget(m_leftSpliter);
+    m_leftSpace->setFixedSize(TraySpace, TraySpace);
+    m_leftSpace->setAccessibleName("leftspace");
+
+    m_mainBoxLayout->addWidget(m_leftSpace);
     m_mainBoxLayout->addWidget(m_normalContainer);
-    m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_controlWidget);
+    m_mainBoxLayout->addWidget(m_holdContainer);
     m_mainBoxLayout->addWidget(m_attentionContainer);
-    m_mainBoxLayout->addWidget(m_rightSpliter);
 
-    m_mainBoxLayout->setAlignment(m_leftSpliter, Qt::AlignCenter);
-    m_mainBoxLayout->setAlignment(m_controlWidget, Qt::AlignCenter);
-    m_mainBoxLayout->setAlignment(m_rightSpliter, Qt::AlignCenter);
-
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(m_mainBoxLayout);
 
     m_attentionDelayTimer->setInterval(3000);
@@ -81,8 +73,6 @@ FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     connect(m_attentionContainer, &AttentionContainer::attentionChanged, this, &FashionTrayItem::onWrapperAttentionChanged);
     connect(m_normalContainer, &NormalContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
     connect(m_holdContainer, &HoldContainer::requestDraggingWrapper, this, &FashionTrayItem::onRequireDraggingWrapper);
-    connect(m_normalContainer, &NormalContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
-    connect(m_holdContainer, &HoldContainer::draggingStateChanged, this, &FashionTrayItem::onContainerDraggingStateChanged);
 
     // do not call init immediately the TrayPlugin has not be constructed for now
     QTimer::singleShot(0, this, &FashionTrayItem::init);
@@ -157,8 +147,10 @@ void FashionTrayItem::clearTrayWidgets()
 
 void FashionTrayItem::setDockPosition(Dock::Position pos)
 {
+    m_dockpos = pos;
     m_controlWidget->setDockPostion(pos);
     SystemTrayItem::setDockPostion(pos);
+    SNITrayWidget::setDockPostion(pos);
 
     m_normalContainer->setDockPosition(pos);
     m_attentionContainer->setDockPosition(pos);
@@ -166,7 +158,7 @@ void FashionTrayItem::setDockPosition(Dock::Position pos)
 
     if (pos == Dock::Position::Top || pos == Dock::Position::Bottom) {
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::LeftToRight);
-    } else{
+    } else {
         m_mainBoxLayout->setDirection(QBoxLayout::Direction::TopToBottom);
     }
 
@@ -177,22 +169,9 @@ void FashionTrayItem::onExpandChanged(const bool expand)
 {
     m_trayPlugin->saveValue(FASHION_MODE_ITEM_KEY, ExpandedKey, expand);
 
-    refreshHoldContainerPosition();
+//    refreshHoldContainerPosition();
 
-    if (expand) {
-        m_normalContainer->setExpand(expand);
-    } else {
-        // hide all tray immediately if Dock is in maxed size
-        // the property "DockIsMaxiedSize" of qApp is set by DockSettings class
-        if (qApp->property("DockIsMaxiedSize").toBool()) {
-            m_normalContainer->setExpand(expand);
-        } else {
-            // hide all tray widget delay for fold animation
-            QTimer::singleShot(350, this, [=] {
-                m_normalContainer->setExpand(expand);
-            });
-        }
-    }
+    m_normalContainer->setExpand(expand);
 
     m_attentionContainer->setExpand(expand);
     m_holdContainer->setExpand(expand);
@@ -204,40 +183,8 @@ void FashionTrayItem::onExpandChanged(const bool expand)
     requestResize();
 }
 
-// used by QMetaObject::invokeMethod in TrayPluginItem / MainPanel class
-void FashionTrayItem::setSuggestIconSize(QSize size)
-{
-    size = size * 0.6;
-
-    int length = qMin(size.width(), size.height());
-    // 设置最小值
-//    length = qMax(length, TrayWidgetWidthMin);
-
-    if (length == TrayWidgetWidth || length == TrayWidgetHeight) {
-        return;
-    }
-
-    TrayWidgetWidth = length;
-    TrayWidgetHeight = length;
-
-    QSize newSize(length, length);
-
-    m_controlWidget->setFixedSize(newSize);
-
-    m_normalContainer->setWrapperSize(newSize);
-    m_attentionContainer->setWrapperSize(newSize);
-    m_holdContainer->setWrapperSize(newSize);
-
-    requestResize();
-}
-
 void FashionTrayItem::setRightSplitVisible(const bool visible)
 {
-    if (visible) {
-        m_rightSpliter->setStyleSheet("background-color: rgba(255, 255, 255, 0.1);");
-    } else {
-        m_rightSpliter->setStyleSheet("background-color: transparent;");
-    }
 }
 
 void FashionTrayItem::onPluginSettingsChanged()
@@ -261,17 +208,7 @@ void FashionTrayItem::hideEvent(QHideEvent *event)
 
 void FashionTrayItem::resizeEvent(QResizeEvent *event)
 {
-    const QSize &mSize = event->size();
-    const Dock::Position dockPosition = m_trayPlugin->dockPosition();
-
-    if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-        m_leftSpliter->setFixedSize(SpliterSize, mSize.height() * 0.8);
-        m_rightSpliter->setFixedSize(SpliterSize, mSize.height() * 0.8);
-    } else{
-        m_leftSpliter->setFixedSize(mSize.width() * 0.8, SpliterSize);
-        m_rightSpliter->setFixedSize(mSize.width() * 0.8, SpliterSize);
-    }
-
+    resizeTray();
     QWidget::resizeEvent(event);
 }
 
@@ -287,69 +224,12 @@ void FashionTrayItem::dragEnterEvent(QDragEnterEvent *event)
     QWidget::dragEnterEvent(event);
 }
 
-QSize FashionTrayItem::sizeHint() const
-{
-    return wantedTotalSize();
-}
-
 void FashionTrayItem::init()
 {
     qDebug() << "init Fashion mode tray plugin item";
     m_controlWidget->setExpanded(m_trayPlugin->getValue(FASHION_MODE_ITEM_KEY, ExpandedKey, true).toBool());
     setDockPosition(m_trayPlugin->dockPosition());
     onExpandChanged(m_controlWidget->expanded());
-}
-
-QSize FashionTrayItem::wantedTotalSize() const
-{
-    QSize size;
-    const Dock::Position dockPosition = m_trayPlugin->dockPosition();
-
-    if (m_controlWidget->expanded()) {
-        if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-            size.setWidth(
-                        SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
-                        + m_normalContainer->sizeHint().width() // 普通区域
-                        + m_holdContainer->sizeHint().width() // 保留区域
-                        + m_attentionContainer->sizeHint().width() // 活动区域
-                        );
-            size.setHeight(height());
-        } else {
-            size.setWidth(width());
-            size.setHeight(
-                        SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
-                        + m_normalContainer->sizeHint().height() // 普通区域
-                        + m_holdContainer->sizeHint().height() // 保留区域
-                        + m_attentionContainer->sizeHint().height() // 活动区域
-                        );
-        }
-    } else {
-        if (dockPosition == Dock::Position::Top || dockPosition == Dock::Position::Bottom) {
-            size.setWidth(
-                        SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
-                        + m_holdContainer->sizeHint().width() // 保留区域
-                        + m_attentionContainer->sizeHint().width() // 活动区域
-                        );
-            size.setHeight(height());
-        } else {
-            size.setWidth(width());
-            size.setHeight(
-                        SpliterSize * 2 // 两个分隔条
-                        + TraySpace * 2 // 两个分隔条旁边的 space
-                        + TrayWidgetWidth // 控制按钮
-                        + m_holdContainer->sizeHint().height() // 保留区域
-                        + m_attentionContainer->sizeHint().height() // 活动区域
-                        );
-        }
-    }
-
-    return size;
 }
 
 void FashionTrayItem::onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention)
@@ -378,7 +258,6 @@ void FashionTrayItem::onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrappe
             attentionWrapperToNormalWrapper();
         }
     }
-
     m_attentionDelayTimer->start();
 
     requestResize();
@@ -404,9 +283,13 @@ void FashionTrayItem::normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *
 
 void FashionTrayItem::requestResize()
 {
-    // reset property "FashionTraySize" to notify dock resize
-    // DockPluginsController will watch this property
-    setProperty("FashionTraySize", sizeHint());
+    // 通知dock，当前托盘有几个图标显示，用来计算图标大小
+    m_leftSpace->setVisible(!m_controlWidget->expanded());
+
+    int count = m_normalContainer->itemCount() + m_holdContainer->itemCount() + m_attentionContainer->itemCount();
+    setProperty("TrayVisableItemCount", count + 1); // +1 : m_controlWidget
+
+    resizeTray();
 }
 
 void FashionTrayItem::refreshHoldContainerPosition()
@@ -450,9 +333,55 @@ void FashionTrayItem::onRequireDraggingWrapper()
     container->addDraggingWrapper(draggingWrapper);
 }
 
-void FashionTrayItem::onContainerDraggingStateChanged(FashionTrayWidgetWrapper *wrapper, const bool dragging)
+bool FashionTrayItem::event(QEvent *event)
 {
-    Q_UNUSED(wrapper);
+    if (event->type() == QEvent::DynamicPropertyChange) {
+        const QString &propertyName = static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName();
+        if (propertyName == "iconSize") {
+            m_iconSize = property("iconSize").toInt();
+            m_normalContainer->setItemSize(m_iconSize);
+            m_holdContainer->setItemSize(m_iconSize);
+            m_attentionContainer->setItemSize(m_iconSize);
 
-    m_holdContainer->setDragging(dragging);
+            resizeTray();
+        }
+    }
+
+    return QWidget::event(event);
+}
+
+void FashionTrayItem::resizeTray()
+{
+    if (!m_iconSize)
+        return;
+
+    if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
+        if (m_attentionContainer->itemCount() != 0){
+            m_mainBoxLayout->setContentsMargins(0, 0, TraySpace, 0);
+        } else {
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
+        }
+        m_holdContainer->setFixedWidth((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        m_holdContainer->setFixedHeight(QWIDGETSIZE_MAX);
+
+        m_attentionContainer->setFixedWidth(m_iconSize * m_attentionContainer->itemCount());
+        m_attentionContainer->setFixedHeight(QWIDGETSIZE_MAX);
+
+        m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
+    } else {
+        m_holdContainer->setFixedWidth(QWIDGETSIZE_MAX);
+        if (m_attentionContainer->itemCount() != 0){
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, TraySpace);
+        } else {
+            m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
+        }
+
+         m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        m_attentionContainer->setFixedWidth(QWIDGETSIZE_MAX);
+        m_attentionContainer->setFixedHeight(m_iconSize * m_attentionContainer->itemCount());
+
+        m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
+    }    
+
+    m_normalContainer->updateSize();
 }

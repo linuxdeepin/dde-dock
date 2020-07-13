@@ -7,17 +7,10 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Clique para exibir o ícone oculto</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar layout de teclado</translation>
+        <translation>Adicionar Layout de Teclado</translation>
     </message>
 </context>
 <context>
@@ -28,30 +21,30 @@
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation>Formato 12 horas</translation>
+        <translation>12 Horas</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation>Formato 24 horas</translation>
+        <translation>24 Horas</translation>
     </message>
     <message>
         <source>Time Settings</source>
-        <translation>Alterar data e hora</translation>
+        <translation>Configurações de Data e Hora</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation>Ativar rede</translation>
+        <translation>Ativar Rede</translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation>Desativar rede</translation>
+        <translation>Desativar Rede</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation>Configurações de rede</translation>
+        <translation>Configurações de Rede</translation>
     </message>
 </context>
 <context>
@@ -111,11 +104,11 @@
     </message>
     <message>
         <source>Top</source>
-        <translation>Acima</translation>
+        <translation>Superior</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Abaixo</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <source>Left</source>
@@ -126,28 +119,16 @@
         <translation>Direita</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Médio</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeno</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation>Manter Visível</translation>
+        <translation>Sempre Exibir</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Manter Oculto</translation>
+        <translation>Sempre Ocultar</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultação Inteligente</translation>
+        <translation>Ocultar Inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -155,11 +136,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Localização</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Tamanho</translation>
+        <translation>Posição</translation>
     </message>
     <message>
         <source>Status</source>
@@ -167,7 +144,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
 </context>
 <context>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Lançador</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Multitarefa</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da Dock</translation>
     </message>
 </context>
 <context>
@@ -203,34 +191,49 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de energia</translation>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation>Carregado %1</translation>
+        <translation>Configurações de Energia</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacidade %1, %2 min restantes</translation>
+        <translation>%1 carregado | %2m restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacidade %1, %2 hr %3 min restantes</translation>
+        <translation>%1 carregado | %2h%3 restantes</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>%1 carregado</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Carregando %1, %2 min até carga completa</translation>
+        <translation>Carregando %1  |  %2min até completar</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Carregando %1, %2 hr %3 min até carga completa</translation>
+        <translation>Carregando %1  |  %2h%3min até completar</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Exibir Área de Trabalho</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da Dock</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energia</translation>
+        <translation>Sessão</translation>
     </message>
     <message>
         <source>Shut down</source>
@@ -258,11 +261,11 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>Trocar de conta</translation>
+        <translation>Alternar Conta</translation>
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de energia</translation>
+        <translation>Configurações de Energia</translation>
     </message>
 </context>
 <context>
@@ -273,22 +276,22 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>Aplicação</translation>
+        <translation>Aplicativo</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Ativar o som</translation>
+        <translation>Com Áudio</translation>
     </message>
     <message>
         <source>Mute</source>
-        <translation>Mudo</translation>
+        <translation>Sem Áudio</translation>
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Configurações de áudio</translation>
+        <translation>Configurações de Áudio</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
@@ -343,7 +346,7 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Conexão com fio %1</translation>
+        <translation>Conexão Cabeada: %1</translation>
     </message>
 </context>
 <context>
@@ -354,18 +357,22 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Conexão Wireless: %1 </translation>
+        <translation>Conexão Wi-Fi: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectado, sem Internet</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Rede Wireless</translation>
+        <translation>Rede Wi-Fi</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Rede Wireless %1</translation>
+        <translation>Rede Wi-Fi %1</translation>
     </message>
 </context>
 </TS>

@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Дараад нуугдсан дүрсүүдийг харах</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Баруун</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Том</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Дундаж</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Жижиг</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Үргэлж харах</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Байршил</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Хэмжээ</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Төлөв</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Эхлүүлэгч</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Цэнэгийн тохиргоо</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>%1 цэнэглэсэн</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation type="unfinished"/>
     </message>
@@ -218,11 +202,30 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>%1 цэнэглэсэн</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Дэлгэц харуулах</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Утасгүй холболт: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Холбогдсон боловч интернетэд холбогдоогүй байна</translation>
     </message>
 </context>
 <context>

@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Apăsați pentru a afișa pictogramele ascunse</translation>
+        <translation>Pluginul % 1 nu este compatibil cu sistemul.</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți doriți să goliți %1 articole?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -126,18 +119,6 @@
         <translation>Dreapta</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Mare</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Mediu</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Mic</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Păstrați docul afișat</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Locație</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Dimensiune</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Stare</translation>
     </message>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vizualizare Multitask</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Detaşaţi</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>La bord</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -206,24 +194,39 @@
         <translation>Setări pentru administrare de energie</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>Capacitate %1, %2 Min rămase</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>Capacitate %1, %2 Ore %3 Min rămase</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>Încărcat %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Încărcare %1, %2 Min până la plin</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>Încărcare %1, %2 Ore %3 Min rămase până la plin</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Arată desktop-ul</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Detaşaţi</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Conexiune fără fir: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Conectat dar fară acces Internet</translation>
     </message>
 </context>
 <context>

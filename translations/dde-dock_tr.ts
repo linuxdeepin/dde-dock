@@ -3,28 +3,21 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>%1 uygulama eki bu sistem ile uyumlu değil.</translation>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Gizli simgeyi görüntülemek için tıklayın</translation>
+        <translation>%1 eklentisi sistemle uyumlu değil.</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Tuş takımı düzeni ekle</translation>
+        <translation>Klavye düzeni ekle</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Tarih saat</translation>
+        <translation>Tarih Saat</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
@@ -77,11 +70,11 @@
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation>Aygıt bilinmiyor</translation>
+        <translation>Bilinmeyen aygıt</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Birim bilinmiyor</translation>
+        <translation>Bilinmeyen birim</translation>
     </message>
 </context>
 <context>
@@ -96,7 +89,7 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Tümünün bağlantısını kes</translation>
+        <translation>Tüm bağı kaldır</translation>
     </message>
 </context>
 <context>
@@ -126,28 +119,16 @@
         <translation>Sağ</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Büyük</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Orta</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Küçük</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation>Görüntülensin</translation>
+        <translation>Sürekli Göster</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Gizlensin</translation>
+        <translation>Sürekli Gizle</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Akıllı Gizlensin</translation>
+        <translation>Akıllı Gizle</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -158,16 +139,12 @@
         <translation>Konum</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Boyut</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Durum</translation>
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Uygulama Ekleri</translation>
+        <translation>Eklentiler</translation>
     </message>
 </context>
 <context>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Başlatıcı</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Çoklu Görev Görünümü</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Ayır</translation>
     </message>
 </context>
 <context>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Tümleşik</translation>
+        <translation>Ekran Klavyesi</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -203,19 +191,19 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Güç Ayarları</translation>
+        <translation>Güç ayarları</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>%1 ve azalıyor, %2 dakika kaldı</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>%1 ve azalıyor, %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
         <source>Charged %1</source>
         <translation>%1 Şarj Oldu</translation>
-    </message>
-    <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 dakika kaldı</translation>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>%1 ve boşalıyor, %2 saat %3 dakika kaldı</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -224,6 +212,21 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Masaüstünü Görüntüle</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Ayır</translation>
     </message>
 </context>
 <context>
@@ -238,11 +241,11 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>Yeniden başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uyut</translation>
+        <translation>Askıya al</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -254,7 +257,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>Oturumu kapat</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -292,7 +295,7 @@
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Geçerli Ses Düzeyi %1</translation>
+        <translation>Mevcut Ses Düzeyi %1</translation>
     </message>
 </context>
 <context>
@@ -306,7 +309,7 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>Çöpe At</translation>
+        <translation>Çöp Kutusu</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
@@ -343,18 +346,22 @@
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Kablolu Bağlantı: %1</translation>
+        <translation>Kablolu bağlantı: %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation>Herhangi Bir Ağ Yok</translation>
+        <translation>Ağ Yok</translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Kablosuz Bağlantı: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Bağlı ancak İnternet erişimi yok</translation>
     </message>
 </context>
 <context>

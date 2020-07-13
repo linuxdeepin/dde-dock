@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>লুকানো আইকন প্রদর্শনের জন্য ক্লিক করুন</translation>
+        <translation>%1 প্লাগিনটি সিস্টেমের জন্যে উপযুক্ত নয়</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি কি নিশ্চিত যে আপনি %1 আইটেমগুলো মোছে ফেলতে চান?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -126,18 +119,6 @@
         <translation>ডান</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>বড়</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>মধ্যম</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>ছোট</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>দেখিয়ে রাখুন</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>অবস্থান</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>সাইজ</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>অবস্থা</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>লঞ্চার</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -206,23 +194,38 @@
         <translation>পাওয়ার সেটিংস</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>ধারণ ক্ষমতা %1, %2 min বাকি আছে</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>ধারণ ক্ষমতা %1, %2 hr %3 min বাকি আছে</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>%1 চার্জ করা হয়েছে</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 min বাকি আছে</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 hr %3 min বাকি আছে</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>ডেস্কটপ দেখান</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>তারবিহীন সংযোগঃ %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
     </message>
 </context>
 <context>

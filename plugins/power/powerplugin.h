@@ -36,13 +36,11 @@ using SystemPowerInter = com::deepin::system::Power;
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
 enum BatteryState
 {
-    UNKNOWN = 0,
-    CHARGING = 1,
-    DISCHARGING = 2,
-    EMPTY = 3,
-    FULLY_CHARGED = 4,
-    PENDING_CHARGE = 5,
-    PENDING_DISCHARGE = 6
+    UNKNOWN = 0,        // 未知
+    CHARGING = 1,       // 充电中
+    DIS_CHARGING = 2,   // 放电
+    NOT_CHARGED = 3,    // 未充
+    FULLY_CHARGED = 4   // 充满
 };
 
 class PowerPlugin : public QObject, PluginsItemInterface

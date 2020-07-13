@@ -20,13 +20,21 @@
  */
 
 #include "sinkinputwidget.h"
+#include "../frame/util/imageutil.h"
 
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QApplication>
 #include <DHiDPIHelper>
+#include <DGuiApplicationHelper>
+#include <DApplication>
+#include <DLabel>
+
+#define ICON_SIZE   24
+#define APP_TITLE_SIZE 110
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qreal ratio)
 {
@@ -37,38 +45,83 @@ const QPixmap getIconFromTheme(const QString &name, const QSize &size, const qre
 }
 
 SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
-    : QWidget(parent),
-
-      m_inputInter(new DBusSinkInput(inputPath, this)),
-
-      m_volumeIcon(new DImageButton),
-      m_volumeSlider(new VolumeSlider)
+    : QWidget(parent)
+    , m_inputInter(new DBusSinkInput(inputPath, this))
+    , m_volumeBtnMin(new DImageButton(this))
+    , m_volumeIconMax(new QLabel(this))
+    , m_appBtn(new DImageButton(this))
+    , m_volumeSlider(new VolumeSlider(this))
+    , m_volumeLabel(new TipsWidget(this))
 {
     const QString iconName = m_inputInter->icon();
-    m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
-    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24), devicePixelRatioF()));
+    m_appBtn->setAccessibleName("app-" + iconName + "-icon");
+    m_appBtn->setPixmap(getIconFromTheme(iconName, QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+
+    DLabel *titleLabel = new DLabel;
+    titleLabel->setForegroundRole(DPalette::TextTitle);
+    titleLabel->setText(titleLabel->fontMetrics().elidedText(m_inputInter->name(), Qt::TextElideMode::ElideRight, APP_TITLE_SIZE));
+
+    m_volumeBtnMin->setAccessibleName("volume-button");
+    m_volumeBtnMin->setFixedSize(ICON_SIZE, ICON_SIZE);
+    m_volumeBtnMin->setPixmap(DHiDPIHelper::loadNxPixmap("://audio-volume-low-symbolic.svg"));
+
+    m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
+
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(1000);
 
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addWidget(m_volumeIcon);
-    centralLayout->addSpacing(10);
-    centralLayout->addWidget(m_volumeSlider);
+    // 应用图标+名称
+    QHBoxLayout *appLayout = new QHBoxLayout();
+    appLayout->setAlignment(Qt::AlignLeft);
+    appLayout->addWidget(m_appBtn);
+    appLayout->addSpacing(10);
+    appLayout->addWidget(titleLabel);
+    appLayout->addStretch();
+    appLayout->addWidget(m_volumeLabel, 0, Qt::AlignRight);
+    appLayout->setSpacing(0);
+    appLayout->setMargin(0);
+
+    // 音量图标+slider
+    QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
+    volumeCtrlLayout->addSpacing(2);
+    volumeCtrlLayout->addWidget(m_volumeBtnMin);
+    volumeCtrlLayout->addSpacing(10);
+    volumeCtrlLayout->addWidget(m_volumeSlider);
+    volumeCtrlLayout->addSpacing(10);
+    volumeCtrlLayout->addWidget(m_volumeIconMax);
+    volumeCtrlLayout->setSpacing(0);
+    volumeCtrlLayout->setMargin(0);
+
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(appLayout);
+    centralLayout->addSpacing(6);
+    centralLayout->addLayout(volumeCtrlLayout);
     centralLayout->setSpacing(2);
     centralLayout->setMargin(0);
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
-    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
-    connect(m_volumeIcon, &DImageButton::clicked, this, &SinkInputWidget::setMute);
+    connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::onVolumeChanged);
+//    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
+    connect(m_appBtn, &DImageButton::clicked, this, &SinkInputWidget::setMute);
+    connect(m_volumeBtnMin, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
-    connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [=] { m_volumeSlider->setValue(m_inputInter->volume() * 1000); });
+    connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [ = ] {
+        m_volumeSlider->setValue(m_inputInter->volume() * 1000);
+        QString str = QString::number(int(m_inputInter->volume() * 100)) + '%';
+        m_volumeLabel->setText(str);
+        refreshIcon();
+    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SinkInputWidget::refreshIcon);
+    connect(qApp, &DApplication::iconThemeChanged, this, &SinkInputWidget::refreshIcon);
 
     setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    setFixedHeight(30);
+    setFixedHeight(60);
 
     setMuteIcon();
+    refreshIcon();
+    onVolumeChanged();
 
     emit m_inputInter->VolumeChanged();
 }
@@ -76,6 +129,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 void SinkInputWidget::setVolume(const int value)
 {
     m_inputInter->SetVolumeQueued(double(value) / 1000.0, false);
+    refreshIcon();
 }
 
 void SinkInputWidget::setMute()
@@ -87,8 +141,13 @@ void SinkInputWidget::setMuteIcon()
 {
     if (m_inputInter->mute()) {
         const auto ratio = devicePixelRatioF();
-        QPixmap muteIcon = DHiDPIHelper::loadNxPixmap("://audio-volume-muted-symbolic.svg");
-        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
+        QString iconString = "audio-volume-muted-symbolic";
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            iconString.append("-dark");
+        }
+        QPixmap muteIcon = QIcon::fromTheme(iconString).pixmap(ICON_SIZE * ratio, ICON_SIZE * ratio);
+        muteIcon.setDevicePixelRatio(ratio);
+        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
 
         QPixmap temp(appIconSource.size());
         temp.fill(Qt::transparent);
@@ -104,14 +163,59 @@ void SinkInputWidget::setMuteIcon()
         p.drawPixmap(0, 0, muteIcon);
 
         appIconSource.setDevicePixelRatio(ratio);
-        m_volumeIcon->setPixmap(appIconSource);
+        m_appBtn->setPixmap(appIconSource);
     } else {
-        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24), devicePixelRatioF()));
+        m_appBtn->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
     }
+
+    refreshIcon();
 }
 
 void SinkInputWidget::onPlaySoundEffect()
 {
     // set the mute property to false to play sound effects.
     m_inputInter->SetMuteQueued(false);
+}
+
+void SinkInputWidget::refreshIcon()
+{
+    if (!m_inputInter)
+        return;
+
+    const float volume = m_inputInter->volume();
+    const bool mute = m_inputInter->mute();
+
+    QString volumeString;
+
+    if (mute) {
+        volumeString = "muted";
+    } else if (volume >= double(2) / 3) {
+        volumeString = "high";
+    } else if (volume >= double(1) / 3) {
+        volumeString = "medium";
+    } else {
+        volumeString = "low";
+    }
+
+    QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
+    QString iconRight = QString("audio-volume-high-symbolic");
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        iconLeft.append("-dark");
+        iconRight.append("-dark");
+    }
+
+    const auto ratio = devicePixelRatioF();
+    QPixmap ret = ImageUtil::loadSvg(iconRight, ":/", ICON_SIZE, ratio);
+    m_volumeIconMax->setPixmap(ret);
+
+    ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
+    m_volumeBtnMin->setPixmap(ret);
+
+}
+
+void SinkInputWidget:: onVolumeChanged()
+{
+    QString str = QString::number(int(m_inputInter->volume() * 100)) + '%';
+    m_volumeLabel->setText(str);
 }

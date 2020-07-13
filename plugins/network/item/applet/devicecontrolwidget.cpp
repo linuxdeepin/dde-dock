@@ -28,27 +28,33 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QEvent>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
+
+extern const int ItemHeight = 30;
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
 {
-    m_deviceName = new TipsWidget;
+    m_deviceName = new QLabel(this);
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_switchBtn = new DSwitchButton;
 
-    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_normal.svg");
+    const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
     m_loadingIndicator = new DLoadingIndicator;
-    m_loadingIndicator->setImageSource(pixmap);
     m_loadingIndicator->setLoading(false);
     m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
     m_loadingIndicator->setAniEasingCurve(QEasingCurve::InOutCirc);
     m_loadingIndicator->installEventFilter(this);
     m_loadingIndicator->setFixedSize(pixmap.size() / devicePixelRatioF());
+    m_loadingIndicator->viewport()->setAutoFillBackground(false);
+    m_loadingIndicator->setFrameShape(QFrame::NoFrame);
+    refreshIcon();
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
@@ -57,7 +63,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(20, 0, 5, 0);
+    infoLayout->setContentsMargins(10, 0, 3, 0);
 
 //    m_seperator = new HorizontalSeperator;
 //    m_seperator->setFixedHeight(1);
@@ -72,9 +78,10 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     centralLayout->setSpacing(0);
 
     setLayout(centralLayout);
-    setFixedHeight(30);
+    setFixedHeight(ItemHeight);
 
-    connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::enableButtonToggled);
+    connect(m_switchBtn, &DSwitchButton::clicked, this, &DeviceControlWidget::enableButtonToggled);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DeviceControlWidget::refreshIcon);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)
@@ -109,9 +116,20 @@ void DeviceControlWidget::refreshNetwork()
 
     m_loadingIndicator->setLoading(true);
 
-    QTimer::singleShot(1000, this, [=] {
+    QTimer::singleShot(1000, this, [ = ] {
         m_loadingIndicator->setLoading(false);
     });
+}
+
+void DeviceControlWidget::refreshIcon()
+{
+    QPixmap pixmap;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
+    else
+        pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
+
+    m_loadingIndicator->setImageSource(pixmap);
 }
 
 //void DeviceControlWidget::setSeperatorVisible(const bool visible)

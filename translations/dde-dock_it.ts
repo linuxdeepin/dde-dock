@@ -3,21 +3,14 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Il Plugin %1 non risulta compatibile col Sistema.</translation>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Clicca per visualizzare le icone nascoste</translation>
+        <translation>Il plugin %1 non risulta compatibile col Sistema.</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Aggiunti un layout della Tastiera</translation>
+        <translation>Aggiungi un layout della Tastiera</translation>
     </message>
 </context>
 <context>
@@ -126,18 +119,6 @@
         <translation>Destra</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Larga</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Media</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Piccola</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Mostra sempre</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Posizione</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Dimensioni</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Comportamento</translation>
     </message>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista Multitasking</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Sgancia</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,7 +176,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Tastiera</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -206,16 +194,16 @@
         <translation>Impostazioni Alimentazione</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Carica %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacità %1, %2 min. rimanenti</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacità %1, 2% ore e %3 min. rimanenti</translation>
+        <translation>Capacità %1, %2 ore e %3 min. rimanenti</translation>
+    </message>
+    <message>
+        <source>Charged %1</source>
+        <translation>Carica %1</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -224,6 +212,21 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Carica %1, %2 ore e %3 min. per la carica completa</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostra Desktop</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Sgancia</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Connessione WiFi: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connesso senza accesso ad internet</translation>
     </message>
 </context>
 <context>

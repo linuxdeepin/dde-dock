@@ -21,8 +21,9 @@
 
 #include "wirelessitem.h"
 #include "networkplugin.h"
-#include "../util/imageutil.h"
+#include "../frame/util/imageutil.h"
 #include "../widgets/tipswidget.h"
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QMouseEvent>
@@ -30,31 +31,45 @@
 #include <QIcon>
 
 using namespace dde::network;
+DGUI_USE_NAMESPACE
 
 WirelessItem::WirelessItem(WirelessDevice *device)
     : DeviceItem(device),
-
-      m_reloadIcon(false),
       m_refreshTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
-      m_wirelessTips(new TipsWidget),
       m_APList(nullptr)
 {
     m_refreshTimer->setSingleShot(true);
     m_refreshTimer->setInterval(100);
 
     m_wirelessApplet->setVisible(false);
-    m_wirelessTips->setObjectName("wireless-" + m_device->path());
-    m_wirelessTips->setVisible(false);
-    m_wirelessTips->setText(tr("No Network"));
 
-    connect(m_refreshTimer, &QTimer::timeout, this, &WirelessItem::onRefreshTimeout);
-    connect(m_device, static_cast<void (NetworkDevice::*) (const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*) ()>(&QTimer::start));
+    connect(m_refreshTimer, &QTimer::timeout, [&]{
+        if (m_device.isNull()) {
+            return;
+        }
+        WirelessDevice *dev = static_cast<WirelessDevice *>(m_device.data());
+        // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
+        if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled()) {
+            Q_EMIT queryActiveConnInfo();
+            return;
+        }
+    });
+    connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        update();
+    });
 
-    //QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
-    QTimer::singleShot(0, this, &WirelessItem::refreshTips);
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ](QJsonObject info) {
+        const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
+        if (activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
+            m_activeApInfo = info;
+        }
+        update();
+    });
+
     init();
 }
 
@@ -69,16 +84,65 @@ QWidget *WirelessItem::itemApplet()
     return m_wirelessApplet;
 }
 
-QWidget *WirelessItem::itemTips()
+int WirelessItem::APcount()
 {
-    refreshTips();
+    return m_APList->APcount();
+}
 
-    return m_wirelessTips;
+bool WirelessItem::deviceEanbled()
+{
+    return m_device->enabled();
+}
+
+void WirelessItem::setDeviceEnabled(bool enable)
+{
+    m_APList->onEnableButtonToggle(enable);
+}
+
+WirelessItem::WirelessStatus WirelessItem::getDeviceState()
+{
+    if (!m_device->enabled()) {
+        return Disabled;
+    }
+    if (m_device->status() == NetworkDevice::Activated
+            && NetworkModel::connectivity() != Connectivity::Full) {
+        return ConnectNoInternet;
+    }
+    if (m_device->obtainIpFailed()) {
+        return ObtainIpFailed;
+    }
+
+    switch (m_device->status()) {
+    case NetworkDevice::Unknow:        return Unknow;
+    case NetworkDevice::Unmanaged:
+    case NetworkDevice::Unavailable:
+    case NetworkDevice::Disconnected:  return Disconnected;
+    case NetworkDevice::Prepare:
+    case NetworkDevice::Config:        return Connecting;
+    case NetworkDevice::NeedAuth:      return Authenticating;
+    case NetworkDevice::IpConfig:
+    case NetworkDevice::IpCheck:
+    case NetworkDevice::Secondaries:   return ObtainingIP;
+    case NetworkDevice::Activated:     return Connected;
+    case NetworkDevice::Deactivation:
+    case NetworkDevice::Failed:        return Failed;
+    }
+}
+
+QJsonObject &WirelessItem::getConnectedApInfo()
+{
+    return  m_activeApInfo;
+}
+
+QJsonObject WirelessItem::getActiveWirelessConnectionInfo()
+{
+    return static_cast<WirelessDevice *>(m_device.data())->activeWirelessConnectionInfo();
 }
 
 void WirelessItem::setDeviceInfo(const int index)
 {
     m_APList->setDeviceInfo(index);
+    m_index = index;
 }
 
 bool WirelessItem::eventFilter(QObject *o, QEvent *e)
@@ -89,131 +153,6 @@ bool WirelessItem::eventFilter(QObject *o, QEvent *e)
         Q_EMIT requestWirelessScan();
 
     return false;
-}
-
-void WirelessItem::paintEvent(QPaintEvent *e)
-{
-    DeviceItem::paintEvent(e);
-
-//    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
-
-    const auto ratio = devicePixelRatioF();
-    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-    QPixmap pixmap = iconPix(displayMode, iconSize * ratio);
-    pixmap.setDevicePixelRatio(ratio);
-
-    QPainter painter(this);
-    if (displayMode == Dock::Fashion)
-    {
-        QPixmap pixmap = backgroundPix(iconSize * ratio);
-        pixmap.setDevicePixelRatio(ratio);
-        painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
-    }
-    const QRectF &rf = QRectF(rect());
-    const QRectF &rfp = QRectF(pixmap.rect());
-    painter.drawPixmap(rf.center() - rfp.center() / ratio, pixmap);
-
-    if (m_reloadIcon)
-        m_reloadIcon = false;
-}
-
-void WirelessItem::resizeEvent(QResizeEvent *e)
-{
-    DeviceItem::resizeEvent(e);
-
-    m_icons.clear();
-}
-
-const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
-{
-    if (m_device.isNull()) {
-        return QPixmap();
-    }
-
-    QString type;
-    const auto state = m_device->status();
-
-    if (m_device->enabled()) {
-        // get strength in switch-case
-        int strength = 0;
-        switch (state) {
-        case NetworkDevice::DeviceStatus::Unknow:
-        case NetworkDevice::DeviceStatus::Unmanaged:
-        case NetworkDevice::DeviceStatus::Unavailable:
-        case NetworkDevice::DeviceStatus::Disconnected: {
-            strength = 0;
-            break;
-        }
-        case NetworkDevice::DeviceStatus::Prepare:
-        case NetworkDevice::DeviceStatus::Config:
-        case NetworkDevice::DeviceStatus::NeedAuth:
-        case NetworkDevice::DeviceStatus::IpConfig:
-        case NetworkDevice::DeviceStatus::IpCheck:
-        case NetworkDevice::DeviceStatus::Secondaries: {
-            strength = QTime::currentTime().msec() / 10 % 100;
-            if (!m_refreshTimer->isActive()) {
-                m_refreshTimer->start();
-            }
-            break;
-        }
-        case NetworkDevice::DeviceStatus::Activated: {
-            const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-            if (activeApInfo.isEmpty()) {
-                strength = 100;
-                m_refreshTimer->start();
-            } else {
-                strength = activeApInfo.value("Strength").toInt();
-            }
-            break;
-        }
-        case NetworkDevice::DeviceStatus::Deactivation:
-        case NetworkDevice::DeviceStatus::Failed: {
-            strength = 0;
-            break;
-        }
-        default:;
-        }
-
-        // set wireless icon by strength
-        if (strength == 100) {
-            type = "80";
-        } else if (strength < 20) {
-            type = "0";
-        } else {
-            type = QString::number(strength / 10 & ~0x1) + "0";
-        }
-    } else {
-        type = "disabled";
-    }
-
-    QString key = QString("wireless-%1%2")
-                                .arg(type)
-                                .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
-
-    if (state == NetworkDevice::DeviceStatus::Activated && !NetworkPlugin::isConnectivity()) {
-        key = "network-wireless-offline-symbolic";
-    }
-
-    if (m_device->obtainIpFailed()) {
-        key = "network-wireless-warning-symbolic";
-    }
-
-    return cachedPix(key, size);
-}
-
-const QPixmap WirelessItem::backgroundPix(const int size)
-{
-    return cachedPix("wireless-background", size);
-}
-
-const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
-{
-    if (m_reloadIcon || !m_icons.contains(key)) {
-        m_icons.insert(key, QIcon::fromTheme(key, QIcon(":/wireless/resources/wireless/" + key + ".svg")).pixmap(size));
-    }
-
-    return m_icons.value(key);
 }
 
 void WirelessItem::init()
@@ -233,9 +172,9 @@ void WirelessItem::init()
     connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
     connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
-    connect(m_APList, &WirelessList::requestSetAppletVisible, this, &WirelessItem::requestSetAppletVisible);
+    connect(m_APList, &WirelessList::requestUpdatePopup, this, &WirelessItem::deviceStateChanged);
 
-    QTimer::singleShot(0, this, [=]() {
+    QTimer::singleShot(0, this, [ = ]() {
         m_refreshTimer->start();
     });
 }
@@ -244,62 +183,3 @@ void WirelessItem::adjustHeight()
 {
     m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
 }
-
-void WirelessItem::refreshIcon()
-{
-    m_reloadIcon = true;
-    m_refreshTimer->start();
-
-    refreshTips();
-}
-
-void WirelessItem::refreshTips()
-{
-    if (m_device.isNull()) {
-        return;
-    }
-
-    m_wirelessTips->setText(m_device->statusStringDetail());
-
-    if (NetworkPlugin::isConnectivity()) {
-        do {
-            if (m_device->status() != NetworkDevice::DeviceStatus::Activated) {
-                break;
-            }
-            const QJsonObject info = static_cast<WirelessDevice *>(m_device.data())->activeWirelessConnectionInfo();
-            if (!info.contains("Ip4"))
-                break;
-            const QJsonObject ipv4 = info.value("Ip4").toObject();
-            if (!ipv4.contains("Address"))
-                break;
-            m_wirelessTips->setText(tr("Wireless Connection: %1").arg(ipv4.value("Address").toString()));
-        } while (false);
-    }
-}
-
-void WirelessItem::deviceStateChanged()
-{
-    refreshTips();
-
-    m_refreshTimer->start();
-}
-
-void WirelessItem::onRefreshTimeout()
-{
-    Q_ASSERT(sender() == m_refreshTimer);
-
-    if (m_device.isNull()) {
-        return;
-    }
-
-    WirelessDevice *dev = static_cast<WirelessDevice *>(m_device.data());
-    // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
-    if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled()) {
-        Q_EMIT queryActiveConnInfo();
-        return;
-    }
-
-    refreshTips();
-    update();
-}
-

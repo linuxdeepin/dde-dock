@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klepněte pr zobrazení skryté ikony</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -126,18 +119,6 @@
         <translation>Vpravo</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Velký</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Střední</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Malý</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Ukázat vždy</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Umístění</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Velikost</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Stav</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Spouštěč</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Víceúlohový pohled</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Zrušit ukotvení</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>Správa napájení</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>Stav %1, %2 min zbývá</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>Stav %1, %2 h %3 min zbývá</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>Nabito %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Nabíjení %1, %2 min do úplného nabití</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>Nabíjení %1, %2 h %3 min do úplného nabití</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Ukázat pracovní plochu</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Zrušit ukotvení</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Bezdrátové připojení: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Připojeno, ale bez přístupu k internetu</translation>
     </message>
 </context>
 <context>

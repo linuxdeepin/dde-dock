@@ -12,9 +12,9 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-if (${CMAKE_SYSTEM_PROCESSOR}  STREQUAL "aarch64")
-    add_definitions("-DDISABLE_POWER_OPTIONS")
-endif()
+#if (${CMAKE_SYSTEM_PROCESSOR}  STREQUAL "aarch64")
+#    add_definitions("-DDISABLE_POWER_OPTIONS")
+#endif()
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} shutdown.qrc)
@@ -26,6 +26,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Qt5DBus_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

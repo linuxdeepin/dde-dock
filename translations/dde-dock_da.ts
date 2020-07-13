@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Klik for at vise skjulte ikoner</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på, at du vil tømme %1 punkter?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -126,18 +119,6 @@
         <translation>Højre</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Stor</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Medium</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Lille</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Hold vist</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>Placering</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Størrelse</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>Status</translation>
     </message>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Programstarter</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Multitaskingvisning</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Fjern fra dok</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>Strømindstillinger</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>Kapacitet %1, %2 minutter tilbage</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>Kapacitet %1, %2 timer %3 minutter tilbage</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>Opladet %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Oplader %1, %2 minutter til fuldt</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>Oplader %1, %2 timer %3 minutter til fuldt</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Vis skrivebord</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Fjern fra dok</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>Trådløs forbindelse: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Tilsluttet men ingen internetadgang</translation>
     </message>
 </context>
 <context>

@@ -5,13 +5,26 @@
         <file>resources/wired/network-wired-symbolic-connecting3.svg</file>
         <file>resources/wired/network-wired-symbolic-connecting4.svg</file>
         <file>resources/wired/network-wired-symbolic-connecting5.svg</file>
+        <file>resources/wired/network-disabled-symbolic.svg</file>
+        <file>resources/wired/network-error-symbolic.svg</file>
+        <file>resources/wired/network-online-symbolic.svg</file>
+        <file>resources/wired/network-offline-symbolic.svg</file>
+        <file>resources/wired/network-wired-symbolic.svg</file>
+        <file>resources/wired/network-online-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting3-dark.svg</file>
+        <file>resources/wired/network-disabled-symbolic-dark.svg</file>
+        <file>resources/wired/network-none-symbolic.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting1-dark.svg</file>
+        <file>resources/wired/network-error-symbolic-dark.svg</file>
+        <file>resources/wired/network-warning-symbolic.svg</file>
+        <file>resources/wired/network-warning-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting5-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting2-dark.svg</file>
+        <file>resources/wired/network-none-symbolic-dark.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting4-dark.svg</file>
     </qresource>
     <qresource prefix="/wireless">
-        <file>resources/wireless/wireless-0.svg</file>
-        <file>resources/wireless/wireless-20.svg</file>
-        <file>resources/wireless/wireless-40.svg</file>
-        <file>resources/wireless/wireless-60.svg</file>
-        <file>resources/wireless/wireless-80.svg</file>
         <file>resources/wireless/wireless-background.svg</file>
         <file>resources/wireless/wireless-disconnect.svg</file>
         <file>resources/wireless/wireless-0-symbolic.svg</file>
@@ -19,15 +32,22 @@
         <file>resources/wireless/wireless-40-symbolic.svg</file>
         <file>resources/wireless/wireless-60-symbolic.svg</file>
         <file>resources/wireless/wireless-80-symbolic.svg</file>
+        <file>resources/wireless/wireless-0-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-20-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-40-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-60-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-80-symbolic-dark.svg</file>
         <file>resources/wireless/wireless-disconnect-symbolic.svg</file>
         <file>resources/wireless/security.svg</file>
-        <file>resources/wireless/refresh_press.svg</file>
-        <file>resources/wireless/refresh_normal.svg</file>
-        <file>resources/wireless/refresh_hover.svg</file>
+        <file>resources/wireless/security_dark.svg</file>
         <file>resources/wireless/select.svg</file>
-        <file>resources/wireless/disconnect_hover.svg</file>
-        <file>resources/wireless/disconnect_press.svg</file>
+        <file>resources/wireless/select_dark.svg</file>
         <file>resources/wireless/disconnect.svg</file>
+        <file>resources/wireless/disconnect_dark.svg</file>
+        <file>resources/wireless/refresh.svg</file>
+        <file>resources/wireless/refresh_dark.svg</file>
+        <file>resources/wireless/wireless-disabled-symbolic-dark.svg</file>
+        <file>resources/wireless/wireless-disabled-symbolic.svg</file>
     </qresource>
     <qresource prefix="/wireless/indicator">
         <file>resources/wireless/spinner14/Spinner01.png</file>
@@ -120,5 +140,11 @@
         <file>resources/wireless/spinner14/Spinner88.png</file>
         <file>resources/wireless/spinner14/Spinner89.png</file>
         <file>resources/wireless/spinner14/Spinner90.png</file>
+    </qresource>
+    <qresource prefix="/common">
+        <file>resources/common/list_select.png</file>
+        <file>resources/common/list_select@2x.png</file>
+        <file>resources/common/notify_close_press.png</file>
+        <file>resources/common/notify_close_press@2x.png</file>
     </qresource>
 </RCC>

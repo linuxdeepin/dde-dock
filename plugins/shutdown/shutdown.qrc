@@ -2,5 +2,6 @@
     <qresource prefix="/icons">
         <file>resources/icons/fashion.svg</file>
         <file>resources/icons/normal.svg</file>
+        <file>resources/icons/system-shutdown.svg</file>
     </qresource>
 </RCC>

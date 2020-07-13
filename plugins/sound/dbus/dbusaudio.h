@@ -75,6 +75,10 @@ public:
     inline QList<QDBusObjectPath> sinkInputs()
     { return qvariant_cast< QList<QDBusObjectPath> >(property("SinkInputs")); }
 
+    Q_PROPERTY(bool IncreaseVolume READ increaseVolume NOTIFY IncreaseVolumeChanged)
+    inline bool increaseVolume()
+    { return qvariant_cast< bool >(property("IncreaseVolume")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Reset()
     {
@@ -103,6 +107,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetPort"), argumentList);
     }
 
+    inline QDBusPendingReply<> SetIncreaseVolume(const bool &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("SetIncreaseVolume"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
     void CardsChanged() const;
@@ -110,6 +121,7 @@ Q_SIGNALS: // SIGNALS
     void DefaultSourceChanged() const;
     void MaxUIVolumeChanged() const;
     void SinkInputsChanged() const;
+    void IncreaseVolumeChanged() const;
 };
 
 namespace com {

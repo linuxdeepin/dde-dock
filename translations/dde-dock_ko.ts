@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>숨겨진 아이콘을 표시하려면 클릭</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -107,11 +100,11 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>효율적인 모드</translation>
+        <translation>능률 모드</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>맨 위</translation>
+        <translation>상단</translation>
     </message>
     <message>
         <source>Bottom</source>
@@ -126,28 +119,16 @@
         <translation>오른쪽</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>대형</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>중형</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>소형</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
-        <translation>계속 표시</translation>
+        <translation>표시된 상태로 유지</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>숨김 유지</translation>
+        <translation>숨겨진 상태로 유지</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>스마트 숨김</translation>
+        <translation>스마트 숨기기</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -156,10 +137,6 @@
     <message>
         <source>Location</source>
         <translation>위치</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>크기</translation>
     </message>
     <message>
         <source>Status</source>
@@ -174,7 +151,18 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>런쳐</translation>
+        <translation>실행도구</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>멀티태스킹 보기</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>도구집 해제</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>전원 설정</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>용량 %1, %2분 남음</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>용량 %1, %2시간 %3분 남음</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>%1 충전됨</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 충전중, 완전 충전까지 %2분 남음</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>%1 충전중, 완전 충전까지 %2시간 %3분 남음</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>바탕화면 표시</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>도구집 해제</translation>
     </message>
 </context>
 <context>
@@ -242,7 +245,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>일시 정지</translation>
+        <translation>일시 중지</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -325,7 +328,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>비었음</translation>
+        <translation>비우기</translation>
     </message>
 </context>
 <context>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>무선 연결: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>연결됨, 인터넷 없음</translation>
     </message>
 </context>
 <context>

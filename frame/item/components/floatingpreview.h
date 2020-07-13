@@ -26,6 +26,7 @@
 #include <QPointer>
 
 #include <dimagebutton.h>
+#include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -41,7 +42,7 @@ public:
     AppSnapshot *trackedWindow();
 
 public slots:
-    void trackWindow(AppSnapshot * const snap);
+    void trackWindow(AppSnapshot *const snap);
 
 private:
     void paintEvent(QPaintEvent *e) override;
@@ -56,6 +57,7 @@ private:
     QPointer<AppSnapshot> m_tracked;
 
     DImageButton *m_closeBtn3D;
+    DPushButton *m_titleBtn;
 };
 
 #endif // FLOATINGPREVIEW_H

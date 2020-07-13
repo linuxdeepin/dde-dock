@@ -22,14 +22,18 @@
 #ifndef SNITRAYWIDGET_H
 #define SNITRAYWIDGET_H
 
+#include "constants.h"
 #include "abstracttraywidget.h"
-//#include "dbus/sni/statusnotifieritem_interface.h"
+#include "util/dockpopupwindow.h"
+#include "../../widgets/tipswidget.h"
 
 #include <org_kde_statusnotifieritem.h>
-#include <dbusmenu-qt5/dbusmenuimporter.h>
 
 #include <QMenu>
 #include <QDBusObjectPath>
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
+class DBusMenuImporter;
 
 //using namespace com::deepin::dde;
 using namespace org::kde;
@@ -61,6 +65,13 @@ public:
     static bool isSNIKey(const QString &itemKey);
     static QPair<QString, QString> serviceAndPath(const QString &servicePath);
 
+    void showHoverTips();
+    const QPoint topleftPoint() const;
+    void showPopupWindow(QWidget * const content, const bool model = false);
+    const QPoint popupMarkPoint() const;
+
+    static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
+
 Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
 
@@ -84,9 +95,13 @@ private Q_SLOTS:
     void onSNIOverlayIconNameChanged(const QString & value);
     void onSNIOverlayIconPixmapChanged(DBusImageList  value);
     void onSNIStatusChanged(const QString & value);
+    void hidePopup();
+    void hideNonModel();
+    void popupWindowAccept();
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
 private:
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     QPixmap newIconPixmap(IconType iconType);
 
@@ -120,6 +135,11 @@ private:
     QString m_sniOverlayIconName;
     DBusImageList m_sniOverlayIconPixmap;
     QString m_sniStatus;
+    QTimer *m_popupTipsDelayTimer;
+    static Dock::Position DockPosition;
+    static QPointer<DockPopupWindow> PopupWindow;
+    TipsWidget *m_tipsLabel;
+    bool m_popupShown;
 };
 
 #endif /* SNIWIDGET_H */

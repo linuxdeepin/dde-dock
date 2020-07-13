@@ -29,6 +29,7 @@
 
 #include "pluginsiteminterface.h"
 #include "trashwidget.h"
+#include "../../widgets/tipswidget.h"
 
 #include <QLabel>
 #include <QSettings>
@@ -59,10 +60,13 @@ public:
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void displayModeChanged(const Dock::DisplayMode displayMode) Q_DECL_OVERRIDE;
+    void pluginSettingsChanged() override;
 
 private:
+    void refreshPluginItemsVisible();
+
     TrashWidget *m_trashWidget;
-    QLabel *m_tipsLabel;
+    QPointer<TipsWidget> m_tipsLabel;
 };
 
 #endif // TRASHPLUGIN_H

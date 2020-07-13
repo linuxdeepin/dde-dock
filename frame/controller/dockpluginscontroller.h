@@ -39,6 +39,7 @@ class DockPluginsController : public AbstractPluginsController
     Q_OBJECT
 
     friend class DockItemController;
+    friend class DockItemManager;
 
 public:
     explicit DockPluginsController(QObject *parent = 0);
@@ -57,7 +58,11 @@ signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
-    void fashionTraySizeChanged(const QSize &traySize) const;
+    void trayVisableCountChanged(const int &count) const;
+
+private:
+    void loadLocalPlugins();
+    void loadSystemPlugins();
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

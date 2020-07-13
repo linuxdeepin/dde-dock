@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -24,15 +17,15 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation type="unfinished"/>
+        <translation>چېسىلا ۋە ۋاقىت</translation>
     </message>
     <message>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 سائەتلىك</translation>
     </message>
     <message>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 سائەتلىك</translation>
     </message>
     <message>
         <source>Time Settings</source>
@@ -43,15 +36,15 @@
     <name>DeviceItem</name>
     <message>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>تورنى قوزغىتىش </translation>
     </message>
     <message>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>تورنى تاقاش</translation>
     </message>
     <message>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>تور تەڭشىكى </translation>
     </message>
 </context>
 <context>
@@ -88,7 +81,7 @@
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation type="unfinished"/>
+        <translation>دېسكا</translation>
     </message>
     <message>
         <source>Open</source>
@@ -96,7 +89,7 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation type="unfinished"/>
+        <translation>ھەممىنى ئۆچۈرۈش </translation>
     </message>
 </context>
 <context>
@@ -115,39 +108,27 @@
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>ئاستى تەرەپ</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"/>
+        <translation>سول تەرەپ</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>ئوتتۇرىدا</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation type="unfinished"/>
+        <translation>ئوڭ تەرەپ</translation>
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation type="unfinished"/>
+        <translation>كۆرسىتىش</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation type="unfinished"/>
+        <translation>يوشۇرۇش</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation type="unfinished"/>
+        <translation>ئەقلىي يوشۇرۇش</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -155,15 +136,11 @@
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>چوڭلۇقى</translation>
+        <translation>ئورنى</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished"/>
+        <translation>ھالىتى </translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>ئۈستەليۈزى</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -192,7 +180,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>تەڭشەك</translation>
     </message>
 </context>
 <context>
@@ -203,11 +191,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>باتارىيە تەڭشىكى</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -218,11 +202,30 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>ئۈستەل يۈزىنى كۆرۈش</translation>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -262,7 +265,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation type="unfinished"/>
+        <translation>باتارىيە تەڭشىكى</translation>
     </message>
 </context>
 <context>
@@ -273,7 +276,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation type="unfinished"/>
+        <translation>ئەپلەر </translation>
     </message>
 </context>
 <context>
@@ -284,11 +287,11 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋازسىز</translation>
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋاز تەڭشىكى</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
@@ -350,11 +353,15 @@
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="unfinished"/>
+        <translation>تور يوق </translation>
     </message>
     <message>
         <source>Wireless Connection: %1</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
     </message>
 </context>
 <context>

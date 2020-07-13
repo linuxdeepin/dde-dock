@@ -20,26 +20,25 @@
  */
 
 #include "systemtrayitem.h"
-#include "dbus/dbusmenu.h"
 
 #include <QProcess>
 #include <QDebug>
 
 #include <xcb/xproto.h>
+#include <QGSettings>
 
 Dock::Position SystemTrayItem::DockPosition = Dock::Position::Top;
 QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
 
-SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
-    : AbstractTrayWidget(parent),
-      m_popupShown(false),
-      m_tapAndHold(false),
-      m_pluginInter(pluginInter),
-      m_menuManagerInter(new DBusMenuManager(this)),
-      m_centralWidget(m_pluginInter->itemWidget(itemKey)),
-      m_popupTipsDelayTimer(new QTimer(this)),
-      m_popupAdjustDelayTimer(new QTimer(this)),
-      m_itemKey(itemKey)
+SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
+    : AbstractTrayWidget(parent)
+    , m_popupShown(false)
+    , m_tapAndHold(false)
+    , m_pluginInter(pluginInter)
+    , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_popupTipsDelayTimer(new QTimer(this))
+    , m_popupAdjustDelayTimer(new QTimer(this))
+    , m_itemKey(itemKey)
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -47,7 +46,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
     m_centralWidget->setVisible(true);
     m_centralWidget->installEventFilter(this);
 
-    QBoxLayout *hLayout = new QHBoxLayout;
+    QBoxLayout *hLayout = new QHBoxLayout(this);
     hLayout->addWidget(m_centralWidget);
     hLayout->setSpacing(0);
     hLayout->setMargin(0);
@@ -56,8 +55,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
     setAccessibleName(m_pluginInter->pluginName() + "-" + m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    if (PopupWindow.isNull())
-    {
+    if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
         arrowRectangle->setRadius(6);
@@ -76,14 +74,34 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface * const pluginInter, const Q
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
+    connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
     grabGesture(Qt::TapAndHoldGesture);
+
+    const QByteArray &schema{
+        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
+    };
+
+    if (QGSettings::isSchemaInstalled(schema)) {
+        m_gsettings = new QGSettings(schema);
+        m_gsettings->setParent(this);
+        connect(m_gsettings, &QGSettings::changed, this,
+                &SystemTrayItem::onGSettingsChanged);
+    }
+    else {
+        m_gsettings = nullptr;
+    }
 }
 
 SystemTrayItem::~SystemTrayItem()
 {
     if (m_popupShown)
         popupWindowAccept();
+
+    if(nullptr != m_gsettings){
+        m_gsettings->deleteLater();
+        m_gsettings = nullptr;
+    }
 }
 
 QString SystemTrayItem::itemKeyForConfig()
@@ -155,10 +173,8 @@ void SystemTrayItem::detachPluginWidget()
 
 bool SystemTrayItem::event(QEvent *event)
 {
-    if (m_popupShown)
-    {
-        switch (event->type())
-        {
+    if (m_popupShown) {
+        switch (event->type()) {
         case QEvent::Paint:
             if (!m_popupAdjustDelayTimer->isActive())
                 m_popupAdjustDelayTimer->start();
@@ -168,13 +184,17 @@ bool SystemTrayItem::event(QEvent *event)
     }
 
     if (event->type() == QEvent::Gesture)
-        gestureEvent(static_cast<QGestureEvent*>(event));
+        gestureEvent(static_cast<QGestureEvent *>(event));
 
     return AbstractTrayWidget::event(event);
 }
 
 void SystemTrayItem::enterEvent(QEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_popupTipsDelayTimer->start();
     update();
 
@@ -196,11 +216,15 @@ void SystemTrayItem::leaveEvent(QEvent *event)
 
 void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     m_popupTipsDelayTimer->stop();
     hideNonModel();
 
     if (event->button() == Qt::RightButton) {
-        if (perfectIconRect().contains(event->pos())) {
+        if (perfectIconRect().contains(event->pos(), true)) {
             return showContextMenu();
         }
     }
@@ -210,11 +234,15 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 
 void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (checkGSettingsControl()) {
+        return;
+    }
+
     if (event->button() != Qt::LeftButton) {
         return;
     }
 
-    if (checkAndResetTapHoldGestureState()&& event->source() == Qt::MouseEventSynthesizedByQt) {
+    if (checkAndResetTapHoldGestureState() && event->source() == Qt::MouseEventSynthesizedByQt) {
         qDebug() << "SystemTray: tap and hold gesture detected, ignore the synthesized mouse release event";
         return;
     }
@@ -228,6 +256,15 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
     }
 
     AbstractTrayWidget::mouseReleaseEvent(event);
+}
+
+void SystemTrayItem::showEvent(QShowEvent *event)
+{
+    QTimer::singleShot(0, this, [ = ] {
+        onGSettingsChanged("enable");
+    });
+
+    return AbstractTrayWidget::showEvent(event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const
@@ -296,7 +333,7 @@ void SystemTrayItem::popupWindowAccept()
     hidePopup();
 }
 
-void SystemTrayItem::showPopupApplet(QWidget * const applet)
+void SystemTrayItem::showPopupApplet(QWidget *const applet)
 {
     // another model popup window already exists
     if (PopupWindow->model())
@@ -309,7 +346,7 @@ void SystemTrayItem::showPopupApplet(QWidget * const applet)
     showPopupWindow(applet, true);
 }
 
-void SystemTrayItem::showPopupWindow(QWidget * const content, const bool model)
+void SystemTrayItem::showPopupWindow(QWidget *const content, const bool model)
 {
     m_popupShown = true;
     m_lastPopupWidget = content;
@@ -322,10 +359,9 @@ void SystemTrayItem::showPopupWindow(QWidget * const content, const bool model)
     if (lastContent)
         lastContent->setVisible(false);
 
-    switch (DockPosition)
-    {
+    switch (DockPosition) {
     case Dock::Position::Top:   popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
-    case Dock::Position::Bottom:popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
+    case Dock::Position::Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
     case Dock::Position::Left:  popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
     case Dock::Position::Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
     }
@@ -352,7 +388,7 @@ void SystemTrayItem::showHoverTips()
     if (!r.contains(QCursor::pos()))
         return;
 
-    QWidget * const content = trayTipsWidget();
+    QWidget *const content = trayTipsWidget();
     if (!content)
         return;
 
@@ -390,42 +426,37 @@ void SystemTrayItem::showContextMenu()
     if (menuJson.isEmpty())
         return;
 
-    QDBusPendingReply<QDBusObjectPath> result = m_menuManagerInter->RegisterMenu();
 
-    result.waitForFinished();
-    if (result.isError())
-    {
-        qWarning() << result.error();
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
+    if (jsonDocument.isNull())
         return;
+
+    QJsonObject jsonMenu = jsonDocument.object();
+
+    qDeleteAll(m_contextMenu.actions());
+
+    QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
+    for (auto item : jsonMenuItems) {
+        QJsonObject itemObj = item.toObject();
+        QAction *action = new QAction(itemObj.value("itemText").toString());
+        action->setCheckable(itemObj.value("isCheckable").toBool());
+        action->setChecked(itemObj.value("checked").toBool());
+        action->setData(itemObj.value("itemId").toString());
+        action->setEnabled(itemObj.value("isActive").toBool());
+        m_contextMenu.addAction(action);
     }
-
-    const QPoint p = popupMarkPoint();
-
-    QJsonObject menuObject;
-    menuObject.insert("x", QJsonValue(p.x()));
-    menuObject.insert("y", QJsonValue(p.y()));
-    menuObject.insert("isDockMenu", QJsonValue(true));
-    menuObject.insert("menuJsonContent", QJsonValue(menuJson));
-
-    switch (DockPosition)
-    {
-    case Dock::Position::Top:       menuObject.insert("direction", "top");      break;
-    case Dock::Position::Bottom:    menuObject.insert("direction", "bottom");   break;
-    case Dock::Position::Left:      menuObject.insert("direction", "left");     break;
-    case Dock::Position::Right:     menuObject.insert("direction", "right");    break;
-    }
-
-    const QDBusObjectPath path = result.argumentAt(0).value<QDBusObjectPath>();
-    DBusMenu *menuInter = new DBusMenu(path.path(), this);
-
-    connect(menuInter, &DBusMenu::ItemInvoked, this, &SystemTrayItem::invokedMenuItem);
-    connect(menuInter, &DBusMenu::ItemInvoked, menuInter, &DBusMenu::deleteLater);
-    connect(menuInter, &DBusMenu::MenuUnregistered, this, &SystemTrayItem::onContextMenuAccepted, Qt::QueuedConnection);
-
-    menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
 
     hidePopup();
     emit requestWindowAutoHide(false);
+
+    m_contextMenu.exec(QCursor::pos());
+
+    onContextMenuAccepted();
+}
+
+void SystemTrayItem::menuActionClicked(QAction *action)
+{
+    invokedMenuItem(action->data().toString(), true);
 }
 
 void SystemTrayItem::onContextMenuAccepted()
@@ -446,4 +477,21 @@ void SystemTrayItem::updatePopupPosition()
 
     const QPoint p = popupMarkPoint();
     PopupWindow->show(p, PopupWindow->model());
+}
+
+void SystemTrayItem::onGSettingsChanged(const QString &key) {
+    if (key != "enable" || !m_gsettings) {
+        return;
+    }
+
+    if (m_gsettings->keys().contains("enable")) {
+        const bool visible = m_gsettings->get("enable").toBool();
+        setVisible(visible);
+        emit itemVisibleChanged(visible);
+    }
+}
+
+bool SystemTrayItem::checkGSettingsControl() const
+{
+    return m_gsettings ? m_gsettings->get("control").toBool() : false;
 }

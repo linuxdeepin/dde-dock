@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
 
 class TrashWidget : public QWidget
 {
@@ -43,11 +44,11 @@ public:
 
     QWidget *popupApplet();
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     const QString contextMenu() const;
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
     void updateIcon();
+    void updateIconAndRefresh();
 
 signals:
     void requestContextMenu() const;
@@ -57,7 +58,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void removeApp(const QString &appKey);
@@ -67,6 +67,7 @@ private:
     PopupControlWidget *m_popupApplet;
 
     QPixmap m_icon;
+    QIcon m_defaulticon;
 };
 
 #endif // TRASHWIDGET_H

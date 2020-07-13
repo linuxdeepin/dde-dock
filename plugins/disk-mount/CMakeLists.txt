@@ -9,6 +9,7 @@ file(GLOB SRCS "*.h" "*.cpp")
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
+find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
@@ -19,6 +20,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Qt5DBus_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

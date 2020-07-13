@@ -33,6 +33,7 @@
 #include <com_deepin_dde_daemon_dock_entry.h>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130

@@ -48,12 +48,13 @@ signals:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    void refreshIcon();
 
 private slots:
     void refreshNetwork();
 
 private:
-    TipsWidget *m_deviceName;
+    QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
     DLoadingIndicator *m_loadingIndicator;

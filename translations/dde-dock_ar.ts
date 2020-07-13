@@ -3,14 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>انقر لعرض الرمز المخفي</translation>
+        <translation>الإضافة 1% غير متوافقة مع النظام.</translation>
     </message>
 </context>
 <context>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>هل أنت متأكد من إفراغ  %1 عناصر ؟</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -126,18 +119,6 @@
         <translation>يمين</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>كبير</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>متوسط</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>صغير</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>اﻹبقاء ظاهراً</translation>
     </message>
@@ -158,10 +139,6 @@
         <translation>الموقع</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>الحجم</translation>
-    </message>
-    <message>
         <source>Status</source>
         <translation>الحالة</translation>
     </message>
@@ -178,6 +155,17 @@
     </message>
 </context>
 <context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>عرض متعدد الواجهات</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>إلغاء الإرساء</translation>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
@@ -188,11 +176,11 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>لوحة المفاتيح الافتراضية</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>إعدادات</translation>
+        <translation>الإعدادات</translation>
     </message>
 </context>
 <context>
@@ -206,24 +194,39 @@
         <translation>إعدادت الطاقة</translation>
     </message>
     <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation>السعة 1%, 2% دقيقة متبقية</translation>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation>السعة 1% ,2% ساعة 3% دقيقة متبقية</translation>
+    </message>
+    <message>
         <source>Charged %1</source>
         <translation>مشحون %1</translation>
     </message>
     <message>
-        <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>جاري الشحن 1%, 2% دقيقة للاكتمال</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
+        <translation>جاري الشحن 1%, 2% ساعة 3% دقيقة للاكتمال</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>إظهار سطح المكتب</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>إلغاء الإرساء</translation>
     </message>
 </context>
 <context>
@@ -246,7 +249,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>وضع السكون</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -355,6 +358,10 @@
     <message>
         <source>Wireless Connection: %1</source>
         <translation>اتصال لاسلكي بـ : %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل لكن لا يوجد اتصال بالإنترنت</translation>
     </message>
 </context>
 <context>

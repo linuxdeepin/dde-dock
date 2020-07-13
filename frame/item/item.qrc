@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/indicator">
-        <file>resources/indicator_active.png</file>
-        <file>resources/indicator.png</file>
-        <file>resources/indicator_ver.png</file>
-        <file>resources/indicator_active_ver.png</file>
+        <file>resources/indicator_dark.svg</file>
+        <file>resources/indicator.svg</file>
+        <file>resources/indicator_ver.svg</file>
+        <file>resources/indicator_active_ver.svg</file>
+        <file>resources/indicator_dark_ver.svg</file>
+        <file>resources/indicator_active.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>resources/arrow-up.svg</file>

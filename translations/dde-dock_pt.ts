@@ -7,13 +7,6 @@
     </message>
 </context>
 <context>
-    <name>ContainerItem</name>
-    <message>
-        <source>Click to display hidden icon</source>
-        <translation>Clique para exibir o ícone oculto</translation>
-    </message>
-</context>
-<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -58,7 +51,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Tem certeza de que deseja esvaziar % 1 itens?</translation>
+        <translation>Tem a certeza que deseja eliminar %1 itens?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -70,7 +63,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta ação não pode ser restaurada</translation>
+        <translation>Esta ação não pode ser restabelecida</translation>
     </message>
 </context>
 <context>
@@ -126,28 +119,16 @@
         <translation>Direita</translation>
     </message>
     <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation>Médio</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeno</translation>
-    </message>
-    <message>
         <source>Keep Shown</source>
         <translation>Manter Visível</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Manter Escondido</translation>
+        <translation>Manter Oculta</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Esconder Inteligente</translation>
+        <translation>Ocultar Inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -156,10 +137,6 @@
     <message>
         <source>Location</source>
         <translation>Localização</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Tamanho</translation>
     </message>
     <message>
         <source>Status</source>
@@ -175,6 +152,17 @@
     <message>
         <source>Launcher</source>
         <translation>Lançador</translation>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation>Vista de Tarefas</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
@@ -206,10 +194,6 @@
         <translation>Definições de energia</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation>Carregado %1</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacidade %1, %2 min restantes</translation>
     </message>
@@ -218,12 +202,31 @@
         <translation>Capacidade %1, %2 hr %3 min restantes</translation>
     </message>
     <message>
+        <source>Charged %1</source>
+        <translation>Carregado %1</translation>
+    </message>
+    <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>A carregar %1, %2 min até estar cheio</translation>
+        <translation>A carregar %1, %2 min até ficar carregada</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>A carregar %1, %2 hr %3 min até estar cheio</translation>
+        <translation>A carregar %1, %2 hr %3 min até ficar carregada</translation>
+    </message>
+    <message>
+        <source>Charging %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation>Mostrar Ambiente de trabalho</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
@@ -250,7 +253,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Trancar</translation>
+        <translation>Bloquear</translation>
     </message>
     <message>
         <source>Log out</source>
@@ -288,11 +291,11 @@
     </message>
     <message>
         <source>Audio Settings</source>
-        <translation>Definições de Áudio</translation>
+        <translation>Definições de som</translation>
     </message>
     <message>
         <source>Current Volume %1</source>
-        <translation>Nível de Som Atual %1</translation>
+        <translation>Volume atual %1</translation>
     </message>
 </context>
 <context>
@@ -332,7 +335,7 @@
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation>Bandeja do Sistema</translation>
+        <translation>Área de notificação do sistema</translation>
     </message>
 </context>
 <context>
@@ -354,18 +357,22 @@
     </message>
     <message>
         <source>Wireless Connection: %1</source>
-        <translation>Ligação Sem Fios: %1</translation>
+        <translation>Ligação sem fios: %1</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Ligado, mas sem acesso à Internet</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>Rede Sem fios</translation>
+        <translation>Rede sem fios</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Rede Sem Fios %1</translation>
+        <translation>Rede sem fios %1</translation>
     </message>
 </context>
 </TS>
