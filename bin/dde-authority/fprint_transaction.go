@@ -11,7 +11,7 @@ import (
 
 	"github.com/gosexy/gettext"
 	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/strv"
@@ -174,7 +174,7 @@ func (tx *FPrintTransaction) Authenticate(sender dbus.Sender) *dbus.Error {
 	logger.Debugf("%s Authenticate sender: %q", tx, sender)
 	err := tx.authenticate()
 	if err != nil {
-		logger.Warningf("%s failed to authenticate: %v", tx, err)
+		logger.Infof("%s failed to authenticate: %v", tx, err)
 	}
 	return dbusutil.ToError(err)
 }
