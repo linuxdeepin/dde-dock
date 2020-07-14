@@ -26,10 +26,6 @@
 
 namespace Dock {
 
-// WINDOWS_MENU is Unique Identifier code for Windows flags use in plugin.
-// Window set Role Notification and PanelBehavior AlwaysVisible and set PanelTakesFocus true when use WINDOWS_MENU.
-#define WINDOWS_MENU 0x00800000
-
 #define DOCK_PLUGIN_MIME    "dock/plugin"
 #define DOCK_PLUGIN_API_VERSION    "1.2.2"
 

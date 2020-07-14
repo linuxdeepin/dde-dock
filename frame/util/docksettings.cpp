@@ -30,10 +30,12 @@
 #include <DApplication>
 #include <QScreen>
 
+#define WINDOWS_MENU 0x00000082
+
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
 
-#define FASHION_DEFAULT_HEIGHT   72
+#define FASHION_DEFAULT_HEIGHT 72
 #define EffICIENT_DEFAULT_HEIGHT 40
 #define WINDOW_MAX_SIZE          100
 #define WINDOW_MIN_SIZE          40
@@ -246,7 +248,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     return QRect(primaryRect.topLeft() + p, size);
 }
 
-void DockSettings::showDockSettingsMenu(QPoint pos)
+void DockSettings::showDockSettingsMenu()
 {
     QTimer::singleShot(0, this, [ = ] {
         onGSettingsChanged("enable");
@@ -308,12 +310,12 @@ void DockSettings::showDockSettingsMenu(QPoint pos)
     m_settingsMenu.setWindowFlags(m_settingsMenu.windowFlags() | flags);
 
     m_settingsMenu.show();
-    updateDockMenuGeometry(pos);
+    updateGeometry();
 
     setAutoHide(true);
 }
 
-void DockSettings::updateDockMenuGeometry(QPoint pos)
+void DockSettings::updateGeometry()
 {
     int width = m_settingsMenu.width();
     int height = m_settingsMenu.height();
@@ -321,13 +323,13 @@ void DockSettings::updateDockMenuGeometry(QPoint pos)
     switch (m_position) {
         case Top:
         case Left:
-            m_settingsMenu.move(pos.x(), pos.y());
+            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y());
             break;
         case Bottom:
-            m_settingsMenu.move(pos.x(), pos.y() - height);
+            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y() - height);
             break;
         case Right:
-            m_settingsMenu.move(pos.x() - width, pos.y());
+            m_settingsMenu.move(QCursor::pos().x() - width, QCursor::pos().y());
             break;
     }
 }

@@ -401,7 +401,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
     if (e->button() == Qt::RightButton && m_settings->m_menuVisible) {
-        m_settings->showDockSettingsMenu(mapToGlobal(e->pos()));
+        m_settings->showDockSettingsMenu();
         return;
     } else if (e->button() == Qt::LeftButton && m_settings->m_menuVisible) {
         m_settings->hideDockSettingsMenu();

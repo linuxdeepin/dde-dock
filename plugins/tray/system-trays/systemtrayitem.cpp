@@ -226,11 +226,7 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::RightButton) {
         if (perfectIconRect().contains(event->pos(), true)) {
-            return showContextMenu(mapToGlobal(event->pos()));
-        }
-    } else if (event->button() == Qt::LeftButton) {
-        if (perfectIconRect().contains(event->pos(), true)) {
-            hideContextMenu();
+            return showContextMenu();
         }
     }
 
@@ -269,11 +265,6 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
     }
 
     AbstractTrayWidget::mouseReleaseEvent(event);
-}
-
-void SystemTrayItem::hideContextMenu()
-{
-    m_contextMenu.hide();
 }
 
 void SystemTrayItem::showEvent(QShowEvent *event)
@@ -449,7 +440,7 @@ void SystemTrayItem::gestureEvent(QGestureEvent *event)
     m_tapAndHold = true;
 }
 
-void SystemTrayItem::showContextMenu(QPoint pos)
+void SystemTrayItem::showContextMenu()
 {
     const QString menuJson = contextMenu();
     if (menuJson.isEmpty())
@@ -478,32 +469,9 @@ void SystemTrayItem::showContextMenu(QPoint pos)
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    Qt::WindowFlags flags = (Qt::WindowFlags)WINDOWS_MENU;
-    m_contextMenu.setWindowFlags(m_contextMenu.windowFlags() | flags);
-
-    m_contextMenu.show();
-    updateContextMenuGeometry(pos);
+    m_contextMenu.exec(QCursor::pos());
 
     onContextMenuAccepted();
-}
-
-void SystemTrayItem::updateContextMenuGeometry(QPoint pos)
-{
-    int width = m_contextMenu.width();
-    int height = m_contextMenu.height();
-
-    switch (DockPosition) {
-        case Dock::Position::Top:
-        case Dock::Position::Left:
-            m_contextMenu.move(pos.x(), pos.y());
-            break;
-        case Dock::Position::Bottom:
-            m_contextMenu.move(pos.x(), pos.y() - height);
-            break;
-        case Dock::Position::Right:
-            m_contextMenu.move(pos.x() - width, pos.y());
-            break;
-    }
 }
 
 void SystemTrayItem::menuActionClicked(QAction *action)

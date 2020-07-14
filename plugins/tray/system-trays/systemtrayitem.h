@@ -57,6 +57,7 @@ public:
 
     QWidget *centralWidget() const;
     void detachPluginWidget();
+    void showContextMenu();
 
     void showPopupApplet(QWidget * const applet);
     void hidePopup();
@@ -89,10 +90,7 @@ protected Q_SLOTS:
     void onContextMenuAccepted();
 
 private:
-    void showContextMenu(QPoint pos);
-    void hideContextMenu() ;
     void updatePopupPosition();
-    void updateContextMenuGeometry(QPoint pos);
     void onGSettingsChanged(const QString &key);
     bool checkGSettingsControl() const;
     void menuActionClicked(QAction *action);
