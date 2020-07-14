@@ -102,6 +102,7 @@ func main() {
 		logger.Fatal("failed to request name:", err)
 	}
 
+	startBacklightHelperAsync(service.Conn())
 	loader.SetService(service)
 	loader.StartAll()
 	defer loader.StopAll()
