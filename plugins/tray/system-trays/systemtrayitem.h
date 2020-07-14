@@ -99,7 +99,7 @@ private:
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_open;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
     QWidget *m_centralWidget;

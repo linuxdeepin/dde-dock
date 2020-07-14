@@ -46,7 +46,6 @@
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
 
-#define WINDOWS_DOCK 0x00000081
 #define MAINWINDOW_MAX_SIZE       DOCK_MAX_SIZE
 #define MAINWINDOW_MIN_SIZE       (40)
 #define DRAG_AREA_SIZE (5)
@@ -104,7 +103,7 @@ private:
     {
         QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
         QString theme = gsetting.get("gtk-cursor-theme-name").toString();
-        Position position = DockSettings::Instance().position();
+        Position position = DockSettings::Instance()->position();
         int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
 
         static QCursor *lastCursor = nullptr;
@@ -182,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_sessionManagerInter(new SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
-    Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window | (Qt::WindowFlags)WINDOWS_DOCK;
+    Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window;
     setWindowFlags(windowFlags() | flags);
     setAttribute(Qt::WA_TranslucentBackground);
     setMouseTracking(true);
@@ -194,7 +193,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_platformWindowHandle.setShadowOffset(QPoint(0, 5));
     m_platformWindowHandle.setShadowColor(QColor(0, 0, 0, 0.3 * 255));
 
-    m_settings = &DockSettings::Instance();
+    m_settings = DockSettings::Instance(this);
     m_size = m_settings->m_mainWindowSize;
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     initSNIHost();
@@ -568,7 +567,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::displayModeChanegd, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(&DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
+    connect(DockSettings::Instance(), &DockSettings::opacityChanged, this, &MainWindow::setMaskAlpha);
     connect(m_settings, &DockSettings::displayModeChanegd, this, &MainWindow::updateDisplayMode, Qt::QueuedConnection);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);  //+ 6-22-1
@@ -981,7 +980,7 @@ void MainWindow::setEffectEnabled(const bool enabled)
 {
     setMaskColor(AutoColor);
 
-    setMaskAlpha(DockSettings::Instance().Opacity());
+    setMaskAlpha(DockSettings::Instance()->Opacity());
 
     m_platformWindowHandle.setBorderWidth(enabled ? 1 : 0);
 }

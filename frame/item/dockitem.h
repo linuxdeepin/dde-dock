@@ -110,7 +110,7 @@ protected:
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;

@@ -47,7 +47,7 @@ class DockSettings : public QObject
     Q_OBJECT
 
 public:
-    static DockSettings &Instance();
+    static DockSettings *Instance(QWidget *parent = nullptr);
 
     inline DisplayMode displayMode() const { return m_displayMode; }
     inline HideMode hideMode() const { return m_hideMode; }
@@ -118,7 +118,6 @@ private:
     void calculateWindowConfig();
     void gtkIconThemeChanged();
     void checkService();
-    void updateGeometry();
 
 private:
     int m_dockWindowSize;
@@ -135,7 +134,7 @@ private:
     QRect m_primaryRawRect;
     QRect m_frontendRect;
 
-    QMenu m_settingsMenu;
+    QMenu *m_settingsMenu;
     QMenu *m_hideSubMenu;
     QAction m_fashionModeAct;
     QAction m_efficientModeAct;
@@ -151,6 +150,7 @@ private:
     DockItemManager *m_itemManager;
     bool m_trashVisible;
     bool m_aiAssistantVisible;
+    static DockSettings *settings;
 };
 
 #endif // DOCKSETTINGS_H

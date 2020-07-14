@@ -163,6 +163,8 @@ int main(int argc, char *argv[])
 
     MainWindow mw;
     DBusDockAdaptors adaptor(&mw);
+    mw.setAttribute(Qt::WA_NativeWindow);
+    mw.windowHandle()->setProperty("_d_dwayland_window-type" , "dock");
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 

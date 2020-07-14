@@ -39,6 +39,7 @@ DockItem::DockItem(QWidget *parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_draging(false)
+    , m_contextMenu(new QMenu(this))
     , m_hoverEffect(new HoverHighlightEffect(this))
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
@@ -65,7 +66,7 @@ DockItem::DockItem(QWidget *parent)
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &DockItem::menuActionClicked);
+    connect(m_contextMenu, &QMenu::triggered, this, &DockItem::menuActionClicked);
 
     grabGesture(Qt::TapAndHoldGesture);
 
@@ -228,7 +229,7 @@ void DockItem::showContextMenu()
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -238,13 +239,13 @@ void DockItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.popup(QCursor::pos());
+    m_contextMenu->popup(QCursor::pos());
 
     onContextMenuAccepted();
 }

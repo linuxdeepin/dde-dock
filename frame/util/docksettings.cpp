@@ -30,8 +30,6 @@
 #include <DApplication>
 #include <QScreen>
 
-#define WINDOWS_MENU 0x00000082
-
 #define FASHION_MODE_PADDING    30
 #define MAINWINDOW_MARGIN       10
 
@@ -43,6 +41,8 @@
 DWIDGET_USE_NAMESPACE
 
 extern const QPoint rawXPosition(const QPoint &scaledPos);
+
+DockSettings *DockSettings::settings = nullptr;
 
 static QGSettings *GSettingsByMenu()
 {
@@ -68,6 +68,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_menuVisible(true)
     , m_autoHide(true)
     , m_opacity(0.4)
+    , m_settingsMenu (new QMenu(parent))
     , m_fashionModeAct(tr("Fashion Mode"), this)
     , m_efficientModeAct(tr("Efficient Mode"), this)
     , m_topPosAct(tr("Top"), this)
@@ -82,7 +83,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_trashVisible(true)
     , m_aiAssistantVisible(true)
 {
-    m_settingsMenu.setTitle("docksettingsmenu");
+    m_settingsMenu->setTitle("docksettingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();
@@ -107,14 +108,14 @@ DockSettings::DockSettings(QWidget *parent)
     m_keepHiddenAct.setCheckable(true);
     m_smartHideAct.setCheckable(true);
 
-    QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
+    QMenu *modeSubMenu = new QMenu(m_settingsMenu);
     modeSubMenu->setAccessibleName("Menu_modesub");
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
-    QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
+    QMenu *locationSubMenu = new QMenu(m_settingsMenu);
     locationSubMenu->setAccessibleName("Menu_locationsub");
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
@@ -123,7 +124,7 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *locationSubMenuAct = new QAction(tr("Location"), this);
     locationSubMenuAct->setMenu(locationSubMenu);
 
-    QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
+    QMenu *statusSubMenu = new QMenu(m_settingsMenu);
     statusSubMenu->setAccessibleName("Menu_statussub");
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
@@ -131,18 +132,18 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *statusSubMenuAct = new QAction(tr("Status"), this);
     statusSubMenuAct->setMenu(statusSubMenu);
 
-    m_hideSubMenu = new QMenu(&m_settingsMenu);
+    m_hideSubMenu = new QMenu(m_settingsMenu);
     m_hideSubMenu->setAccessibleName("Menu_plugins");
     QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
     hideSubMenuAct->setMenu(m_hideSubMenu);
 
-    m_settingsMenu.addAction(modeSubMenuAct);
-    m_settingsMenu.addAction(locationSubMenuAct);
-    m_settingsMenu.addAction(statusSubMenuAct);
-    m_settingsMenu.addAction(hideSubMenuAct);
-    m_settingsMenu.setAccessibleName("Menu_settingsmenu");
+    m_settingsMenu->addAction(modeSubMenuAct);
+    m_settingsMenu->addAction(locationSubMenuAct);
+    m_settingsMenu->addAction(statusSubMenuAct);
+    m_settingsMenu->addAction(hideSubMenuAct);
+    m_settingsMenu->setAccessibleName("Menu_settingsmenu");
 
-    connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(GSettingsByMenu(), &QGSettings::changed, this, &DockSettings::onGSettingsChanged);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::onDisplayModeChanged);
@@ -182,9 +183,14 @@ DockSettings::DockSettings(QWidget *parent)
     });
 }
 
-DockSettings &DockSettings::Instance()
+DockSettings *DockSettings::Instance(QWidget *parent)
 {
-    static DockSettings settings;
+//    static DockSettings settings;
+//    return settings;
+    if (settings == nullptr) {
+        settings =  new DockSettings(parent);
+    }
+
     return settings;
 }
 
@@ -306,36 +312,12 @@ void DockSettings::showDockSettingsMenu()
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
 
-    Qt::WindowFlags flags = (Qt::WindowFlags)WINDOWS_MENU;
-    m_settingsMenu.setWindowFlags(m_settingsMenu.windowFlags() | flags);
-
-    m_settingsMenu.show();
-    updateGeometry();
-
+    m_settingsMenu->exec(QCursor::pos());
     setAutoHide(true);
 }
 
-void DockSettings::updateGeometry()
-{
-    int width = m_settingsMenu.width();
-    int height = m_settingsMenu.height();
-
-    switch (m_position) {
-        case Top:
-        case Left:
-            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y());
-            break;
-        case Bottom:
-            m_settingsMenu.move(QCursor::pos().x(), QCursor::pos().y() - height);
-            break;
-        case Right:
-            m_settingsMenu.move(QCursor::pos().x() - width, QCursor::pos().y());
-            break;
-    }
-}
-
 void DockSettings::hideDockSettingsMenu() {
-    m_settingsMenu.hide();
+    m_settingsMenu->hide();
 }
 
 void DockSettings::setAutoHide(const bool autoHide)

@@ -35,6 +35,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_open(false)
+    , m_contextMenu(nullptr)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -75,7 +76,6 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
     grabGesture(Qt::TapAndHoldGesture);
 
@@ -451,9 +451,13 @@ void SystemTrayItem::showContextMenu()
     if (jsonDocument.isNull())
         return;
 
+    if (m_contextMenu == nullptr) {
+        m_contextMenu = new QMenu(this->topLevelWidget());
+        connect(m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
+    }
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -463,13 +467,13 @@ void SystemTrayItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu->exec(QCursor::pos());
 
     onContextMenuAccepted();
 }
