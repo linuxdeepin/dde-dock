@@ -55,7 +55,7 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     m_wirelessControlPanel = new QWidget(this);
     m_wirelessTitle = new QLabel(m_wirelessControlPanel);
-    m_wirelessTitle->setText(tr("Wireless connection"));
+    m_wirelessTitle->setText(tr("Wireless Network"));
     m_wirelessTitle->setFont(titlefont);
     initFontColor(m_wirelessTitle);
     m_switchWirelessBtn = new DSwitchButton(m_wirelessControlPanel);
@@ -93,7 +93,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wiredControlPanel = new QWidget(this);
 
     m_wiredTitle = new QLabel(m_wiredControlPanel);
-    m_wiredTitle->setText(tr("Wired connection"));
+    m_wiredTitle->setText(tr("Wired Network"));
     m_wiredTitle->setFont(titlefont);
     initFontColor(m_wiredTitle);
     m_switchWiredBtn = new DSwitchButton(m_wiredControlPanel);
