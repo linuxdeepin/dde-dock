@@ -33,9 +33,9 @@ type Manager struct {
 func NewManager() (*Manager, error) {
 	m := &Manager{}
 
-	// 在 arm 架构下，调用 i2c 的接口会导致待机后无法唤醒，
-	// 所以不在 arm 架构下使用 DDC/CI 功能。
-	if !strings.HasPrefix(runtime.GOARCH, "arm") {
+	// 在 arm 和 mips 架构下，调用 i2c 的接口会导致待机后无法唤醒，
+	// 所以不在 arm 和 mips 架构下使用 DDC/CI 功能。
+	if !strings.HasPrefix(runtime.GOARCH, "arm") && !strings.HasPrefix(runtime.GOARCH, "mips") {
 		var err error
 		m.ddcci, err = newDDCCI()
 		if err != nil {
