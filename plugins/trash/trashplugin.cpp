@@ -40,7 +40,7 @@ TrashPlugin::TrashPlugin(QObject *parent)
     , m_trashWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
 {
-    m_tipsLabel->setObjectName("trashtips");
+    m_tipsLabel->setObjectName("trash");
 }
 
 const QString TrashPlugin::pluginName() const
