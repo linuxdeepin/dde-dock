@@ -91,7 +91,7 @@ SET_FORM_ACCESSIBLE(MultitaskingWidget, "plugin-multitasking")
 SET_FORM_ACCESSIBLE(ShowDesktopWidget, "plugin-showdesktop")
 SET_FORM_ACCESSIBLE(OverlayWarningWidget, "plugin-overlaywarningwidget")
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
-SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
+SET_LABEL_ACCESSIBLE(QLabel,  m_w->objectName() == "notifications" ? m_w->objectName() : m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");

@@ -69,7 +69,8 @@ void DockPopupWindow::setContent(QWidget *content)
     QAccessibleEvent event(this, QAccessible::NameChanged);
     QAccessible::updateAccessibility(&event);
 
-    setAccessibleName(content->objectName() + "-popup");
+    if (!content->objectName().trimmed().isEmpty())
+        setAccessibleName(content->objectName() + "-popup");
 
     DArrowRectangle::setContent(content);
 }
