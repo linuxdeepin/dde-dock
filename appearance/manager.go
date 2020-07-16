@@ -37,6 +37,7 @@ import (
 	"time"
 
 	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	display "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
 	imageeffect "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.imageeffect"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
@@ -91,6 +92,7 @@ const (
 	gsKeyBackgroundURIs     = "background-uris"
 	gsKeyOpacity            = "opacity"
 	gsKeyWallpaperSlideshow = "wallpaper-slideshow"
+	gsKeyWallpaperURIs      = "wallpaper-uris"
 	gsKeyQtActiveColor      = "qt-active-color"
 
 	propQtActiveColor = "QtActiveColor"
@@ -132,10 +134,12 @@ type Manager struct {
 	Opacity            gsprop.Double `prop:"access:rw"`
 	FontSize           gsprop.Double `prop:"access:rw"`
 	WallpaperSlideShow gsprop.String `prop:"access:rw"`
-	QtActiveColor      string        `prop:"access:rw"`
+	WallpaperURIs      gsprop.String
+	QtActiveColor      string `prop:"access:rw"`
 
 	wsLoopMap      map[string]*WSLoop
 	wsSchedulerMap map[string]*WSScheduler
+	monitorMap     map[string]string
 
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
@@ -144,6 +148,7 @@ type Manager struct {
 	login1Manager       *login1.Manager
 	geoclueClient       *geoclue.Client
 	themeAutoTimer      *time.Timer
+	display             *display.Display
 	latitude            float64
 	longitude           float64
 	locationValid       bool
@@ -197,6 +202,7 @@ type Manager struct {
 
 type mapMonitorWorkspaceWSPolicy map[string]string
 type mapMonitorWorkspaceWSConfig map[string]WSConfig
+type mapMonitorWorkspaceWallpaperURIs map[string]string
 
 // NewManager will create a 'Manager' object
 func newManager(service *dbusutil.Service) *Manager {
@@ -215,6 +221,7 @@ func newManager(service *dbusutil.Service) *Manager {
 	m.FontSize.Bind(m.setting, gsKeyFontSize)
 	m.Opacity.Bind(m.setting, gsKeyOpacity)
 	m.WallpaperSlideShow.Bind(m.setting, gsKeyWallpaperSlideshow)
+	m.WallpaperURIs.Bind(m.setting, gsKeyWallpaperURIs)
 	var err error
 	m.QtActiveColor, err = m.getQtActiveColor()
 	if err != nil {
@@ -525,10 +532,36 @@ func (m *Manager) init() error {
 
 	m.initUserObj(systemBus)
 	m.initCurrentBgs()
+	m.display = display.NewDisplay(sessionBus)
+	m.display.InitSignalExt(m.sessionSigLoop, true)
+	err = m.display.Monitors().ConnectChanged(func(hasValue bool, value []dbus.ObjectPath) {
+		m.handleDisplayChanged(hasValue)
+	})
+	if err != nil {
+		logger.Warning("failed to connect Monitors changed:", err)
+	}
+	err = m.display.Primary().ConnectChanged(func(hasValue bool, value string) {
+		m.handleDisplayChanged(hasValue)
+	})
+	if err != nil {
+		logger.Warning("failed to connect Primary changed:", err)
+	}
+	m.updateMonitorMap()
 	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
 	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
 		backgroundDBusPath, logger)
 	return nil
+}
+
+func (m *Manager) handleDisplayChanged(hasValue bool) {
+	if !hasValue {
+		return
+	}
+	m.updateMonitorMap()
+	err := m.doUpdateWallpaperURIs()
+	if err != nil {
+		logger.Warning("failed to update WallpaperURIs:", err)
+	}
 }
 
 func (m *Manager) handleWmWorkspaceCountChanged(count int32) {
@@ -547,6 +580,10 @@ func (m *Manager) handleWmWorkspaceCountChanged(count int32) {
 	} else if len(bgs) > int(count) {
 		bgs = bgs[:int(count)]
 		m.setting.SetStrv(gsKeyBackgroundURIs, bgs)
+	}
+	err := m.doUpdateWallpaperURIs()
+	if err != nil {
+		logger.Warning("failed to update WallpaperURIs:", err)
 	}
 }
 
@@ -653,6 +690,10 @@ func (m *Manager) doSetMonitorBackground(monitorName string, imageFile string) (
 	if err != nil {
 		return "", err
 	}
+	err = m.doUpdateWallpaperURIs()
+	if err != nil {
+		logger.Warning("failed to update WallpaperURIs:", err)
+	}
 	_, err = m.imageBlur.Get(0, file)
 	if err != nil {
 		logger.Warning("call imageBlur.Get err:", err)
@@ -668,14 +709,76 @@ func (m *Manager) doSetMonitorBackground(monitorName string, imageFile string) (
 	return file, nil
 }
 
-func (m *Manager) doUnmarshalWallpaperSlideshow(jsonString string) (mapMonitorWorkspaceWSPolicy, error) {
+func (m *Manager) updateMonitorMap() {
+	monitorList, _ := m.display.ListOutputNames(0)
+	primary, _ := m.display.Primary().Get(0)
+	index := 0
+	m.monitorMap = make(map[string]string)
+	for _, item := range monitorList {
+		if item == primary {
+			m.monitorMap[item] = "Primary"
+		} else {
+			m.monitorMap[item] = "Subsidiary" + strconv.Itoa(index)
+			index++
+		}
+	}
+}
+
+func (m *Manager) reverseMonitorMap() map[string]string {
+	reverseMap := make(map[string]string)
+	for k, v := range m.monitorMap {
+		reverseMap[v] = k
+	}
+	return reverseMap
+}
+
+func (m *Manager) doUpdateWallpaperURIs() error {
+	mapWallpaperURIs := make(mapMonitorWorkspaceWallpaperURIs)
+	workspaceCount, _ := m.wm.WorkspaceCount(0)
+	monitorList, _ := m.display.ListOutputNames(0)
+	for _, monitor := range monitorList {
+		for idx := int32(1); idx <= workspaceCount; idx++ {
+			wallpaperURI, err := m.wm.GetWorkspaceBackgroundForMonitor(0, idx, monitor)
+			if err != nil {
+				logger.Warning("get wallpaperURI failed:", err)
+				continue
+			}
+			key := m.monitorMap[monitor] + "&&" + strconv.Itoa(int(idx))
+			mapWallpaperURIs[key] = wallpaperURI
+		}
+	}
+
+	jsonString, err := doMarshalMonitorWorkspaceWallpaperURIs(mapWallpaperURIs)
+	if err != nil {
+		return err
+	}
+	m.WallpaperURIs.Set(jsonString)
+	return nil
+}
+
+func doUnmarshalMonitorWorkspaceWallpaperURIs(jsonString string) (mapMonitorWorkspaceWallpaperURIs, error) {
+	var cfg mapMonitorWorkspaceWallpaperURIs
+	var byteMonitorWorkspaceWallpaperURIs = []byte(jsonString)
+	err := json.Unmarshal(byteMonitorWorkspaceWallpaperURIs, &cfg)
+	return cfg, err
+}
+
+func doMarshalMonitorWorkspaceWallpaperURIs(cfg mapMonitorWorkspaceWallpaperURIs) (string, error) {
+	data, err := json.Marshal(cfg)
+	if err != nil {
+		return "", err
+	}
+	return string(data), err
+}
+
+func doUnmarshalWallpaperSlideshow(jsonString string) (mapMonitorWorkspaceWSPolicy, error) {
 	var cfg mapMonitorWorkspaceWSPolicy
 	var byteWallpaperSlideShow []byte = []byte(jsonString)
 	err := json.Unmarshal(byteWallpaperSlideShow, &cfg)
 	return cfg, err
 }
 
-func (m *Manager) doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy) (string, error) {
+func doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy) (string, error) {
 	data, err := json.Marshal(cfg)
 	if err != nil {
 		return "", err
@@ -689,13 +792,13 @@ func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow
 		logger.Warning("Get Current Workspace failure:", err)
 		return err
 	}
-	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	cfg, err := doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if cfg == nil {
 		cfg = make(mapMonitorWorkspaceWSPolicy)
 	}
 	key := monitorName + "&&" + strconv.Itoa(int(idx))
 	cfg[key] = wallpaperSlideShow
-	strAllWallpaperSlideShow, err := m.doMarshalWallpaperSlideshow(cfg)
+	strAllWallpaperSlideShow, err := doMarshalWallpaperSlideshow(cfg)
 	if err != nil {
 		logger.Warning("Marshal Wallpaper Slideshow failure:", err)
 	}
@@ -710,7 +813,7 @@ func (m *Manager) doGetWallpaperSlideShow(monitorName string) (string, error) {
 		logger.Warning("Get Current Workspace failure:", err)
 		return "", err
 	}
-	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	cfg, err := doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if err != nil {
 		return "", nil
 	}
@@ -945,7 +1048,7 @@ func (m *Manager) autoChangeBg(monitorSpace string, t time.Time) {
 
 func (m *Manager) initWallpaperSlideshow() {
 	m.loadWSConfig()
-	cfg, err := m.doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	cfg, err := doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
 	if err == nil {
 		for monitorSpace, policy := range cfg {
 			_, ok := m.wsSchedulerMap[monitorSpace]
@@ -1041,7 +1144,7 @@ func (m *Manager) loadWSConfig() {
 }
 
 func (m *Manager) updateWSPolicy(policy string) {
-	cfg, err := m.doUnmarshalWallpaperSlideshow(policy)
+	cfg, err := doUnmarshalWallpaperSlideshow(policy)
 	m.loadWSConfig()
 	if err == nil {
 		for monitorSpace, policy := range cfg {

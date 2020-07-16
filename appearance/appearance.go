@@ -58,7 +58,7 @@ func HandlePrepareForSleep(sleep bool) {
 	if sleep {
 		return
 	}
-	cfg, err := _m.doUnmarshalWallpaperSlideshow(_m.WallpaperSlideShow.Get())
+	cfg, err := doUnmarshalWallpaperSlideshow(_m.WallpaperSlideShow.Get())
 	if err == nil {
 		for monitorSpace := range cfg {
 			if cfg[monitorSpace] == wsPolicyWakeup {

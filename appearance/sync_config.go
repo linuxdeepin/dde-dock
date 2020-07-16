@@ -2,8 +2,9 @@ package appearance
 
 import (
 	"encoding/json"
-
-	"pkg.deepin.io/lib/strv"
+	"errors"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -110,10 +111,42 @@ func (sc *backgroundSyncConfig) Get() (interface{}, error) {
 	var v backgroundSyncData
 	v.Version = "1.0"
 	v.GreeterBackground = sc.m.greeterBg
-	v.SlideShow = sc.m.WallpaperSlideShow.Get()
-	if v.SlideShow == "" {
-		v.BackgroundURIs = sc.m.getBackgroundURIs()
+	slideShow := sc.m.WallpaperSlideShow.Get()
+
+	cfgSlideshow, _ := doUnmarshalWallpaperSlideshow(slideShow) // slideShow是一个map 格式为： "HDMI-0&&1":"600" 分别是屏幕名称&&工作区编号和自动切换壁纸配置
+	uploadSlideShow := make(mapMonitorWorkspaceWSPolicy)
+	for k, value := range cfgSlideshow { // 将具体的屏幕名称(例如"HDMI-0"或"VGA-0")转换为　主屏幕或副屏幕(Primary或Subsidiary0/Subsidiary1等)
+		keySlice := strings.Split(k, "&&")
+		if len(keySlice) < 2 {
+			continue
+		}
+		index, err := strconv.Atoi(keySlice[1])
+		if err != nil {
+			logger.Warning(err)
+			return nil, err
+		}
+		if int32(index) < 1 {
+			return nil, errors.New("invalid workspace index")
+		}
+		monitorName := sc.m.monitorMap[keySlice[0]]
+		key := monitorName + "&&" + keySlice[1]
+		uploadSlideShow[key] = value
 	}
+
+	cfgWallpaperURIs, err := doUnmarshalMonitorWorkspaceWallpaperURIs(sc.m.WallpaperURIs.Get())
+	if err != nil {
+		logger.Warning(err)
+		return nil, err
+	}
+	uploadWallpaperURIs := make(mapMonitorWorkspaceWallpaperURIs)
+	for key, value := range cfgWallpaperURIs { // 对需要上传的壁纸信息进行过滤,只有当对应的自动切换的配置为空时(即：未配置自动切换相关内容),将该壁纸信息上传
+		if uploadSlideShow[key] == "" {
+			uploadWallpaperURIs[key] = value
+		}
+	}
+	v.WallpaperURIs = uploadWallpaperURIs
+	v.SlideShow = uploadSlideShow
+
 	return &v, nil
 }
 
@@ -123,10 +156,7 @@ func (sc *backgroundSyncConfig) Set(data []byte) error {
 	if err != nil {
 		return err
 	}
-
 	m := sc.m
-	m.WallpaperSlideShow.Set(v.SlideShow)
-
 	if m.greeterBg != v.GreeterBackground {
 		err = m.doSetGreeterBackground(v.GreeterBackground)
 		if err != nil {
@@ -134,28 +164,73 @@ func (sc *backgroundSyncConfig) Set(data []byte) error {
 		}
 	}
 
-	if v.SlideShow != "" {
-		return nil
+	reverseMonitorMap := m.reverseMonitorMap() // 主副屏幕对应的具体屏幕名称的map 格式为{"Primary": "HDMI-0"}
+	slideShow := make(mapMonitorWorkspaceWSPolicy)
+	for k, value := range v.SlideShow {
+		keySlice := strings.Split(k, "&&")
+		if len(keySlice) < 2 {
+			continue
+		}
+		monitorName := reverseMonitorMap[keySlice[0]] //将主屏幕或副屏幕(Primary或Subsidiary0/Subsidiary1等)转换为具体的屏幕名称(例如"HDMI-0"或"VGA-0")
+		index, err := strconv.Atoi(keySlice[1])
+		if err != nil {
+			logger.Warning(err)
+			return err
+		}
+		if int32(index) < 1 {
+			return errors.New("invalid workspace index")
+		}
+		key := monitorName + "&&" + keySlice[1]
+		slideShow[key] = value
 	}
 
-	bgs := m.getBackgroundURIs()
-	if strv.Strv(bgs).Equal(v.BackgroundURIs) {
-		return nil
+	wallpaperSlideshow, err := doMarshalWallpaperSlideshow(slideShow)
+	if err != nil {
+		logger.Warning(err)
+		return err
 	}
-	for i, uri := range v.BackgroundURIs {
-		err := m.wm.SetWorkspaceBackground(0, int32(i+1), uri)
+	m.WallpaperSlideShow.Set(wallpaperSlideshow)
+
+	uris, err := doMarshalMonitorWorkspaceWallpaperURIs(v.WallpaperURIs)
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	m.WallpaperURIs.Set(uris)
+
+	workspaceCount, _ := m.wm.WorkspaceCount(0) // 当前工作区数量
+	for key, value := range v.WallpaperURIs {
+		keySlice := strings.Split(key, "&&")
+		if len(keySlice) < 2 {
+			continue
+		}
+		monitorName := reverseMonitorMap[keySlice[0]] // 将主屏幕或副屏幕(Primary或Subsidiary0/Subsidiary1等)转换为具体的屏幕名称(例如"HDMI-0"或"VGA-0")
+		index, err := strconv.Atoi(keySlice[1])
 		if err != nil {
-			logger.Warning("Failed to set workspace background:", i+1, uri)
+			logger.Warning(err)
+			return err
+		}
+		if monitorName == "" {
+			continue
+		}
+		if int32(index) < 1 { // index由1开始，代表工作区的编号，小于1代表编号错误
+			return errors.New("invalid workspace index")
+		}
+		if int32(index) > workspaceCount {
+			continue
+		}
+		err = m.wm.SetWorkspaceBackgroundForMonitor(0, int32(index), monitorName, value)
+		if err != nil {
+			logger.Warning("failed to set WorkspaceBackgroundForMonitor:", err)
 		}
 	}
-
 	return nil
 }
 
 // version: 1.0
 type backgroundSyncData struct {
-	Version           string   `json:"version"`
-	BackgroundURIs    []string `json:"background_uris"`
-	GreeterBackground string   `json:"greeter_background"`
-	SlideShow         string   `json:"slide_show"`
+	Version           string                           `json:"version"`
+	GreeterBackground string                           `json:"greeter_background"`
+	SlideShow         mapMonitorWorkspaceWSPolicy      `json:"slide_show"`
+	WallpaperURIs     mapMonitorWorkspaceWallpaperURIs `json:"wallpaper_uris"`
 }
