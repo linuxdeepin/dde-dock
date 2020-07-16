@@ -13,6 +13,7 @@ find_package(PkgConfig REQUIRED)
 find_package(Qt5 COMPONENTS Test DBus REQUIRED)
 
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
+pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
 # 添加执行文件信息
 add_executable(${BIN_NAME} ${SRCS} ${INTERFACES})
@@ -25,4 +26,5 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${Qt5Test_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
+    ${QGSettings_LIBRARIES}
 )
