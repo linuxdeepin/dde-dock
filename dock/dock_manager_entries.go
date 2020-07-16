@@ -25,7 +25,7 @@ import (
 
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/dde/daemon/session/common"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) allocEntryId() string {
@@ -60,8 +60,10 @@ func (m *Manager) markAppLaunched(appInfo *AppInfo) {
 }
 
 func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
-	win := winInfo.window
+	winInfo.Lock()
+	defer winInfo.Unlock()
 
+	win := winInfo.window
 	isReg := m.isWindowRegistered(win)
 	clientListContains := m.clientList.Contains(win)
 	shouldSkip := winInfo.shouldSkip()
@@ -75,6 +77,8 @@ func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
 	if entry != nil {
 		if !showOnDock {
 			m.detachWindow(winInfo)
+		} else {
+			logger.Debugf("win %v nothing to do", win)
 		}
 	} else {
 
