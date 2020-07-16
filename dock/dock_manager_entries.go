@@ -60,10 +60,10 @@ func (m *Manager) markAppLaunched(appInfo *AppInfo) {
 }
 
 func (m *Manager) attachOrDetachWindow(winInfo *WindowInfo) {
-	win := winInfo.window
-
 	winInfo.Lock()
 	defer winInfo.Unlock()
+
+	win := winInfo.window
 	isReg := m.isWindowRegistered(win)
 	clientListContains := m.clientList.Contains(win)
 	shouldSkip := winInfo.shouldSkip()
