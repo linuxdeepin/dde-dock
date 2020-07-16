@@ -70,6 +70,7 @@ type WindowInfo struct {
 
 	entryInnerId string
 	appInfo      *AppInfo
+	sync.Mutex
 }
 
 func NewWindowInfo(win x.Window) *WindowInfo {
