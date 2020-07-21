@@ -856,8 +856,6 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
 
 void MainPanelControl::resizeDockIcon()
 {
-    if (!m_tray)
-        return;
     // 插件有点特殊，因为会引入第三方的插件，并不会受dock的缩放影响，我们只能限制我们自己的插件，否则会导致显示错误。
     // 以下是受控制的插件
     PluginsItem *trashPlugin = nullptr;
@@ -877,7 +875,11 @@ void MainPanelControl::resizeDockIcon()
     // 总宽度
     int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
     // 减去托盘间隔区域
-    totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+    if (m_tray) {
+        totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+    } else {
+        totalLength -= 10;
+    }
     // 减去插件间隔
     totalLength -= (m_pluginLayout->count() + 1) * 10;
     // 减去3个分割线的宽度
@@ -902,7 +904,12 @@ void MainPanelControl::resizeDockIcon()
         return;
 
     // 参与计算的插件的个数（包含托盘和插件，垃圾桶，关机，屏幕键盘）
-    int pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0);
+    int pluginCount = 0;
+    if (m_tray) {
+        pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0);
+    } else {
+        pluginCount = (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0);
+    }
 
     // icon个数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
@@ -980,7 +987,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     }
 
     // 插件和托盘
-
     // 托盘上每个图标大小
     int tray_item_size = 20;
 
@@ -996,7 +1002,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         return;
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+        if (m_tray) {
+            m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+        }
 
         // 插件
         if (shutdownPlugin)
@@ -1005,7 +1013,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             keyboardPlugin->setFixedSize(tray_item_size, h - 20);
 
     } else {
-        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+        if (m_tray) {
+            m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+        }
 
         if (shutdownPlugin)
             shutdownPlugin->setFixedSize(w - 20, tray_item_size);
