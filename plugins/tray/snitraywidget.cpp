@@ -21,11 +21,13 @@
 
 #include "snitraywidget.h"
 #include "util/themeappicon.h"
+#include "util/imageutil.h"
 #include <dbusmenu-qt5/dbusmenuimporter.h>
 #include <QPainter>
 #include <QApplication>
 
 #include <xcb/xproto.h>
+
 
 #define IconSize 20
 
@@ -352,6 +354,8 @@ void SNITrayWidget::showContextMenu(int x, int y)
             qDebug() << "context menu has not be ready, init menu";
             initMenu();
         }
+
+        ImageUtil::loadQCursorForUpdateMenu(m_menu);//更新键盘右键菜单cursor
 
         if (m_menu)
             m_menu->exec(QPoint(x, y));

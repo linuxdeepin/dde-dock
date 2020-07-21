@@ -25,6 +25,7 @@
 #include "constants.h"
 #include "../abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
+#include "util/imageutil.h"
 #include "pluginsiteminterface.h"
 
 #include <QGestureEvent>
@@ -58,6 +59,7 @@ public:
     QWidget *centralWidget() const;
     void detachPluginWidget();
     void showContextMenu();
+    void updateSysTrayItemMenuCursor(QWidget *menu_win);//根据主题加载系统中的x11光标更新菜单窗口上显示的光标
 
     void showPopupApplet(QWidget * const applet);
     void hidePopup();

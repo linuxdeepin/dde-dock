@@ -22,6 +22,7 @@
 #include "dockitem.h"
 #include "components/hoverhighlighteffect.h"
 #include "pluginsitem.h"
+#include "util/imageutil.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
@@ -43,7 +44,7 @@ DockItem::DockItem(QWidget *parent)
     , m_hoverEffect(new HoverHighlightEffect(this))
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
-
+    , m_appearInter(new DBusAppearance("com.deepin.daemon.Appearance","/com/deepin/daemon/Appearance",QDBusConnection::sessionBus(), this))
 {
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
@@ -71,6 +72,19 @@ DockItem::DockItem(QWidget *parent)
     grabGesture(Qt::TapAndHoldGesture);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    //DockItem初始右键菜单页面的光标同步系统QCursor(临时解决方案)
+    ImageUtil::loadQCursorForUpdateMenu(m_contextMenu);
+    ImageUtil::loadQCursorForUpdateMenu(m_contextMenu->parentWidget());
+    connect(m_appearInter,&DBusAppearance::CursorThemeChanged,this,[=](const QString & value)
+    {
+        QTimer::singleShot(100,this,[=](){
+            qDebug() << "Dde-Control-Center Update Cursor Theme->update dockitem menu cursor" << value;
+            ImageUtil::loadQCursorForUpdateMenu(m_contextMenu);
+            ImageUtil::loadQCursorForUpdateMenu(m_contextMenu->parentWidget());
+        });
+
+    });
 }
 
 QSize DockItem::sizeHint() const

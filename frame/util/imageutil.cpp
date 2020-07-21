@@ -26,6 +26,7 @@
 #include <QCursor>
 #include <QGSettings>
 #include <QDebug>
+#include <QWidget>
 
 #include <X11/Xcursor/Xcursor.h>
 
@@ -70,4 +71,27 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
     QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
     delete images;
     return cursor;
+}
+
+void ImageUtil::loadQCursorForUpdateMenu(QWidget *menu_win)
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        qDebug() << QString("Menu Update Cursor (theme=%1,%2 ; size=%3,%4)...").arg(lastCursorTheme).arg(theme).arg(lastCursorSize).arg(cursorSize);
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        if(menu_win)
+            menu_win->setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }

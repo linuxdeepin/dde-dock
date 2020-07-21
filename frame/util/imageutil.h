@@ -34,6 +34,8 @@ public:
 
     //根据主题加载系统中的x11光标为QCursor
     static QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
+    //根据主题加载系统中的x11光标更新菜单窗口上显示的光标
+    static void loadQCursorForUpdateMenu(QWidget *menu_win);
 };
 
 #endif // IMAGEUTIL_H
