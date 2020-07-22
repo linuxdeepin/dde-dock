@@ -293,9 +293,6 @@ int AbstractContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
         return m_wrapperList.size();
     }
 
-    if (wrapper->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray)
-        destSortKey += m_wrapperList.size();
-
     // 当目标插入位置为列表的大小时将从最后面追加到列表中
     int destIndex = m_wrapperList.size();
     for (int i = 0; i < m_wrapperList.size(); ++i) {

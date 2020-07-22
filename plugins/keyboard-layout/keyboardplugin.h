@@ -40,6 +40,9 @@ public:
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
 
+    int itemSortKey(const QString &itemKey) override;
+    void setSortKey(const QString &itemKey, const int order) override;
+
 private:
     DBusAdaptors *m_dbusAdaptors = nullptr;
 };
