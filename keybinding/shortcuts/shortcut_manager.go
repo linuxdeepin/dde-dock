@@ -34,7 +34,7 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
-	"pkg.deepin.io/gir/gio-2.0"
+	gio "pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pinyin_search"
@@ -777,20 +777,33 @@ func (sm *ShortcutManager) FindConflictingKeystroke(ks *Keystroke) (*Keystroke, 
 	return nil, nil
 }
 
-func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
+func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings, wmObj *wm.Wm) {
 	logger.Debug("AddSystem")
 	idNameMap := getSystemIdNameMap()
+	allow, err := wmObj.CompositingAllowSwitch().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		allow = false
+	}
+	session := os.Getenv("XDG_SESSION_TYPE")
 	for _, id := range gsettings.ListKeys() {
+		if id == "deepin-screen-recorder" || id == "wm-switcher" {
+			if !allow {
+				logger.Debugf("com.deepin.wm.compositingAllowSwitch is false, filter %s", id)
+				continue
+			}
+
+			if strings.Contains(session, "wayland") {
+				logger.Debugf("XDG_SESSION_TYPE is %s, filter %s", session, id)
+				continue
+			}
+		}
+
 		name := idNameMap[id]
 		if name == "" {
 			name = id
 		}
-		session := os.Getenv("XDG_SESSION_TYPE")
-		if strings.Contains(session, "wayland") {
-			if id == "deepin-screen-recorder" || id == "wm-switcher" {
-				continue
-			}
-		}
+
 		cmd := getSystemActionCmd(id)
 		if id == "terminal-quake" && strings.Contains(cmd, "deepin-terminal") {
 			termPath, _ := exec.LookPath("deepin-terminal")
