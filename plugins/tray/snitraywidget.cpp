@@ -286,7 +286,7 @@ void SNITrayWidget::initMenu()
 
     qDebug() << "generate the sni menu object";
 
-    m_menu = m_dbusMenuImporter->menu();
+    m_menu = m_dbusMenuImporter->menu(window());
 
     qDebug() << "the sni menu obect is:" << m_menu;
 }
@@ -343,6 +343,8 @@ void SNITrayWidget::refreshAttentionIcon()
 void SNITrayWidget::showContextMenu(int x, int y)
 {
     // ContextMenu does not work
+    hidePopup();
+
     if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
     } else {
@@ -352,9 +354,8 @@ void SNITrayWidget::showContextMenu(int x, int y)
         }
 
         if (m_menu)
-            m_menu->popup(QPoint(x, y));
+            m_menu->exec(QPoint(x, y));
     }
-    hidePopup();
 }
 
 void SNITrayWidget::onSNIAttentionIconNameChanged(const QString &value)

@@ -1,0 +1,3 @@
+deb [trusted=yes] http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/bGliZGJ1c21lbnUtcXQxMTQw unstable main contrib non-free
+deb [trusted=yes] http://shuttle.corp.deepin.com/cache/repos/nonfree-eagle/release-candidate/bGliZGJ1c21lbnUtcXQxMTQw unstable main contrib non-free
+deb [trusted=yes] http://shuttle.corp.deepin.com/cache/repos/qt5.11-rebuild/release-candidate/bGliZGJ1c21lbnUtcXQxMTQw unstable main contrib non-free
