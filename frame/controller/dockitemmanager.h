@@ -79,6 +79,7 @@ private:
     static DockItemManager *INSTANCE;
 
     QList<QPointer<DockItem>> m_itemList;
+    QList<QString> m_appIDist;
 };
 
 #endif // DOCKITEMMANAGER_H
