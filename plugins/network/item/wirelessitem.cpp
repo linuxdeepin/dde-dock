@@ -39,7 +39,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
       m_reloadIcon(false),
       m_refreshTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
-      m_wirelessTips(new TipsWidget),
+      m_wirelessTips(new Dock::TipsWidget),
       m_APList(nullptr)
 {
     m_refreshTimer->setSingleShot(true);

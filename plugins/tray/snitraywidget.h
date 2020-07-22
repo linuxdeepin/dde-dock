@@ -138,7 +138,7 @@ private:
     QTimer *m_popupTipsDelayTimer;
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     bool m_popupShown;
 };
 

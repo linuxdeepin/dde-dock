@@ -38,7 +38,7 @@ DGUI_USE_NAMESPACE
 WiredItem::WiredItem(WiredDevice *device)
     : DeviceItem(device),
 
-      m_itemTips(new TipsWidget(this)),
+      m_itemTips(new Dock::TipsWidget(this)),
       m_delayTimer(new QTimer(this))
 {
     m_delayTimer->setSingleShot(true);

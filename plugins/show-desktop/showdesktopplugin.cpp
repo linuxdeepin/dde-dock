@@ -28,7 +28,7 @@
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
-    , m_tipsLabel(new TipsWidget)
+    , m_tipsLabel(new Dock::TipsWidget)
 {
     m_tipsLabel->setVisible(false);
 }

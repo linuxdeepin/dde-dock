@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>प्लगिन %1 सिस्टम हेतु संगत नहीं है।</translation>
     </message>
 </context>
 <context>
@@ -12,19 +12,39 @@
         <source>Bluetooth</source>
         <translation>ब्लूटूथ</translation>
     </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>ब्लूएटूथ सेवाएं</translation>
+    </message>
 </context>
 <context>
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>ऑफ करें</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>ऑन करें</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
+        <translation>ब्लूएटूथ सेवाएं</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ब्लूटूथ</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -49,28 +69,16 @@
         <translation>दिनांक व समय</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 घंटे का समय</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 घंटे का समय</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">समय संबंधी सेटिंग्स</translation>
-    </message>
-    <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12 घंटे का समय</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24 घंटे का समय</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>समय सेवाएं</translation>
     </message>
 </context>
 <context>
@@ -92,7 +100,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>क्या आप निश्चित ही %1 वस्तुएँ हटाना चाहते हैं?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -199,78 +207,11 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>बहु-कार्य दृश्य</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation>डॉक से हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -303,27 +244,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>क्षमता %1, %2 मिनट शेष</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">चार्ज है %1</translation>
+        <translation>क्षमता %1, %2 घंटे %3 मिनट शेष</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 चार्ज हो रहा है, पूर्ण होने में %2 मिनट शेष</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>%1 चार्ज हो रहा है, पूर्ण होने में %2 घंटे %3 मिनट शेष</translation>
     </message>
     <message>
         <source>%1 charged</source>
@@ -331,6 +264,10 @@
     </message>
     <message>
         <source>Capacity %1 ....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -342,7 +279,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>डॉक से हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -354,10 +291,6 @@
     <message>
         <source>Shut down</source>
         <translation>बंद करें</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="vanished">पुनः आरंभ करें</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -410,20 +343,12 @@
         <translation>ध्वनि बंद करें</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">ऑडियो सेटिंग्स</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="vanished">वर्तमान ध्वनि का स्तर %1</translation>
-    </message>
-    <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>ध्वनि सेटिंग्स</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>ध्वनि %1</translation>
     </message>
 </context>
 <context>
@@ -470,30 +395,26 @@
     <name>WiredItem</name>
     <message>
         <source>Unknown</source>
-        <translation type="vanished">अज्ञात</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation type="vanished">तार वाला कनेक्शन : %1</translation>
+        <translation>तार वाला कनेक्शन : %1</translation>
     </message>
 </context>
 <context>
     <name>WirelessItem</name>
     <message>
         <source>No Network</source>
-        <translation type="vanished">कोई नेटवर्क नहीं</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="vanished">बेतार कनेक्शन : %1</translation>
+        <translation>कोई नेटवर्क नहीं</translation>
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation type="vanished">कनेक्टेड लेकिन इंटरनेट आक्सेस नही है</translation>
+        <translation>कनेक्टेड लेकिन इंटरनेट आक्सेस नही है</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>केबल रहित कनेक्शन : %1</translation>
     </message>
 </context>
 <context>

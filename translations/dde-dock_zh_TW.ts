@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>藍牙</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>藍牙設定</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>關閉藍牙</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>開啟藍牙</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>藍牙設定</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>已連接%1</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>正在連線...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>藍牙</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>藍牙關閉</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>藍牙</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -81,7 +130,7 @@
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation>磁碟</translation>
     </message>
     <message>
         <source>Open</source>
@@ -96,11 +145,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>時尚 (Deepin) 模式</translation>
+        <translation>時尚模式</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>高效 (Windows) 模式</translation>
+        <translation>高效模式</translation>
     </message>
     <message>
         <source>Top</source>
@@ -112,11 +161,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>左側</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>右側</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -136,7 +185,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <source>Status</source>
@@ -176,7 +225,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>螢幕鍵盤</translation>
     </message>
     <message>
         <source>Settings</source>

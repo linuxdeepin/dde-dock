@@ -42,7 +42,7 @@ DGUI_USE_NAMESPACE
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
 
-      m_tipsLabel(new TipsWidget(this)),
+      m_tipsLabel(new Dock::TipsWidget(this)),
       m_applet(new SoundApplet(this)),
       m_sinkInter(nullptr)
 {

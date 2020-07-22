@@ -71,7 +71,7 @@ private:
     bool m_startupState;
 
     OnboardItem *m_onboardItem;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 };
 
 #endif // ONBOARDPLUGIN_H

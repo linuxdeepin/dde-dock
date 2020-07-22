@@ -51,7 +51,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     , m_volumeIconMax(new QLabel(this))
     , m_appBtn(new DImageButton(this))
     , m_volumeSlider(new VolumeSlider(this))
-    , m_volumeLabel(new TipsWidget(this))
+    , m_volumeLabel(new Dock::TipsWidget(this))
 {
     const QString iconName = m_inputInter->icon();
     m_appBtn->setAccessibleName("app-" + iconName + "-icon");

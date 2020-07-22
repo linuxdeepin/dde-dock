@@ -35,7 +35,7 @@ DWIDGET_USE_NAMESPACE
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent)
     , m_trashWidget(nullptr)
-    , m_tipsLabel(new TipsWidget)
+    , m_tipsLabel(new Dock::TipsWidget)
 {
     m_tipsLabel->setObjectName("trash");
 }

@@ -108,7 +108,7 @@ private:
     bool m_pluginLoaded;
 
     ShutdownWidget *m_shutdownWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     DBusLogin1Manager* m_login1Inter;
 };
 

@@ -55,7 +55,7 @@ private:
     Dtk::Widget::DImageButton *m_volumeBtnMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
-    TipsWidget *m_volumeLabel;
+    Dock::TipsWidget *m_volumeLabel;
 };
 
 #endif // SINKINPUTWIDGET_H

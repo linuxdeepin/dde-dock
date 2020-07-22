@@ -30,7 +30,11 @@
 #include <dswitchbutton.h>
 
 DWIDGET_USE_NAMESPACE
+
+namespace Dock {
 class TipsWidget;
+}
+
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
@@ -54,7 +58,7 @@ public slots:
     void refreshNetwork();
 
 private:
-    TipsWidget *m_deviceName;
+    Dock::TipsWidget *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
     DLoadingIndicator *m_loadingIndicator;

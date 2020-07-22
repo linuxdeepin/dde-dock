@@ -32,7 +32,9 @@
 #include <QSlider>
 #include <dimagebutton.h>
 
+namespace Dock {
 class TipsWidget;
+}
 class SoundApplet : public QScrollArea
 {
     Q_OBJECT
@@ -64,7 +66,7 @@ private:
     Dtk::Widget::DImageButton *m_volumeBtn;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
-    TipsWidget *m_soundShow;
+    Dock::TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
 
     DBusAudio *m_audioInter;

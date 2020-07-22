@@ -63,7 +63,7 @@ private:
     bool m_pluginLoaded;
 
     MultitaskingWidget *m_multitaskingWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 };
 
 #endif // MULTITASKINGPLUGIN_H

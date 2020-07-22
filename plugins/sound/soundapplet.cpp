@@ -46,7 +46,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeBtn(new DImageButton)
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
-    , m_soundShow(new TipsWidget)
+    , m_soundShow(new Dock::TipsWidget)
     , m_audioInter(new DBusAudio(this))
     , m_defSinkInter(nullptr)
 {
@@ -63,7 +63,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_soundShow->setText(QString("%1%").arg(0));
 
-    TipsWidget *deviceLabel = new TipsWidget;
+    Dock::TipsWidget *deviceLabel = new Dock::TipsWidget;
     deviceLabel->setText(tr("Device"));
 
     QHBoxLayout *deviceLayout =new QHBoxLayout;
@@ -90,7 +90,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
-    TipsWidget *appLabel = new TipsWidget;
+    Dock::TipsWidget *appLabel = new Dock::TipsWidget;
     appLabel->setText(tr("Application"));
 
     QVBoxLayout *appLineHLayout = new QVBoxLayout;

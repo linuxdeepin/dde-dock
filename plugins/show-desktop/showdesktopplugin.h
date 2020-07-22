@@ -63,7 +63,7 @@ private:
     bool m_pluginLoaded;
 
     ShowDesktopWidget *m_showDesktopWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 };
 
 #endif // SHOWDESKTOPPLUGIN_H

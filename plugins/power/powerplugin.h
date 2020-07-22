@@ -78,7 +78,7 @@ private:
     bool m_pluginLoaded;
 
     PowerStatusWidget *m_powerStatusWidget;
-    TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;

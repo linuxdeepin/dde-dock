@@ -31,7 +31,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginLoaded(false),
-      m_tipsLabel(new TipsWidget),
+      m_tipsLabel(new Dock::TipsWidget),
       m_login1Inter(new DBusLogin1Manager("org.freedesktop.login1", "/org/freedesktop/login1", QDBusConnection::systemBus(), this))
 
 {

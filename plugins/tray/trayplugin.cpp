@@ -39,12 +39,17 @@
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
 
-using org::kde::StatusNotifierWatcher;
+using org::kde::StatusNotifierWatcher;;
 
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
 {
+}
+
+TrayPlugin::~TrayPlugin()
+{
+    delete m_tipsLabel;
 }
 
 const QString TrayPlugin::pluginName() const
@@ -81,7 +86,7 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     m_systemTraysController = new SystemTraysController(this);
     m_refreshXEmbedItemsTimer = new QTimer(this);
     m_refreshSNIItemsTimer = new QTimer(this);
-    m_tipsLabel = new TipsWidget;
+    m_tipsLabel = new Dock::TipsWidget;
 
     m_refreshXEmbedItemsTimer->setInterval(0);
     m_refreshXEmbedItemsTimer->setSingleShot(true);

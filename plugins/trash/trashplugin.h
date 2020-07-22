@@ -66,7 +66,7 @@ private:
     void refreshPluginItemsVisible();
 
     TrashWidget *m_trashWidget;
-    QPointer<TipsWidget> m_tipsLabel;
+    QPointer<Dock::TipsWidget> m_tipsLabel;
 };
 
 #endif // TRASHPLUGIN_H

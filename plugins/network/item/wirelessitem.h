@@ -32,7 +32,10 @@
 
 #include <WirelessDevice>
 
+namespace Dock {
 class TipsWidget;
+}
+
 class WirelessItem : public DeviceItem
 {
     Q_OBJECT
@@ -84,7 +87,7 @@ private:
 
     QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
-    TipsWidget *m_wirelessTips;
+    Dock::TipsWidget *m_wirelessTips;
     WirelessList *m_APList;
     QJsonObject m_activeApInfo;
 };

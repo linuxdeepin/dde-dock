@@ -31,7 +31,9 @@
 #include <WiredDevice>
 #include <QIcon>
 
+namespace Dock {
 class TipsWidget;
+}
 class WiredItem : public DeviceItem
 {
     Q_OBJECT
@@ -55,7 +57,7 @@ private slots:
 private:
     QPixmap m_icon;
 
-    TipsWidget *m_itemTips;
+    Dock::TipsWidget *m_itemTips;
     QTimer *m_delayTimer;
 };
 

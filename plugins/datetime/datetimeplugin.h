@@ -72,7 +72,7 @@ private:
 
 private:
     QPointer<DatetimeWidget> m_centralWidget;
-    QPointer<TipsWidget> m_dateTipsLabel;
+    QPointer<Dock::TipsWidget> m_dateTipsLabel;
     QTimer *m_refershTimer;
     QString m_currentTimeString;
     QDBusInterface *m_interface;

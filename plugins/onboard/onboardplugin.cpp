@@ -31,7 +31,7 @@ OnboardPlugin::OnboardPlugin(QObject *parent)
 
       m_pluginLoaded(false),
       m_startupState(false),
-      m_tipsLabel(new TipsWidget)
+      m_tipsLabel(new Dock::TipsWidget)
 {
     m_tipsLabel->setText(tr("Onboard"));
     m_tipsLabel->setVisible(false);

@@ -44,7 +44,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
     , m_popupTipsDelayTimer(new QTimer(this))
-    , m_tipsLabel(new TipsWidget)
+    , m_tipsLabel(new Dock::TipsWidget)
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);

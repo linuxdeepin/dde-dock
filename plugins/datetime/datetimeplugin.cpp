@@ -76,7 +76,7 @@ void DatetimePlugin::loadPlugin()
         return;
 
     m_pluginLoaded = true;
-    m_dateTipsLabel = new TipsWidget;
+    m_dateTipsLabel = new Dock::TipsWidget;
     m_refershTimer = new QTimer(this);
     m_dateTipsLabel->setObjectName("datetime");
 

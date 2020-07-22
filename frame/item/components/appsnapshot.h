@@ -89,7 +89,7 @@ private:
     QImage m_snapshot;
     QRectF m_snapshotSrcRect;
 
-    TipsWidget *m_title;
+    Dock::TipsWidget *m_title;
     QTimer *m_waitLeaveTimer;
     DImageButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;

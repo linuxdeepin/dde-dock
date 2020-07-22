@@ -7,6 +7,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>බ්ලූටූත්</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>බ්ලූටූත් සැකසුම්</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>වසා දමන්න</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>ක්‍රියාත්මක කරන්න</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>බ්ලූටූත් සැකසුම්</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 සම්බන්ධයි</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>සම්බන්ධ වෙමින්...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>බ්ලූටූත්</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>වසා දමා ඇත</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>බ්ලූටූත්</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>

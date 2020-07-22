@@ -54,7 +54,7 @@ struct SHMInfo {
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
-    , m_title(new TipsWidget)
+    , m_title(new Dock::TipsWidget)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DImageButton)
     , m_wmHelper(DWindowManagerHelper::instance())
