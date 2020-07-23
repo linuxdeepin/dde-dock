@@ -24,11 +24,14 @@
 #include <QDBusMetaType>
 #include <QDBusMessage>
 #include <QDBusArgument>
+#include <QGSettings/QGSettings>
 
 #include <com_deepin_daemon_display.h>
+#include <com_deepin_dde_daemon_dock.h>
 
 #include "dock_unit_test.h"
 
+using DBusDock = com::deepin::dde::daemon::Dock;
 DockUnitTest::DockUnitTest()
 {
     qDBusRegisterMetaType<ScreenRect>();
@@ -76,6 +79,79 @@ void DockUnitTest::dock_geometry_check()
     }
 
     QCOMPARE(daemonDockRect, dockRect);
+}
+/**
+ * @brief DockUnitTest::dock_position_check   比较Dbus和QGSettings获取的坐标信息是否一致
+ */
+void DockUnitTest::dock_position_check()
+{
+    DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    int nPos = dockInter->position();
+    QString postion = "";
+    qDebug() << nPos;
+
+    switch (nPos) {
+    case 0 :
+        postion = "top";
+        break;
+    case 1:
+        postion = "right";
+        break;
+    case 2:
+        postion = "bottom";
+        break;
+    case 3:
+        postion = "left";
+        break;
+    default:
+        break;
+    }
+
+    QGSettings *setting = new QGSettings("com.deepin.dde.dock");
+    if (setting->keys().contains("position")) {
+        qDebug() << setting->get("position");
+        QCOMPARE(postion,setting->get("position").toString());
+    }
+}
+/**
+ * @brief DockUnitTest::dock_displayMode_check   比较Dbus和QGSettings获取的显示模式是否一致
+ */
+void DockUnitTest::dock_displayMode_check()
+{
+    DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    int nMode = dockInter->displayMode();
+    QString displayMode = "";
+    qDebug() << nMode;
+
+    switch (nMode) {
+    case 0 :
+        displayMode = "fashion";
+        break;
+    case 1:
+        displayMode = "efficient";
+        break;
+    case 2:
+        displayMode = "classic";
+        break;
+    default:
+        break;
+    }
+
+    QGSettings *setting = new QGSettings("com.deepin.dde.dock");
+    if (setting->keys().contains("displayMode")) {
+        qDebug() << setting->get("displayMode");
+        QCOMPARE(displayMode,setting->get("displayMode").toString());
+    }
+}
+
+void DockUnitTest::dock_appItemCount_check()
+{
+    DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    qDebug() << dockInter->entries().size();
+    for (auto inter : dockInter->entries()) {
+        qDebug() << inter.path();
+    }
+
 }
 
 QTEST_APPLESS_MAIN(DockUnitTest)

@@ -32,9 +32,9 @@ public:
 
 private slots:
     void dock_geometry_check();         // 显示区域
-//    void dock_position_check();         // 位置检查
-//    void dock_displayMode_check();      // 显示模式检查
-//    void dock_appItemCount_check();     // 应用显示数量检查
+    void dock_position_check();         // 位置检查
+    void dock_displayMode_check();      // 显示模式检查
+    void dock_appItemCount_check();     // 应用显示数量检查
 };
 
 #endif // DOCK_UNIT_TEST_H
