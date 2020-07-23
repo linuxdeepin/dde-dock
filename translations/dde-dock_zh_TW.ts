@@ -7,18 +7,18 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
+    <name>AirplaneModeApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation>藍牙設定</translation>
+        <source>Airplane Mode</source>
+        <translation>飛航模式</translation>
     </message>
 </context>
 <context>
-    <name>BluetoothItem</name>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>飛航模式</translation>
+    </message>
     <message>
         <source>Turn off</source>
         <translation>關閉藍牙</translation>
@@ -28,31 +28,15 @@
         <translation>開啟藍牙</translation>
     </message>
     <message>
-        <source>Bluetooth settings</source>
-        <translation>藍牙設定</translation>
-    </message>
-    <message>
-        <source>%1 connected</source>
-        <translation>已連接%1</translation>
-    </message>
-    <message>
-        <source>Connecting...</source>
-        <translation>正在連線...</translation>
-    </message>
-    <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-    <message>
-        <source>Turned off</source>
-        <translation>藍牙關閉</translation>
+        <source>Airplane Mode settings</source>
+        <translation>飛行模式設置</translation>
     </message>
 </context>
 <context>
-    <name>BluetoothPlugin</name>
+    <name>AirplaneModePlugin</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
+        <source>Airplane Mode</source>
+        <translation>飛航模式</translation>
     </message>
 </context>
 <context>

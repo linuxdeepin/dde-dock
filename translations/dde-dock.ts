@@ -9,18 +9,18 @@
     </message>
 </context>
 <context>
-    <name>BluetoothApplet</name>
+    <name>AirplaneModeApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"></translation>
+        <source>Airplane Mode</source>
+        <translation>AirplaneMode</translation>
     </message>
 </context>
 <context>
-    <name>BluetoothItem</name>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>AirplaneMode</translation>
+    </message>
     <message>
         <source>Turn off</source>
         <translation type="unfinished"></translation>
@@ -30,31 +30,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bluetooth settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connecting...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Turned off</source>
-        <translation type="unfinished"></translation>
+        <source>AirplaneMode settings</source>
+        <translation>AirplaneMode settings</translation>
     </message>
 </context>
 <context>
-    <name>BluetoothPlugin</name>
+    <name>AirplaneModePlugin</name>
     <message>
-        <source>Bluetooth</source>
-        <translation type="unfinished"></translation>
+        <source>AirplaneMode</source>
+        <translation>AirplaneMode</translation>
     </message>
 </context>
 <context>
