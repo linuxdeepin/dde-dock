@@ -47,6 +47,7 @@ const (
 	wacomKeyPressureSensitive = "pressure-sensitive"
 	wacomKeyRawSample         = "raw-sample"
 	wacomKeyThreshold         = "threshold"
+	wacomKeyMouseEnterRemap   = "mouse-enter-remap"
 )
 
 const (
@@ -122,6 +123,7 @@ type Wacom struct {
 	LeftHanded       gsprop.Bool `prop:"access:rw"`
 	CursorMode       gsprop.Bool `prop:"access:rw"`
 	ForceProportions gsprop.Bool `prop:"access:rw"`
+	MouseEnterRemap  gsprop.Bool `prop:"access:rw"` // need remap when mouse enter new screen
 
 	KeyUpAction   gsprop.String `prop:"access:rw"`
 	KeyDownAction gsprop.String `prop:"access:rw"`
@@ -160,6 +162,7 @@ func newWacom(service *dbusutil.Service) *Wacom {
 	w.CursorMode.Bind(w.setting, wacomKeyCursorMode)
 	w.ForceProportions.Bind(w.setting, wacomKeyForceProportions)
 	w.Suppress.Bind(w.setting, wacomKeySuppress)
+	w.MouseEnterRemap.Bind(w.setting, wacomKeyMouseEnterRemap)
 
 	// stylus settings
 	w.stylusSetting = gio.NewSettings(wacomStylusSchema)
@@ -308,6 +311,10 @@ func (w *Wacom) checkLoop() {
 
 // update Area and MapToOutput settings
 func (w *Wacom) updateAreaAndMapToOutput() {
+	// check if need remap when mouse enter new screen
+	if !w.MouseEnterRemap.Get() {
+		return
+	}
 	w.updatePointerPos()
 	inOutput := w.pointerInOutput()
 	if inOutput == nil {
