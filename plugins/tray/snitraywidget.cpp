@@ -603,7 +603,8 @@ void SNITrayWidget::showHoverTips()
             return;
 
         m_tipsLabel->setText(tooltip.title);
-        m_tipsLabel->setAccessibleName(tooltip.title);
+        m_tipsLabel->setAccessibleName(itemKeyForConfig().replace("sni:",""));
+
         showPopupWindow(m_tipsLabel);
     }
 

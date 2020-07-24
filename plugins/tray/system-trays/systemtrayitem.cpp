@@ -52,7 +52,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     hLayout->setMargin(0);
 
     setLayout(hLayout);
-    setAccessibleName(m_pluginInter->pluginName() + "-" + m_itemKey);
+    setAccessibleName(m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
 
     if (PopupWindow.isNull()) {

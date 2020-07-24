@@ -46,7 +46,6 @@ SoundItem::SoundItem(QWidget *parent)
     , m_applet(new SoundApplet(this))
     , m_sinkInter(nullptr)
 {
-    m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setAccessibleName("soundtips");
     m_tipsLabel->setVisible(false);
 

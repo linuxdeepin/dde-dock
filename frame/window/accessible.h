@@ -16,6 +16,7 @@
 #include "../item/components/floatingpreview.h"
 
 #include "../plugins/tray/snitraywidget.h"
+#include "../plugins/tray/abstracttraywidget.h"
 #include "../plugins/tray/indicatortraywidget.h"
 #include "../plugins/tray/xembedtraywidget.h"
 #include "../plugins/tray/system-trays/systemtrayitem.h"
@@ -66,10 +67,11 @@ SET_BUTTON_ACCESSIBLE(PlaceholderItem, "placeholderitem")
 SET_BUTTON_ACCESSIBLE(AppDragWidget, "appdragwidget")
 SET_BUTTON_ACCESSIBLE(AppSnapshot, "appsnapshot")
 SET_BUTTON_ACCESSIBLE(FloatingPreview, "floatingpreview")
-SET_BUTTON_ACCESSIBLE(XEmbedTrayWidget, m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE(IndicatorTrayWidget, m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE(SNITrayWidget, m_w->itemKeyForConfig())
-SET_BUTTON_ACCESSIBLE(SystemTrayItem, m_w->itemKeyForConfig())
+SET_BUTTON_ACCESSIBLE(XEmbedTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
+SET_BUTTON_ACCESSIBLE(IndicatorTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
+SET_BUTTON_ACCESSIBLE(SNITrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
+SET_BUTTON_ACCESSIBLE(AbstractTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
+SET_BUTTON_ACCESSIBLE(SystemTrayItem, m_w->itemKeyForConfig().replace("sni:",""))
 SET_FORM_ACCESSIBLE(FashionTrayItem, "fashiontrayitem")
 SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper, "fashiontraywrapper")
 SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget, "fashiontraycontrolwidget")
@@ -91,7 +93,7 @@ SET_FORM_ACCESSIBLE(MultitaskingWidget, "plugin-multitasking")
 SET_FORM_ACCESSIBLE(ShowDesktopWidget, "plugin-showdesktop")
 SET_FORM_ACCESSIBLE(OverlayWarningWidget, "plugin-overlaywarningwidget")
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
-SET_LABEL_ACCESSIBLE(QLabel,  m_w->objectName() == "notifications" ? m_w->objectName() : m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
+SET_LABEL_ACCESSIBLE(QLabel, m_w->objectName() == "notifications" ? m_w->objectName() : m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");
@@ -113,6 +115,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, AppSnapshot);
     USE_ACCESSIBLE(classname, FloatingPreview);
     USE_ACCESSIBLE(classname, SNITrayWidget);
+    USE_ACCESSIBLE(classname, AbstractTrayWidget);
     USE_ACCESSIBLE(classname, SystemTrayItem);
     USE_ACCESSIBLE(classname, FashionTrayItem);
     USE_ACCESSIBLE(classname, FashionTrayWidgetWrapper);

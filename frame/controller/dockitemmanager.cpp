@@ -72,11 +72,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
-
-    // 自动化测试,需要从后端读取的插件配置中,显示的插件默认需要有enable属性,这里主动向后端写入一次
-    m_updatePluginsOrderTimer->start();
 }
-
 
 DockItemManager *DockItemManager::instance(QObject *parent)
 {
