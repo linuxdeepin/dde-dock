@@ -346,6 +346,9 @@ void SNITrayWidget::refreshAttentionIcon()
 
 void SNITrayWidget::showContextMenu(int x, int y)
 {
+    // 这里的PopupWindow属性是置顶的,如果不隐藏,会导致菜单显示不出来
+    hidePopup();
+
     // ContextMenu does not work
     if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
@@ -358,7 +361,6 @@ void SNITrayWidget::showContextMenu(int x, int y)
         if (m_menu)
             m_menu->popup(QPoint(x, y));
     }
-    hidePopup();
 }
 
 void SNITrayWidget::onSNIAttentionIconNameChanged(const QString &value)
