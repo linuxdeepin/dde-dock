@@ -33,6 +33,8 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <qwidget.h>
+#include "../widgets/tipswidget.h"
+#include "util/dockpopupwindow.h"
 
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
@@ -55,10 +57,13 @@ protected:
 
 private:
     void initAnimations();
+    void initConfigurations();
     void showRemoveAnimation();
     void showGoBackAnimation();
     void onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
+    const QPoint popupMarkPoint(Dock::Position pos);
+    const QPoint topleftPoint() const;
 
 private:
     AppGraphicsObject *m_object;
@@ -73,6 +78,13 @@ private:
     Dock::Position m_dockPosition;
     QRect m_dockGeometry;
     QPoint m_originPoint;
+    Dock::TipsWidget * m_removeTips;
+    static QPointer<DockPopupWindow> PopupWindow;
+    /**
+     * @brief m_distanceMultiple: 倍数
+     * dock栏上应用区驻留应用被拖拽远离dock的距离除以dock的宽或者高（更小的一个）的比值
+     */
+    double m_distanceMultiple;
 };
 
 #endif /* APPDRAGWIDGET_H */
