@@ -27,6 +27,8 @@
 #include <QAccessible>
 #include <QDir>
 #include <QStandardPaths>
+#include <QDateTime>
+
 #include <DApplication>
 #include <DLog>
 #include <DDBusSender>
@@ -50,6 +52,12 @@ DCORE_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #endif
 
+const int MAX_STACK_FRAMES = 128;
+const QString strPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-collapse.log";
+const QString cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
+
+using namespace std;
+
 // let startdde know that we've already started.
 void RegisterDdeSession()
 {
@@ -60,30 +68,63 @@ void RegisterDdeSession()
 
     if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
-                .interface("com.deepin.SessionManager")
-                .path("/com/deepin/SessionManager")
-                .service("com.deepin.SessionManager")
-                .method("Register")
-                .arg(QString(cookie))
-                .call();
+                                    .interface("com.deepin.SessionManager")
+                                    .path("/com/deepin/SessionManager")
+                                    .service("com.deepin.SessionManager")
+                                    .method("Register")
+                                    .arg(QString(cookie))
+                                    .call();
 
         qDebug() << Q_FUNC_INFO << r.value();
     }
 }
-const int MAX_STACK_FRAMES = 128;
 
-using namespace std;
+bool IsSaveMode()
+{
+    QSettings settings(cfgPath, QSettings::IniFormat);
+    settings.beginGroup("dde-dock");
+    int collapseNum = settings.value("collapse").toInt();
 
+    // 自动进入安全模式
+    if (collapseNum >= 3) {
+        settings.setValue("collapse", 0);
+        settings.endGroup();
+        settings.sync();
+        return true;
+    }
+
+    return false;
+}
 void sig_crash(int sig)
 {
     FILE *fd;
     struct stat buf;
     char path[100];
     memset(path, 0, 100);
-    //崩溃日志路径
-    QString strPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-collapse.log";
+
+    // 创建默认配置文件,记录段时间内的崩溃次数
+    if (!QFile::exists(cfgPath)) {
+        QFile file(cfgPath);
+        if (!file.open(QIODevice::WriteOnly))
+            exit(0);
+        file.close();
+    }
+
+    QSettings settings(cfgPath, QSettings::IniFormat);
+    settings.beginGroup("dde-dock");
+
+    QDateTime lastDate = QDateTime::fromString(settings.value("lastDate").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
+    int collapseNum = settings.value("collapse").toInt();
+
+    //3分钟以内发生崩溃则累加,记录到文件中
+    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 60 * 3) {
+        settings.setValue("collapse", collapseNum + 1);
+    }
+    settings.setValue("lastDate", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+    settings.endGroup();
+    settings.sync();
+
     memcpy(path, strPath.toStdString().data(), strPath.length());
-    qDebug() << path;
 
     stat(path, &buf);
     if (buf.st_size > 10 * 1024 * 1024) {
@@ -98,19 +139,19 @@ void sig_crash(int sig)
     }
     //捕获异常，打印崩溃日志到配置文件中
     try {
-            char szLine[512] = {0};
-            time_t t = time(nullptr);
-            tm *now = localtime(&t);
-            QString log = "#####" + qApp->applicationName() + "#####\n[%04d-%02d-%02d %02d:%02d:%02d][crash signal number:%d]\n";
-            int nLen1 = sprintf(szLine, log.toStdString().c_str(),
-                                now->tm_year + 1900,
-                                now->tm_mon + 1,
-                                now->tm_mday,
-                                now->tm_hour,
-                                now->tm_min,
-                                now->tm_sec,
-                                sig);
-            fwrite(szLine, 1, strlen(szLine), fd);
+        char szLine[512] = {0};
+        time_t t = time(nullptr);
+        tm *now = localtime(&t);
+        QString log = "#####" + qApp->applicationName() + "#####\n[%04d-%02d-%02d %02d:%02d:%02d][crash signal number:%d]\n";
+        int nLen1 = sprintf(szLine, log.toStdString().c_str(),
+                            now->tm_year + 1900,
+                            now->tm_mon + 1,
+                            now->tm_mday,
+                            now->tm_hour,
+                            now->tm_min,
+                            now->tm_sec,
+                            sig);
+        fwrite(szLine, 1, strlen(szLine), fd);
 
 #ifdef __linux
         void *array[MAX_STACK_FRAMES];
@@ -166,7 +207,7 @@ int main(int argc, char *argv[])
     signal(SIGFPE, sig_crash);
 
     // 锁定物理内存，用于国测测试[会显著增加内存占用]
-//    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
+    //    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
@@ -214,7 +255,7 @@ int main(int argc, char *argv[])
 
     QTimer::singleShot(1, &mw, &MainWindow::launch);
 
-    if (!parser.isSet(disablePlugOption)) {
+    if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
         DockItemManager::instance()->startLoadPlugins();
     }
 
