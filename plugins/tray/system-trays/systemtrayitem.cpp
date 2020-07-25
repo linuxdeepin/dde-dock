@@ -138,11 +138,16 @@ void SystemTrayItem::sendClick(uint8_t mouseButton, int x, int y)
 
 QWidget *SystemTrayItem::trayTipsWidget()
 {
+    if(nullptr != m_pluginInter->itemTipsWidget(m_itemKey))
+        m_pluginInter->itemTipsWidget(m_itemKey)->setAccessibleName(m_pluginInter->pluginName());
     return m_pluginInter->itemTipsWidget(m_itemKey);
 }
 
 QWidget *SystemTrayItem::trayPopupApplet()
 {
+    if(nullptr != m_pluginInter->itemPopupApplet(m_itemKey))
+        m_pluginInter->itemPopupApplet(m_itemKey)->setAccessibleName(m_pluginInter->pluginName());
+
     return m_pluginInter->itemPopupApplet(m_itemKey);
 }
 
