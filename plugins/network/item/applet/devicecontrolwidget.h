@@ -29,6 +29,11 @@
 #include <dloadingindicator.h>
 #include <dswitchbutton.h>
 
+#include <com_deepin_daemon_airplanemode.h>
+
+using AirplanInter = com::deepin::daemon::AirplaneMode;
+
+
 DWIDGET_USE_NAMESPACE
 
 namespace Dock {
@@ -62,6 +67,9 @@ private:
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
     DLoadingIndicator *m_loadingIndicator;
+
+    AirplanInter *m_airplaninter;           //飞行模式dbus接口(system dbus)  com.deepin.daemon.AirplaneMode
+
 };
 
 #endif // DEVICECONTROLWIDGET_H

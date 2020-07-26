@@ -34,6 +34,11 @@
 #include <dpicturesequenceview.h>
 #include <WirelessDevice>
 
+#include <com_deepin_daemon_airplanemode.h>
+
+using AirplanInter = com::deepin::daemon::AirplaneMode;
+
+
 DWIDGET_USE_NAMESPACE
 
 class AccessPointWidget;
@@ -96,6 +101,8 @@ private:
     DeviceControlWidget *m_controlPanel;
 
     AccessPointWidget *m_clickedAPW;
+
+    AirplanInter *m_airplaninter;
 
 public:
     bool isHotposActive;

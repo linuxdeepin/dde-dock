@@ -49,7 +49,8 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 
       m_centralLayout(new QVBoxLayout),
       m_centralWidget(new QWidget),
-      m_controlPanel(new DeviceControlWidget)
+      m_controlPanel(new DeviceControlWidget),
+      m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     setFixedHeight(WIDTH);
 
@@ -95,6 +96,8 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     connect(m_device, static_cast<void (WirelessDevice::*)(NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_device, &WirelessDevice::activeConnectionsChanged, this, &WirelessList::updateIndicatorPos, Qt::QueuedConnection);
 
+    //关联信号和槽,防止信息不同步
+    connect(m_airplaninter, &AirplanInter::WifiEnabledChanged,this, [=](const bool enabled) { m_controlPanel->setDeviceEnabled(m_device->enabled() && enabled);});
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [ = ] {
         auto apw = accessPointWidgetByAp(m_activatingAP);
         if (!apw) return;
@@ -152,8 +155,8 @@ void WirelessList::setDeviceInfo(const int index)
     }
 
     // set device enable state
-    m_controlPanel->setDeviceEnabled(m_device->enabled());
-
+    m_controlPanel->setDeviceEnabled(m_device->enabled() && m_airplaninter->wifiEnabled());
+    
     // set device name
     if (index == -1)
         m_controlPanel->setDeviceName(tr("Wireless Network"));

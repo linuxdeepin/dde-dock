@@ -155,8 +155,8 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
 
     QString type;
     const auto state = m_device->status();
-
-    if (m_device->enabled()) {
+    //当飞行模式打开，则状态为不可用状态
+    if (m_device->enabled() && state != NetworkDevice::DeviceStatus::Unavailable) {
         // get strength in switch-case
         int strength = 0;
         switch (state) {

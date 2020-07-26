@@ -55,7 +55,8 @@ const QString DeviceItem::itemContextMenu()
 
     QMap<QString, QVariant> enable;
     enable["itemId"] = "enable";
-    if (!m_device->enabled())
+    //这里加一个判断，当飞行模式开启且wifi关闭，则状态是不可用状态
+    if (!m_device->enabled() && m_device->status() == NetworkDevice::Unavailable)
         enable["itemText"] = tr("Enable network");
     else
         enable["itemText"] = tr("Disable network");

@@ -29,12 +29,14 @@
 #include <QDebug>
 #include <QEvent>
 #include <DGuiApplicationHelper>
+#include <QDBusConnection>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
+    , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     m_deviceName = new Dock::TipsWidget;
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
