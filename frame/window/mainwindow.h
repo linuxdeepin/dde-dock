@@ -28,6 +28,7 @@
 #include "panel/mainpanelcontrol.h"
 
 #include <com_deepin_api_xeventmonitor.h>
+#include <com_deepin_dde_launcher.h>
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -39,6 +40,7 @@
 DWIDGET_USE_NAMESPACE
 
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
+using DBusLuncher = ::com::deepin::dde::Launcher;
 
 class DockSettings;
 class DragWidget;
@@ -127,6 +129,7 @@ private:
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
     XEventMonitor *m_eventInter;
+    DBusLuncher* m_launcherInter;
     QString m_registerKey{""};
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

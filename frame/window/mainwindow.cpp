@@ -136,6 +136,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_platformWindowHandle(this)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
+    , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher","/com/deepin/dde/Launcher",QDBusConnection::sessionBus()))
     , m_positionUpdateTimer(new QTimer(this))
     , m_expandDelayTimer(new QTimer(this))
     , m_leaveDelayTimer(new QTimer(this))
@@ -1020,6 +1021,9 @@ void MainWindow::onRegionMonitorChanged(int x, int y, const QString &key)
         expand();
     } else {
         // 移动Dock至相应屏相应位置
+        if (m_launcherInter->IsVisible())//启动器显示,则dock不显示
+            return;
+
         if (m_settings->setDockScreen(screen->name())) {
             if (m_settings->hideMode() == KeepShowing || m_settings->hideMode() == SmartHide) {
                 narrow();
