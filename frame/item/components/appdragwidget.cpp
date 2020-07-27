@@ -19,10 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "appdragwidget.h"
-
 #include "../appitem.h"
+#include "appdragwidget.h"
+#include <QGSettings>
 
+QPointer<DockPopupWindow> AppDragWidget::PopupWindow(nullptr);
 class AppGraphicsObject : public QGraphicsObject
 {
 public:
@@ -68,8 +69,24 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_animRotation(new QPropertyAnimation(m_object, "rotation", this)),
     m_animOpacity(new QPropertyAnimation(m_object, "opacity", this)),
     m_animGroup(new QParallelAnimationGroup(this)),
-    m_goBackAnim(new QPropertyAnimation(this, "pos", this))
+    m_goBackAnim(new QPropertyAnimation(this, "pos", this)),
+    m_removeTips(new TipsWidget(this))
 {
+    m_removeTips->setText(tr("Remove"));
+    m_removeTips->setObjectName("AppRemoveTips");
+    m_removeTips->setVisible(false);
+    m_removeTips->installEventFilter(this);
+
+    DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
+    arrowRectangle->setShadowBlurRadius(20);
+    arrowRectangle->setRadius(18);
+    arrowRectangle->setShadowYOffset(2);
+    arrowRectangle->setShadowXOffset(0);
+    arrowRectangle->setArrowWidth(18);
+    arrowRectangle->setArrowHeight(10);
+    PopupWindow = arrowRectangle;
+    PopupWindow->setRadius(18);
+
     m_scene->addItem(m_object);
     setScene(m_scene);
 
@@ -84,6 +101,7 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     setAcceptDrops(true);
 
     initAnimations();
+    initConfigurations();
 
     m_followMouseTimer->setSingleShot(false);
     m_followMouseTimer->setInterval(1);
@@ -115,13 +133,72 @@ void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
+    bool model = true;
+    Dock::Position pos = Dock::Position::Bottom;
+
+    DockPopupWindow *popup = PopupWindow.data();
     if (isRemoveAble()) {
+        QWidget *lastContent = popup->getContent();
+        if (lastContent)
+            lastContent->setVisible(false);
+
+        switch (pos) {
+        case Top:    popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
+        case Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
+        case Left:   popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
+        case Right:  popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
+        }
+        popup->resize(m_removeTips->sizeHint());
+        popup->setContent(m_removeTips);
+
+        const QPoint p = popupMarkPoint(pos);
+        if (!popup->isVisible())
+            QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+        else
+            popup->show(p, model);
+
         m_object->setOpacity(0.5);
         m_animOpacity->setStartValue(0.5);
     } else {
         m_object->setOpacity(1.0);
         m_animOpacity->setStartValue(1.0);
+        if (popup->isVisible())
+            popup->setVisible(false);
     }
+}
+
+const QPoint AppDragWidget::topleftPoint() const
+{
+    QPoint p;
+    const QWidget *w = this;
+    do {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    } while (w);
+
+    return p;
+}
+
+const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
+{
+    QPoint p(topleftPoint());
+
+    const QRect r = rect();
+    switch (pos) {
+    case Top:
+        p += QPoint(r.width() / 2, r.height());
+        break;
+    case Bottom:
+        p += QPoint(r.width() / 2, 0);
+        break;
+    case Left:
+        p += QPoint(r.width(), r.height() / 2);
+        break;
+    case Right:
+        p += QPoint(0, r.height() / 2);
+        break;
+    }
+    return p;
 }
 
 void AppDragWidget::dropEvent(QDropEvent *event)
@@ -132,8 +209,9 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         showRemoveAnimation();
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
+        PopupWindow->setVisible(false);
     } else {
-        showGoBackAnimation();;
+        showGoBackAnimation();
     }
 }
 
@@ -185,6 +263,23 @@ void AppDragWidget::initAnimations()
     connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
 }
 
+void AppDragWidget::initConfigurations()
+{
+    const QString &cschema = "com.deepin.dde.dock.distancemultiple";
+    const QString &cpath = "/com/deepin/dde/dock/distancemultiple/";
+
+    const QByteArray &schema_id {
+        cschema.toUtf8()
+    };
+    
+    const QByteArray &path_id {
+        cpath.toUtf8()
+    };
+
+    QGSettings gsetting(schema_id, path_id);
+    m_distanceMultiple = gsetting.get("distance-multiple").toDouble();
+}
+
 void AppDragWidget::showRemoveAnimation()
 {
     if (m_animGroup->state() == QParallelAnimationGroup::Running) {
@@ -214,22 +309,22 @@ bool AppDragWidget::isRemoveAble()
     const QPoint &p = QCursor::pos();
     switch (m_dockPosition) {
     case Dock::Position::Left:
-        if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * 3)) {
+        if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * m_distanceMultiple)) {
             return true;
         }
         break;
     case Dock::Position::Top:
-        if ((p.y() - m_dockGeometry.bottomLeft().y()) > (m_dockGeometry.height() * 3)) {
+        if ((p.y() - m_dockGeometry.bottomLeft().y()) > (m_dockGeometry.height() * m_distanceMultiple)) {
             return true;
         }
         break;
     case Dock::Position::Right:
-        if ((m_dockGeometry.topLeft().x() - p.x()) > (m_dockGeometry.width() * 3)) {
+        if ((m_dockGeometry.topLeft().x() - p.x()) > (m_dockGeometry.width() * m_distanceMultiple)) {
             return true;
         }
         break;
     case Dock::Position::Bottom:
-        if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * 3)) {
+        if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * m_distanceMultiple)) {
             return true;
         }
         break;
