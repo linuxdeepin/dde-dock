@@ -38,6 +38,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+Gesture *FashionTrayWidgetWrapper::m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
+                                                                , "/com/deepin/daemon/Gesture"
+                                                                , QDBusConnection::systemBus()
+                                                                , nullptr);
+bool FashionTrayWidgetWrapper::m_longPressed = false;
+
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
     : QWidget(parent),
       m_absTrayWidget(absTrayWidget),
@@ -67,6 +73,14 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 
     m_absTrayWidget->show();
+
+    // 根据后端信号，记录触屏长按状态
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, []{
+        m_longPressed = true;
+    }, Qt::UniqueConnection);
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, []{
+        m_longPressed = false;
+    }, Qt::UniqueConnection);
 }
 
 QPointer<AbstractTrayWidget> FashionTrayWidgetWrapper::absTrayWidget() const
@@ -218,6 +232,11 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
     }
 
     if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
+        return;
+    }
+
+    // 如果是触屏事件转换而来并且没有收到后端的延时触屏消息，不进行拖拽
+    if (event->source() == Qt::MouseEventSynthesizedByQt && !m_longPressed) {
         return;
     }
 

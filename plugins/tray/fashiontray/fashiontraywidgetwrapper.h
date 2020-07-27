@@ -28,6 +28,10 @@
 #include <QVBoxLayout>
 #include <QPointer>
 
+#include <com_deepin_daemon_gesture.h>
+
+using Gesture = com::deepin::daemon::Gesture;
+
 #define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 
 class FashionTrayWidgetWrapper : public QWidget
@@ -75,6 +79,9 @@ private:
     bool m_pressed;
     QString m_itemKey;
     QPoint MousePressPoint;
+
+    static Gesture *m_gestureInter;
+    static bool m_longPressed;
 };
 
 #endif //FASHIONTRAYWIDGETWRAPPER_H

@@ -77,6 +77,8 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_isHover(false)
     , m_needRecoveryWin(false)
     , m_isEnableLaunch(true)
+    , m_longPressed(false)
+    , m_gestureInter(new Gesture("com.deepin.daemon.Gesture", "/com/deepin/daemon/Gesture", QDBusConnection::systemBus(), this))
 {
     init();
     updateMainPanelLayout();
@@ -95,6 +97,14 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_fixedSpliter->setFixedSize(0,0);
     m_appSpliter ->setFixedSize(0,0);
     m_traySpliter->setFixedSize(0,0);
+
+    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, this, [this]{
+        m_longPressed = true;
+    });
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, [this]{
+        m_longPressed = false;
+    });
 }
 
 MainPanelControl::~MainPanelControl()
@@ -611,7 +621,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (event->type() != QEvent::MouseMove)
         return false;
 
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     if (!mouseEvent || mouseEvent->buttons() != Qt::LeftButton)
         return false;
 
@@ -626,6 +636,11 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     const QPoint distance = pos - m_mousePressPos;
     if (distance.manhattanLength() < QApplication::startDragDistance())
         return false;
+
+    // source为MouseEventSynthesizedByQt时，事件由触屏事件转换而来，触屏没有收到后端的延迟触屏信号时不进行拖动
+    if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt && !m_longPressed) {
+        return false;
+    }
 
     startDrag(item);
 
