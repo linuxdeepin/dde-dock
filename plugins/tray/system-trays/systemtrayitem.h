@@ -81,6 +81,7 @@ protected:
 
     void hideNonModel();
     void popupWindowAccept();
+    void waylandPopupWindowAccept();
 
     virtual void showPopupWindow(QWidget * const content, const bool model = false);
     virtual void showHoverTips();
@@ -100,7 +101,7 @@ private:
 private:
     bool m_popupShown;
     bool m_tapAndHold;
-    bool m_open;
+    static bool m_appletOpen;
     QMenu *m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;

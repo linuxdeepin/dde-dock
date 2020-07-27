@@ -30,12 +30,12 @@
 
 Dock::Position SystemTrayItem::DockPosition = Dock::Position::Top;
 QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
+bool SystemTrayItem::m_appletOpen = false;
 
 SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
     : AbstractTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
-    , m_open(false)
     , m_contextMenu(nullptr)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
@@ -255,11 +255,17 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
         hidePopup();
     }
 
-    if (!m_open) {
+    QWidget *const applet = trayPopupApplet();
+    if (!applet) {
+        m_appletOpen = false;
+        return;
+    }
+
+    if (!m_appletOpen) {
         showPopupApplet(trayPopupApplet());
-        m_open = true;
+        m_appletOpen = true;
     } else
-        m_open = false;
+        m_appletOpen = false;
 
     if (!trayClickCommand().isEmpty()) {
         QProcess::startDetached(trayClickCommand());
@@ -350,8 +356,16 @@ void SystemTrayItem::popupWindowAccept()
     Q_ASSERT(item);
     QPoint point = item->mapFromGlobal(QCursor::pos());
     if (!item->rect().contains(point)) {
-        m_open = false;
+        m_appletOpen = false;
     }
+}
+
+void SystemTrayItem::waylandPopupWindowAccept()
+{
+    if (!PopupWindow->isVisible())
+        return;
+
+    disconnect(PopupWindow.data(), &DockPopupWindow::accept, this, &SystemTrayItem::popupWindowAccept);
 }
 
 void SystemTrayItem::showPopupApplet(QWidget *const applet)
@@ -523,7 +537,7 @@ void SystemTrayItem::updatePopupPosition()
         return;
 
     if (PopupWindow->getContent() != m_lastPopupWidget.data())
-        return popupWindowAccept();
+        return waylandPopupWindowAccept();
 
     const QPoint p = popupMarkPoint();
     PopupWindow->show(p, PopupWindow->model());
