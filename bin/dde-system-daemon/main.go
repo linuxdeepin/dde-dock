@@ -35,6 +35,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/system/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/system/timedated"
 
+	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/lib/dbusutil"
@@ -44,12 +45,20 @@ import (
 )
 
 type Daemon struct {
-	methods *struct {		//nolint
+	loginManager  *login1.Manager
+	systemSigLoop *dbusutil.SignalLoop
+	service       *dbusutil.Service
+	methods       *struct { //nolint
 		ScalePlymouth                  func() `in:"scale"`
 		SetLongPressDuration           func() `in:"duration"`
 		NetworkGetConnections          func() `out:"data"`
 		NetworkSetConnections          func() `in:"data"`
 		BluetoothGetDeviceTechnologies func() `in:"adapter,device" out:"technologies"`
+	}
+	signals *struct {
+		HandleForSleep struct {
+			start bool
+		}
 	}
 }
 
@@ -111,6 +120,10 @@ func main() {
 	go glib.StartLoop()
 
 	fixDeepinInstallConfig()
+	err = _daemon.forwardPrepareForSleepSignal(service)
+	if err != nil {
+		logger.Warning(err)
+	}
 	service.Wait()
 }
 

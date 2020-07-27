@@ -22,6 +22,7 @@ package power
 import (
 	"syscall"
 
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	"pkg.deepin.io/dde/daemon/appearance"
 	"pkg.deepin.io/dde/daemon/bluetooth"
@@ -36,17 +37,22 @@ type sleepInhibitor struct {
 	OnBeforeSuspend func()
 }
 
-func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
+func newSleepInhibitor(login1Manager *login1.Manager, daemon *daemon.Daemon) *sleepInhibitor {
 	inhibitor := &sleepInhibitor{
 		loginManager: login1Manager,
 		fd:           -1,
 	}
 
-	_, err := login1Manager.ConnectPrepareForSleep(func(before bool) {
-		logger.Info("login1 PrepareForSleep", before)
-		// signal `PrepareForSleep` true -> false
+	_, err := daemon.ConnectHandleForSleep(func(before bool) {
+		logger.Info("login1 HandleForSleep", before)
+		// signal `HandleForSleep` true -> false
+		if !_manager.sessionActive {
+			//如果此用户此时不是活跃状态,则不处理待机唤醒信号.
+			return
+		}
+
 		if before {
-			// TODO(jouyouyun): implement 'PrepareForSleep' register
+			// TODO(jouyouyun): implement 'HandleForSleep' register
 			appearance.HandlePrepareForSleep(true)
 			network.HandlePrepareForSleep(true)
 			bluetooth.HandlePrepareForSleep(true)
