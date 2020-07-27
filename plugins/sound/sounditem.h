@@ -23,12 +23,14 @@
 #define SOUNDITEM_H
 
 #include "soundapplet.h"
-#include "dbus/dbussink.h"
+#include <com_deepin_daemon_audio_sink.h>
 
 #include <QWidget>
 #include <QIcon>
 
 #define SOUND_KEY "sound-item-key"
+
+using DBusSink = com::deepin::daemon::audio::Sink;
 
 namespace Dock {
 class TipsWidget;

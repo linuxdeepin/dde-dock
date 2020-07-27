@@ -31,25 +31,96 @@
 #include <QIcon>
 #include <QScrollBar>
 #include <DApplication>
+#include <DStandardItem>
 
 #define WIDTH       200
 #define MAX_HEIGHT  300
 #define ICON_SIZE   24
+#define ITEM_HEIGHT 24
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 using namespace Dock;
+
+Q_DECLARE_METATYPE(const Port *)
+
+Port::Port(QObject *parent)
+    : QObject(parent)
+    , m_isActive(false)
+{
+
+}
+
+void Port::setId(const QString &id)
+{
+    if (id != m_id) {
+        m_id = id;
+        Q_EMIT idChanged(id);
+    }
+}
+
+void Port::setName(const QString &name)
+{
+    if (name != m_name) {
+        m_name = name;
+        Q_EMIT nameChanged(name);
+    }
+}
+
+void Port::setCardName(const QString &cardName)
+{
+    if (cardName != m_cardName) {
+        m_cardName = cardName;
+        Q_EMIT cardNameChanged(cardName);
+    }
+}
+
+void Port::setIsActive(bool isActive)
+{
+    if (isActive != m_isActive) {
+        m_isActive = isActive;
+        Q_EMIT isActiveChanged(isActive);
+    }
+}
+
+void Port::setDirection(const Direction &direction)
+{
+    if (direction != m_direction) {
+        m_direction = direction;
+        Q_EMIT directionChanged(direction);
+    }
+}
+
+void Port::setCardId(const uint &cardId)
+{
+    if (cardId != m_cardId) {
+        m_cardId = cardId;
+        Q_EMIT cardIdChanged(cardId);
+    }
+}
+
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
     , m_centralWidget(new QWidget)
-    , m_applicationTitle(new QWidget)
     , m_volumeBtn(new DIconButton(this))
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
-    , m_audioInter(new DBusAudio(this))
+    , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
+    , m_listView(new DListView(this))
+    , m_model(new QStandardItemModel(m_listView))
+    , m_deviceInfo("")
 {
+    m_listView->setEditTriggers(DListView::NoEditTriggers);
+    m_listView->setSelectionMode(QAbstractItemView::NoSelection);
+    m_listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_listView->setBackgroundType(DStyledItemDelegate::NoBackground);
+    m_listView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    m_listView->setViewportMargins(QMargins(0, 0, 12, 0));
+    m_listView->setSpacing(1);
+    m_listView->setFixedHeight(0);
+
     m_centralWidget->setAccessibleName("volumn-centralwidget");
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeIconMax->setAccessibleName("volume-iconmax");
@@ -74,7 +145,6 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     QVBoxLayout *deviceLineLayout = new QVBoxLayout;
     deviceLineLayout->addLayout(deviceLayout);
-    //    deviceLineLayout->addSpacing(12);
     deviceLineLayout->addWidget(new HorizontalSeparator);
     deviceLineLayout->setMargin(0);
     deviceLineLayout->setSpacing(10);
@@ -105,9 +175,6 @@ SoundApplet::SoundApplet(QWidget *parent)
     appLineVLayout->setSpacing(0);
     appLineVLayout->setMargin(0);
 
-    m_applicationTitle->setLayout(appLineVLayout);
-    m_applicationTitle->setAccessibleName("applicationtitle");
-
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_volumeBtn->setFlat(true);
@@ -118,7 +185,9 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_centralLayout->addLayout(deviceLineLayout);
     m_centralLayout->addSpacing(8);
     m_centralLayout->addLayout(volumeCtrlLayout);
-    m_centralLayout->addWidget(m_applicationTitle);
+
+    m_listView->setModel(m_model);
+    m_centralLayout->addWidget(m_listView);
 
     m_centralWidget->setLayout(m_centralLayout);
     m_centralWidget->setFixedWidth(WIDTH);
@@ -135,17 +204,26 @@ SoundApplet::SoundApplet(QWidget *parent)
     connect(m_volumeBtn, &DIconButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
-    connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(m_audioInter, &DBusAudio::IncreaseVolumeChanged, this, &SoundApplet::increaseVolumeChanged);
     connect(this, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
+    connect(m_listView, &DListView::clicked, this, [this](const QModelIndex & idx) {
+        const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();
+        if (port) {
+            m_audioInter->SetPort(port->cardId(), port->id(), int(port->direction()));
+            activePort(port->id(),port->cardId());
+        }
+    });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundApplet::refreshIcon);
     connect(qApp, &DApplication::iconThemeChanged, this, &SoundApplet::refreshIcon);
+    QDBusConnection::sessionBus().connect("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", "org.freedesktop.DBus.Properties"
+                                          ,"PropertiesChanged", "sa{sv}as", this, SLOT(haldleDbusSignal(QDBusMessage)));
 
     QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
 
     refreshIcon();
+
+    getCradsInfo();
 }
 
 int SoundApplet::volumeValue() const
@@ -165,13 +243,20 @@ VolumeSlider *SoundApplet::mainSlider()
 
 void SoundApplet::defaultSinkChanged()
 {
-    delete m_defSinkInter;
+    if (m_defSinkInter) {
+        delete m_defSinkInter;
+        m_defSinkInter = nullptr;
+    }
 
     const QDBusObjectPath defSinkPath = m_audioInter->defaultSink();
-    m_defSinkInter = new DBusSink(defSinkPath.path(), this);
+    m_defSinkInter = new DBusSink("com.deepin.daemon.Audio", defSinkPath.path(), QDBusConnection::sessionBus(), this);
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
     connect(m_defSinkInter, &DBusSink::MuteChanged, this, &SoundApplet::onVolumeChanged);
+
+    QString portId = m_defSinkInter->activePort().name;
+    uint cardId = m_defSinkInter->card();
+    activePort(portId,cardId);
 
     emit defaultSinkChanged(m_defSinkInter);
 }
@@ -201,21 +286,82 @@ void SoundApplet::sinkInputsChanged()
         delete item;
     }
 
-    m_applicationTitle->setVisible(false);
     for (auto input : m_audioInter->sinkInputs()) {
-        m_applicationTitle->setVisible(true);
         appLayout->addWidget(new HorizontalSeparator);
 
         SinkInputWidget *si = new SinkInputWidget(input.path());
         appLayout->addWidget(si);
     }
 
-    const int contentHeight = m_centralWidget->sizeHint().height();
-    m_centralWidget->setFixedHeight(contentHeight);
     m_centralWidget->setVisible(true);
-    setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 
+void SoundApplet::cardsChanged(const QString &cards)
+{
+    QMap<uint, QStringList> tmpCardIds;
+
+    QJsonDocument doc = QJsonDocument::fromJson(cards.toUtf8());
+    QJsonArray jCards = doc.array();
+    for (QJsonValue cV : jCards) {
+        QJsonObject jCard = cV.toObject();
+        const uint cardId = jCard["Id"].toInt();
+        const QString cardName = jCard["Name"].toString();
+        QJsonArray jPorts = jCard["Ports"].toArray();
+
+        QStringList tmpPorts;
+
+        for (QJsonValue pV : jPorts) {
+            QJsonObject jPort = pV.toObject();
+            const double portAvai = jPort["Available"].toDouble();
+            if (portAvai == 2 || portAvai == 0 ) { // 0 Unknow 1 Not available 2 Available
+                const QString portId = jPort["Name"].toString();
+                const QString portName = jPort["Description"].toString();
+
+                Port *port = findPort(portId, cardId);
+                const bool include = port != nullptr;
+                if (!include) { port = new Port(m_model); }
+
+                port->setId(portId);
+                port->setName(portName);
+                port->setDirection(Port::Direction(jPort["Direction"].toDouble()));
+                port->setCardId(cardId);
+                port->setCardName(cardName);
+
+                if (!include) { startAddPort(port); }
+
+                tmpPorts << portId;
+            }
+        }
+        tmpCardIds.insert(cardId, tmpPorts);
+    }
+    defaultSinkChanged();//重新获取切换的设备信息
+
+    for (Port *port : m_ports) {
+        //判断端口是否在最新的设备列表中
+        if (tmpCardIds.contains(port->cardId())) {
+            if (!tmpCardIds[port->cardId()].contains(port->id())) {
+                startRemovePort(port->id(), port->cardId());
+            }
+        }
+        else {
+            startRemovePort(port->id(), port->cardId());
+        }
+    }
+
+    //设备数多于10个时显示滚动条,固定高度
+    int count = m_model->rowCount();
+    if (m_model->rowCount() > 10) {
+        count = 10;
+        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+    else {
+        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+    m_listView->setFixedHeight(count * ITEM_HEIGHT);
+    int height = m_volumeSlider->height() + m_soundShow->height() + (count + 3) * ITEM_HEIGHT;//三倍的ITEM_HEIGHT为设备音量和滑块所占高度大概值
+    setFixedHeight(height);
+    m_centralWidget->setFixedHeight(height);
+}
 void SoundApplet::toggleMute()
 {
     m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
@@ -262,3 +408,122 @@ void SoundApplet::refreshIcon()
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
     m_volumeBtn->setIcon(ret);
 }
+
+/**
+ * @brief SoundApplet::startAddPort 添加端口前判断
+ * @param port 端口
+ */
+void SoundApplet::startAddPort(Port *port)
+{
+    if (!containsPort(port) && port->direction() == Port::Out) {
+        m_ports.append(port);
+        addPort(port);
+    }
+}
+
+/**
+ * @brief SoundApplet::startRemovePort 移除端口前判断
+ * @param portId 端口
+ * @param cardId 声卡
+ */
+void SoundApplet::startRemovePort(const QString &portId, const uint &cardId)
+{
+    Port *port = findPort(portId, cardId);
+    if (port) {
+        m_ports.removeOne(port);
+        port->deleteLater();
+        removePort(portId, cardId);
+    }
+}
+
+bool SoundApplet::containsPort(const Port *port)
+{
+    return findPort(port->id(), port->cardId()) != nullptr;
+}
+
+Port *SoundApplet::findPort(const QString &portId, const uint &cardId) const
+{
+    for (Port *port : m_ports) {
+        if (port->id() == portId && port->cardId() == cardId) {
+            return port;
+        }
+    }
+
+    return nullptr;
+}
+
+void SoundApplet::addPort(const Port *port)
+{
+    DStandardItem *pi = new DStandardItem;
+    pi->setText(port->name());
+    pi->setBackground(Qt::transparent);
+    pi->setForeground(QBrush(Qt::black));
+    pi->setData(QVariant::fromValue<const Port *>(port), Qt::WhatsThisPropertyRole);
+
+    connect(port, &Port::nameChanged, this, [ = ](const QString str) {
+        pi->setText(str);
+    });
+    connect(port, &Port::isActiveChanged, this, [ = ](bool isActive) {
+        pi->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+    });
+
+    if (port->isActive()) {
+        pi->setCheckState(Qt::CheckState::Checked);
+    }
+    m_model->appendRow(pi);
+    m_model->sort(0);
+}
+
+void SoundApplet::removePort(const QString &portId, const uint &cardId)
+{
+    auto rmFunc = [ = ](QStandardItemModel * model) {
+        for (int i = 0; i < model->rowCount();) {
+            auto item = model->item(i);
+            auto port = item->data(Qt::WhatsThisPropertyRole).value<const Port *>();
+            if (port->id() == portId && cardId == port->cardId()) {
+                model->removeRow(i);
+                break;
+            } else {
+                ++i;
+            }
+        }
+    };
+
+    rmFunc(m_model);
+}
+
+/**
+ * @brief SoundApplet::activePort 激活某一指定端口
+ * @param portId 端口
+ * @param cardId 声卡
+ */
+void SoundApplet::activePort(const QString &portId, const uint &cardId)
+{
+    for (Port *it : m_ports) {
+        if (it->id() == portId && it->cardId() == cardId) {
+            it->setIsActive(true);
+        }
+        else {
+            it->setIsActive(false);
+        }
+    }
+}
+
+void SoundApplet::getCradsInfo()
+{
+    QDBusInterface inter("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio","com.deepin.daemon.Audio",QDBusConnection::sessionBus(), this);
+    QString info = inter.property("CardsWithoutUnavailable").toString();
+    if(m_deviceInfo != info){
+        cardsChanged(info);
+        m_deviceInfo = info;
+    }
+}
+
+void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
+{
+    Q_UNUSED(msg)
+
+    getCradsInfo();
+}
+
+

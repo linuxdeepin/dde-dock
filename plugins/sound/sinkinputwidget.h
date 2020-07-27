@@ -22,8 +22,8 @@
 #ifndef SINKINPUTWIDGET_H
 #define SINKINPUTWIDGET_H
 
-#include "dbus/dbussinkinput.h"
 #include "componments/volumeslider.h"
+#include <com_deepin_daemon_audio_sinkinput.h>
 
 #include <QFrame>
 #include <QPainter>
@@ -31,6 +31,7 @@
 #include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
+using DBusSinkInput = com::deepin::daemon::audio::SinkInput;
 namespace Dock {
     class TipsWidget;
 }
