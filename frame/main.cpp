@@ -68,12 +68,12 @@ void RegisterDdeSession()
 
     if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
-                                    .interface("com.deepin.SessionManager")
-                                    .path("/com/deepin/SessionManager")
-                                    .service("com.deepin.SessionManager")
-                                    .method("Register")
-                                    .arg(QString(cookie))
-                                    .call();
+                .interface("com.deepin.SessionManager")
+                .path("/com/deepin/SessionManager")
+                .service("com.deepin.SessionManager")
+                .method("Register")
+                .arg(QString(cookie))
+                .call();
 
         qDebug() << Q_FUNC_INFO << r.value();
     }
@@ -95,12 +95,10 @@ bool IsSaveMode()
 
     return false;
 }
+
 void sig_crash(int sig)
 {
-    FILE *fd;
-    struct stat buf;
-    char path[100];
-    memset(path, 0, 100);
+    QFile *file = new QFile(strPath);
 
     // 创建默认配置文件,记录段时间内的崩溃次数
     if (!QFile::exists(cfgPath)) {
@@ -116,7 +114,7 @@ void sig_crash(int sig)
     QDateTime lastDate = QDateTime::fromString(settings.value("lastDate").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
     int collapseNum = settings.value("collapse").toInt();
 
-    //3分钟以内发生崩溃则累加,记录到文件中
+    // 3分钟以内发生崩溃则累加,记录到文件中
     if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 60 * 3) {
         settings.setValue("collapse", collapseNum + 1);
     }
@@ -124,72 +122,62 @@ void sig_crash(int sig)
     settings.endGroup();
     settings.sync();
 
-    memcpy(path, strPath.toStdString().data(), strPath.length());
-
-    stat(path, &buf);
-    if (buf.st_size > 10 * 1024 * 1024) {
-        // 超过10兆则清空内容
-        fd = fopen(path, "w");
-    } else {
-        fd = fopen(path, "at");
-    }
-
-    if (nullptr == fd) {
+    if (!file->open(QIODevice::Text | QIODevice::Append)) {
+        qDebug() << file->errorString();
         exit(0);
     }
-    //捕获异常，打印崩溃日志到配置文件中
-    try {
-        char szLine[512] = {0};
-        time_t t = time(nullptr);
-        tm *now = localtime(&t);
-        QString log = "#####" + qApp->applicationName() + "#####\n[%04d-%02d-%02d %02d:%02d:%02d][crash signal number:%d]\n";
-        int nLen1 = sprintf(szLine, log.toStdString().c_str(),
-                            now->tm_year + 1900,
-                            now->tm_mon + 1,
-                            now->tm_mday,
-                            now->tm_hour,
-                            now->tm_min,
-                            now->tm_sec,
-                            sig);
-        fwrite(szLine, 1, strlen(szLine), fd);
 
-#ifdef __linux
+    if (file->size() >= 10 * 1024 * 1024) {
+        // 清空原有内容
+        file->close();
+        if (file->open(QIODevice::Text | QIODevice::Truncate)) {
+            qDebug() << file->errorString();
+            exit(0);
+        }
+    }
+
+    // 捕获异常，打印崩溃日志到配置文件中
+    try {
+        QString head = "\n#####" + qApp->applicationName() + "#####\n"
+                + QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss:zzz]")
+                + "[crash signal number:" + QString::number(sig) + "]\n";
+        file->write(head.toUtf8());
+
+#ifdef Q_OS_LINUX
         void *array[MAX_STACK_FRAMES];
         size_t size = 0;
         char **strings = nullptr;
-        size_t i, j;
+        size_t i;
         signal(sig, SIG_DFL);
-        size = backtrace(array, MAX_STACK_FRAMES);
-        strings = (char **)backtrace_symbols(array, size);
+        size = static_cast<size_t>(backtrace(array, MAX_STACK_FRAMES));
+        strings = backtrace_symbols(array, int(size));
         for (i = 0; i < size; ++i) {
-            char szLine[512] = {0};
-            sprintf(szLine, "%d %s\n", i, strings[i]);
-            fwrite(szLine, 1, strlen(szLine), fd);
+            QString line = QString::number(i) + " " + QString::fromStdString(strings[i]) + "\n";
+            file->write(line.toUtf8());
 
             std::string symbol(strings[i]);
+            QString strSymbol = QString::fromStdString(symbol);
+            int pos1 = strSymbol.indexOf("[");
+            int pos2 = strSymbol.lastIndexOf("]");
+            QString address = strSymbol.mid(pos1 + 1,pos2 - pos1 - 1);
 
-            size_t pos1 = symbol.find_first_of("[");
-            size_t pos2 = symbol.find_last_of("]");
-            std::string address = symbol.substr(pos1 + 1, pos2 - pos1 - 1);
-            char cmd[128] = {0};
-            sprintf(cmd, "addr2line -C -f -e dde-dock %s", address.c_str()); // 打印当前进程的id和地址
-            FILE *fPipe = popen(cmd, "r");
-            if (fPipe != nullptr) {
-                char buff[1024];
-                memset(buff, 0, sizeof(buff));
-                char *ret = fgets(buff, sizeof(buff), fPipe);
-                pclose(fPipe);
-                fwrite(ret, 1, strlen(ret), fd);
-            }
+            // 按照内存地址找到对应代码的行号
+            QString cmd = "addr2line -C -f -e " + qApp->applicationName() + " " + address;
+            QProcess *p = new QProcess;
+            p->setReadChannel(QProcess::StandardOutput);
+            p->start(cmd);
+            p->waitForFinished();
+            p->waitForReadyRead();
+            file->write(p->readAllStandardOutput());
+            delete p;
+            p = nullptr;
         }
         free(strings);
 #endif // __linux
     } catch (...) {
         //
     }
-    fflush(fd);
-    fclose(fd);
-    fd = nullptr;
+    file->close();
     exit(0);
 }
 
@@ -198,13 +186,14 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
+
     //崩溃信号
     signal(SIGTERM, sig_crash);
     signal(SIGSEGV, sig_crash);
-    signal(SIGILL, sig_crash);
-    signal(SIGINT, sig_crash);
+    signal(SIGILL,  sig_crash);
+    signal(SIGINT,  sig_crash);
     signal(SIGABRT, sig_crash);
-    signal(SIGFPE, sig_crash);
+    signal(SIGFPE,  sig_crash);
 
     // 锁定物理内存，用于国测测试[会显著增加内存占用]
     //    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
