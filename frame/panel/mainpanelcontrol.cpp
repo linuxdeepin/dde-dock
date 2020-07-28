@@ -75,6 +75,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appSpliter(new QLabel(this))
     , m_traySpliter(new QLabel(this))
     , m_isHover(false)
+    , m_needRecoveryWin(false)
     , m_isEnableLaunch(true)
 {
     init();
@@ -568,9 +569,17 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
     if (watched == m_desktopWidget) {
         if (event->type() == QEvent::Enter) {
+            if (checkNeedShowDesktop()) {
+                m_needRecoveryWin = true;
+                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+            }
             m_isHover = true;
             update();
         } else if (event->type() == QEvent::Leave) {
+            // 鼠标移入时隐藏了窗口，移出时恢复
+            if (m_needRecoveryWin) {
+                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+            }
             m_isHover = false;
             update();
         }
@@ -629,8 +638,11 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
         m_mousePressPos = e->globalPos();
 
         QRect rect(m_desktopWidget->pos(), m_desktopWidget->size());
-        if (rect.contains(e->pos()))
+        if (rect.contains(e->pos())) {
+            // 手动点击 显示桌面窗口 后，鼠标移出时不再调用显/隐窗口进程，以手动点击设置为准
+            m_needRecoveryWin = false;
             QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        }
     }
 
     QWidget::mousePressEvent(e);
@@ -1103,3 +1115,20 @@ void MainPanelControl::updateFixedAreaIcon()
     }
 }
 
+/**
+ * @brief MainPanelControl::checkNeedShowDesktop 根据窗管提供接口（当前是否显示的桌面），提供鼠标
+ * 移入 显示桌面窗口 区域时，是否需要显示桌面判断依据
+ * @return 窗管返回 当前是桌面 或 窗管接口查询失败 返回false，否则true
+ */
+bool MainPanelControl::checkNeedShowDesktop()
+{
+    QDBusInterface wmInter("com.deepin.wm", "/com/deepin/wm", "com.deepin.wm");
+    QList<QVariant> argumentList;
+    QDBusMessage reply = wmInter.callWithArgumentList(QDBus::Block, QStringLiteral("GetIsShowDesktop"), argumentList);
+    if (reply.type() == QDBusMessage::ReplyMessage && reply.arguments().count() == 1) {
+        return !reply.arguments().at(0).toBool();
+    }
+
+    qDebug() << "wm call GetIsShowDesktop fail, res:" << reply.type();
+    return false;
+}

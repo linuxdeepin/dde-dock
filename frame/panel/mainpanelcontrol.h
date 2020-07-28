@@ -103,7 +103,7 @@ private:
     void resizeDesktopWidget();
 
     void updateFixedAreaIcon();
-
+    bool checkNeedShowDesktop();
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
@@ -140,6 +140,7 @@ private:
     int m_trayIconCount;
     TrayPluginItem *m_tray = nullptr;
     bool m_isHover;//判断鼠标是否移到desktop区域
+    bool m_needRecoveryWin; // 判断鼠标移出desktop区域是否恢复之前窗口
     bool m_isEnableLaunch;//判断是否使能了com.deepin.dde.dock.module.launcher
 };
 
