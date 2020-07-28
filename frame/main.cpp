@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 
-    QTimer::singleShot(1, &mw, &MainWindow::launch);
+    mw.launch();
 
     if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
         DockItemManager::instance()->startLoadPlugins();
