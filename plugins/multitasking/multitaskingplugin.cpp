@@ -22,9 +22,12 @@
 #include "multitaskingplugin.h"
 #include "../widgets/tipswidget.h"
 
+#include <DWindowManagerHelper>
+
 #include <QIcon>
 
 #define PLUGIN_STATE_KEY    "enable"
+DGUI_USE_NAMESPACE
 
 using namespace Dock;
 MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
@@ -34,6 +37,17 @@ MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("multitasking");
+
+    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, [ = ] {
+        if (!m_proxyInter)
+            return;
+
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            m_proxyInter->itemAdded(this, PLUGIN_KEY);
+        } else {
+            m_proxyInter->itemRemoved(this, PLUGIN_KEY);
+        }
+    });
 }
 
 const QString MultitaskingPlugin::pluginName() const
@@ -165,10 +179,11 @@ PluginsItemInterface::PluginType MultitaskingPlugin::type()
 
 void MultitaskingPlugin::updateVisible()
 {
-    if (pluginIsDisable())
+    if (pluginIsDisable() || !DWindowManagerHelper::instance()->hasComposite()) {
         m_proxyInter->itemRemoved(this, PLUGIN_KEY);
-    else
+    } else {
         m_proxyInter->itemAdded(this, PLUGIN_KEY);
+    }
 }
 
 void MultitaskingPlugin::loadPlugin()
