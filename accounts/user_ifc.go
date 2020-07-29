@@ -24,10 +24,14 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
+
+	"strconv"
+	"time"
 
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/imgutil"
@@ -401,6 +405,33 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
 	iconFile := dutils.DecodeURI(iconURI)
 
+	// check if file exist
+	_, err = os.Stat(iconFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
+	// if iconURI not in iconList, need to create temp icon file
+	if !isStrInArray(iconURI, u.IconList) {
+		// copy file to temp file, update icon file
+		iconFile, err = copyTempIconFile(iconFile, u.UserName)
+		if err != nil {
+			logger.Warningf("copy temp file failed, err: %v", err)
+			return dbusutil.ToError(err)
+		}
+		// remove file
+		defer func() {
+			err := os.Remove(iconFile)
+			if err != nil {
+				logger.Warningf("remove temp file failed, err: %v", err)
+				return
+			}
+		}()
+		// if temp icon file is create, update icon URI
+		iconURI = dutils.EncodeURI(iconFile, dutils.SCHEME_FILE)
+	}
+
 	if !gdkpixbuf.IsSupportedImage(iconFile) {
 		err := fmt.Errorf("%q is not a image file", iconFile)
 		logger.Debug(err)
@@ -661,164 +692,32 @@ func (err ErrInvalidBackground) Error() string {
 	return fmt.Sprintf("%q is not a valid background file", err.FileName)
 }
 
-func (u *User) SetWeekdayFormat(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
+// copy file to root dir
+func copyTempIconFile(src string, username string) (string, error) {
+	// make dde-daemon dir
+	daemonDir := "/var/cache/deepin/dde-daemon"
+	err := os.MkdirAll(daemonDir, 0644)
 	if err != nil {
-		logger.Debug("[SetWeekdayFormat] access denied:", err)
-		return dbusutil.ToError(err)
+		logger.Warningf("make dir failed, err: %v", err)
+		return "", err
 	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.WeekdayFormat {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyWeekdayFormat, value)
+	// make image dir
+	imageDir := filepath.Join(daemonDir, "icon")
+	// make dir, only superuser can write and writer
+	err = os.MkdirAll(imageDir, 0600)
 	if err != nil {
-		return dbusutil.ToError(err)
+		logger.Warningf("make dir failed, err: %v", err)
+		return "", err
 	}
-
-	u.WeekdayFormat = value
-	err = u.emitPropChangedWeekdayFormat(value)
+	// create target file path
+	ns := time.Now().UnixNano()
+	base := username + "-" + strconv.FormatInt(ns, 36)
+	file := filepath.Join(imageDir, base)
+	// copy file
+	err = dutils.CopyFile(src, file)
 	if err != nil {
-		return dbusutil.ToError(err)
+		logger.Warningf("copy file failed, err: %v", err)
+		return "", err
 	}
-	return nil
-}
-
-func (u *User) SetShortDateFormat(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
-	if err != nil {
-		logger.Debug("[SetShortDateFormat] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.ShortDateFormat {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyShortDateFormat, value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	u.ShortDateFormat = value
-	err = u.emitPropChangedShortDateFormat(value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	return nil
-}
-
-func (u *User) SetLongDateFormat(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
-	if err != nil {
-		logger.Debug("[SetLongDateFormat] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.LongDateFormat {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyLongDateFormat, value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	u.LongDateFormat = value
-	err = u.emitPropChangedLongDateFormat(value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	return nil
-}
-
-func (u *User) SetShortTimeFormat(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
-	if err != nil {
-		logger.Debug("[SetShortTimeFormat] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.ShortTimeFormat {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyShortTimeFormat, value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	u.ShortTimeFormat = value
-	err = u.emitPropChangedShortTimeFormat(value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	return nil
-}
-
-func (u *User) SetLongTimeFormat(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
-	if err != nil {
-		logger.Debug("[SetLongTimeFormat] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.LongTimeFormat {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyLongTimeFormat, value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	u.LongTimeFormat = value
-	err = u.emitPropChangedLongTimeFormat(value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	return nil
-}
-
-func (u *User) SetWeekBegins(sender dbus.Sender, value int32) *dbus.Error {
-	err := u.checkAuth(sender, true, "")
-	if err != nil {
-		logger.Debug("[SetWeekBegins] access denied:", err)
-		return dbusutil.ToError(err)
-	}
-
-	u.PropsMu.Lock()
-	defer u.PropsMu.Unlock()
-
-	if value == u.WeekBegins {
-		return nil
-	}
-
-	err = u.writeUserConfigWithChange(confKeyWeekBegins, value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-
-	u.WeekBegins = value
-	err = u.emitPropChangedWeekBegins(value)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
-	return nil
+	return file, nil
 }
