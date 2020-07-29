@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
@@ -33,6 +34,8 @@ import (
 	"pkg.deepin.io/lib/imgutil"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
+	"strconv"
+	"time"
 )
 
 const (
@@ -397,9 +400,36 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 		logger.Debug("[SetIconFile] access denied:", err)
 		return dbusutil.ToError(err)
 	}
-
+	
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
 	iconFile := dutils.DecodeURI(iconURI)
+
+	// check if file exist
+	_, err = os.Stat(iconFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
+	// if iconURI not in iconList, need to create temp icon file
+	if !isStrInArray(iconURI, u.IconList) {
+		// copy file to temp file, update icon file
+		iconFile, err = copyTempIconFile(iconFile, u.UserName)
+		if err != nil {
+			logger.Warningf("copy temp file failed, err: %v", err)
+			return dbusutil.ToError(err)
+		}
+		// remove file
+		defer func() {
+			err := os.Remove(iconFile)
+			if err != nil {
+				logger.Warningf("remove temp file failed, err: %v", err)
+				return
+			}
+		}()
+		// if temp icon file is create, update icon URI
+		iconURI = dutils.EncodeURI(iconFile, dutils.SCHEME_FILE)
+	}
 
 	if !gdkpixbuf.IsSupportedImage(iconFile) {
 		err := fmt.Errorf("%q is not a image file", iconFile)
@@ -659,4 +689,34 @@ type ErrInvalidBackground struct {
 
 func (err ErrInvalidBackground) Error() string {
 	return fmt.Sprintf("%q is not a valid background file", err.FileName)
+}
+
+// copy file to root dir
+func copyTempIconFile(src string, username string) (string, error) {
+	// make dde-daemon dir
+	daemonDir := "/var/cache/deepin/dde-daemon"
+	err := os.MkdirAll(daemonDir, 0644)
+	if err != nil {
+		logger.Warningf("make dir failed, err: %v", err)
+		return "", err
+	}
+	// make image dir
+	imageDir := filepath.Join(daemonDir, "icon")
+	// make dir, only superuser can write and writer
+	err = os.MkdirAll(imageDir, 0600)
+	if err != nil {
+		logger.Warningf("make dir failed, err: %v", err)
+		return "", err
+	}
+	// create target file path
+	ns := time.Now().UnixNano()
+	base := username + "-" + strconv.FormatInt(ns, 36)
+	file := filepath.Join(imageDir, base)
+	// copy file
+	err = dutils.CopyFile(src, file)
+	if err != nil {
+		logger.Warningf("copy file failed, err: %v", err)
+		return "", err
+	}
+	return file, nil
 }
