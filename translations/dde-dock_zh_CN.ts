@@ -16,20 +16,20 @@
 <context>
     <name>AirplaneModeItem</name>
     <message>
-        <source>Airplane Mode</source>
-        <translation>飞行模式</translation>
-    </message>
-    <message>
         <source>Turn off</source>
-        <translation>关闭飞行模式</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation>开启飞行模式</translation>
+        <translation>开启</translation>
     </message>
     <message>
         <source>Airplane Mode settings</source>
         <translation>飞行模式设置</translation>
+    </message>
+    <message>
+        <source>Airplane mode</source>
+        <translation>飞行模式</translation>
     </message>
 </context>
 <context>
@@ -37,6 +37,55 @@
     <message>
         <source>Airplane Mode</source>
         <translation>飞行模式</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>蓝牙</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>蓝牙设置</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>蓝牙设置</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 已连接</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>正在连接...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>蓝牙</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>蓝牙关闭</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>开启</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>蓝牙</translation>
     </message>
 </context>
 <context>

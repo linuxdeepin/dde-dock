@@ -46,7 +46,7 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
                                                QDBusConnection::systemBus(),
                                                this))
 {
-    m_tipsLabel->setText(tr("Airplane Mode"));
+    m_tipsLabel->setText(tr("Airplane mode"));
     m_tipsLabel->setVisible(false);
     m_applet->setVisible(false);
 

@@ -7,6 +7,39 @@
     </message>
 </context>
 <context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Desactivar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Activar</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Ajustes de modo avión</translation>
+    </message>
+    <message>
+        <source>Airplane mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth</source>
@@ -19,14 +52,6 @@
 </context>
 <context>
     <name>BluetoothItem</name>
-    <message>
-        <source>Turn off</source>
-        <translation>Desactivar</translation>
-    </message>
-    <message>
-        <source>Turn on</source>
-        <translation>Activar</translation>
-    </message>
     <message>
         <source>Bluetooth settings</source>
         <translation>Ajustes de Bluetooth</translation>
@@ -46,6 +71,14 @@
     <message>
         <source>Turned off</source>
         <translation>Apagado</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Desactivar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Activar</translation>
     </message>
 </context>
 <context>
