@@ -305,6 +305,8 @@ void DockSettings::showDockSettingsMenu()
 
     m_autoHide = false;
 
+    bool hasComposite = DWindowManagerHelper::instance()->hasComposite();
+
     // create actions
     QList<QAction *> actions;
     for (auto *p : m_itemManager->pluginList()) {
@@ -316,6 +318,10 @@ void DockSettings::showDockSettingsMenu()
         const QString &display = p->pluginDisplayName();
 
         if (!m_trashPluginShow && name == "trash") {
+            continue;
+        }
+
+        if (name == "multitasking" && !hasComposite) {
             continue;
         }
 

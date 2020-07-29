@@ -26,6 +26,7 @@
 #include "multitaskingwidget.h"
 
 #include <QLabel>
+
 namespace Dock {
 class TipsWidget;
 }
