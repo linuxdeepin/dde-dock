@@ -22,7 +22,11 @@
 #ifndef DATETIMEWIDGET_H
 #define DATETIMEWIDGET_H
 
+#include <com_deepin_daemon_timedate.h>
+
 #include <QWidget>
+
+using Timedate = com::deepin::daemon::Timedate;
 
 class DatetimeWidget : public QWidget
 {
@@ -40,6 +44,10 @@ signals:
 public slots:
     void set24HourFormat(const bool value);
 
+private Q_SLOTS:
+    void setShortDateFormat(int type);
+    void setShortTimeFormat(int type);
+
 private:
     void paintEvent(QPaintEvent *e);
     QSize curTimeSize() const;
@@ -49,6 +57,9 @@ private:
     mutable QFont m_timeFont;
     mutable QFont m_dateFont;
     mutable int m_timeOffset;
+    Timedate *m_timedateInter;
+    QString m_shortDateFormat;
+    QString m_shortTimeFormat;
 
 };
 

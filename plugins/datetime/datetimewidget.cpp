@@ -40,8 +40,16 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
     , m_24HourFormat(false)
     , m_timeOffset(false)
+    , m_timedateInter(new Timedate("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", QDBusConnection::sessionBus(), this))
+    , m_shortDateFormat("yyyy-MM-dd")
+    , m_shortTimeFormat("hh:mm")
 {
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
+    setShortDateFormat(m_timedateInter->shortDateFormat());
+    setShortTimeFormat(m_timedateInter->shortTimeFormat());
+
+    connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DatetimeWidget::setShortDateFormat);
+    connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DatetimeWidget::setShortTimeFormat);
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)
@@ -59,6 +67,43 @@ void DatetimeWidget::set24HourFormat(const bool value)
     }
 }
 
+/**
+ * @brief DatetimeWidget::setShortDateFormat 根据类型设置时间显示格式
+ * @param type 自定义类型
+ */
+void DatetimeWidget::setShortDateFormat(int type)
+{
+    switch (type) {
+    case 0: m_shortDateFormat = "yyyy/M/d";  break;
+    case 1: m_shortDateFormat = "yyyy-M-d"; break;
+    case 2: m_shortDateFormat = "yyyy.M.d"; break;
+    case 3: m_shortDateFormat = "yyyy/MM/dd"; break;
+    case 4: m_shortDateFormat = "yyyy-MM-dd"; break;
+    case 5: m_shortDateFormat = "yyyy.MM.dd"; break;
+    case 6: m_shortDateFormat = "yy/M/d"; break;
+    case 7: m_shortDateFormat = "yy-M-d"; break;
+    case 8: m_shortDateFormat = "yy.M.d"; break;
+    default: m_shortDateFormat = "yyyy-MM-dd"; break;
+    }
+    update();
+}
+
+/**
+ * @brief DatetimeWidget::setShortTimeFormat 根据类型设置短时间显示格式
+ * @param type 自定义类型
+ */
+void DatetimeWidget::setShortTimeFormat(int type)
+{
+    switch (type) {
+    case 0: m_shortTimeFormat = "h:m"; break;
+    case 1: m_shortTimeFormat = "hh:mm";  break;
+    case 2: m_shortTimeFormat = "h:m"; break;
+    case 3: m_shortTimeFormat = "hh:mm";  break;
+    default: m_shortTimeFormat = "hh:mm"; break;
+    }
+    update();
+}
+
 QSize DatetimeWidget::curTimeSize() const
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
@@ -66,21 +111,19 @@ QSize DatetimeWidget::curTimeSize() const
     m_timeFont = TIME_FONT;
     m_dateFont = DATE_FONT;
     QFontMetrics fm(m_timeFont);
-    QString format;
-    if (m_24HourFormat)
-        format = "hh:mm";
-    else {
+    QString format = m_shortTimeFormat;
+    if (!m_24HourFormat) {
         if (position == Dock::Top || position == Dock::Bottom)
-            format = "hh:mm AP";
+            format = format.append(" AP");
         else
-            format = "hh:mm\nAP";
+            format = format.append("\nAP");
     }
 
     QString timeString = QDateTime::currentDateTime().toString(format);
     QSize timeSize = fm.boundingRect(timeString).size();
     if (timeString.contains("\n")) {
-         QStringList SL = timeString.split("\n");
-         timeSize = QSize(fm.boundingRect(SL.at(0)).width(), fm.boundingRect(SL.at(0)).height() + fm.boundingRect(SL.at(1)).height());
+        QStringList SL = timeString.split("\n");
+        timeSize = QSize(fm.boundingRect(SL.at(0)).width(), fm.boundingRect(SL.at(0)).height() + fm.boundingRect(SL.at(1)).height());
     }
 
     QSize dateSize = QFontMetrics(m_dateFont).boundingRect("0000/00/00").size();
@@ -89,7 +132,7 @@ QSize DatetimeWidget::curTimeSize() const
         while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() + QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height() > height()) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             timeSize.setWidth(QFontMetrics(m_timeFont).boundingRect(timeString).size().width());
-            if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1){
+            if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1) {
                 m_dateFont.setPixelSize(m_dateFont.pixelSize() - 1);
                 dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width());
             }
@@ -103,7 +146,7 @@ QSize DatetimeWidget::curTimeSize() const
             } else {
                 timeSize.setHeight(QFontMetrics(m_timeFont).boundingRect(timeString).size().height() * 2);
             }
-            if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1){
+            if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1) {
                 m_dateFont.setPixelSize(m_dateFont.pixelSize() - 1);
                 dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height());
             }
@@ -128,14 +171,12 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QString format;
-    if (m_24HourFormat)
-        format = "hh:mm";
-    else {
+    QString format = m_shortTimeFormat;
+    if (!m_24HourFormat) {
         if (position == Dock::Top || position == Dock::Bottom)
-            format = "hh:mm AP";
+            format = format.append(" AP");
         else
-            format = "hh:mm\nAP";
+            format = format.append("\nAP");
     }
 
     painter.setFont(m_timeFont);
@@ -144,15 +185,15 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     QRect timeRect = rect();
     QRect dateRect = rect();
 
-    if (position == Dock::Top || position == Dock::Bottom){
-       timeRect.setBottom(rect().center().y() + 6);
-       dateRect.setTop(timeRect.bottom() - 4);
+    if (position == Dock::Top || position == Dock::Bottom) {
+        timeRect.setBottom(rect().center().y() + 6);
+        dateRect.setTop(timeRect.bottom() - 4);
     } else {
         timeRect.setBottom(rect().center().y() + m_timeOffset);
         dateRect.setTop(timeRect.bottom());
     }
     painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
-    format = "yyyy/MM/dd";
+    format = m_shortDateFormat;
     painter.setFont(m_dateFont);
     painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, current.toString(format));
 }
