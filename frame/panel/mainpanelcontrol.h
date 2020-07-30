@@ -96,8 +96,6 @@ private:
     void updatePanelCursor();
     void calcuDockIconSize(const int w, const int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
 
-    void updateFixedAreaIcon();
-
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);

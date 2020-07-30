@@ -286,7 +286,6 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     m_appAreaSonWidget->adjustSize();
 
     moveAppSonWidget();
-    updateFixedAreaIcon();
 }
 
 void MainPanelControl::setPositonValue(Dock::Position position)
@@ -542,7 +541,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::LayoutRequest) {
             m_appAreaSonWidget->adjustSize();
             resizeDockIcon();
-            updateFixedAreaIcon();
         } else {
             moveAppSonWidget();
         }
@@ -1107,20 +1105,4 @@ void MainPanelControl::resizeDesktopWidget()
 
     if (DisplayMode::Fashion == m_dislayMode)
         m_desktopWidget->setFixedSize(0, 0);
-}
-
-void MainPanelControl::updateFixedAreaIcon()
-{
-    QLayoutItem *appLayoutItem = m_appAreaSonLayout->itemAt(0);
-    if (appLayoutItem) {
-        QWidget *appWidget = appLayoutItem->widget();
-        if (appWidget) {
-            int w = appWidget->width();
-            int h = appWidget->height();
-            for (int i = 0; i < m_fixedAreaLayout->count(); ++ i) {
-                // 取最近较小偶数, 去抖
-                m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize((w | 1) - 1, (h | 1) - 1);
-            }
-        }
-    }
 }
