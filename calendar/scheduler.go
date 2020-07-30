@@ -32,12 +32,14 @@ type Scheduler struct {
 	quitChan   chan struct{}
 	//nolint
 	methods *struct {
-		GetJobs   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
-		GetJob    func() `in:"id" out:"job"`
-		QueryJobs func() `in:"params" out:"jobs"`
-		DeleteJob func() `in:"id"`
-		UpdateJob func() `in:"jobInfo"`
-		CreateJob func() `in:"jobInfo" out:"id"`
+		GetJobs          func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
+		GetJob           func() `in:"id" out:"job"`
+		GetJobsWithLimit func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,maxNum" out:"jobs"`
+		GetJobsWithRule  func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,rule" out:"jobs"`
+		QueryJobs        func() `in:"params" out:"jobs"`
+		DeleteJob        func() `in:"id"`
+		UpdateJob        func() `in:"jobInfo"`
+		CreateJob        func() `in:"jobInfo" out:"id"`
 
 		GetTypes   func() `out:"types"`
 		GetType    func() `in:"id" out:"type"`
