@@ -108,8 +108,17 @@
         }
     },
     {
-        "Name": "pinch",
-        "Direction": "out",
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 4,
+        "Action": {
+            "Type": "commandline",
+            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
         "Fingers": 4,
         "Action": {
             "Type": "commandline",
@@ -162,8 +171,17 @@
         }
     },
     {
-        "Name": "pinch",
-        "Direction": "out",
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 5,
+        "Action": {
+            "Type": "commandline",
+            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
         "Fingers": 5,
         "Action": {
             "Type": "commandline",

@@ -44,6 +44,7 @@ type Manager struct {
 	tsSetting     *gio.Settings
 	enabled       bool
 	Infos         gestureInfos
+	lastAction    int  // 四、五指的最新一次动作
 
 	methods *struct {
 		SetLongPressDuration  func() `in:"duration"`
@@ -51,6 +52,34 @@ type Manager struct {
 		SetShortPressDuration func() `in:"duration"`
 		GetShortPressDuration func() `out:"duration"`
 	}
+}
+
+const (
+	lastActionNone = iota
+	lastActionShowWorkspace
+	lastActionHideWorkspace
+	lastActionShowDesktop
+	lastActionHideDesktop
+)
+
+func (m *Manager) setLastAction(v int) {
+	m.mu.Lock()
+	m.lastAction = v
+	m.mu.Unlock()
+}
+
+func (m *Manager) getLastAction() int {
+	m.mu.Lock()
+	value := m.lastAction
+	m.mu.Unlock()
+	return value
+}
+
+func (m *Manager) getEnable() bool {
+	m.mu.RLock()
+	value := m.enabled
+	m.mu.RUnlock()
+	return value
 }
 
 func newManager() (*Manager, error) {
@@ -113,6 +142,7 @@ func newManager() (*Manager, error) {
 		dock:      dock.NewDock(sessionConn),
 		display:   display.NewDisplay(sessionConn),
 		sysDaemon: daemon.NewDaemon(systemConn),
+		lastAction: lastActionNone,
 	}
 
 	m.gesture = gesture.NewGesture(systemConn)
@@ -161,18 +191,79 @@ func (m *Manager) init() {
 	m.listenGSettingsChanged()
 }
 
-func (m *Manager) Exec(name, direction string, fingers int32) error {
-	m.mu.RLock()
-	defer m.mu.RUnlock()
+func (m *Manager) getMatchGesture(direction, actionType string) bool {
+	lastAc := m.getLastAction()
+	isShowMultiTask, err := m.wm.GetMultiTaskingStatus(0)
+	if err != nil {
+		logger.Debug("GetMultiTaskingStatus err: ",err)
+		return false
+	}
+	isShowDesktop, err := m.wm.GetIsShowDesktop(0)
+	if err != nil {
+		logger.Debug("GetIsShowDesktop err: ",err)
+		return false
+	}
 
-	if !m.enabled || !isSessionActive() {
+	if direction == "down" {
+		// 不存在桌面窗口，下滑执行显示桌面
+		if !isShowDesktop && actionType == ActionTypeCommandline {
+			m.setLastAction(lastActionShowDesktop)
+			return true
+		}
+		// 处于多任务视图，下滑隐藏多任务视图
+		if isShowMultiTask && actionType == ActionTypeBuiltin {
+			m.setLastAction(lastActionHideWorkspace)
+			return true
+		}
+	}
+
+	if direction == "up" && !isShowMultiTask {
+		// 不存在桌面窗口，上滑显示多任务视图
+		// 最后一次没有操作，直接上滑显示多任务视图
+		// 最后一次操作是对多任务视图操作（显示/隐藏），上滑显示多任务视图
+		if (!isShowDesktop || lastAc < lastActionShowDesktop) && actionType == ActionTypeBuiltin {
+			m.setLastAction(lastActionShowWorkspace)
+			return true
+		}
+		// 存在桌面窗口，并且上一次操作为显示桌面，上滑隐藏桌面
+		if isShowDesktop && lastAc >= lastActionShowDesktop && actionType == ActionTypeCommandline {
+			m.setLastAction(lastActionHideDesktop)
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Manager) getMatchGestureInfo(name, direction string, fingers int32) (*gestureInfo, error) {
+	infoArray := m.Infos.Get(name, direction, fingers)
+	if len(infoArray) == 0 {
+		return nil, fmt.Errorf("not found gesture info for: %s, %s, %d", name, direction, fingers)
+	}
+	if len(infoArray) == 1 {
+		return infoArray[0], nil
+	}
+	for _, info := range infoArray {
+		// 四五指手势相同，需要依据上次操作判断当前操作
+		if info.Name == "swipe" && (info.Fingers == 4 || info.Fingers == 5) {
+			if m.getMatchGesture(info.Direction, info.Action.Type) {
+				return info, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("not found gesture info for: %s, %s, %d", name, direction, fingers)
+}
+
+func (m *Manager) Exec(name, direction string, fingers int32) error {
+	isEnable := m.getEnable()
+	if !isEnable || !isSessionActive() {
 		logger.Debug("Gesture had been disabled or session inactive")
 		return nil
 	}
 
-	info := m.Infos.Get(name, direction, fingers)
-	if info == nil {
-		return fmt.Errorf("not found gesture info for: %s, %s, %d", name, direction, fingers)
+	info, err := m.getMatchGestureInfo(name, direction, fingers)
+	if err != nil {
+		logger.Debug("getMatchGestureInfo error:",err)
+		return err
 	}
 
 	logger.Debug("[Exec] action info:", info.Name, info.Direction, info.Fingers,
