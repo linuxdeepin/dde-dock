@@ -22,12 +22,12 @@ package audio
 import (
 	"sort"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 
-	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/pulse"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gsettings"
+	"pkg.deepin.io/lib/pulse"
 )
 
 func (a *Audio) handleEvent() {
@@ -99,6 +99,7 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 		if added {
 			a.PropsMu.Lock()
 			a.setPropCards(cards.string())
+			a.setPropCardsWithoutUnavailable(cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
 			a.cards = cards
 		}
@@ -113,6 +114,7 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 		if deleted {
 			a.PropsMu.Lock()
 			a.setPropCards(cards.string())
+			a.setPropCardsWithoutUnavailable(cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
 			a.cards = cards
 		}
@@ -129,6 +131,7 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			card.update(cardInfo)
 			a.PropsMu.Lock()
 			a.setPropCards(a.cards.string())
+			a.setPropCardsWithoutUnavailable(a.cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
 		}
 		a.mu.Unlock()
@@ -388,7 +391,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		a.addSource(sourceInfo)
 
-		err = setReduceNoise(a.ReduceNoise.Get())
+		err = a.setReduceNoise(a.ReduceNoise.Get())
 		if err != nil {
 			logger.Debug("reduce physical device noise failed:", err)
 		}
@@ -411,7 +414,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		// 移除物理设备需要关闭虚拟通道，后面切换
 		if isPhysicalDevice(source.Name) {
-			err = setReduceNoise(false)
+			err = a.setReduceNoise(false)
 			if err != nil {
 				logger.Warning("set reduce noise fail:", err)
 			}
@@ -446,7 +449,7 @@ func isPhysicalDevice(deviceName string) bool {
 			return false
 		}
 	}
-	return  true
+	return true
 }
 
 func (a *Audio) handleServerEvent(eventType int) {
@@ -479,15 +482,30 @@ func (a *Audio) listenGSettingVolumeIncreaseChanged() {
 		err := a.emitPropChangedMaxUIVolume(a.MaxUIVolume)
 		if err != nil {
 			logger.Warning("changed Max UI Volume failed: ", err)
+		} else {
+			sink := a.defaultSink
+			configKeeper.SetIncreaseVolume(a.getCardNameById(sink.Card), sink.ActivePort.Name, volInc)
+			err = configKeeper.Save(configKeeperFile)
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
 }
 
 func (a *Audio) listenGSettingReduceNoiseChanged() {
 	gsettings.ConnectChanged(gsSchemaAudio, gsKeyReduceNoise, func(val string) {
-		err := setReduceNoise(a.ReduceNoise.Get())
+		reduce := a.ReduceNoise.Get()
+		err := a.setReduceNoise(reduce)
 		if err != nil {
 			logger.Warning("set Reduce Noise failed: ", err)
+		} else {
+			source := a.defaultSource
+			configKeeper.SetReduceNoise(a.getCardNameById(source.Card), source.ActivePort.Name, reduce)
+			err = configKeeper.Save(configKeeperFile)
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
 }

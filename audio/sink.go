@@ -107,6 +107,13 @@ func (s *Sink) SetVolume(v float64, isPlay bool) *dbus.Error {
 	s.PropsMu.Unlock()
 	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
 
+	configKeeper.SetVolume(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if isPlay {
 		s.playFeedback()
 	}
@@ -127,6 +134,14 @@ func (s *Sink) SetBalance(v float64, isPlay bool) *dbus.Error {
 	cv := s.cVolume.SetBalance(s.channelMap, v)
 	s.PropsMu.RUnlock()
 	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
+
+	configKeeper.SetBalance(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if isPlay {
 		s.playFeedback()
 	}
@@ -155,6 +170,14 @@ func (s *Sink) SetFade(v float64) *dbus.Error {
 func (s *Sink) SetMute(v bool) *dbus.Error {
 	logger.Debugf("Sink #%d SetMute %v", s.index, v)
 	s.audio.context().SetSinkMuteByIndex(s.index, v)
+
+	configKeeper.SetMute(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if !v {
 		s.playFeedback()
 	}

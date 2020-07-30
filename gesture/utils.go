@@ -36,6 +36,18 @@ var (
 	_self  *login1.Session
 )
 
+const (
+	positionTop int32 = iota
+	positionRight
+	positionBottom
+	positionLeft
+)
+
+type Rect struct {
+	X, Y          int32
+	Width, Height uint32
+}
+
 func isKbdAlreadyGrabbed() bool {
 	if getX11Conn() == nil {
 		return false

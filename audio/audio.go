@@ -31,7 +31,7 @@ import (
 
 	"golang.org/x/xerrors"
 	"pkg.deepin.io/dde/daemon/common/dsync"
-	"pkg.deepin.io/gir/gio-2.0"
+	gio "pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -92,12 +92,13 @@ type Audio struct {
 	// dbusutil-gen: equal=objectPathSliceEqual
 	Sinks []dbus.ObjectPath
 	// dbusutil-gen: equal=objectPathSliceEqual
-	Sources        []dbus.ObjectPath
-	DefaultSink    dbus.ObjectPath
-	DefaultSource  dbus.ObjectPath
-	Cards          string
-	IncreaseVolume gsprop.Bool `prop:"access:rw"`
-	defaultPaCfg   defaultPaConfig
+	Sources                 []dbus.ObjectPath
+	DefaultSink             dbus.ObjectPath
+	DefaultSource           dbus.ObjectPath
+	Cards                   string
+	CardsWithoutUnavailable string
+	IncreaseVolume          gsprop.Bool `prop:"access:rw"`
+	defaultPaCfg            defaultPaConfig
 
 	// dbusutil-gen: ignore
 	// 最大音量
@@ -138,7 +139,9 @@ type Audio struct {
 	ReduceNoise gsprop.Bool `prop:"access:rw"`
 
 	methods *struct {
-		SetPort func() `in:"cardId,portName,direction"`
+		SetPort        func() `in:"cardId,portName,direction"`
+		SetPortEnabled func() `in:"cardId,portName,enabled"`
+		IsPortEnabled  func() `in:"cardId,portName" out:"enabled"`
 	}
 }
 
@@ -308,6 +311,7 @@ func (a *Audio) init() error {
 
 	a.PropsMu.Lock()
 	a.setPropCards(a.cards.string())
+	a.setPropCardsWithoutUnavailable(a.cards.stringWithoutUnavailable())
 	a.PropsMu.Unlock()
 
 	a.eventChan = make(chan *pulse.Event, 100)
@@ -340,7 +344,7 @@ func (a *Audio) init() error {
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
 
-	err = setReduceNoise(a.ReduceNoise.Get())
+	err = a.setReduceNoise(a.ReduceNoise.Get())
 	if err != nil {
 		logger.Warning("set reduce noise fail:", err)
 	}
@@ -424,6 +428,10 @@ func (a *Audio) findSourceByCardIndexPortName(cardId uint32, portName string) *p
 
 // set default sink and sink active port
 func (a *Audio) setDefaultSinkWithPort(cardId uint32, portName string) error {
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(cardId), portName)
+	if !portConfig.Enabled {
+		return fmt.Errorf("card #%d port %q is disabled", cardId, portName)
+	}
 	logger.Debugf("setDefaultSinkWithPort card #%d port %q", cardId, portName)
 	sink := a.findSinkByCardIndexPortName(cardId, portName)
 	if sink == nil {
@@ -467,6 +475,10 @@ func (a *Audio) getDefaultSourceActivePortName() string {
 
 // set default source and source active port
 func (a *Audio) setDefaultSourceWithPort(cardId uint32, portName string) error {
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(cardId), portName)
+	if !portConfig.Enabled {
+		return fmt.Errorf("card #%d port %q is disabled", cardId, portName)
+	}
 	logger.Debugf("setDefault card #%d port %q", cardId, portName)
 	source := a.findSourceByCardIndexPortName(cardId, portName)
 	if source == nil {
@@ -494,6 +506,29 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 		cardId, portName, direction)
 	err := a.setPort(cardId, portName, int(direction))
 	return dbusutil.ToError(err)
+}
+
+func (a *Audio) SetPortEnabled(cardId uint32, portName string, enabled bool) *dbus.Error {
+	configKeeper.SetEnabled(a.getCardNameById(cardId), portName, enabled)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	if a.defaultSink.Card == cardId && a.defaultSink.ActivePort.Name == portName {
+		// TODO : 自动切换，将在SP3二期实现
+	}
+
+	if a.defaultSource.Card == cardId && a.defaultSource.ActivePort.Name == portName {
+		// TODO : 自动切换，将在SP3二期实现
+	}
+
+	return nil
+}
+
+func (a *Audio) IsPortEnabled(cardId uint32, portName string) (bool, *dbus.Error) {
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(cardId), portName)
+	return portConfig.Enabled, nil
 }
 
 func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
@@ -562,7 +597,7 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
 }
 
 func (a *Audio) resetSinksVolume() {
-	logger.Debug("reset sink volume",defaultOutputVolume)
+	logger.Debug("reset sink volume", defaultOutputVolume)
 	for _, s := range a.ctx.GetSinkList() {
 		a.ctx.SetSinkMuteByIndex(s.Index, false)
 		curPort := s.ActivePort.Name
@@ -590,7 +625,7 @@ func (a *Audio) resetSinksVolume() {
 }
 
 func (a *Audio) resetSourceVolume() {
-	logger.Debug("reset source volume",defaultInputVolume)
+	logger.Debug("reset source volume", defaultInputVolume)
 	for _, s := range a.ctx.GetSourceList() {
 		a.ctx.SetSourceMuteByIndex(s.Index, false)
 		cv := s.Volume.SetAvg(defaultInputVolume).SetBalance(s.ChannelMap,
@@ -675,6 +710,27 @@ func (a *Audio) updateDefaultSink(sinkName string) {
 	a.setPropDefaultSink(defaultSinkPath)
 	a.PropsMu.Unlock()
 	logger.Debug("set prop default sink:", defaultSinkPath)
+
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sink.Card), sink.ActivePort.Name)
+	err := sink.SetVolume(portConfig.Volume, false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = sink.SetBalance(portConfig.Balance, false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = sink.SetMute(portConfig.Mute)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	a.IncreaseVolume.Set(portConfig.IncreaseVolume)
+	if portConfig.IncreaseVolume {
+		a.MaxUIVolume = increaseMaxVolume
+	} else {
+		a.MaxUIVolume = normalMaxVolume
+	}
 }
 
 func (a *Audio) updateDefaultSource(sourceName string) {
@@ -684,19 +740,16 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 		return
 	}
 	logger.Debugf("updateDefaultSource #%d %s", sourceInfo.Index, sourceName)
-	if isPhysicalDevice(sourceName) {
-		err := setReduceNoise(a.ReduceNoise.Get())
-		if err != nil {
-			logger.Warning("set reduce noise fail:", err)
-		}
-	} else {
+	a.mu.Lock()
+
+	if !isPhysicalDevice(sourceName) {
 		sourceInfo = a.getSourceInfoByName(sourceInfo.Proplist["device.master_device"])
 		if sourceInfo == nil {
 			logger.Warning("failed to get virtual device sourceInfo for name:", sourceName)
 			return
 		}
 	}
-	a.mu.Lock()
+
 	source, ok := a.sources[sourceInfo.Index]
 	if !ok {
 		a.mu.Unlock()
@@ -710,6 +763,28 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	a.PropsMu.Lock()
 	a.setPropDefaultSource(defaultSourcePath)
 	a.PropsMu.Unlock()
+
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(source.Card), source.ActivePort.Name)
+	err := source.SetVolume(portConfig.Volume, false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = source.SetBalance(portConfig.Balance, false)
+	if err != nil {
+		logger.Warning(err)
+	}
+	err = source.SetMute(portConfig.Mute)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	if isPhysicalDevice(sourceName) {
+		a.ReduceNoise.Set(portConfig.ReduceNoise)
+		err := a.setReduceNoise(portConfig.ReduceNoise)
+		if err != nil {
+			logger.Warning("set reduce noise fail:", err)
+		}
+	}
 }
 
 func (a *Audio) context() *pulse.Context {

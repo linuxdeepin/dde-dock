@@ -306,3 +306,6 @@ func notifyDeviceRemoved(devPath dbus.ObjectPath) {
 	msg := deviceErrorTable[nm.NM_DEVICE_STATE_REASON_REMOVED]
 	notify(icon, Tr("Disconnected"), msg)
 }
+func notifyPortalSuccess() {
+	notify(notifyIconProxyEnabled, Tr("Network"), Tr("Portal network authentication succeedful."))
+}

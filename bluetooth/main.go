@@ -99,6 +99,14 @@ func (*daemon) Start() error {
 		return err
 	}
 
+	obexAgent := newObexAgent(service, globalBluetooth)
+	err = service.Export(obexAgentDBusPath, obexAgent)
+	if err != nil {
+		logger.Warning("failed to export obex agent:", err)
+		return err
+	}
+	globalBluetooth.obexAgent = obexAgent
+
 	err = initNotifications()
 	if err != nil {
 		return err

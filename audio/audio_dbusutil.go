@@ -2,9 +2,7 @@
 
 package audio
 
-import (
-	"pkg.deepin.io/lib/dbus1"
-)
+import dbus "pkg.deepin.io/lib/dbus1"
 
 func (v *Sink) setPropName(value string) (changed bool) {
 	if v.Name != value {
@@ -524,6 +522,19 @@ func (v *Audio) setPropCards(value string) (changed bool) {
 
 func (v *Audio) emitPropChangedCards(value string) error {
 	return v.service.EmitPropertyChanged(v, "Cards", value)
+}
+
+func (v *Audio) setPropCardsWithoutUnavailable(value string) (changed bool) {
+	if v.CardsWithoutUnavailable != value {
+		v.CardsWithoutUnavailable = value
+		v.emitPropChangedCardsWithoutUnavailable(value)
+		return true
+	}
+	return false
+}
+
+func (v *Audio) emitPropChangedCardsWithoutUnavailable(value string) error {
+	return v.service.EmitPropertyChanged(v, "CardsWithoutUnavailable", value)
 }
 
 func (v *Audio) emitPropChangedReduceNoise(enable bool) error {

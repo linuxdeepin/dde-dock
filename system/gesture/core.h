@@ -20,6 +20,8 @@
 #ifndef __GESTURE_CORE_H__
 #define __GESTURE_CORE_H__
 
+#include "touchscreen_core.h"
+
 // only supported single finger
 #define TOUCH_TYPE_RIGHT_BUTTON 50
 
@@ -44,5 +46,6 @@
 int start_loop(int verbose, double distance);
 void quit_loop(void);
 void set_timer_duration(int duration);
+void set_timer_short_duration(int duration);
 
 #endif

@@ -660,3 +660,138 @@ type ErrInvalidBackground struct {
 func (err ErrInvalidBackground) Error() string {
 	return fmt.Sprintf("%q is not a valid background file", err.FileName)
 }
+
+func (u *User) SetWeekdayFormat(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetWeekdayFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.WeekdayFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyWeekdayFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.WeekdayFormat = value
+	err = u.emitPropChangedWeekdayFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (u *User) SetShortDateFormat(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetShortDateFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.ShortDateFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyShortDateFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.ShortDateFormat = value
+	err = u.emitPropChangedShortDateFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (u *User) SetLongDateFormat(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetLongDateFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.LongDateFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyLongDateFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.LongDateFormat = value
+	err = u.emitPropChangedLongDateFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (u *User) SetShortTimeFormat(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetShortTimeFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.ShortTimeFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyShortTimeFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.ShortTimeFormat = value
+	err = u.emitPropChangedShortTimeFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}
+
+func (u *User) SetLongTimeFormat(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetLongTimeFormat] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.LongTimeFormat {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyLongTimeFormat, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.LongTimeFormat = value
+	err = u.emitPropChangedLongTimeFormat(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}

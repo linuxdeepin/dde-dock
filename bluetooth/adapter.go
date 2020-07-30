@@ -138,6 +138,17 @@ func (a *adapter) connectProperties() {
 		a.Powered = value
 		logger.Debugf("%s Powered: %v", a, value)
 		a.notifyPropertiesChanged()
+		// save the powered state
+		globalBluetooth.config.setAdapterConfigPowered(a.address, a.Powered)
+
+		if a.Powered {
+			err := a.core.Discoverable().Set(0, globalBluetooth.config.Discoverable)
+			if err != nil {
+				logger.Warningf("failed to set discoverable for %s: %v", a, err)
+			}
+			a.startDiscovery()
+			go globalBluetooth.tryConnectPairedDevices()
+		}
 	})
 	a.core.Discovering().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
@@ -164,3 +175,14 @@ func (a *adapter) connectProperties() {
 		a.notifyPropertiesChanged()
 	})
 }
+func (a *adapter)startDiscovery(){
+	err := a.core.StartDiscovery(0)
+	if err != nil {
+		logger.Warningf("failed to start discovery for %s: %v", a, err)
+	} else {
+		logger.Debug("reset timer for stop scan")
+		// start discovering success, reset discovering timer
+		a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
+	}
+}
+

@@ -68,6 +68,15 @@ func getCardName(card *pulse.Card) (name string) {
 	return
 }
 
+func (a *Audio) getCardNameById(cardId uint32) string {
+	card, err := a.ctx.GetCard(cardId)
+	if err != nil {
+		logger.Warning(err)
+		return ""
+	}
+	return card.Name
+}
+
 func (c *Card) update(card *pulse.Card) {
 	c.Id = card.Index
 	c.Name = getCardName(card)
@@ -128,6 +137,32 @@ func (cards CardList) string() string {
 			Ports: ports,
 		})
 	}
+	return toJSON(list)
+}
+
+func (cards CardList) stringWithoutUnavailable() string {
+	var list []CardExport
+	for _, cardInfo := range cards {
+		var ports []CardPortExport
+		for _, portInfo := range cardInfo.Ports {
+			if portInfo.Available == pulse.AvailableTypeNo {
+				logger.Debugf("port '%s(%s)' is unavailable", portInfo.Name, portInfo.Description)
+				continue
+			}
+			ports = append(ports, CardPortExport{
+				Name:        portInfo.Name,
+				Description: portInfo.Description,
+				Direction:   portInfo.Direction,
+			})
+		}
+
+		list = append(list, CardExport{
+			Id:    cardInfo.Id,
+			Name:  cardInfo.Name,
+			Ports: ports,
+		})
+	}
+
 	return toJSON(list)
 }
 

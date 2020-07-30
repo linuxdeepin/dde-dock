@@ -34,10 +34,11 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
-	"pkg.deepin.io/gir/gio-2.0"
+	gio "pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pinyin_search"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 var logger *log.Logger
@@ -46,6 +47,10 @@ const (
 	SKLCtrlShift uint32 = 1 << iota
 	SKLAltShift
 	SKLSuperSpace
+)
+
+const (
+	versionFile = "/etc/deepin-version"
 )
 
 func SetLogger(l *log.Logger) {
@@ -777,25 +782,33 @@ func (sm *ShortcutManager) FindConflictingKeystroke(ks *Keystroke) (*Keystroke, 
 	return nil, nil
 }
 
-func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
+func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings, wmObj *wm.Wm) {
 	logger.Debug("AddSystem")
 	idNameMap := getSystemIdNameMap()
+	allow, err := wmObj.CompositingAllowSwitch().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		allow = false
+	}
+	session := os.Getenv("XDG_SESSION_TYPE")
 	for _, id := range gsettings.ListKeys() {
-		if id == "wm-switcher" && os.Getenv("KWIN_COMPOSE") == "N" {
-			logger.Debug("filter 'wm-switcher' because KWIN_COMPOSE=N")
-			continue
+		if id == "deepin-screen-recorder" || id == "wm-switcher" {
+			if !allow {
+				logger.Debugf("com.deepin.wm.compositingAllowSwitch is false, filter %s", id)
+				continue
+			}
+
+			if strings.Contains(session, "wayland") {
+				logger.Debugf("XDG_SESSION_TYPE is %s, filter %s", session, id)
+				continue
+			}
 		}
 
 		name := idNameMap[id]
 		if name == "" {
 			name = id
 		}
-		session := os.Getenv("XDG_SESSION_TYPE")
-		if strings.Contains(session, "wayland") {
-			if id == "deepin-screen-recorder" || id == "wm-switcher" {
-				continue
-			}
-		}
+
 		cmd := getSystemActionCmd(id)
 		if id == "terminal-quake" && strings.Contains(cmd, "deepin-terminal") {
 			termPath, _ := exec.LookPath("deepin-terminal")
@@ -819,7 +832,12 @@ func (sm *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 func (sm *ShortcutManager) AddWM(gsettings *gio.Settings) {
 	logger.Debug("AddWM")
 	idNameMap := getWMIdNameMap()
+	releaseType := getDeepinReleaseType()
 	for _, id := range gsettings.ListKeys() {
+		if releaseType == "Server" && strings.Contains(id, "workspace") {
+			logger.Debugf("release type is server filter '%s'", id)
+			continue
+		}
 		name := idNameMap[id]
 		if name == "" {
 			name = id
@@ -879,8 +897,13 @@ func (sm *ShortcutManager) AddKWin(wmObj *wm.Wm) {
 	}
 
 	idNameMap := getWMIdNameMap()
+	releaseType := getDeepinReleaseType()
 
 	for _, accel := range accels {
+		if releaseType == "Server" && strings.Contains(accel.Id, "workspace") {
+			logger.Debugf("release type is server filter '%s'", accel.Id)
+			continue
+		}
 		name := idNameMap[accel.Id]
 		if name == "" {
 			name = accel.Id
@@ -894,4 +917,21 @@ func (sm *ShortcutManager) AddKWin(wmObj *wm.Wm) {
 func isZH() bool {
 	lang := gettext.QueryLang()
 	return strings.HasPrefix(lang, "zh")
+}
+
+func getDeepinReleaseType() string {
+	keyFile, err := dutils.NewKeyFileFromFile(versionFile)
+	if err != nil {
+		logger.Warningf("failed to open '%s' : %s", versionFile, err)
+		return ""
+	}
+	defer keyFile.Free()
+	releaseType, err := keyFile.GetString("Release", "Type")
+	if err != nil {
+		logger.Warningf("failed to get release type : %s", err)
+		return ""
+	}
+
+	logger.Debugf("release type is %s", releaseType)
+	return releaseType
 }

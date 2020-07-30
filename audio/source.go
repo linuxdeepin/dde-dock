@@ -24,7 +24,7 @@ import (
 	"strconv"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -86,6 +86,13 @@ func (s *Source) SetVolume(v float64, isPlay bool) *dbus.Error {
 	s.PropsMu.RUnlock()
 	s.audio.context().SetSourceVolumeByIndex(s.index, cv)
 
+	configKeeper.SetVolume(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if isPlay {
 		playFeedback()
 	}
@@ -101,6 +108,14 @@ func (s *Source) SetBalance(v float64, isPlay bool) *dbus.Error {
 	cv := s.cVolume.SetBalance(s.channelMap, v)
 	s.PropsMu.RUnlock()
 	s.audio.context().SetSourceVolumeByIndex(s.index, cv)
+
+	configKeeper.SetBalance(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if isPlay {
 		playFeedback()
 	}
@@ -123,6 +138,14 @@ func (s *Source) SetFade(v float64) *dbus.Error {
 
 func (s *Source) SetMute(v bool) *dbus.Error {
 	s.audio.context().SetSourceMuteByIndex(s.index, v)
+
+	configKeeper.SetMute(s.audio.getCardNameById(s.Card), s.ActivePort.Name, v)
+	err := configKeeper.Save(configKeeperFile)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
 	if !v {
 		playFeedback()
 	}

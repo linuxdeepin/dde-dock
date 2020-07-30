@@ -33,8 +33,9 @@ import (
 const (
 	deviceStateDisconnected = 0
 	// device state is connecting or disconnecting, mark them as device state doing
-	deviceStateDoing     = 1
-	deviceStateConnected = 2
+	deviceStateDoing         = 1
+	deviceStateConnected     = 2
+	deviceStateDisconnecting = 3
 )
 
 type deviceState uint32
@@ -47,6 +48,8 @@ func (s deviceState) String() string {
 		return "doing"
 	case deviceStateConnected:
 		return "Connected"
+	case deviceStateDisconnecting:
+		return "Disconnecting"
 	default:
 		return fmt.Sprintf("Unknown(%d)", s)
 	}
@@ -96,8 +99,9 @@ type device struct {
 	isInitiativeConnect bool
 	// remove device when device state is connecting or disconnecting may cause blueZ crash
 	// to avoid this situation, remove device only allowed when connected or disconnected finished
-	needRemove bool
-	removeLock sync.Mutex
+	needRemove     bool
+	removeLock     sync.Mutex
+	disconnectTime time.Time
 }
 
 type connectPhase uint32
@@ -272,8 +276,14 @@ func (d *device) connectProperties() {
 		if connected {
 			d.ConnectState = true
 			d.connectedTime = time.Now()
+			globalBluetooth.config.setDeviceConfigConnected(d, true)
 		} else {
+			//If the pairing is successful and connected, the signal will be sent when the device is disconnected
+			if d.Paired && d.ConnectState {
+				notifyDisconnected(d.Alias)
+			}
 			d.ConnectState = false
+
 			// if disconnect success, remove device from map
 			globalBluetooth.removeConnectedDevice(d)
 			// when disconnected quickly after connecting, automatically try to connect
@@ -452,7 +462,7 @@ func (d *device) getState() deviceState {
 		return deviceStateDoing
 
 	} else if d.disconnectPhase != connectPhaseNone {
-		return deviceStateDoing
+		return deviceStateDisconnecting
 
 	} else {
 		if d.connected {
@@ -497,7 +507,7 @@ func (d *device) doConnect(hasNotify bool) error {
 		}
 		return err
 	}
-	// d.audioA2DPWorkaround()
+	d.audioA2DPWorkaround()
 
 	err = d.doRealConnect()
 	if err != nil {

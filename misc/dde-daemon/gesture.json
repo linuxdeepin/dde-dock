@@ -99,8 +99,8 @@
         }
     },
     {
-        "Name": "pinch",
-        "Direction": "in",
+        "Name": "tap",
+        "Direction": "none",
         "Fingers": 4,
         "Action": {
             "Type": "commandline",
@@ -153,8 +153,8 @@
         }
     },
     {
-        "Name": "pinch",
-        "Direction": "in",
+        "Name": "tap",
+        "Direction": "none",
         "Fingers": 5,
         "Action": {
             "Type": "commandline",

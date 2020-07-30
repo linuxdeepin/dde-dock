@@ -204,7 +204,14 @@ func (m *Manager) initHandlers() {
 		case powerActionShowUI:
 			cmd := "dde-shutdown"
 			go func() {
-				err := m.execCmd(cmd, false)
+				locked, err := m.sessionManager.Locked().Get(0)
+				if err != nil {
+					logger.Warning("sessionManager get locked error:", err)
+				}
+				if locked {
+					return
+				}
+				err = m.execCmd(cmd, false)
 				if err != nil {
 					logger.Warning("execCmd error:", err)
 				}

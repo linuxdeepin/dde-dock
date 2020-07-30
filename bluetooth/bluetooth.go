@@ -22,11 +22,13 @@ package bluetooth
 import (
 	"errors"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
 	apidevice "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.device"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
+	obex "github.com/linuxdeepin/go-dbus-factory/org.bluez.obex"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	dbus "pkg.deepin.io/lib/dbus1"
@@ -72,6 +74,14 @@ const (
 	CameraPhone
 )
 
+const (
+	transferStatusQueued    = "queued"
+	transferStatusActive    = "active"
+	transferStatusSuspended = "suspended"
+	transferStatusComplete  = "complete"
+	transferStatusError     = "error"
+)
+
 var DeviceTypes []string = []string{
 	"computer",
 	"phone",
@@ -93,12 +103,15 @@ type dbusObjectData map[string]dbus.Variant
 
 type Bluetooth struct {
 	service       *dbusutil.Service
+	sigLoop       *dbusutil.SignalLoop
 	systemSigLoop *dbusutil.SignalLoop
 	config        *config
 	objectManager *bluez.ObjectManager
 	sysDBusDaemon *ofdbus.DBus
 	apiDevice     *apidevice.Device
 	agent         *agent
+	obexAgent     *obexAgent
+	obexManager   *obex.Manager
 
 	// adapter
 	adaptersLock sync.Mutex
@@ -116,6 +129,9 @@ type Bluetooth struct {
 	connectedDevices map[string][]*device
 	connectedLock    sync.RWMutex
 
+	sessionCancelChMap   map[dbus.ObjectPath]chan struct{}
+	sessionCancelChMapMu sync.Mutex
+
 	methods *struct {
 		DebugInfo                     func() `out:"info"`
 		GetDevices                    func() `in:"adapter" out:"devicesJSON"`
@@ -129,6 +145,8 @@ type Bluetooth struct {
 		FeedPasskey                   func() `in:"device,accept,passkey"`
 		GetAdapters                   func() `out:"adaptersJSON"`
 		RequestDiscovery              func() `in:"adapter"`
+		SendFiles                     func() `in:"device,files" out:"sessionPath"`
+		CancelTransferSession         func() `in:"sessionPath"`
 		SetAdapterPowered             func() `in:"adapter,powered"`
 		SetAdapterAlias               func() `in:"adapter,alias"`
 		SetAdapterDiscoverable        func() `in:"adapter,discoverable"`
@@ -181,6 +199,34 @@ type Bluetooth struct {
 		Cancelled struct {
 			device dbus.ObjectPath
 		}
+
+		ObexSessionCreated struct {
+			sessionPath dbus.ObjectPath
+		}
+
+		ObexSessionRemoved struct {
+			sessionPath dbus.ObjectPath
+		}
+
+		ObexSessionProcess struct {
+			sessionPath dbus.ObjectPath
+			totalSize   uint64
+			transferred uint64
+			currentIdx  int
+		}
+
+		TransferCreated struct {
+			file         string
+			transferPath dbus.ObjectPath
+			sessionPath  dbus.ObjectPath
+		}
+
+		TransferRemoved struct {
+			file         string
+			transferPath dbus.ObjectPath
+			sessionPath  dbus.ObjectPath
+			done         bool
+		}
 	}
 }
 
@@ -193,8 +239,11 @@ func newBluetooth(service *dbusutil.Service) (b *Bluetooth) {
 
 	b = &Bluetooth{
 		service:       service,
+		sigLoop:       dbusutil.NewSignalLoop(service.Conn(), 0),
 		systemSigLoop: dbusutil.NewSignalLoop(systemConn, 10),
+		obexManager:   obex.NewManager(service.Conn()),
 	}
+
 	b.adapters = make(map[dbus.ObjectPath]*adapter)
 	return
 }
@@ -231,6 +280,8 @@ func (*Bluetooth) GetInterfaceName() string {
 }
 
 func (b *Bluetooth) init() {
+	b.sigLoop.Start()
+
 	b.systemSigLoop.Start()
 	b.config = newConfig()
 	b.devices = make(map[dbus.ObjectPath][]*device)
@@ -240,6 +291,8 @@ func (b *Bluetooth) init() {
 	b.connectedLock.Lock()
 	b.connectedDevices = make(map[string][]*device, len(DeviceTypes))
 	b.connectedLock.Unlock()
+
+	b.sessionCancelChMap = make(map[dbus.ObjectPath]chan struct{})
 
 	// start bluetooth goroutine
 	// monitor click signal or time out signal to close notification window
@@ -260,6 +313,8 @@ func (b *Bluetooth) init() {
 
 	b.agent.init()
 	b.loadObjects()
+
+	b.obexAgent.init()
 
 	b.config.clearSpareConfig(b)
 	b.config.save()
@@ -656,29 +711,52 @@ func (b *Bluetooth) updateState() {
 }
 
 func (b *Bluetooth) tryConnectPairedDevices() {
+	//input and audio devices counter
+	typeMap := make(map[string]uint8)
+	typeMap["audio-card"] = 0
+	typeMap["input-keyboard"] = 0
+	typeMap["input-mouse"] = 0
+	typeMap["input-tablet"] = 0
+
 	var devList = b.getPairedDeviceList()
 	for _, dev := range devList {
 		// make sure dev always exist
 		if dev == nil {
 			continue
 		}
-		logger.Info("[DEBUG] Auto connect device:", dev.Path)
-
-		// if device using LE mode, will suspend, try connect should be failed, filter it.
-		if !b.isBREDRDevice(dev) {
-			continue
-		}
-		logger.Debug("Will auto connect device:", dev.String(), dev.adapter.address, dev.Address)
-		err := dev.doConnect(false)
-		if err != nil {
-			logger.Debug("failed to connect:", dev.String(), err)
-		} else {
-			// if auto connect success, add device into map connectedDevices
-			if dev.ConnectState == true {
-				b.addConnectedDevice(dev)
+		//connect back to a device
+		switch dev.Icon {
+		case "audio-card", "input-keyboard", "input-mouse", "input-tablet":
+			if typeMap[dev.Icon] == 0 {
+				if b.tryConnectPairedDevice(dev) {
+					typeMap[dev.Icon]++
+				}
 			}
+		default:
+			b.tryConnectPairedDevice(dev)
 		}
 	}
+}
+
+func (b *Bluetooth) tryConnectPairedDevice(dev *device) bool {
+	logger.Info("[DEBUG] Auto connect device:", dev.Path)
+
+	// if device using LE mode, will suspend, try connect should be failed, filter it.
+	if !b.isBREDRDevice(dev) {
+		return false
+	}
+	logger.Debug("Will auto connect device:", dev.String(), dev.adapter.address, dev.Address)
+	err := dev.doConnect(false)
+	if err != nil {
+		logger.Debug("failed to connect:", dev.String(), err)
+		return false
+	} else {
+		// if auto connect success, add device into map connectedDevices
+		if dev.ConnectState == true {
+			b.addConnectedDevice(dev)
+		}
+	}
+	return true
 }
 
 // get paired device list
@@ -707,9 +785,9 @@ func (b *Bluetooth) getPairedDeviceList() []*device {
 				continue
 			}
 			devAddressMap[value.getAddress()] = value
+			logger.Debug("devAddressMap", value)
 		}
 	}
-
 	// select the latest devices of each deviceType and add them into list
 	devList := b.config.filterDemandedTypeDevices(devAddressMap)
 
@@ -788,4 +866,187 @@ func (b *Bluetooth) removeConnectedDevice(disconnectedDev *device) {
 		globalBluetooth.connectedDevices[disconnectedDev.Icon] = tempDevices
 	}
 	b.connectedLock.Unlock()
+}
+
+func (b *Bluetooth) getConnectedDeviceByAddress(address string) *device {
+	b.connectedLock.Lock()
+	defer b.connectedLock.Unlock()
+
+	for _, v := range b.connectedDevices {
+		for _, dev := range v {
+			if dev.Address == address {
+				return dev
+			}
+		}
+	}
+
+	return nil
+}
+
+func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, error) {
+	var totalSize uint64
+
+	for _, f := range files {
+		info, err := os.Stat(f)
+		if err != nil {
+			return "", err
+		}
+
+		totalSize += uint64(info.Size())
+	}
+
+	// 创建 OBEX session
+	args := make(map[string]dbus.Variant)
+	args["Source"] = dbus.MakeVariant(dev.adapter.address) // 蓝牙适配器地址
+	args["Target"] = dbus.MakeVariant("opp")               // 连接方式「OPP」
+	sessionPath, err := b.obexManager.CreateSession(0, dev.Address, args)
+	if err != nil {
+		logger.Warning("failed to create obex session:", err)
+		return "", err
+	}
+
+	b.emitObexSessionCreated(sessionPath)
+
+	session, err := obex.NewSession(b.service.Conn(), sessionPath)
+	if err != nil {
+		logger.Warning("failed to get session bus:", err)
+		return "", err
+	}
+
+	go b.sendFilesToSession(session, files, totalSize)
+
+	return sessionPath, nil
+}
+
+func (b *Bluetooth) sendFilesToSession(session *obex.Session, files []string, totalSize uint64) {
+	sessionPath := session.Path_()
+	cancelCh := make(chan struct{})
+
+	b.sessionCancelChMapMu.Lock()
+	b.sessionCancelChMap[sessionPath] = cancelCh
+	b.sessionCancelChMapMu.Unlock()
+
+	var transferredBase uint64
+
+	for i, f := range files {
+		transferPath, properties, err := session.ObjectPush().SendFile(0, f)
+		if err != nil {
+			logger.Warningf("failed to send file: %s: %s", f, err)
+			continue
+		}
+		logger.Infof("properties: %v", properties)
+
+		transfer, err := obex.NewTransfer(b.service.Conn(), transferPath)
+		if err != nil {
+			logger.Warningf("failed to send file: %s: %s", f, err)
+			continue
+		}
+
+		transfer.InitSignalExt(b.sigLoop, true)
+
+		b.emitTransferCreated(f, transferPath, sessionPath)
+
+		ch := make(chan bool)
+		err = transfer.Status().ConnectChanged(func(hasValue bool, value string) {
+			if !hasValue {
+				return
+			}
+
+			// 成功或者失败，说明这个传输结束
+			if value == transferStatusComplete || value == transferStatusError {
+				ch <- value == transferStatusComplete
+			}
+		})
+		if err != nil {
+			logger.Warning("connect to status changed failed:", err)
+		}
+
+		err = transfer.Transferred().ConnectChanged(func(hasValue bool, value uint64) {
+			if !hasValue {
+				return
+			}
+
+			transferred := transferredBase + value
+			b.emitObexSessionProcess(sessionPath, totalSize, transferred, i+1)
+		})
+		if err != nil {
+			logger.Warning("connect to transferred changed failed:", err)
+		}
+
+		var res bool
+		var cancel bool
+		select {
+		case res = <-ch:
+		case <-cancelCh:
+			b.sessionCancelChMapMu.Lock()
+			delete(b.sessionCancelChMap, sessionPath)
+			b.sessionCancelChMapMu.Unlock()
+
+			cancel = true
+			transfer.Cancel(0)
+		}
+
+		b.emitTransferRemoved(f, transferPath, sessionPath, res)
+
+		if cancel {
+			break
+		}
+
+		info, err := os.Stat(f)
+		if err != nil {
+			logger.Warning("failed to stat file:", err)
+			continue
+		} else {
+			transferredBase += uint64(info.Size())
+		}
+
+		b.emitObexSessionProcess(sessionPath, totalSize, transferredBase, i+1)
+	}
+
+	b.sessionCancelChMapMu.Lock()
+	delete(b.sessionCancelChMap, sessionPath)
+	b.sessionCancelChMapMu.Unlock()
+
+	err := b.obexManager.RemoveSession(0, sessionPath)
+	if err != nil {
+		logger.Warning("failed to remove session:", err)
+		return
+	}
+
+	b.emitObexSessionRemoved(sessionPath)
+}
+
+func (b *Bluetooth) emitObexSessionCreated(sessionPath dbus.ObjectPath) {
+	err := b.service.Emit(b, "ObexSessionCreated", sessionPath)
+	if err != nil {
+		logger.Warning("failed to emit ObexSessionCreated:", err)
+	}
+}
+
+func (b *Bluetooth) emitObexSessionRemoved(sessionPath dbus.ObjectPath) {
+	err := b.service.Emit(b, "ObexSessionRemoved", sessionPath)
+	if err != nil {
+		logger.Warning("failed to emit ObexSessionRemoved:", err)
+	}
+}
+
+func (b *Bluetooth) emitObexSessionProcess(sessionPath dbus.ObjectPath, totalSize uint64, transferred uint64, currentIdx int) {
+	err := b.service.Emit(b, "ObexSessionProcess", sessionPath, totalSize, transferred, currentIdx)
+	if err != nil {
+		logger.Warning("failed to emit ObexSessionProcess:", err)
+	}
+}
+
+func (b *Bluetooth) emitTransferCreated(file string, transferPath dbus.ObjectPath, sessionPath dbus.ObjectPath) {
+	err := b.service.Emit(b, "TransferCreated", file, transferPath, sessionPath)
+	if err != nil {
+		logger.Warning("failed to emit TransferCreated:", err)
+	}
+}
+
+func (b *Bluetooth) emitTransferRemoved(file string, transferPath dbus.ObjectPath, sessionPath dbus.ObjectPath, done bool) {
+	err := b.service.Emit(b, "TransferRemoved", file, transferPath, sessionPath, done)
+	if err != nil {
+		logger.Warning("failed to emit TransferRemoved:", err)
+	}
 }

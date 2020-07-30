@@ -7,12 +7,15 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"sync"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.gesture"
+	"github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.daemon.dock"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -21,9 +24,10 @@ import (
 )
 
 const (
-	tsSchemaID           = "com.deepin.dde.touchscreen"
-	tsSchemaKeyLongPress = "longpress-duration"
-	tsSchemaKeyBlacklist = "longpress-blacklist"
+	tsSchemaID            = "com.deepin.dde.touchscreen"
+	tsSchemaKeyLongPress  = "longpress-duration"
+	tsSchemaKeyShortPress = "shortpress-duration"
+	tsSchemaKeyBlacklist  = "longpress-blacklist"
 )
 
 type Manager struct {
@@ -34,14 +38,18 @@ type Manager struct {
 	userFile      string
 	builtinSets   map[string]func() error
 	gesture       *gesture.Gesture
+	dock          *dock.Dock
+	display       *display.Display
 	setting       *gio.Settings
 	tsSetting     *gio.Settings
 	enabled       bool
 	Infos         gestureInfos
 
 	methods *struct {
-		SetLongPressDuration func() `in:"duration"`
-		GetLongPressDuration func() `out:"duration"`
+		SetLongPressDuration  func() `in:"duration"`
+		GetLongPressDuration  func() `out:"duration"`
+		SetShortPressDuration func() `in:"duration"`
+		GetShortPressDuration func() `out:"duration"`
 	}
 }
 
@@ -102,6 +110,8 @@ func newManager() (*Manager, error) {
 		tsSetting: tsSetting,
 		enabled:   setting.GetBoolean(gsKeyEnabled),
 		wm:        wm.NewWm(sessionConn),
+		dock:      dock.NewDock(sessionConn),
+		display:   display.NewDisplay(sessionConn),
 		sysDaemon: daemon.NewDaemon(systemConn),
 	}
 
@@ -119,15 +129,35 @@ func (m *Manager) destroy() {
 func (m *Manager) init() {
 	m.initBuiltinSets()
 	m.sysDaemon.SetLongPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyLongPress)))
+	err := m.gesture.SetShortPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyShortPress)))
+	if err != nil {
+		logger.Warning("call SetShortPressDuration failed:", err)
+	}
+
 	m.systemSigLoop.Start()
 	m.gesture.InitSignalExt(m.systemSigLoop, true)
-	m.gesture.ConnectEvent(func(name string, direction string, fingers int32) {
+	_, err = m.gesture.ConnectEvent(func(name string, direction string, fingers int32) {
 		logger.Debug("[Event] received:", name, direction, fingers)
-		err := m.Exec(name, direction, fingers)
+		err = m.Exec(name, direction, fingers)
 		if err != nil {
 			logger.Error("Exec failed:", err)
 		}
 	})
+	if err != nil {
+		logger.Error("connect gesture event failed:", err)
+	}
+
+	_, err = m.gesture.ConnectTouchEdgeMoveStopLeave(func(direction string, scaleX float64, scaleY float64, duration int32) {
+		logger.Debug("----------[ConnectTouchEdgeMoveStopLeave]:", direction, scaleX, scaleY, duration)
+		err = m.handleTouchEdgeMoveStopLeave(direction, scaleX, scaleY, duration)
+		if err != nil {
+			logger.Error("handleTouchEdgeMoveStopLeave failed:", err)
+		}
+	})
+	if err != nil {
+		logger.Error("connect TouchEdgeMoveStopLeave failed:", err)
+	}
+
 	m.listenGSettingsChanged()
 }
 
@@ -158,7 +188,10 @@ func (m *Manager) Exec(name, direction string, fingers int32) error {
 			logger.Debug("The current active window in blacklist")
 			return nil
 		}
+	} else if strings.HasPrefix(info.Name, "touch") {
+		return m.handleTouchScreenEvent(info)
 	}
+
 	var cmd = info.Action.Action
 	switch info.Action.Type {
 	case ActionTypeCommandline:
@@ -211,4 +244,46 @@ func (m *Manager) handleBuiltinAction(cmd string) error {
 
 func (*Manager) GetInterfaceName() string {
 	return dbusServiceIFC
+}
+
+//handle touchscreen event
+func (*Manager) handleTouchScreenEvent(info *gestureInfo) error {
+	return nil
+}
+
+//param @edge: swipe to touchscreen edge
+func (m *Manager) handleTouchEdgeMoveStopLeave(edge string, scaleX float64, scaleY float64, duration int32) error {
+	if edge == "bot" {
+		position, err := m.dock.Position().Get(0)
+		if err != nil {
+			logger.Error("get dock.Position failed:", err)
+			return err
+		}
+
+		if position >= 0 {
+			rect, err := m.dock.FrontendWindowRect().Get(0)
+			if err != nil {
+				logger.Error("get dock.FrontendWindowRect failed:", err)
+				return err
+			}
+
+			var dockPly uint32 = 0
+			if position == positionTop || position == positionBottom {
+				dockPly = rect.Height
+			} else if position == positionRight || position == positionLeft {
+				dockPly = rect.Width
+			}
+
+			screenHeight, err := m.display.ScreenHeight().Get(0)
+			if err != nil {
+				logger.Error("get display.ScreenHeight failed:", err)
+				return err
+			}
+
+			if screenHeight > 0 && float64(dockPly)/float64(screenHeight) < scaleY {
+				return m.handleBuiltinAction("ShowWorkspace")
+			}
+		}
+	}
+	return nil
 }

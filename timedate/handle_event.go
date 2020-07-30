@@ -103,4 +103,44 @@ func (m *Manager) handleGSettingsChanged() {
 			logger.Warning(err)
 		}
 	})
+
+    gsettings.ConnectChanged(timeDateSchema, settingsKeyWeekdayFormat, func(key string) {
+		value := m.settings.GetInt(settingsKeyWeekdayFormat)
+		err := m.userObj.SetWeekdayFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+    
+    gsettings.ConnectChanged(timeDateSchema, settingsKeyShortDateFormat, func(key string) {
+		value := m.settings.GetInt(settingsKeyShortDateFormat)
+		err := m.userObj.SetShortDateFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+    
+    gsettings.ConnectChanged(timeDateSchema, settingsKeyLongDateFormat, func(key string) {
+		value := m.settings.GetInt(settingsKeyLongDateFormat)
+		err := m.userObj.SetLongDateFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+    
+    gsettings.ConnectChanged(timeDateSchema, settingsKeyShortTimeFormat, func(key string) {
+		value := m.settings.GetInt(settingsKeyShortTimeFormat)
+		err := m.userObj.SetShortTimeFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+
+    gsettings.ConnectChanged(timeDateSchema, settingsKeyLongTimeFormat, func(key string) {
+		value := m.settings.GetInt(settingsKeyLongTimeFormat)
+		err := m.userObj.SetLongTimeFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})  
 }

@@ -20,6 +20,7 @@
 package network
 
 import (
+	"os/exec"
 	"sync"
 	"time"
 
@@ -27,6 +28,7 @@ import (
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/common/dsync"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/dde/daemon/session/common"
 	dbus "pkg.deepin.io/lib/dbus1"
@@ -40,6 +42,8 @@ const (
 	dbusPath        = "/com/deepin/daemon/Network"
 	dbusInterface   = "com.deepin.daemon.Network"
 )
+
+const maxPortalCheckTimes = 600
 
 type connectionData map[string]map[string]dbus.Variant
 
@@ -92,7 +96,6 @@ type Manager struct {
 
 	sessionSigLoop *dbusutil.SignalLoop
 	syncConfig     *dsync.Config
-
 
 	signals *struct {
 		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
@@ -222,6 +225,10 @@ func (m *Manager) init() {
 
 	// update property Connectivity
 	_ = nmManager.Connectivity().ConnectChanged(func(hasValue bool, value uint32) {
+		logger.Debug("connectivity state changed ", hasValue, value)
+		if hasValue && value == nm.NM_CONNECTIVITY_PORTAL {
+			go m.doPortalAuthentication()
+		}
 		m.updatePropConnectivity()
 	})
 	m.updatePropConnectivity()
@@ -364,4 +371,27 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 	if err != nil {
 		logger.Warning(err)
 	}
+}
+
+func (m *Manager) doPortalAuthentication() {
+	logger.Info("portal authentication begin")
+
+	err := exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
+	if err != nil {
+		logger.Warning(err)
+	}
+	for i := 0; i < maxPortalCheckTimes; i++ {
+		connectivity, err := nmManager.CheckConnectivity(0)
+		if err != nil {
+			logger.Warning(err)
+		}
+		if connectivity == nm.NM_CONNECTIVITY_FULL {
+			logger.Info("portal authentication successful")
+			notifyPortalSuccess()
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	logger.Info("portal authentication end")
 }

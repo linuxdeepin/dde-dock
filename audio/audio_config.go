@@ -219,16 +219,17 @@ func (a *Audio) doSaveConfig() {
 
 }
 
-func setReduceNoise(enable bool) error {
+func (a *Audio) setReduceNoise(enable bool) error {
 	logger.Debug("set reduce noise :", enable)
 	var err error
+	var out []byte
 	if enable {
-		out, err := exec.Command("/bin/sh", "/usr/share/dde-daemon/audio/echoCancelEnable.sh").CombinedOutput()
+		out, err = exec.Command("/bin/sh", "/usr/share/dde-daemon/audio/echoCancelEnable.sh").CombinedOutput()
 		if err != nil {
 			logger.Warningf("failed to enable reduce noise %v %s", err, out)
 		}
 	} else {
-		out, err := exec.Command("pactl", "unload-module", "module-echo-cancel").CombinedOutput()
+		out, err = exec.Command("pactl", "unload-module", "module-echo-cancel").CombinedOutput()
 		if err != nil {
 			logger.Warningf("failed to disable reduce noise %v %s", err, out)
 		}
