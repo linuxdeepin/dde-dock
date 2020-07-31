@@ -746,6 +746,7 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 		sourceInfo = a.getSourceInfoByName(sourceInfo.Proplist["device.master_device"])
 		if sourceInfo == nil {
 			logger.Warning("failed to get virtual device sourceInfo for name:", sourceName)
+			a.mu.Unlock()
 			return
 		}
 	}

@@ -391,7 +391,8 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		}
 		a.addSource(sourceInfo)
 
-		err = a.setReduceNoise(a.ReduceNoise.Get())
+		_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sourceInfo.Card), sourceInfo.ActivePort.Name)
+		err = a.setReduceNoise(portConfig.ReduceNoise)
 		if err != nil {
 			logger.Debug("reduce physical device noise failed:", err)
 		}
