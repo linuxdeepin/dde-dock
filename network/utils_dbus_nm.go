@@ -147,9 +147,9 @@ func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
 	}
 
 	switch driver {
-	case "dummy", "veth", "vboxnet", "vmnet", "vmxnet", "vmxnet2", "vmxnet3":
+	case "dummy", "veth", "vboxnet", "vmnet":
 		return true
-	case "unknown":
+	case "unknown", "vmxnet", "vmxnet2", "vmxnet3":
 		// sometimes we could not get vmnet dirver name, so check the
 		// udi sys path if is prefix with /sys/devices/virtual/net
 		devUdi, _ := dev.Udi().Get(0)
@@ -817,8 +817,8 @@ func nmGetIp6ConfigInfo(path dbus.ObjectPath) (address, prefix string, gateways,
 	}
 	for _, addr := range ipv6Addresses {
 		gateways = append(gateways, addr.Gateway)
-		if(addr.Address[:5] != "FE80:" &&     // link local
-			addr.Address[:5] != "FEC0:") {    // site local
+		if addr.Address[:5] != "FE80:" && // link local
+			addr.Address[:5] != "FEC0:" { // site local
 			address = addr.Address
 			prefix = fmt.Sprintf("%d", addr.Prefix)
 		}
