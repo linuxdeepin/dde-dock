@@ -27,7 +27,7 @@ import (
 
 const (
 	macAddrZero  = "00:00:00:00:00:00"
-	ipv4Zero     = "0.0.0.0"
+	ipv4Zero     = "0.0.0.0" //nolint
 	ipv6AddrZero = "0000:0000:0000:0000:0000:0000:0000:0000"
 )
 
@@ -75,16 +75,6 @@ func convertMacAddressToArrayByteCheck(v string) (macAddr []byte, err error) {
 
 func convertIpv4AddressToString(v uint32) (ip4Addr string) {
 	ip4Addr = fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
-	return
-}
-
-// if address is 0, return empty string instead of "0.0.0.0"
-func convertIpv4AddressToStringNoZero(v uint32) (ip4Addr string) {
-	if v == 0 {
-		return
-	} else {
-		ip4Addr = fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
-	}
 	return
 }
 
@@ -194,14 +184,6 @@ func convertIpv6AddressToStringCheck(v []byte) (ipv6Addr string, err error) {
 	return
 }
 
-// if address is 0, return empty string instead of "0.0.0.0"
-func convertIpv6AddressToStringNoZero(v []byte) (ipv6Addr string) {
-	if isIpv6AddressZero(v) {
-		return
-	}
-	return convertIpv6AddressToString(v)
-}
-
 // "0000:0000:0000:0000:0000:0000:0000:0000" -> []byte{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
 	ipv6Addr, err := convertIpv6AddressToArrayByteCheck(v)
@@ -289,35 +271,4 @@ func expandIpv6Address(v string) (ipv6Addr string, err error) {
 		}
 	}
 	return
-}
-
-func isIpv6AddressValid(v []byte) bool {
-	if len(v) != 16 {
-		return false
-	}
-	return true
-}
-
-func isIpv6AddressZero(v []byte) bool {
-	// don't care if ipv6 address if is valid
-	allAreZero := true
-	for _, b := range v {
-		if b != 0 {
-			allAreZero = false
-			break
-		}
-	}
-	return allAreZero
-}
-
-func isIpv6AddressStructZero(addr ipv6Address) bool {
-	if isIpv6AddressZero(addr.Address) && isIpv6AddressZero(addr.Gateway) && addr.Prefix == 0 {
-		return true
-	}
-	return false
-}
-
-func isIpv6RouteStructZero(route ipv6Route) bool {
-	return isIpv6AddressZero(route.Address) && isIpv6AddressZero(route.NextHop) &&
-		(route.Prefix == 0) && (route.Metric == 0)
 }

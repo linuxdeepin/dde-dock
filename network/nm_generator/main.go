@@ -129,12 +129,12 @@ func genTpl(data interface{}, tplstr string) (content string) {
 	if err != nil {
 		panic(err)
 	}
-	buf := bytes.NewBufferString("")
-	err = tpl.Execute(buf, data)
+	var buf bytes.Buffer
+	err = tpl.Execute(&buf, data)
 	if err != nil {
 		panic(err)
 	}
-	content = string(buf.Bytes())
+	content = buf.String()
 	return
 }
 
@@ -149,9 +149,7 @@ func main() {
 	mergeOverrideKeys()
 
 	yamlUnmarshalFile(nmVpnAliasSettingsYamlFile, &nmVpnAliasSettings)
-	for _, setting := range nmVpnAliasSettings {
-		nmConsts.NMSettings = append(nmConsts.NMSettings, setting)
-	}
+	nmConsts.NMSettings = append(nmConsts.NMSettings, nmVpnAliasSettings...)
 
 	yamlUnmarshalFile(nmVirtualSettingYamlFile, &nmVirtualSections)
 	yamlUnmarshalFile(nmLogicSetKeysYamlFile, &nmLogicSetKeys)

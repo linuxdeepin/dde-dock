@@ -25,7 +25,7 @@ import (
 
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/utils"
 )
@@ -84,7 +84,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 
 	// connect property changed signals
 	ap.nmAp.InitSignalExt(m.sysSigLoop, true)
-	ap.nmAp.AccessPoint().ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
+	_, err = ap.nmAp.AccessPoint().ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
 		if !m.isAccessPointExists(apPath) {
 			return
 		}
@@ -102,36 +102,50 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 				logger.Debugf("access point(ignored) properties changed %#v", ap)
 			} else {
 				//logger.Debugf("access point properties changed %#v", ap)
-				m.service.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
+				err = m.service.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
 			}
 		} else {
 			// ignored state changed, if became ignored now, send
 			// removed signal or send added signal
 			if ignoredNow {
 				logger.Debugf("access point is ignored %#v", ap)
-				m.service.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
+				err = m.service.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
 			} else {
 				logger.Debugf("ignored access point available %#v", ap)
-				m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+				err = m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
 			}
 		}
+		if err != nil {
+			logger.Warning("failed to emit signal:", err)
+		}
 	})
+	if err != nil {
+		logger.Warning("failed to monitor changing properties of AccessPoint", err)
+	}
 
 	if ap.shouldBeIgnore() {
 		logger.Debugf("new access point is ignored %#v", ap)
 	} else {
 		apJSON, _ := marshalJSON(ap)
-		m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+		err = m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+		if err != nil {
+			logger.Warning("failed to emit signal:", err)
+		}
 	}
 
 	return
 }
+
 func (m *Manager) destroyAccessPoint(ap *accessPoint) {
 	// emit AccessPointRemoved signal
 	apJSON, _ := marshalJSON(ap)
-	m.service.Emit(m, "AccessPointRemoved", string(ap.devPath), apJSON)
+	err := m.service.Emit(m, "AccessPointRemoved", string(ap.devPath), apJSON)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 	nmDestroyAccessPoint(ap.nmAp)
 }
+
 func (a *accessPoint) updateProps() {
 	ssid, _ := a.nmAp.Ssid().Get(0)
 	a.Ssid = decodeSsid(ssid)
@@ -218,7 +232,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if !m.isAccessPointExists(apPath) {
 		return
 	}
-	devPath, i := m.getAccessPointIndex(apPath)
+	_, i := m.getAccessPointIndex(apPath)
 
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
@@ -233,24 +247,9 @@ func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint 
 	return aps
 }
 
-func (m *Manager) getAccessPoint(apPath dbus.ObjectPath) (ap *accessPoint) {
-	devPath, i := m.getAccessPointIndex(apPath)
-	if i < 0 {
-		logger.Warning("access point not found", apPath)
-		return
-	}
-
-	m.accessPointsLock.Lock()
-	defer m.accessPointsLock.Unlock()
-	ap = m.accessPoints[devPath][i]
-	return
-}
 func (m *Manager) isAccessPointExists(apPath dbus.ObjectPath) bool {
 	_, i := m.getAccessPointIndex(apPath)
-	if i >= 0 {
-		return true
-	}
-	return false
+	return i >= 0
 }
 func (m *Manager) getAccessPointIndex(apPath dbus.ObjectPath) (devPath dbus.ObjectPath, index int) {
 	m.accessPointsLock.Lock()
@@ -263,15 +262,6 @@ func (m *Manager) getAccessPointIndex(apPath dbus.ObjectPath) (devPath dbus.Obje
 		}
 	}
 	return "", -1
-}
-
-func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
-	for _, ap := range m.accessPoints[devPath] {
-		if ap.Ssid == ssid {
-			return true
-		}
-	}
-	return false
 }
 
 // GetAccessPoints return all access points object which marshaled by json.
@@ -332,13 +322,17 @@ func fixApSecTypeChange(uuid string, secType apSecType) (needUserEdit bool, err 
 
 	switch secType {
 	case apSecNone:
-		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "none")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(connData, "none")
 	case apSecWep:
-		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wep")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wep")
 	case apSecPsk:
-		logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wpa-psk")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(connData, "wpa-psk")
 	case apSecEap:
 		needUserEdit = true
+		return
+	}
+	if err != nil {
+		logger.Debug("failed to set VKWirelessSecutiryKeyMgmt")
 		return
 	}
 

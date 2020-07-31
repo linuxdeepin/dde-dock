@@ -26,15 +26,6 @@ type ipv4AddressWrapper struct {
 	Gateway string
 }
 
-// Ipv4RoutesWrapper
-type ipv4RoutesWrapper []ipv4RouteWrapper
-type ipv4RouteWrapper struct {
-	Address string
-	Mask    string
-	NextHop string
-	Metric  uint32
-}
-
 // Ipv6AddressesWrapper
 type ipv6AddressesWrapper []ipv6AddressWrapper
 type ipv6AddressWrapper struct {
@@ -49,15 +40,6 @@ type ipv6Address struct {
 	Address []byte
 	Prefix  uint32
 	Gateway []byte
-}
-
-// ipv6RoutesWrapper
-type ipv6RoutesWrapper []ipv6RouteWrapper
-type ipv6RouteWrapper struct {
-	Address string
-	Prefix  uint32
-	NextHop string
-	Metric  uint32
 }
 
 // ipv6Routes is an array of (byte array, uint32, byte array, uint32)

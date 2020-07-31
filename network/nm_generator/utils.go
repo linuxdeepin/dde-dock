@@ -22,11 +22,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"gopkg.in/yaml.v2"
+	"pkg.deepin.io/lib/log"
 )
+
+var logger = log.NewLogger("daemon/network/nm_generator")
 
 func yamlUnmarshalFile(file string, value interface{}) {
 	yamlContent, err := ioutil.ReadFile(file)
@@ -84,6 +88,7 @@ func mergeOverrideKeys() {
 
 // convert setting key's default value from yaml string to go interface
 func getSettingKeyFixedDefaultValue(ktype, defaultValueYAML string) (fixedDefaultValue interface{}) {
+	var err error
 	switch ktype {
 	default:
 		fmt.Println("invalid ktype:", ktype)
@@ -93,94 +98,98 @@ func getSettingKeyFixedDefaultValue(ktype, defaultValueYAML string) (fixedDefaul
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `""`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeByte":
 		var fixedValue byte
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `0`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeInt32":
 		var fixedValue int32
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `0`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeUint32":
 		var fixedValue uint32
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `0`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeInt64":
 		var fixedValue int64
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `0`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeUint64":
 		var fixedValue uint64
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `0`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeBoolean":
 		var fixedValue bool
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `False`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
 		var fixedValue []byte
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `[]`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeArrayString":
 		var fixedValue []string
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `[]`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeArrayUint32", "ktypeWrapperIpv4Dns":
 		var fixedValue []uint32
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `[]`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
 		var fixedValue [][]byte
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `[]`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
 		var fixedValue [][]uint32
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `[]`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeDictStringString":
 		var fixedValue map[string]string
 		if len(defaultValueYAML) == 0 {
 			defaultValueYAML = `{}`
 		}
-		yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
+		err = yaml.Unmarshal([]byte(defaultValueYAML), &fixedValue)
 		fixedDefaultValue = fixedValue
 	case "ktypeIpv6Addresses", "ktypeIpv6Routes", "ktypeWrapperIpv6Addresses", "ktypeWrapperIpv6Routes":
 		// ignore the combined structure here and it will be filled in GetKeyDefaultValue
+	}
+	if err != nil {
+		logger.Debug("failed to Unmarshal defauleValueYAML:", err)
+		return
 	}
 	return
 }

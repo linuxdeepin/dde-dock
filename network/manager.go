@@ -63,11 +63,6 @@ type Manager struct {
 	NetworkingEnabled bool `prop:"access:rw"` // airplane mode for NetworkManager
 	VpnEnabled        bool `prop:"access:rw"`
 
-	// hidden properties
-	wirelessEnabled bool
-	wwanEnabled     bool
-	wiredEnabled    bool
-
 	// update by manager_devices.go
 	devicesLock sync.Mutex
 	devices     map[string][]*device
@@ -99,6 +94,7 @@ type Manager struct {
 
 	isPortalChecking bool
 
+	//nolint
 	signals *struct {
 		AccessPointAdded, AccessPointRemoved, AccessPointPropertiesChanged struct {
 			devPath, apJSON string
@@ -108,7 +104,7 @@ type Manager struct {
 			enabled bool
 		}
 	}
-
+	//nolint
 	methods *struct {
 		ActivateAccessPoint          func() `in:"uuid,apPath,devPath" out:"cPath"`
 		ActivateConnection           func() `in:"uuid,devPath" out:"cPath"`

@@ -76,9 +76,6 @@ type device struct {
 
 const (
 	nmInterfaceFlagUP uint32 = 1 << iota
-	nmInterfaceFlagLowerUP
-
-	nmInterfaceFlagCarrier = 0x10000
 )
 
 func (m *Manager) initDeviceManage() {
@@ -186,7 +183,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				}
 			}
 
-			nmDev.Wired().Carrier().ConnectChanged(carrierChanged)
+			err = nmDev.Wired().Carrier().ConnectChanged(carrierChanged)
+			if err != nil {
+				logger.Warning("failed to monitor Wired-Carrier's change:", err)
+			}
 
 			carrier, _ := nmDev.Wired().Carrier().Get(0)
 			carrierChanged(true, carrier)
@@ -477,10 +477,7 @@ func (m *Manager) getDevice(devPath dbus.ObjectPath) (dev *device) {
 }
 func (m *Manager) isDeviceExists(devPath dbus.ObjectPath) bool {
 	_, i := m.getDeviceIndex(devPath)
-	if i >= 0 {
-		return true
-	}
-	return false
+	return i >= 0
 }
 func (m *Manager) getDeviceIndex(devPath dbus.ObjectPath) (devType string, index int) {
 	m.devicesLock.Lock()
@@ -516,7 +513,11 @@ func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		if err != nil {
 			return
 		}
-		m.ActivateConnection(uuid, devPath)
+		_, err = m.ActivateConnection(uuid, devPath)
+		if err != nil {
+			logger.Debug("failed to activate a connection")
+			return
+		}
 	}
 
 	m.stateHandler.locker.Lock()

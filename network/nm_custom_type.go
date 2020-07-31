@@ -20,10 +20,8 @@
 package network
 
 import (
-	"strconv"
-
 	"pkg.deepin.io/dde/daemon/network/nm"
-	. "pkg.deepin.io/lib/gettext"
+	_ "pkg.deepin.io/lib/gettext"
 )
 
 // Custom device types, use string instead of number, used by front-end
@@ -130,19 +128,6 @@ var supportedConnectionTypes = []string{
 	connectionVpnVpnc,
 }
 
-func getCustomConnectionTypeForUuid(uuid string) (connType string) {
-	connType = connectionUnknown
-	cpath, err := nmGetConnectionByUuid(uuid)
-	if err != nil {
-		return
-	}
-	data, err := nmGetConnectionData(cpath)
-	if err != nil {
-		return
-	}
-	return getCustomConnectionType(data)
-}
-
 // return custom connection type, and the wrapper types will be ignored, e.g. connectionMobile.
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
@@ -186,78 +171,6 @@ func getCustomConnectionType(data connectionData) (connType string) {
 	}
 	if len(connType) == 0 {
 		connType = connectionUnknown
-	}
-	return
-}
-
-func isWirelessConnection(data connectionData) (isWireless bool) {
-	if getSettingConnectionType(data) == nm.NM_SETTING_WIRELESS_SETTING_NAME {
-		return true
-	}
-	return false
-}
-
-func isVpnConnection(data connectionData) (isVpn bool) {
-	if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
-		return true
-	}
-	return false
-}
-
-func isCreatedManuallyConnection(data connectionData) (isCreateManual bool) {
-	if isVpnConnection(data) {
-		return true
-	}
-	switch getCustomConnectionType(data) {
-	case connectionPppoe:
-		return true
-	}
-	return false
-}
-
-// generate connection id when creating a new connection
-func genConnectionId(connType string) (id string) {
-	var idPrefix string
-	switch connType {
-	default:
-		idPrefix = Tr("Connection")
-	case connectionWired:
-		idPrefix = Tr("Wired Connection")
-	case connectionWireless:
-		idPrefix = Tr("Wireless Connection")
-	case connectionWirelessAdhoc:
-		idPrefix = Tr("Wireless Ad-Hoc")
-	case connectionWirelessHotspot:
-		idPrefix = Tr("Wireless Ap-Hotspot")
-	case connectionPppoe:
-		idPrefix = Tr("PPPoE Connection")
-	case connectionMobile:
-		idPrefix = Tr("Mobile Connection")
-	case connectionMobileGsm:
-		idPrefix = Tr("Mobile GSM Connection")
-	case connectionMobileCdma:
-		idPrefix = Tr("Mobile CDMA Connection")
-	case connectionVpn:
-		idPrefix = Tr("VPN Connection")
-	case connectionVpnL2tp:
-		idPrefix = Tr("VPN L2TP")
-	case connectionVpnOpenconnect:
-		idPrefix = Tr("VPN OpenConnect")
-	case connectionVpnOpenvpn:
-		idPrefix = Tr("VPN OpenVPN")
-	case connectionVpnPptp:
-		idPrefix = Tr("VPN PPTP")
-	case connectionVpnStrongswan:
-		idPrefix = Tr("VPN StrongSwan")
-	case connectionVpnVpnc:
-		idPrefix = Tr("VPN VPNC")
-	}
-	allIds := nmGetConnectionIds()
-	for i := 1; ; i++ {
-		id = idPrefix + " " + strconv.Itoa(i)
-		if !isStringInArray(id, allIds) {
-			break
-		}
 	}
 	return
 }

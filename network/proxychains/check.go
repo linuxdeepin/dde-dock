@@ -42,18 +42,11 @@ func validIPv4(ipStr string) bool {
 	}
 
 	ip := net.ParseIP(ipStr)
-	if ip == nil {
-		return false
-	}
-	return true
+	return ip != nil
 }
 
 func validUser(user string) bool {
-	if strings.ContainsAny(user, "\t ") {
-		return false
-	}
-
-	return true
+	return !strings.ContainsAny(user, "\t ")
 }
 
 func validPassword(password string) bool {

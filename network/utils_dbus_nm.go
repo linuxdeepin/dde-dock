@@ -71,28 +71,16 @@ func isDeviceTypeValid(devType uint32) bool {
 
 // check current device state
 func isDeviceStateManaged(state uint32) bool {
-	if state > nm.NM_DEVICE_STATE_UNMANAGED {
-		return true
-	}
-	return false
+	return state > nm.NM_DEVICE_STATE_UNMANAGED
 }
 func isDeviceStateAvailable(state uint32) bool {
-	if state > nm.NM_DEVICE_STATE_UNAVAILABLE {
-		return true
-	}
-	return false
+	return state > nm.NM_DEVICE_STATE_UNAVAILABLE
 }
 func isDeviceStateActivated(state uint32) bool {
-	if state == nm.NM_DEVICE_STATE_ACTIVATED {
-		return true
-	}
-	return false
+	return state == nm.NM_DEVICE_STATE_ACTIVATED
 }
 func isDeviceStateInActivating(state uint32) bool {
-	if state >= nm.NM_DEVICE_STATE_PREPARE && state <= nm.NM_DEVICE_STATE_ACTIVATED {
-		return true
-	}
-	return false
+	return state == nm.NM_DEVICE_STATE_ACTIVATED
 }
 
 func isDeviceStateReasonInvalid(reason uint32) bool {
@@ -459,15 +447,6 @@ func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nmdbus.ConnectionSett
 	return
 }
 
-// Destroy network manager objects
-func nmDestroyManager(m *nmdbus.Manager) {
-	if m == nil {
-		logger.Error("Manager to destroy is nil")
-		return
-	}
-	m.RemoveHandler(proxy.RemoveAllHandlers)
-}
-
 func nmDestroyDevice(dev *nmdbus.Device) {
 	if dev == nil {
 		logger.Error("Device to destroy is nil")
@@ -698,30 +677,11 @@ func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string, err error) {
 	return
 }
 
-func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
-	data, err := nmGetConnectionData(cpath)
-	if err != nil {
-		return
-	}
-	ctype = getSettingConnectionType(data)
-	if len(ctype) == 0 {
-		logger.Error("get type of connection failed, type is empty")
-	}
-	return
-}
-
 func nmGetConnectionList() (connections []dbus.ObjectPath) {
 	connections, err := nmSettings.ListConnections(0)
 	if err != nil {
 		logger.Error(err)
 		return
-	}
-	return
-}
-
-func nmGetConnectionIds() (ids []string) {
-	for _, cpath := range nmGetConnectionList() {
-		ids = append(ids, nmGetConnectionId(cpath))
 	}
 	return
 }
@@ -855,8 +815,11 @@ func nmSetDeviceAutoconnect(devPath dbus.ObjectPath, autoConnect bool) {
 	if err != nil {
 		return
 	}
-	dev.Autoconnect().Set(0, autoConnect)
-	return
+	err = dev.Autoconnect().Set(0, autoConnect)
+	if err != nil {
+		logger.Warning("failed to set autoconnect:", err)
+		return
+	}
 }
 
 func nmSetDeviceManaged(devPath dbus.ObjectPath, managed bool) (err error) {
@@ -864,7 +827,11 @@ func nmSetDeviceManaged(devPath dbus.ObjectPath, managed bool) (err error) {
 	if err != nil {
 		return
 	}
-	dev.Managed().Set(0, managed)
+	err = dev.Managed().Set(0, managed)
+	if err != nil {
+		logger.Warning("failed to set device managed:", err)
+		return
+	}
 	return
 }
 
@@ -924,26 +891,4 @@ func nmGetNetworkEnabled() bool {
 func nmGetWirelessHardwareEnabled() bool {
 	enabled, _ := nmManager.WirelessHardwareEnabled().Get(0)
 	return enabled
-}
-
-func (m *Manager) nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
-	dev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-
-	state, _ := dev.State().Get(0)
-	if isDeviceStateAvailable(state) {
-		cb()
-	} else {
-		hasRun := false
-		dev.InitSignalExt(m.sysSigLoop, true)
-		dev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
-			if !hasRun && isDeviceStateAvailable(newState) {
-				cb()
-				nmDestroyDevice(dev)
-				hasRun = true
-			}
-		})
-	}
 }

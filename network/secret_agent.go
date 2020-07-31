@@ -24,15 +24,15 @@ const (
 	nmSecretDialogBin              = "/usr/lib/deepin-daemon/dnetwork-secret-dialog"
 	getSecretsFlagAllowInteraction = 0x1
 	getSecretsFlagRequestNew       = 0x2
-	getSecretsFlagUserRequested    = 0x4
+	getSecretsFlagUserRequested    = 0x4 //nolint
 
-	secretFlagNone          = 0 // save for all user
-	secretFlagNoneStr       = "0"
-	secretFlagAgentOwned    = 1 // save for me
+	secretFlagNone          = 0   // save for all user
+	secretFlagNoneStr       = "0" //nolint
+	secretFlagAgentOwned    = 1   // save for me
 	secretFlagAgentOwnedStr = "1"
 	secretFlagAsk           = 2 // always ask
 	secretFlagAskStr        = "2"
-	secretFlagNotRequired   = 4 // no need password
+	secretFlagNotRequired   = 4 //nolint  //no need password
 
 	// keep keyring tags same with nm-applet
 	keyringTagConnUUID    = "connection-uuid"
@@ -62,7 +62,7 @@ type SecretAgent struct {
 	needSleep bool
 
 	m *Manager
-
+	//nolint
 	methods *struct {
 		GetSecrets        func() `in:"connection,connectionPath,settingName,hints,flags" out:"secrets"`
 		CancelGetSecrets  func() `in:"connectionPath,settingName"`
@@ -492,9 +492,8 @@ func (sa *SecretAgent) getSecrets(connectionData map[string]map[string]dbus.Vari
 	secretsData = make(map[string]map[string]dbus.Variant)
 	setting := make(map[string]dbus.Variant)
 	secretsData[settingName] = setting
-
+	var vpnSecretsData map[string]string
 	if settingName == "vpn" {
-		vpnSecretsData := make(map[string]string)
 		if getSettingVpnServiceType(connectionData) == nmOpenConnectServiceType {
 			vpnSecretsData, ok = <-sa.createPendingKey(connectionData, hints, flags)
 			if !ok {
@@ -668,7 +667,10 @@ func (sa *SecretAgent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingN
 	process := sa.getSaveSecretsTaskProcess(connectionPath, settingName)
 	if process != nil {
 		logger.Debug("kill process", process.Pid)
-		process.Kill()
+		err := process.Kill()
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	}
 
 	return nil
@@ -714,14 +716,34 @@ func (a *SecretAgent) createPendingKey(connectionData map[string]map[string]dbus
 
 		// send vpn connection data to the authentication dialog binary
 		for key, value := range vpnData {
-			stdinWriter.WriteString("DATA_KEY=" + key + "\n")
-			stdinWriter.WriteString("DATA_VAL=" + value + "\n\n")
+			_, err = stdinWriter.WriteString("DATA_KEY=" + key + "\n")
+			if err != nil {
+				logger.Warning("failed to write string", err)
+				return
+			}
+			_, err = stdinWriter.WriteString("DATA_VAL=" + value + "\n\n")
+			if err != nil {
+				logger.Warning("failed to write string", err)
+				return
+			}
 		}
 		for key, value := range vpnSecretData {
-			stdinWriter.WriteString("SECRET_KEY=" + key + "\n")
-			stdinWriter.WriteString("SECRET_VAL=" + value + "\n\n")
+			_, err = stdinWriter.WriteString("SECRET_KEY=" + key + "\n")
+			if err != nil {
+				logger.Warning("failed to write string", err)
+				return
+			}
+			_, err = stdinWriter.WriteString("SECRET_VAL=" + value + "\n\n")
+			if err != nil {
+				logger.Warning("failed to write string", err)
+				return
+			}
 		}
-		stdinWriter.WriteString("DONE\n\n")
+		_, err = stdinWriter.WriteString("DONE\n\n")
+		if err != nil {
+			logger.Warning("failed to write string", err)
+			return
+		}
 		stdinWriter.Flush()
 
 		newVpnSecretData := make(map[string]string)
@@ -752,7 +774,11 @@ func (a *SecretAgent) createPendingKey(connectionData map[string]map[string]dbus
 		}
 
 		// notify auth dialog to quit
-		stdinWriter.WriteString("QUIT\n\n")
+		_, err = stdinWriter.WriteString("QUIT\n\n")
+		if err != nil {
+			logger.Warning("failed to write string", err)
+			return
+		}
 		err = stdinWriter.Flush()
 		if err == nil {
 			ch <- newVpnSecretData
@@ -957,7 +983,11 @@ func (sa *SecretAgent) saveSecrets(connectionData map[string]map[string]dbus.Var
 			sa.m.items = arr
 			continue
 		}
-		sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
+		err := sa.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
+		if err != nil {
+			logger.Debug("failed to save Secret to keyring")
+			return err
+		}
 	}
 
 	// delete
@@ -967,7 +997,11 @@ func (sa *SecretAgent) saveSecrets(connectionData map[string]map[string]dbus.Var
 				getSecretFlagsKeyName(secretKey))
 
 			if secretFlags != secretFlagAgentOwned {
-				sa.delete(connUUID, settingName, secretKey)
+				err := sa.delete(connUUID, settingName, secretKey)
+				if err != nil {
+					logger.Debug("failed to delete secret")
+					return err
+				}
 			}
 		}
 	}
@@ -979,7 +1013,11 @@ func (sa *SecretAgent) saveSecrets(connectionData map[string]map[string]dbus.Var
 			for _, secretKey := range vpnSecretKeys {
 				secretFlags := vpnDataMap[getSecretFlagsKeyName(secretKey)]
 				if secretFlags != secretFlagAgentOwnedStr {
-					sa.delete(connUUID, "vpn", secretKey)
+					err := sa.delete(connUUID, "vpn", secretKey)
+					if err != nil {
+						logger.Debug("failed to delete secret")
+						return err
+					}
 				}
 			}
 		}
@@ -1000,6 +1038,10 @@ func (sa *SecretAgent) DeleteSecrets(connectionData map[string]map[string]dbus.V
 	}
 
 	err := sa.deleteAll(connUUID)
+	if err != nil {
+		logger.Debug("failed to delete secret")
+		return dbusutil.ToError(err)
+	}
 	return dbusutil.ToError(err)
 }
 
@@ -1012,6 +1054,7 @@ func (*SecretAgentSession) GetSystemBusName() (string, *dbus.Error) {
 }
 
 type SecretAgentSession struct {
+	//nolint
 	methods *struct {
 		GetSystemBusName func() `out:"name"`
 	}

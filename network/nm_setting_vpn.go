@@ -46,7 +46,10 @@ func getVpnAuthDialogBin(data connectionData) (authdialog string) {
 
 func doGetVpnAuthDialogBin(vpnType string) (authdialog string) {
 	k := keyfile.NewKeyFile()
-	k.LoadFromFile(getVpnNameFile(vpnType))
+	err := k.LoadFromFile(getVpnNameFile(vpnType))
+	if err != nil {
+		logger.Warning("failed to load from file:", err)
+	}
 	authdialog, _ = k.GetString("GNOME", "auth-dialog")
 
 	return

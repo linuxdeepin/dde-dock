@@ -23,7 +23,7 @@ import (
 	"errors"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -55,16 +55,6 @@ func (m *Manager) setPropNetworkingEnabled(value bool) {
 	}
 }
 
-func (m *Manager) setPropWirelessEnabled(value bool) {
-	m.wirelessEnabled = value
-}
-func (m *Manager) setPropWwanEnabled(value bool) {
-	m.wwanEnabled = value
-}
-func (m *Manager) setPropWiredEnabled(value bool) {
-	m.wiredEnabled = value
-}
-
 func (m *Manager) setPropVpnEnabled(value bool) {
 	m.VpnEnabled = value
 	err := m.service.EmitPropertyChanged(m, "VpnEnabled", value)
@@ -75,17 +65,26 @@ func (m *Manager) setPropVpnEnabled(value bool) {
 
 func (m *Manager) updatePropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
-	m.service.EmitPropertyChanged(m, "ActiveConnections", m.ActiveConnections)
+	err := m.service.EmitPropertyChanged(m, "ActiveConnections", m.ActiveConnections)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 }
 
 func (m *Manager) updatePropState() {
 	m.State = nmGetManagerState()
-	m.service.EmitPropertyChanged(m, "State", m.State)
+	err := m.service.EmitPropertyChanged(m, "State", m.State)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 }
 
 func (m *Manager) updatePropConnectivity() {
 	m.Connectivity, _ = nmManager.Connectivity().Get(0)
-	m.service.EmitPropertyChanged(m, "Connectivity", m.Connectivity)
+	err := m.service.EmitPropertyChanged(m, "Connectivity", m.Connectivity)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 }
 
 func (m *Manager) updatePropDevices() {
@@ -102,10 +101,16 @@ func (m *Manager) updatePropDevices() {
 		}
 	}
 	m.Devices, _ = marshalJSON(filteredDevices)
-	m.service.EmitPropertyChanged(m, "Devices", m.Devices)
+	err := m.service.EmitPropertyChanged(m, "Devices", m.Devices)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 }
 
 func (m *Manager) updatePropConnections() {
 	m.Connections, _ = marshalJSON(m.connections)
-	m.service.EmitPropertyChanged(m, "Connections", m.Connections)
+	err := m.service.EmitPropertyChanged(m, "Connections", m.Connections)
+	if err != nil {
+		logger.Warning("failed to emit signal:", err)
+	}
 }

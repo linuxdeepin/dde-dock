@@ -23,7 +23,7 @@ import (
 	"os"
 
 	"pkg.deepin.io/dde/daemon/network/nm"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func newWirelessHotspotConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
@@ -57,16 +57,20 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 		setSettingWirelessSsid(data, ssid)
 	}
 	setSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_INFRA)
-
+	var err error 
 	switch secType {
 	case apSecNone:
-		logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
 	case apSecWep:
-		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
 	case apSecPsk:
-		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
 	case apSecEap:
-		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
+		err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
+	}
+	if err != nil {
+		logger.Debug("failed to set VKWirelessSecutiryKeyMgmt")
+		return 
 	}
 
 	initSettingSectionIpv4(data)
@@ -77,7 +81,11 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 
 func newWirelessHotspotConnectionData(id, uuid string) (data connectionData) {
 	data = newWirelessConnectionData(id, uuid, nil, apSecNone)
-	logicSetSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_AP)
+	err := logicSetSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_AP)
+	if err != nil {
+		logger.Debug("failed to set WirelessMode")
+		return 
+	}
 	setSettingConnectionAutoconnect(data, false)
 	return
 }
@@ -88,7 +96,11 @@ func logicSetSettingWirelessMode(data connectionData, value string) (err error) 
 	// set ip4 method to "shared"
 	if value != nm.NM_SETTING_WIRELESS_MODE_INFRA {
 		if getSettingVkWirelessSecurityKeyMgmt(data) == "wpa-eap" {
-			logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+			err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+			if err != nil {
+				logger.Debug("failed to set VkWirelessKeyMgmt")
+				return err 
+			}
 		}
 		setSettingIP4ConfigMethod(data, nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED)
 	}

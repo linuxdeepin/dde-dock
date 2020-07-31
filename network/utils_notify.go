@@ -34,12 +34,10 @@ const (
 	notifyIconNetworkOffline            = "notification-network-offline"
 	notifyIconWiredConnected            = "notification-network-wired-connected"
 	notifyIconWiredDisconnected         = "notification-network-wired-disconnected"
-	notifyIconWiredLocal                = "notification-network-wired-local"
 	notifyIconWiredError                = notifyIconWiredDisconnected
 	notifyIconWirelessConnected         = "notification-network-wireless-full"
 	notifyIconWirelessDisconnected      = "notification-network-wireless-disconnected"
 	notifyIconWirelessDisabled          = "notification-network-wireless-disabled"
-	notifyIconWirelessLocal             = "notification-network-wireless-local"
 	notifyIconWirelessError             = notifyIconWirelessDisconnected
 	notifyIconVpnConnected              = "notification-network-vpn-connected"
 	notifyIconVpnDisconnected           = "notification-network-vpn-disconnected"
@@ -179,10 +177,6 @@ func _notify(icon, summary, body string) {
 	notifyIdMu.Lock()
 	notifyId = nid
 	notifyIdMu.Unlock()
-}
-
-func notifyNetworkOffline() {
-	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("You are now offline."))
 }
 
 func notifyAirplanModeEnabled() {

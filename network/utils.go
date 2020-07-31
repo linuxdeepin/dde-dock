@@ -28,7 +28,7 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/daemon/iw"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -39,37 +39,6 @@ func isStringInArray(s string, list []string) bool {
 		}
 	}
 	return false
-}
-
-func stringArrayBut(list []string, ignoreList ...string) (newList []string) {
-	for _, s := range list {
-		if !isStringInArray(s, ignoreList) {
-			newList = append(newList, s)
-		}
-	}
-	return
-}
-
-func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
-	a = a1
-	for _, s := range a2 {
-		if !isStringInArray(s, a) {
-			a = append(a, s)
-		}
-	}
-	return
-}
-
-func removeStrArray(a1 []string, a2 ...string) (a []string) {
-	for _, s := range a2 {
-		for _, v := range a1 {
-			if v == s {
-				continue
-			}
-			a = append(a, v)
-		}
-	}
-	return
 }
 
 func isDBusPathInArray(path dbus.ObjectPath, pathList []dbus.ObjectPath) bool {
@@ -85,21 +54,6 @@ func isInterfaceNil(v interface{}) bool {
 	return utils.IsInterfaceNil(v)
 }
 
-func isInterfaceEmpty(v interface{}) bool {
-	if isInterfaceNil(v) {
-		return true
-	}
-	switch v.(type) {
-	case [][]interface{}: // ipv6Addresses
-		if vd, ok := v.([][]interface{}); ok {
-			if len(vd) == 0 {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func marshalJSON(v interface{}) (jsonStr string, err error) {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -107,25 +61,6 @@ func marshalJSON(v interface{}) (jsonStr string, err error) {
 		return
 	}
 	jsonStr = string(b)
-	return
-}
-
-func unmarshalJSON(jsonStr string, v interface{}) (err error) {
-	err = json.Unmarshal([]byte(jsonStr), &v)
-	if err != nil {
-		logger.Error(err)
-	}
-	return
-}
-
-func isUint32ArrayEmpty(a []uint32) (empty bool) {
-	empty = true
-	for _, v := range a {
-		if v != 0 {
-			empty = false
-			break
-		}
-	}
 	return
 }
 
@@ -211,8 +146,13 @@ func execWithIO(name string, arg ...string) (process *os.Process, stdin io.Write
 	if err != nil {
 		return
 	}
-	go cmd.Wait()
-
+	go func() {
+		err = cmd.Wait()
+		if err != nil {
+			logger.Debug("failed to wait cmd:", err)
+			return
+		}
+	}()
 	process = cmd.Process
 	return
 }

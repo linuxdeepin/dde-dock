@@ -270,16 +270,32 @@ func (*testWrapper) TestExpandIpv6Address(c *C.C) {
 func (*testWrapper) TestGetterAndSetterForVirtualKey(c *C.C) {
 	data := newWirelessConnectionData("", "", nil, apSecNone)
 
-	logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
+	err := logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
+	if err != nil {
+		logger.Warning("failed to set VkWirelessMgmt")
+		return
+	}
 	c.Check("none", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
-	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
+	err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
+	if err != nil {
+		logger.Warning("failed to set VkWirelessMgmt")
+		return
+	}
 	c.Check("wep", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
-	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+	err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+	if err != nil {
+		logger.Warning("failed to set VkWirelessMgmt")
+		return
+	}
 	c.Check("wpa-psk", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
-	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
+	err = logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
+	if err != nil {
+		logger.Warning("failed to set VkWirelessMgmt")
+		return
+	}
 	c.Check("wpa-eap", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 }
 

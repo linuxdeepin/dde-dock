@@ -119,10 +119,7 @@ func udevIsUsbDevice(syspath string) bool {
 	defer C.free(unsafe.Pointer(cSyspath))
 
 	ret := C.is_usb_device(cSyspath)
-	if ret == 0 {
-		return true
-	}
-	return false
+	return ret == 0
 }
 
 // fixupDeviceDesc attempt to shorten description by ignoring certain

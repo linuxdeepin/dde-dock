@@ -273,10 +273,7 @@ func (m *Manager) getConnection(cpath dbus.ObjectPath) (conn *connection) {
 }
 func (m *Manager) isConnectionExists(cpath dbus.ObjectPath) bool {
 	_, i := m.getConnectionIndex(cpath)
-	if i >= 0 {
-		return true
-	}
-	return false
+	return i >= 0
 }
 func (m *Manager) getConnectionIndex(cpath dbus.ObjectPath) (connType string, index int) {
 	m.connectionsLock.Lock()
@@ -400,30 +397,6 @@ func isObjPathValid(dpath dbus.ObjectPath) bool {
 	return true
 }
 
-func getWiredDeviceConnectionUuid(wiredDevPath dbus.ObjectPath) string {
-	wired, _ := nmNewDevice(wiredDevPath)
-	if wired == nil {
-		return ""
-	}
-
-	apath, _ := wired.ActiveConnection().Get(0)
-	if apath != "" && apath != "/" {
-		aconn, _ := nmNewActiveConnection(apath)
-		if aconn != nil {
-			uuid, _ := aconn.Uuid().Get(0)
-			return uuid
-		}
-	}
-
-	list, _ := wired.AvailableConnections().Get(0)
-	if len(list) != 0 && list[0] != "/" {
-		sconn, _ := nmNewSettingsConnection(list[0])
-		settings, _ := sconn.GetSettings(0)
-		return settings["connection"]["uuid"].Value().(string)
-	}
-	return ""
-}
-
 // ensureWirelessHotspotConnectionExists will check if wireless hotspot connection for
 // target device exists, if not, create one.
 func (m *Manager) ensureWirelessHotspotConnectionExists(wirelessDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
@@ -464,6 +437,9 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (
 	cpath dbus.ObjectPath, busErr *dbus.Error) {
 	cpath, err := m.activateConnection(uuid, devPath)
 	busErr = dbusutil.ToError(err)
+	if err != nil {
+		logger.Debug("failed to activate a connection", err)
+	}
 	return
 }
 

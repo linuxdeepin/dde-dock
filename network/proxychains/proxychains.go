@@ -49,7 +49,7 @@ type Manager struct {
 
 	jsonFile string
 	confFile string
-
+	//nolint
 	methods *struct {
 		Set func() `in:"type0,ip,port,user,password"`
 	}
@@ -127,8 +127,12 @@ func (m *Manager) saveConfig() error {
 	return cfg.save(m.jsonFile)
 }
 
+//nolint
 func (m *Manager) notifyChange(prop string, v interface{}) {
-	m.service.EmitPropertyChanged(m, prop, v)
+	err := m.service.EmitPropertyChanged(m, prop, v)
+	if err != nil {
+		logger.Warning("failed to emit signal", err)
+	}
 }
 
 func (m *Manager) fixConfig() bool {
@@ -179,6 +183,7 @@ type InvalidParamError struct {
 	Param string
 }
 
+//nolint
 func (err InvalidParamError) Error() string {
 	return fmt.Sprintf("invalid param %s", err.Param)
 }

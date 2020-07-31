@@ -102,10 +102,7 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 
 // Virtual key getter
 func getSettingVk8021xEnable(data connectionData) (value bool) {
-	if isSettingExists(data, nm.NM_SETTING_802_1X_SETTING_NAME) {
-		return true
-	}
-	return false
+	return isSettingExists(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 }
 
 func getSettingVk8021xEap(data connectionData) (eap string) {

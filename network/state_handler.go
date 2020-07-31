@@ -180,7 +180,7 @@ func newStateHandler(sysSigLoop *dbusutil.SignalLoop, m *Manager) (sh *stateHand
 }
 
 func destroyStateHandler(sh *stateHandler) {
-	for path, _ := range sh.devices {
+	for path := range sh.devices {
 		sh.remove(path)
 	}
 	sh.devices = nil
@@ -399,6 +399,10 @@ func (sh *stateHandler) savePasswordByConnectionStatus(data connectionData) {
 		return
 	}
 	for _, item := range sh.m.items {
-		sh.m.secretAgent.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
+		err := sh.m.secretAgent.set(item.label, connUUID, item.settingName, item.settingKey, item.value)
+		if err != nil {
+			logger.Debug("failed to save secret when status connected")
+			return
+		}
 	}
 }

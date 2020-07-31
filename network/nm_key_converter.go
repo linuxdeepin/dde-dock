@@ -32,7 +32,7 @@ func interfaceToString(v interface{}) (d string) {
 	}
 	return
 }
-
+//nolint
 func interfaceToByte(v interface{}) (d byte) {
 	if isInterfaceNil(v) {
 		return
@@ -68,7 +68,7 @@ func interfaceToUint32(v interface{}) (d uint32) {
 	}
 	return
 }
-
+//nolint
 func interfaceToInt64(v interface{}) (d int64) {
 	if isInterfaceNil(v) {
 		return
@@ -80,7 +80,7 @@ func interfaceToInt64(v interface{}) (d int64) {
 	}
 	return
 }
-
+//nolint
 func interfaceToUint64(v interface{}) (d uint64) {
 	if isInterfaceNil(v) {
 		return
@@ -128,7 +128,7 @@ func interfaceToArrayString(v interface{}) (d []string) {
 	}
 	return
 }
-
+//nolint
 func interfaceToArrayUint32(v interface{}) (d []uint32) {
 	if isInterfaceNil(v) {
 		return
@@ -140,7 +140,7 @@ func interfaceToArrayUint32(v interface{}) (d []uint32) {
 	}
 	return
 }
-
+//nolint
 func interfaceToArrayArrayByte(v interface{}) (d [][]byte) {
 	if isInterfaceNil(v) {
 		return
@@ -152,7 +152,7 @@ func interfaceToArrayArrayByte(v interface{}) (d [][]byte) {
 	}
 	return
 }
-
+//nolint
 func interfaceToArrayArrayUint32(v interface{}) (d [][]uint32) {
 	if isInterfaceNil(v) {
 		return
@@ -192,7 +192,7 @@ func interfaceToIpv6Addresses(v interface{}) (d ipv6Addresses) {
 		return
 	}
 	d = make(ipv6Addresses, len(tmpData))
-	for i, _ := range tmpData {
+	for i := range tmpData {
 		if len(tmpData[i]) >= 3 {
 			var ok0, ok1, ok2 bool
 			d[i].Address, ok0 = tmpData[i][0].([]byte)
@@ -222,7 +222,7 @@ func interfaceToIpv6Routes(v interface{}) (d ipv6Routes) {
 		return
 	}
 	d = make(ipv6Routes, len(tmpData))
-	for i, _ := range tmpData {
+	for i := range tmpData {
 		if len(tmpData) >= 4 {
 			var ok0, ok1, ok2, ok3 bool
 			d[i].Address, ok0 = tmpData[i][0].([]byte)
