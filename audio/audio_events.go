@@ -396,6 +396,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		if err != nil {
 			logger.Debug("reduce physical device noise failed:", err)
 		}
+		a.ReduceNoise.Set(portConfig.ReduceNoise)
 	case pulse.EventTypeRemove:
 		a.mu.Lock()
 		source, ok := a.sources[idx]
@@ -419,6 +420,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 			if err != nil {
 				logger.Warning("set reduce noise fail:", err)
 			}
+			a.ReduceNoise.Set(false)
 		}
 	case pulse.EventTypeChange:
 		sourceInfo, err := a.ctx.GetSource(idx)

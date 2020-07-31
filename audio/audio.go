@@ -780,11 +780,11 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	}
 
 	if isPhysicalDevice(sourceName) {
-		a.ReduceNoise.Set(portConfig.ReduceNoise)
 		err := a.setReduceNoise(portConfig.ReduceNoise)
 		if err != nil {
 			logger.Warning("set reduce noise fail:", err)
 		}
+		a.ReduceNoise.Set(portConfig.ReduceNoise)
 	}
 }
 
