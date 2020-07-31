@@ -634,6 +634,10 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
     clearStrutPartial();
     narrow(prevPos);
 
+    connect(m_panelHideAni, &QVariantAnimation::finished, [&]() {
+        m_mainPanel->setPositonValue(m_newDockPos);
+    });
+
     // set strut
     QTimer::singleShot(400, this, [&] {
         setStrutPartial();
