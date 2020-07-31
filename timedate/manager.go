@@ -36,16 +36,17 @@ import (
 )
 
 const (
-	timeDateSchema          = "com.deepin.dde.datetime"
-	settingsKey24Hour       = "is-24hour"
-	settingsKeyTimezoneList = "user-timezone-list"
-	settingsKeyDSTOffset    = "dst-offset"
-        settingsKeyWeekdayFormat = "weekday-format"
-        settingsKeyShortDateFormat = "short-date-format"
-        settingsKeyLongDateFormat = "long-date-format"
-        settingsKeyShortTimeFormat = "short-time-format"
-        settingsKeyLongTimeFormat = "long-time-format"
-    
+	timeDateSchema             = "com.deepin.dde.datetime"
+	settingsKey24Hour          = "is-24hour"
+	settingsKeyTimezoneList    = "user-timezone-list"
+	settingsKeyDSTOffset       = "dst-offset"
+	settingsKeyWeekdayFormat   = "weekday-format"
+	settingsKeyShortDateFormat = "short-date-format"
+	settingsKeyLongDateFormat  = "long-date-format"
+	settingsKeyShortTimeFormat = "short-time-format"
+	settingsKeyLongTimeFormat  = "long-time-format"
+	settingsKeyWeekBegins      = "week-begins"
+
 	dbusServiceName = "com.deepin.daemon.Timedate"
 	dbusPath        = "/com/deepin/daemon/Timedate"
 	dbusInterface   = dbusServiceName
@@ -75,22 +76,24 @@ type Manager struct {
 	DSTOffset gsprop.Int `prop:"access:rw"`
 	// User added timezone list
 	UserTimezones gsprop.Strv
-    
-        // weekday shows format
+
+	// weekday shows format
 	WeekdayFormat gsprop.Int `prop:"access:rw"`
 
-        // short date shows format
+	// short date shows format
 	ShortDateFormat gsprop.Int `prop:"access:rw"`
-    
-        // long date shows format
+
+	// long date shows format
 	LongDateFormat gsprop.Int `prop:"access:rw"`
-    
-        // short time shows format
+
+	// short time shows format
 	ShortTimeFormat gsprop.Int `prop:"access:rw"`
 
-        // long time shows format
-	LongTimeFormat  gsprop.Int `prop:"access:rw"`
-    
+	// long time shows format
+	LongTimeFormat gsprop.Int `prop:"access:rw"`
+
+	WeekBegins gsprop.Int `prop:"access:rw"`
+
 	settings *gio.Settings
 	td       *timedate1.Timedate
 	setter   *timedated.Timedated
@@ -130,12 +133,13 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	m.Use24HourFormat.Bind(m.settings, settingsKey24Hour)
 	m.DSTOffset.Bind(m.settings, settingsKeyDSTOffset)
 	m.UserTimezones.Bind(m.settings, settingsKeyTimezoneList)
-    
-        m.WeekdayFormat.Bind(m.settings, settingsKeyWeekdayFormat)
-        m.ShortDateFormat.Bind(m.settings, settingsKeyShortDateFormat)
-        m.LongDateFormat.Bind(m.settings, settingsKeyLongDateFormat)
-        m.ShortTimeFormat.Bind(m.settings, settingsKeyShortTimeFormat)
-        m.LongTimeFormat.Bind(m.settings, settingsKeyLongTimeFormat)    
+
+	m.WeekdayFormat.Bind(m.settings, settingsKeyWeekdayFormat)
+	m.ShortDateFormat.Bind(m.settings, settingsKeyShortDateFormat)
+	m.LongDateFormat.Bind(m.settings, settingsKeyLongDateFormat)
+	m.ShortTimeFormat.Bind(m.settings, settingsKeyShortTimeFormat)
+	m.LongTimeFormat.Bind(m.settings, settingsKeyLongTimeFormat)
+	m.WeekBegins.Bind(m.settings, settingsKeyWeekBegins)
 
 	return m, nil
 }
@@ -175,7 +179,7 @@ func (m *Manager) init() {
 	}
 	err = m.AddUserTimezone(m.Timezone)
 	if err != nil {
-		logger.Warning("AddUserTimezone error:",err)
+		logger.Warning("AddUserTimezone error:", err)
 	}
 
 	err = common.ActivateSysDaemonService(m.setter.ServiceName_())
@@ -232,33 +236,39 @@ func (m *Manager) initUserObj(systemConn *dbus.Conn) {
 		logger.Warning(err)
 	}
 
-        weekdayFormat := m.settings.GetInt(settingsKeyWeekdayFormat)
+	weekdayFormat := m.settings.GetInt(settingsKeyWeekdayFormat)
 	err = m.userObj.SetWeekdayFormat(0, weekdayFormat)
 	if err != nil {
 		logger.Warning(err)
 	}
-    
-        shortDateFormat := m.settings.GetInt(settingsKeyShortDateFormat)
+
+	shortDateFormat := m.settings.GetInt(settingsKeyShortDateFormat)
 	err = m.userObj.SetShortDateFormat(0, shortDateFormat)
 	if err != nil {
 		logger.Warning(err)
 	}
-    
-        longDateFormat := m.settings.GetInt(settingsKeyLongDateFormat)
+
+	longDateFormat := m.settings.GetInt(settingsKeyLongDateFormat)
 	err = m.userObj.SetLongDateFormat(0, longDateFormat)
 	if err != nil {
 		logger.Warning(err)
 	}
 
-        shortTimeFormat := m.settings.GetInt(settingsKeyShortTimeFormat)
+	shortTimeFormat := m.settings.GetInt(settingsKeyShortTimeFormat)
 	err = m.userObj.SetShortTimeFormat(0, shortTimeFormat)
 	if err != nil {
 		logger.Warning(err)
 	}
 
-        longTimeFormat := m.settings.GetInt(settingsKeyLongTimeFormat)
+	longTimeFormat := m.settings.GetInt(settingsKeyLongTimeFormat)
 	err = m.userObj.SetLongDateFormat(0, longTimeFormat)
 	if err != nil {
 		logger.Warning(err)
-	}    
+	}
+
+	weekBegins := m.settings.GetInt(settingsKeyWeekBegins)
+	err = m.userObj.SetWeekBegins(0, weekBegins)
+	if err != nil {
+		logger.Warning(err)
+	}
 }

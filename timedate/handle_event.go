@@ -76,7 +76,7 @@ func (m *Manager) listenPropChanged() {
 
 		err := m.AddUserTimezone(m.Timezone)
 		if err != nil {
-			logger.Warning("AddUserTimezone error:",err)
+			logger.Warning("AddUserTimezone error:", err)
 		}
 	})
 	if err != nil {
@@ -142,6 +142,13 @@ func (m *Manager) handleGSettingsChanged() {
 	gsettings.ConnectChanged(timeDateSchema, settingsKeyLongTimeFormat, func(key string) {
 		value := m.settings.GetInt(settingsKeyLongTimeFormat)
 		err := m.userObj.SetLongTimeFormat(0, value)
+		if err != nil {
+			logger.Warning(err)
+		}
+	})
+	gsettings.ConnectChanged(timeDateSchema, settingsKeyWeekBegins, func(key string) {
+		value := m.settings.GetInt(settingsKeyWeekBegins)
+		err := m.userObj.SetWeekBegins(0, value)
 		if err != nil {
 			logger.Warning(err)
 		}

@@ -223,6 +223,19 @@ func (v *User) emitPropChangedLongTimeFormat(value int32) error {
 	return v.service.EmitPropertyChanged(v, "LongTimeFormat", value)
 }
 
+func (v *User) setPropWeekBegins(value int32) (changed bool) {
+	if v.LongTimeFormat != value {
+		v.LongTimeFormat = value
+		v.emitPropChangedLongTimeFormat(value)
+		return true
+	}
+	return false
+}
+
+func (v *User) emitPropChangedWeekBegins(value int32) error {
+	return v.service.EmitPropertyChanged(v, "WeekBegins", value)
+}
+
 func (v *User) setPropDesktopBackgrounds(value []string) {
 	v.DesktopBackgrounds = value
 	v.emitPropChangedDesktopBackgrounds(value)

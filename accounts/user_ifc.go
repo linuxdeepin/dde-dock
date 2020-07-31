@@ -795,3 +795,30 @@ func (u *User) SetLongTimeFormat(sender dbus.Sender, value int32) *dbus.Error {
 	}
 	return nil
 }
+
+func (u *User) SetWeekBegins(sender dbus.Sender, value int32) *dbus.Error {
+	err := u.checkAuth(sender, true, "")
+	if err != nil {
+		logger.Debug("[SetWeekBegins] access denied:", err)
+		return dbusutil.ToError(err)
+	}
+
+	u.PropsMu.Lock()
+	defer u.PropsMu.Unlock()
+
+	if value == u.WeekBegins {
+		return nil
+	}
+
+	err = u.writeUserConfigWithChange(confKeyWeekBegins, value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	u.WeekBegins = value
+	err = u.emitPropChangedWeekBegins(value)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	return nil
+}

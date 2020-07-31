@@ -60,18 +60,20 @@ const (
 	confKeyHistoryLayout      = "HistoryLayout"
 	confKeyUse24HourFormat    = "Use24HourFormat"
 	confKeyUUID               = "UUID"
-        confKeyWeekdayFormat      = "WeekdayFormat"
-        confKeyShortDateFormat    = "ShortDateFormat"
-        confKeyLongDateFormat     = "LongDateFormat"
-        confKeyShortTimeFormat    = "ShortTimeFormat"
-        confKeyLongTimeFormat     = "LongTimeFormat"
+	confKeyWeekdayFormat      = "WeekdayFormat"
+	confKeyShortDateFormat    = "ShortDateFormat"
+	confKeyLongDateFormat     = "LongDateFormat"
+	confKeyShortTimeFormat    = "ShortTimeFormat"
+	confKeyLongTimeFormat     = "LongTimeFormat"
+	confKeyWeekBegins         = "WeekBegins"
 
 	defaultUse24HourFormat = true
-        defaultWeekdayFormat = 0
-        defaultShortDateFormat = 0
-        defaultLongDateFormat = 0
-        defaultShortTimeFormat = 0
-        defaultLongTimeFormat = 0
+	defaultWeekdayFormat   = 0
+	defaultShortDateFormat = 0
+	defaultLongDateFormat  = 0
+	defaultShortTimeFormat = 0
+	defaultLongTimeFormat  = 0
+	defaultWeekBegins      = 0
 )
 
 func getDefaultUserBackground() string {
@@ -98,12 +100,14 @@ type User struct {
 	Layout          string
 	IconFile        string
 	Use24HourFormat bool
-        WeekdayFormat   int32
-        ShortDateFormat int32
-        LongDateFormat  int32
-        ShortTimeFormat int32
-        LongTimeFormat  int32
-	customIcon      string
+	WeekdayFormat   int32
+	ShortDateFormat int32
+	LongDateFormat  int32
+	ShortTimeFormat int32
+	LongTimeFormat  int32
+	WeekBegins      int32
+
+	customIcon string
 	// dbusutil-gen: equal=nil
 	DesktopBackgrounds []string
 	// dbusutil-gen: equal=isStrvEqual
@@ -118,9 +122,9 @@ type User struct {
 	Locked bool
 	// 是否允许此用户自动登录
 	AutomaticLogin bool
-	
+
 	// deprecated property
-	SystemAccount  bool
+	SystemAccount bool
 
 	NoPasswdLogin bool
 
@@ -159,11 +163,12 @@ type User struct {
 		SetUse24HourFormat    func() `in:"value"`
 		SetMaxPasswordAge     func() `in:"nDays"`
 		IsPasswordExpired     func() `out:"expired"`
-                SetWeekdayFormat      func() `in:"value"`
-                SetShortDateFormat    func() `in:"value"`
-                SetLongDateFormat     func() `in:"value"`
-                SetShortTimeFormat    func() `in:"value"`
-                SetLongTimeFormat     func() `in:"value"`
+		SetWeekdayFormat      func() `in:"value"`
+		SetShortDateFormat    func() `in:"value"`
+		SetLongDateFormat     func() `in:"value"`
+		SetShortTimeFormat    func() `in:"value"`
+		SetLongTimeFormat     func() `in:"value"`
+		SetWeekBegins         func() `in:"value"`
 	}
 }
 
@@ -220,11 +225,13 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		u.GreeterBackground = defaultUserBackground
 		u.Use24HourFormat = defaultUse24HourFormat
 		u.UUID = dutils.GenUuid()
-                u.WeekdayFormat   = defaultWeekdayFormat
-                u.ShortDateFormat = defaultShortDateFormat
-                u.LongDateFormat  = defaultLongDateFormat
-                u.ShortTimeFormat = defaultShortTimeFormat
-                u.LongTimeFormat  = defaultLongTimeFormat
+		u.WeekdayFormat = defaultWeekdayFormat
+		u.ShortDateFormat = defaultShortDateFormat
+		u.LongDateFormat = defaultLongDateFormat
+		u.ShortTimeFormat = defaultShortTimeFormat
+		u.LongTimeFormat = defaultLongTimeFormat
+		u.WeekBegins = defaultWeekBegins
+
 		err = u.writeUserConfig()
 		if err != nil {
 			logger.Warning(err)
@@ -306,33 +313,39 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 		isSave = true
 	}
 
-        u.WeekdayFormat, err = kf.GetInteger(confGroupUser, confKeyWeekdayFormat)
+	u.WeekdayFormat, err = kf.GetInteger(confGroupUser, confKeyWeekdayFormat)
 	if err != nil {
 		u.WeekdayFormat = defaultWeekdayFormat
 		isSave = true
 	}
 
-        u.ShortDateFormat, err = kf.GetInteger(confGroupUser, confKeyShortDateFormat)
+	u.ShortDateFormat, err = kf.GetInteger(confGroupUser, confKeyShortDateFormat)
 	if err != nil {
 		u.ShortDateFormat = defaultShortDateFormat
 		isSave = true
 	}
 
-        u.LongDateFormat, err = kf.GetInteger(confGroupUser, confKeyLongDateFormat)
+	u.LongDateFormat, err = kf.GetInteger(confGroupUser, confKeyLongDateFormat)
 	if err != nil {
 		u.LongDateFormat = defaultLongDateFormat
 		isSave = true
 	}
 
-        u.ShortTimeFormat, err = kf.GetInteger(confGroupUser, confKeyShortTimeFormat)
+	u.ShortTimeFormat, err = kf.GetInteger(confGroupUser, confKeyShortTimeFormat)
 	if err != nil {
 		u.ShortTimeFormat = defaultShortTimeFormat
 		isSave = true
 	}
 
-        u.LongTimeFormat, err = kf.GetInteger(confGroupUser, confKeyLongTimeFormat)
+	u.LongTimeFormat, err = kf.GetInteger(confGroupUser, confKeyLongTimeFormat)
 	if err != nil {
 		u.LongTimeFormat = defaultLongTimeFormat
+		isSave = true
+	}
+
+	u.WeekBegins, err = kf.GetInteger(confGroupUser, confKeyWeekBegins)
+	if err != nil {
+		u.WeekBegins = defaultWeekBegins
 		isSave = true
 	}
 
@@ -467,7 +480,7 @@ func (u *User) writeUserConfigWithChanges(changes []configChange) error {
 			kf.SetString(confGroupUser, change.key, val)
 		case []string:
 			kf.SetStringList(confGroupUser, change.key, val)
-                case int32:
+		case int32:
 			kf.SetInteger(confGroupUser, change.key, val)
 		default:
 			return errors.New("unsupported value type")
