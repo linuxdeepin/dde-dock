@@ -913,12 +913,12 @@ func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, err
 		return "", err
 	}
 
-	go b.sendFilesToSession(session, files, totalSize)
+	go b.doSendFiles(session, files, totalSize)
 
 	return sessionPath, nil
 }
 
-func (b *Bluetooth) sendFilesToSession(session *obex.Session, files []string, totalSize uint64) {
+func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize uint64) {
 	sessionPath := session.Path_()
 	cancelCh := make(chan struct{})
 
@@ -983,7 +983,10 @@ func (b *Bluetooth) sendFilesToSession(session *obex.Session, files []string, to
 			b.sessionCancelChMapMu.Unlock()
 
 			cancel = true
-			transfer.Cancel(0)
+			err = transfer.Cancel(0)
+			if err != nil {
+				logger.Warning("failed to cancel transfer:", err)
+			}
 		}
 
 		b.emitTransferRemoved(f, transferPath, sessionPath, res)

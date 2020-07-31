@@ -55,7 +55,9 @@ type obexAgent struct {
 
 	obexManager *obex.Manager
 
-	notifyCh           chan bool
+	requestNotifyCh   chan bool
+	requestNotifyChMu sync.Mutex
+
 	acceptedSessions   map[dbus.ObjectPath]int
 	acceptedSessionsMu sync.Mutex
 
@@ -230,7 +232,6 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 
 		if value == transferStatusComplete {
 			// 传送完成，移动到下载目录
-			basename := filepath.Base(oriFilepath)
 			dest := filepath.Join(receiveBaseDir, basename)
 			err = os.Rename(oriFilepath, dest)
 			if err != nil {
@@ -311,6 +312,8 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 		actions = []string{"cancel", gettext.Tr("Cancel")}
 	}
 
+	hints := map[string]dbus.Variant{"suppress-sound": dbus.MakeVariant(true)}
+
 	notifyID, err := notify.Notify(0,
 		"dde-control-center",
 		replaceID,
@@ -318,7 +321,7 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 		fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), filename, device),
 		fmt.Sprintf("%d%%", progress),
 		actions,
-		nil,
+		hints,
 		receiveFileNotifyTimeout)
 	if err != nil {
 		logger.Warning("failed to send notify:", err)
@@ -347,11 +350,13 @@ func (a *obexAgent) notifyFailed(notify *notifications.Notifications, replaceID 
 
 // Cancel 用于在客户端取消发送文件时取消文件传输请求
 func (a *obexAgent) Cancel() *dbus.Error {
-	if a.notifyCh == nil {
+	a.requestNotifyChMu.Lock()
+	defer a.requestNotifyChMu.Unlock()
+	if a.requestNotifyCh == nil {
 		return dbusutil.ToError(errors.New("no such process"))
 	}
 
-	a.notifyCh <- false
+	a.requestNotifyCh <- false
 
 	return nil
 }
@@ -376,19 +381,20 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 		return false, err
 	}
 
-	a.notifyCh = make(chan bool)
+	a.requestNotifyChMu.Lock()
+	a.requestNotifyCh = make(chan bool, 10)
+	a.requestNotifyChMu.Unlock()
 
 	_, err = notify.ConnectActionInvoked(func(id uint32, actionKey string) {
 		if notifyID != id {
 			return
 		}
 
-		if actionKey == "receive" {
-			a.notifyCh <- true
-			return
+		a.requestNotifyChMu.Lock()
+		if a.requestNotifyCh != nil {
+			a.requestNotifyCh <- actionKey == "receive"
 		}
-
-		a.notifyCh <- false
+		a.requestNotifyChMu.Unlock()
 	})
 	if err != nil {
 		logger.Warning("ConnectActionInvoked failed:", err)
@@ -400,15 +406,22 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 			return
 		}
 
-		a.notifyCh <- false
+		a.requestNotifyChMu.Lock()
+		if a.requestNotifyCh != nil {
+			a.requestNotifyCh <- false
+		}
+		a.requestNotifyChMu.Unlock()
 	})
 	if err != nil {
 		logger.Warning("ConnectNotificationClosed failed:", err)
 		return false, dbusutil.ToError(err)
 	}
 
-	result := <-a.notifyCh
-	a.notifyCh = nil
+	result := <-a.requestNotifyCh
+
+	a.requestNotifyChMu.Lock()
+	a.requestNotifyCh = nil
+	a.requestNotifyChMu.Unlock()
 
 	notify.RemoveAllHandlers()
 

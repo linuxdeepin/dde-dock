@@ -130,6 +130,10 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) *dbus.Error {
 
 // SendFiles 用来发送文件给蓝牙设备，仅支持发送给已连接设备
 func (b *Bluetooth) SendFiles(devAddress string, files []string) (dbus.ObjectPath, *dbus.Error) {
+	if len(files) == 0 {
+		return "", dbusutil.ToError(errors.New("files is empty"))
+	}
+
 	// 检查设备是否已经连接
 	dev := b.getConnectedDeviceByAddress(devAddress)
 	if dev == nil {
