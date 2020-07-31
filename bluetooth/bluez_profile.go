@@ -25,6 +25,7 @@ type profile struct {
 	uuid, name string
 }
 
+// nolint
 var profiles = []profile{
 	profile{SPP_UUID, Tr("Serial port")},
 	profile{DUN_GW_UUID, Tr("Dial-Up networking")},

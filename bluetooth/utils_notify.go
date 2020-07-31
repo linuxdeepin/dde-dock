@@ -130,7 +130,12 @@ func notifyInitiativeConnect(dev *device, pinCode string) error {
 		return err
 	}
 
-	go cmd.Wait()
+	go func() {
+		err := cmd.Wait()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 
 	return nil
 }

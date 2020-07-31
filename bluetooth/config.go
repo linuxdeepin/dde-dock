@@ -69,11 +69,17 @@ func newConfig() (c *config) {
 }
 
 func (c *config) load() {
-	c.core.Load(c)
+	err := c.core.Load(c)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (c *config) save() {
-	c.core.Save(c)
+	err := c.core.Save(c)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func newAdapterConfig() (ac *adapterConfig) {
@@ -143,20 +149,6 @@ func (c *config) addAdapterConfig(address string) {
 	c.save()
 }
 
-func (c *config) removeAdapterConfig(address string) {
-	c.core.Lock()
-	delete(c.Adapters, address)
-	c.core.Unlock()
-	c.save()
-}
-
-func (c *config) getAdapterConfig(address string) (ac *adapterConfig, ok bool) {
-	c.core.Lock()
-	defer c.core.Unlock()
-	ac, ok = c.Adapters[address]
-	return
-}
-
 func (c *config) isAdapterConfigExists(address string) (ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
@@ -180,7 +172,6 @@ func (c *config) setAdapterConfigPowered(address string, powered bool) {
 	}
 	c.core.Unlock()
 	c.save()
-	return
 }
 
 func newDeviceConfig() (ac *deviceConfig) {
@@ -221,13 +212,6 @@ func (c *config) getDeviceConfig(address string) (dc *deviceConfig, ok bool) {
 	return
 }
 
-func (c *config) removeDeviceConfig(address string) {
-	c.core.Lock()
-	delete(c.Devices, address)
-	c.core.Unlock()
-	c.save()
-}
-
 func (c *config) getDeviceConfigConnected(address string) (connected bool) {
 	dc, ok := c.getDeviceConfig(address)
 	if !ok {
@@ -250,20 +234,19 @@ func (c *config) setDeviceConfigConnected(device *device, connected bool) {
 	// when status is connect, set connected status as true, update latest time
 	dc.Connected = connected
 	dc.Icon = device.Icon
-	if connected == true {
+	if connected {
 		dc.LatestTime = time.Now().Unix()
 	}
 
 	c.core.Unlock()
 
 	c.save()
-	return
 }
 
 // select latest devices from devAddressMap, each type only contain one device
 func (c *config) filterDemandedTypeDevices(devAddressMap map[string]*device) []*device {
 	var typeDeviceConfigSlice []*deviceConfigWithAddress
-	
+
 	// find latest devices to fill ordered type device
 	for _, deviceUnit := range devAddressMap {
 		// if device's address is empty, ignore this device

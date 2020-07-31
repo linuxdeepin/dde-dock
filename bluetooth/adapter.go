@@ -21,12 +21,13 @@ package bluetooth
 
 import (
 	"fmt"
-	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"os"
+	"time"
+
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
-	"time"
 )
 
 type adapter struct {
@@ -98,23 +99,32 @@ func (a *adapter) String() string {
 
 func (a *adapter) notifyAdapterAdded() {
 	logger.Info("AdapterAdded", a)
-	globalBluetooth.service.Emit(globalBluetooth, "AdapterAdded", marshalJSON(a))
+	err := globalBluetooth.service.Emit(globalBluetooth, "AdapterAdded", marshalJSON(a))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (a *adapter) notifyAdapterRemoved() {
 	logger.Info("AdapterRemoved", a)
-	globalBluetooth.service.Emit(globalBluetooth, "AdapterRemoved", marshalJSON(a))
+	err := globalBluetooth.service.Emit(globalBluetooth, "AdapterRemoved", marshalJSON(a))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (a *adapter) notifyPropertiesChanged() {
-	globalBluetooth.service.Emit(globalBluetooth, "AdapterPropertiesChanged", marshalJSON(a))
+	err := globalBluetooth.service.Emit(globalBluetooth, "AdapterPropertiesChanged", marshalJSON(a))
+	if err != nil {
+		logger.Warning(err)
+	}
 	globalBluetooth.updateState()
 }
 
 func (a *adapter) connectProperties() {
-	a.core.Name().ConnectChanged(func(hasValue bool, value string) {
+	err := a.core.Name().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -122,8 +132,11 @@ func (a *adapter) connectProperties() {
 		logger.Debugf("%s Name: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
-	a.core.Alias().ConnectChanged(func(hasValue bool, value string) {
+	err = a.core.Alias().ConnectChanged(func(hasValue bool, value string) {
 		if !hasValue {
 			return
 		}
@@ -131,7 +144,11 @@ func (a *adapter) connectProperties() {
 		logger.Debugf("%s Alias: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.core.Powered().ConnectChanged(func(hasValue bool, value bool) {
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = a.core.Powered().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -150,7 +167,11 @@ func (a *adapter) connectProperties() {
 			go globalBluetooth.tryConnectPairedDevices()
 		}
 	})
-	a.core.Discovering().ConnectChanged(func(hasValue bool, value bool) {
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = a.core.Discovering().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -158,7 +179,11 @@ func (a *adapter) connectProperties() {
 		logger.Debugf("%s Discovering: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.core.Discoverable().ConnectChanged(func(hasValue bool, value bool) {
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = a.core.Discoverable().ConnectChanged(func(hasValue bool, value bool) {
 		if !hasValue {
 			return
 		}
@@ -166,7 +191,11 @@ func (a *adapter) connectProperties() {
 		logger.Debugf("%s Discoverable: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
-	a.core.DiscoverableTimeout().ConnectChanged(func(hasValue bool, value uint32) {
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = a.core.DiscoverableTimeout().ConnectChanged(func(hasValue bool, value uint32) {
 		if !hasValue {
 			return
 		}
@@ -174,8 +203,11 @@ func (a *adapter) connectProperties() {
 		logger.Debugf("%s DiscoverableTimeout: %v", a, value)
 		a.notifyPropertiesChanged()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
-func (a *adapter)startDiscovery(){
+func (a *adapter) startDiscovery() {
 	err := a.core.StartDiscovery(0)
 	if err != nil {
 		logger.Warningf("failed to start discovery for %s: %v", a, err)
@@ -185,4 +217,3 @@ func (a *adapter)startDiscovery(){
 		a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
 	}
 }
-

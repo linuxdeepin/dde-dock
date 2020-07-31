@@ -83,14 +83,12 @@ type device struct {
 	connected         bool
 	connectedTime     time.Time
 	retryConnectCount int
-	connecting        bool
 	agentWorking      bool
 
 	connectPhase      connectPhase
 	disconnectPhase   disconnectPhase
 	disconnectChan    chan struct{}
 	mu                sync.Mutex
-	confirmation      chan bool
 	pairingFailedTime time.Time
 
 	// mark if pc or mobile request a connection
@@ -99,9 +97,8 @@ type device struct {
 	isInitiativeConnect bool
 	// remove device when device state is connecting or disconnecting may cause blueZ crash
 	// to avoid this situation, remove device only allowed when connected or disconnected finished
-	needRemove     bool
-	removeLock     sync.Mutex
-	disconnectTime time.Time
+	needRemove bool
+	removeLock sync.Mutex
 }
 
 type connectPhase uint32
@@ -314,7 +311,6 @@ func (d *device) connectProperties() {
 		if needNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
 			d.notifyConnectedChanged()
 		}
-		return
 	})
 	if err != nil {
 		logger.Warning(err)
@@ -493,9 +489,9 @@ func (d *device) doConnect(hasNotify bool) error {
 
 	err := d.cancelBlock()
 	if err != nil {
-		if hasNotify {
-			// TODO(jouyouyun): notify device blocked
-		}
+		// if hasNotify {
+		// 	// TODO(jouyouyun): notify device blocked
+		// }
 		return err
 	}
 
@@ -542,7 +538,10 @@ func (d *device) doRealConnect() error {
 	globalBluetooth.config.setDeviceConfigConnected(d, true)
 
 	// auto trust device when connecting success
-	d.doTrust()
+	err = d.doTrust()
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	return nil
 }
@@ -612,7 +611,7 @@ func (d *device) getAndResetNeedRemove() bool {
 	defer d.removeLock.Unlock()
 	needRemove := d.needRemove
 	// if needRemove is true, reset needRemove
-	if needRemove == true {
+	if needRemove {
 		d.needRemove = false
 	}
 	return needRemove
@@ -637,7 +636,7 @@ func (d *device) Connect() {
 	err := d.doConnect(true)
 	// add active connected device to map in case auto connect close this device
 	// when auto connect happens, this type device element is not nil, dont try to create connection
-	if err == nil && d.ConnectState == true {
+	if err == nil && d.ConnectState {
 		globalBluetooth.addConnectedDevice(d)
 	}
 }

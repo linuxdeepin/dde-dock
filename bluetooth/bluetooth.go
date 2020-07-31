@@ -30,7 +30,6 @@ import (
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	obex "github.com/linuxdeepin/go-dbus-factory/org.bluez.obex"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -74,6 +73,7 @@ const (
 	CameraPhone
 )
 
+// nolint
 const (
 	transferStatusQueued    = "queued"
 	transferStatusActive    = "active"
@@ -96,8 +96,6 @@ var DeviceTypes []string = []string{
 	"printer",
 	"camera-photo",
 }
-
-type dbusObjectData map[string]dbus.Variant
 
 //go:generate dbusutil-gen -type Bluetooth bluetooth.go
 
@@ -132,6 +130,7 @@ type Bluetooth struct {
 	sessionCancelChMap   map[dbus.ObjectPath]chan struct{}
 	sessionCancelChMapMu sync.Mutex
 
+	// nolint
 	methods *struct {
 		DebugInfo                     func() `out:"info"`
 		GetDevices                    func() `in:"adapter" out:"devicesJSON"`
@@ -154,6 +153,7 @@ type Bluetooth struct {
 		SetAdapterDiscoverableTimeout func() `in:"adapter,timeout"`
 	}
 
+	// nolint
 	signals *struct {
 		// adapter/device properties changed signals
 		AdapterAdded, AdapterRemoved, AdapterPropertiesChanged struct {
@@ -301,15 +301,25 @@ func (b *Bluetooth) init() {
 	b.apiDevice = apidevice.NewDevice(systemBus)
 	b.sysDBusDaemon = ofdbus.NewDBus(systemBus)
 	b.sysDBusDaemon.InitSignalExt(b.systemSigLoop, true)
-	b.sysDBusDaemon.ConnectNameOwnerChanged(b.handleDBusNameOwnerChanged)
+	_, err := b.sysDBusDaemon.ConnectNameOwnerChanged(b.handleDBusNameOwnerChanged)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	// initialize dbus object manager
 	b.objectManager = bluez.NewObjectManager(systemBus)
 
 	// connect signals
 	b.objectManager.InitSignalExt(b.systemSigLoop, true)
-	b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
-	b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+	_, err = b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	b.agent.init()
 	b.loadObjects()
@@ -481,7 +491,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 					// auto connect, dont show notification window
 					err = d.doConnect(false)
 					// if connect success, add dev into map
-					if err == nil && d.ConnectState == true {
+					if err == nil && d.ConnectState {
 						b.addConnectedDevice(d)
 					}
 				} else {
@@ -494,7 +504,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 						logger.Infof("auto connect %s", d)
 						err = d.doConnect(false)
 						// if connect success, add dev into map
-						if err == nil && d.ConnectState == true {
+						if err == nil && d.ConnectState {
 							b.addConnectedDevice(d)
 						}
 					}
@@ -516,7 +526,6 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	b.devicesLock.Lock()
 	defer b.devicesLock.Unlock()
 	b.devices[apath] = b.doRemoveDevice(b.devices[apath], i)
-	return
 }
 
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
@@ -532,10 +541,7 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
 
 func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
 	_, i := b.getDeviceIndex(dpath)
-	if i >= 0 {
-		return true
-	}
-	return false
+	return i >= 0
 }
 
 func (b *Bluetooth) findDevice(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
@@ -589,9 +595,7 @@ func (b *Bluetooth) getAdapterDevices(adapterAddress string) []*device {
 	}
 
 	result := make([]*device, 0, len(devices))
-	for _, dev := range devices {
-		result = append(result, dev)
-	}
+	result = append(result, devices...)
 	return result
 }
 
@@ -612,7 +616,11 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	}
 
 	if cfgPowered {
-		a.core.DiscoverableTimeout().Set(0, 0)
+		err = a.core.DiscoverableTimeout().Set(0, 0)
+		if err != nil {
+			logger.Warning(err)
+		}
+
 		err = a.core.Discoverable().Set(0, b.config.Discoverable)
 		if err != nil {
 			logger.Warning(err)
@@ -661,10 +669,7 @@ func (b *Bluetooth) getAdapter(apath dbus.ObjectPath) (a *adapter, err error) {
 func (b *Bluetooth) isAdapterExists(apath dbus.ObjectPath) bool {
 	b.adaptersLock.Lock()
 	defer b.adaptersLock.Unlock()
-	if b.adapters[apath] != nil {
-		return true
-	}
-	return false
+	return b.adapters[apath] != nil
 }
 
 func (b *Bluetooth) feed(devPath dbus.ObjectPath, accept bool, key string) (err error) {
@@ -752,7 +757,7 @@ func (b *Bluetooth) tryConnectPairedDevice(dev *device) bool {
 		return false
 	} else {
 		// if auto connect success, add device into map connectedDevices
-		if dev.ConnectState == true {
+		if dev.ConnectState {
 			b.addConnectedDevice(dev)
 		}
 	}
@@ -818,32 +823,6 @@ func (b *Bluetooth) isBREDRDevice(dev *device) bool {
 		}
 	}
 	return false
-}
-
-func (b *Bluetooth) wakeupWorkaround() {
-	// try connect devices after suspend wakeup
-	var loginManager = login1.NewManager(b.systemSigLoop.Conn())
-	loginManager.InitSignalExt(b.systemSigLoop, true)
-	loginManager.ConnectPrepareForSleep(func(isSleep bool) {
-		if isSleep {
-			logger.Debug("prepare to sleep")
-			return
-		}
-		logger.Debug("Wakeup from sleep, will set adapter and try connect device")
-		time.Sleep(time.Second * 3)
-		for _, aobj := range b.adapters {
-			powered := b.config.getAdapterConfigPowered(aobj.address)
-			logger.Debugf("Compare adapter(%s) powered with config: ifc(%v), config(%v)", aobj.address, aobj.Powered, powered)
-			if powered != aobj.Powered {
-				_ = aobj.core.Powered().Set(0, powered)
-			}
-			if !powered {
-				continue
-			}
-			_ = aobj.core.Discoverable().Set(0, b.config.Discoverable)
-		}
-		b.tryConnectPairedDevices()
-	})
 }
 
 func (b *Bluetooth) addConnectedDevice(connectedDev *device) {

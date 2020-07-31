@@ -82,9 +82,7 @@ func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err *
 	b.devicesLock.Lock()
 	devices := b.devices[apath]
 	var result []*device
-	for _, device := range devices {
-		result = append(result, device)
-	}
+	result = append(result, devices...)
 	devicesJSON = marshalJSON(result)
 	b.devicesLock.Unlock()
 	return
@@ -309,7 +307,10 @@ func (b *Bluetooth) ClearUnpairedDevice() *dbus.Error {
 	b.devicesLock.Unlock()
 
 	for _, d := range removeDevices {
-		b.RemoveDevice(d.AdapterPath, d.Path)
+		err := b.RemoveDevice(d.AdapterPath, d.Path)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	return nil
 }

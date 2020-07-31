@@ -51,6 +51,7 @@ type agent struct {
 	mu            sync.Mutex
 	requestDevice dbus.ObjectPath
 
+	// nolint
 	methods *struct {
 		RequestPinCode       func() `in:"device" out:"pinCode"`
 		DisplayPinCode       func() `in:"device,pinCode"`
@@ -110,7 +111,8 @@ func (a *agent) RequestPinCode(dpath dbus.ObjectPath) (pincode string, busErr *d
 //				   org.bluez.Error.Canceled
 func (a *agent) DisplayPinCode(devPath dbus.ObjectPath, pinCode string) (err *dbus.Error) {
 	logger.Info("DisplayPinCode()", pinCode)
-	a.b.service.Emit(a.b, "DisplayPinCode", devPath, pinCode)
+	err1 := a.b.service.Emit(a.b, "DisplayPinCode", devPath, pinCode)
+	err = dbusutil.ToError(err1)
 	return
 }
 
@@ -235,7 +237,6 @@ func (a *agent) init() {
 	sysBus := a.service.Conn()
 	a.bluezManager = bluez.NewManager(sysBus)
 	a.registerDefaultAgent()
-	return
 }
 
 func (a *agent) registerDefaultAgent() {

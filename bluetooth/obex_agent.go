@@ -61,6 +61,7 @@ type obexAgent struct {
 	acceptedSessions   map[dbus.ObjectPath]int
 	acceptedSessionsMu sync.Mutex
 
+	// nolint
 	methods *struct {
 		AuthorizePush func() `in:"transferPath" out:"filename"`
 		Cancel        func()
@@ -97,6 +98,7 @@ func (a *obexAgent) registerAgent() {
 	}
 }
 
+// nolint
 // unregisterAgent 注销 OBEX 的代理
 func (a *obexAgent) unregisterAgent() {
 	err := a.obexManager.UnregisterAgent(0, obexAgentDBusPath)
