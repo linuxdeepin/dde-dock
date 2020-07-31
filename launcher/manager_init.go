@@ -27,11 +27,6 @@ import (
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
-const (
-	appsDBusDest       = "com.deepin.daemon.Apps"
-	appsDBusObjectPath = "/com/deepin/daemon/Apps"
-)
-
 func (m *Manager) initItems() {
 	// load items
 	m.items = make(map[string]*Item)
@@ -68,10 +63,7 @@ func shouldCheckDesktopFile(filename string) bool {
 
 	// ignore $HOME/.local/share/applications/menu-xdg/
 	skipDir := filepath.Join(getUserAppDir(), "menu-xdg")
-	if dir == skipDir {
-		return false
-	}
-	return true
+	return dir != skipDir
 }
 
 type popPushOp struct {
@@ -92,7 +84,10 @@ func (m *Manager) handlePopPushOps() {
 			top := stack.topTask()
 			if top == nil {
 				logger.Debug("emit SearchDone []")
-				m.service.Emit(m, "SearchDone", []string{})
+				err := m.service.Emit(m, "SearchDone", []string{})
+				if err != nil {
+					logger.Warning("emit SearchDone Failed:", err)
+				}
 			} else {
 				top.emitResult()
 			}

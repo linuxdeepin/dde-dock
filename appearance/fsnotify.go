@@ -84,7 +84,7 @@ func (m *Manager) handleThemeChanged() {
 						continue
 					}
 					background.NotifyChanged()
-					for iloop := range m.wsLoopMap{
+					for iloop := range m.wsLoopMap {
 						m.wsLoopMap[iloop].NotifyFsChanged()
 					}
 
@@ -161,5 +161,8 @@ func hasEventOccurred(ev string, list []string) bool {
 }
 
 func (m *Manager) emitSignalRefreshed(type0 string) {
-	m.service.Emit(m, "Refreshed", type0)
+	err := m.service.Emit(m, "Refreshed", type0)
+	if err != nil {
+		logger.Warning("emit signal Refreshed failed:", err)
+	}
 }

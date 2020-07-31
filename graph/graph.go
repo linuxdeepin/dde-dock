@@ -202,23 +202,15 @@ func (d *Data) DeleteNode(nd *Node) {
 			continue
 		}
 		elem.Lock()
-		if _, ok := elem.WeightFrom[nd]; ok {
-			delete(elem.WeightFrom, nd)
-		}
-		if _, ok := elem.WeightTo[nd]; ok {
-			delete(elem.WeightTo, nd)
-		}
+		delete(elem.WeightFrom, nd)
+		delete(elem.WeightTo, nd)
 		elem.Unlock()
 	}
 
 	// delete from Data(graph)
 	d.Lock()
-	if _, ok := d.NodeMap[nd]; ok {
-		delete(d.NodeMap, nd)
-	}
-	if _, ok := d.nodeID[nd.ID]; ok {
-		delete(d.nodeID, nd.ID)
-	}
+	delete(d.NodeMap, nd)
+	delete(d.nodeID, nd.ID)
 	d.Unlock()
 
 	nd = nil
@@ -233,15 +225,11 @@ func (d *Data) DeleteEdge(src, dst *Node) {
 	}
 
 	src.Lock()
-	if _, ok := src.WeightTo[dst]; ok {
-		delete(src.WeightTo, dst)
-	}
+	delete(src.WeightTo, dst)
 	src.Unlock()
 
 	dst.Lock()
-	if _, ok := dst.WeightFrom[src]; ok {
-		delete(dst.WeightFrom, src)
-	}
+	delete(dst.WeightFrom, src)
 	dst.Unlock()
 
 }

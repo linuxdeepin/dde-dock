@@ -33,9 +33,7 @@ var (
 // ListDirs list all background dirs
 func ListDirs() []string {
 	var result []string
-	for _, value := range systemWallpapersDir {
-		result = append(result, value)
-	}
+	result = append(result, systemWallpapersDir...)
 	result = append(result, CustomWallpapersConfigDir)
 	return result
 }

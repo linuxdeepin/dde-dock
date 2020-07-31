@@ -92,7 +92,10 @@ loop:
 }
 
 func (m *Manager) emitSignalKeyEvent(pressed bool, keystroke string) {
-	m.service.Emit(m, "KeyEvent", pressed, keystroke)
+	err := m.service.Emit(m, "KeyEvent", pressed, keystroke)
+	if err != nil {
+		logger.Warning("emit KeyEvent Failed:", err)
+	}
 }
 
 func grabKbdAndMouse(conn *x.Conn) error {
@@ -106,13 +109,22 @@ func grabKbdAndMouse(conn *x.Conn) error {
 	const pointerEventMask = x.EventMaskButtonRelease | x.EventMaskButtonPress
 	err = mousebind.GrabPointer(conn, rootWin, pointerEventMask, x.None, x.None)
 	if err != nil {
-		keybind.UngrabKeyboard(conn)
+		err1 := keybind.UngrabKeyboard(conn)
+		if err1 != nil {
+			logger.Warning("ungrabKeyboard Failed:", err)
+		}
 		return err
 	}
 	return nil
 }
 
 func ungrabKbdAndMouse(conn *x.Conn) {
-	keybind.UngrabKeyboard(conn)
-	mousebind.UngrabPointer(conn)
+	err := keybind.UngrabKeyboard(conn)
+	if err != nil {
+		logger.Warning("ungrabKeyboard Failed", err)
+	}
+	err = mousebind.UngrabPointer(conn)
+	if err != nil {
+		logger.Warning("ungrabPointer Failed", err)
+	}
 }

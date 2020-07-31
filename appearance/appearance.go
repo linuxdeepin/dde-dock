@@ -109,7 +109,10 @@ func (*Module) start() error {
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		_m.destroy()
-		service.StopExport(_m)
+		err = service.StopExport(_m)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 
@@ -152,7 +155,10 @@ func (*Module) Stop() error {
 
 	_m.destroy()
 	service := loader.GetService()
-	service.StopExport(_m)
+	err := service.StopExport(_m)
+	if err != nil {
+		return err
+	}
 	_m = nil
 	return nil
 }

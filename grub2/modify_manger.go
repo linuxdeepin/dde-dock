@@ -64,21 +64,19 @@ func (m *modifyManager) notifyStateChange() {
 
 func (m *modifyManager) loop() {
 	for {
-		select {
-		case t, ok := <-m.ch:
-			if !ok {
-				return
-			}
-			m.mu.Lock()
-
-			if m.running {
-				m.modifyTasks = append(m.modifyTasks, t)
-			} else {
-				m.start(t)
-			}
-
-			m.mu.Unlock()
+		t, ok := <-m.ch
+		if !ok {
+			return
 		}
+		m.mu.Lock()
+
+		if m.running {
+			m.modifyTasks = append(m.modifyTasks, t)
+		} else {
+			m.start(t)
+		}
+
+		m.mu.Unlock()
 	}
 }
 

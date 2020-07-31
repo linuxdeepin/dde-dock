@@ -54,7 +54,6 @@ func NewConfig(name string, core Interface, sessionSigLoop *dbusutil.SignalLoop,
 				c.logger.Warning(err)
 			}
 		}
-		return
 	})
 	if err != nil {
 		logger.Warning(err)

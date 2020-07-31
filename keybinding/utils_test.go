@@ -18,16 +18,3 @@
  */
 
 package keybinding
-
-import (
-	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
-)
-
-func TestIBMHotkey(t *testing.T) {
-	Convey("Test ibm hotkey checker", t, func(c C) {
-		c.So(checkIBMHotkey("testdata/hotkey"), ShouldEqual, true)
-		c.So(checkIBMHotkey("testdata/hotkey_disable"), ShouldEqual, false)
-	})
-}

@@ -141,16 +141,6 @@ func (c *MediaPlayerController) ExecCmd(cmd ActionCmd) error {
 	return nil
 }
 
-func (c *MediaPlayerController) pauseAllPlayer() {
-	for _, sender := range c.getMprisSender() {
-		player := mpris2.NewMediaPlayer(c.conn, sender)
-		err := player.Pause(0)
-		if err != nil {
-			logger.Warning(err)
-		}
-	}
-}
-
 func (c *MediaPlayerController) getMprisSender() []string {
 	if c.dbusDaemon == nil {
 		return nil

@@ -213,10 +213,7 @@ func getThemes(files []string) Themes {
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, home) {
-		return true
-	}
-	return false
+	return strings.Contains(file, home)
 }
 
 func isItemInList(item string, list []string) bool {

@@ -27,9 +27,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strconv"
-	"strings"
 
-	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
@@ -39,12 +37,6 @@ import (
 	gio "pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 )
-
-func getPowerButtonPressedExec() string {
-	s := gio.NewSettings("com.deepin.dde.power")
-	defer s.Unref()
-	return s.GetString("power-button-pressed-exec")
-}
 
 func resetGSettings(gs *gio.Settings) {
 	for _, key := range gs.ListKeys() {
@@ -172,11 +164,7 @@ func (m *Manager) systemTurnOffScreen() {
 	if useWayland {
 		err = exec.Command("dde_wldpms", "-s", "Off").Run()
 	} else {
-		xConn, err := x.NewConn()
-		if err != nil {
-			logger.Error(err)
-		}
-		err = dpms.ForceLevelChecked(xConn, dpms.DPMSModeOff).Check(xConn)
+		err = dpms.ForceLevelChecked(m.conn, dpms.DPMSModeOff).Check(m.conn)
 	}
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
@@ -201,52 +189,6 @@ func queryCommandByMime(mime string) string {
 	defer app.Unref()
 
 	return app.GetExecutable()
-}
-
-const (
-	ibmHotkeyFile = "/proc/acpi/ibm/hotkey"
-)
-
-var driverSupportedHotkey = func() func() bool {
-	var (
-		init      bool = false
-		supported bool = false
-	)
-
-	return func() bool {
-		if !init {
-			init = true
-			supported = checkIBMHotkey(ibmHotkeyFile)
-		}
-		return supported
-	}
-}()
-
-func checkIBMHotkey(file string) bool {
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		return false
-	}
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		if len(line) == 0 {
-			continue
-		}
-		list := strings.Split(line, ":")
-		if len(list) != 2 {
-			continue
-		}
-
-		if list[0] != "status" {
-			continue
-		}
-
-		if strings.TrimSpace(list[1]) == "enabled" {
-			return true
-		}
-	}
-	return false
 }
 
 func getRfkillWlanState() (int, error) {

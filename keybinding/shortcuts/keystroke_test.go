@@ -48,19 +48,19 @@ func TestSplitKeystroke(t *testing.T) {
 		c.So(keys, ShouldResemble, []string{"Shift", "Super", "T"})
 
 		// abnormal situation:
-		keys, err = splitKeystroke("<Super>>")
+		_, err = splitKeystroke("<Super>>")
 		c.So(err, ShouldNotBeNil)
 
-		keys, err = splitKeystroke("<Super><")
+		_, err = splitKeystroke("<Super><")
 		c.So(err, ShouldNotBeNil)
 
-		keys, err = splitKeystroke("Super<")
+		_, err = splitKeystroke("Super<")
 		c.So(err, ShouldNotBeNil)
 
-		keys, err = splitKeystroke("<Super><shiftT")
+		_, err = splitKeystroke("<Super><shiftT")
 		c.So(err, ShouldNotBeNil)
 
-		keys, err = splitKeystroke("<Super><Shift><>T")
+		_, err = splitKeystroke("<Super><Shift><>T")
 		c.So(err, ShouldNotBeNil)
 	})
 }
@@ -101,13 +101,13 @@ func TestParseKeystroke(t *testing.T) {
 		})
 
 		// abnormal situation:
-		ks, err = ParseKeystroke("<Shift>XXXXX")
+		_, err = ParseKeystroke("<Shift>XXXXX")
 		c.So(err, ShouldNotBeNil)
 
-		ks, err = ParseKeystroke("")
+		_, err = ParseKeystroke("")
 		c.So(err, ShouldNotBeNil)
 
-		ks, err = ParseKeystroke("<lock><Shift>A")
+		_, err = ParseKeystroke("<lock><Shift>A")
 		c.So(err, ShouldNotBeNil)
 	})
 }

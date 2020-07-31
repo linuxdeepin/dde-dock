@@ -33,7 +33,7 @@ import (
 	"unicode"
 
 	"pkg.deepin.io/dde/daemon/grub_common"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/procfs"
@@ -50,9 +50,9 @@ func SetLogger(v *log.Logger) {
 type gfxmodeDetectState int
 
 const (
-	gfxmodeDetectStateNone      gfxmodeDetectState = 0
-	gfxmodeDetectStateDetecting                    = 1
-	gfxmodeDetectStateFailed                       = 2
+	gfxmodeDetectStateNone gfxmodeDetectState = iota
+	gfxmodeDetectStateDetecting
+	gfxmodeDetectStateFailed
 )
 
 //go:generate dbusutil-gen -type Grub2,Theme grub2.go theme.go
@@ -72,6 +72,7 @@ type Grub2 struct {
 	Timeout      uint32
 	Updating     bool
 
+	//nolint
 	methods *struct {
 		GetSimpleEntryTitles func() `out:"titles"` // ([]string, *dbus.Error) {
 		GetAvailableGfxmodes func() `out:"gfxmodes"`
@@ -318,7 +319,10 @@ func NewGrub2(service *dbusutil.Service) *Grub2 {
 		inhibitFd: -1,
 	}
 
-	g.readEntries()
+	err := g.readEntries()
+	if err != nil {
+		logger.Warning("readEntries Failed:", err)
+	}
 
 	params, err := grub_common.LoadGrubParams()
 	if err != nil {

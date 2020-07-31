@@ -22,14 +22,14 @@ package fonts
 import (
 	"crypto/md5"
 	"fmt"
-	"pkg.deepin.io/gir/gio-2.0"
 	"path"
-	"pkg.deepin.io/lib/strv"
-	"pkg.deepin.io/lib/xdg/basedir"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
+
+	"pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 type Family struct {
@@ -47,7 +47,6 @@ type FamilyHashTable map[string]*Family
 const (
 	fallbackStandard  = "Noto Sans"
 	fallbackMonospace = "Noto Mono"
-	defaultDPI        = 96
 
 	xsettingsSchema = "com.deepin.xsettings"
 	gsKeyFontName   = "gtk-font-name"
@@ -60,31 +59,13 @@ var (
 	DeepinFontConfig = path.Join(basedir.GetUserConfigDir(), "fontconfig", "conf.d", "99-deepin.conf")
 )
 
-var stylePriorityList = []string{
-	"Regular",
-	"normal",
-	"Standard",
-	"Normale",
-	"Medium",
-	"Italic",
-	"Black",
-	"Light",
-	"Bold",
-	"BoldItalic",
-	"DemiLight",
-	"Thin",
-}
-
 func IsFontFamily(value string) bool {
 	if isVirtualFont(value) {
 		return true
 	}
 
 	info := GetFamilyTable().GetFamily(value)
-	if info != nil {
-		return true
-	}
-	return false
+	return info != nil
 }
 
 func IsFontSizeValid(size float64) bool {
@@ -163,7 +144,7 @@ func (table FamilyHashTable) ListStandard() []string {
 }
 
 func (table FamilyHashTable) Get(key string) *Family {
-	info, _ := table[key]
+	info := table[key]
 	return info
 }
 
@@ -185,16 +166,6 @@ func (table FamilyHashTable) GetFamilies(ids []string) []*Family {
 		infos = append(infos, info)
 	}
 	return infos
-}
-
-func (info Family) preferredStyle() string {
-	styles := strv.Strv(info.Styles)
-	for _, v := range stylePriorityList {
-		if styles.Contains(v) {
-			return v
-		}
-	}
-	return ""
 }
 
 func setFontByXSettings(name string, size float64) error {

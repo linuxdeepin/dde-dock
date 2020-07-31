@@ -20,10 +20,7 @@
 package grub2
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
-	"io"
 	"os"
 	"strconv"
 
@@ -82,24 +79,3 @@ func checkAuth(sysBusName, actionId string) (bool, error) {
 }
 
 var errAuthFailed = errors.New("authentication failed")
-
-func getBytesMD5Sum(b []byte) string {
-	return fmt.Sprintf("%x", md5.Sum(b))
-}
-
-func getFileMD5sum(file string) (string, error) {
-	f, err := os.Open(file)
-	if err != nil {
-		return "", err
-	}
-	defer f.Close()
-
-	h := md5.New()
-	_, err = io.Copy(h, f)
-	if err != nil {
-		return "", err
-	}
-
-	sum := fmt.Sprintf("%x", h.Sum(nil))
-	return sum, nil
-}

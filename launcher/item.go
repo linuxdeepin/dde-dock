@@ -118,7 +118,6 @@ const (
 	genericNameScore = 70
 	keywordScore     = 60
 	categoryScore    = 60
-	commentScore     = 50
 )
 
 var pinyinArgs = pinyin.NewArgs()

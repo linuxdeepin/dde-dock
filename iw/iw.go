@@ -28,9 +28,10 @@ import "C"
 import (
 	"fmt"
 	"io/ioutil"
-	"pkg.deepin.io/lib/strv"
 	"strings"
 	"unsafe"
+
+	"pkg.deepin.io/lib/strv"
 )
 
 type WirelessInfo struct {
@@ -84,7 +85,7 @@ func (infos WirelessInfos) ListHotspotDevice() WirelessInfos {
 
 func (infos WirelessInfos) Get(address string) *WirelessInfo {
 	for _, info := range infos {
-		if strings.ToLower(info.HwAddress) == strings.ToLower(address) {
+		if strings.EqualFold(info.HwAddress, address) {
 			return info
 		}
 	}
@@ -129,18 +130,4 @@ func getHwAddressByFile(file string) string {
 	}
 
 	return strings.TrimSpace(string(contents))
-}
-
-func printWirelessInfos() {
-	infos, err := ListWirelessInfo()
-	if err != nil {
-		fmt.Println("Failed to list wireless devices:", err)
-		return
-	}
-
-	for _, info := range infos {
-		fmt.Println(info.Wiphy)
-		fmt.Println("\tMac Address\t:", info.HwAddress)
-		fmt.Println("\tInterface Modes\t:", info.IFCModes)
-	}
 }

@@ -100,14 +100,6 @@ func getAppIdByFilePath(file string, appDirs []string) string {
 	return strings.TrimSuffix(desktopId, desktopExt)
 }
 
-func runeSliceToStringSlice(runes []rune) []string {
-	var list []string
-	for _, v := range runes {
-		list = append(list, string(v))
-	}
-	return list
-}
-
 func runeSliceDiff(key, current []rune) (popCount int, runesPush []rune) {
 	var i int
 	kLen := len(key)

@@ -122,6 +122,7 @@ type Manager struct {
 	switchKbdLayoutState SKLState
 	sklWaitQuit          chan int
 
+	//nolint
 	signals *struct {
 		Added, Deleted, Changed struct {
 			id  string
@@ -134,6 +135,7 @@ type Manager struct {
 		}
 	}
 
+	//nolint
 	methods *struct {
 		AddCustomShortcut         func() `in:"name,action,keystroke" out:"id,type"`
 		AddShortcutKeystroke      func() `in:"id,type,keystroke"`
@@ -169,14 +171,6 @@ const (
 	SKLStateWait
 	SKLStateOSDShown
 )
-
-func (m *Manager) systemConn() *dbus.Conn {
-	return m.systemSigLoop.Conn()
-}
-
-func (m *Manager) sessionConn() *dbus.Conn {
-	return m.sessionSigLoop.Conn()
-}
 
 func newManager(service *dbusutil.Service) (*Manager, error) {
 	conn, err := x.NewConn()
@@ -237,9 +231,12 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	// when session is locked, we need handle some keyboard function event
 	m.lockFront = lockfront.NewLockFront(sessionBus)
 	m.lockFront.InitSignalExt(m.sessionSigLoop, true)
-	m.lockFront.ConnectChangKey(func(changKey string) {
+	_, err = m.lockFront.ConnectChangKey(func(changKey string) {
 		m.handleKeyEventFromLockFront(changKey)
 	})
+	if err != nil {
+		logger.Warning("connect ChangKey signal failed:", err)
+	}
 
 	if shouldUseDDEKwin() {
 		logger.Debug("Use DDE KWin")
@@ -263,7 +260,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.sessionManager = sessionmanager.NewSessionManager(sessionBus)
 	m.keyboard = inputdevices.NewKeyboard(sessionBus)
 	m.keyboard.InitSignalExt(m.sessionSigLoop, true)
-	m.keyboard.CurrentLayout().ConnectChanged(func(hasValue bool, layout string) {
+	err = m.keyboard.CurrentLayout().ConnectChanged(func(hasValue bool, layout string) {
 		if !hasValue {
 			return
 		}
@@ -273,6 +270,9 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 			m.shortcutManager.NotifyLayoutChanged()
 		}
 	})
+	if err != nil {
+		logger.Warning("connect CurrentLayout property changed failed:", err)
+	}
 
 	m.displayController = NewDisplayController(m.backlightHelper, sessionBus)
 	m.kbdLightController = NewKbdLightController(m.backlightHelper)
@@ -326,7 +326,10 @@ func (m *Manager) handleKeyEventFromLockFront(changKey string) {
 }
 
 func (m *Manager) destroy() {
-	m.service.StopExport(m)
+	err := m.service.StopExport(m)
+	if err != nil {
+		logger.Warning("stop export failed:", err)
+	}
 
 	if m.shortcutManager != nil {
 		m.shortcutManager.Destroy()
@@ -459,7 +462,10 @@ func (m *Manager) eliminateKeystrokeConflict() {
 		shortcut := ks.Shortcut
 		logger.Infof("eliminate conflict shortcut: %s keystroke: %s",
 			ks.Shortcut.GetUid(), ks)
-		m.DeleteShortcutKeystroke(shortcut.GetId(), shortcut.GetType(), ks.String())
+		err := m.DeleteShortcutKeystroke(shortcut.GetId(), shortcut.GetType(), ks.String())
+		if err != nil {
+			logger.Warning("delete shortcut keystroke failed:", err)
+		}
 	}
 
 	m.shortcutManager.ConflictingKeystrokes = nil

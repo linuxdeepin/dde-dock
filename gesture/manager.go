@@ -128,8 +128,11 @@ func (m *Manager) destroy() {
 
 func (m *Manager) init() {
 	m.initBuiltinSets()
-	m.sysDaemon.SetLongPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyLongPress)))
-	err := m.gesture.SetShortPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyShortPress)))
+	err := m.sysDaemon.SetLongPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyLongPress)))
+	if err != nil {
+		logger.Warning("call SetLongPressDuration failed:", err)
+	}
+	err = m.gesture.SetShortPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyShortPress)))
 	if err != nil {
 		logger.Warning("call SetShortPressDuration failed:", err)
 	}
@@ -198,7 +201,6 @@ func (m *Manager) Exec(name, direction string, fingers int32) error {
 		break
 	case ActionTypeShortcut:
 		cmd = fmt.Sprintf("xdotool key %s", cmd)
-		break
 	case ActionTypeBuiltin:
 		return m.handleBuiltinAction(cmd)
 	default:

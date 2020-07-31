@@ -171,6 +171,7 @@ type Manager struct {
 	curMonitorSpace string
 	wm              *wm.Wm
 
+	//nolint
 	signals *struct {
 		// Theme setting changed
 		Changed struct {
@@ -184,6 +185,7 @@ type Manager struct {
 		}
 	}
 
+	//nolint
 	methods *struct {
 		Delete                func() `in:"type,name"`
 		GetScaleFactor        func() `out:"scale_factor"`
@@ -793,9 +795,13 @@ func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow
 		return err
 	}
 	cfg, err := doUnmarshalWallpaperSlideshow(m.WallpaperSlideShow.Get())
+	if err != nil {
+		logger.Warning("doUnmarshalWallpaperSlideshow Failed:", err)
+	}
 	if cfg == nil {
 		cfg = make(mapMonitorWorkspaceWSPolicy)
 	}
+
 	key := monitorName + "&&" + strconv.Itoa(int(idx))
 	cfg[key] = wallpaperSlideShow
 	strAllWallpaperSlideShow, err := doMarshalWallpaperSlideshow(cfg)

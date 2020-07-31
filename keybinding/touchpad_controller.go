@@ -42,11 +42,20 @@ func (*TouchPadController) Name() string {
 func (c *TouchPadController) ExecCmd(cmd ActionCmd) error {
 	switch cmd {
 	case TouchpadToggle:
-		c.toggle()
+		err := c.toggle()
+		if err != nil {
+			return err
+		}
 	case TouchpadOn:
-		c.enable(true)
+		err := c.enable(true)
+		if err != nil {
+			return err
+		}
 	case TouchpadOff:
-		c.enable(false)
+		err := c.enable(false)
+		if err != nil {
+			return err
+		}
 	default:
 		return ErrInvalidActionCmd{cmd}
 	}

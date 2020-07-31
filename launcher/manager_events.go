@@ -39,14 +39,6 @@ func isDesktopFile(path string) bool {
 	return matched
 }
 
-func isDirectory(path string) (bool, error) {
-	fileInfo, err := os.Stat(path)
-	if err != nil {
-		return false, err
-	}
-	return fileInfo.IsDir(), nil
-}
-
 func (m *Manager) listenSettingsChanged() {
 	gsettings.ConnectChanged(gsSchemaLauncher, gsKeyAppsHidden, func(key string) {
 		m.appsHiddenMu.Lock()
@@ -274,5 +266,8 @@ func (m *Manager) emitItemChanged(item *Item, status string) {
 	atomic.StoreUint32(&m.itemsChangedHit, 1)
 	itemInfo := item.newItemInfo()
 	logger.Debugf("emit signal ItemChanged status: %v, itemInfo: %v", status, itemInfo)
-	m.service.Emit(m, "ItemChanged", status, itemInfo, itemInfo.CategoryID)
+	err := m.service.Emit(m, "ItemChanged", status, itemInfo, itemInfo.CategoryID)
+	if err != nil {
+		logger.Warning("emit emitItemChanged Failed", err)
+	}
 }

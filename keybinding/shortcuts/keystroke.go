@@ -188,7 +188,10 @@ func splitKeystroke(str string) ([]string, error) {
 				return nil, errors.New("empty modifier found")
 			}
 		default:
-			reader.UnreadByte()
+			err := reader.UnreadByte()
+			if err != nil {
+				logger.Warning("UnreadByte Failed:", err)
+			}
 			var key bytes.Buffer
 			// read rest bytes
 			for {
@@ -340,10 +343,7 @@ func isGoodNoMods(str string, sym x.Keysym) bool {
 		return true
 	}
 
-	if strings.HasPrefix(str, "XF86") {
-		return true
-	}
-	return false
+	return strings.HasPrefix(str, "XF86")
 }
 
 func isGoodModShift(str string, sym x.Keysym) bool {
@@ -362,10 +362,7 @@ func isGoodModShift(str string, sym x.Keysym) bool {
 		return true
 	}
 
-	if strings.HasPrefix(str, "XF86") {
-		return true
-	}
-	return false
+	return strings.HasPrefix(str, "XF86")
 }
 
 func (ks *Keystroke) IsGood() bool {

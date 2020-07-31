@@ -22,7 +22,6 @@ package shortcuts
 import (
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -280,8 +279,6 @@ func (sm *ShortcutManager) ListByType(type0 int32) (list []Shortcut) {
 	}
 	return
 }
-
-var regSpace = regexp.MustCompile(`\s+`)
 
 func (sm *ShortcutManager) Search(query string) (list []Shortcut) {
 	query = pinyin_search.GeneralizeQuery(query)
@@ -617,11 +614,14 @@ func isKbdAlreadyGrabbed(conn *x.Conn) bool {
 	err := keybind.GrabKeyboard(conn, grabWin)
 	if err == nil {
 		// grab keyboard successful
-		keybind.UngrabKeyboard(conn)
+		err = keybind.UngrabKeyboard(conn)
+		if err != nil {
+			logger.Warning("ungrabKeyboard Failed:", err)
+		}
 		return false
 	}
 
-	logger.Warningf("GrabKeyboard win %d failed: %v", grabWin, err)
+	logger.Warningf("grabKeyboard win %d failed: %v", grabWin, err)
 
 	gkErr, ok := err.(keybind.GrabKeyboardError)
 	if ok && gkErr.Status == x.GrabStatusAlreadyGrabbed {

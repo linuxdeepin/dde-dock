@@ -75,7 +75,7 @@ func isKbdAlreadyGrabbed() bool {
 	err := keybind.GrabKeyboard(xconn, grabWin)
 	if err == nil {
 		// grab keyboard successful
-		keybind.UngrabKeyboard(xconn)
+		_ = keybind.UngrabKeyboard(xconn)
 		return false
 	}
 

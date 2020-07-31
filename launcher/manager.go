@@ -100,6 +100,7 @@ type Manager struct {
 	DisplayMode gsprop.Enum `prop:"access:rw"`
 	Fullscreen  gsprop.Bool `prop:"access:rw"`
 
+	//nolint
 	signals *struct {
 		// SearchDone 返回搜索结果列表
 		SearchDone struct {
@@ -128,6 +129,7 @@ type Manager struct {
 		}
 	}
 
+	//nolint
 	methods *struct {
 		GetAllItemInfos          func() `out:"itemInfoList"`
 		GetItemInfo              func() `in:"id" out:"itemInfo"`

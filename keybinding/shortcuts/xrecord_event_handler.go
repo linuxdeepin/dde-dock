@@ -41,9 +41,9 @@ func NewXRecordEventHandler(keySymbols *keysyms.KeySymbols) *XRecordEventHandler
 	}
 }
 
-func (h *XRecordEventHandler) logPressedMods(title string) {
-	logger.Debug(title, "pressedMods:", Modifiers(h.pressedMods))
-}
+//func (h *XRecordEventHandler) logPressedMods(title string) {
+//	logger.Debug(title, "pressedMods:", Modifiers(h.pressedMods))
+//}
 
 func (h *XRecordEventHandler) handleButtonEvent(pressed bool) {
 	if h.pressedMods > 0 {
@@ -100,18 +100,6 @@ func (h *XRecordEventHandler) handleKeyEvent(pressed bool, keycode uint8, state 
 			}
 		}
 	}
-}
-
-func keys2Mod(keys []string) (uint16, bool) {
-	var ret uint16
-	for _, key := range keys {
-		mod, ok := key2Mod(key)
-		if !ok {
-			return 0, false
-		}
-		ret |= mod
-	}
-	return ret, true
 }
 
 func key2Mod(key string) (uint16, bool) {

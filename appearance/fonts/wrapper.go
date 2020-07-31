@@ -183,13 +183,6 @@ func isMonospace(name, spacing string) bool {
 	return false
 }
 
-func isDeletable(file string) bool {
-	if strings.Contains(file, home) {
-		return true
-	}
-	return false
-}
-
 func getItemByIndex(idx int, list []string) string {
 	if len(list) == 0 {
 		return ""
@@ -209,16 +202,6 @@ func indexOf(item string, list []string) int {
 		}
 	}
 	return -1
-}
-
-func lastIndexOf(item string, list []string) int {
-	var ret int = -1
-	for i, v := range list {
-		if item == v {
-			ret = i
-		}
-	}
-	return ret
 }
 
 func getCurLang() string {

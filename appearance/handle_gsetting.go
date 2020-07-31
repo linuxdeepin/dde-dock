@@ -107,7 +107,10 @@ func (m *Manager) listenGSettingChanged() {
 }
 
 func (m *Manager) emitSignalChanged(type0, value string) {
-	m.service.Emit(m, "Changed", type0, value)
+	err := m.service.Emit(m, "Changed", type0, value)
+	if err != nil {
+		logger.Warning("emit emitSignalChanged Failed:", err)
+	}
 }
 
 func (m *Manager) listenBgGSettings() {

@@ -142,7 +142,12 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, *dbus.Error) {
 		return false, dbusutil.ToError(err)
 	}
 	// success
-	go soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "")
+	go func() {
+		err := soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "")
+		if err != nil {
+			logger.Warning("playSystemSound Failed", err)
+		}
+	}()
 	return true, nil
 }
 
@@ -171,13 +176,19 @@ func (m *Manager) RequestUninstall(sender dbus.Sender, id string, purge bool) *d
 		err = m.uninstall(id)
 		if err != nil {
 			logger.Warningf("uninstall %q failed: %v", id, err)
-			m.service.Emit(m, "UninstallFailed", id, err.Error())
+			err := m.service.Emit(m, "UninstallFailed", id, err.Error())
+			if err != nil {
+				logger.Warning("emit UninstallFailed Failed:", err)
+			}
 			return
 		}
 
 		m.removeAutostart(id)
 		logger.Infof("uninstall %q success", id)
-		m.service.Emit(m, "UninstallSuccess", id)
+		err := m.service.Emit(m, "UninstallSuccess", id)
+		if err != nil {
+			logger.Warning("emit UninstallSuccess Failed:", err)
+		}
 	}()
 	return nil
 }
