@@ -989,13 +989,23 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 	delete(b.sessionCancelChMap, sessionPath)
 	b.sessionCancelChMapMu.Unlock()
 
-	err := b.obexManager.RemoveSession(0, sessionPath)
+	b.emitObexSessionRemoved(sessionPath)
+
+	objs, err := obex.NewObjectManager(b.service.Conn()).GetManagedObjects(0)
 	if err != nil {
-		logger.Warning("failed to remove session:", err)
-		return
+		logger.Warning("failed to get managed objects:", err)
+	} else {
+		_, pathExists := objs[sessionPath]
+		if !pathExists {
+			logger.Debugf("session %s not exists", sessionPath)
+			return
+		}
 	}
 
-	b.emitObexSessionRemoved(sessionPath)
+	err = b.obexManager.RemoveSession(0, sessionPath)
+	if err != nil {
+		logger.Warning("failed to remove session:", err)
+	}
 }
 
 func (b *Bluetooth) emitObexSessionCreated(sessionPath dbus.ObjectPath) {
