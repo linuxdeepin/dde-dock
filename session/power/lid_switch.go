@@ -22,14 +22,13 @@ package power
 import (
 	"os/exec"
 	"strings"
-
-	"pkg.deepin.io/dde/api/drandr"
 )
 
 func init() {
 	submoduleList = append(submoduleList, newLidSwitchHandler)
 }
 
+// nolint
 const (
 	lidSwitchStateUnknown = iota
 	lidSwitchStateOpen
@@ -50,8 +49,14 @@ func newLidSwitchHandler(m *Manager) (string, submodule, error) {
 
 func (h *LidSwitchHandler) Start() error {
 	power := h.manager.helper.Power
-	power.ConnectLidClosed(h.onLidClosed)
-	power.ConnectLidOpened(h.onLidOpened)
+	_, err := power.ConnectLidClosed(h.onLidClosed)
+	if err != nil {
+		return err
+	}
+	_, err = power.ConnectLidOpened(h.onLidOpened)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -99,23 +104,6 @@ func (h *LidSwitchHandler) onLidOpened() {
 	}
 }
 
-func (h *LidSwitchHandler) startAskUser() error {
-	h.cmd = exec.Command("/usr/lib/deepin-daemon/dde-suspend-dialog")
-	logger.Debug("startAskUser cmd.Start")
-	if err := h.cmd.Start(); err != nil {
-		return err
-	}
-	go func() {
-		err := h.cmd.Wait()
-		if err == nil {
-			h.manager.doSuspend()
-		} else {
-			logger.Debug("cmd exit with", err)
-		}
-	}()
-	return nil
-}
-
 func (h *LidSwitchHandler) stopAskUser() error {
 	if h.cmd == nil {
 		return nil
@@ -133,22 +121,6 @@ func (h *LidSwitchHandler) stopAskUser() error {
 	}
 	h.cmd = nil
 	return nil
-}
-
-// guess the working outputs after user close the lid
-func outputsAfterLidClosed(outputs []string) []string {
-	ret := make([]string, 0, len(outputs))
-	// found builtin output
-	var found bool
-	for _, output := range outputs {
-		if !found && isBuiltinOutput(output) {
-			// skip built output
-			found = true
-			continue
-		}
-		ret = append(ret, output)
-	}
-	return ret
 }
 
 // copy from display module of project startdde
@@ -171,26 +143,6 @@ func isBuiltinOutput(name string) bool {
 		return true
 	}
 	return false
-}
-
-// get the names of the working display outputs
-func getWorkingOutputNames(helper *Helper) ([]string, error) {
-	conn := helper.xConn
-	screenInfo, err := drandr.GetScreenInfo(conn)
-	if err != nil {
-		return nil, err
-	}
-
-	outputs := screenInfo.Outputs.ListConnectionOutputs()
-	workingOutputs := make(drandr.OutputInfos, 0, len(outputs))
-	for _, output := range outputs {
-		crtc := &output.Crtc
-		if crtc.Width == 0 || crtc.Height == 0 {
-			continue
-		}
-		workingOutputs = append(workingOutputs, output)
-	}
-	return workingOutputs.ListNames(), nil
 }
 
 func (h *LidSwitchHandler) Destroy() {

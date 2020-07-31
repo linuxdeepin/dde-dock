@@ -58,7 +58,7 @@ func (m *Manager) shouldIgnoreIdleOff() bool {
 // 处理有线电源插入拔出事件
 func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power
-	power.OnBattery().ConnectChanged(func(hasValue bool, onBattery bool) {
+	err := power.OnBattery().ConnectChanged(func(hasValue bool, onBattery bool) {
 		if !hasValue {
 			return
 		}
@@ -75,6 +75,10 @@ func (m *Manager) initOnBatteryChangedHandler() {
 			}
 		}
 	})
+
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) handleBeforeSuspend() {
@@ -107,7 +111,10 @@ func (m *Manager) handleWakeup() {
 	}
 
 	m.setDPMSModeOn()
-	m.helper.Power.RefreshBatteries(0)
+	err := m.helper.Power.RefreshBatteries(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 	playSound(soundutils.EventWakeup)
 }
 
@@ -154,8 +161,11 @@ func (m *Manager) handleBatteryDisplayUpdate() {
 		delete(m.BatteryPercentage, batteryDisplay)
 		delete(m.BatteryState, batteryDisplay)
 
-		m.service.EmitPropertiesChanged(m, nil, "BatteryIsPresent",
+		err := m.service.EmitPropertiesChanged(m, nil, "BatteryIsPresent",
 			"BatteryPercentage", "BatteryState")
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	m.PropsMu.Unlock()

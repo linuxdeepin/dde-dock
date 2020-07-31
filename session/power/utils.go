@@ -20,39 +20,17 @@
 package power
 
 import (
-	"fmt"
-	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/ext/dpms"
-	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"os"
 	"os/exec"
+	"time"
+
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"pkg.deepin.io/dde/api/soundutils"
 	dbus "pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
-	"time"
 )
-
-func (m *Manager) findWindow(wmClassInstance, wmClassClass string) x.Window {
-	c := m.helper.xConn
-	rootWin := c.GetDefaultScreen().Root
-	tree, err := x.QueryTree(c, rootWin).Reply(c)
-	if err != nil {
-		logger.Warning("QueryTree error:", err)
-		return 0
-	}
-
-	for _, win := range tree.Children {
-		wmClass, err := icccm.GetWMClass(c, win).Reply(c)
-		if err == nil &&
-			wmClass.Instance == wmClassInstance &&
-			wmClass.Class == wmClassClass {
-			return win
-		}
-	}
-	return 0
-}
 
 func (m *Manager) waitLockShowing(timeout time.Duration) {
 	ticker := time.NewTicker(time.Millisecond * 300)
@@ -249,12 +227,22 @@ func (m *Manager) setAndSaveDisplayBrightness(brightnessTable map[string]float64
 
 func doShowDDELowPower() {
 	logger.Info("Show dde low power")
-	go exec.Command(cmdDDELowPower, "--raise").Run()
+	go func() {
+		err := exec.Command(cmdDDELowPower, "--raise").Run()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 }
 
 func doCloseDDELowPower() {
 	logger.Info("Close low power")
-	go exec.Command(cmdDDELowPower, "--quit").Run()
+	go func() {
+		err := exec.Command(cmdDDELowPower, "--quit").Run()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {
@@ -281,7 +269,12 @@ const iconBatteryLow = "notification-battery-low"
 
 func playSound(name string) {
 	logger.Debug("play system sound", name)
-	go soundutils.PlaySystemSound(name, "")
+	go func() {
+		err := soundutils.PlaySystemSound(name, "")
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 }
 
 const (
@@ -342,10 +335,6 @@ func suspendPulseSources(suspend int) {
 	for _, source := range ctx.GetSourceList() {
 		ctx.SuspendSourceById(source.Index, suspend)
 	}
-}
-
-func brightnessRound(x float64) string {
-	return fmt.Sprintf("%.2f", x)
 }
 
 func (m *Manager) initGSettingsConnectChanged() {

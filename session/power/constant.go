@@ -19,6 +19,7 @@
 
 package power
 
+// nolint
 const (
 	gsSchemaPower = "com.deepin.dde.power"
 	// settingKeys

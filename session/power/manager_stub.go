@@ -38,7 +38,10 @@ func (m *Manager) setPropBatteryIsPresent(val bool) {
 }
 
 func (m *Manager) emitPropChangedBatteryIsPresent() {
-	m.service.EmitPropertyChanged(m, "BatteryIsPresent", m.BatteryIsPresent)
+	err := m.service.EmitPropertyChanged(m, "BatteryIsPresent", m.BatteryIsPresent)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) setPropBatteryPercentage(val float64) {
@@ -51,7 +54,10 @@ func (m *Manager) setPropBatteryPercentage(val float64) {
 }
 
 func (m *Manager) emitPropChangedBatteryPercentage() {
-	m.service.EmitPropertyChanged(m, "BatteryPercentage", m.BatteryPercentage)
+	err := m.service.EmitPropertyChanged(m, "BatteryPercentage", m.BatteryPercentage)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) setPropBatteryState(val uint32) {
@@ -64,5 +70,8 @@ func (m *Manager) setPropBatteryState(val uint32) {
 }
 
 func (m *Manager) emitPropChangedBatteryState() {
-	m.service.EmitPropertyChanged(m, "BatteryState", m.BatteryState)
+	err := m.service.EmitPropertyChanged(m, "BatteryState", m.BatteryState)
+	if err != nil {
+		logger.Warning(err)
+	}
 }

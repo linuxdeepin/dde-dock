@@ -22,8 +22,8 @@ package power
 import (
 	"time"
 
-	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	gio "pkg.deepin.io/gir/gio-2.0"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/gsettings"
 )
@@ -121,7 +121,10 @@ func (m *WarnLevelConfigManager) delayCheckValid() {
 		wlc := m.getWarnLevelConfig()
 		if !wlc.isValid() {
 			logger.Info("Warn level config is invalid, reset")
-			m.Reset()
+			err := m.Reset()
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 	})
 }

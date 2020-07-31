@@ -26,7 +26,7 @@ import (
 
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
-	"pkg.deepin.io/gir/gio-2.0"
+	gio "pkg.deepin.io/gir/gio-2.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
@@ -40,7 +40,6 @@ type Manager struct {
 	syncConfig           *dsync.Config
 	helper               *Helper
 	settings             *gio.Settings
-	isSuspending         bool
 	warnLevelCountTicker *countTicker
 	warnLevelConfig      *WarnLevelConfigManager
 	submodules           map[string]submodule

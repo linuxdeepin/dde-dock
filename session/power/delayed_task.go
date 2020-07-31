@@ -35,7 +35,6 @@ const (
 type delayedTask struct {
 	state      delayedTaskState
 	mu         sync.Mutex
-	fn         func()
 	cancelable bool
 	timer      *time.Timer
 	name       string
