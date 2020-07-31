@@ -100,14 +100,6 @@ func getDirsAndApps(root string) (dirs, apps []string) {
 	return
 }
 
-func isDirectory(path string) (bool, error) {
-	fileInfo, err := os.Stat(path)
-	if err != nil {
-		return false, err
-	}
-	return fileInfo.IsDir(), nil
-}
-
 const desktopExt = ".desktop"
 
 func isDesktopFile(path string) bool {

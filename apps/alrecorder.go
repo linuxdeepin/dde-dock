@@ -26,9 +26,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -47,6 +47,7 @@ type ALRecorder struct {
 	subRecordersMutex sync.RWMutex
 	loginManager      *login1.Manager
 
+	// nolint
 	methods *struct {
 		GetNew         func() `out:"newApps"`
 		MarkLaunched   func() `in:"desktopFile"`
@@ -54,6 +55,7 @@ type ALRecorder struct {
 		UninstallHints func() `in:"desktopFiles"`
 	}
 
+	// nolint
 	signals *struct {
 		Launched struct {
 			file string
@@ -90,9 +92,12 @@ func newALRecorder(watcher *DFWatcher) (*ALRecorder, error) {
 	sysSigLoop := dbusutil.NewSignalLoop(systemBus, 10)
 	sysSigLoop.Start()
 	r.loginManager.InitSignalExt(sysSigLoop, true)
-	r.loginManager.ConnectUserRemoved(func(uid uint32, userPath dbus.ObjectPath) {
+	_, err = r.loginManager.ConnectUserRemoved(func(uid uint32, userPath dbus.ObjectPath) {
 		r.handleUserRemoved(int(uid))
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	return r, nil
 }

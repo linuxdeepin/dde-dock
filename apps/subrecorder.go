@@ -37,8 +37,7 @@ const (
 )
 
 type SubRecorder struct {
-	root   string
-	rootOk bool
+	root string
 	// key: app, value: launched
 	launchedMap        map[string]bool
 	removedLaunchedMap map[string]bool
@@ -75,13 +74,19 @@ func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder
 func (sr *SubRecorder) init() {
 	subDirNames, apps := getDirsAndApps(sr.root)
 	if sr.initAppLaunchedMap(apps) {
-		MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
+		err := MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, dirPerm)
+		if err != nil {
+			logger.Warning(err)
+		}
 		sr.RequestSave()
 	}
 
 	for _, dirName := range subDirNames {
 		path := filepath.Join(sr.root, dirName)
-		sr.parent.watcher.add(path)
+		err := sr.parent.watcher.add(path)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 }
 
@@ -163,7 +168,10 @@ func (sr *SubRecorder) writeStatus(w io.Writer) error {
 	// NOTE: csv.NewWriter will new a bufio.Writer
 	writer := csv.NewWriter(w)
 	sr.launchedMapMu.RLock()
-	writer.Write([]string{"# " + sr.root})
+	err := writer.Write([]string{"# " + sr.root})
+	if err != nil {
+		logger.Warning(err)
+	}
 	for app, launched := range sr.launchedMap {
 		record := make([]string, 2)
 		record[0] = app

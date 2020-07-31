@@ -41,6 +41,7 @@ type DFWatcher struct {
 	sem       chan int
 	eventChan chan *FileEvent
 
+	// nolint
 	signals *struct {
 		Event struct {
 			name string
@@ -132,7 +133,7 @@ func (w *DFWatcher) remove(path string) error {
 
 func (w *DFWatcher) addRecursive(path string, loadExisted bool) {
 	logger.Debug("DFWatcher.addRecursive", path, loadExisted)
-	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			logger.Warning(err)
 			return nil
@@ -150,11 +151,14 @@ func (w *DFWatcher) addRecursive(path string, loadExisted bool) {
 		}
 		return nil
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (w *DFWatcher) removeRecursive(path string) {
 	logger.Debug("DFWatcher.removeRecursive", path)
-	filepath.Walk(path,
+	err := filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				// ignore file not exist error
@@ -172,4 +176,7 @@ func (w *DFWatcher) removeRecursive(path string) {
 			}
 			return nil
 		})
+	if err != nil {
+		logger.Warning(err)
+	}
 }
