@@ -52,7 +52,7 @@ func initPathDirCodeMap() {
 
 func getDesktopIdByFilePath(path string) string {
 	var desktopId string
-	for dir, _ := range pathDirCodeMap {
+	for dir := range pathDirCodeMap {
 		if strings.HasPrefix(path, dir) {
 			desktopId = path[len(dir):]
 			desktopId = strings.Replace(desktopId, "/", "-", -1)

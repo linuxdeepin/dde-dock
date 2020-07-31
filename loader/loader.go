@@ -113,9 +113,7 @@ func (l *Loader) List() []Module {
 	var modules Modules
 
 	l.lock.Lock()
-	for _, module := range l.modules {
-		modules = append(modules, module)
-	}
+	modules = append(modules,l.modules...)
 	l.lock.Unlock()
 
 	return modules

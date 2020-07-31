@@ -52,7 +52,10 @@ func (m *Manager) initEntries() {
 		m.service.Emit(m, "EntryRemoved", entry.Id)
 		go func() {
 			time.Sleep(time.Second)
-			m.service.StopExport(entry)
+			err := m.service.StopExport(entry)
+			if err != nil {
+				logger.Warning("StopExport error:",err)
+			}
 		}()
 	}
 	m.initClientList()

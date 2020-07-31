@@ -65,7 +65,6 @@ func (td *TargetData) needINCR() bool {
 type Manager struct {
 	xc        XClient
 	window    x.Window
-	dataWin   x.Window
 	ec        *eventCaptor
 	timestamp x.Timestamp
 

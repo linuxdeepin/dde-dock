@@ -286,14 +286,6 @@ func (tpad *Touchpad) motionScaling() {
 	}
 }
 
-func (tpad *Touchpad) doubleClick() {
-	xsSetInt32(xsPropDoubleClick, tpad.DoubleClick.Get())
-}
-
-func (tpad *Touchpad) dragThreshold() {
-	xsSetInt32(xsPropDragThres, tpad.DragThreshold.Get())
-}
-
 func (tpad *Touchpad) disableWhileTyping() {
 	if !tpad.Exist {
 		return
@@ -350,7 +342,10 @@ func (tpad *Touchpad) startSyndaemon() {
 	}
 	err := cmd.Start()
 	if err != nil {
-		os.Remove(syndaemonPidFile)
+		err = os.Remove(syndaemonPidFile)
+		if err != nil {
+			logger.Warning("Remove error:",err)
+		}
 		logger.Debug("[disableWhileTyping] start syndaemon failed:", err)
 		return
 	}
@@ -363,7 +358,10 @@ func (tpad *Touchpad) stopSyndaemon() {
 	if err != nil {
 		logger.Warning("[stopSyndaemon] failed:", string(out), err)
 	}
-	os.Remove(syndaemonPidFile)
+	err = os.Remove(syndaemonPidFile)
+	if err != nil {
+		logger.Warning("remove error:",err)
+	}
 }
 
 func (tpad *Touchpad) enablePalmDetect() {

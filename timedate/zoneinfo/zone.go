@@ -29,10 +29,6 @@ import (
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-const (
-	zoneInfoDir = "/usr/share/zoneinfo"
-)
-
 type DSTInfo struct {
 	// The timestamp of entering DST every year
 	Enter int64
@@ -60,7 +56,6 @@ var (
 
 	// Error, invalid timezone
 	ErrZoneInvalid = fmt.Errorf("Invalid time zone")
-	errZoneNoDST   = fmt.Errorf("The time zone has no DST info")
 
 	defaultZoneTab = "/usr/share/zoneinfo/zone1970.tab"
 	defaultZoneDir = "/usr/share/zoneinfo"

@@ -95,34 +95,6 @@ func (sc *syncConfig) Set(data []byte) error {
 	return nil
 }
 
-func diffStrSlice(a, b []string) (added, removed []string) {
-	// from a to b
-	toMap := func(slice []string) map[string]struct{} {
-		m := make(map[string]struct{})
-		for _, value := range slice {
-			m[value] = struct{}{}
-		}
-		return m
-	}
-	mapA := toMap(a)
-	mapB := toMap(b)
-
-	for keyB := range mapB {
-		_, ok := mapA[keyB]
-		if !ok {
-			added = append(added, keyB)
-		}
-	}
-
-	for keyA := range mapA {
-		_, ok := mapB[keyA]
-		if !ok {
-			removed = append(removed, keyA)
-		}
-	}
-	return
-}
-
 const (
 	syncConfigVersion = "1.2"
 )

@@ -134,7 +134,10 @@ func (entry *AppEntry) PresentWindows() *dbus.Error {
 	windowIds := entry.getWindowIds()
 	entry.PropsMu.RUnlock()
 	if len(windowIds) > 0 {
-		entry.manager.wm.PresentWindows(dbus.FlagNoAutoStart, windowIds)
+		err := entry.manager.wm.PresentWindows(dbus.FlagNoAutoStart, windowIds)
+		if err != nil {
+			logger.Warning("PresentWindows error:",err)
+		}
 	}
 	return nil
 }

@@ -567,7 +567,7 @@ func changeCurrentWorkspaceToWindowWorkspace(win x.Window) error {
 		// only warning not return
 		logger.Warning("getWindowUserTime failed:", err)
 	}
-	err = ewmh.RequestChangeCurrentDesktop(globalXConn, winWorkspace,
+	_ = ewmh.RequestChangeCurrentDesktop(globalXConn, winWorkspace,
 		x.Timestamp(winUserTime)).Check(globalXConn)
 
 	return nil

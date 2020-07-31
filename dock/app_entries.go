@@ -151,7 +151,7 @@ func (entries *AppEntries) FilterDocked() (dockedEntries []*AppEntry) {
 
 	for _, entry := range entries.items {
 		entry.PropsMu.RLock()
-		if entry.appInfo != nil && entry.IsDocked == true {
+		if entry.appInfo != nil && entry.IsDocked {
 			dockedEntries = append(dockedEntries, entry)
 		}
 		entry.PropsMu.RUnlock()

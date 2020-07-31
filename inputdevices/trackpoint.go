@@ -104,11 +104,6 @@ func (tp *TrackPoint) init() {
 	tp.motionScaling()
 }
 
-func (tp *TrackPoint) handleDeviceChanged() {
-	tp.updateDXMouses()
-	tp.init()
-}
-
 func (tp *TrackPoint) updateDXMouses() {
 	tp.devInfos = dxMouses{}
 	for _, info := range getMouseInfos(false) {

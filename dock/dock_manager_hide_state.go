@@ -234,14 +234,6 @@ func (m *Manager) resetSmartHideModeTimer(delay time.Duration) {
 	logger.Debug("reset smart hide mode timer ", delay)
 }
 
-func (m *Manager) cancelSmartHideModeTimer() {
-	m.smartHideModeMutex.Lock()
-	defer m.smartHideModeMutex.Unlock()
-
-	m.smartHideModeTimer.Stop()
-	logger.Debug("cancel smart hide mode timer ")
-}
-
 func (m *Manager) updateHideState(delay bool) {
 	if m.isDDELauncherVisible() {
 		logger.Debug("updateHideState: dde launcher is visible, show dock")

@@ -53,7 +53,10 @@ func (d *Daemon) Stop() error {
 }
 
 func (d *Daemon) startFailed() {
-	d.Stop()
+	err := d.Stop()
+	if err != nil {
+		logger.Warning("Stop error:",err)
+	}
 }
 
 func (d *Daemon) Start() error {

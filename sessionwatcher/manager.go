@@ -109,17 +109,23 @@ func (m *Manager) initUserSessions() {
 	}
 	m.handleSessionChanged()
 
-	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
+	_, err = m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session added:", id, path)
 		m.addSession(id, path)
 		m.handleSessionChanged()
 	})
+	if err != nil {
+		logger.Warning("ConnectSessionNew error:",err)
+	}
 
-	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
+	_, err = m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session removed:", id, path)
 		m.deleteSession(id, path)
 		m.handleSessionChanged()
 	})
+	if err != nil {
+		logger.Warning("ConnectSessionRemoved error:",err)
+	}
 }
 
 func (m *Manager) addSession(id string, path dbus.ObjectPath) {
@@ -157,9 +163,12 @@ func (m *Manager) addSession(id string, path dbus.ObjectPath) {
 	m.mu.Unlock()
 
 	session.InitSignalExt(m.systemSigLoop, true)
-	session.Active().ConnectChanged(func(hasValue bool, value bool) {
+	err = session.Active().ConnectChanged(func(hasValue bool, value bool) {
 		m.handleSessionChanged()
 	})
+	if err != nil {
+		logger.Warning("ConnectChanged error:",err)
+	}
 }
 
 func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
@@ -222,7 +231,10 @@ func (m *Manager) setIsActive(val bool) bool {
 	if m.IsActive != val {
 		m.IsActive = val
 		logger.Debug("[setIsActive] IsActive changed:", val)
-		m.service.EmitPropertyChanged(m, "IsActive", val)
+		err := m.service.EmitPropertyChanged(m, "IsActive", val)
+		if err != nil {
+			logger.Warning("EmitPropertyChanged error:",err)
+		}
 		return true
 	}
 	return false

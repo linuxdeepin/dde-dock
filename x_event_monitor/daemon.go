@@ -77,7 +77,10 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	service.Emit(m, "CancelAllArea")
+	err = service.Emit(m, "CancelAllArea")
+	if err != nil {
+		logger.Warning("Emit error:",err)
+	}
 
 	return nil
 }

@@ -179,7 +179,7 @@ func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
 
 func (entry *AppEntry) findNextLeader() x.Window {
 	winSlice := make(windowSlice, 0, len(entry.windows))
-	for win, _ := range entry.windows {
+	for win := range entry.windows {
 		winSlice = append(winSlice, win)
 	}
 	sort.Sort(winSlice)

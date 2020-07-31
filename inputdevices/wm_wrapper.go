@@ -35,8 +35,6 @@ const (
 	wmTPadKeyTapClick      = "tap-to-click"
 	// enum: mouse, left, right
 	wmTPadKeyLeftHanded = "left-handed"
-
-	wmMouseSchemaID = "com.deepin.wrap.gnome.desktop.peripherals.mouse"
 )
 
 func setWMKeyboardRepeat(repeat bool, delay, interval uint32) {

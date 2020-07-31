@@ -25,10 +25,10 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/gir/gio-2.0"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/dxinput"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 )
@@ -177,7 +177,10 @@ func newWacom(service *dbusutil.Service) *Wacom {
 
 	w.updateDXWacoms()
 
-	w.initX()
+	err := w.initX()
+	if err != nil {
+		logger.Warning("initX error:",err)
+	}
 	w.handleScreenChanged()
 	go w.listenXRandrEvents()
 	w.exit = make(chan int)

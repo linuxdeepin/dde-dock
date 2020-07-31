@@ -80,7 +80,10 @@ func (d *Daemon) Stop() error {
 	}
 
 	service := loader.GetService()
-	service.StopExport(d.manager)
+	err := service.StopExport(d.manager)
+	if err != nil {
+		logger.Warning("StopExport error:",err)
+	}
 	d.manager.destroy()
 	d.manager = nil
 	return nil

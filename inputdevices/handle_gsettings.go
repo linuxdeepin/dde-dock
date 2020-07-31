@@ -20,13 +20,9 @@
 package inputdevices
 
 import (
-	"sync"
-
 	"pkg.deepin.io/dde/api/dxinput"
 	"pkg.deepin.io/lib/gsettings"
 )
-
-var gsLocker sync.Mutex
 
 func (m *Manager) handleGSettings() {
 	gsettings.ConnectChanged(gsSchemaInputDevices, gsKeyWheelSpeed, func(key string) {

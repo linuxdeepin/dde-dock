@@ -173,7 +173,10 @@ func (m *Manager) init() {
 	if hasNil {
 		m.UserTimezones.Set(newList)
 	}
-	m.AddUserTimezone(m.Timezone)
+	err = m.AddUserTimezone(m.Timezone)
+	if err != nil {
+		logger.Warning("AddUserTimezone error:",err)
+	}
 
 	err = common.ActivateSysDaemonService(m.setter.ServiceName_())
 	if err != nil {

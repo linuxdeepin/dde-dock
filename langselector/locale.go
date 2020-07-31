@@ -115,6 +115,7 @@ type LangSelector struct {
 	Locales  []string
 	settings *gio.Settings
 
+	//nolint
 	methods *struct {
 		SetLocale                  func() `in:"locale"`
 		GetLocaleList              func() `out:"locales"`
@@ -123,7 +124,7 @@ type LangSelector struct {
 		AddLocale                  func() `in:"locale"`
 		DeleteLocale               func() `in:"locale"`
 	}
-
+	//nolint
 	signals *struct {
 		Changed struct {
 			locale string
@@ -261,7 +262,6 @@ func sendNotify(icon, summary, body string) {
 	if err != nil {
 		logger.Warning(err)
 	}
-	return
 }
 
 func isNetworkEnable() (bool, error) {

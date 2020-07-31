@@ -37,10 +37,6 @@ func newEventCaptor() *eventCaptor {
 	return l
 }
 
-func (ec *eventCaptor) destroy() {
-	close(ec.quit)
-}
-
 func (ec *eventCaptor) loopCheck() {
 	const hookExpires = 11 * time.Second
 	for {

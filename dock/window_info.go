@@ -403,7 +403,10 @@ func genInnerId(winInfo *WindowInfo) string {
 	}
 
 	md5hash := md5.New()
-	md5hash.Write([]byte(str))
+	_, err := md5hash.Write([]byte(str))
+	if err != nil {
+		logger.Warning("Write error:",err)
+	}
 	innerId := windowHashPrefix + hex.EncodeToString(md5hash.Sum(nil))
 	logger.Debugf("genInnerId win: %v str: %s, innerId: %s", win, str, innerId)
 	return innerId

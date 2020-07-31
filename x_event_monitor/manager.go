@@ -62,14 +62,13 @@ type Manager struct {
 	xConn               *x.Conn
 	keySymbols          *keysyms.KeySymbols
 	service             *dbusutil.Service
+	//nolint
 	signals             *struct {
-		CancelAllArea struct{}
-
+		CancelAllArea                     struct{}
 		CursorInto, CursorOut, CursorMove struct {
 			x, y int32
 			id   string
 		}
-
 		ButtonPress, ButtonRelease struct {
 			button, x, y int32
 			id           string
@@ -80,7 +79,7 @@ type Manager struct {
 			id   string
 		}
 	}
-
+	//nolint
 	methods *struct {
 		RegisterArea        func() `in:"x1,y1,x2,y2,flag" out:"id"`
 		RegisterAreas       func() `in:"areas,flag" out:"id"`
@@ -399,9 +398,15 @@ func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
 		}
 
 		if press {
-			m.service.Emit(m, "ButtonPress", button, x, y, id)
+			err := m.service.Emit(m, "ButtonPress", button, x, y, id)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		} else {
-			m.service.Emit(m, "ButtonRelease", button, x, y, id)
+			err := m.service.Emit(m, "ButtonRelease", button, x, y, id)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		}
 	}
 
@@ -411,9 +416,15 @@ func (m *Manager) handleButtonEvent(button int32, press bool, x, y int32) {
 	}
 
 	if press {
-		m.service.Emit(m, "ButtonPress", button, x, y, fullscreenId)
+		err := m.service.Emit(m, "ButtonPress", button, x, y, fullscreenId)
+		if err != nil {
+			logger.Warning("Emit error:",err)
+		}
 	} else {
-		m.service.Emit(m, "ButtonRelease", button, x, y, fullscreenId)
+		err := m.service.Emit(m, "ButtonRelease", button, x, y, fullscreenId)
+		if err != nil {
+			logger.Warning("Emit error:",err)
+		}
 	}
 }
 
@@ -434,30 +445,34 @@ func (m *Manager) handleKeyboardEvent(code int32, press bool, x, y int32) {
 		}
 
 		if press {
-			m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y, id)
+			err := m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y, id)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		} else {
-			m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y, id)
+			err := m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y, id)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		}
 	}
 
 	_, ok := m.idReferCountMap[fullscreenId]
 	if ok {
 		if press {
-			m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y,
+			err := m.service.Emit(m, "KeyPress", m.keyCode2Str(code), x, y,
 				fullscreenId)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		} else {
-			m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y,
+			err := m.service.Emit(m, "KeyRelease", m.keyCode2Str(code), x, y,
 				fullscreenId)
+			if err != nil {
+				logger.Warning("Emit error:",err)
+			}
 		}
 	}
-
-}
-
-func (m *Manager) cancelAllRegisterArea() {
-	m.idAreaInfoMap = make(map[string]*coordinateInfo)
-	m.idReferCountMap = make(map[string]int32)
-
-	m.service.Emit(m, "CancelAllArea")
 }
 
 func (m *Manager) isPidAreaRegistered(pid uint32, areasId string) bool {

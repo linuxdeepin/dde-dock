@@ -143,7 +143,10 @@ func getAtomListFormReply(reply *x.GetPropertyReply) ([]x.Atom, error) {
 
 func getBytesMd5sum(data []byte) string {
 	h := md5.New()
-	h.Write(data)
+	_, err := h.Write(data)
+	if err != nil {
+		logger.Warning("Write error:",err)
+	}
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 

@@ -54,7 +54,6 @@ const (
 	kbdKeyLayoutOptions  = "layout-options"
 	kbdKeyCursorBlink    = "cursor-blink-time"
 	kbdKeyCapslockToggle = "capslock-toggle"
-	kbdKeyLayoutApp      = "layout-app"
 	kbdKeyAppLayoutMap   = "app-layout-map"
 	kbdKeyLayoutScope    = "layout-scope"
 

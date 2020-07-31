@@ -310,7 +310,10 @@ func (m *Manager) SetFrontendWindowRect(x, y int32, width, height uint32) *dbus.
 	m.FrontendWindowRect.Y = y
 	m.FrontendWindowRect.Width = width
 	m.FrontendWindowRect.Height = height
-	m.service.EmitPropertyChanged(m, "FrontendWindowRect", m.FrontendWindowRect)
+	err := m.service.EmitPropertyChanged(m, "FrontendWindowRect", m.FrontendWindowRect)
+	if err != nil {
+		logger.Warning("EmitPropertyChanged error:",err)
+	}
 	m.updateHideState(false)
 	return nil
 }

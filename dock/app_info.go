@@ -106,7 +106,10 @@ func NewAppInfoFromFile(file string) *AppInfo {
 func (ai *AppInfo) genInnerId() {
 	cmdline := ai.GetCommandline()
 	hasher := md5.New()
-	hasher.Write([]byte(cmdline))
+	_, err := hasher.Write([]byte(cmdline))
+	if err != nil {
+		logger.Warning("Write error:",err)
+	}
 	ai.innerId = desktopHashPrefix + hex.EncodeToString(hasher.Sum(nil))
 }
 

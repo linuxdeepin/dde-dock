@@ -124,28 +124,40 @@ func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 func (entry *AppEntry) getMenuItemForceQuit() *MenuItem {
 	return NewMenuItem(Tr("Force Quit"), func(timestamp uint32) {
 		logger.Debug("Force Quit")
-		entry.ForceQuit()
+		err := entry.ForceQuit()
+		if err != nil {
+			logger.Warning("ForceQuit error:",err)
+		}
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemDock() *MenuItem {
 	return NewMenuItem(Tr("Dock"), func(uint32) {
 		logger.Debug("menu action dock entry")
-		entry.RequestDock()
+		err := entry.RequestDock()
+		if err != nil {
+			logger.Warning("RequestDock error:",err)
+		}
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 	return NewMenuItem(Tr("Undock"), func(uint32) {
 		logger.Debug("menu action undock entry")
-		entry.RequestUndock()
+		err := entry.RequestUndock()
+		if err != nil {
+			logger.Warning("RequestUndock error:",err)
+		}
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemAllWindows() *MenuItem {
 	menuItem := NewMenuItem(Tr("All Windows"), func(uint32) {
 		logger.Debug("menu action all windows")
-		entry.PresentWindows()
+		err := entry.PresentWindows()
+		if err != nil {
+			logger.Warning("PresentWindows error:",err)
+		}
 	}, true)
 	menuItem.hint = menuItemHintShowAllWindows
 	return menuItem
