@@ -3,9 +3,9 @@ package audio
 import (
 	"encoding/json"
 
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
-	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
+	gio "pkg.deepin.io/gir/gio-2.0"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 const (
@@ -117,7 +117,10 @@ func (sc *syncConfig) Set(data []byte) error {
 		s.SetBoolean(gsKeyCompleteCopy, soundEffect.CompleteCopy)
 		s.SetBoolean(gsKeyCompletePrint, soundEffect.CompletePrint)
 		s.SetBoolean(gsKeyDesktopLogin, soundEffect.DesktopLogin)
-		sc.syncConfigToSoundThemePlayer(soundEffect.DesktopLogin)
+		err = sc.syncConfigToSoundThemePlayer(soundEffect.DesktopLogin)
+		if err != nil {
+			logger.Warning(err)
+		}
 		s.SetBoolean(gsKeyDesktopLogout, soundEffect.DesktopLogout)
 		s.SetBoolean(gsKeyDeviceAdded, soundEffect.DeviceAdded)
 		s.SetBoolean(gsKeyDeviceRemoved, soundEffect.DeviceRemoved)

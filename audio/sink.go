@@ -68,6 +68,7 @@ type Sink struct {
 
 	props map[string]string
 
+	// nolint
 	methods *struct {
 		SetVolume  func() `in:"value,isPlay"`
 		SetBalance func() `in:"value,isPlay"`

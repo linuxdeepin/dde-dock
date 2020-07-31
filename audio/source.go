@@ -52,6 +52,7 @@ type Source struct {
 	// 声卡的索引
 	Card uint32
 
+	// nolint
 	methods *struct {
 		SetVolume  func() `in:"value,isPlay"`
 		SetBalance func() `in:"value,isPlay"`

@@ -31,7 +31,7 @@ import (
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	"pkg.deepin.io/dde/api/soundutils"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	//"pkg.deepin.io/lib/pulse"
 )
 
@@ -47,7 +47,12 @@ func playFeedback() {
 }
 
 func playFeedbackWithDevice(device string) {
-	go soundutils.PlaySystemSound(soundutils.EventAudioVolumeChanged, device)
+	go func() {
+		err := soundutils.PlaySystemSound(soundutils.EventAudioVolumeChanged, device)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 }
 
 func toJSON(v interface{}) string {

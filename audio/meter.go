@@ -23,7 +23,7 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -46,7 +46,10 @@ func newMeter(id string, core *pulse.SourceMeter, audio *Audio) *Meter {
 		audio:   audio,
 		service: audio.service,
 	}
-	m.Tick()
+	err := m.Tick()
+	if err != nil {
+		logger.Warning(err)
+	}
 	go m.tryQuit()
 	return m
 }
@@ -66,17 +69,14 @@ func (m *Meter) quit() {
 func (m *Meter) tryQuit() {
 	defer m.quit()
 
-	for {
-		select {
-		case <-time.After(time.Second * 10):
-			m.PropsMu.Lock()
-			if !m.alive {
-				m.PropsMu.Unlock()
-				return
-			}
-			m.alive = false
+	for range time.After(time.Second * 10) {
+		m.PropsMu.Lock()
+		if !m.alive {
 			m.PropsMu.Unlock()
+			return
 		}
+		m.alive = false
+		m.PropsMu.Unlock()
 	}
 }
 

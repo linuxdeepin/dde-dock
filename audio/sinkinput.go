@@ -25,7 +25,7 @@ import (
 	"strings"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/procfs"
 	"pkg.deepin.io/lib/pulse"
@@ -59,6 +59,7 @@ type SinkInput struct {
 	SupportFade    bool
 	SinkIndex      uint32
 
+	// nolint
 	methods *struct {
 		SetVolume  func() `in:"value,isPlay"`
 		SetBalance func() `in:"value,isPlay"`

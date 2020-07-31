@@ -20,7 +20,6 @@
 package audio
 
 import (
-	"fmt"
 	"sort"
 
 	"pkg.deepin.io/lib/pulse"
@@ -55,15 +54,6 @@ func newProfileList(src []pulse.ProfileInfo2) ProfileList {
 		result = append(result, newProfile(v))
 	}
 	return result
-}
-
-func (pl ProfileList) get(name string) (*Profile, error) {
-	for _, info := range pl {
-		if info.Name == name {
-			return info, nil
-		}
-	}
-	return nil, fmt.Errorf("invalid profile name: %v", name)
 }
 
 func getCommonProfiles(info1, info2 pulse.CardPortInfo) pulse.ProfileInfos2 {

@@ -106,7 +106,6 @@ type Audio struct {
 
 	headphoneUnplugAutoPause bool
 
-	inited    bool
 	settings  *gio.Settings
 	ctx       *pulse.Context
 	eventChan chan *pulse.Event
@@ -138,6 +137,7 @@ type Audio struct {
 
 	ReduceNoise gsprop.Bool `prop:"access:rw"`
 
+	// nolint
 	methods *struct {
 		SetPort        func() `in:"cardId,portName,direction"`
 		SetPortEnabled func() `in:"cardId,portName,enabled"`
@@ -195,7 +195,7 @@ func startPulseaudio() error {
 	if err != nil {
 		logger.Warningf("failed to start pulseaudio via `pulseaudio --start`: err: %v, stderr: %s",
 			err, errBuf.Bytes())
-		return xerrors.Errorf("cmd `pulseaudio --start` error:", err)
+		return xerrors.Errorf("cmd `pulseaudio --start` error: %w", err)
 	}
 	return nil
 }
@@ -515,13 +515,11 @@ func (a *Audio) SetPortEnabled(cardId uint32, portName string, enabled bool) *db
 		return dbusutil.ToError(err)
 	}
 
-	if a.defaultSink.Card == cardId && a.defaultSink.ActivePort.Name == portName {
-		// TODO : 自动切换，将在SP3二期实现
-	}
-
-	if a.defaultSource.Card == cardId && a.defaultSource.ActivePort.Name == portName {
-		// TODO : 自动切换，将在SP3二期实现
-	}
+	// TODO : 自动切换，将在SP3二期实现
+	// if a.defaultSink.Card == cardId && a.defaultSink.ActivePort.Name == portName {
+	// }
+	// if a.defaultSource.Card == cardId && a.defaultSource.ActivePort.Name == portName {
+	// }
 
 	return nil
 }
@@ -793,20 +791,6 @@ func (a *Audio) context() *pulse.Context {
 	c := a.ctx
 	a.mu.Unlock()
 	return c
-}
-
-func (a *Audio) getSinkInput(index uint32) *SinkInput {
-	a.mu.Lock()
-
-	for _, sinkInput := range a.sinkInputs {
-		if sinkInput.index == index {
-			a.mu.Unlock()
-			return sinkInput
-		}
-	}
-
-	a.mu.Unlock()
-	return nil
 }
 
 func (a *Audio) moveSinkInputsToDefaultSink() {
