@@ -124,10 +124,10 @@ func loadConnectionFile(filename string) (*Connection, error) {
 	}
 
 	// erase some keys
-	kf.RemoveKey(kfSectionConnection, kfKeyInterfaceName)
-	kf.RemoveKey(kfSectionWIFI, kfKeyMac)
-	kf.RemoveKey(kfSectionWIFI, kfKeyMacBlacklist)
-	kf.RemoveKey(kfSectionWIFI, kfKeySeenBSSID)
+	_, _ = kf.RemoveKey(kfSectionConnection, kfKeyInterfaceName)
+	_, _ = kf.RemoveKey(kfSectionWIFI, kfKeyMac)
+	_, _ = kf.RemoveKey(kfSectionWIFI, kfKeyMacBlacklist)
+	_, _ = kf.RemoveKey(kfSectionWIFI, kfKeySeenBSSID)
 
 	_, contents, err := kf.ToData()
 	if err != nil {

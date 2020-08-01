@@ -94,7 +94,7 @@ func main() {
 
 	usr, err := user.Current()
 	if err == nil {
-		os.Chdir(usr.HomeDir)
+		_ = os.Chdir(usr.HomeDir)
 	}
 
 	flags := new(Flags)
@@ -108,7 +108,7 @@ func main() {
 
 	subCmd := cmd.ParseCommandLine(os.Args[1:])
 
-	cmd.StartProfile()
+	_ = cmd.StartProfile()
 
 	C.init()
 	proxy.SetupProxy()

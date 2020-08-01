@@ -182,25 +182,25 @@ func renameXDGDirs(home, lang string) {
 	switch lang {
 	case "zh_CN":
 		if dutils.IsFileExist(desktop) {
-			os.Rename(desktop, path.Join(home, "桌面"))
+			_ = os.Rename(desktop, path.Join(home, "桌面"))
 		}
 
 		if dutils.IsFileExist(templates) {
-			os.Rename(templates, path.Join(home, "模板"))
+			_ = os.Rename(templates, path.Join(home, "模板"))
 			//dutils.CreateFile(path.Join(home, "模板", "文本文件"))
 		}
 	case "zh_TW":
 		if dutils.IsFileExist(desktop) {
-			os.Rename(desktop, path.Join(home, "桌面"))
+			_ = os.Rename(desktop, path.Join(home, "桌面"))
 		}
 
 		if dutils.IsFileExist(templates) {
-			os.Rename(templates, path.Join(home, "模板"))
-			dutils.CreateFile(path.Join(home, "模板", "新增檔案"))
+			_ = os.Rename(templates, path.Join(home, "模板"))
+			_ = dutils.CreateFile(path.Join(home, "模板", "新增檔案"))
 		}
 	default:
 		if dutils.IsFileExist(templates) {
-			dutils.CreateFile(path.Join(templates, "New file"))
+			_ = dutils.CreateFile(path.Join(templates, "New file"))
 		}
 	}
 }

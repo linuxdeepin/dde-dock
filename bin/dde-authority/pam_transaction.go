@@ -17,7 +17,7 @@ type PAMTransaction struct {
 	PropsMu        sync.RWMutex
 	Authenticating bool
 	Sender         string
-	methods        *struct {
+	methods        *struct { //nolint
 		SetUser func() `in:"user"`
 	}
 
@@ -80,7 +80,7 @@ func genCookie() (string, error) {
 	}
 
 	hash := sha256.New()
-	hash.Write(buf)
+	_, _ = hash.Write(buf)
 	encoded := base64.StdEncoding.EncodeToString(hash.Sum(nil))
 	return encoded, nil
 }

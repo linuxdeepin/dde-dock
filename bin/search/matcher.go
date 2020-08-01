@@ -27,7 +27,7 @@ import (
 
 // Result score && Sorted by it
 const (
-	POOR          uint32 = 50000
+	POOR          uint32 = 50000 //nolint
 	BELOW_AVERAGE        = 60000
 	AVERAGE              = 70000
 	ABOVE_AVERAGE        = 75000
@@ -84,27 +84,27 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 	// * 7) split to characters and search \bq.*u.*e.*r.*y
 	m := make(map[*regexp.Regexp]uint32)
 
-	addMatcher(`(?i)^%s$`, key, HIGHEST, m)
-	addMatcher(`(?i)^%s`, key, EXCELLENT, m)
-	addMatcher(`(?i)\b%s`, key, VERY_GOOD, m)
+	_ = addMatcher(`(?i)^%s$`, key, HIGHEST, m)
+	_ = addMatcher(`(?i)^%s`, key, EXCELLENT, m)
+	_ = addMatcher(`(?i)\b%s`, key, VERY_GOOD, m)
 
 	words := strings.Fields(key)
 	if len(words) > 1 {
-		addMatcher(`(?i)\b%s`, strings.Join(words, `.+\b`),
+		_ = addMatcher(`(?i)\b%s`, strings.Join(words, `.+\b`),
 			GOOD, m)
 	}
 
-	addMatcher(`(?i)%s`, key, BELOW_AVERAGE, m)
+	_ = addMatcher(`(?i)%s`, key, BELOW_AVERAGE, m)
 
 	chars := splitKey(key)
 	logger.Debugf("chars %#v", chars)
 	if len(words) == 1 && len(chars) <= 5 {
-		addMatcher(`(?i)\b%s`, strings.Join(chars, `.+\b`),
+		_ = addMatcher(`(?i)\b%s`, strings.Join(chars, `.+\b`),
 			ABOVE_AVERAGE, m)
 	}
 
-	addMatcher(`(?i)\b%s`, strings.Join(chars, `.*`), BELOW_AVERAGE, m)
-	addMatcher(`(?i)%s`, strings.Join(chars, `.*`), POOR, m)
+	_ = addMatcher(`(?i)\b%s`, strings.Join(chars, `.*`), BELOW_AVERAGE, m)
+	_ = addMatcher(`(?i)%s`, strings.Join(chars, `.*`), POOR, m)
 
 	return m
 }

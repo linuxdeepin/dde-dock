@@ -48,8 +48,8 @@ func writeDatasToFile(datas interface{}, filename string) {
 	}
 	defer fp.Close()
 
-	fp.WriteString(w.String())
-	fp.Sync()
+	_, _ = fp.WriteString(w.String())
+	_ = fp.Sync()
 }
 
 func readDatasFromFile(datas interface{}, filename string) bool {

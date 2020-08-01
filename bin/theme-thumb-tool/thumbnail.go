@@ -38,8 +38,8 @@ import (
 const (
 	thumbBgDir = "/var/cache/appearance/thumbnail/background"
 
-	defaultWidth  int = 128
-	defaultHeight     = 72
+	defaultWidth  = 128
+	defaultHeight = 72
 )
 
 func genAllThumbnails(force bool) []string {

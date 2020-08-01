@@ -11,8 +11,6 @@ import (
 	"pkg.deepin.io/lib/dbus1"
 )
 
-var executeFlag string
-
 const (
 	gsSchemaDefaultTerminal = "com.deepin.desktop.default-applications.terminal"
 	gsKeyAppId              = "app-id"

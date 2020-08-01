@@ -23,7 +23,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"sync"
 
 	"pkg.deepin.io/dde/api/session"
 	"pkg.deepin.io/dde/daemon/calltrace"
@@ -37,8 +36,8 @@ import (
 )
 
 const (
-	ProfTypeCPU = "cpu"
-	ProfTypeMem = "memory"
+	ProfTypeCPU = "cpu"			//nolint
+	ProfTypeMem = "memory"		//nolint
 
 	dbusPath        = "/com/deepin/daemon/Daemon"
 	dbusServiceName = "com.deepin.daemon.Daemon"
@@ -81,10 +80,7 @@ type SessionDaemon struct {
 	part2EnabledModules  []string
 	part2DisabledModules []string
 
-	cpuLocker sync.Mutex
-	cpuWriter *os.File
-
-	methods *struct {
+	methods *struct {		//nolint
 		CallTrace func() `in:"times,seconds"`
 	}
 }

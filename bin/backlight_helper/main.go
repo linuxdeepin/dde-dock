@@ -45,7 +45,7 @@ const (
 
 type Manager struct {
 	service *dbusutil.Service
-	methods *struct {
+	methods *struct {		//nolint
 		SetBrightness func() `in:"type,name,value"`
 	}
 }

@@ -31,7 +31,7 @@ type Manager struct {
 	writeStart bool
 	writeEnd   chan bool
 
-	methods *struct {
+	methods *struct { //nolint
 		NewSearchWithStrList  func() `in:"list" out:"md5sum,ok"`
 		NewSearchWithStrDict  func() `in:"dict" out:"md5sum,ok"`
 		SearchString          func() `in:"str,md5sum" out:"result"`
@@ -82,7 +82,7 @@ func main() {
 
 	service.SetAutoQuitHandler(time.Second*5, func() bool {
 		if m.writeStart {
-			select {
+			select { //nolint
 			case <-m.writeEnd:
 				return true
 			}

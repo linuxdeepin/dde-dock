@@ -6,7 +6,6 @@ import (
 	"strings"
 	"sync"
 
-	x "github.com/linuxdeepin/go-x11-client"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
@@ -20,13 +19,10 @@ const (
 var logger = log.NewLogger("backlight_helper/ddcci")
 
 type Manager struct {
-	service *dbusutil.Service
 	ddcci   *ddcci
+	PropsMu sync.RWMutex
 
-	PropsMu         sync.RWMutex
-	configTimestamp x.Timestamp
-
-	methods *struct {
+	methods *struct { //nolint
 		CheckSupport    func() `in:"edidChecksum" out:"support"`
 		GetBrightness   func() `in:"edidChecksum" out:"value"`
 		SetBrightness   func() `in:"edidChecksum,value"`

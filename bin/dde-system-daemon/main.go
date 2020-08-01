@@ -44,7 +44,7 @@ import (
 )
 
 type Daemon struct {
-	methods *struct {
+	methods *struct {		//nolint
 		ScalePlymouth                  func() `in:"scale"`
 		SetLongPressDuration           func() `in:"duration"`
 		NetworkGetConnections          func() `out:"data"`

@@ -36,7 +36,7 @@ type Authority struct {
 	dbusDaemon    *ofdbus.DBus
 	accounts      *accounts.Accounts
 
-	methods *struct {
+	methods *struct { //nolint
 		Start       func() `in:"authType,user,agentObj" out:"transactionObj"`
 		CheckCookie func() `in:"user,cookie" out:"result,authToken"`
 		HasCookie   func() `in:"user" out:"result"`
@@ -94,8 +94,7 @@ func (a *Authority) listenDBusSignals() {
 }
 
 const (
-	authTypeFprint   = "fprint"
-	authTypeKeyboard = "keyboard"
+	authTypeFprint = "fprint"
 )
 
 func (a *Authority) Start(sender dbus.Sender, authType, user string, agent dbus.ObjectPath) (dbus.ObjectPath, *dbus.Error) {

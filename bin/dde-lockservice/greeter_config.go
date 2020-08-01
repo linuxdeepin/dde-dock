@@ -50,6 +50,9 @@ func setGreeterUser(file, username string) error {
 	}
 
 	v, err := kf.GetString(greeterGroupGeneral, greeterKeyLastUser)
+	if err != nil {
+		return err
+	}
 	if v == username {
 		return nil
 	}

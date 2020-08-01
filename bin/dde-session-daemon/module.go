@@ -108,7 +108,7 @@ func checkDependencies(s *gio.Settings, module loader.Module, enabled bool) erro
 	if enabled {
 		depends := module.GetDependencies()
 		for _, n := range depends {
-			if s.GetBoolean(n) != true {
+			if !s.GetBoolean(n) {
 				return fmt.Errorf("Dependency lose: %v", n)
 			}
 		}
@@ -120,7 +120,7 @@ func checkDependencies(s *gio.Settings, module loader.Module, enabled bool) erro
 			continue
 		}
 
-		if m.IsEnable() == true && isStrInList(module.Name(), m.GetDependencies()) {
+		if m.IsEnable() && isStrInList(module.Name(), m.GetDependencies()) {
 			return fmt.Errorf("Can not diable this module '%s', because of it was depended by'%s'",
 				module.Name(), m.Name())
 		}

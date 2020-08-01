@@ -52,5 +52,4 @@ func main() {
 	}
 	service.SetAutoQuitHandler(time.Second*30, nil)
 	service.Wait()
-	return
 }

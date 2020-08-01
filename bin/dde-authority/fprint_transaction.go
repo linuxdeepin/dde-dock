@@ -31,7 +31,7 @@ type FPrintTransaction struct {
 	PropsMu        sync.RWMutex
 	Authenticating bool
 	Sender         string
-	methods        *struct {
+	methods        *struct { //nolint
 		SetUser func() `in:"user"`
 	}
 	quit       chan struct{}
@@ -295,11 +295,7 @@ func (tx *FPrintTransaction) verify(deviceObj *fprint.Device, user, scanType str
 
 func shouldLimitVerifyTime(deviceObj *fprint.Device) bool {
 	path := string(deviceObj.Path_())
-	if filepath.Base(path) == "huawei" {
-		return false
-	}
-	// else fprintd device
-	return true
+	return filepath.Base(path) != "huawei"
 }
 
 func (tx *FPrintTransaction) doVerify(deviceObj *fprint.Device, verifyResultCh chan verifyResult,

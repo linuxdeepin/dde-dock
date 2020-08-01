@@ -46,7 +46,7 @@ type Manager struct {
 	authLocker    sync.Mutex
 	authUserTable map[string]chan string // 'pid+user': 'password'
 
-	methods *struct {
+	methods *struct { //nolint
 		CurrentUser      func() `out:"username"`
 		IsLiveCD         func() `in:"username" out:"result"`
 		SwitchToUser     func() `in:"username"`
@@ -54,7 +54,7 @@ type Manager struct {
 		UnlockCheck      func() `in:"username,password"`
 	}
 
-	signals *struct {
+	signals *struct { //nolint
 		Event struct {
 			eventType uint32
 			pid       uint32
@@ -142,7 +142,10 @@ func (m *Manager) SwitchToUser(username string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	if current != "" {
-		m.service.Emit(m, "UserChanged", username)
+		err = m.service.Emit(m, "UserChanged", username)
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	}
 	return nil
 }
@@ -238,19 +241,18 @@ func (m *Manager) doAuthenticate(username, password string, pid uint32) {
 				return "", fmt.Errorf("no passwd channel found for %s", username)
 			}
 			log.Println("Join select:", id)
-			select {
-			case tmp, ok := <-v:
-				if !ok {
-					log.Println("Invalid select channel")
-					return "", nil
-				}
 
-				m.authLocker.Lock()
-				delete(m.authUserTable, id)
-				close(v)
-				m.authLocker.Unlock()
-				return tmp, nil
+			tmp, ok := <-v
+			if !ok {
+				log.Println("Invalid select channel")
+				return "", nil
 			}
+
+			m.authLocker.Lock()
+			delete(m.authUserTable, id)
+			close(v)
+			m.authLocker.Unlock()
+			return tmp, nil
 		case pam.ErrorMsg:
 			if msg != "" {
 				log.Println("ShowError:", msg)

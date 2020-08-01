@@ -22,7 +22,6 @@ package main
 import (
 	"fmt"
 	"os/exec"
-	"strings"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
@@ -76,36 +75,4 @@ func (*Daemon) ScalePlymouth(scale uint32) *dbus.Error {
 	}
 	logger.Debug("Plymouth update result:", string(out))
 	return nil
-}
-
-var _ssd = -1
-
-func isSSD() bool {
-	if _ssd != -1 {
-		return _ssd == 1
-	}
-
-	outputs, err := exec.Command("/bin/lsblk",
-		"-P", "-o", "MOUNTPOINT,ROTA").CombinedOutput()
-	if err != nil {
-		logger.Warning("Failed to check ssd:", string(outputs), err)
-		_ssd = -1
-		return false
-	}
-
-	lines := strings.Split(string(outputs), "\n")
-	for _, line := range lines {
-		if !strings.Contains(line, "MOUNTPOINT=\"/\"") {
-			continue
-		}
-
-		// ssd: ROTA="0"
-		if strings.Contains(line, "ROTA=\"0\"") {
-			_ssd = 1
-		} else {
-			_ssd = 0
-		}
-		break
-	}
-	return _ssd == 1
 }

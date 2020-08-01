@@ -22,7 +22,6 @@ package main
 import (
 	"io"
 	"os"
-	"sync"
 
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
@@ -36,9 +35,8 @@ const (
 
 type Manager struct {
 	service *dbusutil.Service
-	mu      sync.Mutex
 
-	methods *struct {
+	methods *struct { //nolint
 		UpdateGreeterQtTheme func() `in:"fd"`
 	}
 }
