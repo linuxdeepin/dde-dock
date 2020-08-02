@@ -654,9 +654,13 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
 
         QRect rect(m_desktopWidget->pos(), m_desktopWidget->size());
         if (rect.contains(e->pos())) {
-            // 手动点击 显示桌面窗口 后，鼠标移出时不再调用显/隐窗口进程，以手动点击设置为准
-            m_needRecoveryWin = false;
-            QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+            if (m_needRecoveryWin) {
+                // 手动点击 显示桌面窗口 后，鼠标移出时不再调用显/隐窗口进程，以手动点击设置为准
+                m_needRecoveryWin = false;
+            } else {
+                // 需求调整，鼠标移入，预览桌面时再点击显示桌面保持显示桌面状态，再点击才切换桌面显、隐状态
+                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+            }
         }
     }
 
