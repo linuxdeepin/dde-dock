@@ -7,6 +7,13 @@
     </message>
 </context>
 <context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation>Hiqe</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth</source>
@@ -70,11 +77,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>orë 12-orëshe</translation>
+        <translation>Orë 12-orëshe</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>orë 24-orëshe</translation>
+        <translation>Orë 24-orëshe</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -100,7 +107,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Jeni i sigurt se doni të zbrazni $1 objekte?</translation>
+        <translation>Jeni i sigurt se doni të zbrazen $1 objekte?</translation>
     </message>
     <message>
         <source>Cancel</source>

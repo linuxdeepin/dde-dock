@@ -7,6 +7,13 @@
     </message>
 </context>
 <context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth</source>
@@ -130,7 +137,7 @@
     <name>DiskMountPlugin</name>
     <message>
         <source>Disk</source>
-        <translation>Disk</translation>
+        <translation>磁碟</translation>
     </message>
     <message>
         <source>Open</source>
@@ -145,11 +152,11 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>時尚 (Deepin) 模式</translation>
+        <translation>時尚模式</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>高效 (Windows) 模式</translation>
+        <translation>高效模式</translation>
     </message>
     <message>
         <source>Top</source>
@@ -161,11 +168,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>左側</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>右側</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -185,7 +192,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <source>Status</source>
@@ -300,7 +307,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>螢幕鍵盤</translation>
     </message>
     <message>
         <source>Settings</source>
