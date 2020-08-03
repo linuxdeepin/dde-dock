@@ -224,7 +224,6 @@ void PreviewContainer::onSnapshotClicked(const WId wid)
     Q_EMIT requestActivateWindow(wid);
     m_needActivate = true;
     m_waitForShowPreviewTimer->stop();
-    requestCancelPreviewWindow();
     requestHidePopup();
 }
 
@@ -247,8 +246,6 @@ void PreviewContainer::previewEntered(const WId wid)
     m_currentWId = wid;
 
     m_floatingPreview->trackWindow(snap);
-
-    requestCancelPreviewWindow();
 
     if (m_waitForShowPreviewTimer->isActive()) {
         return;

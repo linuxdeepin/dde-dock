@@ -369,8 +369,7 @@ void SoundApplet::toggleMute()
 
 void SoundApplet::onPlaySoundEffect()
 {
-    // set the mute property to false to play sound effects.
-    m_defSinkInter->SetMuteQueued(false);
+
 }
 
 void SoundApplet::increaseVolumeChanged()

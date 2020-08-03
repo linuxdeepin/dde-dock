@@ -189,6 +189,12 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     }
 
     AppItem *item = new AppItem(path);
+
+    if (m_appIDist.contains(item->appId())) {
+        delete item;
+        return;
+    }
+
     manageItem(item);
 
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
@@ -196,6 +202,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
     m_itemList.insert(insertIndex, item);
+    m_appIDist.append(item->appId());
 
     if (index != -1) {
         emit itemInserted(insertIndex - 1, item);
@@ -219,6 +226,8 @@ void DockItemManager::appItemRemoved(const QString &appId)
             appItemRemoved(app);
         }
     }
+
+    m_appIDist.removeAll(appId);
 }
 
 void DockItemManager::appItemRemoved(AppItem *appItem)

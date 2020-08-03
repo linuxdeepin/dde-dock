@@ -104,9 +104,8 @@ private:
     void resizeDockIcon();
     void calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
     void resizeDesktopWidget();
-
-    void updateFixedAreaIcon();
     bool checkNeedShowDesktop();
+
 public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);

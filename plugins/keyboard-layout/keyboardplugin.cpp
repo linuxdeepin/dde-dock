@@ -77,3 +77,17 @@ QWidget *KeyboardPlugin::itemTipsWidget(const QString &itemKey)
 
     return nullptr;
 }
+
+int KeyboardPlugin::itemSortKey(const QString &itemKey)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+
+    return m_proxyInter->getValue(this, key, 2).toInt();
+}
+
+void KeyboardPlugin::setSortKey(const QString &itemKey, const int order)
+{
+    const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
+
+    m_proxyInter->saveValue(this, key, order);
+}
