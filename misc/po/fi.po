@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Kimmo Kujansuu <mrkujansuu@gmail.com>, 2020\n"
 "Language-Team: Finnish (https://www.transifex.com/linuxdeepin/teams/3617/fi/)\n"
@@ -133,46 +133,78 @@ msgstr "Viesteihin pääsy"
 msgid "Message notification"
 msgstr "Ilmoitusviesti"
 
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr ""
+
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Yhdistetty %q onnistuneesti"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Katkaistu"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q irrotettu"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Varmista että %q on päällä ja kantaman sisällä"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-yhteyden muodostaminen epäonnistui"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
 msgstr "Yhteys napsauttamalla tätä %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
 msgstr "Lisää Bluetooth-laitteita"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
 msgstr "Pari"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
 msgstr "tänään"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
 msgstr "huomenna"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
 msgstr "%s/ %s"
@@ -453,10 +485,6 @@ msgstr "Järjestelmän kielen vaihtaminen epäonnistui, yritä myöhemmin"
 #: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Uudelleen"
-
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Peruuta"
 
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
@@ -946,38 +974,41 @@ msgstr "Hotspot käytössä"
 msgid "%q connected"
 msgstr "Yhdistetty kohteeseen %q"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
 msgstr "Hotspot suljettu"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q irrotettu"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Hotspot-yhteyden jako epäonnistui, tarkista dnsmasq:n asetukset"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Yhteys kohteeseen %q epäonnistui, pysyttele lähempänä langatonta reititintä"
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Yhteys kohteeseen %q epäonnistui, tarkista reititin tai verkkokaapeli"
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
 msgstr "Yhdistämiseen tarvitaan salasana %q"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Yhteys kohteeseen %q epäonnistui, väärä salasana"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Tuntematon"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "Katkaistu"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -992,7 +1023,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "Tämä laite ei tue tukiaseman tilaa."
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "Verkko"
 
@@ -1014,6 +1045,10 @@ msgstr "Järjestelmän välityspalvelin on peruttu."
 msgid "Connected"
 msgstr "Yhdistetty"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr ""
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
@@ -1031,36 +1066,36 @@ msgstr "Akku kriittisesti alhainen"
 msgid "Battery low, please plug in"
 msgstr "Virtataso alhainen, ole hyvä ja yhdistä verkkovirtaan"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
 msgstr "Virta-asetukset muuttuneet"
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
 msgstr "Kun kansi on kiinni,"
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
 msgstr "Kun painat virtapainiketta,"
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
 msgstr "tietokoneesi sammuu"
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
 msgstr "tietokoneesi siirtyy lepotilaan"
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "tietokoneesi siirtyy valmiustilaan"
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
 msgstr "näyttö sammuu"
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
 msgstr "se ei tee mitään"
 

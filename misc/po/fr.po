@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: n1coc4cola <n1coc4cola@gmail.com>, 2020\n"
 "Language-Team: French (https://www.transifex.com/linuxdeepin/teams/3617/fr/)\n"
@@ -140,46 +140,78 @@ msgstr "Message d'accès"
 msgid "Message notification"
 msgstr "Message de notification"
 
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr ""
+
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q connecté avec succès"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Déconnecté"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q déconnecté"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Assurez-vous que %q est sous tension "
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Connection bluetooth échouée "
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
 msgstr "Cliquez ici pour vous connecter à %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
 msgstr "Ajouter un appareil Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
 msgstr "Jumeler"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
 msgstr "aujourd'hui"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
 msgstr "demain"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
 msgstr "%s à %s"
@@ -462,10 +494,6 @@ msgstr ""
 #: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Réessayer"
-
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Annuler"
 
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
@@ -967,37 +995,33 @@ msgstr "Point d'accès activé"
 msgid "%q connected"
 msgstr "%q connecté"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
 msgstr "Point d'accès désactivé"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q déconnecté"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 "Impossible de partager le point d'accès, veuillez vérifier les paramètres de"
 " dnsmasq"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Impossible de se connecter à %q, veuillez-vous rapprocher du routeur sans "
 "fil."
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "Impossible de se connecter à %q, veuillez vérifier votre routeur ou votre "
 "câble internet."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
 msgstr "Mot de passe requis pour se connecter %q"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 "Échec de la connexion, impossible de connecter %q, mot de passe incorrect"
@@ -1005,6 +1029,13 @@ msgstr ""
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Inconnu"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "Déconnecté"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -1019,7 +1050,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "Le mode point d'accès n'est pas supporté par ce périphérique."
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "Réseau"
 
@@ -1042,6 +1073,10 @@ msgstr "Le proxy a été annulé."
 msgid "Connected"
 msgstr "Connecté"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr ""
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
@@ -1059,36 +1094,36 @@ msgstr "Niveau de batterie critique"
 msgid "Battery low, please plug in"
 msgstr "Batterie faible, veuillez brancher votre appareil"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
 msgstr ""
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
 msgstr ""
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
 msgstr ""
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
 msgstr ""
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
 msgstr ""
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
 msgstr ""
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
 msgstr ""
 

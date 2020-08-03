@@ -307,5 +307,5 @@ func notifyDeviceRemoved(devPath dbus.ObjectPath) {
 	notify(icon, Tr("Disconnected"), msg)
 }
 func notifyPortalSuccess() {
-	notify(notifyIconProxyEnabled, Tr("Network"), Tr("Portal network authentication succeedful."))
+	notify(notifyIconProxyEnabled, Tr("Network"), Tr("Portal network authentication successful"))
 }

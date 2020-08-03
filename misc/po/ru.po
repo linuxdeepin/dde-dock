@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Владимир Киреев <vovan_kireev@mail.ru>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/linuxdeepin/teams/3617/ru/)\n"
@@ -132,46 +132,78 @@ msgstr "Доступ  к сообщениям"
 msgid "Message notification"
 msgstr "Уведомление о сообщении"
 
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr ""
+
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "%q соединено успешно"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Отключено"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q отсоединено"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Убедитесь, что %q включено и доступно"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-подключение не удалось"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
 msgstr "Нажмите здесь, что подсоединиться к %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
 msgstr "Добавить Bluetooth устройство"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
 msgstr "Пара"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
 msgstr "сегодня"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
 msgstr "завтра"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
 msgstr "с %s до %s"
@@ -423,7 +455,7 @@ msgstr "Отобразить рабочий стол"
 
 #: ../../keybinding/shortcuts/id_name_map.go:210
 msgid "Switch monitors"
-msgstr ""
+msgstr "Переключить мониторы"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -453,10 +485,6 @@ msgstr "Не удалось изменить язык системы, попро
 #: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Повторить"
-
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Отмена"
 
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
@@ -944,41 +972,44 @@ msgstr "Точка доступа включена"
 msgid "%q connected"
 msgstr "%q соединено"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
 msgstr "Точка доступа отключена"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q отсоединено"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Не удалось предоставить точку доступа, проверьте настройки dnsmasq"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Не удалось соединить %q, пожалуйста держитесь ближе к беспроводному "
 "маршрутизатору."
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "Не удалось соединить %q, пожалуйста проверьте ваш беспроводной маршрутизатор"
 " или сетевой кабель."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
 msgstr "Для подключения к %q требуется пароль"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Не удалось подключиться, не удалось соединить %q, неправильный пароль"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Неизвестный"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "Отключено"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -993,7 +1024,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "Режим точки доступа не поддерживается этим устройством."
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "Сеть"
 
@@ -1015,6 +1046,10 @@ msgstr "Системный прокси был отменен."
 msgid "Connected"
 msgstr "Подключено"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr ""
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
@@ -1032,36 +1067,36 @@ msgstr "Критически низкий заряд батареи"
 msgid "Battery low, please plug in"
 msgstr "Низкий заряд батареи, пожалуйста подключите питание"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
 msgstr "Настройки питания изменены"
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
 msgstr "Когда крышка закрыта,"
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
 msgstr "При нажатии на кнопку питания,"
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
 msgstr "Ваш компьютер выключится"
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
 msgstr "Ваш компьютер перейдет в режим ожидания"
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "Ваш компьютер будет находится в спящем режиме"
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
 msgstr "Ваш монитор будет выключен"
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
 msgstr "Ничего не делать с компьютером"
 

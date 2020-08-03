@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>, 2020\n"
 "Language-Team: Slovak (https://www.transifex.com/linuxdeepin/teams/3617/sk/)\n"
@@ -129,46 +129,78 @@ msgstr "Prístup k správam"
 msgid "Message notification"
 msgstr "Upozornenie na správy"
 
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr ""
+
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Pripojenie k %q úspešné"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Odpojené"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q odpojený"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Uistite sa, že %q je zapnutý a v dosahu"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Pripojenie bluetooth zlyhalo"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
 msgstr "Kliknutím sem sa pripojíte k %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
 msgstr "Pridať Bluetooth zariadenia"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
 msgstr "Spárovať"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
 msgstr "dnes"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
 msgstr "zajtra"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
 msgstr "%s do %s"
@@ -248,7 +280,7 @@ msgstr "Terminál"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Nahrávanie obrazovky"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -449,10 +481,6 @@ msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 #: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "Skúsiť znova"
-
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Zrušiť"
 
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
@@ -815,7 +843,7 @@ msgstr "Zariadenie InfiniBand nepodporuje režim pripojenia"
 
 #: ../../network/state_handler.go:89
 msgid "A dependency of the connection failed"
-msgstr ""
+msgstr "Závislosť pripojenia zlyhala"
 
 #: ../../network/state_handler.go:90
 msgid "RFC 2684 Ethernet bridging error to ADSL"
@@ -945,39 +973,42 @@ msgstr "Hotspot povolený"
 msgid "%q connected"
 msgstr "%q pripojený"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
 msgstr "Hotspot vypnutý"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q odpojený"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Nepodarilo sa zdieľať hotspot, skontrolujte nastavenia dnsmasq"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Nepodarilo sa pripojiť %q, prosím priblížte sa bližšie k bezdrôtovému "
 "smerovaču"
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Nepodarilo sa pripojiť %q, skontrolujte router alebo sieťový kábel."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
 msgstr "Na pripojenie k %q je potrebné heslo"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Pripojenie zlyhalo, nemôžem pripojiť %q, nesprávne heslo"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Neznámy"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "Odpojené"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -992,7 +1023,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "Prístupový bod nie je podporovaný týmto zariadením. "
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "Sieť"
 
@@ -1013,6 +1044,10 @@ msgstr "System proxy bolo zrušené. "
 msgid "Connected"
 msgstr "Pripojené"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr ""
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
@@ -1028,36 +1063,36 @@ msgstr "Kriticky nízka úroveň batérie"
 msgid "Battery low, please plug in"
 msgstr "Vybitá batéria, prosím pripojte kábel napájania"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
 msgstr "Nastavenia napájania boli zmenené"
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
 msgstr "Po zatvorení veka,"
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
 msgstr "Po stlačení tlačidla vypnutia,"
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
 msgstr "sa váš počítač vypne"
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
 msgstr "váš počítač prejde do režimu pozastavenia"
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
 msgstr "váš monitor sa vypne"
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
 msgstr "váš počítač nespraví nič"
 

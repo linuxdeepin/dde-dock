@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Chinese (Hong Kong) (https://www.transifex.com/linuxdeepin/teams/3617/zh_HK/)\n"
@@ -128,46 +128,78 @@ msgstr "訊息存取"
 msgid "Message notification"
 msgstr "訊息通知"
 
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "取消"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr "正在接收來自“%s”的%s個文件"
+
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr "文件傳輸失敗"
+
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr "藍牙設備連接中斷，請檢查設備連接"
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr "拒絕"
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr "接收"
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr "藍牙文件傳輸"
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr "%s"
+
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "連接%q成功"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "已切斷連接"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q已斷開"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "確認 %q 已開啟且在範圍內"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "藍牙連接失敗"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
 msgstr "點擊以設置添加%q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
 msgstr "添加藍牙設備"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
 msgstr "配對"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
 msgstr "今天"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
 msgstr "明天"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
 msgstr "%s至%s"
@@ -446,10 +478,6 @@ msgstr "系統語言切換失敗，請稍後重試"
 #: ../../lastore/lastore.go:248
 msgid "Retry"
 msgstr "重試"
-
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "取消"
 
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
@@ -932,37 +960,40 @@ msgstr "熱點共享已開啟"
 msgid "%q connected"
 msgstr "已連接%q"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
 msgstr "熱點共享已關閉"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q已斷開"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "無法共享熱點，請檢查dnsmasq 相關設置"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "未能加入%q，請嘗試靠近無線路由器"
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "未能加入%q，請檢查路由器或網線。"
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
 msgstr "連接%q需要密碼"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "連接失敗，未能加入%q，密碼不正確"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "未知"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "已切斷連接"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -977,7 +1008,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "此設備不支持熱點模式。"
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "网络"
 
@@ -998,6 +1029,10 @@ msgstr "系統代理已取消。"
 msgid "Connected"
 msgstr "已连接"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr "Portal網絡認證成功"
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
@@ -1013,36 +1048,36 @@ msgstr "電池電量耗盡"
 msgid "Battery low, please plug in"
 msgstr "電池電量低，請連接電源"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
 msgstr "電源設置更改"
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
 msgstr "“筆記本合蓋時”"
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
 msgstr "“按電源按鈕時”"
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
 msgstr "修改為關機"
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
 msgstr "修改為待機"
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "修改為休眠"
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
 msgstr "修改為關閉顯示器"
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
 msgstr "修改為無任何操作"
 

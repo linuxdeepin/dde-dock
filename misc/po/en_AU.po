@@ -4,19 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# ilox11 <ilox11@gmail.com>, 2020
 # ad678b801149d46c03273b8809c6c193_5440964, 2020
 # Aimi Hobson <minervavine@gmail.com>, 2020
 # Cindy0514, 2020
+# ilox11 <ilox11@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-03 13:36+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: ilox11 <ilox11@gmail.com>, 2020\n"
 "Language-Team: English (Australia) (https://www.transifex.com/linuxdeepin/teams/3617/en_AU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,11 +42,11 @@ msgstr "Username cannot be empty"
 
 #: ../../accounts/checkers/username.go:68
 msgid "The first character must be a letter or number"
-msgstr ""
+msgstr "The first character must be a letter or number"
 
 #: ../../accounts/checkers/username.go:70
 msgid "The username already exists"
-msgstr ""
+msgstr "The username already exists"
 
 #: ../../accounts/checkers/username.go:72
 msgid "The username has been used by system"
@@ -128,49 +128,81 @@ msgstr "Message access"
 msgid "Message notification"
 msgstr "Message notification"
 
-#: ../../bluetooth/utils_notify.go:98
-msgid "Connect %q successfully"
+#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+msgid "Cancel"
+msgstr "Cancel"
+
+#: ../../bluetooth/obex_agent.go:321
+#, c-format
+msgid "Receiving %s files from \"%s\""
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Disconnected"
+#: ../../bluetooth/obex_agent.go:339
+msgid "File Transfer Failed"
+msgstr ""
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/obex_agent.go:340
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:374
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:375
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:98
+msgid "Connect %q successfully"
+msgstr "Connect %q successfully"
+
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
+#: ../../network/state_handler.go:362
+msgid "%q disconnected"
+msgstr "%q disconnected"
+
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Make sure %q is turned on and in range"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth connection failed"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:141
 msgid "Click here to connect to %q"
-msgstr ""
+msgstr "Click here to connect to %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:142
 msgid "Add Bluetooth devices"
-msgstr ""
+msgstr "Add Bluetooth devices"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:152
 msgid "Pair"
-msgstr ""
+msgstr "Pair"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:510 ../../calendar/job.go:517
 msgid "today"
-msgstr ""
+msgstr "today"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:512 ../../calendar/job.go:519
 msgid "tomorrow"
-msgstr ""
+msgstr "tomorrow"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:532
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%s to %s"
 
 #: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
@@ -186,7 +218,7 @@ msgstr "Other"
 
 #: ../../calendar/scheduler.go:495
 msgid "One day before start"
-msgstr ""
+msgstr "One day before start"
 
 #: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
 #: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
@@ -195,19 +227,19 @@ msgstr "Close"
 
 #: ../../calendar/scheduler.go:500
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "Remind me tomorrow"
 
 #: ../../calendar/scheduler.go:508
 msgid "Remind me later"
-msgstr ""
+msgstr "Remind me later"
 
 #: ../../calendar/scheduler.go:518
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "Schedule Reminder"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "Festival"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -247,7 +279,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "Screen Recorder"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -299,7 +331,7 @@ msgstr "Fast Screen Off"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "System Monitor"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -307,23 +339,23 @@ msgstr "Deepin Picker"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "Desktop AI Assistant"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "Text to Speech"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "Speech to Text"
 
 #: ../../keybinding/shortcuts/id_name_map.go:48
 msgid "Clipboard"
-msgstr ""
+msgstr "Clipboard"
 
 #: ../../keybinding/shortcuts/id_name_map.go:49
 msgid "Translation"
-msgstr ""
+msgstr "Translation"
 
 #: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
@@ -419,7 +451,7 @@ msgstr "Display workspace"
 
 #: ../../keybinding/shortcuts/id_name_map.go:210
 msgid "Switch monitors"
-msgstr ""
+msgstr "Switch monitors"
 
 #: ../../langselector/locale.go:63
 msgid "Authentication is required to switch language"
@@ -449,13 +481,9 @@ msgstr "Failed to change system language, please try later"
 msgid "Retry"
 msgstr "Retry"
 
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Cancel"
-
 #: ../../lastore/lastore.go:270
 msgid "Update Now"
-msgstr ""
+msgstr "Update Now"
 
 #: ../../lastore/notify.go:97
 msgid "%q installed successfully."
@@ -467,11 +495,11 @@ msgstr "%q failed to install."
 
 #: ../../lastore/notify.go:108
 msgid "Removed successfully"
-msgstr ""
+msgstr "Removed successfully"
 
 #: ../../lastore/notify.go:110
 msgid "Failed to remove the app"
-msgstr ""
+msgstr "Failed to remove the app"
 
 #: ../../lastore/notify.go:117
 msgid ""
@@ -824,7 +852,7 @@ msgstr "ModemManager did not run or quitted unexpectedly"
 
 #: ../../network/state_handler.go:92
 msgid "The 802.11 WLAN network could not be found"
-msgstr ""
+msgstr "The 802.11 WLAN network could not be found"
 
 #: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
@@ -929,51 +957,54 @@ msgstr "The connection was deleted from settings"
 
 #: ../../network/state_handler.go:251
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "Enabling hotspot"
 
 #: ../../network/state_handler.go:253
 msgid "Connecting %q"
-msgstr ""
+msgstr "Connecting %q"
 
 #: ../../network/state_handler.go:261
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "Hotspot enabled"
 
 #: ../../network/state_handler.go:263
 msgid "%q connected"
 msgstr "%q connected"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "Hotspot disabled"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q disconnected"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:343
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Unable to share hotspot, please check dnsmasq settings"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:345
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr "Unable to connect %q, please keep closer to the wireless router"
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:347
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr "Unable to connect %q, please check your router or net cable."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:350
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "Password is required to connect %q"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:353
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Connection failed, unable to connect %q, wrong password"
 
 #: ../../network/utils_dbus_nm.go:271
 msgid "Unknown"
 msgstr "Unknown"
+
+#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
+#: ../../network/utils_notify.go:307
+msgid "Disconnected"
+msgstr "Disconnected"
 
 #: ../../network/utils_notify.go:185
 msgid "You are now offline."
@@ -988,7 +1019,7 @@ msgid "Access Point mode is not supported by this device."
 msgstr "Access Point mode is not supported by this device."
 
 #: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
 msgid "Network"
 msgstr "Network"
 
@@ -1009,10 +1040,14 @@ msgstr "System proxy setup has been cancelled."
 msgid "Connected"
 msgstr "Connected"
 
+#: ../../network/utils_notify.go:310
+msgid "Portal network authentication successful"
+msgstr ""
+
 #: ../../service_trigger/msg.go:7
 #, c-format
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
-msgstr ""
+msgstr "\"%s\" did not pass the system security verification, and cannot run now"
 
 #: ../../session/power/manager_events.go:183
 msgid "Battery critically low"
@@ -1024,38 +1059,38 @@ msgstr "Battery critically low"
 msgid "Battery low, please plug in"
 msgstr "Battery low, please plug in"
 
-#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
+#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
+#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
 msgid "Power settings changed"
-msgstr ""
+msgstr "Power settings changed"
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:387
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "When the lid is closed, "
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:391
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "When pressing the power button, "
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:401
 msgid "your computer will shut down"
-msgstr ""
+msgstr "your computer will shut down"
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:403
 msgid "your computer will suspend"
-msgstr ""
+msgstr "your computer will suspend"
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:405
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "your computer will hibernate"
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:407
 msgid "your monitor will turn off"
-msgstr ""
+msgstr "your monitor will turn off"
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:409
 msgid "it will do nothing to your computer"
-msgstr ""
+msgstr "it will do nothing to your computer"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
