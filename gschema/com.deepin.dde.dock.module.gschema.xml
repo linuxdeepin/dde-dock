@@ -26,6 +26,7 @@
   <schema path="/com/deepin/dde/dock/distancemultiple/" id="com.deepin.dde.dock.distancemultiple" gettext-domain="DDE">
      <key name='distance-multiple' type='d'>
         <default>1.5</default>
+        <range min="1.0" max="5.0"/>
         <summary>
           the distance multiple factor between the dragged resident app and the dock
         </summary>
