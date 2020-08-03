@@ -82,7 +82,7 @@ int KeyboardPlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
-    return m_proxyInter->getValue(this, key, 2).toInt();
+    return m_proxyInter->getValue(this, key, 1).toInt();
 }
 
 void KeyboardPlugin::setSortKey(const QString &itemKey, const int order)
