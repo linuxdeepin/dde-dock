@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     parser.addOption(disablePlugOption);
     parser.process(app);
 
-    DGuiApplicationHelper::setSingelInstanceInterval(-1);
+    DGuiApplicationHelper::setSingleInstanceInterval(-1);
     if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
         qDebug() << "set single instance failed!";
         return -1;
