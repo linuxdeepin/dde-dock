@@ -55,13 +55,14 @@ func HandlePrepareForSleep(sleep bool) {
 	}
 	logger.Debug("Wakeup from sleep, will set adapter and try connect device")
 	time.Sleep(time.Second * 3)
-	for _, aobj := range globalBluetooth.adapters {
-		if !aobj.Powered {
+	for _, adapter := range globalBluetooth.adapters {
+		// check if adapter is powered
+		if !adapter.Powered {
 			continue
 		}
-		_ = aobj.core.Discoverable().Set(0, globalBluetooth.config.Discoverable)
+		// if adapter is power on, try to auto connect
+		globalBluetooth.tryConnectPairedDevices(adapter.Path)
 	}
-	globalBluetooth.tryConnectPairedDevices()
 }
 
 func (*daemon) Start() error {

@@ -144,34 +144,16 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		return dbusutil.ToError(err)
 	}
 
-	a.Powered = powered
-	a.notifyPropertiesChanged()
+	if a.Powered == powered {
+		logger.Debugf("adapter %s powered is %v already", a.Path, a.Powered)
+		return nil
+	}
 
 	err = a.core.Powered().Set(0, powered)
 	if err != nil {
 		logger.Warningf("failed to set %s powered: %v", a, err)
 		return dbusutil.ToError(err)
 	}
-
-	// save the powered state
-	b.config.setAdapterConfigPowered(a.address, powered)
-
-	if powered {
-		err := a.core.Discoverable().Set(0, b.config.Discoverable)
-		if err != nil {
-			logger.Warningf("failed to set discoverable for %s: %v", a, err)
-		}
-		err = a.core.StartDiscovery(0)
-		if err != nil {
-			logger.Warningf("failed to start discovery for %s: %v", a, err)
-		} else {
-			logger.Debug("reset timer for stop scan")
-			// start discovering success, reset discovering timer
-			a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
-		}
-		go b.tryConnectPairedDevices()
-	}
-
 	return nil
 }
 

@@ -28,7 +28,6 @@ import (
 	apidevice "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.device"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
@@ -263,9 +262,19 @@ func (b *Bluetooth) init() {
 
 	b.config.clearSpareConfig(b)
 	b.config.save()
-	go b.tryConnectPairedDevices()
-	// move to power module
-	// b.wakeupWorkaround()
+
+	for _, poweredAdapter := range b.adapters {
+		if b.config.getAdapterConfigPowered(poweredAdapter.address) {
+			logger.Debugf("bluetooth init, try to open adapter, adapter path: %v", poweredAdapter.Path)
+			if err := b.SetAdapterPowered(poweredAdapter.Path, true); err != nil {
+				logger.Warningf("adapter %s set powered on failed, err: %v", poweredAdapter.Path, err)
+			}
+		} else {
+			if err := b.SetAdapterPowered(poweredAdapter.Path, false); err != nil {
+				logger.Warningf("adapter %s set powered off failed, err: %v", poweredAdapter.Path, err)
+			}
+		}
+	}
 }
 
 func (b *Bluetooth) unblockBluetoothDevice() {
@@ -655,16 +664,16 @@ func (b *Bluetooth) updateState() {
 	b.PropsMu.Unlock()
 }
 
-func (b *Bluetooth) tryConnectPairedDevices() {
-	var devList = b.getPairedDeviceList()
+func (b *Bluetooth) tryConnectPairedDevices(adapterPath dbus.ObjectPath) {
+	// try to auto connect
+	var devList = b.getPairedDeviceList(adapterPath)
 	for _, dev := range devList {
 		// make sure dev always exist
 		if dev == nil {
 			continue
 		}
 		logger.Info("[DEBUG] Auto connect device:", dev.Path)
-
-		// if device using LE mode, will suspend, try connect should be failed, filter it.
+		// check if is BR/EDR device
 		if !b.isBREDRDevice(dev) {
 			continue
 		}
@@ -682,32 +691,30 @@ func (b *Bluetooth) tryConnectPairedDevices() {
 }
 
 // get paired device list
-func (b *Bluetooth) getPairedDeviceList() []*device {
+func (b *Bluetooth) getPairedDeviceList(adapterPath dbus.ObjectPath) []*device {
 	// memory lock
 	b.adaptersLock.Lock()
 	defer b.adaptersLock.Unlock()
 	b.devicesLock.Lock()
 	defer b.devicesLock.Unlock()
 
+	autoConnectAdapter, ok := b.adapters[adapterPath]
+	if !ok {
+		return nil
+	}
+	autoConnectDevices := b.devices[adapterPath]
+	if len(autoConnectDevices) == 0 || !b.config.getAdapterConfigPowered(autoConnectAdapter.address) {
+		return nil
+	}
+
 	// get all paired devices list from adapters
 	var devAddressMap = make(map[string]*device)
-	for _, aobj := range b.adapters {
-		logger.Info("[DEBUG] Auto connect adapter:", aobj.Path)
-
-		// check if devices list in current adapter is legal
-		list := b.devices[aobj.Path]
-		if len(list) == 0 || !b.config.getAdapterConfigPowered(aobj.address) {
+	for _, dev := range autoConnectDevices {
+		// select already paired but not connected device from list
+		if dev == nil || !dev.Paired || dev.connected {
 			continue
 		}
-
-		// add devices info to list
-		for _, value := range list {
-			// select already paired but not connected device from list
-			if value == nil || !value.Paired || value.connected {
-				continue
-			}
-			devAddressMap[value.getAddress()] = value
-		}
+		devAddressMap[dev.getAddress()] = dev
 	}
 
 	// select the latest devices of each deviceType and add them into list
@@ -740,32 +747,6 @@ func (b *Bluetooth) isBREDRDevice(dev *device) bool {
 		}
 	}
 	return false
-}
-
-func (b *Bluetooth) wakeupWorkaround() {
-	// try connect devices after suspend wakeup
-	var loginManager = login1.NewManager(b.systemSigLoop.Conn())
-	loginManager.InitSignalExt(b.systemSigLoop, true)
-	loginManager.ConnectPrepareForSleep(func(isSleep bool) {
-		if isSleep {
-			logger.Debug("prepare to sleep")
-			return
-		}
-		logger.Debug("Wakeup from sleep, will set adapter and try connect device")
-		time.Sleep(time.Second * 3)
-		for _, aobj := range b.adapters {
-			powered := b.config.getAdapterConfigPowered(aobj.address)
-			logger.Debugf("Compare adapter(%s) powered with config: ifc(%v), config(%v)", aobj.address, aobj.Powered, powered)
-			if powered != aobj.Powered {
-				_ = aobj.core.Powered().Set(0, powered)
-			}
-			if !powered {
-				continue
-			}
-			_ = aobj.core.Discoverable().Set(0, b.config.Discoverable)
-		}
-		b.tryConnectPairedDevices()
-	})
 }
 
 func (b *Bluetooth) addConnectedDevice(connectedDev *device) {

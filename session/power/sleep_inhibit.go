@@ -49,7 +49,7 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 			// TODO(jouyouyun): implement 'PrepareForSleep' register
 			appearance.HandlePrepareForSleep(true)
 			network.HandlePrepareForSleep(true)
-			bluetooth.HandlePrepareForSleep(true)
+			go bluetooth.HandlePrepareForSleep(true)
 			if inhibitor.OnBeforeSuspend != nil {
 				inhibitor.OnBeforeSuspend()
 			}
@@ -66,7 +66,7 @@ func newSleepInhibitor(login1Manager *login1.Manager) *sleepInhibitor {
 				inhibitor.OnWakeup()
 			}
 			network.HandlePrepareForSleep(false)
-			bluetooth.HandlePrepareForSleep(false)
+			go bluetooth.HandlePrepareForSleep(false)
 			appearance.HandlePrepareForSleep(false)
 			err := inhibitor.block()
 			if err != nil {
