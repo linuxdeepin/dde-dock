@@ -45,6 +45,7 @@ import (
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	timedate "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
@@ -80,6 +81,7 @@ const (
 	wrapBgSchema    = "com.deepin.wrap.gnome.desktop.background"
 	gnomeBgSchema   = "org.gnome.desktop.background"
 	gsKeyBackground = "picture-uri"
+	zonePath        = "/usr/share/zoneinfo/zone1970.tab"
 
 	appearanceSchema        = "com.deepin.dde.appearance"
 	xSettingsSchema         = "com.deepin.xsettings"
@@ -140,9 +142,11 @@ type Manager struct {
 	wsLoopMap      map[string]*WSLoop
 	wsSchedulerMap map[string]*WSScheduler
 	monitorMap     map[string]string
+	coordinateMap  map[string]*coordinate
 
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
+	timeDate            *timedate.Timedate
 	imageEffect         *imageeffect.ImageEffect
 	xSettings           *sessionmanager.XSettings
 	login1Manager       *login1.Manager
@@ -154,6 +158,7 @@ type Manager struct {
 	locationValid       bool
 	detectSysClockTimer *time.Timer
 	ts                  int64
+	loc                 *time.Location
 
 	setting        *gio.Settings
 	xSettingsGs    *gio.Settings
@@ -206,6 +211,10 @@ type mapMonitorWorkspaceWSPolicy map[string]string
 type mapMonitorWorkspaceWSConfig map[string]WSConfig
 type mapMonitorWorkspaceWallpaperURIs map[string]string
 
+type coordinate struct {
+	latitude, longitude float64
+}
+
 // NewManager will create a 'Manager' object
 func newManager(service *dbusutil.Service) *Manager {
 	var m = new(Manager)
@@ -232,6 +241,9 @@ func newManager(service *dbusutil.Service) *Manager {
 
 	m.wsLoopMap = make(map[string]*WSLoop)
 	m.wsSchedulerMap = make(map[string]*WSScheduler)
+	m.coordinateMap = make(map[string]*coordinate)
+
+	m.initCoordinate()
 
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
@@ -482,6 +494,39 @@ func (m *Manager) init() error {
 		}
 	}
 	m.initWallpaperSlideshow()
+
+	m.timeDate = timedate.NewTimedate(systemBus)
+	m.timeDate.InitSignalExt(m.sysSigLoop, true)
+	zone, err := m.timeDate.Timezone().Get(0)
+	if err != nil {
+		logger.Warning("Get Timezone Failed:", err)
+	}
+	l, err := time.LoadLocation(zone)
+	if err != nil {
+		logger.Warning("LoadLocation Failed :", err)
+	}
+	m.loc = l
+	m.timeDate.Timezone().ConnectChanged(func(hasValue bool, value string) {
+		if err != nil {
+			logger.Warning(err)
+		}
+		for ct, coordinate := range m.coordinateMap {
+			if value == ct {
+				m.longitude = coordinate.longitude
+				m.latitude = coordinate.latitude
+			}
+		}
+		l, err := time.LoadLocation(value)
+		if err != nil {
+			logger.Warning("LoadLocation Failed :", err)
+		}
+		m.loc = l
+		logger.Debug("value", value, m.longitude, m.latitude)
+		if m.GtkTheme.Get() == autoGtkTheme {
+			m.autoSetTheme(m.latitude, m.longitude)
+			m.resetThemeAutoTimer()
+		}
+	})
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
@@ -1263,78 +1308,21 @@ func (m *Manager) updateThemeAuto(enabled bool) {
 			m.themeAutoTimer.Reset(0)
 		}
 
-		if m.geoclueClient == nil {
-			m.geoclueClient, err = getGeoclueClient()
-			if err != nil {
-				logger.Warning("failed to get geoclue client:", err)
-				return
-			}
-
-			m.geoclueClient.InitSignalExt(m.sysSigLoop, true)
-			_, err = m.geoclueClient.ConnectLocationUpdated(
-				func(old dbus.ObjectPath, newLoc dbus.ObjectPath) {
-					sysBus, err := dbus.SystemBus()
-					if err != nil {
-						logger.Warning(err)
-						return
-					}
-					loc, err := geoclue.NewLocation(sysBus, newLoc)
-					if err != nil {
-						logger.Warning(err)
-						return
-					}
-
-					latitude, err := loc.Latitude().Get(0)
-					if err != nil {
-						logger.Warning("failed to get latitude:", err)
-						return
-					}
-
-					longitude, err := loc.Longitude().Get(0)
-					if err != nil {
-						logger.Warning("failed to get longitude:", err)
-						return
-					}
-					m.updateLocation(latitude, longitude)
-				})
-			if err != nil {
-				logger.Warning(err)
-			}
-		}
-
-		locPath, err := m.geoclueClient.Location().Get(0)
-		if err == nil {
-			if locPath != "/" {
-				latitude, longitude, err := getLocation(locPath)
-				if err == nil {
-					m.updateLocation(latitude, longitude)
-				} else {
-					logger.Warning("failed to get location:", err)
-				}
-			} else {
-				logger.Debug("wait location updated signal")
-			}
-		} else {
-			logger.Warning("failed to get geoclue client location path:", err)
-		}
-
-		err = m.geoclueClient.Start(0)
+		city, err := m.timeDate.Timezone().Get(0)
 		if err != nil {
-			logger.Warning("failed to start geoclue client:", err)
-			return
+			logger.Warning(err)
 		}
+		for ct, coordinate := range m.coordinateMap {
+			if city == ct {
+				m.longitude = coordinate.longitude
+				m.latitude = coordinate.latitude
+			}
+		}
+
+		m.updateLocation(m.latitude, m.longitude)
+		logger.Debug("city", city, m.longitude, m.latitude)
 
 	} else {
-		// disable geoclue client
-		if m.geoclueClient != nil {
-			err := m.geoclueClient.Stop(0)
-			if err != nil {
-				logger.Warning("failed to stop geoclue client:", err)
-			}
-
-			m.geoclueClient.RemoveAllHandlers()
-			m.geoclueClient = nil
-		}
 		m.latitude = 0
 		m.longitude = 0
 		m.locationValid = false
@@ -1364,8 +1352,8 @@ func (m *Manager) resetThemeAutoTimer() {
 		return
 	}
 
-	now := time.Now()
-	changeTime, err := getThemeAutoChangeTime(now, m.latitude, m.longitude)
+	now := time.Now().In(m.loc)
+	changeTime, err := m.getThemeAutoChangeTime(now, m.latitude, m.longitude)
 	if err != nil {
 		logger.Warning("failed to get theme auto change time:", err)
 		return
@@ -1377,12 +1365,12 @@ func (m *Manager) resetThemeAutoTimer() {
 }
 
 func (m *Manager) autoSetTheme(latitude, longitude float64) {
-	now := time.Now()
+	now := time.Now().In(m.loc)
 	if m.GtkTheme.Get() != autoGtkTheme {
 		return
 	}
 
-	sunriseT, sunsetT, err := getSunriseSunset(now, latitude, longitude)
+	sunriseT, sunsetT, err := m.getSunriseSunset(now, latitude, longitude)
 	if err != nil {
 		logger.Warning(err)
 		return
@@ -1528,4 +1516,42 @@ func hexColorToXsColor(hexColor string) (string, error) {
 	}
 	return fmt.Sprintf("%d,%d,%d,%d", array[0], array[1],
 		array[2], array[3]), nil
+}
+
+func (m *Manager) initCoordinate() {
+	content, err := ioutil.ReadFile(zonePath)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	var (
+		lines = strings.Split(string(content), "\n")
+		match = regexp.MustCompile(`^#`)
+	)
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		if match.MatchString(line) {
+			continue
+		}
+		strv := strings.Split(line, "\t")
+		m.iso6709Parsing(string(strv[2]), strv[1])
+	}
+}
+
+func (m *Manager) iso6709Parsing(city, coordinates string) {
+	var cdn coordinate
+	match := regexp.MustCompile(`(\+|-)\d+\.?\d*`)
+
+	temp := match.FindAllString(coordinates, 2)
+
+	temp[0] = temp[0][:3] + "." + temp[0][3:]
+	temp[1] = temp[1][:4] + "." + temp[1][4:]
+	lat, _ := strconv.ParseFloat(temp[0], 64)
+	lon, _ := strconv.ParseFloat(temp[1], 64)
+	cdn.longitude = lon
+	cdn.latitude = lat
+	m.coordinateMap[city] = &cdn
 }
