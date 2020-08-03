@@ -35,7 +35,6 @@ const (
 	kdmConfig             = "/usr/share/config/kdm/kdmrc"
 	gdmConfig             = "/etc/gdm/custom.conf"
 	sddmConfig            = "/etc/sddm.conf"
-	slimCOnfig            = "/etc/slim.conf"
 	lxdmConfig            = "/etc/lxdm/lxdm.conf"
 
 	kfGroupLightdmSeat        = "Seat:*"
@@ -47,14 +46,11 @@ const (
 	kfGroupGDM3Daemon         = "daemon"
 	kfKeyGDM3AutomaticEnable  = "AutomaticLoginEnable"
 	kfKeyGDM3AutomaticLogin   = "AutomaticLogin"
-	kfGroupDmrcDesktop        = "Desktop"
-	kfKeyDmrcSession          = "Session"
 	kfGroupSDDMAutologin      = "Autologin"
 	kfKeySDDMUser             = "User"
 	kfKeySDDMSession          = "Session"
 	kfGroupLXDMBase           = "base"
 	kfKeyLXDMAutologin        = "autologin"
-	kfKeyLXDMSession          = "Session"
 
 	// values: 'yes', 'no'
 	slimKeyAutoLogin   = "auto_login"
@@ -81,7 +77,7 @@ func SetAutoLoginUser(username, session string) error {
 	// detail see archlinux wiki for lightdm
 	if username != "" {
 		if !isGroupExists("autologin") {
-			doAction("groupadd", []string{"-r", "autologin"})
+			_ = doAction("groupadd", []string{"-r", "autologin"})
 		}
 
 		if !isUserInGroup(username, "autologin") {
@@ -363,7 +359,6 @@ func parseSlimConfig(filename, username string, isWirte bool) (string, error) {
 
 		if list[0] == slimKeyDefaultUser {
 			if isWirte {
-				line = slimKeyDefaultUser + " " + username
 				set[slimKeyDefaultUser] = idx
 			} else {
 				if len(list) >= 2 {
@@ -380,20 +375,18 @@ func parseSlimConfig(filename, username string, isWirte bool) (string, error) {
 	autoLogin := ""
 	defaultUser := ""
 	sync := false
-	idx, _ := set[slimKeyAutoLogin]
+	idx := set[slimKeyAutoLogin]
 	if username != "" {
 		autoLogin = slimKeyAutoLogin + " yes"
 		defaultUser = slimKeyDefaultUser + " " + username
 	}
 	if idx == -1 && autoLogin != "" {
 		lines = append(lines, autoLogin)
-		sync = true
 	} else {
 		lines[idx] = autoLogin
-		sync = true
 	}
 
-	idx, _ = set[slimKeyDefaultUser]
+	idx = set[slimKeyDefaultUser]
 	if idx == -1 && defaultUser != "" {
 		lines = append(lines, defaultUser)
 		sync = true

@@ -179,10 +179,7 @@ func (ci *CommentInfo) SetFullName(value string) {
 }
 
 func isCommentFieldValid(name string) bool {
-	if strings.ContainsAny(name, ",=:\n") {
-		return false
-	}
-	return true
+	return !strings.ContainsAny(name, ",=:\n")
 }
 
 func ModifyFullName(fullName, username string) error {
@@ -267,11 +264,7 @@ const (
 
 func IsAutoLoginUser(username string) bool {
 	name, _ := GetAutoLoginUser()
-	if name == username {
-		return true
-	}
-
-	return false
+	return name == username
 }
 
 func IsAdminUser(username string) bool {
@@ -289,7 +282,7 @@ func CanNoPasswdLogin(username string) bool {
 
 func EnableNoPasswdLogin(username string, enabled bool) error {
 	if !isGroupExists(groupNameNoPasswdLogin) {
-		doAction("groupadd", []string{"-r", groupNameNoPasswdLogin})
+		_ = doAction("groupadd", []string{"-r", groupNameNoPasswdLogin})
 	}
 
 	var err error

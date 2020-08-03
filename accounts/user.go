@@ -133,7 +133,6 @@ type User struct {
 	// dbusutil-gen: equal=nil
 	HistoryLayout []string
 
-	syncLocker   sync.Mutex
 	configLocker sync.Mutex
 
 	methods *struct {

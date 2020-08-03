@@ -37,7 +37,6 @@ const (
 	userFileSudoers   = "/etc/sudoers"
 
 	itemLenPasswd    = 7
-	itemLenShadow    = 9
 	itemLenGroup     = 4
 	itemLenLoginDefs = 2
 )

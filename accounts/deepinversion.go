@@ -33,6 +33,6 @@ func getDeepinReleaseType() string {
 		return ""
 	}
 	defer keyFile.Free()
-	releaseType, err := keyFile.GetString("Release", "Type")
+	releaseType, _ := keyFile.GetString("Release", "Type")
 	return releaseType
 }

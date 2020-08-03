@@ -167,7 +167,7 @@ func (ib *ImageBlur) emitBlurDone(file string, ok bool) {
 func genGaussianBlur(file string) {
 	file = dutils.DecodeURI(file)
 	if _imageBlur != nil {
-		_imageBlur.Get(file)
+		_, _ = _imageBlur.Get(file)
 	} else {
 		logger.Warning("_imageBlur is nil")
 	}

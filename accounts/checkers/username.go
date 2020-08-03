@@ -37,7 +37,6 @@ const (
 	userNameMinLength = 3
 
 	passwdFile = "/etc/passwd"
-	groupFile  = "/etc/group"
 )
 
 type ErrorCode int32
@@ -131,19 +130,12 @@ func (name Username) isNameExist() bool {
 
 func (name Username) isStringValid() bool {
 	match := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
-	if !match.MatchString(string(name)) {
-		return false
-	}
-
-	return true
+	return match.MatchString(string(name))
 }
 
 func (name Username) isFirstCharValid() bool {
 	match := regexp.MustCompile(`^[a-zA-Z0-9]`)
-	if !match.MatchString(string(name)) {
-		return false
-	}
-	return true
+	return match.MatchString(string(name))
 }
 
 func (name Username) getUid() (int64, error) {

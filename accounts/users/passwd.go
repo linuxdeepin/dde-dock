@@ -119,7 +119,9 @@ func writeStrvToFile(datas []string, file string, mode os.FileMode) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer func() {
+		_ = f.Close()
+	}()
 
 	wLocker.Lock()
 	defer wLocker.Unlock()
@@ -133,8 +135,8 @@ func writeStrvToFile(datas []string, file string, mode os.FileMode) error {
 		return err
 	}
 
-	os.Rename(file+".bak~", file)
-	os.Chmod(file, mode)
+	_ = os.Rename(file+".bak~", file)
+	_ = os.Chmod(file, mode)
 
 	return nil
 }

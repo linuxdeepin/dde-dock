@@ -152,7 +152,7 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 	u.PropsMu.Lock()
 	defer u.PropsMu.Unlock()
 
-	if u.Locked != false {
+	if u.Locked {
 		if err := users.LockedUser(false, u.UserName); err != nil {
 			logger.Warning("DoAction: unlock user failed:", err)
 			return dbusutil.ToError(err)

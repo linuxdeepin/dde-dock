@@ -104,10 +104,10 @@ func NewManager(service *dbusutil.Service) *Manager {
 	m.watcher = dutils.NewWatchProxy()
 	if m.watcher != nil {
 		m.delayTaskManager = tasker.NewDelayTaskManager()
-		m.delayTaskManager.AddTask(taskNamePasswd, fileEventDelay, m.handleFilePasswdChanged)
-		m.delayTaskManager.AddTask(taskNameGroup, fileEventDelay, m.handleFileGroupChanged)
-		m.delayTaskManager.AddTask(taskNameShadow, fileEventDelay, m.handleFileShadowChanged)
-		m.delayTaskManager.AddTask(taskNameDM, fileEventDelay, m.handleDMConfigChanged)
+		_ = m.delayTaskManager.AddTask(taskNamePasswd, fileEventDelay, m.handleFilePasswdChanged)
+		_ = m.delayTaskManager.AddTask(taskNameGroup, fileEventDelay, m.handleFileGroupChanged)
+		_ = m.delayTaskManager.AddTask(taskNameShadow, fileEventDelay, m.handleFileShadowChanged)
+		_ = m.delayTaskManager.AddTask(taskNameDM, fileEventDelay, m.handleDMConfigChanged)
 
 		m.watcher.SetFileList(m.getWatchFiles())
 		m.watcher.SetEventHandler(m.handleFileChanged)
