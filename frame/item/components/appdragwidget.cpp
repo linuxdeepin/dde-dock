@@ -23,7 +23,6 @@
 #include "appdragwidget.h"
 #include <QGSettings>
 
-QPointer<DockPopupWindow> AppDragWidget::PopupWindow(nullptr);
 class AppGraphicsObject : public QGraphicsObject
 {
 public:
@@ -70,7 +69,8 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_animOpacity(new QPropertyAnimation(m_object, "opacity", this)),
     m_animGroup(new QParallelAnimationGroup(this)),
     m_goBackAnim(new QPropertyAnimation(this, "pos", this)),
-    m_removeTips(new TipsWidget(this))
+    m_removeTips(new TipsWidget(this)),
+    m_popupWindow(nullptr)
 {
     m_removeTips->setText(tr("Remove"));
     m_removeTips->setObjectName("AppRemoveTips");
@@ -84,8 +84,8 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     arrowRectangle->setShadowXOffset(0);
     arrowRectangle->setArrowWidth(18);
     arrowRectangle->setArrowHeight(10);
-    PopupWindow = arrowRectangle;
-    PopupWindow->setRadius(18);
+    m_popupWindow = arrowRectangle;
+    m_popupWindow->setRadius(18);
 
     m_scene->addItem(m_object);
     setScene(m_scene);
@@ -114,6 +114,10 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
 
 AppDragWidget::~AppDragWidget()
 {
+    if (m_popupWindow != nullptr) {
+        delete m_popupWindow;
+        m_popupWindow=nullptr;
+    }
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
@@ -136,7 +140,7 @@ void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
     bool model = true;
     Dock::Position pos = Dock::Position::Bottom;
 
-    DockPopupWindow *popup = PopupWindow.data();
+    DockPopupWindow *popup = m_popupWindow;
     if (isRemoveAble()) {
         QWidget *lastContent = popup->getContent();
         if (lastContent)
@@ -209,7 +213,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         showRemoveAnimation();
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
-        PopupWindow->setVisible(false);
+        m_popupWindow->setVisible(false);
     } else {
         showGoBackAnimation();
     }
