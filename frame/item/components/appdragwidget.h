@@ -39,6 +39,7 @@
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
 {
+    Q_OBJECT
 public:
     explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
     virtual ~AppDragWidget() override;
