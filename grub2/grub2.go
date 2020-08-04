@@ -375,11 +375,13 @@ func (grub *Grub2) readEntries() (err error) {
 		logger.Error(err)
 		return
 	}
-	err = grub.parseEntries(string(fileContent))
+	entries, err := parseEntries(string(fileContent))
 	if err != nil {
 		logger.Error(err)
+		grub.resetEntries()
 		return
 	}
+	grub.entries = entries
 	if len(grub.entries) == 0 {
 		logger.Warningf("there is no menu entry in %s", grubScriptFile)
 	}
@@ -400,8 +402,8 @@ func (grub *Grub2) getEntryTitlesLv1() (entryTitles []string) {
 	return
 }
 
-func (grub *Grub2) parseEntries(fileContent string) (err error) {
-	grub.resetEntries()
+func parseEntries(fileContent string) ([]Entry, error) {
+	var entries []Entry
 
 	inMenuEntry := false
 	level := 0
@@ -416,34 +418,31 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "menuentry ") {
 			if inMenuEntry {
-				grub.resetEntries()
-				err = fmt.Errorf("a 'menuentry' directive was detected inside the scope of a menuentry")
-				return
+				err := fmt.Errorf("a 'menuentry' directive was detected inside the scope of a menuentry")
+				return nil, err
 			}
 			title, ok := parseTitle(line)
 			if ok {
 				entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
-				grub.entries = append(grub.entries, entry)
+				entries = append(entries, entry)
 				logger.Debugf("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				numCount[level]++
 				inMenuEntry = true
 				continue
 			} else {
-				grub.resetEntries()
-				err = fmt.Errorf("parse entry title failed from: %q", line)
-				return
+				err := fmt.Errorf("parse entry title failed from: %q", line)
+				return nil, err
 			}
 		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
-				grub.resetEntries()
-				err = fmt.Errorf("a 'submenu' directive was detected inside the scope of a menuentry")
-				return
+				err := fmt.Errorf("a 'submenu' directive was detected inside the scope of a menuentry")
+				return nil, err
 			}
 			title, ok := parseTitle(line)
 			if ok {
 				entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
-				grub.entries = append(grub.entries, entry)
+				entries = append(entries, entry)
 				parentMenus = append(parentMenus, &entry)
 				logger.Debugf("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
@@ -451,9 +450,8 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 				numCount[level] = 0
 				continue
 			} else {
-				grub.resetEntries()
-				err = fmt.Errorf("parse entry title failed from: %q", line)
-				return
+				err := fmt.Errorf("parse entry title failed from: %q", line)
+				return nil, err
 			}
 		} else if line == "}" {
 			if inMenuEntry {
@@ -469,11 +467,11 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 			}
 		}
 	}
-	err = sl.Err()
+	err := sl.Err()
 	if err != nil {
-		return
+		return nil, err
 	}
-	return
+	return entries, nil
 }
 
 var (
@@ -589,4 +587,26 @@ func getGfxmodesFromBootArg() (grub_common.Gfxmodes, error) {
 		return nil, err
 	}
 	return allGfxmodes, nil
+}
+
+var ignoreString = []string{"System setup", "UOS Backup & Restore"}
+
+func getOSNum(entries []Entry) uint32 {
+	var systemNum uint32
+	var shouldIgnore bool
+	for _, entry := range entries {
+		shouldIgnore = false
+		if entry.parentSubMenu == nil && entry.entryType == MENUENTRY {
+			for _, str := range ignoreString {
+				if strings.Contains(entry.title, str) {
+					shouldIgnore = true
+					break
+				}
+			}
+			if !shouldIgnore {
+				systemNum++
+			}
+		}
+	}
+	return systemNum
 }
