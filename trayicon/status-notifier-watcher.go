@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )
@@ -27,11 +27,13 @@ type StatusNotifierWatcher struct {
 	// dbusutil-gen: ignore
 	ProtocolVersion int32
 
+	// nolint
 	methods *struct {
 		RegisterStatusNotifierItem func() `in:"serviceName"`
 		RegisterStatusNotifierHost func() `in:"serviceName"`
 	}
 
+	// nolint
 	signals *struct {
 		StatusNotifierItemRegistered struct {
 			ServiceName string
@@ -106,9 +108,9 @@ func (snw *StatusNotifierWatcher) RegisterStatusNotifierItem(sender dbus.Sender,
 	newItems, _ := snw.RegisteredStatusNotifierItems.Add(notifierItemId)
 	snw.setPropRegisteredStatusNotifierItems(newItems)
 
-	snw.service.Emit(snw, "StatusNotifierItemRegistered", notifierItemId)
+	err := snw.service.Emit(snw, "StatusNotifierItemRegistered", notifierItemId)
 
-	return nil
+	return dbusutil.ToError(err)
 }
 
 func (snw *StatusNotifierWatcher) RegisterStatusNotifierHost(serviceName string) *dbus.Error {
@@ -124,14 +126,14 @@ func (snw *StatusNotifierWatcher) RegisterStatusNotifierHost(serviceName string)
 	snw.setPropIsStatusNotifierHostRegistered(true)
 	snw.hostServiceName = serviceName
 
-	snw.service.Emit(snw, "StatusNotifierHostRegistered")
+	err := snw.service.Emit(snw, "StatusNotifierHostRegistered")
 
-	return nil
+	return dbusutil.ToError(err)
 }
 
 func (ss *StatusNotifierWatcher) listenDBusNameOwnerChanged() {
 	ss.dbusDaemon.InitSignalExt(ss.sigLoop, true)
-	ss.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
+	_, err := ss.dbusDaemon.ConnectNameOwnerChanged(func(name string, oldOwner string, newOwner string) {
 		ss.PropsMu.Lock()
 
 		if newOwner == "" {
@@ -149,7 +151,10 @@ func (ss *StatusNotifierWatcher) listenDBusNameOwnerChanged() {
 				newItems := make(strv.Strv, 0, len(ss.RegisteredStatusNotifierItems))
 				for _, itemID := range ss.RegisteredStatusNotifierItems {
 					if strings.HasPrefix(itemID, match) {
-						ss.service.Emit(ss, "StatusNotifierItemUnregistered", itemID)
+						err := ss.service.Emit(ss, "StatusNotifierItemUnregistered", itemID)
+						if err != nil {
+							logger.Warning(err)
+						}
 					} else {
 						newItems = append(newItems, itemID)
 					}
@@ -160,4 +165,7 @@ func (ss *StatusNotifierWatcher) listenDBusNameOwnerChanged() {
 
 		ss.PropsMu.Unlock()
 	})
+	if err != nil {
+		logger.Warning(err)
+	}
 }

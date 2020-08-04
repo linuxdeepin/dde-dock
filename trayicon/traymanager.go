@@ -54,6 +54,7 @@ type TrayManager struct {
 	// dbusutil-gen: equal=nil
 	TrayIcons []uint32
 
+	// nolint
 	signals *struct {
 		// Inited when tray manager is initialized.
 		Inited struct{}
@@ -65,6 +66,7 @@ type TrayManager struct {
 		}
 	}
 
+	// nolint
 	methods *struct {
 		Manage             func() `out:"ok"`
 		GetName            func() `in:"win" out:"name"`
@@ -143,10 +145,6 @@ func (m *TrayManager) init() error {
 	return nil
 }
 
-func (m *TrayManager) destroy() {
-
-}
-
 func (m *TrayManager) checkValid() {
 	for _, id := range m.TrayIcons {
 		xid := x.Window(id)
@@ -181,7 +179,10 @@ func (m *TrayManager) handleDamageNotifyEvent(xid x.Window) {
 	}
 	if !bytes.Equal(icon.data, newData) {
 		icon.data = newData
-		m.service.Emit(m, "Changed", uint32(xid))
+		err := m.service.Emit(m, "Changed", uint32(xid))
+		if err != nil {
+			logger.Warning(err)
+		}
 		logger.Debugf("handleDamageNotifyEvent %v changed", xid)
 	} else {
 		logger.Debugf("handleDamageNotifyEvent %v no changed", xid)
@@ -278,7 +279,7 @@ func (m *TrayManager) acquireSystemTraySelection() error {
 	w.Write4b(0)
 	x.ChangeProperty(XConn,
 		x.PropModeReplace,
-		m.owner, // window
+		m.owner,                       // window
 		XA_NET_SYSTEM_TRAY_ORIENTAION, // property
 		x.AtomCardinal,                // type
 		32,
@@ -365,7 +366,10 @@ func (m *TrayManager) addIcon(win x.Window) {
 		x.EventMaskVisibilityChange | x.EventMaskStructureNotify, // event mask
 	})
 
-	m.service.Emit(m, "Added", uint32(win))
+	err = m.service.Emit(m, "Added", uint32(win))
+	if err != nil {
+		logger.Warning(err)
+	}
 	logger.Infof("Add tray icon %v name: %q", win, icon.getName())
 	m.icons[win] = icon
 	m.updateTrayIcons()
@@ -388,7 +392,10 @@ func (m *TrayManager) removeIcon(win x.Window) {
 	}
 
 	delete(m.icons, win)
-	m.service.Emit(m, "Removed", uint32(win))
+	err = m.service.Emit(m, "Removed", uint32(win))
+	if err != nil {
+		logger.Warning(err)
+	}
 	logger.Debugf("remove tray icon %v", win)
 	m.updateTrayIcons()
 }

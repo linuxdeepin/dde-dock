@@ -77,13 +77,20 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	d.manager.sendClientMsgMANAGER()
+	err = d.manager.sendClientMsgMANAGER()
+	if err != nil {
+		return err
+	}
 
 	err = service.RequestName(dbusServiceName)
 	if err != nil {
 		return err
 	}
-	service.Emit(d.manager, "Inited")
+
+	err = service.Emit(d.manager, "Inited")
+	if err != nil {
+		return err
+	}
 
 	if os.Getenv("DDE_DISABLE_STATUS_NOTIFIER_WATCHER") != "1" {
 		d.snw = newStatusNotifierWatcher(service, d.sigLoop)

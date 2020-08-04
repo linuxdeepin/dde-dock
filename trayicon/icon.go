@@ -73,7 +73,12 @@ func (icon *TrayIcon) getPixmapData() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer XConn.FreeID(pixmapId)
+	defer func() {
+		err := XConn.FreeID(pixmapId)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}()
 
 	pixmap := x.Pixmap(pixmapId)
 	err = composite.NameWindowPixmapChecked(XConn, icon.win, pixmap).Check(XConn)

@@ -46,8 +46,15 @@ var (
 )
 
 func initX() {
-	damage.QueryVersion(XConn, damage.MajorVersion, damage.MinorVersion).Reply(XConn)
-	composite.QueryVersion(XConn, composite.MajorVersion, composite.MinorVersion).Reply(XConn)
+	_, err := damage.QueryVersion(XConn, damage.MajorVersion, damage.MinorVersion).Reply(XConn)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	_, err = composite.QueryVersion(XConn, composite.MajorVersion, composite.MinorVersion).Reply(XConn)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	XA_NET_SYSTEM_TRAY_S0, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_S0")
 	XA_NET_SYSTEM_TRAY_OPCODE, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_OPCODE")
