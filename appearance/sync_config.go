@@ -109,7 +109,7 @@ type backgroundSyncConfig struct {
 
 func (sc *backgroundSyncConfig) Get() (interface{}, error) {
 	var v backgroundSyncData
-	v.Version = "1.0"
+	v.Version = "2.0"
 	v.GreeterBackground = sc.m.greeterBg
 	slideShow := sc.m.WallpaperSlideShow.Get()
 
@@ -145,7 +145,7 @@ func (sc *backgroundSyncConfig) Get() (interface{}, error) {
 		}
 	}
 	v.WallpaperURIs = uploadWallpaperURIs
-	v.SlideShow = uploadSlideShow
+	v.SlideShowConfig = uploadSlideShow
 
 	return &v, nil
 }
@@ -166,7 +166,7 @@ func (sc *backgroundSyncConfig) Set(data []byte) error {
 
 	reverseMonitorMap := m.reverseMonitorMap() // 主副屏幕对应的具体屏幕名称的map 格式为{"Primary": "HDMI-0"}
 	slideShow := make(mapMonitorWorkspaceWSPolicy)
-	for k, value := range v.SlideShow {
+	for k, value := range v.SlideShowConfig {
 		keySlice := strings.Split(k, "&&")
 		if len(keySlice) < 2 {
 			continue
@@ -227,10 +227,10 @@ func (sc *backgroundSyncConfig) Set(data []byte) error {
 	return nil
 }
 
-// version: 1.0
+// version: 2.0
 type backgroundSyncData struct {
 	Version           string                           `json:"version"`
 	GreeterBackground string                           `json:"greeter_background"`
-	SlideShow         mapMonitorWorkspaceWSPolicy      `json:"slide_show"`
+	SlideShowConfig   mapMonitorWorkspaceWSPolicy      `json:"slide_show_config"`
 	WallpaperURIs     mapMonitorWorkspaceWallpaperURIs `json:"wallpaper_uris"`
 }
