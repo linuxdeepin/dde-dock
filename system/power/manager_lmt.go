@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -160,8 +160,14 @@ func writeLmtConfigTemp(lines []string) (string, error) {
 
 	bufWriter := bufio.NewWriter(f)
 	for _, line := range lines {
-		bufWriter.WriteString(line)
-		bufWriter.WriteByte('\n')
+		_, err := bufWriter.WriteString(line)
+		if err != nil {
+			logger.Warning(err)
+		}
+		err = bufWriter.WriteByte('\n')
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 	return f.Name(), bufWriter.Flush()
 }
@@ -206,19 +212,19 @@ func (m *Manager) updatePowerSavingMode() { // 根据用户设置以及当前状
 	var enable bool
 	var lmtCfgChanged bool
 	var err error
-	if m.PowerSavingModeAuto == true && m.PowerSavingModeAutoWhenBatteryLow == true {
+	if m.PowerSavingModeAuto && m.PowerSavingModeAutoWhenBatteryLow {
 		if m.OnBattery || m.batteryLow {
 			enable = true
 		} else {
 			enable = false
 		}
-	} else if m.PowerSavingModeAuto == true && m.PowerSavingModeAutoWhenBatteryLow == false {
+	} else if m.PowerSavingModeAuto && !m.PowerSavingModeAutoWhenBatteryLow {
 		if m.OnBattery {
 			enable = true
 		} else {
 			enable = false
 		}
-	} else if m.PowerSavingModeAuto == false && m.PowerSavingModeAutoWhenBatteryLow == true {
+	} else if !m.PowerSavingModeAuto && m.PowerSavingModeAutoWhenBatteryLow {
 		if m.batteryLow {
 			enable = true
 		} else {

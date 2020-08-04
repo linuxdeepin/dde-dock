@@ -20,7 +20,7 @@
 package power
 
 import (
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 const (
@@ -77,7 +77,13 @@ func (m *Manager) RefreshMains() *dbus.Error {
 }
 
 func (m *Manager) Refresh() *dbus.Error {
-	m.RefreshMains()
-	m.RefreshBatteries()
+	err := m.RefreshMains()
+	if err != nil {
+		return err
+	}
+	err = m.RefreshBatteries()
+	if err != nil {
+		return err
+	}
 	return nil
 }

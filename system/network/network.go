@@ -109,13 +109,16 @@ type Network struct {
 	nmManager      *networkmanager.Manager
 	nmSettings     *networkmanager.Settings
 	sigLoop        *dbusutil.SignalLoop
-	methods        *struct {
+
+	// nolint
+	methods *struct {
 		IsDeviceEnabled       func() `in:"pathOrIface" out:"enabled"`
 		EnableDevice          func() `in:"pathOrIface,enabled" out:"cpath"`
 		Ping                  func() `in:"host"`
 		ToggleWirelessEnabled func() `out:"enabled"`
 	}
 
+	// nolint
 	signals *struct {
 		DeviceEnabled struct {
 			devPath dbus.ObjectPath

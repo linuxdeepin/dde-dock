@@ -62,10 +62,7 @@ func OFF(x int) int {
 //#define test_bit(bit, array)    ((array[LONG(bit)] >> OFF(bit)) & 1)
 func testBit(bit int, array []int) bool {
 	v := (array[LONG(bit)] >> uint(OFF(bit))) & 1
-	if v == 0 {
-		return false
-	}
-	return true
+	return v != 0
 }
 
 func upInputStrToBitmask(s string, bitmask []int) int {
@@ -210,7 +207,7 @@ func readLidSwitchEvent(f *os.File) ([]InputEvent, error) {
 	for i := range events {
 		logger.Debug("i", i)
 		if events[i].Time.Sec == 0 {
-			events = append(events[:i])
+			events = events[:i]
 			break
 		}
 	}

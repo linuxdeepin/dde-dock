@@ -30,9 +30,9 @@ import (
 
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
-	"pkg.deepin.io/gir/gudev-1.0"
+	gudev "pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/lib/arch"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -70,7 +70,7 @@ type Manager struct {
 	BatteryTimeToFull  uint64
 	// 电池容量
 	BatteryCapacity float64
-	
+
 	// 开启和关闭节能模式
 	PowerSavingModeEnabled bool `prop:"access:rw"`
 
@@ -83,11 +83,13 @@ type Manager struct {
 	// 开启节能模式时降低亮度的百分比值
 	PowerSavingModeBrightnessDropPercent uint32 `prop:"access:rw"`
 
+	// nolint
 	methods *struct {
 		GetBatteries func() `out:"batteries"`
 		Debug        func() `in:"cmd"`
 	}
 
+	// nolint
 	signals *struct {
 		BatteryDisplayUpdate struct {
 			timestamp int64
@@ -163,15 +165,10 @@ func (m *Manager) initAC(devices []*gudev.Device) {
 		if noUEvent {
 			go func() {
 				c := time.Tick(2 * time.Second)
-				for {
-					select {
-					case _, ok := <-c:
-						if !ok {
-							logger.Error("Invalid ticker event")
-							return
-						}
-
-						m.RefreshMains()
+				for range c {
+					err := m.RefreshMains()
+					if err != nil {
+						logger.Warning(err)
 					}
 				}
 			}()
@@ -326,11 +323,17 @@ func (m *Manager) removeBattery(dev *gudev.Device) {
 }
 
 func (m *Manager) emitBatteryAdded(bat *Battery) {
-	m.service.Emit(m, "BatteryAdded", bat.getObjPath())
+	err := m.service.Emit(m, "BatteryAdded", bat.getObjPath())
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) emitBatteryRemoved(bat *Battery) {
-	m.service.Emit(m, "BatteryRemoved", bat.getObjPath())
+	err := m.service.Emit(m, "BatteryRemoved", bat.getObjPath())
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) destroy() {

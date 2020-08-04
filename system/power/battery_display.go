@@ -29,7 +29,10 @@ func (m *Manager) refreshBatteryDisplay() {
 	logger.Debug("refreshBatteryDisplay")
 	defer func() {
 		timestamp := time.Now().Unix()
-		m.service.Emit(m, "BatteryDisplayUpdate", timestamp)
+		err := m.service.Emit(m, "BatteryDisplayUpdate", timestamp)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}()
 
 	var percentage float64

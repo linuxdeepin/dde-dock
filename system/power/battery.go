@@ -27,7 +27,7 @@ import (
 	"path/filepath"
 
 	"pkg.deepin.io/dde/api/powersupply/battery"
-	"pkg.deepin.io/gir/gudev-1.0"
+	gudev "pkg.deepin.io/gir/gudev-1.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -35,10 +35,8 @@ import (
 type Battery struct {
 	service *dbusutil.Service
 	exit    chan struct{}
-	mutex   sync.Mutex
 
-	gudevClient       *gudev.Client
-	changedProperties []string
+	gudevClient *gudev.Client
 
 	PropsMu   sync.RWMutex
 	SysfsPath string
@@ -69,6 +67,7 @@ type Battery struct {
 
 	refreshDone func()
 
+	// nolint
 	methods *struct {
 		Debug func() `in:"cmd"`
 	}
@@ -147,10 +146,6 @@ func (bat *Battery) setRefreshDoneCallback(fn func()) {
 
 func (bat *Battery) newDevice() *gudev.Device {
 	return bat.gudevClient.QueryBySysfsPath(bat.SysfsPath)
-}
-
-func (bat *Battery) notifyChange(propNames ...string) {
-	bat.changedProperties = append(bat.changedProperties, propNames...)
 }
 
 func (bat *Battery) refresh(dev *gudev.Device) (ok bool) {

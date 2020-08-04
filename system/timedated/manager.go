@@ -28,8 +28,8 @@ import (
 	"syscall"
 
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
-	"pkg.deepin.io/lib/dbus1"
+	timedate1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
 )
@@ -42,6 +42,7 @@ type Manager struct {
 	PropsMu   sync.RWMutex
 	NTPServer string
 
+	// nolint
 	methods *struct {
 		SetTime      func() `in:"usec,relative,message"`
 		SetTimezone  func() `in:"timezone,message"`

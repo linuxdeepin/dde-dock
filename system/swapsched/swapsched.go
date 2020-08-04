@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/cgroup"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
@@ -80,6 +80,7 @@ type Helper struct {
 	loginManager *login1.Manager
 	sysSigLoop   *dbusutil.SignalLoop
 
+	// nolint
 	methods *struct {
 		Prepare func() `in:"sessionID"`
 	}
@@ -135,7 +136,7 @@ func (sw *Helper) getSessionUid(sessionID string) (uint32, error) {
 
 func (sw *Helper) init() {
 	sw.loginManager.InitSignalExt(sw.sysSigLoop, true)
-	sw.loginManager.ConnectSessionRemoved(
+	_, err := sw.loginManager.ConnectSessionRemoved(
 		func(sessionID string, sessionPath dbus.ObjectPath) {
 			logger.Debug("session removed", sessionID, sessionPath)
 			memMountPoint := cgroup.GetSubSysMountPoint(cgroup.Memory)
@@ -151,6 +152,10 @@ func (sw *Helper) init() {
 				}()
 			}
 		})
+
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func createDDECGroups(uid uint32, sessionID string) error {

@@ -27,7 +27,7 @@ import "C"
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
@@ -137,10 +137,14 @@ func (t TouchDirection) String() string {
 
 type Manager struct {
 	service *dbusutil.Service
+
+	// nolint
 	methods *struct {
 		SetShortPressDuration func() `in:"duration"`
 		SetEdgeMoveStopTime   func() `in:"duration"`
 	}
+
+	// nolint
 	signals *struct {
 		Event struct {
 			name      string

@@ -15,16 +15,16 @@ const (
 	dbusPath        = "/com/deepin/system/SystemInfo"
 	dbusInterface   = dbusServiceName
 
- 	KB =  1 << 10
- 	MB =  1 << 20
- 	GB =  1 << 30
- 	TB =  1 << 40
- 	EB =  1 << 50
+	KB = 1 << 10
+	MB = 1 << 20
+	GB = 1 << 30
+	TB = 1 << 40
+	EB = 1 << 50
 )
 
 type Manager struct {
-	service   *dbusutil.Service
-	PropsMu   sync.RWMutex
+	service         *dbusutil.Service
+	PropsMu         sync.RWMutex
 	MemorySize      uint64
 	MemorySizeHuman string
 }
@@ -34,8 +34,8 @@ type lshwXmlList struct {
 }
 
 type lshwXmlNode struct {
-	Description string  `xml:"description"`
-	Size 		uint64  `xml:"size"`
+	Description string `xml:"description"`
+	Size        uint64 `xml:"size"`
 }
 
 func formatFileSize(fileSize uint64) (size string) {
@@ -67,7 +67,7 @@ func NewManager(service *dbusutil.Service) *Manager {
 
 func runLshwMemory() (out []byte, err error) {
 	cmd := exec.Command("lshw", "-c", "memory", "-sanitize", "-xml")
-	out,err = cmd.Output()
+	out, err = cmd.Output()
 	if err != nil {
 		logger.Error(err)
 		return out, err
@@ -86,7 +86,7 @@ func parseXml(bytes []byte) (result lshwXmlNode, err error) {
 	len := len(list.Items)
 	for i := 0; i < len; i++ {
 		data := list.Items[i]
-		logger.Debug("Description : ", data.Description," , size : ", data.Size)
+		logger.Debug("Description : ", data.Description, " , size : ", data.Size)
 		if strings.ToLower(data.Description) == "system memory" {
 			result = data
 		}
@@ -96,12 +96,18 @@ func parseXml(bytes []byte) (result lshwXmlNode, err error) {
 
 func (m *Manager) setMemorySize(value uint64) {
 	m.MemorySize = value
-	m.service.EmitPropertyChanged(m, "MemorySize", m.MemorySize)
+	err := m.service.EmitPropertyChanged(m, "MemorySize", m.MemorySize)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) setMemorySizeHuman(value string) {
 	m.MemorySizeHuman = value
-	m.service.EmitPropertyChanged(m, "MemorySizeHuman", m.MemorySizeHuman)
+	err := m.service.EmitPropertyChanged(m, "MemorySizeHuman", m.MemorySizeHuman)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (m *Manager) calculateMemoryViaLshw() {

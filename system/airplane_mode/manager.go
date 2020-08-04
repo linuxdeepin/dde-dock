@@ -37,6 +37,7 @@ type Manager struct {
 
 	state AirplaneModeState
 
+	// nolint
 	methods *struct {
 		Enable          func() `in:"enabled"`
 		EnableWifi      func() `in:"enabled"`
