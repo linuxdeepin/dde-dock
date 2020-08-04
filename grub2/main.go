@@ -102,3 +102,18 @@ func PrepareGfxmodeDetect() error {
 
 	return nil
 }
+
+func GetOSNum() (uint32, error) {
+	fileContent, err := ioutil.ReadFile(grubScriptFile)
+	if err != nil {
+		logger.Error(err)
+		return 0, err
+	}
+	entries, err := parseEntries(string(fileContent))
+	if err != nil {
+		logger.Error(err)
+		return 0, err
+	}
+
+	return getOSNum(entries), nil
+}

@@ -21,6 +21,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"pkg.deepin.io/dde/daemon/grub2"
@@ -37,6 +38,7 @@ var (
 	optPrepareGfxmodeDetect bool
 	optSetupTheme           bool
 	optDebug                bool
+	optOSNum                bool
 )
 
 func main() {
@@ -44,6 +46,7 @@ func main() {
 	flag.BoolVar(&optPrepareGfxmodeDetect, "prepare-gfxmode-detect", false,
 		"prepare gfxmode detect")
 	flag.BoolVar(&optSetupTheme, "setup-theme", false, "do nothing")
+	flag.BoolVar(&optOSNum, "os-num", false, "get system num")
 	flag.Parse()
 	if optDebug {
 		logger.SetLogLevel(log.LevelDebug)
@@ -59,6 +62,13 @@ func main() {
 	} else if optSetupTheme {
 		// for compatibility
 		return
+	} else if optOSNum {
+		num, err := grub2.GetOSNum()
+		if err != nil {
+			logger.Warning(err)
+			os.Exit(2)
+		}
+		fmt.Println(num)
 	} else {
 		logger.Debug("mode: daemon")
 		grub2.RunAsDaemon()
