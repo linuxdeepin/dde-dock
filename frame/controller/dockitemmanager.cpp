@@ -224,6 +224,7 @@ void DockItemManager::appItemRemoved(const QString &appId)
         }
         if (!app->isValid() || app->appId() == appId) {
             appItemRemoved(app);
+            break;
         }
     }
 
