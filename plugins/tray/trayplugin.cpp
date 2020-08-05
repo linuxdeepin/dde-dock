@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QX11Info>
 #include <QGSettings>
+#include <X11/Xlib.h>
 
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
@@ -45,6 +46,9 @@ TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
 {
+    int screenp = 0;
+    xcb_connection = xcb_connect(qgetenv("DISPLAY"), &screenp);
+    m_display = XOpenDisplay(nullptr);
 }
 
 TrayPlugin::~TrayPlugin()
@@ -392,13 +396,13 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
         return;
     }
 
-    //Todo: wayland will crash
-//    AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
-//    if (trayWidget->isValid())
-//        addTrayWidget(itemKey, trayWidget);
-//    else {
-//        qDebug() << "-- invalid tray windowid" << winId;
-//    }
+    //Todo: wayland will crash，therefore not show app name
+   AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId, xcb_connection, m_display);
+   if (trayWidget->isValid())
+       addTrayWidget(itemKey, trayWidget);
+   else {
+       qDebug() << "-- invalid tray windowid" << winId;
+   }
 }
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)

@@ -34,10 +34,13 @@
 
 #include <QSettings>
 #include <QLabel>
+#include <xcb/xcb.h>
 
 namespace Dock {
 class TipsWidget;
 }
+
+ typedef struct _XDisplay Display;
 
 class FashionTrayItem;
 class TrayPlugin : public QObject, PluginsItemInterface
@@ -104,6 +107,8 @@ private:
 
     Dock::TipsWidget *m_tipsLabel;
     bool m_pluginLoaded;
+    xcb_connection_t * xcb_connection = nullptr;
+    Display* m_display = nullptr;
 };
 
 #endif // TRAYPLUGIN_H
