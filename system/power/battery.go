@@ -157,20 +157,20 @@ func (bat *Battery) refresh(dev *gudev.Device) (ok bool) {
 
 	setTimeToFull := true
 	if batInfo.Status == battery.StatusCharging {
+		/*
+		 * bug: https://pms.uniontech.com/zentao/bug-view-15187.html
+		 * \desc Because the time to full provide by Upower module is not stable
+		 * when just started charging. There are now two way solve that:
+		 * 1. take the average value of the times, but the frequency of refresh battry is 60 seconds.
+		 * If add more time tickers may introducing new bugs because the refresh() method can used by
+		 * other method. Just like: https://pms.uniontech.com/zentao/bug-view-37382.html
+		 * 2. just show time to full on the next refresh, it will be 60s after charging.
+		 * \warn Add frequency of refresh battry will take a lot of overhead in cpu
+		 * refresh battry every 1s take 5% cpu performence on arm laptop
+		 */
 		if bat.Status == battery.StatusDischarging {
 			logger.Debug("Just started charging")
 			setTimeToFull = false
-			bat.timeToFullHistory = bat.timeToFullHistory[:0]
-			bat.timeToFullHistory = append(bat.timeToFullHistory, batInfo.TimeToFull)
-			time.AfterFunc(1*time.Second, bat.Refresh)
-		} else if len(bat.timeToFullHistory) != 0 {
-			if checkTimeStabilized(bat.timeToFullHistory, batInfo.TimeToFull) {
-				bat.timeToFullHistory = bat.timeToFullHistory[:0]
-			} else {
-				setTimeToFull = false
-				bat.timeToFullHistory = append(bat.timeToFullHistory, batInfo.TimeToFull)
-				time.AfterFunc(1*time.Second, bat.Refresh)
-			}
 		}
 	}
 
