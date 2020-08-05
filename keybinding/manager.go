@@ -400,15 +400,6 @@ func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
 		return
 	}
 
-	shortcutID := ev.Shortcut.GetId()
-	if strings.HasPrefix(shortcutID, "screenshot") {
-		locked, _ := m.sessionMaganer.Locked().Get(0)
-		if locked {
-			logger.Debugf("locked filter %s", shortcutID)
-			return
-		}
-	}
-
 	if handler := m.handlers[int(action.Type)]; handler != nil {
 		handler(ev)
 	} else {
