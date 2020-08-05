@@ -25,13 +25,15 @@
 
 #ifndef MONITOR_H
 #define MONITOR_H
+#include "constants.h"
 
 #include <QObject>
+#include <QDebug>
 
 #include <com_deepin_daemon_display_monitor.h>
 
 using MonitorInter = com::deepin::daemon::display::Monitor;
-
+using namespace Dock;
 class Monitor : public QObject
 {
     Q_OBJECT
@@ -42,11 +44,36 @@ public:
         bool topDock = true;
         bool rightDock = true;
         bool bottomDock = true;
-        DockPosition(bool l = true, bool t = true, bool r = true, bool b = true) {
+        DockPosition(bool l = true, bool t = true, bool r = true, bool b = true)
+        {
+            qDebug() << leftDock << topDock << rightDock << bottomDock;
             leftDock = l;
             topDock = t;
             rightDock = r;
             bottomDock = b;
+        }
+
+        bool docked(const Position &pos)
+        {
+            switch (pos) {
+            case Position::Top:
+                return topDock;
+            case Position::Bottom:
+                return bottomDock;
+            case Position::Left:
+                return leftDock;
+            case Position::Right:
+                return rightDock;
+            }
+            Q_UNREACHABLE();
+        }
+
+        void reset()
+        {
+            leftDock = true;
+            topDock = true;
+            rightDock = true;
+            bottomDock = true;
         }
     };
 
@@ -65,57 +92,26 @@ public:
     inline QPoint topRight() const { return QPoint(m_x + m_w, m_y); }
     inline QPoint bottomLeft() const { return QPoint(m_x, m_y + m_h); }
     inline QPoint bottomRight() const { return QPoint(m_x + m_w, m_y + m_h); }
-    inline uint mmWidth() const { return m_mmWidth; }
-    inline uint mmHeight() const { return m_mmHeight; }
-    inline double scale() const { return m_scale; }
-    inline bool isPrimary() const { return m_primary == m_name; }
-    inline quint16 rotate() const { return m_rotate; }
-//    inline double brightness() const { return m_brightness; }
     inline const QRect rect() const { return QRect(m_x, m_y, m_w, m_h); }
+
     inline const QString name() const { Q_ASSERT(!m_name.isEmpty()); return m_name; }
     inline const QString path() const { return m_path; }
-    inline const Resolution currentMode() const { return m_currentMode; }
-    inline const QList<quint16> rotateList() const { return m_rotateList; }
-    inline const QList<Resolution> modeList() const { return m_modeList; }
     inline bool enable() const { return m_enable; }
+
     inline void setDockPosition(const DockPosition &position) { m_dockPosition = position; }
     inline DockPosition &dockPosition() { return m_dockPosition; }
 
 Q_SIGNALS:
     void geometryChanged() const;
-    void xChanged(const int x) const;
-    void yChanged(const int y) const;
-    void wChanged(const int w) const;
-    void hChanged(const int h) const;
-    void scaleChanged(const double scale) const;
-    void rotateChanged(const quint16 rotate) const;
-//    void brightnessChanged(const double brightness) const;
-    void currentModeChanged(const Resolution &resolution) const;
-    void modelListChanged(const QList<Resolution> &resolution) const;
     void enableChanged(bool enable) const;
-
-//public:
-//    static bool isSameResolution(const Resolution &r1,const Resolution &r2);
-//    static bool isSameRatefresh(const Resolution &r1,const Resolution &r2);
-//    bool hasResolution(const Resolution &r);
-//    bool hasResolutionAndRate(const Resolution &r);
 
 public Q_SLOTS:
     void setX(const int x);
     void setY(const int y);
     void setW(const int w);
     void setH(const int h);
-    void setMmWidth(const uint mmWidth);
-    void setMmHeight(const uint mmHeight);
-    void setScale(const double scale);
-    void setPrimary(const QString &primaryName);
-    void setRotate(const quint16 rotate);
-//    void setBrightness(const double brightness);
     void setName(const QString &name);
     void setPath(const QString &path);
-    void setRotateList(const QList<quint16> &rotateList);
-    void setCurrentMode(const Resolution &resolution);
-    void setModeList(const ResolutionList &modeList);
     void setMonitorEnable(bool enable);
 
 private:
@@ -123,20 +119,10 @@ private:
     int m_y;
     int m_w;
     int m_h;
-    uint m_mmWidth;
-    uint m_mmHeight;
-    double m_scale;
-    quint16 m_rotate;
-//    double m_brightness;
 
     QString m_name;
     QString m_path;
-    QString m_primary;
-    Resolution m_currentMode;
-    QList<quint16> m_rotateList;
-//    QList<QPair<int, int>> m_resolutionList;
-//    QList<double> m_refreshList;
-    QList<Resolution> m_modeList;
+
     bool m_enable;
     DockPosition m_dockPosition;
 };

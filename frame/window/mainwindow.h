@@ -26,9 +26,9 @@
 #include "xcb/xcb_misc.h"
 #include "dbus/sni/statusnotifierwatcher_interface.h"
 #include "panel/mainpanelcontrol.h"
+#include "util/multiscreenworker.h"
 
 #include <com_deepin_api_xeventmonitor.h>
-#include <com_deepin_dde_launcher.h>
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -40,13 +40,69 @@
 DWIDGET_USE_NAMESPACE
 
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
-using DBusLuncher = ::com::deepin::dde::Launcher;
 
-class DockSettings;
-class DragWidget;
 class MainPanel;
 class MainPanelControl;
 class QTimer;
+class MenuWorker;
+class DragWidget : public QWidget
+{
+    Q_OBJECT
+
+private:
+    bool m_dragStatus;
+    QPoint m_resizePoint;
+
+public:
+    DragWidget(QWidget *parent = nullptr) : QWidget(parent)
+    {
+        setObjectName("DragWidget");
+        m_dragStatus = false;
+    }
+
+signals:
+    void dragPointOffset(QPoint);
+    void dragFinished();
+
+private:
+    void mousePressEvent(QMouseEvent *event) override
+    {
+        if (event->button() == Qt::LeftButton) {
+            m_resizePoint = event->globalPos();
+            m_dragStatus = true;
+            this->grabMouse();
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *) override
+    {
+        if (m_dragStatus) {
+            QPoint offset = QPoint(QCursor::pos() - m_resizePoint);
+            emit dragPointOffset(offset);
+        }
+    }
+
+    void mouseReleaseEvent(QMouseEvent *) override
+    {
+        if (!m_dragStatus)
+            return;
+
+        m_dragStatus =  false;
+        releaseMouse();
+        emit dragFinished();
+    }
+
+    void enterEvent(QEvent *) override
+    {
+        QApplication::setOverrideCursor(cursor());
+    }
+
+    void leaveEvent(QEvent *) override
+    {
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+    }
+};
+
 class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
 {
     Q_OBJECT
@@ -59,19 +115,23 @@ class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
 
     friend class MainPanel;
     friend class MainPanelControl;
 
+    MainPanelControl *panel() {return m_mainPanel;}
+    DragWidget *dragWidget() {return m_dragWidget;}
+
 public slots:
     void launch();
+    // 第一次显示
+    void initShow();
 
 private:
     using QWidget::show;
-    bool event(QEvent *e) override;
     void showEvent(QShowEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
@@ -79,75 +139,52 @@ private:
     void leaveEvent(QEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
+    void moveEvent(QMoveEvent *event) override;
 
     void initSNIHost();
     void initComponents();
     void initConnections();
-    void resizeMainWindow();
-    void resizeMainPanelWindow();
 
-//    const QPoint x11GetWindowPos();
-//    void x11MoveWindow(const int x, const int y);
-//    void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
     bool appIsOnDock(const QString &appDesktop) override;
-    void onRegionMonitorChanged(int x, int y, const QString &key);
-    void updateRegionMonitorWatch();
     void getTrayVisableItemCount();
 
 signals:
     void panelGeometryChanged();
 
+public slots:
+    void resetDragWindow();
+
 private slots:
-    void positionChanged();
-    void updatePosition();
-    void updateGeometry();
-    void clearStrutPartial();
-    void setStrutPartial();
     void compositeChanged();
-    void internalMove(const QPoint &p);
     void updateDisplayMode();
 
-    void expand();
-    void narrow();
-    void resetPanelEnvironment();
-    void updatePanelVisible();
-
     void adjustShadowMask();
-    void positionCheck();
 
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
-    void newPositionExpand();
-
 private:
-    bool m_launched;
     MainPanelControl *m_mainPanel;
 
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
+    MultiScreenWorker *m_multiScreenWorker;
+    MenuWorker *m_menuWorker;
     XEventMonitor *m_eventInter;
-    DBusLuncher* m_launcherInter;
-    QString m_registerKey{""};
-    QTimer *m_positionUpdateTimer;
-    QTimer *m_expandDelayTimer;
-    QTimer *m_leaveDelayTimer;
-    QTimer *m_shadowMaskOptimizeTimer;
-    QVariantAnimation *m_panelShowAni;
-    QVariantAnimation *m_panelHideAni;
 
-    XcbMisc *m_xcbMisc;
-    DockSettings *m_settings;
+    QTimer *m_shadowMaskOptimizeTimer;
 
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
     QString m_sniHostService;
-    QSize m_size;
     DragWidget *m_dragWidget;
-    Position m_dockPosition;
-    bool m_primaryScreenChanged;
+
+    bool m_launched;
+    int m_dockSize;
+    QString m_registerKey;
+    QStringList m_registerKeys;
 };
 
 #endif // MAINWINDOW_H

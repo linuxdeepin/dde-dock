@@ -21,7 +21,6 @@
 
 #include "mainpanelcontrol.h"
 #include "../item/dockitem.h"
-#include "util/docksettings.h"
 #include "../item/placeholderitem.h"
 #include "../item/components/appdrag.h"
 #include "../item/appitem.h"
