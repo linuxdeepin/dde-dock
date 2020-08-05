@@ -161,12 +161,16 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     const QSize s = QSize(16, 16);
 
     QString type;
-    if (strength == 100)
-        type = "80";
-    else if (strength < 20)
-        type = "0";
-    else
-        type = QString::number(strength / 10 & ~0x1) + "0";
+    if (strength > 65)
+         type = "80";
+     else if (strength > 55)
+         type = "60";
+     else if (strength > 30)
+         type = "40";
+     else if (strength > 5)
+         type = "20";
+     else
+         type = "0";
 
     QString iconString = QString("wireless-%1-symbolic").arg(type);
     bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
