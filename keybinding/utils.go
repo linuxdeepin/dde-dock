@@ -22,8 +22,6 @@ package keybinding
 import (
 	"bytes"
 	"errors"
-	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -31,12 +29,15 @@ import (
 	"strconv"
 	"strings"
 
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
+
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/lib/strv"
 
-	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	gio "pkg.deepin.io/gir/gio-2.0"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func getPowerButtonPressedExec() string {
@@ -97,6 +98,15 @@ func showOSD(signal string) {
 
 const sessionManagerDest = "com.deepin.SessionManager"
 const sessionManagerObjPath = "/com/deepin/SessionManager"
+
+func systemLock() {
+	sessionDBus, err := dbus.SessionBus()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLock", 0)
+}
 
 func systemSuspend() {
 	sessionDBus, _ := dbus.SessionBus()
