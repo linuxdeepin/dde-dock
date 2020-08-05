@@ -231,6 +231,10 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
         }
     }
 
+    if (!trayClickCommand().isEmpty()) {
+        QProcess::startDetached(trayClickCommand());
+    }
+
     AbstractTrayWidget::mousePressEvent(event);
 }
 
@@ -266,10 +270,6 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
         m_appletOpen = true;
     } else
         m_appletOpen = false;
-
-    if (!trayClickCommand().isEmpty()) {
-        QProcess::startDetached(trayClickCommand());
-    }
 
     AbstractTrayWidget::mouseReleaseEvent(event);
 }
