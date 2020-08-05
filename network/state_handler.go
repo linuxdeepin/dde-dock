@@ -268,6 +268,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 					sh.m.hasSaveSecret = true
 				}
 			}
+			go sh.m.doPortalAuthentication()
 		case nm.NM_DEVICE_STATE_FAILED, nm.NM_DEVICE_STATE_DISCONNECTED, nm.NM_DEVICE_STATE_NEED_AUTH,
 			nm.NM_DEVICE_STATE_UNMANAGED, nm.NM_DEVICE_STATE_UNAVAILABLE:
 			logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
