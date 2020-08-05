@@ -211,15 +211,14 @@ void SoundItem::refreshTips(const bool force)
 
     QString value;
     if (m_sinkInter->mute()) {
-        value = QString("0") + '%';
+        m_tipsLabel->setText(QString(tr("Mute")));
     } else {
         if (m_sinkInter->volume() * 1000 < m_applet->volumeValue())
             value = QString::number(m_applet->volumeValue() / 10) + '%';
         else
             value = QString::number(m_sinkInter->volume() * 100) + '%';
+        m_tipsLabel->setText(QString(tr("Volume %1").arg(value)));
     }
-
-    m_tipsLabel->setText(QString(tr("Volume %1").arg(value)));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
