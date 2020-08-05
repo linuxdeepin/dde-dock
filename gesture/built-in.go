@@ -19,6 +19,10 @@
 
 package gesture
 
+import (
+	"os/exec"
+)
+
 const (
 	wmActionShowWorkspace int32 = iota + 1
 	wmActionToggleMaximize
@@ -34,23 +38,64 @@ const (
 
 func (m *Manager) initBuiltinSets() {
 	m.builtinSets = map[string]func() error{
-		"ShowWorkspace":            m.doShowWorkspace,
-		"ToggleMaximize":           m.doToggleMaximize,
-		"Minimize":                 m.doMinimize,
-		"ShowWindow":               m.doShowWindow,
-		"ShowAllWindow":            m.doShowAllWindow,
-		"SwitchApplication":        m.doSwitchApplication,
-		"ReverseSwitchApplication": m.doReverseSwitchApplication,
-		"SwitchWorkspace":          m.doSwitchWorkspace,
-		"ReverseSwitchWorkspace":   m.doReverseSwitchWorkspace,
-		"SplitWindowLeft":          m.doTileActiveWindowLeft,
-		"SplitWindowRight":         m.doTileActiveWindowRight,
-		"MoveWindow":               m.doMoveActiveWindow,
+		"Handle4Or5FingersSwipeUp":   m.doHandle4Or5FingersSwipeUp,
+		"Handle4Or5FingersSwipeDown": m.doHandle4Or5FingersSwipeDown,
+		"ToggleMaximize":             m.doToggleMaximize,
+		"Minimize":                   m.doMinimize,
+		"ShowWindow":                 m.doShowWindow,
+		"ShowAllWindow":              m.doShowAllWindow,
+		"SwitchApplication":          m.doSwitchApplication,
+		"ReverseSwitchApplication":   m.doReverseSwitchApplication,
+		"SwitchWorkspace":            m.doSwitchWorkspace,
+		"ReverseSwitchWorkspace":     m.doReverseSwitchWorkspace,
+		"SplitWindowLeft":            m.doTileActiveWindowLeft,
+		"SplitWindowRight":           m.doTileActiveWindowRight,
+		"MoveWindow":                 m.doMoveActiveWindow,
 	}
 }
 
-func (m *Manager) doShowWorkspace() error {
+func (m *Manager) toggleShowDesktop() error {
+	return exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
+}
+
+func (m *Manager) toggleShowMultiTasking() error {
 	return m.wm.PerformAction(0, wmActionShowWorkspace)
+}
+
+func (m *Manager) doHandle4Or5FingersSwipeUp() error {
+	isShowDesktop, err := m.wm.GetIsShowDesktop(0)
+	if err != nil {
+		return err
+	}
+	isShowMultiTask, err := m.wm.GetMultiTaskingStatus(0)
+	if err != nil {
+		return err
+	}
+	if !isShowDesktop && !isShowMultiTask {
+		return m.toggleShowMultiTasking()
+	}
+	if isShowDesktop && !isShowMultiTask {
+		return m.toggleShowDesktop()
+	}
+	return nil
+}
+
+func (m *Manager) doHandle4Or5FingersSwipeDown() error {
+	isShowDesktop, err := m.wm.GetIsShowDesktop(0)
+	if err != nil {
+		return err
+	}
+	isShowMultiTask, err := m.wm.GetMultiTaskingStatus(0)
+	if err != nil {
+		return err
+	}
+	if isShowMultiTask {
+		return m.toggleShowMultiTasking()
+	}
+	if !isShowDesktop {
+		return m.toggleShowDesktop()
+	}
+	return nil
 }
 
 func (m *Manager) doToggleMaximize() error {

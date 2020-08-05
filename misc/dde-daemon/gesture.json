@@ -68,7 +68,7 @@
         "Fingers": 4,
         "Action": {
             "Type": "built-in",
-            "Action": "ShowWorkspace"
+            "Action": "Handle4Or5FingersSwipeUp"
         }
     },
     {
@@ -77,7 +77,7 @@
         "Fingers": 4,
         "Action": {
             "Type": "built-in",
-            "Action": "ShowWorkspace"
+            "Action": "Handle4Or5FingersSwipeDown"
         }
     },
     {
@@ -110,28 +110,10 @@
     {
         "Name": "swipe",
         "Direction": "up",
-        "Fingers": 4,
-        "Action": {
-            "Type": "commandline",
-            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
-        }
-    },
-    {
-        "Name": "swipe",
-        "Direction": "down",
-        "Fingers": 4,
-        "Action": {
-            "Type": "commandline",
-            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
-        }
-    },
-    {
-        "Name": "swipe",
-        "Direction": "up",
         "Fingers": 5,
         "Action": {
             "Type": "built-in",
-            "Action": "ShowWorkspace"
+            "Action": "Handle4Or5FingersSwipeUp"
         }
     },
     {
@@ -140,7 +122,7 @@
         "Fingers": 5,
         "Action": {
             "Type": "built-in",
-            "Action": "ShowWorkspace"
+            "Action": "Handle4Or5FingersSwipeDown"
         }
     },
     {
@@ -168,24 +150,6 @@
         "Action": {
             "Type": "commandline",
             "Action": "dbus-send --type=method_call --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
-        }
-    },
-    {
-        "Name": "swipe",
-        "Direction": "up",
-        "Fingers": 5,
-        "Action": {
-            "Type": "commandline",
-            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
-        }
-    },
-    {
-        "Name": "swipe",
-        "Direction": "down",
-        "Fingers": 5,
-        "Action": {
-            "Type": "commandline",
-            "Action": "/usr/lib/deepin-daemon/desktop-toggle"
         }
     }
 ]

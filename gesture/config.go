@@ -55,25 +55,22 @@ type gestureInfo struct {
 }
 type gestureInfos []*gestureInfo
 
-func (infos gestureInfos) Get(name, direction string, fingers int32) []*gestureInfo {
-	var infoArray gestureInfos
+func (infos gestureInfos) Get(name, direction string, fingers int32) *gestureInfo {
 	for _, info := range infos {
 		if info.Name == name && info.Direction == direction &&
 			info.Fingers == fingers {
-			infoArray = append(infoArray, info)
+			return info
 		}
 	}
-	return infoArray
+	return nil
 }
 
 func (infos gestureInfos) Set(name, direction string, fingers int32, action ActionInfo) error {
-	infoArray := infos.Get(name, direction, fingers)
-	if len(infoArray) == 0 {
+	info := infos.Get(name, direction, fingers)
+	if info == nil {
 		return fmt.Errorf("not found gesture info for: %s, %s, %d", name, direction, fingers)
 	}
-	for _, info := range infoArray {
-		info.Action = action
-	}
+	info.Action = action
 	return nil
 }
 
