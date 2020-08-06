@@ -274,7 +274,7 @@ void MainWindow::initConnections()
     connect(m_menuWorker, &MenuWorker::autoHideChanged, m_multiScreenWorker, &MultiScreenWorker::onAutoHideChanged);
 
     connect(m_multiScreenWorker, &MultiScreenWorker::opacityChanged, this, &MainWindow::setMaskAlpha, Qt::QueuedConnection);
-    connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanegd, this, &MainWindow::updateDisplayMode, Qt::QueuedConnection);
+    connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanegd, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
     //　更新任务栏内容展示
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateLayout, this, [ = ](const QString & screenName) {
@@ -371,12 +371,6 @@ void MainWindow::resetDragWindow()
     } else {
         m_dragWidget->setCursor(Qt::SizeHorCursor);
     }
-}
-
-void MainWindow::updateDisplayMode()
-{
-    m_mainPanel->setDisplayMode(m_multiScreenWorker->displayMode());
-    adjustShadowMask();
 }
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)

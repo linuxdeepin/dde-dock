@@ -484,6 +484,10 @@ void MultiScreenWorker::onDisplayModeChanged()
     parent()->setFixedSize(dockRect(m_ds.current()).size());
     parent()->move(dockRect(m_ds.current()).topLeft());
 
+    parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
+    parent()->panel()->move(0,0);
+    parent()->panel()->setDisplayMode(m_displayMode);
+
     emit displayModeChanegd();
     emit requestUpdateRegionMonitor();
     emit requestUpdateFrontendGeometry(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode));

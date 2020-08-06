@@ -154,8 +154,6 @@ public slots:
 
 private slots:
     void compositeChanged();
-    void updateDisplayMode();
-
     void adjustShadowMask();
 
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
