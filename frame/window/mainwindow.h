@@ -123,7 +123,6 @@ public:
     friend class MainPanelControl;
 
     MainPanelControl *panel() {return m_mainPanel;}
-    DragWidget *dragWidget() {return m_dragWidget;}
 
 public slots:
     void launch();

@@ -262,6 +262,7 @@ void MainWindow::initConnections()
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, m_multiScreenWorker, [ = ] {m_multiScreenWorker->onDragStateChanged(true);});
     connect(m_dragWidget, &DragWidget::dragFinished, m_multiScreenWorker, [ = ] {m_multiScreenWorker->onDragStateChanged(false);});
+
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
 
@@ -305,6 +306,8 @@ void MainWindow::adjustShadowMask()
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
 
+    qDebug() << "#";
+    qDebug() << int(composite && isFasion ? radius : 0);
     m_platformWindowHandle.setWindowRadius(composite && isFasion ? radius : 0);
 }
 
@@ -428,7 +431,6 @@ void MainWindow::onDragFinished()
 void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     if (m_wmHelper->hasComposite()) {
-
         if (themeType == DGuiApplicationHelper::DarkType)
             m_platformWindowHandle.setBorderColor(QColor(0, 0, 0, 255 * 0.3));
         else

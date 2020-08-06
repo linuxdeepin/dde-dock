@@ -1283,7 +1283,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     }
 
 #ifdef QT_DEBUG
-    qDebug() << rect;
+//    qDebug() << rect;
 #endif
 
     return rect;
@@ -1332,7 +1332,7 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
     }
 
 #ifdef QT_DEBUG
-    qDebug() << rect;
+//    qDebug() << rect;
 #endif
 
     return rect;

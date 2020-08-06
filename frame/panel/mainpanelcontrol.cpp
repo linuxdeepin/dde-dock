@@ -801,6 +801,7 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 void MainPanelControl::updateDisplayMode()
 {
     moveAppSonWidget();
+    resizeDesktopWidget();
 }
 
 void MainPanelControl::moveAppSonWidget()
