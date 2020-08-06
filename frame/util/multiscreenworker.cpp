@@ -397,6 +397,9 @@ void MultiScreenWorker::showAniFinished()
 {
     const QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
 
+    parent()->setFixedSize(rect.size());
+    parent()->setGeometry(rect);
+
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
 
@@ -407,7 +410,10 @@ void MultiScreenWorker::showAniFinished()
 
 void MultiScreenWorker::hideAniFinished()
 {
-    const QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    const QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepHidden, m_displayMode);
+
+    parent()->setFixedSize(rect.size());
+    parent()->setGeometry(rect);
 
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
