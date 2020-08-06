@@ -38,7 +38,6 @@
 #include "dbus/dbusdockadaptors.h"
 #include <string>
 
-//#include <sys/mman.h>
 #include <stdio.h>
 #include <time.h>
 #include <execinfo.h>
@@ -194,9 +193,6 @@ int main(int argc, char *argv[])
     signal(SIGINT,  sig_crash);
     signal(SIGABRT, sig_crash);
     signal(SIGFPE,  sig_crash);
-
-    // 锁定物理内存，用于国测测试[会显著增加内存占用]
-    //    qDebug() << "lock memory result:" << mlockall(MCL_CURRENT | MCL_FUTURE);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
