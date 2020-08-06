@@ -208,7 +208,7 @@ type Bluetooth struct {
 			sessionPath dbus.ObjectPath
 		}
 
-		ObexSessionProcess struct {
+		ObexSessionProgress struct {
 			sessionPath dbus.ObjectPath
 			totalSize   uint64
 			transferred uint64
@@ -946,7 +946,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 			}
 
 			transferred := transferredBase + value
-			b.emitObexSessionProcess(sessionPath, totalSize, transferred, i+1)
+			b.emitObexSessionProgress(sessionPath, totalSize, transferred, i+1)
 		})
 		if err != nil {
 			logger.Warning("connect to transferred changed failed:", err)
@@ -982,7 +982,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 			transferredBase += uint64(info.Size())
 		}
 
-		b.emitObexSessionProcess(sessionPath, totalSize, transferredBase, i+1)
+		b.emitObexSessionProgress(sessionPath, totalSize, transferredBase, i+1)
 	}
 
 	b.sessionCancelChMapMu.Lock()
@@ -1012,10 +1012,10 @@ func (b *Bluetooth) emitObexSessionRemoved(sessionPath dbus.ObjectPath) {
 	}
 }
 
-func (b *Bluetooth) emitObexSessionProcess(sessionPath dbus.ObjectPath, totalSize uint64, transferred uint64, currentIdx int) {
-	err := b.service.Emit(b, "ObexSessionProcess", sessionPath, totalSize, transferred, currentIdx)
+func (b *Bluetooth) emitObexSessionProgress(sessionPath dbus.ObjectPath, totalSize uint64, transferred uint64, currentIdx int) {
+	err := b.service.Emit(b, "ObexSessionProgress", sessionPath, totalSize, transferred, currentIdx)
 	if err != nil {
-		logger.Warning("failed to emit ObexSessionProcess:", err)
+		logger.Warning("failed to emit ObexSessionProgress:", err)
 	}
 }
 
