@@ -40,6 +40,7 @@ protected:
 
 private:
     QString m_pluginDirPath;
+    bool m_isPanguV;
 };
 
 #endif // PLUGINLOADER_H
