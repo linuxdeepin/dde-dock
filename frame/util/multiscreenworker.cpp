@@ -418,7 +418,9 @@ void MultiScreenWorker::hideAniFinished()
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
 
-    emit requestUpdateFrontendGeometry(rect);
+    const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+
+    emit requestUpdateFrontendGeometry(frontedRect);
     emit requestNotifyWindowManager();
 }
 
@@ -485,7 +487,7 @@ void MultiScreenWorker::onDisplayModeChanged()
     parent()->move(dockRect(m_ds.current()).topLeft());
 
     parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
-    parent()->panel()->move(0,0);
+    parent()->panel()->move(0, 0);
     parent()->panel()->setDisplayMode(m_displayMode);
 
     emit displayModeChanegd();
@@ -505,7 +507,9 @@ void MultiScreenWorker::onHideModeChanged()
 
     m_hideMode = hideMode;
 
-    emit requestUpdateFrontendGeometry(dockRect(m_ds.current()));
+    const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    emit requestUpdateFrontendGeometry(frontedRect);
+
     emit requestNotifyWindowManager();
 }
 
@@ -607,6 +611,10 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry(const QRect &rect)
 {
+    //!!! 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
+    if (rect.width() == 0 || rect.height() == 0)
+        return;
+
     const qreal scale = scaleByName(m_ds.current());
 #ifdef QT_DEBUG
     qDebug() << rect;
@@ -874,7 +882,9 @@ void MultiScreenWorker::initConnection()
 #endif
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, [ = ] {
         autosetDockScreen();
-        emit requestUpdateFrontendGeometry(dockRect(m_ds.current()));
+
+        const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+        emit requestUpdateFrontendGeometry(frontedRect);
     });
     connect(m_dockInter, &DBusDock::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
     connect(m_dockInter, &DBusDock::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
@@ -1392,7 +1402,6 @@ bool MultiScreenWorker::onScreenEdge(const QPoint &point)
 
 bool MultiScreenWorker::contains(const MonitRect &rect, const QPoint &pos)
 {
-    qDebug() << rect.x1 << rect.y1 << rect.x2 << rect.y2;
     return (pos.x() <= rect.x2 && pos.x() >= rect.x1 && pos.y() >= rect.y1 && pos.y() <= rect.y2);
 }
 

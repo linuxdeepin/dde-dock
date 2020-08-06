@@ -174,7 +174,7 @@ signals:
 
     // 更新监视区域
     void requestUpdateRegionMonitor();
-    void requestUpdateFrontendGeometry(const QRect &rect);
+    void requestUpdateFrontendGeometry(const QRect &rect);      //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
     void requestUpdateLayout(const QString &screenName);        //　界面需要根据任务栏更新布局的方向
