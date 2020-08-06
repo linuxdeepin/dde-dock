@@ -127,8 +127,6 @@ public:
 
 public slots:
     void launch();
-    // 第一次显示
-    void initShow();
 
 private:
     using QWidget::show;

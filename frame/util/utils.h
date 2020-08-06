@@ -26,7 +26,7 @@
 #include <QScreen>
 
 namespace Utils {
-    inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
+inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
     QImageReader reader;
     QPixmap pixmap;
     reader.setFileName(path);
@@ -40,43 +40,47 @@ namespace Utils {
     }
 
     return pixmap;
-    }
+}
 
-    inline QScreen * screenAt(const QPoint &point) {
-        for (QScreen *screen : qApp->screens()) {
-            const QRect r { screen->geometry() };
-            const QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
-            if (rect.contains(point)) {
-                return screen;
-            }
+inline QScreen * screenAt(const QPoint &point) {
+    for (QScreen *screen : qApp->screens()) {
+        const QRect r { screen->geometry() };
+        const QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
+        if (rect.contains(point)) {
+            return screen;
         }
-
-        return nullptr;
     }
 
-    //　判断坐标是否位于屏幕边缘
-    inline bool onScreenEdge(const QPoint &point) {
-        for (QScreen *screen : qApp->screens()) {
-            const QRect r { screen->geometry() };
-            QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
-            if ( point.y() == screen->geometry().y()+screen->geometry().height()
-                    || point.x() == screen->geometry().x()+screen->geometry().width()) {
-                return true;
-            }
+    return nullptr;
+}
+
+//　判断坐标是否位于屏幕边缘
+//!!! 注意:这里传入的QPoint是未计算缩放的
+inline bool onScreenEdge(const QPoint &point) {
+    for (QScreen *screen : qApp->screens()) {
+        const QRect r { screen->geometry() };
+        QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
+        if ( point.y() == screen->geometry().y()+screen->geometry().height()
+             || point.x() == screen->geometry().x()+screen->geometry().width()) {
+            return true;
         }
-
-        return false;
     }
 
-    inline QScreen * screenAtByScaled(const QPoint &point) {
-        for (QScreen *screen : qApp->screens()) {
-            if (screen->geometry().contains(point)) {
-                return screen;
-            }
+    return false;
+}
+
+//!!! 注意:这里传入的QPoint是未计算缩放的
+inline QScreen * screenAtByScaled(const QPoint &point) {
+    for (QScreen *screen : qApp->screens()) {
+        const QRect r { screen->geometry() };
+        QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
+        if (rect.contains(point)) {
+            return screen;
         }
-
-        return nullptr;
     }
+
+    return nullptr;
+}
 }
 
 #endif // UTILS

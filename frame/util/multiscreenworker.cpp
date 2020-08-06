@@ -42,7 +42,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
-    , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher","/com/deepin/dde/Launcher",QDBusConnection::sessionBus()))
+    , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_showAni(new QVariantAnimation(this))
     , m_hideAni(new QVariantAnimation(this))
@@ -314,7 +314,7 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 #ifdef QT_DEBUG
         qDebug() << "boundRect:" << boundRect;
 #endif
-        if ((hideMode() == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
+        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
                 && (boundRect.size().isEmpty())) {
             showAni(m_ds.current());
         }
@@ -609,6 +609,11 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     // 先清除原先的窗管任务栏区域
     m_xcbMisc->clear_strut_partial(xcb_window_t(parent()->winId()));
 
+    // 在副屏时,且为一直显示时,不要挤占应用,这是sp3的新需求
+    if (m_ds.current() != qApp->primaryScreen()->name() && m_hideMode == HideMode::KeepShowing)
+        return;
+
+    // 除了"一直显示"模式,其他的都不要设置任务栏区域
     if (m_hideMode != Dock::KeepShowing)
         return;
 
@@ -815,7 +820,7 @@ void MultiScreenWorker::initMembers()
 
 void MultiScreenWorker::initConnection()
 {
-    auto updateGeometry = [ = ](QVariant value){
+    auto updateGeometry = [ = ](QVariant value) {
         QRect rect = value.toRect();
         parent()->setFixedSize(rect.size());
         parent()->setGeometry(rect);
@@ -837,8 +842,8 @@ void MultiScreenWorker::initConnection()
         }
     };
 
-    connect(m_showAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value){updateGeometry(value);});
-    connect(m_hideAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value){updateGeometry(value);});
+    connect(m_showAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value) {updateGeometry(value);});
+    connect(m_hideAni, &QVariantAnimation::valueChanged, this, [ = ](QVariant value) {updateGeometry(value);});
 
     connect(m_showAni, &QVariantAnimation::finished, this, &MultiScreenWorker::showAniFinished);
     connect(m_hideAni, &QVariantAnimation::finished, this, &MultiScreenWorker::hideAniFinished);
@@ -879,8 +884,8 @@ void MultiScreenWorker::initConnection()
     });
 
     connect(m_eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
-    connect(m_eventInter, &XEventMonitor::ButtonPress, this, [=]{m_btnPress = true;});
-    connect(m_eventInter, &XEventMonitor::ButtonRelease, this, [=]{m_btnPress = false;});
+    connect(m_eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
+    connect(m_eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
 
     connect(this, &MultiScreenWorker::requestUpdateRegionMonitor, this, &MultiScreenWorker::onRequestUpdateRegionMonitor);
     connect(this, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &MultiScreenWorker::onRequestUpdateFrontendGeometry);
@@ -1046,7 +1051,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
         }
     });
 
-    auto updateGeometry = [ = ](const QString &screenName, const Position &pos,QVariant value){
+    auto updateGeometry = [ = ](const QString & screenName, const Position & pos, QVariant value) {
         const QRect &rect = value.toRect();
         parent()->setFixedSize(rect.size());
         parent()->setGeometry(rect);
@@ -1132,11 +1137,16 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     // 查找主屏
     QString primaryName;
     foreach (auto monitor, monitorList) {
-        primaryName = monitor->name();
-        break;
+        if (monitor->name() == qApp->primaryScreen()->name()) {
+            primaryName = monitor->name();
+            break;
+        }
     }
 
-    Q_ASSERT(!primaryName.isEmpty());
+    if (primaryName.isEmpty()) {
+        qDebug() << "cannnot find primary screen";
+        return QString();
+    }
 
     Monitor *primaryMonitor = monitorByName(validMonitorList(m_monitorInfo), primaryName);
 
@@ -1212,6 +1222,8 @@ MainWindow *MultiScreenWorker::parent()
 
 QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode)
 {
+    //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
+    const qreal scale = screenByName(screenName)->devicePixelRatio();
     QRect rect;
     foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
         if (inter->name() == screenName) {
@@ -1219,31 +1231,31 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
             switch (static_cast<Position>(pos)) {
             case Top: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + WINDOWMARGIN);
-                rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
+                rect.setX(inter->x() / scale  + WINDOWMARGIN);
+                rect.setY(inter->y() / scale  + WINDOWMARGIN);
+                rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
                 rect.setHeight(dockSize);
             }
             break;
             case Bottom: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + inter->h() - WINDOWMARGIN - dockSize);
-                rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
+                rect.setX(inter->x() / scale  + WINDOWMARGIN);
+                rect.setY(inter->y() / scale  + inter->h() / scale - WINDOWMARGIN - dockSize);
+                rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
                 rect.setHeight(dockSize);
             }
             break;
             case Left: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + WINDOWMARGIN);
+                rect.setX(inter->x() / scale  + WINDOWMARGIN);
+                rect.setY(inter->y() / scale  + WINDOWMARGIN);
                 rect.setWidth(dockSize);
-                rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
+                rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
             }
             break;
             case Right: {
-                rect.setX(inter->x() + inter->w() - WINDOWMARGIN - dockSize);
-                rect.setY(inter->y() + WINDOWMARGIN);
+                rect.setX(inter->x() / scale  + inter->w() / scale - WINDOWMARGIN - dockSize);
+                rect.setY(inter->y() / scale  + WINDOWMARGIN);
                 rect.setWidth(dockSize);
-                rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
+                rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
             }
             }
             break;
@@ -1259,6 +1271,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
 QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode)
 {
+    //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
+    const qreal scale = screenByName(screenName)->devicePixelRatio();
     QRect rect;
     foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
         if (inter->name() == screenName) {
@@ -1266,31 +1280,31 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
 
             switch (static_cast<Position>(pos)) {
             case Top: {
-                rect.setX(inter->x() + margin);
-                rect.setY(inter->y());
-                rect.setWidth(inter->w() - 2 * margin);
+                rect.setX(inter->x() / scale  + margin);
+                rect.setY(inter->y() / scale);
+                rect.setWidth(inter->w() / scale - 2 * margin);
                 rect.setHeight(0);
             }
             break;
             case Bottom: {
-                rect.setX(inter->x() + margin);
-                rect.setY(inter->y() + inter->h());
-                rect.setWidth(inter->w() - 2 * margin);
+                rect.setX(inter->x() / scale  + margin);
+                rect.setY(inter->y() / scale  + inter->h() / scale);
+                rect.setWidth(inter->w() / scale - 2 * margin);
                 rect.setHeight(0);
             }
             break;
             case Left: {
-                rect.setX(inter->x());
-                rect.setY(inter->y() + margin);
+                rect.setX(inter->x() / scale);
+                rect.setY(inter->y() / scale  + margin);
                 rect.setWidth(0);
-                rect.setHeight(inter->h() - 2 * margin);
+                rect.setHeight(inter->h() / scale - 2 * margin);
             }
             break;
             case Right: {
-                rect.setX(inter->x() + inter->w());
-                rect.setY(inter->y() + margin);
+                rect.setX(inter->x() / scale  + inter->w() / scale);
+                rect.setY(inter->y() / scale  + margin);
                 rect.setWidth(0);
-                rect.setHeight(inter->h() - 2 * margin);
+                rect.setHeight(inter->h() / scale - 2 * margin);
             }
             break;
             }

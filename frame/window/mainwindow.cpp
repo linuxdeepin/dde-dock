@@ -135,17 +135,10 @@ void MainWindow::launch()
     QTimer::singleShot(400, this, [&] {
         m_launched = true;
         qApp->processEvents();
-        initShow();
+        setVisible(true);
+        m_multiScreenWorker->initShow();
+        m_shadowMaskOptimizeTimer->start();
     });
-}
-
-void MainWindow::initShow()
-{
-    setVisible(true);
-
-    m_multiScreenWorker->initShow();
-
-    m_shadowMaskOptimizeTimer->start();
 }
 
 void MainWindow::showEvent(QShowEvent *e)
