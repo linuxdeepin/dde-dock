@@ -1251,29 +1251,29 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
             switch (static_cast<Position>(pos)) {
             case Top: {
-                rect.setX(inter->x() / scale  + WINDOWMARGIN);
-                rect.setY(inter->y() / scale  + WINDOWMARGIN);
+                rect.setX(inter->x() + WINDOWMARGIN);
+                rect.setY(inter->y() + WINDOWMARGIN);
                 rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
                 rect.setHeight(dockSize);
             }
             break;
             case Bottom: {
-                rect.setX(inter->x() / scale  + WINDOWMARGIN);
-                rect.setY(inter->y() / scale  + inter->h() / scale - WINDOWMARGIN - dockSize);
+                rect.setX(inter->x() + WINDOWMARGIN);
+                rect.setY(inter->y() + inter->h() / scale - WINDOWMARGIN - dockSize);
                 rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
                 rect.setHeight(dockSize);
             }
             break;
             case Left: {
-                rect.setX(inter->x() / scale  + WINDOWMARGIN);
-                rect.setY(inter->y() / scale  + WINDOWMARGIN);
+                rect.setX(inter->x() + WINDOWMARGIN);
+                rect.setY(inter->y() + WINDOWMARGIN);
                 rect.setWidth(dockSize);
                 rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
             }
             break;
             case Right: {
-                rect.setX(inter->x() / scale  + inter->w() / scale - WINDOWMARGIN - dockSize);
-                rect.setY(inter->y() / scale  + WINDOWMARGIN);
+                rect.setX(inter->x() + inter->w() / scale - WINDOWMARGIN - dockSize);
+                rect.setY(inter->y() + WINDOWMARGIN);
                 rect.setWidth(dockSize);
                 rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
             }
@@ -1283,7 +1283,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     }
 
 #ifdef QT_DEBUG
-//    qDebug() << rect;
+    qDebug() << rect;
 #endif
 
     return rect;
@@ -1300,29 +1300,29 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
 
             switch (static_cast<Position>(pos)) {
             case Top: {
-                rect.setX(inter->x() / scale  + margin);
-                rect.setY(inter->y() / scale);
+                rect.setX(inter->x() + margin);
+                rect.setY(inter->y());
                 rect.setWidth(inter->w() / scale - 2 * margin);
                 rect.setHeight(0);
             }
             break;
             case Bottom: {
-                rect.setX(inter->x() / scale  + margin);
-                rect.setY(inter->y() / scale  + inter->h() / scale);
+                rect.setX(inter->x() + margin);
+                rect.setY(inter->y() + inter->h() / scale);
                 rect.setWidth(inter->w() / scale - 2 * margin);
                 rect.setHeight(0);
             }
             break;
             case Left: {
-                rect.setX(inter->x() / scale);
-                rect.setY(inter->y() / scale  + margin);
+                rect.setX(inter->x());
+                rect.setY(inter->y() + margin);
                 rect.setWidth(0);
                 rect.setHeight(inter->h() / scale - 2 * margin);
             }
             break;
             case Right: {
-                rect.setX(inter->x() / scale  + inter->w() / scale);
-                rect.setY(inter->y() / scale  + margin);
+                rect.setX(inter->x() + inter->w() / scale);
+                rect.setY(inter->y() + margin);
                 rect.setWidth(0);
                 rect.setHeight(inter->h() / scale - 2 * margin);
             }
@@ -1332,7 +1332,7 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
     }
 
 #ifdef QT_DEBUG
-//    qDebug() << rect;
+    qDebug() << rect;
 #endif
 
     return rect;
