@@ -38,7 +38,7 @@
 #include "dbus/dbusdockadaptors.h"
 #include <string>
 
-#include <sys/mman.h>
+//#include <sys/mman.h>
 #include <stdio.h>
 #include <time.h>
 #include <execinfo.h>
