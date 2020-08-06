@@ -1057,7 +1057,8 @@ void MainWindow::updateRegionMonitorWatch()
     QList<QRect> screensRect = m_settings->monitorsRect();
     QList<MonitRect> monitorAreas;
 
-    int val = 3;
+    //任务栏隐藏时，唤醒监视区域大小，上下15像素 左右15像素
+    int val = 15;
     int x, y, w, h;
 
     auto func = [&](MonitRect & monitRect) {
