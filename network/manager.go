@@ -43,7 +43,7 @@ const (
 	dbusInterface   = "com.deepin.daemon.Network"
 )
 
-const maxPortalCheckTimes = 600
+const maxPortalDetectionTime = 600*time.Second
 
 type connectionData map[string]map[string]dbus.Variant
 
@@ -92,7 +92,7 @@ type Manager struct {
 	sessionSigLoop *dbusutil.SignalLoop
 	syncConfig     *dsync.Config
 
-	isPortalChecking bool
+	portalLastDetectionTime time.Time
 
 	//nolint
 	signals *struct {
@@ -224,9 +224,23 @@ func (m *Manager) init() {
 	// update property Connectivity
 	_ = nmManager.Connectivity().ConnectChanged(func(hasValue bool, value uint32) {
 		logger.Debug("connectivity state changed ", hasValue, value)
+		if hasValue && value == nm.NM_CONNECTIVITY_PORTAL {
+			go m.doPortalAuthentication()
+		}
 		m.updatePropConnectivity()
 	})
 	m.updatePropConnectivity()
+	go func() {
+		time.Sleep(3 * time.Second)
+		connectivity, err := nmManager.CheckConnectivity(0)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		if connectivity == nm.NM_CONNECTIVITY_PORTAL {
+			m.doPortalAuthentication()
+		}
+	}()
 
 	// move to power module
 	// connect computer suspend signal
@@ -369,25 +383,21 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 }
 
 func (m *Manager) doPortalAuthentication() {
-	connectivity, err := nmManager.CheckConnectivity(0)
+	err := exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
 	if err != nil {
 		logger.Warning(err)
-		return
 	}
-	if connectivity != nm.NM_CONNECTIVITY_PORTAL {
+	sincePortalDetection := time.Since(m.portalLastDetectionTime)
+	m.portalLastDetectionTime = time.Now()
+	if sincePortalDetection < maxPortalDetectionTime {
 		return
 	}
 	logger.Info("portal authentication begin")
-
-	err = exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
-	if err != nil {
-		logger.Warning(err)
-	}
-	if m.isPortalChecking {
-		return
-	}
-	m.isPortalChecking = true
-	for i := 0; i < maxPortalCheckTimes; i++ {
+	for {
+		sincePortalDetection := time.Since(m.portalLastDetectionTime)
+		if sincePortalDetection >= maxPortalDetectionTime {
+			break
+		}
 		connectivity, err := nmManager.CheckConnectivity(0)
 		if err != nil {
 			logger.Warning(err)
@@ -400,6 +410,5 @@ func (m *Manager) doPortalAuthentication() {
 		time.Sleep(1 * time.Second)
 	}
 
-	m.isPortalChecking = false
 	logger.Info("portal authentication end")
 }
