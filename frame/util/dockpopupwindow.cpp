@@ -43,6 +43,8 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     m_acceptDelayTimer->setInterval(100);
 
     setAccessibleName("popup");
+    setAttribute(Qt::WA_NativeWindow);
+    windowHandle()->setProperty("_d_dwayland_window-type", "tooltip");
 
     m_wmHelper = DWindowManagerHelper::instance();
 
