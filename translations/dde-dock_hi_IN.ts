@@ -149,14 +149,21 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>लॉन्चर </translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>फैशन मोड</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>कुशल मोड</translation>
+        <translation>दक्षता मोड</translation>
     </message>
     <message>
         <source>Top</source>
@@ -184,7 +191,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>उपयोग के अनुरूप छिपाएँ</translation>
+        <translation>उपयोग अनुरूप छिपाएँ</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>प्लगिन</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>लॉन्चर </translation>
     </message>
 </context>
 <context>

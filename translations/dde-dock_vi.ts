@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Khởi chạy</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Chế độ Thời trang</translation>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>Các phần bổ sung</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Khởi chạy</translation>
     </message>
 </context>
 <context>

@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>රදවනය </translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>විචිත්‍ර ආකාරය</translation>
@@ -188,7 +195,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>ආකාරය</translation>
+        <translation>ප්‍රකාරය</translation>
     </message>
     <message>
         <source>Location</source>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>ආධාරක යෙදවුම්</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>රදවනය </translation>
     </message>
 </context>
 <context>

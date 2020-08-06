@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Pelancar</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Mod Berfesyen</translation>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>Pemalam</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Pelancar</translation>
     </message>
 </context>
 <context>

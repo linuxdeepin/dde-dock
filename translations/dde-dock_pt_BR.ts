@@ -149,14 +149,21 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Lançador</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Modo Fashion</translation>
+        <translation>Fashion</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Modo Eficiente</translation>
+        <translation>Eficiente</translation>
     </message>
     <message>
         <source>Top</source>
@@ -176,15 +183,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Sempre Exibir</translation>
+        <translation>Sempre exibir</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Sempre Ocultar</translation>
+        <translation>Sempre ocultar</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultar Inteligente</translation>
+        <translation>Ocultar inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -200,14 +207,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Complementos</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Lançador</translation>
+        <translation>Plugins</translation>
     </message>
 </context>
 <context>

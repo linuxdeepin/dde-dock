@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Başlatıcı</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Moda Kipi</translation>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>Eklentiler</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Başlatıcı</translation>
     </message>
 </context>
 <context>

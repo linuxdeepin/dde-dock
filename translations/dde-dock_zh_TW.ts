@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>啟動器</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>時尚模式</translation>
@@ -168,11 +175,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>左側</translation>
+        <translation>左聲道</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>右側</translation>
+        <translation>右聲道</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>附加元件</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>啟動器</translation>
     </message>
 </context>
 <context>

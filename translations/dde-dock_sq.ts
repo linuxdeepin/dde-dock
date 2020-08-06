@@ -149,10 +149,17 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Nisës</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Mënyrë Moda</translation>
+        <translation>Mënyra Modë</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>Shtojca</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Nisës</translation>
     </message>
 </context>
 <context>

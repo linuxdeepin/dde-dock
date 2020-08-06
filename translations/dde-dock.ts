@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -12,7 +10,7 @@
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove</translation>
     </message>
 </context>
 <context>
@@ -151,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Launcher</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Fashion Mode</translation>
@@ -203,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>Plugins</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Launcher</translation>
     </message>
 </context>
 <context>

@@ -149,14 +149,21 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>실행도구</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>유행 모드</translation>
+        <translation>시각 모드</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>능률 모드</translation>
+        <translation>효율 모드</translation>
     </message>
     <message>
         <source>Top</source>
@@ -201,13 +208,6 @@
     <message>
         <source>Plugins</source>
         <translation>플러그인</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>실행도구</translation>
     </message>
 </context>
 <context>

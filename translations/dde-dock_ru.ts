@@ -149,7 +149,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Выбор Программ</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Современный Режим</translation>
@@ -192,22 +199,15 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Местонахождение</translation>
+        <translation>Расположение</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Статус</translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <source>Plugins</source>
         <translation>Плагины</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Выбор Программ</translation>
     </message>
 </context>
 <context>

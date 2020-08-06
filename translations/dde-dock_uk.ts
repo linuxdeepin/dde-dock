@@ -149,22 +149,29 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Запускач</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Модний режим</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Режим ефективності</translation>
+        <translation>Практичний режим</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>Верх</translation>
+        <translation>Вгорі</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Вниз</translation>
+        <translation>Внизу</translation>
     </message>
     <message>
         <source>Left</source>
@@ -192,7 +199,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Місце знаходження</translation>
+        <translation>Розташування</translation>
     </message>
     <message>
         <source>Status</source>
@@ -200,14 +207,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Плагіни</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Запускач</translation>
+        <translation>Додатки</translation>
     </message>
 </context>
 <context>
