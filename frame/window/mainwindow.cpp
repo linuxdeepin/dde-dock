@@ -43,15 +43,12 @@
 
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
-#define SessionManagerService "com.deepin.SessionManager"
-#define SessionManagerPath "/com/deepin/SessionManager"
 
 #define MAINWINDOW_MAX_SIZE       DOCK_MAX_SIZE
 #define MAINWINDOW_MIN_SIZE       (40)
 #define DRAG_AREA_SIZE (5)
 
 using org::kde::StatusNotifierWatcher;
-using namespace com::deepin;
 
 class DragWidget : public QWidget
 {
@@ -178,7 +175,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_panelHideAni(new QVariantAnimation(this)),
       m_dbusDaemonInterface(QDBusConnection::sessionBus().interface()),
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
-      m_sessionManagerInter(new SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
     Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window;
@@ -320,10 +316,6 @@ MainWindow::MainWindow(QWidget *parent)
         m_mainPanel->move(QPoint(0, 0));
         if (m_settings->hideMode() != KeepShowing)
             this->setVisible(false);
-    });
-
-    connect(m_sessionManagerInter, &SessionManager::LockedChanged, this, [ this ] (bool locked) {
-        this->setVisible(!locked);
     });
 
     updateRegionMonitorWatch();
