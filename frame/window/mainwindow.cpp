@@ -374,8 +374,10 @@ void MainWindow::resetDragWindow()
 
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
 {
-    const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen());
-
+    const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
+                                                      , m_multiScreenWorker->position()
+                                                      , HideMode::KeepShowing,
+                                                       m_multiScreenWorker->displayMode());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
     case Top: {
