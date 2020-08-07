@@ -152,9 +152,11 @@ func (a *adapter) connectProperties() {
 		if !hasValue {
 			return
 		}
+		// Sleep for 1s and wait for bluez to set the attributes before sending the attribute change signal
+		time.Sleep(1 * time.Second)
+
 		a.Powered = value
 		logger.Debugf("%s Powered: %v", a, value)
-		a.notifyPropertiesChanged()
 		// save the powered state
 		globalBluetooth.config.setAdapterConfigPowered(a.address, a.Powered)
 
@@ -166,6 +168,7 @@ func (a *adapter) connectProperties() {
 			a.startDiscovery()
 			go globalBluetooth.tryConnectPairedDevices()
 		}
+		a.notifyPropertiesChanged()
 	})
 	if err != nil {
 		logger.Warning(err)

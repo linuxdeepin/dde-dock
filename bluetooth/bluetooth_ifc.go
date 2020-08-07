@@ -167,9 +167,6 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		return dbusutil.ToError(err)
 	}
 
-	a.Powered = powered
-	a.notifyPropertiesChanged()
-
 	err = a.core.Powered().Set(0, powered)
 	if err != nil {
 		logger.Warningf("failed to set %s powered: %v", a, err)
