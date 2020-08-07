@@ -163,6 +163,16 @@ public:
     QRect dockRect(const QString &screenName);
 
     /**
+     * @brief realDockRect      给出不计算缩放情况的区域信息(和后端接口保持一致)
+     * @param screenName        屏幕名
+     * @param pos               任务栏位置
+     * @param hideMode          模式
+     * @param displayMode       状态
+     * @return
+     */
+    QRect realDockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
+
+    /**
      * @brief handleLeaveEvent  状态为隐藏时,离开任务栏需要隐藏任务栏
      * @param event             离开事件
      */
@@ -174,7 +184,7 @@ signals:
 
     // 更新监视区域
     void requestUpdateRegionMonitor();
-    void requestUpdateFrontendGeometry(const QRect &rect);      //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
+    void requestUpdateFrontendGeometry();      //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
     void requestUpdateLayout(const QString &screenName);        //　界面需要根据任务栏更新布局的方向
@@ -220,7 +230,7 @@ private slots:
     void onRequestUpdateRegionMonitor();
 
     // 通知后端任务栏所在位置
-    void onRequestUpdateFrontendGeometry(const QRect &rect);
+    void onRequestUpdateFrontendGeometry();
 
     void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
@@ -270,9 +280,16 @@ private:
     void checkDaemonDockService();
 
     MainWindow *parent();
-
-    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode);
-    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode);
+    /**
+     * @brief getDockShowGeometry       获取任务栏显示时的位置
+     * @param screenName                当前屏幕名
+     * @param pos                       任务栏位置
+     * @param displaymode               显示模式
+     * @param real                      接口是否计算算法,false为计算,true为不计算(与后端接口大小的形式保持一致.比如,后端给出的屏幕大小是不计算缩放的)
+     * @return
+     */
+    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real = false);
+    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real = false);
 
     Monitor *monitorByName(const QList<Monitor *> &list, const QString &screenName);
     QScreen *screenByName(const QString &screenName);

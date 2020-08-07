@@ -362,10 +362,7 @@ void MainWindow::resetDragWindow()
 
     // 通知窗管和后端更新数据
     m_multiScreenWorker->updateDaemonDockSize(m_dockSize);      // 1.先更新任务栏高度
-
-    const QRect rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen(),m_multiScreenWorker->position(),HideMode::KeepShowing,m_multiScreenWorker->displayMode());
-    m_multiScreenWorker->requestUpdateFrontendGeometry(rect);   // 2.再更新任务栏位置,保证先1再2
-
+    m_multiScreenWorker->requestUpdateFrontendGeometry();       // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
 
     if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {

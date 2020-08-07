@@ -112,6 +112,14 @@ QRect MultiScreenWorker::dockRect(const QString &screenName)
     return dockRect(screenName, m_position, m_hideMode, m_displayMode);
 }
 
+QRect MultiScreenWorker::realDockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
+{
+    if (hideMode == HideMode::KeepShowing)
+        return getDockShowGeometry(screenName, pos, displayMode, true);
+    else
+        return getDockHideGeometry(screenName, pos, displayMode, true);
+}
+
 void MultiScreenWorker::handleLeaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
@@ -403,7 +411,7 @@ void MultiScreenWorker::showAniFinished()
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
 
-    emit requestUpdateFrontendGeometry(rect);
+    emit requestUpdateFrontendGeometry();
     emit requestNotifyWindowManager();
     emit requestUpdateDragArea();
 }
@@ -418,9 +426,7 @@ void MultiScreenWorker::hideAniFinished()
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
 
-    const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-
-    emit requestUpdateFrontendGeometry(frontedRect);
+    emit requestUpdateFrontendGeometry();
     emit requestNotifyWindowManager();
 }
 
@@ -492,7 +498,7 @@ void MultiScreenWorker::onDisplayModeChanged()
 
     emit displayModeChanegd();
     emit requestUpdateRegionMonitor();
-    emit requestUpdateFrontendGeometry(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode));
+    emit requestUpdateFrontendGeometry();
     emit requestNotifyWindowManager();
 }
 
@@ -507,8 +513,7 @@ void MultiScreenWorker::onHideModeChanged()
 
     m_hideMode = hideMode;
 
-    const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-    emit requestUpdateFrontendGeometry(frontedRect);
+    emit requestUpdateFrontendGeometry();
 
     emit requestNotifyWindowManager();
 }
@@ -609,17 +614,19 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     m_registerKey = m_eventInter->RegisterAreas(m_monitorRectList, flags);
 }
 
-void MultiScreenWorker::onRequestUpdateFrontendGeometry(const QRect &rect)
+void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 {
+    const QRect rect = realDockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+
     //!!! 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
     if (rect.width() == 0 || rect.height() == 0)
         return;
 
-    const qreal scale = scaleByName(m_ds.current());
 #ifdef QT_DEBUG
     qDebug() << rect;
 #endif
-    m_dockInter->SetFrontendWindowRect(int(rect.x() / scale), int(rect.y() / scale), uint(rect.width() / scale), uint(rect.height() / scale));
+
+    m_dockInter->SetFrontendWindowRect(int(rect.x()), int(rect.y()), uint(rect.width()), uint(rect.height()));
 }
 
 void MultiScreenWorker::onRequestNotifyWindowManager()
@@ -883,8 +890,7 @@ void MultiScreenWorker::initConnection()
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, [ = ] {
         autosetDockScreen();
 
-        const QRect frontedRect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-        emit requestUpdateFrontendGeometry(frontedRect);
+        emit requestUpdateFrontendGeometry();
     });
     connect(m_dockInter, &DBusDock::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
     connect(m_dockInter, &DBusDock::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
@@ -928,7 +934,7 @@ void MultiScreenWorker::initConnection()
         parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
         parent()->panel()->move(0, 0);
         // 通知后端
-        emit requestUpdateFrontendGeometry(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode));
+        emit requestUpdateFrontendGeometry();
         // 拖拽区域
         emit requestUpdateDragArea();
         // 监控区域
@@ -962,8 +968,7 @@ void MultiScreenWorker::showAni(const QString &screen)
 {
     if (m_showAni->state() == QVariantAnimation::Running || m_aniStart)
         return;
-
-    emit requestUpdateFrontendGeometry(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode));
+    emit requestUpdateFrontendGeometry();
 
     /************************************************************************
       * 务必先走第一步，再走第二部，否则就会出现从一直隐藏切换为一直显示，任务栏不显示的问题
@@ -1131,7 +1136,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
 
         // 结束之后需要根据确定需要再隐藏
         emit showAniFinished();
-        emit requestUpdateFrontendGeometry(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode));
+        emit requestUpdateFrontendGeometry();
         emit requestNotifyWindowManager();
     });
 
@@ -1240,45 +1245,86 @@ MainWindow *MultiScreenWorker::parent()
     return static_cast<MainWindow *>(m_parent);
 }
 
-QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode)
+QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real)
 {
     //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
     const qreal scale = screenByName(screenName)->devicePixelRatio();
     QRect rect;
-    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
-        if (inter->name() == screenName) {
-            const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
 
-            switch (static_cast<Position>(pos)) {
-            case Top: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + WINDOWMARGIN);
-                rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
-                rect.setHeight(dockSize);
+    if (real) {
+        foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+            if (inter->name() == screenName) {
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
+
+                switch (static_cast<Position>(pos)) {
+                case Top: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
+                    rect.setHeight(dockSize);
+                }
+                break;
+                case Bottom: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + inter->h() - WINDOWMARGIN - dockSize);
+                    rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
+                    rect.setHeight(dockSize);
+                }
+                break;
+                case Left: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(dockSize);
+                    rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
+                }
+                break;
+                case Right: {
+                    rect.setX(inter->x() + inter->w() - WINDOWMARGIN - dockSize);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(dockSize);
+                    rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
+                }
+                }
+                break;
             }
-            break;
-            case Bottom: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + inter->h() / scale - WINDOWMARGIN - dockSize);
-                rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
-                rect.setHeight(dockSize);
+        }
+    }
+    else {
+        foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+            if (inter->name() == screenName) {
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
+
+                switch (static_cast<Position>(pos)) {
+                case Top: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
+                    rect.setHeight(dockSize);
+                }
+                break;
+                case Bottom: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + inter->h() / scale - WINDOWMARGIN - dockSize);
+                    rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
+                    rect.setHeight(dockSize);
+                }
+                break;
+                case Left: {
+                    rect.setX(inter->x() + WINDOWMARGIN);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(dockSize);
+                    rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
+                }
+                break;
+                case Right: {
+                    rect.setX(inter->x() + inter->w() / scale - WINDOWMARGIN - dockSize);
+                    rect.setY(inter->y() + WINDOWMARGIN);
+                    rect.setWidth(dockSize);
+                    rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
+                }
+                }
+                break;
             }
-            break;
-            case Left: {
-                rect.setX(inter->x() + WINDOWMARGIN);
-                rect.setY(inter->y() + WINDOWMARGIN);
-                rect.setWidth(dockSize);
-                rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
-            }
-            break;
-            case Right: {
-                rect.setX(inter->x() + inter->w() / scale - WINDOWMARGIN - dockSize);
-                rect.setY(inter->y() + WINDOWMARGIN);
-                rect.setWidth(dockSize);
-                rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
-            }
-            }
-            break;
         }
     }
 
@@ -1289,44 +1335,86 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     return rect;
 }
 
-QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode)
+QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real)
 {
     //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
     const qreal scale = screenByName(screenName)->devicePixelRatio();
     QRect rect;
-    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
-        if (inter->name() == screenName) {
-            const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
 
-            switch (static_cast<Position>(pos)) {
-            case Top: {
-                rect.setX(inter->x() + margin);
-                rect.setY(inter->y());
-                rect.setWidth(inter->w() / scale - 2 * margin);
-                rect.setHeight(0);
+    if (real) {
+        foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+            if (inter->name() == screenName) {
+                const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
+
+                switch (static_cast<Position>(pos)) {
+                case Top: {
+                    rect.setX(inter->x() + margin);
+                    rect.setY(inter->y());
+                    rect.setWidth(inter->w() - 2 * margin);
+                    rect.setHeight(0);
+                }
+                break;
+                case Bottom: {
+                    rect.setX(inter->x() + margin);
+                    rect.setY(inter->y() + inter->h());
+                    rect.setWidth(inter->w() - 2 * margin);
+                    rect.setHeight(0);
+                }
+                break;
+                case Left: {
+                    rect.setX(inter->x());
+                    rect.setY(inter->y() + margin);
+                    rect.setWidth(0);
+                    rect.setHeight(inter->h() - 2 * margin);
+                }
+                break;
+                case Right: {
+                    rect.setX(inter->x() + inter->w());
+                    rect.setY(inter->y() + margin);
+                    rect.setWidth(0);
+                    rect.setHeight(inter->h() - 2 * margin);
+                }
+                break;
+                }
             }
-            break;
-            case Bottom: {
-                rect.setX(inter->x() + margin);
-                rect.setY(inter->y() + inter->h() / scale);
-                rect.setWidth(inter->w() / scale - 2 * margin);
-                rect.setHeight(0);
-            }
-            break;
-            case Left: {
-                rect.setX(inter->x());
-                rect.setY(inter->y() + margin);
-                rect.setWidth(0);
-                rect.setHeight(inter->h() / scale - 2 * margin);
-            }
-            break;
-            case Right: {
-                rect.setX(inter->x() + inter->w() / scale);
-                rect.setY(inter->y() + margin);
-                rect.setWidth(0);
-                rect.setHeight(inter->h() / scale - 2 * margin);
-            }
-            break;
+        }
+
+    }
+    else {
+        foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+            if (inter->name() == screenName) {
+                const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
+
+                switch (static_cast<Position>(pos)) {
+                case Top: {
+                    rect.setX(inter->x() + margin);
+                    rect.setY(inter->y());
+                    rect.setWidth(inter->w() / scale - 2 * margin);
+                    rect.setHeight(0);
+                }
+                break;
+                case Bottom: {
+                    rect.setX(inter->x() + margin);
+                    rect.setY(inter->y() + inter->h() / scale);
+                    rect.setWidth(inter->w() / scale - 2 * margin);
+                    rect.setHeight(0);
+                }
+                break;
+                case Left: {
+                    rect.setX(inter->x());
+                    rect.setY(inter->y() + margin);
+                    rect.setWidth(0);
+                    rect.setHeight(inter->h() / scale - 2 * margin);
+                }
+                break;
+                case Right: {
+                    rect.setX(inter->x() + inter->w() / scale);
+                    rect.setY(inter->y() + margin);
+                    rect.setWidth(0);
+                    rect.setHeight(inter->h() / scale - 2 * margin);
+                }
+                break;
+                }
             }
         }
     }
