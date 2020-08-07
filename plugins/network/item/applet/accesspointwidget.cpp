@@ -46,7 +46,7 @@ extern void initFontColor(QWidget *widget);
 
 AccessPointWidget::AccessPointWidget()
     : QFrame(nullptr)
-    , m_activeState(NetworkDevice::Unknow)
+    , m_activeState(NetworkDevice::Unknown)
     , m_ssidBtn(new SsidButton(this))
     , m_securityLabel(new QLabel)
     , m_strengthLabel(new QLabel)
@@ -127,7 +127,7 @@ void AccessPointWidget::updateAP(const AccessPoint &ap)
     }
 
     // reset state
-    setActiveState(NetworkDevice::Unknow);
+    setActiveState(NetworkDevice::Unknown);
 }
 
 bool AccessPointWidget::active() const
@@ -200,6 +200,6 @@ void AccessPointWidget::ssidClicked()
 
 void AccessPointWidget::disconnectBtnClicked()
 {
-    setActiveState(NetworkDevice::Unknow);
+    setActiveState(NetworkDevice::Unknown);
     emit requestDeactiveAP(m_ap);
 }

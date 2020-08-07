@@ -133,7 +133,7 @@ WiredItem::WiredStatus WiredItem::getDeviceState()
     }
 
     switch (m_device->status()) {
-        case NetworkDevice::Unknow:        return Unknow;
+        case NetworkDevice::Unknown:       return Unknown;
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable:   return Nocable;
         case NetworkDevice::Disconnected:  return Disconnected;
@@ -174,7 +174,7 @@ void WiredItem::setWiredStateIcon()
     auto ratio =  devicePixelRatioF();
 
     switch (m_deviceState) {
-        case NetworkDevice::Unknow:
+        case NetworkDevice::Unknown:
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable: {
             stateString = "error";
@@ -246,7 +246,7 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
     m_deviceState = state;
     switch (state) {
-        case NetworkDevice::Unknow:
+        case NetworkDevice::Unknown:
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable:
         case NetworkDevice::Disconnected:

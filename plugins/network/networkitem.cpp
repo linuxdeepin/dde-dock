@@ -525,7 +525,7 @@ void NetworkItem::getPluginState()
     // 按如下顺序得到当前无线设备状态
     temp = state;
     if (!temp)
-        wirelessState = WirelessItem::Unknow;
+        wirelessState = WirelessItem::Unknown;
     temp = state;
     if ((temp & WirelessItem::Disabled) >> 17)
         wirelessState = WirelessItem::Disabled;
@@ -569,7 +569,7 @@ void NetworkItem::getPluginState()
     }
     temp = state;
     if (!temp)
-        wiredState = WiredItem::Unknow;
+        wiredState = WiredItem::Unknown;
     temp = state;
     if ((temp & WiredItem::Nocable) >> 9)
         wiredState = WiredItem::Nocable;

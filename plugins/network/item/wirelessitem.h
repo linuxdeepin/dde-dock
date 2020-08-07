@@ -38,7 +38,7 @@ class WirelessItem : public DeviceItem
 
 public:
     enum WirelessStatus {
-        Unknow              = 0,
+        Unknown             = 0,
         Enabled             = 0x00010000,
         Disabled            = 0x00020000,
         Connected           = 0x00040000,

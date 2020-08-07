@@ -43,7 +43,7 @@ class WiredItem : public DeviceItem
 
 public:
     enum WiredStatus {
-        Unknow              = 0,
+        Unknown             = 0,
         Enabled             = 0x00000001,
         Disabled            = 0x00000002,
         Connected           = 0x00000004,
