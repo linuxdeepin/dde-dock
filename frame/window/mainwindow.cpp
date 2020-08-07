@@ -376,6 +376,7 @@ void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
+    updateGeometry();
     //    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
     //    windowHandle(), [this](QScreen * new_screen) {
     //        QScreen *old_screen = windowHandle()->screen();
