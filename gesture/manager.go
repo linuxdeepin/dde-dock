@@ -24,10 +24,11 @@ import (
 )
 
 const (
-	tsSchemaID            = "com.deepin.dde.touchscreen"
-	tsSchemaKeyLongPress  = "longpress-duration"
-	tsSchemaKeyShortPress = "shortpress-duration"
-	tsSchemaKeyBlacklist  = "longpress-blacklist"
+	tsSchemaID              = "com.deepin.dde.touchscreen"
+	tsSchemaKeyLongPress    = "longpress-duration"
+	tsSchemaKeyShortPress   = "shortpress-duration"
+	tsSchemaKeyEdgeMoveStop = "edgemovestop-duration"
+	tsSchemaKeyBlacklist    = "longpress-blacklist"
 )
 
 type Manager struct {
@@ -46,10 +47,12 @@ type Manager struct {
 	Infos         gestureInfos
 
 	methods *struct {
-		SetLongPressDuration  func() `in:"duration"`
-		GetLongPressDuration  func() `out:"duration"`
-		SetShortPressDuration func() `in:"duration"`
-		GetShortPressDuration func() `out:"duration"`
+		SetLongPressDuration    func() `in:"duration"`
+		GetLongPressDuration    func() `out:"duration"`
+		SetShortPressDuration   func() `in:"duration"`
+		GetShortPressDuration   func() `out:"duration"`
+		SetEdgeMoveStopDuration func() `in:"duration"`
+		GetEdgeMoveStopDuration func() `out:"duration"`
 	}
 }
 
@@ -135,6 +138,10 @@ func (m *Manager) init() {
 	err = m.gesture.SetShortPressDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyShortPress)))
 	if err != nil {
 		logger.Warning("call SetShortPressDuration failed:", err)
+	}
+	err = m.gesture.SetEdgeMoveStopDuration(0, uint32(m.tsSetting.GetInt(tsSchemaKeyEdgeMoveStop)))
+	if err != nil {
+		logger.Warning("call SetEdgeMoveStopDuration failed:", err)
 	}
 
 	m.systemSigLoop.Start()

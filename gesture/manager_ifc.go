@@ -37,3 +37,20 @@ func (m *Manager) GetShortPressDuration() (uint32, *dbus.Error) {
 	return uint32(m.tsSetting.GetInt(tsSchemaKeyShortPress)), nil
 
 }
+
+func (m *Manager) SetEdgeMoveStopDuration(duration uint32) *dbus.Error {
+	if m.tsSetting.GetInt(tsSchemaKeyShortPress) == int32(duration) {
+		return nil
+	}
+	err := m.gesture.SetEdgeMoveStopDuration(0, duration)
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+	m.tsSetting.SetInt(tsSchemaKeyEdgeMoveStop, int32(duration))
+	return nil
+}
+
+func (m *Manager) GetEdgeMoveStopDuration() (uint32, *dbus.Error) {
+	return uint32(m.tsSetting.GetInt(tsSchemaKeyEdgeMoveStop)), nil
+
+}

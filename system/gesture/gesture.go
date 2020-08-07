@@ -140,8 +140,8 @@ type Manager struct {
 
 	// nolint
 	methods *struct {
-		SetShortPressDuration func() `in:"duration"`
-		SetEdgeMoveStopTime   func() `in:"duration"`
+		SetShortPressDuration   func() `in:"duration"`
+		SetEdgeMoveStopDuration func() `in:"duration"`
 	}
 
 	// nolint
@@ -153,8 +153,8 @@ type Manager struct {
 		}
 
 		TouchEdgeEvent struct {
-			direction string
-			distance  uint32
+			direction      string
+			scaleX, scaleY float64
 		}
 
 		TouchSinglePressTimeout struct {
@@ -218,7 +218,7 @@ func (*Manager) SetShortPressDuration(duration int) *dbus.Error {
 }
 
 //duration unit ms
-func (*Manager) SetEdgeMoveStopTime(duration int) *dbus.Error {
+func (*Manager) SetEdgeMoveStopDuration(duration int) *dbus.Error {
 	C.set_edge_move_stop_time(C.int(duration))
 	return nil
 }
@@ -246,11 +246,11 @@ func handleTouchEvent(ty, btn C.int) {
 }
 
 //export handleTouchScreenEvent
-func handleTouchScreenEvent(ty, direction, fingers, distance C.int) {
+func handleTouchScreenEvent(ty, direction, fingers C.int, scaleX, scaleY C.double) {
 	logger.Debug("emit touch event2:", TouchType(ty).String(),
-		TouchDirection(direction).String(), int32(fingers), uint32(distance))
+		TouchDirection(direction).String(), int32(fingers), float64(scaleX), float64(scaleY))
 	if int(ty) == int(C.get_edge_type()) {
-		err := _m.service.Emit(_m, "TouchEdgeEvent", TouchDirection(direction).String(), uint32(distance))
+		err := _m.service.Emit(_m, "TouchEdgeEvent", TouchDirection(direction).String(), float64(scaleX), float64(scaleY))
 		if err != nil {
 			logger.Error("handleTouchScreenEvent failed:", err)
 		}

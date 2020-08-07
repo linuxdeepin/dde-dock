@@ -451,15 +451,14 @@ enum Direction movement_direction(movement *m, list *ready) {
 }
 
 //edge event move side
-enum Direction edge_move_direction(movement *m, list *ready, int *distance) {
+enum Direction edge_move_direction(movement *m, list *ready) {
 	movement *cm;
 	point start;
 	node *cur = ready->head;
 	while (cur != NULL) {
 		cm = (m + *((size_t *)cur->value));
 		start = cm->start;
-		*distance = movement_length(cm);
-		if (*distance >= min_edge_distance) {
+		if (movement_length(cm) >= min_edge_distance) {
 			return discern_direction(start);
 		}
 		cur = cur->next;
@@ -468,7 +467,7 @@ enum Direction edge_move_direction(movement *m, list *ready, int *distance) {
 }
 
 //get touchscreeen gesture info
-gesture get_gesture(movement *m, list *ready, int *distance) {
+gesture get_gesture(movement *m, list *ready) {
 	gesture g = {0};
 	g.num = list_len(ready);
 	g.dir = movement_direction(m, ready);
@@ -477,7 +476,7 @@ gesture get_gesture(movement *m, list *ready, int *distance) {
 		g.type = GT_TAP;
 	} else if (g.num > 1) {
 		g.type = GT_MOVEMENT;
-	} else if ((edge_dir = edge_move_direction(m, ready, distance)) != DIR_NONE) {
+	} else if ((edge_dir = edge_move_direction(m, ready)) != DIR_NONE) {
 		g.type = GT_EDGE;
 		g.dir = edge_dir;
 	}
@@ -493,11 +492,11 @@ void handle_movements(movement *m) {
 		return;
 	}
 	logger("Handle movements: begin\n");
-	gesture g = get_gesture(m, ready, &distance);
+	gesture g = get_gesture(m, ready);
 	logger("Handle movements: got gesture\n");
 	print_gesture(&g);
 
-	handleTouchScreenEvent(gesture_to_int(g.type), direction_to_int(g.dir), g.num, distance);
+	handleTouchScreenEvent(gesture_to_int(g.type), direction_to_int(g.dir), g.num, last_point_scale.x, last_point_scale.y);
 
 	list_destroy(ready);
 	logger("Handle movements: end\n");
