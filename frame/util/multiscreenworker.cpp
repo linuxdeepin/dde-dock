@@ -483,7 +483,15 @@ void MultiScreenWorker::onPositionChanged()
     DockItem::setDockPosition(position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(position));
 
-    emit requestUpdatePosition(lastPos, position);
+    if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide)) {
+        // 这种情况切换位置,任务栏不需要显示
+        hideAni(m_ds.current());
+    } else {
+        // 一直显示的模式才需要显示
+        emit requestUpdatePosition(lastPos, position);
+    }
+
+    emit requestUpdateLayout(m_ds.current());
     emit requestUpdateRegionMonitor();
 }
 
@@ -1351,11 +1359,9 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
             }
         }
     }
-
 #ifdef QT_DEBUG
     qDebug() << rect;
 #endif
-
     return rect;
 }
 
@@ -1441,11 +1447,9 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
             }
         }
     }
-
 #ifdef QT_DEBUG
     qDebug() << rect;
 #endif
-
     return rect;
 }
 
