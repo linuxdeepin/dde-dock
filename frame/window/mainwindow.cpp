@@ -200,6 +200,13 @@ void MainWindow::moveEvent(QMoveEvent *event)
     Q_UNUSED(event);
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    adjustShadowMask();
+
+    return DBlurEffectWidget::resizeEvent(event);
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);
@@ -300,9 +307,12 @@ void MainWindow::adjustShadowMask()
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
 
-    qDebug() << "#";
-    qDebug() << int(composite && isFasion ? radius : 0);
-    m_platformWindowHandle.setWindowRadius(composite && isFasion ? radius : 0);
+    int newRadius = composite && isFasion ? radius : 0;
+    m_platformWindowHandle.setWindowRadius(newRadius);
+
+    QPainterPath clipPath;
+    clipPath.addRect(QRect(QPoint(0, 0), this->geometry().size()));
+    m_platformWindowHandle.setClipPath(clipPath);
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
@@ -371,7 +381,7 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
     const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
                                                       , m_multiScreenWorker->position()
                                                       , HideMode::KeepShowing,
-                                                       m_multiScreenWorker->displayMode());
+                                                      m_multiScreenWorker->displayMode());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
     case Top: {
