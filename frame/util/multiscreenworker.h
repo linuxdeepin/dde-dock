@@ -172,12 +172,6 @@ public:
      */
     QRect realDockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
 
-    /**
-     * @brief handleLeaveEvent  状态为隐藏时,离开任务栏需要隐藏任务栏
-     * @param event             离开事件
-     */
-    void handleLeaveEvent(QEvent *event);
-
 signals:
     void opacityChanged(const quint8 value) const;
     void displayModeChanegd();
@@ -201,6 +195,7 @@ public slots:
 private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
+    void onExtralRegionMonitorChanged(int x, int y, const QString &key);
 
     // Display Monitor
     void onMonitorListChanged(const QList<QDBusObjectPath> &mons);
@@ -309,6 +304,7 @@ private:
 
     // monitor screen
     XEventMonitor *m_eventInter;
+    XEventMonitor *m_extralEventInter;
 
     // DBus interface
     DBusDock *m_dockInter;
@@ -339,12 +335,14 @@ private:
     int m_screenRawHeight;
     int m_screenRawWidth;
     QString m_registerKey;
+    QString m_extralRegisterKey;
     QString m_leaveRegisterKey;
     bool m_aniStart;                            // changeDockPosition是否正在运行中
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
+    QList<MonitRect> m_extralRectList;          // 任务栏外部区域,随m_monitorRectList一起更新
     /*****************************************************************/
 };
 

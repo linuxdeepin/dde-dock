@@ -200,12 +200,6 @@ void MainWindow::moveEvent(QMoveEvent *event)
     Q_UNUSED(event);
 }
 
-void MainWindow::leaveEvent(QEvent *e)
-{
-    QWidget::leaveEvent(e);
-    return m_multiScreenWorker->handleLeaveEvent(e);
-}
-
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);

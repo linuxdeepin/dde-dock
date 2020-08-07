@@ -133,7 +133,6 @@ private:
     void mousePressEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void enterEvent(QEvent *e) override;
-    void leaveEvent(QEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void moveEvent(QMoveEvent *event) override;

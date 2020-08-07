@@ -40,6 +40,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_wmHelper(helper)
     , m_xcbMisc(XcbMisc::instance())
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
+    , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
@@ -120,36 +121,6 @@ QRect MultiScreenWorker::realDockRect(const QString &screenName, const Position 
         return getDockHideGeometry(screenName, pos, displayMode, true);
 }
 
-void MultiScreenWorker::handleLeaveEvent(QEvent *event)
-{
-    Q_UNUSED(event);
-
-    if (m_hideMode == HideMode::KeepShowing)
-        return;
-
-    if (!m_autoHide)
-        return;
-
-    // 判断是否还在'离开'监控区域内,是的话不处理,否则按照显示状态来处理
-    if (!contains(m_monitorRectList, scaledPos(QCursor::pos()))) {
-        switch (m_hideMode) {
-        case HideMode::SmartHide: {
-            if (m_hideState == HideState::Show) {
-                showAni(m_ds.current());
-            } else {
-                hideAni(m_ds.current());
-            }
-        }
-        break;
-        case HideMode::KeepHidden:
-            hideAni(m_ds.current());
-            break;
-        default:
-            return;
-        }
-    }
-}
-
 void MultiScreenWorker::onAutoHideChanged(bool autoHide)
 {
     m_autoHide = autoHide;
@@ -221,6 +192,9 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
 
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
+    if (m_registerKey != key)
+        return;
+
     // 鼠标按下状态不响应唤醒
     if (m_btnPress)
         return;
@@ -229,21 +203,6 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
         qDebug() << "dock is draging or animation is running";
         return;
     }
-
-    // 这里收到鼠标事件是全局的,不应该仅仅是任务栏唤醒区域之内的,所以要放在判断m_registerKey之前
-    if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
-        // 应该隐藏掉
-        QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-        QRect realRect { rect.topLeft(), rect.size() *qApp->devicePixelRatio() };
-        const QRect boundRect = parent()->visibleRegion().boundingRect();
-        if (!realRect.contains(QPoint(x, y)) && !boundRect.size().isEmpty() && !m_launcherInter->IsVisible() && m_autoHide) {
-            if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide))
-                hideAni(m_ds.current());
-        }
-    }
-
-    if (m_registerKey != key)
-        return;
 
     QString toScreen;
     QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
@@ -337,6 +296,20 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
         if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
                 && (boundRect.size().isEmpty())) {
             showAni(m_ds.current());
+        }
+    }
+}
+
+// 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
+void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString &key)
+{
+    if (m_extralRegisterKey != key)
+        return;
+
+    if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
+        if (!m_launcherInter->IsVisible() && m_autoHide && !m_draging && !m_aniStart) {
+            if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide))
+                hideAni(m_ds.current());
         }
     }
 }
@@ -509,10 +482,17 @@ void MultiScreenWorker::onDisplayModeChanged()
     DockItem::setDockDisplayMode(displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(displayMode));
 
-    parent()->setFixedSize(dockRect(m_ds.current()).size());
-    parent()->move(dockRect(m_ds.current()).topLeft());
+    QRect rect;
+    if (m_hideMode == HideMode::KeepShowing || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Show)) {
+        rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    } else {
+        rect = dockRect(m_ds.current(), m_position, HideMode::KeepHidden, m_displayMode);
+    }
 
-    parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
+    parent()->setFixedSize(rect.size());
+    parent()->move(rect.topLeft());
+
+    parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
     parent()->panel()->setDisplayMode(m_displayMode);
 
@@ -581,8 +561,19 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         m_registerKey.clear();
     }
 
+    if (!m_extralRegisterKey.isEmpty()) {
+#ifdef QT_DEBUG
+        bool ret = m_extralEventInter->UnregisterArea(m_extralRegisterKey);
+        qDebug() << "取消任务栏外部区域监听:" << ret;
+#else
+        m_extralEventInter->UnregisterArea(m_extralRegisterKey);
+#endif
+        m_extralRegisterKey.clear();
+    }
+
     const static int flags = Motion | Button | Key;
     const static int monitorHeight = 15;
+    const int dockSize = int(m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10/*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient());
 
     // 任务栏唤起区域
     m_monitorRectList.clear();
@@ -631,7 +622,54 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         }
     }
 
+    m_extralRectList.clear();
+    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+        // 屏幕不可用或此位置不可停靠时，不用监听这块区域
+        if (!inter->enable() || !inter->dockPosition().docked(m_position))
+            continue;
+
+        MonitRect rect;
+        switch (m_position) {
+        case Top: {
+            rect.x1 = inter->x();
+            rect.y1 = inter->y() + dockSize;
+            rect.x2 = inter->x() + inter->w();
+            rect.y2 = inter->y() + inter->h();
+        }
+        break;
+        case Bottom: {
+            rect.x1 = inter->x();
+            rect.y1 = inter->y();
+            rect.x2 = inter->x() + inter->w();
+            rect.y2 = inter->y() + inter->h() - dockSize;
+        }
+        break;
+        case Left: {
+            rect.x1 = inter->x() + dockSize;
+            rect.y1 = inter->y();
+            rect.x2 = inter->x() + inter->w();
+            rect.y2 = inter->y() + inter->h();
+        }
+        break;
+        case Right: {
+            rect.x1 = inter->x();
+            rect.y1 = inter->y();
+            rect.x2 = inter->x() + inter->w() - dockSize;
+            rect.y2 = inter->y() + inter->h();
+        }
+        break;
+        }
+
+        if (!m_extralRectList.contains(rect)) {
+            m_extralRectList << rect;
+#ifdef QT_DEBUG
+            qDebug() << "任务栏外部区域：" << rect.x1 << rect.y1 << rect.x2 << rect.y2;
+#endif
+        }
+    }
+
     m_registerKey = m_eventInter->RegisterAreas(m_monitorRectList, flags);
+    m_extralRegisterKey = m_extralEventInter->RegisterAreas(m_extralRectList, flags);
 }
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry()
@@ -945,6 +983,8 @@ void MultiScreenWorker::initConnection()
     connect(m_eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
     connect(m_eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
     connect(m_eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
+
+    connect(m_extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
 
     connect(this, &MultiScreenWorker::requestUpdateRegionMonitor, this, &MultiScreenWorker::onRequestUpdateRegionMonitor);
     connect(this, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &MultiScreenWorker::onRequestUpdateFrontendGeometry);
