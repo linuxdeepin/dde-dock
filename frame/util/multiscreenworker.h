@@ -342,7 +342,7 @@ private:
     QString m_leaveRegisterKey;
     bool m_aniStart;                            // changeDockPosition是否正在运行中
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
-    bool m_autoHide;                            // 和DockSettings保持一致,可以直接使用其单例进行获取
+    bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
     /*****************************************************************/

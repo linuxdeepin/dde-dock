@@ -221,9 +221,6 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
 
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-    if (m_registerKey != key)
-        return;
-
     // 鼠标按下状态不响应唤醒
     if (m_btnPress)
         return;
@@ -232,6 +229,21 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
         qDebug() << "dock is draging or animation is running";
         return;
     }
+
+    // 这里收到鼠标事件是全局的,不应该仅仅是任务栏唤醒区域之内的,所以要放在判断m_registerKey之前
+    if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
+        // 应该隐藏掉
+        QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+        QRect realRect { rect.topLeft(), rect.size() *qApp->devicePixelRatio() };
+        const QRect boundRect = parent()->visibleRegion().boundingRect();
+        if (!realRect.contains(QPoint(x, y)) && !boundRect.size().isEmpty() && !m_launcherInter->IsVisible() && m_autoHide) {
+            if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide))
+                hideAni(m_ds.current());
+        }
+    }
+
+    if (m_registerKey != key)
+        return;
 
     QString toScreen;
     QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
@@ -873,6 +885,19 @@ void MultiScreenWorker::initConnection()
     connect(m_showAni, &QVariantAnimation::finished, this, &MultiScreenWorker::showAniFinished);
     connect(m_hideAni, &QVariantAnimation::finished, this, &MultiScreenWorker::hideAniFinished);
 
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, [ = ] {
+        const bool composite = m_wmHelper->hasComposite();
+
+#ifndef DISABLE_SHOW_ANIMATION
+        const int duration = composite ? ANIMATIONTIME : 0;
+#else
+        const int duration = 0;
+#endif
+
+        m_showAni->setDuration(duration);
+        m_hideAni->setDuration(duration);
+    });
+
     //FIX: 这里关联信号有时候收不到,未查明原因,handleDbusSignal处理
 #if 0
     //    connect(m_dockInter, &DBusDock::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
@@ -1288,8 +1313,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
                 break;
             }
         }
-    }
-    else {
+    } else {
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
                 const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
@@ -1379,8 +1403,7 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
             }
         }
 
-    }
-    else {
+    } else {
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
                 const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
