@@ -106,8 +106,6 @@ MainWindow::MainWindow(QWidget *parent)
     initComponents();
     initConnections();
 
-    //TODO 优先更新一下任务栏所在屏幕
-    qDebug() << m_multiScreenWorker->deskScreen();
     resetDragWindow();
 
     m_mainPanel->setDelegate(this);
@@ -312,7 +310,8 @@ void MainWindow::adjustShadowMask()
 
     QPainterPath clipPath;
     clipPath.addRect(QRect(QPoint(0, 0), this->geometry().size()));
-    m_platformWindowHandle.setClipPath(clipPath);
+
+    m_platformWindowHandle.setClipPath(newRadius != 0 ? QPainterPath() : clipPath);
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
@@ -361,8 +360,12 @@ void MainWindow::resetDragWindow()
         break;
     }
 
-    if (m_dockSize == 0)
-        m_dockSize = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()).height();
+    if (m_multiScreenWorker->position() == Position::Left
+            || m_multiScreenWorker->position() == Position::Right) {
+        m_dockSize = this->width();
+    } else {
+        m_dockSize = this->height();
+    }
 
     // 通知窗管和后端更新数据
     m_multiScreenWorker->updateDaemonDockSize(m_dockSize);      // 1.先更新任务栏高度

@@ -756,11 +756,6 @@ void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const P
     changeDockPosition(m_ds.last(), m_ds.current(), fromPos, toPos);
 }
 
-void MultiScreenWorker::onRequestUpdateDragArea()
-{
-    parent()->resetDragWindow();
-}
-
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
 {
 #ifdef QT_DEBUG
@@ -990,7 +985,6 @@ void MultiScreenWorker::initConnection()
     connect(this, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &MultiScreenWorker::onRequestUpdateFrontendGeometry);
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
     connect(this, &MultiScreenWorker::requestNotifyWindowManager, this, &MultiScreenWorker::onRequestNotifyWindowManager);
-    connect(this, &MultiScreenWorker::requestUpdateDragArea, this, &MultiScreenWorker::onRequestUpdateDragArea);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
 
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, [ = ] {

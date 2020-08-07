@@ -178,12 +178,12 @@ signals:
 
     // 更新监视区域
     void requestUpdateRegionMonitor();
-    void requestUpdateFrontendGeometry();      //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
+    void requestUpdateFrontendGeometry();                       //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
     void requestUpdateLayout(const QString &screenName);        //　界面需要根据任务栏更新布局的方向
     void requestUpdateDragArea();                               //　更新拖拽区域
-    void requestUpdateMonitorInfo();                                   //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
+    void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
 
 public slots:
     void onAutoHideChanged(bool autoHide);
@@ -229,7 +229,6 @@ private slots:
 
     void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
-    void onRequestUpdateDragArea();
     void onRequestUpdateMonitorInfo();
 
     void updateMonitorDockedInfo();
