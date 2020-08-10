@@ -24,6 +24,7 @@ import (
 
 	"pkg.deepin.io/dde/api/soundutils"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/dbus1"
 )
 
 const (
@@ -107,7 +108,17 @@ func (m *Manager) handleWakeup() {
 	}
 
 	m.setDPMSModeOn()
-	m.helper.Power.RefreshBatteries(0)
+
+	ch := make(chan *dbus.Call, 1)
+	m.helper.Power.GoRefreshBatteries(0, ch)
+	go func() {
+		select {
+		case <-ch:
+		case <-time.After(2 * time.Second):
+			return
+		}
+	}()
+
 	playSound(soundutils.EventWakeup)
 }
 
