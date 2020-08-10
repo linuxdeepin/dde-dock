@@ -36,12 +36,12 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_tapAndHold(false)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
     , m_itemKey(itemKey)
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
-    m_popupTipsDelayTimer = new QTimer(this);
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
     m_centralWidget->installEventFilter(this);

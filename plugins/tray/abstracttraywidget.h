@@ -45,7 +45,6 @@ public:
     virtual const QImage trayImage() = 0;
     virtual inline TrayType trayTyep() const { return TrayType::ApplicationTray; } // default is ApplicationTray
     virtual bool isValid() {return true;}
-    virtual void setMouseData(QMouseEvent *e);
 
 Q_SIGNALS:
     void iconChanged();
@@ -66,8 +65,5 @@ private:
     QTimer *m_handleMouseReleaseTimer;
 
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
-
-protected:
-    QTimer *m_popupTipsDelayTimer;
 };
 

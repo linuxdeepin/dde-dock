@@ -136,6 +136,7 @@ private:
     QString m_sniOverlayIconName;
     DBusImageList m_sniOverlayIconPixmap;
     QString m_sniStatus;
+    QTimer *m_popupTipsDelayTimer;
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
     Dock::TipsWidget *m_tipsLabel;
