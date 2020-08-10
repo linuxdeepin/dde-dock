@@ -113,7 +113,8 @@ protected:
     QMenu m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
-    QPointer<HoverHighlightEffect> m_hoverEffect;
+    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
+//    QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;

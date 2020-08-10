@@ -40,7 +40,8 @@ DockItem::DockItem(QWidget *parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_draging(false)
-    , m_hoverEffect(new HoverHighlightEffect(this))
+    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
+//    , m_hoverEffect(new HoverHighlightEffect(this))
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
 
@@ -62,8 +63,8 @@ DockItem::DockItem(QWidget *parent)
 
     m_popupAdjustDelayTimer->setInterval(10);
     m_popupAdjustDelayTimer->setSingleShot(true);
-
-    setGraphicsEffect(m_hoverEffect);
+//FIXME: 可能是qt的bug，概率性导致崩溃，待修复
+//    setGraphicsEffect(m_hoverEffect);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
@@ -179,7 +180,8 @@ void DockItem::enterEvent(QEvent *e)
     }
 
     m_hover = true;
-    m_hoverEffect->setHighlighting(true);
+    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
+//    m_hoverEffect->setHighlighting(true);
     m_popupTipsDelayTimer->start();
 
     update();
@@ -192,7 +194,8 @@ void DockItem::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_hover = false;
-    m_hoverEffect->setHighlighting(false);
+    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
+//    m_hoverEffect->setHighlighting(false);
     m_popupTipsDelayTimer->stop();
 
     // auto hide if popup is not model window
