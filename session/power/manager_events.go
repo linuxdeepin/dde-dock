@@ -111,10 +111,17 @@ func (m *Manager) handleWakeup() {
 	}
 
 	m.setDPMSModeOn()
-	err := m.helper.Power.RefreshBatteries(0)
-	if err != nil {
-		logger.Warning(err)
-	}
+
+	ch := make(chan *dbus.Call, 1)
+	m.helper.Power.GoRefreshBatteries(0, ch)
+	go func() {
+		select {
+		case <-ch:
+		case <-time.After(2 * time.Second):
+			return
+		}
+	}()
+
 	playSound(soundutils.EventWakeup)
 }
 
