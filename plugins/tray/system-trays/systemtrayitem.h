@@ -102,10 +102,7 @@ private:
 
     PluginsItemInterface* m_pluginInter;
     QWidget *m_centralWidget;
-
-    QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;
-
     QPointer<QWidget> m_lastPopupWidget;
     QString m_itemKey;
 

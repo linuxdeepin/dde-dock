@@ -47,8 +47,12 @@ void AbstractTrayWidget::mousePressEvent(QMouseEvent *event)
     // when right button of mouse is pressed immediately in fashion mode
 
     // here we hide the right button press event when it is click in the special area
+
+    //enterEvent事件会以计时器方式调起悬停窗口，在这里进行关闭
+    m_popupTipsDelayTimer->stop();
     if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos(), true)) {
         event->accept();
+        setMouseData(event);
         return;
     }
 
@@ -62,10 +66,7 @@ void AbstractTrayWidget::mouseReleaseEvent(QMouseEvent *e)
     // 由于 XWindowTrayWidget 中对 发送鼠标事件到X窗口的函数, 如 sendClick/sendHoverEvent 中
     // 使用了 setX11PassMouseEvent, 而每次调用 setX11PassMouseEvent 时都会导致产生 mousePress 和 mouseRelease 事件
     // 因此如果直接在这里处理事件会导致一些问题, 所以使用 Timer 来延迟处理 100 毫秒内的最后一个事件
-    m_lastMouseReleaseData.first = e->pos();
-    m_lastMouseReleaseData.second = e->button();
-
-    m_handleMouseReleaseTimer->start();
+    setMouseData(e);
 
     QWidget::mouseReleaseEvent(e);
 }
@@ -131,4 +132,12 @@ void AbstractTrayWidget::resizeEvent(QResizeEvent *event)
         setMaximumHeight(width());
         setMaximumWidth(QWIDGETSIZE_MAX);
     }
+}
+
+void AbstractTrayWidget::setMouseData(QMouseEvent *e)
+{
+    m_lastMouseReleaseData.first = e->pos();
+    m_lastMouseReleaseData.second = e->button();
+
+    m_handleMouseReleaseTimer->start();
 }
