@@ -39,20 +39,31 @@ void PluginLoader::run()
     static const QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
     static const auto disable_plugins_list = gsetting.get("disable-plugins-list").toStringList();
 
-    for (QString file : plugins)
+    for (const QString& file : plugins)
     {
-        if (!QLibrary::isLibrary(file))
-            continue;
-
-        // TODO: old dock plugins is uncompatible
-        if (file.startsWith("libdde-dock-"))
-            continue;
-
-        if (disable_plugins_list.contains(file)) {
-            qDebug() << "disable loading plugin:" << file;
+        if (!QLibrary::isLibrary(file)){
+#ifdef QT_DEBUG
+            qDebug() << "--------not a library: " << pluginsDir.absoluteFilePath(file);
+#endif
             continue;
         }
 
+        // TODO: old dock plugins is uncompatible
+        if (file.startsWith("libdde-dock-")) {
+#ifdef QT_DEBUG
+            qDebug() << "--------uncompatible library: " << pluginsDir.absoluteFilePath(file);
+#endif
+            continue;
+        }
+
+        if (disable_plugins_list.contains(file)) {
+            qDebug() << "disable loading plugin:" << pluginsDir.absoluteFilePath(file);
+            continue;
+        }
+
+#ifdef QT_DEBUG
+        qDebug() << "----------loaded: " << pluginsDir.absoluteFilePath(file);
+#endif
         emit pluginFounded(pluginsDir.absoluteFilePath(file));
     }
 

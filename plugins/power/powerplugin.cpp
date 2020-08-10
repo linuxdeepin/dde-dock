@@ -22,6 +22,7 @@
 #include "powerplugin.h"
 #include "dbus/dbusaccount.h"
 #include "../widgets/tipswidget.h"
+#include "../frame/util/utils.h"
 
 #include <QIcon>
 #include <QGSettings>
@@ -121,11 +122,13 @@ const QString PowerPlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(6);
 
-    QMap<QString, QVariant> power;
-    power["itemId"] = "power";
-    power["itemText"] = tr("Power settings");
-    power["isActive"] = true;
-    items.push_back(power);
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        QMap<QString, QVariant> power;
+        power["itemId"] = "power";
+        power["itemText"] = tr("Power settings");
+        power["isActive"] = true;
+        items.push_back(power);
+    }
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

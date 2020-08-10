@@ -19,18 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sounditem.h"
-#include "constants.h"
-
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+#include <QGSettings>
+
 #include <QApplication>
 #include <DApplication>
 #include <DDBusSender>
+#include <DGuiApplicationHelper>
+
+#include "sounditem.h"
+#include "constants.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
-#include <DGuiApplicationHelper>
+#include "../frame/util/utils.h"
 
 // menu actions
 #define MUTE     "mute"
@@ -88,11 +91,19 @@ const QString SoundItem::contextMenu() const
     open["isActive"] = true;
     items.push_back(open);
 
-    QMap<QString, QVariant> settings;
-    settings["itemId"] = SETTINGS;
-    settings["itemText"] = tr("Sound settings");
-    settings["isActive"] = true;
-    items.push_back(settings);
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        QMap<QString, QVariant> settings;
+        settings["itemId"] = SETTINGS;
+        settings["itemText"] = tr("Sound settings");
+        settings["isActive"] = true;
+        items.push_back(settings);
+#ifdef QT_DEBUG
+        qInfo() << "----------icbc sound setting.";
+    } else {
+        qInfo() << "----------icbc sound none.";
+#endif
+    }
+
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

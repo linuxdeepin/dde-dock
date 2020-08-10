@@ -21,6 +21,7 @@
 
 #include "datetimeplugin.h"
 #include "../../widgets/tipswidget.h"
+#include "../../frame/util/utils.h"
 
 #include <DDBusSender>
 #include <QLabel>
@@ -159,11 +160,13 @@ const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
     settings["isActive"] = true;
     items.push_back(settings);
 
-    QMap<QString, QVariant> open;
-    open["itemId"] = "open";
-    open["itemText"] = tr("Time settings");
-    open["isActive"] = true;
-    items.push_back(open);
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        QMap<QString, QVariant> open;
+        open["itemId"] = "open";
+        open["itemText"] = tr("Time settings");
+        open["isActive"] = true;
+        items.push_back(open);
+    }
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

@@ -21,6 +21,7 @@
 
 #include "shutdownplugin.h"
 #include "dbus/dbusaccount.h"
+#include "../frame/util/utils.h"
 #include "../widgets/tipswidget.h"
 
 #include <QIcon>
@@ -161,21 +162,23 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     logout["isActive"] = true;
     items.push_back(logout);
 
-    if (DBusAccount().userList().count() > 1) {
-        QMap<QString, QVariant> switchUser;
-        switchUser["itemId"] = "SwitchUser";
-        switchUser["itemText"] = tr("Switch account");
-        switchUser["isActive"] = true;
-        items.push_back(switchUser);
-    }
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        if (DBusAccount().userList().count() > 1) {
+            QMap<QString, QVariant> switchUser;
+            switchUser["itemId"] = "SwitchUser";
+            switchUser["itemText"] = tr("Switch account");
+            switchUser["isActive"] = true;
+            items.push_back(switchUser);
+        }
 
 #ifndef DISABLE_POWER_OPTIONS
-    QMap<QString, QVariant> power;
-    power["itemId"] = "power";
-    power["itemText"] = tr("Power settings");
-    power["isActive"] = true;
-    items.push_back(power);
+        QMap<QString, QVariant> power;
+        power["itemId"] = "power";
+        power["itemText"] = tr("Power settings");
+        power["isActive"] = true;
+        items.push_back(power);
 #endif
+    }
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;
@@ -192,12 +195,22 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "power")
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
-    else if (menuId == "Lock")
-        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                << "--dest=com.deepin.dde.lockFront"
-                                << "/com/deepin/dde/lockFront"
-                                << QString("com.deepin.dde.lockFront.Show"));
-    else
+    else if (menuId == "Lock") {
+        if (QFile::exists(ICBC_CONF_FILE)) {
+            QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
+            QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus","unix:path=/run/user/1000/bus");
+            QDBusMessage reply = conn.call(send);
+#ifdef QT_DEBUG
+            qInfo()<<"----------"<<reply;
+#endif
+
+        } else {
+            QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                    << "--dest=com.deepin.dde.lockFront"
+                                    << "/com/deepin/dde/lockFront"
+                                    << QString("com.deepin.dde.lockFront.Show"));
+        }
+    } else
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
                                 << "--dest=com.deepin.dde.shutdownFront"
                                 << "/com/deepin/dde/shutdownFront"

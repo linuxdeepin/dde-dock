@@ -2,8 +2,12 @@
 #include <QImageReader>
 #include <QApplication>
 #include <QScreen>
+#include <QGSettings>
 
 namespace Utils {
+
+    #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
+
     inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
     QImageReader reader;
     QPixmap pixmap;
@@ -54,5 +58,17 @@ namespace Utils {
         }
 
         return nullptr;
+    }
+
+    inline bool isSettingConfigured(const QString& id, const QString& path, const QString& keyName) {
+        if (!QGSettings::isSchemaInstalled(id.toUtf8())) {
+            return false;
+        }
+        QGSettings setting(id.toUtf8(), path.toUtf8());
+        QVariant v = setting.get(keyName);
+        if (!v.isValid()) {
+            return false;
+        }
+        return v.toBool();
     }
 }
