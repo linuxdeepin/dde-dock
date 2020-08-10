@@ -273,15 +273,6 @@ void MainWindow::initConnections()
     connect(m_multiScreenWorker, &MultiScreenWorker::opacityChanged, this, &MainWindow::setMaskAlpha, Qt::QueuedConnection);
     connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanegd, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
-    //　更新任务栏内容展示
-    connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateLayout, this, [ = ](const QString & screenName) {
-        m_mainPanel->setFixedSize(m_multiScreenWorker->dockRect(screenName, m_multiScreenWorker->position(), HideMode::KeepShowing, m_multiScreenWorker->displayMode()).size());
-        m_mainPanel->move(0, 0);
-        m_mainPanel->setDisplayMode(m_multiScreenWorker->displayMode());
-        m_mainPanel->setPositonValue(m_multiScreenWorker->position());
-        m_mainPanel->update();
-    });
-
     //　更新拖拽区域
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDragArea, this, &MainWindow::resetDragWindow);
 }
@@ -368,8 +359,8 @@ void MainWindow::resetDragWindow()
     }
 
     // 通知窗管和后端更新数据
-    m_multiScreenWorker->updateDaemonDockSize(m_dockSize);      // 1.先更新任务栏高度
-    m_multiScreenWorker->requestUpdateFrontendGeometry();       // 2.再更新任务栏位置,保证先1再2
+    m_multiScreenWorker->updateDaemonDockSize(m_dockSize / qApp->devicePixelRatio());   // 1.先更新任务栏高度
+    m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
 
     if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {
@@ -392,17 +383,13 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         newRect.setY(rect.y());
         newRect.setWidth(rect.width());
         newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset.y(), MAINWINDOW_MAX_SIZE));
-
-        m_dockSize = newRect.height();
     }
     break;
     case Bottom: {
         newRect.setX(rect.x());
         newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
         newRect.setWidth(rect.width());
-        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
-
-        m_dockSize = newRect.height();
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE ));
     }
     break;
     case Left: {
@@ -410,8 +397,6 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         newRect.setY(rect.y());
         newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() + offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
-
-        m_dockSize = newRect.width();
     }
     break;
     case Right: {
@@ -419,11 +404,12 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         newRect.setY(rect.y());
         newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
-
-        m_dockSize = newRect.width();
     }
     break;
     }
+
+    const Position pos = m_multiScreenWorker->position();
+    m_dockSize = ((pos == Position::Top || pos == Position::Bottom) ? newRect.height() : newRect.width());
 
     // 更新界面大小
     m_mainPanel->setFixedSize(newRect.size());
