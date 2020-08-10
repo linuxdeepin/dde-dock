@@ -47,11 +47,15 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
     , m_popupTipsDelayTimer(new QTimer(this))
+    , m_handleMouseReleaseTimer(new QTimer(this))
     , m_tipsLabel(new TipsWidget)
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
+    m_handleMouseReleaseTimer->setSingleShot(true);
+    m_handleMouseReleaseTimer->setInterval(100);
 
+    connect(m_handleMouseReleaseTimer, &QTimer::timeout, this, &SNITrayWidget::handleMouseRelease);
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SNITrayWidget::showHoverTips);
 
     if (PopupWindow.isNull()) {
@@ -578,6 +582,68 @@ void SNITrayWidget::leaveEvent(QEvent *event)
     AbstractTrayWidget::leaveEvent(event);
 }
 
+void SNITrayWidget::mousePressEvent(QMouseEvent *event)
+{
+    // call QWidget::mousePressEvent means to show dock-context-menu
+    // when right button of mouse is pressed immediately in fashion mode
+
+    // here we hide the right button press event when it is click in the special area
+    m_popupTipsDelayTimer->stop();
+    if (event->button() == Qt::RightButton && perfectIconRect().contains(event->pos(), true)) {
+        event->accept();
+        setMouseData(event);
+        return;
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
+void SNITrayWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+    //e->accept();
+
+    // 由于 XWindowTrayWidget 中对 发送鼠标事件到X窗口的函数, 如 sendClick/sendHoverEvent 中
+    // 使用了 setX11PassMouseEvent, 而每次调用 setX11PassMouseEvent 时都会导致产生 mousePress 和 mouseRelease 事件
+    // 因此如果直接在这里处理事件会导致一些问题, 所以使用 Timer 来延迟处理 100 毫秒内的最后一个事件
+    setMouseData(e);
+
+    QWidget::mouseReleaseEvent(e);
+}
+
+void SNITrayWidget::handleMouseRelease()
+{
+    Q_ASSERT(sender() == m_handleMouseReleaseTimer);
+
+    // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
+    if (trayTyep() == SystemTray)
+        return;
+
+    const QPoint point(m_lastMouseReleaseData.first - rect().center());
+    if (point.manhattanLength() > 24)
+        return;
+
+    QPoint globalPos = QCursor::pos();
+    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
+
+    switch (m_lastMouseReleaseData.second) {
+    case Qt:: MiddleButton:
+        buttonIndex = XCB_BUTTON_INDEX_2;
+        break;
+    case Qt::RightButton:
+        buttonIndex = XCB_BUTTON_INDEX_3;
+        break;
+    default:
+        break;
+    }
+
+    sendClick(buttonIndex, globalPos.x(), globalPos.y());
+
+    // left mouse button clicked
+    if (buttonIndex == XCB_BUTTON_INDEX_1) {
+        Q_EMIT clicked();
+    }
+}
+
 void SNITrayWidget::showHoverTips()
 {
     if (PopupWindow->model())
@@ -700,4 +766,12 @@ void SNITrayWidget::showPopupWindow(QWidget *const content, const bool model)
         QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
     else
         popup->show(p, model);
+}
+
+void SNITrayWidget::setMouseData(QMouseEvent *e)
+{
+    m_lastMouseReleaseData.first = e->pos();
+    m_lastMouseReleaseData.second = e->button();
+
+    m_handleMouseReleaseTimer->start();
 }

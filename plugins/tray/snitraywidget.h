@@ -101,10 +101,14 @@ private Q_SLOTS:
     void popupWindowAccept();
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
     void paintEvent(QPaintEvent *e) override;
     QPixmap newIconPixmap(IconType iconType);
+    void setMouseData(QMouseEvent *e);
+    void handleMouseRelease();
 
 private:
     StatusNotifierItem *m_sniInter;
@@ -137,6 +141,8 @@ private:
     DBusImageList m_sniOverlayIconPixmap;
     QString m_sniStatus;
     QTimer *m_popupTipsDelayTimer;
+    QTimer *m_handleMouseReleaseTimer;
+    QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
     Dock::TipsWidget *m_tipsLabel;
