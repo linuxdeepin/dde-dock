@@ -33,7 +33,7 @@ import (
 const (
 	deviceStateDisconnected = 0
 	// device state is connecting or disconnecting, mark them as device state doing
-	deviceStateDoing         = 1
+	deviceStateConnecting    = 1
 	deviceStateConnected     = 2
 	deviceStateDisconnecting = 3
 )
@@ -44,8 +44,8 @@ func (s deviceState) String() string {
 	switch s {
 	case deviceStateDisconnected:
 		return "Disconnected"
-	case deviceStateDoing:
-		return "doing"
+	case deviceStateConnecting:
+		return "Connecting"
 	case deviceStateConnected:
 		return "Connected"
 	case deviceStateDisconnecting:
@@ -451,11 +451,11 @@ func (d *device) getState() deviceState {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	if d.agentWorking {
-		return deviceStateDoing
+		return deviceStateConnecting
 	}
 
 	if d.connectPhase != connectPhaseNone {
-		return deviceStateDoing
+		return deviceStateConnecting
 
 	} else if d.disconnectPhase != connectPhaseNone {
 		return deviceStateDisconnecting
