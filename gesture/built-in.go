@@ -38,6 +38,7 @@ const (
 
 func (m *Manager) initBuiltinSets() {
 	m.builtinSets = map[string]func() error{
+		"ShowWorkspace":              m.toggleShowMultiTasking,
 		"Handle4Or5FingersSwipeUp":   m.doHandle4Or5FingersSwipeUp,
 		"Handle4Or5FingersSwipeDown": m.doHandle4Or5FingersSwipeDown,
 		"ToggleMaximize":             m.doToggleMaximize,
