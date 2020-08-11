@@ -513,7 +513,7 @@ func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		if err != nil {
 			return
 		}
-		_, err = m.ActivateConnection(uuid, devPath)
+		_, err = m.activateConnection(uuid, devPath)
 		if err != nil {
 			logger.Debug("failed to activate a connection")
 			return
