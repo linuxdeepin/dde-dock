@@ -36,24 +36,6 @@
         }
     },
     {
-        "Name": "pinch",
-        "Direction": "in",
-        "Fingers": 3,
-        "Action": {
-            "Type": "built-in",
-            "Action": "ShowWindow"
-        }
-    },
-    {
-        "Name": "pinch",
-        "Direction": "out",
-        "Fingers": 3,
-        "Action": {
-            "Type": "built-in",
-            "Action": "ShowWindow"
-        }
-    },
-    {
         "Name": "tap",
         "Direction": "none",
         "Fingers": 3,
