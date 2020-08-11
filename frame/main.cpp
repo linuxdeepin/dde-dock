@@ -113,9 +113,11 @@ void sig_crash(int sig)
     QDateTime lastDate = QDateTime::fromString(settings.value("lastDate").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
     int collapseNum = settings.value("collapse").toInt();
 
-    // 3分钟以内发生崩溃则累加,记录到文件中
-    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 60 * 3) {
+    // 10秒以内发生崩溃则累加,记录到文件中
+    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 10) {
         settings.setValue("collapse", collapseNum + 1);
+    } else {
+        settings.setValue("collapse", 0);
     }
     settings.setValue("lastDate", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
     settings.endGroup();
