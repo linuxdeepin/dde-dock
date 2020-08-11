@@ -475,6 +475,12 @@ func (m *Manager) init() error {
 	m.sysSigLoop.Start()
 	m.login1Manager = login1.NewManager(systemBus)
 	m.login1Manager.InitSignalExt(m.sysSigLoop, true)
+	if m.WallpaperURIs.Get() == "" { // 壁纸设置更新为v2.0版本，但是数据依旧为v1.0的数据
+		err := m.updateNewVersionData()
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
 	m.initWallpaperSlideshow()
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
@@ -746,16 +752,15 @@ func (m *Manager) doUpdateWallpaperURIs() error {
 				logger.Warning("get wallpaperURI failed:", err)
 				continue
 			}
-			key := m.monitorMap[monitor] + "&&" + strconv.Itoa(int(idx))
+			key := genMonitorKeyString(m.monitorMap[monitor], int(idx))
 			mapWallpaperURIs[key] = wallpaperURI
 		}
 	}
 
-	jsonString, err := doMarshalMonitorWorkspaceWallpaperURIs(mapWallpaperURIs)
+	err := m.setPropertyWallpaperURIs(mapWallpaperURIs)
 	if err != nil {
 		return err
 	}
-	m.WallpaperURIs.Set(jsonString)
 	return nil
 }
 
@@ -774,6 +779,16 @@ func doMarshalMonitorWorkspaceWallpaperURIs(cfg mapMonitorWorkspaceWallpaperURIs
 	return string(data), err
 }
 
+func (m *Manager) setPropertyWallpaperURIs(cfg mapMonitorWorkspaceWallpaperURIs) error {
+	uris, err := doMarshalMonitorWorkspaceWallpaperURIs(cfg)
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	m.WallpaperURIs.Set(uris)
+	return nil
+}
+
 func doUnmarshalWallpaperSlideshow(jsonString string) (mapMonitorWorkspaceWSPolicy, error) {
 	var cfg mapMonitorWorkspaceWSPolicy
 	var byteWallpaperSlideShow []byte = []byte(jsonString)
@@ -787,6 +802,16 @@ func doMarshalWallpaperSlideshow(cfg mapMonitorWorkspaceWSPolicy) (string, error
 		return "", err
 	}
 	return string(data), err
+}
+
+func (m *Manager) setPropertyWallpaperSlideShow(cfg mapMonitorWorkspaceWSPolicy) error {
+	slideshow, err := doMarshalWallpaperSlideshow(cfg)
+	if err != nil {
+		logger.Warning(err)
+		return err
+	}
+	m.WallpaperSlideShow.Set(slideshow)
+	return nil
 }
 
 func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow string) error {
@@ -803,13 +828,12 @@ func (m *Manager) doSetWallpaperSlideShow(monitorName string, wallpaperSlideShow
 		cfg = make(mapMonitorWorkspaceWSPolicy)
 	}
 
-	key := monitorName + "&&" + strconv.Itoa(int(idx))
+	key := genMonitorKeyString(monitorName, int(idx))
 	cfg[key] = wallpaperSlideShow
-	strAllWallpaperSlideShow, err := doMarshalWallpaperSlideshow(cfg)
+	err = m.setPropertyWallpaperSlideShow(cfg)
 	if err != nil {
-		logger.Warning("Marshal Wallpaper Slideshow failure:", err)
+		return err
 	}
-	m.WallpaperSlideShow.Set(strAllWallpaperSlideShow)
 	m.curMonitorSpace = key
 	return nil
 }
@@ -824,7 +848,7 @@ func (m *Manager) doGetWallpaperSlideShow(monitorName string) (string, error) {
 	if err != nil {
 		return "", nil
 	}
-	key := monitorName + "&&" + strconv.Itoa(int(idx))
+	key := genMonitorKeyString(monitorName, int(idx))
 	wallpaperSlideShow := cfg[key]
 	return wallpaperSlideShow, nil
 }
@@ -1453,6 +1477,44 @@ func (m *Manager) setQtActiveColor(hexColor string) error {
 		return errors.New("failed to save")
 	}
 	return nil
+}
+
+// 原有的壁纸数据保存在background-uris字段中，当壁纸模块升级后，将该数据迁移至wallpaper-uris中;
+// wallpaper-slideshow前后版本的格式不同，根据旧数据重新生成新数据
+func (m *Manager) updateNewVersionData() error {
+	reverseMonitorMap := m.reverseMonitorMap()
+	primaryMonitor := reverseMonitorMap["Primary"]
+	slideshowConfig := make(mapMonitorWorkspaceWSPolicy)
+	slideShow := m.WallpaperSlideShow.Get()
+	workspaceCount, _ := m.wm.WorkspaceCount(0)
+	for i := 1; i <= int(workspaceCount); i++ {
+		key := genMonitorKeyString(primaryMonitor, i)
+		slideshowConfig[key] = slideShow
+	}
+	err := m.setPropertyWallpaperSlideShow(slideshowConfig)
+	if err != nil {
+		return err
+	}
+
+	monitorWorkspaceWallpaperURIs := make(mapMonitorWorkspaceWallpaperURIs)
+	backgroundURIs := m.getBackgroundURIs()
+	for i, uri := range backgroundURIs {
+		err := m.wm.SetWorkspaceBackgroundForMonitor(0, int32(i+1), primaryMonitor, uri)
+		if err != nil {
+			return fmt.Errorf("failed to set background:%v to workspace%v : %v", uri, i+1, err)
+		}
+		key := genMonitorKeyString("Primary", i+1)
+		monitorWorkspaceWallpaperURIs[key] = uri
+	}
+	err = m.setPropertyWallpaperURIs(monitorWorkspaceWallpaperURIs)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func genMonitorKeyString(monitor string, idx interface{}) string {
+	return fmt.Sprintf("%v&&%v", monitor, idx)
 }
 
 func hexColorToXsColor(hexColor string) (string, error) {

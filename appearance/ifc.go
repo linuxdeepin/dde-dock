@@ -215,7 +215,7 @@ func (m *Manager) SetMonitorBackground(monitorName string, imageFile string) *db
 	if err == nil {
 		idx, err := m.wm.GetCurrentWorkspace(0)
 		if err == nil {
-			wsLoop := m.wsLoopMap[monitorName + "&&" + strconv.Itoa(int(idx))]
+			wsLoop := m.wsLoopMap[genMonitorKeyString(monitorName, int(idx))]
 			if wsLoop != nil {
 				wsLoop.AddToShowed(file)
 			}
