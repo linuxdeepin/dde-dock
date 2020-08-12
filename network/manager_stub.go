@@ -44,6 +44,18 @@ func (m *Manager) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
 		logger.Warning(err)
 		return dbusutil.ToError(err)
 	}
+
+	// if vpn enable state is set as true, try to auto connect vpn.
+	// when vpn enable state is set as false, close all vpn connections in system/network module.
+	if enabled {
+		err := enableNetworking()
+		if err != nil {
+			logger.Warning(err)
+			return nil
+		}
+		m.setVpnEnable(true)
+	}
+
 	return nil
 }
 

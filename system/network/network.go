@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 	"sync"
+	"time"
 
 	networkmanager "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/loader"
@@ -64,17 +65,6 @@ func (m *Module) Start() error {
 		return err
 	}
 
-	go func() {
-		m.network.PropsMu.RLock()
-		enabled := m.network.VpnEnabled
-		m.network.PropsMu.RUnlock()
-
-		// auto connect vpn connections
-		if enabled {
-			m.network.enableVpn(true)
-		}
-	}()
-
 	return nil
 }
 
@@ -98,18 +88,16 @@ func init() {
 //go:generate dbusutil-gen -type Network network.go
 
 type Network struct {
-	service        *dbusutil.Service
-	PropsMu        sync.RWMutex
-	VpnEnabled     bool `prop:"access:rw"`
-	delayEnableVpn bool
-	config         *Config
-	configMu       sync.Mutex
-	devices        map[dbus.ObjectPath]*device
-	devicesMu      sync.Mutex
-	nmManager      *networkmanager.Manager
-	nmSettings     *networkmanager.Settings
-	sigLoop        *dbusutil.SignalLoop
-	methods        *struct {
+	service    *dbusutil.Service
+	VpnEnabled bool `prop:"access:rw"`
+	config     *Config
+	configMu   sync.Mutex
+	devices    map[dbus.ObjectPath]*device
+	devicesMu  sync.Mutex
+	nmManager  *networkmanager.Manager
+	nmSettings *networkmanager.Settings
+	sigLoop    *dbusutil.SignalLoop
+	methods    *struct {
 		IsDeviceEnabled       func() `in:"pathOrIface" out:"enabled"`
 		EnableDevice          func() `in:"pathOrIface,enabled" out:"cpath"`
 		Ping                  func() `in:"host"`
@@ -130,25 +118,11 @@ func (n *Network) init() error {
 	n.sigLoop.Start()
 	n.nmManager = networkmanager.NewManager(sysBus)
 	n.nmSettings = networkmanager.NewSettings(sysBus)
-	devicePaths, err := n.nmManager.GetDevices(0)
-	if err != nil {
-		logger.Warning(err)
-	} else {
-		for _, devPath := range devicePaths {
-			err = n.addDevice(devPath)
-			if err != nil {
-				logger.Warning(err)
-				continue
-			}
-		}
-
-		for iface := range n.config.Devices {
-			if n.getDeviceByIface(iface) == nil {
-				delete(n.config.Devices, iface)
-			}
-		}
-	}
+	// retry get all devices
+	n.addDevicesWithRetry()
 	n.connectSignal()
+	// get vpn enable state from config
+	n.VpnEnabled = n.config.VpnEnabled
 
 	return nil
 }
@@ -208,32 +182,6 @@ func (n *Network) connectSignal() {
 		logger.Warning(err)
 	}
 
-	_, err = n.nmManager.ConnectStateChanged(func(state uint32) {
-		n.PropsMu.RLock()
-		delay := n.delayEnableVpn
-		n.PropsMu.RUnlock()
-		if !delay {
-			return
-		}
-
-		avail, err := n.isNetworkAvailable()
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
-
-		if avail {
-			n.PropsMu.Lock()
-			n.delayEnableVpn = false
-			n.PropsMu.Unlock()
-			go n.enableVpn1()
-		}
-
-	})
-	if err != nil {
-		logger.Warning(err)
-	}
-
 	n.sigLoop.AddHandler(&dbusutil.SignalRule{
 		Name: "org.freedesktop.NetworkManager.VPN.Connection.VpnStateChanged",
 	}, func(sig *dbus.Signal) {
@@ -272,9 +220,7 @@ func (n *Network) handleVpnStateChanged(state uint32) {
 	if state >= nm.NM_VPN_CONNECTION_STATE_PREPARE &&
 		state <= nm.NM_VPN_CONNECTION_STATE_ACTIVATED {
 
-		n.PropsMu.Lock()
 		changed := n.setPropVpnEnabled(true)
-		n.PropsMu.Unlock()
 
 		if changed {
 			n.configMu.Lock()
@@ -385,7 +331,6 @@ func (n *Network) GetInterfaceName() string {
 func newNetwork() *Network {
 	n := new(Network)
 	cfg := loadConfigSafe(configFile)
-	n.VpnEnabled = cfg.VpnEnabled
 	n.config = cfg
 	n.devices = make(map[dbus.ObjectPath]*device)
 	return n
@@ -635,28 +580,6 @@ type connSettings struct {
 	settings map[string]map[string]dbus.Variant
 }
 
-func (n *Network) enableVpn1() {
-	connSettingsList, err := n.getConnSettingsListByConnType("vpn")
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	for _, connSettings := range connSettingsList {
-		autoConnect := getSettingConnectionAutoconnect(connSettings.settings)
-		if !autoConnect {
-			continue
-		}
-
-		connPath := connSettings.nmConn.Path_()
-		logger.Debug("activate vpn conn", connPath)
-		_, err := n.nmManager.ActivateConnection(0, connPath,
-			"/", "/")
-		if err != nil {
-			logger.Warning(err)
-		}
-	}
-}
-
 func (n *Network) disableVpn() {
 	connSettingsList, err := n.getConnSettingsListByConnType("vpn")
 	if err != nil {
@@ -669,43 +592,15 @@ func (n *Network) disableVpn() {
 	}
 }
 
-func (n *Network) enableVpn(enabled bool) {
-	if enabled {
-		avail, err := n.isNetworkAvailable()
-		if err != nil {
-			logger.Warning(err)
-		}
-
-		if avail {
-			// n.enableVpn1()
-		} else {
-			n.PropsMu.Lock()
-			n.delayEnableVpn = true
-			n.PropsMu.Unlock()
-		}
-
-	} else {
-		n.disableVpn()
-
-		n.PropsMu.Lock()
-		n.delayEnableVpn = false
-		n.PropsMu.Unlock()
-	}
-}
-
 func (n *Network) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
 	enabled := write.Value.(bool)
 	logger.Debug("set VpnEnabled", enabled)
 
-	if enabled {
-		err := n.enableNetworking()
-		if err != nil {
-			logger.Warning(err)
-			return nil
-		}
+	// if enable is false, disconnect all vpn.
+	// if enable is true, auto connect vpn connections in session/network module.
+	if !enabled {
+		n.disableVpn()
 	}
-
-	n.enableVpn(enabled)
 
 	n.configMu.Lock()
 	n.config.VpnEnabled = enabled
@@ -717,15 +612,6 @@ func (n *Network) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
 	}
 
 	return nil
-}
-
-func (n *Network) isNetworkAvailable() (bool, error) {
-	state, err := n.nmManager.State().Get(0)
-	if err != nil {
-		return false, err
-	}
-
-	return state >= nm.NM_STATE_CONNECTED_SITE, nil
 }
 
 func (n *Network) deactivateConnectionByUuid(uuid string) {
@@ -816,4 +702,40 @@ func (n *Network) getConnSettingsListByConnType(connType string) ([]*connSetting
 		}
 	}
 	return result, nil
+}
+
+// get devices may failed because dde-system-daemon and NetworkManager are started very nearly,
+// need call method 5 times.
+func (n *Network) addDevicesWithRetry() {
+	// try get all devices 5 times
+	for i := 0; i < 5; i++ {
+		devicePaths, err := n.nmManager.GetDevices(0)
+		if err != nil {
+			logger.Warning(err)
+			// sleep for 1 seconds, and retry get devices
+			time.Sleep(1 * time.Second)
+		} else {
+			n.addAndCheckDevices(devicePaths)
+			// if success, break
+			break
+		}
+	}
+}
+
+// add and check devices
+func (n *Network) addAndCheckDevices(devicePaths []dbus.ObjectPath) {
+	// add device
+	for _, devPath := range devicePaths {
+		err := n.addDevice(devPath)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+	}
+	// check if device is legal
+	for iface := range n.config.Devices {
+		if n.getDeviceByIface(iface) == nil {
+			delete(n.config.Devices, iface)
+		}
+	}
 }

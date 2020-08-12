@@ -27,7 +27,9 @@ import (
 	"os/exec"
 	"strings"
 
+	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/iw"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/utils"
 )
@@ -229,4 +231,69 @@ func isWirelessDeviceSupportHotspot(macAddress string) bool {
 		return false
 	}
 	return dev.SupportedHotspot()
+}
+
+func getAutoConnectConnUuidListByConnType(connType string) ([]string, error) {
+	var uuidSlice []string
+	// get connections slice from settings
+	connPaths, err := nmSettings.ListConnections(0)
+	if err != nil {
+		logger.Warningf("get network connections failed, err: %v", err)
+		return nil, err
+	}
+	// get system bus
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning(err)
+		return nil, err
+	}
+	// get uuid list from list according to type
+	for _, connPath := range connPaths {
+		conn, err := nmdbus.NewConnectionSettings(systemBus, connPath)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+		settings, err := conn.GetSettings(0)
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+		// check if type is wanted
+		if getSettingConnectionType(settings) != connType {
+			continue
+		}
+		// check if is auto connect
+		autoConnect := getSettingConnectionAutoconnect(settings)
+		if !autoConnect {
+			continue
+		}
+		// add uuid
+		uuid := getSettingConnectionUuid(settings)
+		if uuid != "" {
+			uuidSlice = append(uuidSlice, uuid)
+		}
+	}
+	return uuidSlice, nil
+}
+
+func isNetworkAvailable() (bool, error) {
+	state, err := nmManager.State().Get(0)
+	if err != nil {
+		return false, err
+	}
+	return state >= nm.NM_STATE_CONNECTED_SITE, nil
+}
+
+func enableNetworking() error {
+	enabled, err := nmManager.NetworkingEnabled().Get(0)
+	if err != nil {
+		return err
+	}
+
+	if enabled {
+		return nil
+	}
+
+	return nmManager.Enable(0, true)
 }
