@@ -98,7 +98,7 @@ type Manager struct {
 	td       *timedate1.Timedate
 	setter   *timedated.Timedated
 	userObj  *accounts.User
-
+	//nolint
 	methods *struct {
 		SetDate             func() `in:"year,month,day,hour,min,sec,nsec"`
 		SetTime             func() `in:"usec,relative"`

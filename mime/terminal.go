@@ -161,10 +161,7 @@ func isTerminalApp(appInfo *desktopappinfo.DesktopAppInfo) bool {
 	}
 
 	exec := appInfo.GetCommandline()
-	if strings.Contains(exec, execXTerminalEmulator) {
-		return false
-	}
-	return true
+	return !strings.Contains(exec, execXTerminalEmulator)
 }
 
 func isStrInList(s string, list []string) bool {

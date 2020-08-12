@@ -62,7 +62,7 @@ type Manager struct {
 	PropsMu sync.RWMutex
 	// dbusutil-gen: equal=nil
 	Devices []dbus.ObjectPath
-
+	//nolint
 	methods *struct {
 		GetDefaultDevice func() `out:"device"`
 		GetDevices       func() `out:"devices"`

@@ -22,10 +22,9 @@ package systeminfo
 import (
 	"fmt"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.udisks2"
 	"pkg.deepin.io/lib/dbus1"
 )
-
+//nolint
 type diskInfo struct {
 	Drive       dbus.ObjectPath // org.freedesktop.UDisks2.Block Drive
 	MountPoints []string        // org.freedesktop.UDisks2.Filesystem MountPoints
@@ -33,7 +32,7 @@ type diskInfo struct {
 	Table       dbus.ObjectPath // org.freedesktop.UDisks2.Partition Table
 }
 
-type diskInfoMap map[dbus.ObjectPath]diskInfo
+type diskInfoMap map[dbus.ObjectPath]diskInfo //nolint
 
 func (set diskInfoMap) GetRootDrive() dbus.ObjectPath {
 	for _, v := range set {
@@ -101,63 +100,4 @@ func getDiskCap() (uint64, error) {
 		return 0, err
 	}
 	return uint64(rdisk.Size), err
-}
-
-func parseUDisksManagers() (diskInfoMap, error) {
-	systemConn, err := dbus.SystemBus()
-	if err != nil {
-		return nil, err
-	}
-
-	set := make(diskInfoMap)
-	udisk := udisks2.NewUDisks(systemConn)
-	managedObjects, _ := udisk.GetManagedObjects(0)
-	for objPath, obj := range managedObjects {
-		var info diskInfo
-		block, ok := obj["org.freedesktop.UDisks2.Block"]
-		if ok {
-			info.Drive = block["Drive"].Value().(dbus.ObjectPath)
-		}
-
-		fs, ok := obj["org.freedesktop.UDisks2.Filesystem"]
-		if ok {
-			values := fs["MountPoints"].Value().([][]byte)
-			for _, v := range values {
-				// filter the end char '\x00'
-				info.MountPoints = append(info.MountPoints, string(v[:len(v)-1]))
-			}
-		}
-
-		// the object maybe a partition, or partition table, or drive, or loop(wubi)
-		partition, ok := obj["org.freedesktop.UDisks2.Partition"]
-		if ok {
-			info.Size = partition["Size"].Value().(uint64)
-			info.Table = partition["Table"].Value().(dbus.ObjectPath)
-			set[objPath] = info
-			continue
-		}
-
-		_, ok = obj["org.freedesktop.UDisks2.PartitionTable"]
-		if ok {
-			info.Size = block["Size"].Value().(uint64)
-			set[objPath] = info
-			continue
-		}
-
-		drive, ok := obj["org.freedesktop.UDisks2.Drive"]
-		if ok {
-			info.Size = drive["Size"].Value().(uint64)
-			set[objPath] = info
-			continue
-		}
-
-		_, ok = obj["org.freedesktop.UDisks2.Loop"]
-		if ok {
-			info.Size = block["Size"].Value().(uint64)
-			set[objPath] = info
-			continue
-		}
-	}
-
-	return set, nil
 }

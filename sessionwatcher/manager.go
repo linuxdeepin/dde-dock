@@ -47,6 +47,7 @@ type Manager struct {
 
 	PropsMu  sync.RWMutex
 	IsActive bool
+	//nolint
 	methods  *struct {
 		GetSessions        func() `out:"sessions"`
 		IsX11SessionActive func() `out:"is_active"`
@@ -218,7 +219,9 @@ func (m *Manager) handleSessionChanged() {
 		go suspendPulseSources(0)
 
 		logger.Debug("[handleSessionChanged] Refresh Brightness")
-		go m.display.RefreshBrightness(0)
+		go func() {
+			_ = m.display.RefreshBrightness(0)
+		}()
 	} else {
 		logger.Debug("[handleSessionChanged] Suspend pulse")
 		go suspendPulseSinks(1)

@@ -37,7 +37,7 @@ func NewManager(duration uint32) (*Manager, error) {
 		fmt.Sprintf("stack_%v.log", timestamp)),
 		os.O_CREATE|os.O_RDWR|os.O_APPEND, 0644)
 	if err != nil {
-		cpu.Close()
+		_ = cpu.Close()
 		return nil, err
 	}
 
@@ -50,7 +50,7 @@ func NewManager(duration uint32) (*Manager, error) {
 	err = pprof.StartCPUProfile(ct.cpuFile)
 	if err != nil {
 		logger.Warning("Failed to start cpu profile:", err)
-		ct.cpuFile.Close()
+		_ = ct.cpuFile.Close()
 		ct.cpuFile = nil
 	}
 
@@ -81,11 +81,11 @@ func (ct *Manager) stop() {
 	}
 	if ct.cpuFile != nil {
 		pprof.StopCPUProfile()
-		ct.cpuFile.Close()
+		_ = ct.cpuFile.Close()
 	}
 
 	if ct.stackFile != nil {
-		ct.stackFile.Close()
+		_ = ct.stackFile.Close()
 	}
 	logger.Info("[Manager] Terminated!")
 	ct = nil
@@ -122,11 +122,10 @@ func (ct *Manager) writeHeap() {
 	}
 
 	err = pprof.WriteHeapProfile(mem)
-	mem.Close()
+	_ = mem.Close()
 	if err != nil {
 		logger.Warning("Failed to write head profile:", err)
 	}
-	return
 }
 
 func (ct *Manager) recordStack() {
@@ -135,18 +134,18 @@ func (ct *Manager) recordStack() {
 		logger.Warning("Failed to start record stack:", err)
 		return
 	}
-	ct.stackFile.WriteString("--- DUMP [goroutine] ---\n")
-	pprof.Lookup("goroutine").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [heap] ---\n")
-	pprof.Lookup("heap").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [threadcreate] ---\n")
-	pprof.Lookup("threadcreate").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [block] ---\n")
-	pprof.Lookup("block").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("\n--- DUMP [mutex] ---\n")
-	pprof.Lookup("mutex").WriteTo(ct.stackFile, 2)
-	ct.stackFile.WriteString("=== END " + time.Now().String() + " ===\n\n\n")
-	ct.stackFile.Sync()
+	_, _ = ct.stackFile.WriteString("--- DUMP [goroutine] ---\n")
+	_ = pprof.Lookup("goroutine").WriteTo(ct.stackFile, 2)
+	_, _ =ct.stackFile.WriteString("\n--- DUMP [heap] ---\n")
+	_ = pprof.Lookup("heap").WriteTo(ct.stackFile, 2)
+	_, _ =ct.stackFile.WriteString("\n--- DUMP [threadcreate] ---\n")
+	_ = pprof.Lookup("threadcreate").WriteTo(ct.stackFile, 2)
+	_, _ =ct.stackFile.WriteString("\n--- DUMP [block] ---\n")
+	_ = pprof.Lookup("block").WriteTo(ct.stackFile, 2)
+	_, _ =ct.stackFile.WriteString("\n--- DUMP [mutex] ---\n")
+	_ = pprof.Lookup("mutex").WriteTo(ct.stackFile, 2)
+	_, _ =ct.stackFile.WriteString("=== END " + time.Now().String() + " ===\n\n\n")
+	_ = ct.stackFile.Sync()
 }
 
 func ensureDirExist() (string, error) {

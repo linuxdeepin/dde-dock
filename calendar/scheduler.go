@@ -30,7 +30,7 @@ type Scheduler struct {
 
 	changeChan chan []uint
 	quitChan   chan struct{}
-
+	//nolint
 	methods *struct {
 		GetJobs   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
 		GetJob    func() `in:"id" out:"job"`
@@ -47,7 +47,7 @@ type Scheduler struct {
 
 		DebugRemindJob func() `in:"id"`
 	}
-
+	//nolint
 	signals *struct {
 		JobsUpdated struct {
 			Ids []int64

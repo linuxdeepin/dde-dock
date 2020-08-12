@@ -74,6 +74,7 @@ type Miracast struct {
 	locker sync.Mutex
 
 	service *dbusutil.Service
+	//nolint
 	signals *struct {
 		Added, Removed struct {
 			path       dbus.ObjectPath
@@ -84,7 +85,7 @@ type Miracast struct {
 			path      dbus.ObjectPath
 		}
 	}
-
+	//nolint
 	methods *struct {
 		ListLinks   func() `out:"links"`
 		ListSinks   func() `out:"sinks"`
@@ -435,7 +436,7 @@ func (m *Miracast) enableWirelessManaged(interfaceName string, enabled bool) err
 	const nmDeviceTypeWifi = 2
 
 	for _, devPath := range devPaths {
-		d, err := networkmanager.NewDevice(sysBus, devPath)
+		d, _ := networkmanager.NewDevice(sysBus, devPath)
 		devType, err := d.DeviceType().Get(0)
 		if err != nil {
 			logger.Warning(err)

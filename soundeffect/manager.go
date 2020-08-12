@@ -55,7 +55,7 @@ type Manager struct {
 	names         strv.Strv
 
 	Enabled gsprop.Bool `prop:"access:rw"`
-
+	//nolint
 	methods *struct {
 		PlaySystemSound    func() `in:"name"`
 		GetSystemSoundFile func() `in:"name" out:"file"`

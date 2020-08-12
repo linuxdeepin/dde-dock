@@ -69,7 +69,7 @@ func (d *Daemon) Stop() error {
 	}
 
 	service := loader.GetService()
-	service.StopExport(d.manager)
+	_ = service.StopExport(d.manager)
 	d.manager.destroy()
 	d.manager = nil
 	return nil

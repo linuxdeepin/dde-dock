@@ -63,7 +63,7 @@ func (u *User) SetFullName(sender dbus.Sender, name string) *dbus.Error {
 		}
 
 		u.FullName = name
-		u.emitPropChangedFullName(name)
+		_ = u.emitPropChangedFullName(name)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func (u *User) SetHomeDir(sender dbus.Sender, home string) *dbus.Error {
 			return dbusutil.ToError(err)
 		}
 		u.HomeDir = home
-		u.emitPropChangedHomeDir(home)
+		_ = u.emitPropChangedHomeDir(home)
 	}
 
 	return nil
@@ -129,7 +129,7 @@ func (u *User) SetShell(sender dbus.Sender, shell string) *dbus.Error {
 			return dbusutil.ToError(err)
 		}
 		u.Shell = shell
-		u.emitPropChangedShell(shell)
+		_ = u.emitPropChangedShell(shell)
 	}
 
 	return nil
@@ -158,7 +158,7 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 			return dbusutil.ToError(err)
 		}
 		u.Locked = false
-		u.emitPropChangedLocked(false)
+		_ = u.emitPropChangedLocked(false)
 	}
 	return nil
 }
@@ -203,7 +203,7 @@ func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 		}
 
 		u.Locked = locked
-		u.emitPropChangedLocked(locked)
+		_ = u.emitPropChangedLocked(locked)
 
 		if locked && u.AutomaticLogin {
 			if err := users.SetAutoLoginUser("", ""); err != nil {
@@ -211,7 +211,7 @@ func (u *User) SetLocked(sender dbus.Sender, locked bool) *dbus.Error {
 				return dbusutil.ToError(err)
 			}
 			u.AutomaticLogin = false
-			u.emitPropChangedAutomaticLogin(false)
+			_ = u.emitPropChangedAutomaticLogin(false)
 		}
 	}
 	return nil
@@ -297,7 +297,7 @@ func (u *User) SetAutomaticLogin(sender dbus.Sender, enabled bool) *dbus.Error {
 	}
 
 	u.AutomaticLogin = enabled
-	u.emitPropChangedAutomaticLogin(enabled)
+	_ = u.emitPropChangedAutomaticLogin(enabled)
 	return nil
 }
 
@@ -327,7 +327,7 @@ func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error
 	}
 
 	u.NoPasswdLogin = enabled
-	u.emitPropChangedNoPasswdLogin(enabled)
+	_ = u.emitPropChangedNoPasswdLogin(enabled)
 	return nil
 }
 
@@ -358,7 +358,7 @@ func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	u.Locale = locale
-	u.emitPropChangedLocale(locale)
+	_ = u.emitPropChangedLocale(locale)
 	return nil
 }
 
@@ -385,7 +385,7 @@ func (u *User) SetLayout(sender dbus.Sender, layout string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	u.Layout = layout
-	u.emitPropChangedLayout(layout)
+	_ = u.emitPropChangedLayout(layout)
 	return nil
 }
 
@@ -448,7 +448,7 @@ func (u *User) SetIconFile(sender dbus.Sender, iconURI string) *dbus.Error {
 	}
 
 	u.IconFile = newIconURI
-	u.emitPropChangedIconFile(newIconURI)
+	_ = u.emitPropChangedIconFile(newIconURI)
 	return nil
 }
 
@@ -518,7 +518,7 @@ func (u *User) SetDesktopBackgrounds(sender dbus.Sender, val []string) *dbus.Err
 	}
 
 	u.DesktopBackgrounds = newVal
-	u.emitPropChangedDesktopBackgrounds(newVal)
+	_ = u.emitPropChangedDesktopBackgrounds(newVal)
 	return nil
 }
 
@@ -554,7 +554,7 @@ func (u *User) SetGreeterBackground(sender dbus.Sender, bg string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	u.GreeterBackground = bg
-	u.emitPropChangedGreeterBackground(bg)
+	_ = u.emitPropChangedGreeterBackground(bg)
 	return nil
 }
 
@@ -581,7 +581,7 @@ func (u *User) SetHistoryLayout(sender dbus.Sender, list []string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 	u.HistoryLayout = list
-	u.emitPropChangedHistoryLayout(list)
+	_ = u.emitPropChangedHistoryLayout(list)
 	return nil
 }
 

@@ -45,7 +45,7 @@ type Manager struct {
 	tsSetting     *gio.Settings
 	enabled       bool
 	Infos         gestureInfos
-
+	//nolint
 	methods *struct {
 		SetLongPressDuration    func() `in:"duration"`
 		GetLongPressDuration    func() `out:"duration"`

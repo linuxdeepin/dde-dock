@@ -27,7 +27,6 @@ import (
 	"time"
 
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wifi"
-	"pkg.deepin.io/dde/daemon/iw"
 	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
@@ -134,14 +133,6 @@ func (link *LinkInfo) update() {
 	link.Managed, _ = link.core.Managed().Get(0)
 	link.P2PScanning, _ = link.core.P2PScanning().Get(0)
 	link.interfaceName, _ = link.core.InterfaceName().Get(0)
-}
-
-func (link *LinkInfo) hasP2PSupported() bool {
-	infos, err := iw.ListWirelessInfo()
-	if err != nil {
-		return false
-	}
-	return infos.ListMiracastDevice().Get(link.MacAddress) != nil
 }
 
 func (link *LinkInfo) EnableManaged(enabled bool) error {

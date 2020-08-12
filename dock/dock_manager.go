@@ -94,7 +94,7 @@ type Manager struct {
 	startManager *sessionmanager.StartManager
 	wmSwitcher   *wmswitcher.WMSwitcher
 	wmName       string
-
+	//nolint
 	signals *struct {
 		ServiceRestarted struct{}
 		EntryAdded       struct {
@@ -109,7 +109,7 @@ type Manager struct {
 		PluginSettingsSynced struct{}
 		DockAppSettingsSynced struct{}
 	}
-
+	//nolint
 	methods *struct {
 		ActivateWindow            func() `in:"win"`
 		CloseWindow               func() `in:"win"`

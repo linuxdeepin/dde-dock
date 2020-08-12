@@ -48,6 +48,6 @@ func IsSystemBusActivated(dest string) bool {
 
 func releaseDBusName(bus *dbus.Conn, name string) {
 	if bus != nil {
-		bus.ReleaseName(name)
+		_, _ = bus.ReleaseName(name)
 	}
 }

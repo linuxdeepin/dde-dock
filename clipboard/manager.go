@@ -22,10 +22,10 @@ var (
 	atomDelete               x.Atom
 	atomInsertProperty       x.Atom
 	atomInsertSelection      x.Atom
-	atomAtomPair             x.Atom
+	atomAtomPair             x.Atom //nolint
 	atomIncr                 x.Atom
 	atomTimestamp            x.Atom
-	atomNull                 x.Atom
+	atomNull                 x.Atom //nolint
 	atomTimestampProp        x.Atom
 	atomFromClipboardManager x.Atom
 
@@ -70,7 +70,7 @@ type Manager struct {
 
 	contentMu sync.Mutex
 	content   []*TargetData
-
+	//nolint
 	methods *struct {
 		RemoveTarget func() `in:"target"`
 	}

@@ -56,17 +56,6 @@ type JobTypeJSON struct {
 	Color string
 }
 
-func (j *JobType) toJobTypeJSON() *JobTypeJSON {
-	if j == nil {
-		return nil
-	}
-	return &JobTypeJSON{
-		ID:    j.ID,
-		Name:  j.Name,
-		Color: j.Color,
-	}
-}
-
 func (j *JobTypeJSON) toJobType() *JobType {
 	if j == nil {
 		return nil

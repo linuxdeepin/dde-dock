@@ -42,7 +42,7 @@ func GetFrequency(id string, f *glib.KeyFile) uint64 {
 
 func SetFrequency(id string, freq uint64, f *glib.KeyFile) {
 	f.SetUint64(id, _RateRecordKey, freq)
-	saveKeyFile(f, ConfigFilePath(_RateRecordFile))
+	_ = saveKeyFile(f, ConfigFilePath(_RateRecordFile))
 }
 
 // saveKeyFile saves key file.

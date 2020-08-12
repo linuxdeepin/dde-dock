@@ -144,7 +144,7 @@ func (m *Manager) DeleteUser(sender dbus.Sender,
 	}
 
 	if users.IsAutoLoginUser(name) {
-		users.SetAutoLoginUser("", "")
+		_ = users.SetAutoLoginUser("", "")
 	}
 
 	//delete user config and icons
@@ -270,7 +270,7 @@ func (m *Manager) AllowGuestAccount(sender dbus.Sender, allow bool) *dbus.Error 
 	}
 
 	m.AllowGuest = allow
-	m.emitPropChangedAllowGuest(allow)
+	_ = m.emitPropChangedAllowGuest(allow)
 	return nil
 }
 

@@ -59,7 +59,7 @@ var (
 	atomNetWmWindowOpacity      x.Atom
 	atomWmClientLeader          x.Atom
 	atomWmCommand               x.Atom
-	atomNetWmStateFocused       x.Atom
+	atomNetWmStateFocused       x.Atom //nolint
 	atomNetWmWindowTypeDesktop  x.Atom
 	atomNetWmActionMinimize     x.Atom
 	atomWmStateDemandsAttention x.Atom

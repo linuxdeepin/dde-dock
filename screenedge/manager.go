@@ -44,7 +44,7 @@ type Manager struct {
 	wm             *wm.Wm
 	sessionSigLoop *dbusutil.SignalLoop
 	syncConfig     *dsync.Config
-
+	//nolint
 	methods *struct {
 		EnableZoneDetected func() `in:"enabled"`
 		SetTopLeft         func() `in:"value"`

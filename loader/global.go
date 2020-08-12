@@ -87,13 +87,13 @@ func StartAll() {
 	for _, module := range allModules {
 		modules = append(modules, module.Name())
 	}
-	getLoader().EnableModules(modules, []string{}, EnableFlagNone)
+	_ = getLoader().EnableModules(modules, []string{}, EnableFlagNone)
 }
 
 // TODO: check dependencies
 func StopAll() {
 	modules := getLoader().List()
 	for _, module := range modules {
-		module.Enable(false)
+		_ = module.Enable(false)
 	}
 }

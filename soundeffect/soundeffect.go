@@ -40,7 +40,7 @@ func run() error {
 		return err
 	}
 
-	gsettings.StartMonitor()
+	_ = gsettings.StartMonitor()
 
 	serverObj, err := service.NewServerObject(dbusPath, m)
 	if err != nil {

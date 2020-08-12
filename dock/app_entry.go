@@ -57,7 +57,7 @@ type AppEntry struct {
 	current          *WindowInfo
 	appInfo          *AppInfo
 	winIconPreferred bool
-
+	//nolint
 	methods *struct {
 		Activate               func() `in:"timestamp"`
 		HandleMenuItem         func() `in:"timestamp,id"`

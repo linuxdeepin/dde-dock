@@ -100,7 +100,7 @@ func (d *Daemon) Stop() error {
 	}
 
 	service := loader.GetService()
-	service.StopExport(d.info)
+	_ = service.StopExport(d.info)
 	d.info = nil
 
 	return nil
@@ -113,13 +113,15 @@ func NewSystemInfo() *SystemInfo {
 		info = *tmp
 		time.AfterFunc(time.Second*10, func() {
 			info.init()
-			doSaveCache(&info, cacheFile)
+			_ = doSaveCache(&info, cacheFile)
 		})
 		return &info
 	}
 
 	info.init()
-	go doSaveCache(&info, cacheFile)
+	go func() {
+		_ = doSaveCache(&info, cacheFile)
+	}()
 	return &info
 }
 

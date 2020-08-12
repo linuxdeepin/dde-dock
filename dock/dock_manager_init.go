@@ -46,10 +46,10 @@ func (m *Manager) initEntries() {
 	m.Entries.insertCb = func(entry *AppEntry, index int) {
 		entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + entry.Id)
 		logger.Debug("entry added", entry.Id, index)
-		m.service.Emit(m, "EntryAdded", entryObjPath, int32(index))
+		_ = m.service.Emit(m, "EntryAdded", entryObjPath, int32(index))
 	}
 	m.Entries.removeCb = func(entry *AppEntry) {
-		m.service.Emit(m, "EntryRemoved", entry.Id)
+		_ = m.service.Emit(m, "EntryRemoved", entry.Id)
 		go func() {
 			time.Sleep(time.Second)
 			err := m.service.StopExport(entry)

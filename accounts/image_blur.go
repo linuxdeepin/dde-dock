@@ -21,7 +21,7 @@ type ImageBlur struct {
 	service *dbusutil.Service
 	mu      sync.Mutex
 	tasks   map[string]struct{}
-
+	//nolint
 	signals *struct {
 		BlurDone struct {
 			imgFile     string
@@ -29,7 +29,7 @@ type ImageBlur struct {
 			ok          bool
 		}
 	}
-
+	//nolint
 	methods *struct {
 		Get    func() `in:"source" out:"blurred"`
 		Delete func() `in:"file"`
@@ -56,7 +56,7 @@ func (ib *ImageBlur) Get(file string) (string, *dbus.Error) {
 		logger.Warning(err)
 		if os.IsNotExist(err) {
 			// source file not exist
-			os.Remove(blurFile)
+			_ = os.Remove(blurFile)
 		}
 		return "", dbusutil.ToError(err)
 	}

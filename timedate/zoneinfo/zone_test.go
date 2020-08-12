@@ -45,7 +45,7 @@ func (*testWrapper) TestGetZoneList(c *C.C) {
 
 	list, err := getZoneListFromFile("testdata/zone1970.tab")
 	c.Check(err, C.Equals, nil)
-	for i, _ := range list {
+	for i := range list {
 		c.Check(list[i], C.Equals, ret[i])
 	}
 }

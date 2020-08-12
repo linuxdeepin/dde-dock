@@ -44,12 +44,14 @@ func ConfigFile(name string) (*glib.KeyFile, error) {
 	file := glib.NewKeyFile()
 	conf := ConfigFilePath(name)
 	if !utils.IsFileExist(conf) {
-		os.MkdirAll(path.Dir(conf), _DirDefaultPerm)
+		_ = os.MkdirAll(path.Dir(conf), _DirDefaultPerm)
 		f, err := os.Create(conf)
 		if err != nil {
 			return nil, err
 		}
-		defer f.Close()
+		defer func() {
+			_ = f.Close()
+		}()
 	}
 
 	if ok, err := file.LoadFromFile(conf, glib.KeyFileFlagsNone); !ok {

@@ -69,7 +69,7 @@ func genMimeAppsFile(data string) error {
 		var validId = ""
 		for _, ty := range info.Types {
 			if validId != "" {
-				SetAppInfo(ty, validId)
+				_ = SetAppInfo(ty, validId)
 				continue
 			}
 

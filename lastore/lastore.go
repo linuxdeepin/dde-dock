@@ -41,7 +41,7 @@ type Lastore struct {
 	// prop:
 	PropsMu            sync.RWMutex
 	SourceCheckEnabled bool
-
+	//nolint
 	methods *struct {
 		SetSourceCheckEnabled func() `in:"val"`
 		IsDiskSpaceSufficient func() `out:"result"`

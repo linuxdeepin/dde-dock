@@ -60,7 +60,7 @@ type ScreenSaver struct {
 	//Inhibit state, we need save the SetTimeout value,
 	//so we can recover the correct state when enter UnInhibit state.
 	lastVals *timeoutVals
-
+	//nolint
 	signals *struct {
 		// Idle 定时器超时信号，当系统在给定时间内未被使用时发送
 		IdleOn struct{}
@@ -71,7 +71,7 @@ type ScreenSaver struct {
 		// Idle 超时后，如果系统被使用就发送此信号，重新开始 Idle 计时器
 		IdleOff struct{}
 	}
-
+	//nolint
 	methods *struct {
 		Inhibit    func() `in:"name,reason" out:"cookie"`
 		UnInhibit  func() `in:"cookie"`

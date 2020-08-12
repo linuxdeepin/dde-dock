@@ -31,8 +31,7 @@ type HuaweiDevice struct {
 
 	ScanType string // const
 
-	methods *deviceMethods
-	signals *deviceSignals
+	methods *deviceMethods //nolint
 }
 
 func (d *HuaweiDevice) destroy() {
@@ -48,7 +47,6 @@ func (d *HuaweiDevice) getPath() dbus.ObjectPath {
 
 const (
 	huaweiDeviceStatusBusy = 1
-	huaweiDeviceStatusIdle = 0
 )
 
 func getUserUuid(username string) (string, error) {
@@ -476,11 +474,6 @@ const (
 	fprintdEnrollStatusFailed             = "enroll-failed"
 	fprintdEnrollStatusStagePassed        = "enroll-stage-passed"
 	fprintdEnrollStatusRetryScan          = "enroll-retry-scan"
-	fprintdEnrollStatusSwipeTooShort      = "enroll-swipe-too-short"
-	fprintdEnrollStatusFingerNotCentered  = "enroll-finger-not-centered"
-	fprintdEnrollStatusRemoveAndRetry     = "enroll-remove-and-retry"
-	fprintdEnrollStatusEnrollDisconnected = "enroll-disconnected"
-	fprintdEnrollStatusEnrollUnknownError = "enroll-unknown-error"
 
 	fprintdVerifyStatusNoMatch      = "verify-no-match"
 	fprintdVerifyStatusMatch        = "verify-match"

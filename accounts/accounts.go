@@ -106,13 +106,13 @@ func (d *Daemon) Stop() error {
 	service := loader.GetService()
 
 	if d.imageBlur != nil {
-		service.StopExport(d.imageBlur)
+		_ = service.StopExport(d.imageBlur)
 		d.imageBlur = nil
 		_imageBlur = nil
 	}
 
 	if d.loginedManager != nil {
-		service.StopExport(d.loginedManager)
+		_ = service.StopExport(d.loginedManager)
 		d.loginedManager = nil
 	}
 

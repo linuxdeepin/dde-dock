@@ -34,7 +34,7 @@ const (
 	actionIdEnroll = "com.deepin.daemon.fprintd.enroll"
 	actionIdDelete = "com.deepin.daemon.fprintd.delete-enrolled-fingers"
 )
-
+//nolint
 type deviceMethods struct {
 	Claim                 func() `in:"username"`
 	ClaimForce            func() `in:"username"`
@@ -45,7 +45,7 @@ type deviceMethods struct {
 	DeleteEnrolledFinger  func() `in:"username,finger"`
 	ListEnrolledFingers   func() `in:"username" out:"fingers"`
 }
-
+//nolint
 type deviceSignals struct {
 	EnrollStatus struct {
 		status string
@@ -74,10 +74,8 @@ type Device struct {
 	core    *fprint.Device
 
 	ScanType string
-	methods  *deviceMethods
+	methods  *deviceMethods //nolint
 
-	// TODO: enroll image
-	signals *deviceSignals
 }
 
 type Devices []IDevice

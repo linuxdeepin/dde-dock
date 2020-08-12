@@ -53,7 +53,7 @@ type Manager struct {
 
 	done     chan struct{}
 	doneResp chan struct{}
-
+	//nolint
 	methods *struct {
 		GetDefaultApp func() `in:"mimeType" out:"defaultApp"`
 		SetDefaultApp func() `in:"mimeTypes,desktopId"`
@@ -63,7 +63,7 @@ type Manager struct {
 		AddUserApp    func() `in:"mimeTypes,desktopId"`
 		DeleteUserApp func() `in:"desktopId"`
 	}
-
+	//nolint
 	signals *struct {
 		Change struct{}
 	}
@@ -342,7 +342,6 @@ func toDesktopId(appId string) string {
 const (
 	sectionDefaultApps         = "Default Applications"
 	sectionAddedAssociations   = "Added Associations"
-	sectionRemovedAssociations = "Removed Associations"
 )
 
 func deleteMimeAssociation(mimeAppsKf *keyfile.KeyFile, mimeType string, desktopId string) {

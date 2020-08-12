@@ -350,7 +350,9 @@ func (tpad *Touchpad) startSyndaemon() {
 		return
 	}
 
-	go cmd.Wait()
+	go func() {
+		_ = cmd.Wait()
+	}()
 }
 
 func (tpad *Touchpad) stopSyndaemon() {

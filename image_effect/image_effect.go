@@ -58,6 +58,7 @@ func (etf effectToolFunc) generate(uid int, inputFile, outputFile string, envVar
 type ImageEffect struct {
 	service *dbusutil.Service
 	tools   map[string]effectTool
+	//nolint
 	methods *struct {
 		Get    func() `in:"effect,filename" out:"outputFile"`
 		Delete func() `in:"effect,filename"`

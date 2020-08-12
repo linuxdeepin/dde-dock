@@ -73,7 +73,7 @@ func (d *Daemon) Start() error {
 	if err != nil {
 		logger.Error("Failed to request name:", err)
 		_m.destroy()
-		service.StopExport(m)
+		_ = service.StopExport(m)
 		_m = nil
 		return err
 	}
@@ -87,7 +87,7 @@ func (*Daemon) Stop() error {
 	}
 	_m.destroy()
 	service := loader.GetService()
-	service.StopExport(_m)
+	_ = service.StopExport(_m)
 	_m = nil
 	return nil
 }

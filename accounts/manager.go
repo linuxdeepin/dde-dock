@@ -63,7 +63,7 @@ type Manager struct {
 
 	userAddedChanMap map[string]chan string
 	//                    ^ username
-
+	//nolint
 	signals *struct {
 		UserAdded struct {
 			objPath string
@@ -73,7 +73,7 @@ type Manager struct {
 			objPath string
 		}
 	}
-
+	//nolint
 	methods *struct {
 		CreateUser         func() `in:"name,fullName,accountType" out:"user"`
 		DeleteUser         func() `in:"name,rmFiles"`
@@ -124,7 +124,7 @@ func (m *Manager) destroy() {
 	}
 
 	m.stopExportUsers(m.UserList)
-	m.service.StopExport(m)
+	_ = m.service.StopExport(m)
 }
 
 func (m *Manager) initUsers(list []string) {
@@ -210,7 +210,7 @@ func (m *Manager) stopExportUser(userPath string) {
 	}
 
 	delete(m.usersMap, userPath)
-	m.service.StopExport(u)
+	_ = m.service.StopExport(u)
 }
 
 func (m *Manager) getUserByName(name string) *User {

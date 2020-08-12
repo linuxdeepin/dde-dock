@@ -98,7 +98,7 @@ type Keyboard struct {
 	layoutMap layoutMap
 
 	devNumber int
-
+	//nolint
 	methods *struct {
 		AddLayoutOption    func() `in:"option"`
 		DeleteLayoutOption func() `in:"option"`

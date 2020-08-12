@@ -209,7 +209,7 @@ func (m *Miracast) connect(sinkPath dbus.ObjectPath, x, y, w, h uint32) error {
 	link.EnableP2PScanning(false)
 	link.ConfigureForManaged()
 
-	connected, err := sink.peer.Connected().Get(0)
+	connected, _ := sink.peer.Connected().Get(0)
 	if connected {
 		logger.Debug("Has connected, start session")
 		m.startSession(sink, x, y, w, h)

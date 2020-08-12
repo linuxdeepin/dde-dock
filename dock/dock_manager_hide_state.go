@@ -270,7 +270,7 @@ func (m *Manager) setPropHideState(hideState HideStateType) {
 	if m.HideState != hideState {
 		logger.Debugf("HideState %v => %v", m.HideState, hideState)
 		m.HideState = hideState
-		m.service.EmitPropertyChanged(m, "HideState", m.HideState)
+		_ = m.service.EmitPropertyChanged(m, "HideState", m.HideState)
 	}
 	m.PropsMu.Unlock()
 }

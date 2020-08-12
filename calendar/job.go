@@ -190,8 +190,7 @@ func getJobsBetween(startDate, endDate libdate.Date, jobs []*Job, extend bool, q
 		}
 		for _, jobTime := range jobTimes {
 
-			var j *Job
-			j = job.clone(jobTime.start, jobTime.start.Add(interval), jobTime.recurID)
+			j := job.clone(jobTime.start, jobTime.start.Add(interval), jobTime.recurID)
 			jStartDate := libdate.NewAt(jobTime.start)
 			idx := int(jStartDate.Sub(startDate))
 

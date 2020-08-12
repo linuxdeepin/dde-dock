@@ -39,7 +39,6 @@ func getAppStoreAppName() string {
 }
 
 const (
-	notifyExpireTimeoutNever   = 0
 	notifyExpireTimeoutDefault = -1
 )
 
@@ -121,11 +120,6 @@ func (l *Lastore) notifyLowPower() {
 func (l *Lastore) notifyAutoClean() {
 	msg := gettext.Tr("Package cache wiped")
 	l.sendNotify("deepin-appstore", msg, nil, notifyExpireTimeoutDefault, "dde-control-center")
-}
-
-func (l *Lastore) notifySourceModified(actions []NotifyAction) {
-	msg := gettext.Tr("Your system source has been modified, please restore to official source for your normal use")
-	l.sendNotify("dialog-warning", msg, actions, notifyExpireTimeoutNever, getAppStoreAppName())
 }
 
 func (l *Lastore) notifyUpdateSource(actions []NotifyAction) {

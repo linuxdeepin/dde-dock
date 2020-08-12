@@ -23,6 +23,7 @@ type Config struct {
 	path       dbus.ObjectPath
 	sigLoop    *dbusutil.SignalLoop
 	logger     *log.Logger
+	//nolint
 	methods    *struct {
 		Get func() `out:"data"`
 		Set func() `in:"data"`

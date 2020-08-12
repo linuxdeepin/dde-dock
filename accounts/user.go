@@ -138,7 +138,7 @@ type User struct {
 	HistoryLayout []string
 
 	configLocker sync.Mutex
-
+	//nolint
 	methods *struct {
 		SetFullName           func() `in:"name"`
 		SetHomeDir            func() `in:"home"`
@@ -381,7 +381,7 @@ func getUserGreeterBackground(kf *glib.KeyFile) (string, bool) {
 
 func (u *User) updateIconList() {
 	u.IconList = u.getAllIcons()
-	u.emitPropChangedIconList(u.IconList)
+	_ = u.emitPropChangedIconList(u.IconList)
 }
 
 func (u *User) getAllIcons() []string {
@@ -417,7 +417,9 @@ func (u *User) setIconFile(iconURI string) (string, bool, error) {
 
 	if scaled {
 		logger.Debug("icon scaled", tmp)
-		defer os.Remove(tmp)
+		defer func() {
+			_ = os.Remove(tmp)
+		}()
 	}
 
 	dest := getNewUserCustomIconDest(u.UserName)
@@ -705,7 +707,7 @@ func getTempFile() (string, error) {
 		return "", err
 	}
 	name := tmpfile.Name()
-	tmpfile.Close()
+	_ = tmpfile.Close()
 	return name, nil
 }
 
