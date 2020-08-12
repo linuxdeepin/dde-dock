@@ -169,7 +169,7 @@ public:
      * @param displayMode       状态
      * @return
      */
-    QRect realDockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
+    QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
 
 signals:
     void opacityChanged(const quint8 value) const;
@@ -183,6 +183,7 @@ signals:
     void requestUpdateLayout();                                 //　界面需要根据任务栏更新布局的方向
     void requestUpdateDragArea();                               //　更新拖拽区域
     void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
+    void requestDelayShowDock(const QString &screenName);       //　延时唤醒任务栏
 
 public slots:
     void onAutoHideChanged(bool autoHide);
@@ -213,6 +214,7 @@ private slots:
     void primaryScreenChanged();
     void updateParentGeometry(const QVariant &value, const Position &pos);
     void updateParentGeometry(const QVariant &value);
+    void delayShowDock();
 
     // 任务栏属性变化
     void onPositionChanged();
@@ -235,6 +237,7 @@ private slots:
     void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
     void onRequestUpdateMonitorInfo();
+    void onRequestDelayShowDock(const QString &screenName);
 
     void updateMonitorDockedInfo();
 
@@ -287,8 +290,8 @@ private:
      * @param real                      接口是否计算算法,false为计算,true为不计算(与后端接口大小的形式保持一致.比如,后端给出的屏幕大小是不计算缩放的)
      * @return
      */
-    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real = false);
-    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real = false);
+    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
+    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
 
     Monitor *monitorByName(const QList<Monitor *> &list, const QString &screenName);
     QScreen *screenByName(const QString &screenName);
@@ -317,6 +320,7 @@ private:
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
+    QTimer *m_delayTimer;               // sp3需求,切换屏幕显示延时2秒唤起任务栏
 
     // animation
     QVariantAnimation *m_showAni;
@@ -340,13 +344,13 @@ private:
     int m_screenRawWidth;
     QString m_registerKey;
     QString m_extralRegisterKey;
-    QString m_leaveRegisterKey;
     bool m_aniStart;                            // changeDockPosition是否正在运行中
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
     QList<MonitRect> m_extralRectList;          // 任务栏外部区域,随m_monitorRectList一起更新
+    QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
     /*****************************************************************/
 };
 

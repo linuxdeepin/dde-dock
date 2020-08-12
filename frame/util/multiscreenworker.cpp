@@ -45,6 +45,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
     , m_monitorUpdateTimer(new QTimer(this))
+    , m_delayTimer(new QTimer(this))
     , m_showAni(new QVariantAnimation(this))
     , m_hideAni(new QVariantAnimation(this))
     , m_ds(m_displayInter->primary())
@@ -113,7 +114,7 @@ QRect MultiScreenWorker::dockRect(const QString &screenName)
     return dockRect(screenName, m_position, m_hideMode, m_displayMode);
 }
 
-QRect MultiScreenWorker::realDockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
+QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
 {
     if (hideMode == HideMode::KeepShowing)
         return getDockShowGeometry(screenName, pos, displayMode, true);
@@ -226,9 +227,6 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     // 过滤重复坐标
     static QPoint lastPos(0, 0);
     if (lastPos == QPoint(x, y)) {
-#ifdef QT_DEBUG
-        qDebug() << "same point,should return";
-#endif
         return;
     }
     lastPos = QPoint(x, y);
@@ -239,37 +237,10 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
-        // 移动Dock至相应屏相应位置
-        if (m_launcherInter->IsVisible())//启动器显示,则dock不显示
-            return;
+        m_delayScreen = toScreen;
 
-        // 复制模式．不需要响应切换屏幕
-        QList<Monitor *> monitorList = validMonitorList(m_monitorInfo);
-        if (monitorList.size() == 2 && monitorList.first()->rect() == monitorList.last()->rect()) {
-#ifdef QT_DEBUG
-            qDebug() << "copy mode　or merge mode";
-#endif
-            parent()->setFixedSize(dockRect(m_ds.current()).size());
-            parent()->setGeometry(dockRect(m_ds.current()));
-            return;
-        }
-
-        m_ds.updateDockedScreen(screen->name());
-
-        Monitor *currentMonitor = monitorByName(validMonitorList(m_monitorInfo), toScreen);
-        if (!currentMonitor) {
-            qDebug() << "cannot find monitor by name: " << toScreen;
-            return;
-        }
-
-        // 检查边缘是否允许停靠
-        if (currentMonitor->dockPosition().docked(m_position)) {
-            if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
-                showAni(m_ds.current());
-            } else if (m_hideMode == HideMode::KeepShowing) {
-                changeDockPosition(m_ds.last(), m_ds.current(), m_position, m_position);
-            }
-        }
+        if (!m_delayTimer->isActive())
+            m_delayTimer->start();
     } else {
         // 任务栏隐藏状态，但需要显示
         if (hideMode() == HideMode::KeepShowing) {
@@ -304,6 +275,9 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
 {
     if (m_extralRegisterKey != key)
         return;
+
+    // 鼠标移动到任务栏界面之外，不再唤起
+    m_delayTimer->stop();
 
     if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
         if (!m_launcherInter->IsVisible() && m_autoHide && !m_draging && !m_aniStart) {
@@ -468,6 +442,11 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Positi
 void MultiScreenWorker::updateParentGeometry(const QVariant &value)
 {
     updateParentGeometry(value, m_position);
+}
+
+void MultiScreenWorker::delayShowDock()
+{
+    emit requestDelayShowDock(m_delayScreen);
 }
 
 void MultiScreenWorker::onPositionChanged()
@@ -716,7 +695,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 {
-    const QRect rect = realDockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
 
     //!!! 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
     if (rect.width() == 0 || rect.height() == 0)
@@ -897,6 +876,41 @@ void MultiScreenWorker::updateMonitorDockedInfo()
     }
 }
 
+void MultiScreenWorker::onRequestDelayShowDock(const QString &screenName)
+{
+    // 移动Dock至相应屏相应位置
+    if (m_launcherInter->IsVisible())//启动器显示,则dock不显示
+        return;
+
+    // 复制模式．不需要响应切换屏幕
+    QList<Monitor *> monitorList = validMonitorList(m_monitorInfo);
+    if (monitorList.size() == 2 && monitorList.first()->rect() == monitorList.last()->rect()) {
+#ifdef QT_DEBUG
+        qDebug() << "copy mode　or merge mode";
+#endif
+        parent()->setFixedSize(dockRect(m_ds.current()).size());
+        parent()->setGeometry(dockRect(m_ds.current()));
+        return;
+    }
+
+    m_ds.updateDockedScreen(screenName);
+
+    Monitor *currentMonitor = monitorByName(validMonitorList(m_monitorInfo), screenName);
+    if (!currentMonitor) {
+        qDebug() << "cannot find monitor by name: " << screenName;
+        return;
+    }
+
+    // 检查边缘是否允许停靠
+    if (currentMonitor->dockPosition().docked(m_position)) {
+        if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
+            showAni(m_ds.current());
+        } else if (m_hideMode == HideMode::KeepShowing) {
+            changeDockPosition(m_ds.last(), m_ds.current(), m_position, m_position);
+        }
+    }
+}
+
 void MultiScreenWorker::initMembers()
 {
     DockItem::setDockPosition(m_position);
@@ -906,6 +920,9 @@ void MultiScreenWorker::initMembers()
 
     m_monitorUpdateTimer->setInterval(10);
     m_monitorUpdateTimer->setSingleShot(true);
+
+    m_delayTimer->setInterval(2000);
+    m_delayTimer->setSingleShot(true);
 
     //　设置应用角色为任务栏
     m_xcbMisc->set_window_type(xcb_window_t(parent()->winId()), XcbMisc::Dock);
@@ -1006,6 +1023,8 @@ void MultiScreenWorker::initConnection()
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
     connect(this, &MultiScreenWorker::requestNotifyWindowManager, this, &MultiScreenWorker::onRequestNotifyWindowManager);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
+    connect(this, &MultiScreenWorker::requestDelayShowDock, this, &MultiScreenWorker::onRequestDelayShowDock);
+
     //　更新任务栏内容展示
     connect(this, &MultiScreenWorker::requestUpdateLayout, this, [ = ] {
         parent()->panel()->setFixedSize(dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size());
@@ -1037,6 +1056,8 @@ void MultiScreenWorker::initConnection()
         // 通知窗管
         emit requestNotifyWindowManager();
     });
+
+    connect(m_delayTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
 
     checkDaemonDockService();
 }
@@ -1316,12 +1337,12 @@ MainWindow *MultiScreenWorker::parent()
     return static_cast<MainWindow *>(m_parent);
 }
 
-QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real)
+QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
 {
     //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
     const qreal scale = qApp->devicePixelRatio();
     QRect rect;
-    if (real) {//后端真实大小
+    if (withoutScale) {//后端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
                 const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * scale;
@@ -1397,12 +1418,12 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     return rect;
 }
 
-QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool real)
+QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
 {
     //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
     const qreal scale = qApp->devicePixelRatio();
     QRect rect;
-    if (real) {//后端真实大小
+    if (withoutScale) {//后端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
                 const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
