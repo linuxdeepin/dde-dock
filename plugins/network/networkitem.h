@@ -32,7 +32,8 @@ class NetworkItem : public QWidget
         Connected,
         Disconnected,
         Connecting,
-//        Failed,
+        //有线无线都失败
+        Failed,
         ConnectNoInternet,
 //        Aenabled,
 //        Benabled,
@@ -46,7 +47,7 @@ class NetworkItem : public QWidget
         Bconnecting,
         AconnectNoInternet,
         BconnectNoInternet,
-//        Afailed,
+        Afailed,
         Bfailed,
         Nocable
     };
@@ -102,6 +103,8 @@ private:
     bool m_switchWirelessBtnState;
 
     bool m_switchWire;
+    //判断定时的时间是否到,否则不重置计时器
+    bool m_timeOut;
 
     QMap<QString, WiredItem *> m_wiredItems;
     QMap<QString, WirelessItem *> m_wirelessItems;

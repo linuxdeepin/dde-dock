@@ -43,6 +43,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_tipsWidget(new Dock::TipsWidget(this))
     , m_applet(new QScrollArea(this))
     , m_switchWire(true)
+    , m_timeOut(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
 {
@@ -135,6 +136,7 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     connect(m_switchWireTimer, &QTimer::timeout, [ = ] {
         m_switchWire = !m_switchWire;
+        m_timeOut = true;
     });
     connect(m_timer, &QTimer::timeout, this, &NetworkItem::refreshIcon);
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
@@ -355,9 +357,10 @@ void NetworkItem::refreshIcon()
             update();
             return;
         } else {
-            const quint64 index = QTime::currentTime().msec() / 10 % 100;
-            const int num = (index % 5) + 1;
-            iconString = QString("network-wired-symbolic-connecting%1.svg").arg(num);
+            m_timer->start(200);
+            const int index = QTime::currentTime().msec() / 200 % 10;
+            const int num = index + 1;
+            iconString = QString("network-wired-symbolic-connecting%1").arg(num);
             if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                     && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
                 iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -397,16 +400,16 @@ void NetworkItem::refreshIcon()
         return;
     }
     case ConnectNoInternet:
-    case AconnectNoInternet:
+    case AconnectNoInternet: //无线已连接但无法访问互联网 offline
         stateString = "offline";
         iconString = QString("network-wireless-%1-symbolic").arg(stateString);
         break;
     case BconnectNoInternet:
-        stateString = "offline";
+        stateString = "warning";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
-    case Bfailed:
-        stateString = "none";
+    case Bfailed://有线连接失败none变为offline
+        stateString = "offline";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
     case Unknow:
@@ -414,6 +417,10 @@ void NetworkItem::refreshIcon()
         stateString = "error";//待图标 暂用错误图标
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
+    case Afailed:
+    case Failed: //无线连接失败改为 disconnect
+        stateString = "disconnect";
+        iconString = QString("wireless-%1").arg(stateString);
     }
 
     m_timer->stop();
@@ -539,6 +546,16 @@ void NetworkItem::getPluginState()
     if ((temp & WirelessItem::Connected) >> 18) {
         wirelessState = WirelessItem::Connected;
     }
+    //将无线获取地址状态中显示为连接中状态
+    temp = state;
+    if ((temp & WirelessItem::ObtainingIP) >> 22) {
+        wirelessState = WirelessItem::ObtainingIP;
+    }
+    //无线正在认证
+    temp = state;
+    if ((temp & WirelessItem::Authenticating) >> 17) {
+        wirelessState = WirelessItem::Authenticating;
+    }
 
     state = 0;
     temp = 0;
@@ -576,6 +593,16 @@ void NetworkItem::getPluginState()
     if ((temp & WiredItem::Connected) >> 2) {
         wiredState = WiredItem::Connected;
     }
+    //将有线获取地址状态中显示为连接中状态
+    temp = state;
+    if ((temp & WiredItem::ObtainingIP) >> 6) {
+        wiredState = WiredItem::ObtainingIP;
+    }
+    //有线正在认证
+    temp = state;
+    if ((temp & WiredItem::Authenticating) >> 5) {
+        wiredState = WiredItem::Authenticating;
+    }
 
     switch (wirelessState | wiredState) {
     case 0:
@@ -593,13 +620,13 @@ void NetworkItem::getPluginState()
     case 0x00000008:
         m_pluginState = Bdisconnected;
         break;
-    case 0x00000010:
+    case 0x00000010: //有线正在连接
         m_pluginState = Bconnecting;
         break;
-    case 0x00000020:
+    case 0x00000020: //有线正在认证
         m_pluginState = Bconnecting;
         break;
-    case 0x00000040:
+    case 0x00000040: //有线正在获取ip转换为正在连接
         m_pluginState = Bconnecting;
         break;
     case 0x00000080:
@@ -611,7 +638,7 @@ void NetworkItem::getPluginState()
     case 0x00000200:
         m_pluginState = Nocable;
         break;
-    case 0x00000400:
+    case 0x00000400: //只有有线,有线失败
         m_pluginState = Bfailed;
         break;
     case 0x00010000:
@@ -626,29 +653,29 @@ void NetworkItem::getPluginState()
     case 0x00080000:
         m_pluginState = Adisconnected;
         break;
-    case 0x00100000:
+    case 0x00100000: //无线正在连接
         m_pluginState = Aconnecting;
         break;
-    case 0x00200000:
+    case 0x00200000: //无线正在认证
         m_pluginState = Aconnecting;
         break;
-    case 0x00400000:
+    case 0x00400000: //无线正在获取ip转换为正在连接
         m_pluginState = Aconnecting;
         break;
-    case 0x00800000:
+    case 0x00800000: //无线获取ip失败
         m_pluginState = Adisconnected;
         break;
     case 0x01000000:
         m_pluginState = AconnectNoInternet;
         break;
-    case 0x02000000:
-        m_pluginState = Adisconnected;
+    case 0x02000000: // 只有无线 Adisconnected(无线未连接) 改为 Afailed(无线连接失败)
+        m_pluginState = Afailed;
         break;
     case 0x00010001:
         m_pluginState = Disconnected;
         break;
     case 0x00020001:
-        m_pluginState = Bdisconnected;
+        m_pluginState = Bdisconnected;//
         break;
     case 0x00040001:
         m_pluginState = Aconnected;
@@ -656,13 +683,13 @@ void NetworkItem::getPluginState()
     case 0x00080001:
         m_pluginState = Disconnected;
         break;
-    case 0x00100001:
+    case 0x00100001: //无线正在连接,有线启用
         m_pluginState = Aconnecting;
         break;
-    case 0x00200001:
+    case 0x00200001: //无线正在认证, 有线启用
         m_pluginState = Aconnecting;
         break;
-    case 0x00400001:
+    case 0x00400001: //无线正在获取ip,有线启用
         m_pluginState = Aconnecting;
         break;
     case 0x00800001:
@@ -677,7 +704,7 @@ void NetworkItem::getPluginState()
     case 0x00010002:
         m_pluginState = Adisconnected;
         break;
-    case 0x00020002:
+    case 0x00020002: //有线无线都禁用
         m_pluginState = Disabled;
         break;
     case 0x00040002:
@@ -686,23 +713,23 @@ void NetworkItem::getPluginState()
     case 0x00080002:
         m_pluginState = Adisconnected;
         break;
-    case 0x00100002:
+    case 0x00100002: //无线正在连接,有线禁用
         m_pluginState = Aconnecting;
         break;
-    case 0x00200002:
+    case 0x00200002: //无线正在认证,有线禁用
         m_pluginState = Aconnecting;
         break;
-    case 0x00400002:
+    case 0x00400002: //无线正在获取ip,有线禁用
         m_pluginState = Aconnecting;
         break;
-    case 0x00800002:
+    case 0x00800002: //有线禁用,无线未连接
         m_pluginState = Adisconnected;
         break;
     case 0x01000002:
         m_pluginState = AconnectNoInternet;
         break;
-    case 0x02000002:
-        m_pluginState = Adisconnected;
+    case 0x02000002: //有线禁用,无线连接失败,设为无线连接失败  Adisconnected换成Afailed
+        m_pluginState = Afailed;
         break;
     case 0x00010004:
         m_pluginState = Bconnected;
@@ -710,20 +737,20 @@ void NetworkItem::getPluginState()
     case 0x00020004:
         m_pluginState = Bconnected;
         break;
-    case 0x00040004:
+    case 0x00040004: //无线已连接,有线已连接
         m_pluginState = Connected;
         break;
-    case 0x00080004:
+    case 0x00080004: //无线断开连接,有线已连接,状态改为有线已连接
         m_pluginState = Bconnected;
         break;
-    case 0x00100004:
-        m_pluginState = Bconnected;
+    case 0x00100004: //无线正在连接,有线已连接
+        m_pluginState = Aconnecting;
         break;
-    case 0x00200004:
-        m_pluginState = Bconnected;
+    case 0x00200004: // 无线认证中.有线已连接,
+        m_pluginState = Aconnecting;
         break;
-    case 0x00400004:
-        m_pluginState = Bconnected;
+    case 0x00400004: //无线正在获取ip,有线已连接
+        m_pluginState = Aconnecting;
         break;
     case 0x00800004:
         m_pluginState = Bconnected;
@@ -740,19 +767,19 @@ void NetworkItem::getPluginState()
     case 0x00020008:
         m_pluginState = Bdisconnected;
         break;
-    case 0x00040008:
+    case 0x00040008: //无线已连接,有线连接失败
         m_pluginState = Aconnected;
         break;
     case 0x00080008:
         m_pluginState = Disconnected;
         break;
-    case 0x00100008:
+    case 0x00100008: //无线正在连接,有线断开连接
         m_pluginState = Aconnecting;
         break;
-    case 0x00200008:
+    case 0x00200008: //无线正在认证,有线断开连接
         m_pluginState = Aconnecting;
         break;
-    case 0x00400008:
+    case 0x00400008:  //无线正在获取ip,有线断开连接
         m_pluginState = Aconnecting;
         break;
     case 0x00800008:
@@ -770,19 +797,19 @@ void NetworkItem::getPluginState()
     case 0x00020010:
         m_pluginState = Bconnecting;
         break;
-    case 0x00040010:
-        m_pluginState = Aconnected;
+    case 0x00040010: //有线正在连接, 无线已连接
+        m_pluginState = Bconnecting;
         break;
     case 0x00080010:
         m_pluginState = Bconnecting;
         break;
-    case 0x00100010:
+    case 0x00100010: //无线正在连接,有线正在连接
         m_pluginState = Connecting;
         break;
-    case 0x00200010:
+    case 0x00200010: //无线正在认证, 有线正在连接
         m_pluginState = Connecting;
         break;
-    case 0x00400010:
+    case 0x00400010:  //无线正在获取ip,有线正在连接
         m_pluginState = Connecting;
         break;
     case 0x00800010:
@@ -794,58 +821,58 @@ void NetworkItem::getPluginState()
     case 0x02000010:
         m_pluginState = Bconnecting;
         break;
-    case 0x00010020:
+    case 0x00010020: //有线正在连接认证 ,无线其余操作
         m_pluginState = Bconnecting;
         break;
     case 0x00020020:
         m_pluginState = Bconnecting;
         break;
-    case 0x00040020:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080020:
+    case 0x00040020: //有线正在认证, 无线已连接
         m_pluginState = Bconnecting;
         break;
-    case 0x00100020:
+    case 0x00080020://无线断开连接,有线正在认证
+        m_pluginState = Bconnecting;
+        break;
+    case 0x00100020: //无线正在连接,有线正在认证
         m_pluginState = Connecting;
         break;
-    case 0x00200020:
+    case 0x00200020: //无线正在认证,有线正在认证
         m_pluginState = Connecting;
         break;
-    case 0x00400020:
+    case 0x00400020: // 无线正在获取ip ,有线正在认证
         m_pluginState = Connecting;
         break;
-    case 0x00800020:
+    case 0x00800020: // 无线获取ip失败 ,有线正在认证(仅有线正在连接,显示有线状态)
         m_pluginState = Bconnecting;
         break;
-    case 0x01000020:
+    case 0x01000020: // 无线连上但无法访问 ,有线正在认证
         m_pluginState = Bconnecting;
         break;
-    case 0x02000020:
+    case 0x02000020: // 无线连接失败 ,有线正在认证
         m_pluginState = Bconnecting;
         break;
-    case 0x00010040:
+    case 0x00010040: //有线正在获取ip,无线启用
         m_pluginState = Bconnecting;
         break;
     case 0x00020040:
         m_pluginState = Bconnecting;
         break;
-    case 0x00040040:
-        m_pluginState = Aconnected;
+    case 0x00040040: //有线正在获取ip,无线已连接
+        m_pluginState = Bconnecting;
         break;
     case 0x00080040:
         m_pluginState = Bconnecting;
         break;
-    case 0x00100040:
+    case 0x00100040: //无线正在连接,有线正在获取ip
         m_pluginState = Connecting;
         break;
-    case 0x00200040:
+    case 0x00200040: //无线正在认证.有线正在获取ip
         m_pluginState = Connecting;
         break;
-    case 0x00400040:
+    case 0x00400040: // 无线正在获取ip ,有线正在获取ip
         m_pluginState = Connecting;
         break;
-    case 0x00800040:
+    case 0x00800040: //有线正在获取ip,无线获取ip失败
         m_pluginState = Bconnecting;
         break;
     case 0x01000040:
@@ -866,13 +893,13 @@ void NetworkItem::getPluginState()
     case 0x00080080:
         m_pluginState = Disconnected;
         break;
-    case 0x00100080:
+    case 0x00100080: //无线正在连接,有线获取ip失败
         m_pluginState = Aconnecting;
         break;
-    case 0x00200080:
+    case 0x00200080: //无线正在认证,有线获取ip失败
         m_pluginState = Aconnecting;
         break;
-    case 0x00400080:
+    case 0x00400080: // 无线正在获取ip ,有线获取ip失败
         m_pluginState = Aconnecting;
         break;
     case 0x00800080:
@@ -896,13 +923,13 @@ void NetworkItem::getPluginState()
     case 0x00080100:
         m_pluginState = BconnectNoInternet;
         break;
-    case 0x00100100:
+    case 0x00100100: //无线正在连接,有线已连接但无法访问
         m_pluginState = Aconnecting;
         break;
-    case 0x00200100:
+    case 0x00200100: //无线正在认证,有线连接但无法访问
         m_pluginState = Aconnecting;
         break;
-    case 0x00400100:
+    case 0x00400100: // 无线正在获取ip ,有线已连接但无法访问
         m_pluginState = Aconnecting;
         break;
     case 0x00800100:
@@ -926,13 +953,13 @@ void NetworkItem::getPluginState()
     case 0x00080200:
         m_pluginState = Adisconnected;
         break;
-    case 0x00100200:
+    case 0x00100200: //无线正在连接,未插入网线
         m_pluginState = Aconnecting;
         break;
-    case 0x00200200:
+    case 0x00200200: //无线正在认证,有线未插入网线
         m_pluginState = Aconnecting;
         break;
-    case 0x00400200:
+    case 0x00400200: // 无线正在获取ip ,有线未插入网线
         m_pluginState = Aconnecting;
         break;
     case 0x00800200:
@@ -947,7 +974,7 @@ void NetworkItem::getPluginState()
     case 0x00010400:
         m_pluginState = Adisconnected;
         break;
-    case 0x00020400:
+    case 0x00020400: //有线失败,无线禁用
         m_pluginState = Bfailed;
         break;
     case 0x00040400:
@@ -956,13 +983,13 @@ void NetworkItem::getPluginState()
     case 0x00080400:
         m_pluginState = Adisconnected;
         break;
-    case 0x00100400:
+    case 0x00100400: //无线正在连接,有线连接失败
         m_pluginState = Aconnecting;
         break;
-    case 0x00200400:
+    case 0x00200400: //无线正在认证,有线连接失败
         m_pluginState = Aconnecting;
         break;
-    case 0x00400400:
+    case 0x00400400: // 无线正在获取ip ,有线连接失败
         m_pluginState = Aconnecting;
         break;
     case 0x00800400:
@@ -971,8 +998,8 @@ void NetworkItem::getPluginState()
     case 0x01000400:
         m_pluginState = AconnectNoInternet;
         break;
-    case 0x02000400:
-        m_pluginState = Bfailed;
+    case 0x02000400: //有线,无线都连接失败,改为无线连接失败
+        m_pluginState = Failed;
         break;
     }
 
@@ -995,10 +1022,14 @@ void NetworkItem::getPluginState()
     case Bfailed:
     case Nocable:
         m_switchWireTimer->stop();
+        m_timeOut = true;
         break;
     case Connecting:
-        // 启动2s切换计时
-        m_switchWireTimer->start(2000);
+        // 启动2s切换计时,只有当计时器记满则重新计数
+        if (m_timeOut) {
+            m_switchWireTimer->start(2000);
+            m_timeOut = false;
+        }
         break;
     }
 }
@@ -1217,8 +1248,10 @@ void NetworkItem::refreshTips()
     case BconnectNoInternet:
         m_tipsWidget->setText(tr("Connected but no Internet access"));
         break;
+    case Failed:
+    case Afailed:
     case Bfailed:
-        m_tipsWidget->setText(tr("Network cable unplugged"));
+        m_tipsWidget->setText(tr("Connection failed"));
         break;
     case Unknow:
     case Nocable:
