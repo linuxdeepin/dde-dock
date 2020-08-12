@@ -528,6 +528,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath, fo
 	} else {
 		if !forced && isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
 			err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+			notifyWiredCableUnplugged()
 			return
 		}
 	}
@@ -544,6 +545,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath, fo
 func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
 	if isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
 		err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+		notifyWiredCableUnplugged()
 		return
 	}
 	spath := dbus.ObjectPath("/")
