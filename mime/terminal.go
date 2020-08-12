@@ -22,6 +22,7 @@ package mime
 import (
 	"fmt"
 	"strings"
+	"unicode/utf8"
 
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
@@ -109,21 +110,37 @@ func setDefaultTerminal(id string) error {
 	return fmt.Errorf("invalid terminal id '%s'", id)
 }
 
-func getDefaultTerminal() (*AppInfo, error) {
+func getDefaultTerminal() (appInfo *AppInfo, changed bool, err error) {
 	settings := gio.NewSettings(gsSchemaDefaultTerminal)
 	appId := settings.GetString(gsKeyAppId)
 	// add suffix .desktop
 	if !strings.HasSuffix(appId, desktopExt) {
 		appId = appId + desktopExt
 	}
-	settings.Unref()
-	for _, info := range getTerminalInfos() {
+	defer settings.Unref()
+
+	// if not find the specified application,choose other application,and send Change signal
+	appInfos := getTerminalInfos()
+	for _, info := range appInfos {
 		if info.Id == appId {
-			return info, nil
+			return info, false, nil
+		}
+		if appInfo == nil && (strings.Contains(info.Id, "gnome") || strings.Contains(info.Id, "deepin")) {
+			appInfo = info
 		}
 	}
 
-	return nil, fmt.Errorf("not found app id for %q", appId)
+	if (appInfo == nil) && (len(appInfos) > 0) {
+		appInfo = appInfos[0]
+	}
+	if appInfo != nil {
+		settings.SetString(gsKeyAppId, appInfo.Id)
+		settings.SetString(gsKeyExec, appInfo.Exec)
+		settings.SetString(gsKeyExecArg, getExecArg(appInfo.Exec))
+		return appInfo, true, nil
+	}
+
+	return nil, false, fmt.Errorf("not found app id for %q", appId)
 }
 
 func getTerminalInfos() AppInfos {
@@ -132,6 +149,11 @@ func getTerminalInfos() AppInfos {
 	var list AppInfos
 	for _, appInfo := range appInfoList {
 		if !isTerminalApp(appInfo) {
+			continue
+		}
+		if !appInfo.IsExecutableOk() ||
+			!utf8.ValidString(appInfo.GetId()) ||
+			isDeepinCustomDesktopFile(appInfo.GetFileName()) {
 			continue
 		}
 

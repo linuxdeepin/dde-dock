@@ -224,11 +224,12 @@ func (m *Manager) Reset() {
 // ret1: error message
 func (m *Manager) GetDefaultApp(mimeType string) (string, *dbus.Error) {
 	var (
-		info *AppInfo
-		err  error
+		info    *AppInfo
+		err     error
+		changed bool
 	)
 	if mimeType == AppMimeTerminal {
-		info, err = getDefaultTerminal()
+		info, changed, err = getDefaultTerminal()
 	} else {
 		info, err = GetDefaultAppInfo(mimeType)
 	}
@@ -236,6 +237,9 @@ func (m *Manager) GetDefaultApp(mimeType string) (string, *dbus.Error) {
 		return "", dbusutil.ToError(err)
 	}
 
+	if changed {
+		m.emitSignalChange()
+	}
 	defaultApp, err := toJSON(info)
 	if err != nil {
 		return "", dbusutil.ToError(err)
