@@ -43,6 +43,8 @@ type adapter struct {
 	DiscoverableTimeout uint32
 	// discovering timer, when time is up, stop discovering until start button is clicked next time
 	discoveringTimeout *time.Timer
+	//Scan timeout flag
+	discoveringTimeoutFlag bool
 }
 
 var defaultDiscoveringTimeout = 1 * time.Minute
@@ -57,6 +59,8 @@ func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *a
 	// 用于定时停止扫描
 	a.discoveringTimeout = time.AfterFunc(defaultDiscoveringTimeout, func() {
 		logger.Debug("discovery time out, stop discovering")
+		//Scan timeout
+		a.discoveringTimeoutFlag = true
 		if err := a.core.StopDiscovery(0); err != nil {
 			logger.Warningf("stop discovery failed, err:%v", err)
 		}
@@ -181,10 +185,15 @@ func (a *adapter) connectProperties() {
 		}
 		a.Discovering = value
 		logger.Debugf("%s Discovering: %v", a, value)
-		if value != a.Powered {
-			return
+		//Scan timeout and send attribute change signal directly
+		if a.discoveringTimeoutFlag {
+			a.notifyPropertiesChanged()
+		} else {
+			if value != a.Powered {
+				return
+			}
+			a.notifyPropertiesChanged()
 		}
-		a.notifyPropertiesChanged()
 	})
 	if err != nil {
 		logger.Warning(err)

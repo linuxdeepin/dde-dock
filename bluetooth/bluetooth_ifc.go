@@ -166,6 +166,8 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
+	//Not scan timeout
+	a.discoveringTimeoutFlag = false
 
 	err = a.core.Powered().Set(0, powered)
 	if err != nil {
