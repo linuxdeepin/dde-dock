@@ -493,6 +493,8 @@ void MultiScreenWorker::onPositionChanged()
         hideAni(m_ds.current());
         // 更新当前屏幕信息,下次显示从目标屏幕显示
         m_ds.updateDockedScreen(getValidScreen(m_position));
+        // 需要更新frontendWindowRect接口数据，否则会造成HideState属性值不变
+        emit requestUpdateFrontendGeometry();
     } else {
         // 一直显示的模式才需要显示
         emit requestUpdatePosition(lastPos, position);
