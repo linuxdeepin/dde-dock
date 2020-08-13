@@ -20,6 +20,8 @@
 package timedated
 
 import (
+	"os"
+
 	"github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -28,10 +30,10 @@ import (
 // pass a value of microseconds since 1 Jan 1970 UTC
 func (m *Manager) SetTime(sender dbus.Sender, usec int64, relative bool, msg string) *dbus.Error {
 	/*
-	err := m.checkAuthorization("SetTime", msg, sender)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
+		err := m.checkAuthorization("SetTime", msg, sender)
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	*/
 
 	// TODO: check usec validity
@@ -81,10 +83,10 @@ func (m *Manager) SetLocalRTC(sender dbus.Sender, enabled bool, fixSystem bool, 
 // SetNTP to control whether the system clock is synchronized with the network
 func (m *Manager) SetNTP(sender dbus.Sender, enabled bool, msg string) *dbus.Error {
 	/*
-	err := m.checkAuthorization("SetNTP", msg, sender)
-	if err != nil {
-		return dbusutil.ToError(err)
-	}
+		err := m.checkAuthorization("SetNTP", msg, sender)
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
 	*/
 
 	currentNTPEnabled, err := m.core.NTP().Get(0)
@@ -95,6 +97,16 @@ func (m *Manager) SetNTP(sender dbus.Sender, enabled bool, msg string) *dbus.Err
 		return nil
 	}
 	err = m.core.SetNTP(0, enabled, false)
+	// 关闭NTP时删除clock文件，使systemd以RTC时间为准
+	if !enabled {
+		err := os.Remove("/var/lib/systemd/timesync/clock")
+		if err != nil {
+			if !os.IsNotExist(err) {
+				logger.Warning("delete [/var/lib/systemd/timesync/clock] err:", err)
+			}
+		}
+	}
+
 	return dbusutil.ToError(err)
 }
 
