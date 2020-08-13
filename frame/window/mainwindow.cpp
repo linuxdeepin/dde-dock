@@ -334,7 +334,6 @@ void MainWindow::launch()
         if(interface.isValid()) {
             waitServerTimer->stop();
             waitServerTimer->deleteLater();
-            emit loaderPlugins();
             QTimer::singleShot(400, this, [&] {
                 m_launched = true;
                 qApp->processEvents();
