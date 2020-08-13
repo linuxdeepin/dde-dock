@@ -42,7 +42,7 @@ const (
 	obexAgentDBusPath      = dbusPath + "/ObexAgent"
 	obexAgentDBusInterface = "org.bluez.obex.Agent1"
 
-	receiveFileNotifyTimeout = 60 * 1000
+	receiveFileNotifyTimeout = 5 * 1000
 )
 
 var receiveBaseDir = userdir.Get(userdir.Download)
@@ -58,8 +58,14 @@ type obexAgent struct {
 	requestNotifyCh   chan bool
 	requestNotifyChMu sync.Mutex
 
+	receiveCh   chan struct{}
+	recevieChMu sync.Mutex
+
 	acceptedSessions   map[dbus.ObjectPath]int
 	acceptedSessionsMu sync.Mutex
+
+	notify   *notifications.Notifications
+	notifyID uint32
 
 	// nolint
 	methods *struct {
@@ -152,20 +158,19 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 		deviceName = dev.Name
 	}
 
-	accepted, err := a.isSessionAccepted(sessionPath, deviceName)
+	accepted, err := a.isSessionAccepted(sessionPath, deviceName, transfer)
 	if err != nil {
+		logger.Debug("isSessionAccepted err", err)
 		return "", dbusutil.ToError(err)
 	}
 	if !accepted {
 		return "", dbusutil.ToError(errors.New("declined"))
 	}
 
-	a.receiveProgress(deviceName, sessionPath, transfer)
-
 	return filename, nil
 }
 
-func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName string) (bool, error) {
+func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName string, transfer *obex.Transfer) (bool, error) {
 	a.acceptedSessionsMu.Lock()
 	defer a.acceptedSessionsMu.Unlock()
 
@@ -180,8 +185,17 @@ func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName st
 		if !accepted {
 			return false, nil
 		}
-
 		a.acceptedSessions[sessionPath] = 0
+		a.notify = notifications.NewNotifications(a.service.Conn())
+		a.notify.InitSignalExt(a.sigLoop, true)
+		a.notifyID = 0
+		a.recevieChMu.Lock()
+		a.receiveCh = make(chan struct{}, 1)
+		a.recevieChMu.Unlock()
+		a.receiveProgress(deviceName, sessionPath, transfer)
+	} else {
+		<-a.receiveCh
+		a.receiveProgress(deviceName, sessionPath, transfer)
 	}
 
 	a.acceptedSessions[sessionPath]++
@@ -196,11 +210,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		logger.Error("failed to get file size:", err)
 	}
 
-	notify := notifications.NewNotifications(a.service.Conn())
-	notify.InitSignalExt(a.sigLoop, true)
-
 	var notifyMu sync.Mutex
-	var notifyID uint32
 	var oriFilepath string
 	var basename string
 
@@ -219,7 +229,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 
 			basename = filepath.Base(oriFilepath)
 			notifyMu.Lock()
-			notifyID = a.notifyProgress(notify, notifyID, basename, device, 0)
+			a.notifyID = a.notifyProgress(a.notify, a.notifyID, basename, device, 0)
 			notifyMu.Unlock()
 		}
 
@@ -230,7 +240,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		// 手机会在一个传送完成之后再开始下一个传送，所以 transfer path 会一样
 		transfer.RemoveAllHandlers()
 
-		notify.RemoveAllHandlers()
+		a.notify.RemoveAllHandlers()
 
 		if value == transferStatusComplete {
 			// 传送完成，移动到下载目录
@@ -241,13 +251,17 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 			}
 
 			notifyMu.Lock()
-			notifyID = a.notifyProgress(notify, notifyID, basename, device, 100)
+			a.notifyID = a.notifyProgress(a.notify, a.notifyID, basename, device, 100)
 			notifyMu.Unlock()
 		} else {
 			notifyMu.Lock()
-			notifyID = a.notifyFailed(notify, notifyID)
+			a.notifyID = a.notifyFailed(a.notify, a.notifyID)
 			notifyMu.Unlock()
 		}
+
+		a.recevieChMu.Lock()
+		a.receiveCh <- struct{}{}
+		a.recevieChMu.Unlock()
 
 		// 避免下个传输还没开始就被清空，导致需要重新询问，故加上一秒的延迟
 		time.AfterFunc(time.Second, func() {
@@ -278,21 +292,19 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		logger.Infof("transferPath: %s, progress: %d", transfer.Path_(), progress)
 
 		notifyMu.Lock()
-		notifyID = a.notifyProgress(notify, notifyID, basename, device, progress)
+		a.notifyID = a.notifyProgress(a.notify, a.notifyID, basename, device, progress)
 		notifyMu.Unlock()
 	})
 	if err != nil {
 		logger.Warning("connect transferred changed failed:", err)
 	}
-
-	_, err = notify.ConnectActionInvoked(func(id uint32, actionKey string) {
+	_, err = a.notify.ConnectActionInvoked(func(id uint32, actionKey string) {
 		notifyMu.Lock()
-		if notifyID != id {
+		if a.notifyID != id {
 			notifyMu.Unlock()
 			return
 		}
 		notifyMu.Unlock()
-
 		if actionKey != "cancel" {
 			return
 		}
@@ -310,23 +322,39 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 // notifyProgress 发送文件传输进度通知
 func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceID uint32, filename string, device string, progress uint64) uint32 {
 	var actions []string
+	var notifyID uint32
+	var err error
 	if progress != 100 {
 		actions = []string{"cancel", gettext.Tr("Cancel")}
-	}
+		hints := map[string]dbus.Variant{"suppress-sound": dbus.MakeVariant(true)}
 
-	hints := map[string]dbus.Variant{"suppress-sound": dbus.MakeVariant(true)}
-
-	notifyID, err := notify.Notify(0,
-		"dde-control-center",
-		replaceID,
-		notifyIconBluetoothConnected,
-		fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), filename, device),
-		fmt.Sprintf("%d%%", progress),
-		actions,
-		hints,
-		receiveFileNotifyTimeout)
-	if err != nil {
-		logger.Warning("failed to send notify:", err)
+		notifyID, err = notify.Notify(0,
+			"dde-control-center",
+			replaceID,
+			notifyIconBluetoothConnected,
+			fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), device, filename),
+			fmt.Sprintf("%d%%", progress),
+			actions,
+			hints,
+			receiveFileNotifyTimeout)
+		if err != nil {
+			logger.Warning("failed to send notify:", err)
+		}
+	} else {
+		actions = []string{"_view", gettext.Tr("View")}
+		hints := map[string]dbus.Variant{"x-deepin-action-_view": dbus.MakeVariant("xdg-open," + receiveBaseDir)}
+		notifyID, err = notify.Notify(0,
+			"dde-control-center",
+			replaceID,
+			notifyIconBluetoothConnected,
+			fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), device, filename),
+			gettext.Tr("Done"),
+			actions,
+			hints,
+			receiveFileNotifyTimeout)
+		if err != nil {
+			logger.Warning("failed to send notify:", err)
+		}
 	}
 
 	return notifyID
@@ -391,7 +419,6 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 		if notifyID != id {
 			return
 		}
-
 		a.requestNotifyChMu.Lock()
 		if a.requestNotifyCh != nil {
 			a.requestNotifyCh <- actionKey == "receive"
@@ -418,7 +445,6 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 		logger.Warning("ConnectNotificationClosed failed:", err)
 		return false, dbusutil.ToError(err)
 	}
-
 	result := <-a.requestNotifyCh
 
 	a.requestNotifyChMu.Lock()
