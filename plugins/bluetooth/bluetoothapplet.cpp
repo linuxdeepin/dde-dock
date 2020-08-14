@@ -162,6 +162,8 @@ void BluetoothApplet::onPowerChanged()
          }
     }
     emit powerChanged(powerState);
+
+    m_openControlCenter->setVisible(powerState);
 }
 
 void BluetoothApplet::onDeviceStateChanged()
@@ -235,17 +237,20 @@ void BluetoothApplet::updateView()
     int contentHeight = 0;
     int itemCount = 0;
     bool isAdapterConnected = true;
+    bool isPowered = false;
     for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem) {
             contentHeight += CONTROLHEIGHT;
-            if (adapterItem->isPowered())
+            if (adapterItem->isPowered()) {
+                isPowered = true;
                 itemCount += adapterItem->deviceCount();
+            }
             if (adapterItem->connectedDevsName().size())
                 isAdapterConnected = false;
         }
     }
 
-    m_openControlCenter->setVisible(isAdapterConnected);
+    m_openControlCenter->setVisible(isPowered);
     if (isAdapterConnected) {
         m_menueLayout->addWidget(m_openControlCenter);
         contentHeight += ITEMHEIGHT;
