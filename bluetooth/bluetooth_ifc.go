@@ -174,6 +174,7 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath,
 		logger.Warningf("failed to set %s powered: %v", a, err)
 		return dbusutil.ToError(err)
 	}
+	globalBluetooth.config.setAdapterConfigPowered(a.address, a.Powered)
 
 	return nil
 }

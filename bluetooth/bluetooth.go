@@ -609,7 +609,6 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	// initialize adapter power state
 	b.config.addAdapterConfig(a.address)
 	cfgPowered := b.config.getAdapterConfigPowered(a.address)
-
 	err := a.core.Powered().Set(0, cfgPowered)
 	if err != nil {
 		logger.Warning(err)

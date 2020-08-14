@@ -162,9 +162,6 @@ func (a *adapter) connectProperties() {
 		// Sleep for 1s and wait for bluez to set the attributes before sending the attribute change signal
 		time.Sleep(1 * time.Second)
 
-		// save the powered state
-		globalBluetooth.config.setAdapterConfigPowered(a.address, a.Powered)
-
 		if a.Powered {
 			err := a.core.Discoverable().Set(0, globalBluetooth.config.Discoverable)
 			if err != nil {
