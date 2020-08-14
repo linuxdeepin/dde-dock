@@ -294,7 +294,7 @@ void check_move_stop_leave(movement m) {
     if (edge_move_stop_direction != DIR_NONE) {
         uint32_t duration = (m.t_end - moveStop.start) / 1000;
         if (valid_move_stop_time(duration))
-            handleTouchEdgeMoveStopLeave(edge_move_stop_direction, moveStop.x / screen.width, moveStop.y / screen.width, duration);
+            handleTouchEdgeMoveStopLeave(edge_move_stop_direction, moveStop.x / screen.width, moveStop.y / screen.height, duration);
     }
 }
 
@@ -380,9 +380,9 @@ void handle_touch_event_motion(struct libinput_event *event, struct movement *m)
     //check if borde move
     edge_move_stop_direction = edge_stop_move_direction(m);           //edge moving direction
 
-    if (cur_touch_finger_num(m) != 1) {
+    if (cur_touch_finger_num(m) == 1) {
         update_move_stop(m[slot]);
-    } else {
+
         check_move_stop_time(m[slot]);
         handleTouchMoving(m[slot].end.x / screen.width, m[slot].end.y / screen.height);
     }

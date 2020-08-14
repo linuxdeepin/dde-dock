@@ -289,7 +289,7 @@ func (m *Manager) handleTouchEdgeMoveStopLeave(edge string, scaleX float64, scal
 				return err
 			}
 
-			if screenHeight > 0 && float64(dockPly)/float64(screenHeight) < scaleY {
+			if screenHeight > 0 && float64(dockPly)/float64(screenHeight)+scaleY < 1 {
 				return m.handleBuiltinAction("ShowWorkspace")
 			}
 		}
