@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"pkg.deepin.io/dde/api/soundutils"
+	dbus "pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 )
 
