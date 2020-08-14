@@ -258,6 +258,9 @@ void PowerPlugin::refreshTipsData()
         QDateTime time = QDateTime::fromTime_t(timeToEmpty).toUTC();
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
+        uint sencond = time.toString("ss").toInt();
+        if (sencond > 0)
+            min += 1;
         if (!m_showTimeToFull) {
             tips = tr("Capacity %1").arg(value);
         } else {
