@@ -1,5 +1,23 @@
 [
     {
+        "Name": "pinch",
+        "Direction": "in",
+        "Fingers": 2,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "ctrl+minus"
+        }
+    },
+    {
+        "Name": "pinch",
+        "Direction": "out",
+        "Fingers": 2,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "ctrl+equal"
+        }
+    },
+    {
         "Name": "swipe",
         "Direction": "up",
         "Fingers": 3,
@@ -40,8 +58,8 @@
         "Direction": "none",
         "Fingers": 3,
         "Action": {
-            "Type": "built-in",
-            "Action": "MoveWindow"
+            "Type": "shortcut",
+            "Action": "ctrl+alt+u"
         }
     },
     {
