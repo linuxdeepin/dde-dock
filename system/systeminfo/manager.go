@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -27,6 +29,7 @@ type Manager struct {
 	PropsMu         sync.RWMutex
 	MemorySize      uint64
 	MemorySizeHuman string
+	CurrentSpeed    uint64
 }
 
 type lshwXmlList struct {
@@ -110,16 +113,16 @@ func (m *Manager) setMemorySizeHuman(value string) {
 	}
 }
 
-func (m *Manager) calculateMemoryViaLshw() {
+func (m *Manager) calculateMemoryViaLshw() error {
 	cmdOutBuf, err := runLshwMemory()
 	if err != nil {
 		logger.Error(err)
-		return
+		return err
 	}
-	ret, error := parseXml(cmdOutBuf)
-	if error != nil {
-		logger.Error(error)
-		return
+	ret, err1 := parseXml(cmdOutBuf)
+	if err1 != nil {
+		logger.Error(err1)
+		return err1
 	}
 	memory := formatFileSize(ret.Size)
 	m.PropsMu.Lock()
@@ -127,5 +130,97 @@ func (m *Manager) calculateMemoryViaLshw() {
 	m.setMemorySize(ret.Size)
 	m.setMemorySizeHuman(memory)
 	m.PropsMu.Unlock()
-	logger.Debug("System Memory : ", ret.Size)
+	logger.Debug("system memory : ", ret.Size)
+	return nil
+}
+
+func GetCurrentSpeed(systemBit int) (uint64, error) {
+	ret, err := getCurrentSpeed(systemBit)
+	return ret, err
+}
+
+func getCurrentSpeed(systemBit int) (uint64, error) {
+	var ret uint64 = 0
+	cmdOutBuf, err := runDmidecode()
+	if err != nil {
+		return ret, err
+	}
+	ret, err = parseCurrentSpeed(cmdOutBuf, systemBit)
+	if err != nil {
+		logger.Error(err)
+		return ret, err
+	}
+	logger.Debug("GetCurrentSpeed :", ret)
+	return ret, err
+}
+
+func runDmidecode() (string, error) {
+	cmd := exec.Command("dmidecode", "-t", "processor")
+	out, err := cmd.Output()
+	if err != nil {
+		logger.Error(err)
+	}
+	return string(out), err
+}
+
+//From string parse "Current Speed"
+func parseCurrentSpeed(bytes string, systemBit int) (result uint64, err error) {
+	logger.Debug("parseCurrentSpeed data: ", bytes)
+	lines := strings.Split(bytes, "\n")
+	for _, line := range lines {
+		if !strings.Contains(line, "Current Speed:") {
+			continue
+		}
+		items := strings.Split(line, "Current Speed:")
+		ret := ""
+		if len(items) == 2 {
+			//Current Speed: 3200 MHz
+			ret = items[1]
+			value, err := strconv.ParseUint(strings.TrimSpace(filterUnNumber(ret)), 10, systemBit)
+			if err != nil {
+				logger.Error(err)
+				return result, err
+			}
+			result = value
+		}
+		break
+	}
+	return result, err
+}
+
+//仅保留字符串中的数字
+func filterUnNumber(value string) string {
+	reg, err := regexp.Compile("[^0-9]+")
+	if err != nil {
+		logger.Fatal(err)
+	}
+	return reg.ReplaceAllString(value, "")
+}
+
+func (m *Manager)systemBit() string {
+	output, err := exec.Command("/usr/bin/getconf", "LONG_BIT").Output()
+	if err != nil {
+		return "64"
+	}
+
+	v := strings.TrimRight(string(output), "\n")
+	return v
+}
+
+func (m *Manager) setPropCurrentSpeed(value uint64) (changed bool) {
+	if m.CurrentSpeed != value {
+		m.CurrentSpeed = value
+		err := m.emitPropChangedsetPropCurrentSpeed(value)
+		if err != nil {
+			logger.Warning("emitPropChangedsetPropCurrentSpeed err : ", err)
+			changed = false
+		} else {
+			changed = true
+		}
+	}
+	return changed
+}
+
+func (m *Manager) emitPropChangedsetPropCurrentSpeed(value uint64) error {
+	return m.service.EmitPropertyChanged(m, "CurrentSpeed", value)
 }

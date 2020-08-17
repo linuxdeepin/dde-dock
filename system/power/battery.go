@@ -61,8 +61,6 @@ type Battery struct {
 	TimeToFull  uint64
 	UpdateTime  int64
 
-	timeToFullHistory []uint64
-
 	batteryHistory []float64
 
 	refreshDone func()
