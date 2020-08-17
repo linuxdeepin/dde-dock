@@ -312,15 +312,7 @@ void NetworkItem::refreshIcon()
     case Connected:
     case Aconnected:
         strength = getStrongestAp();
-        if (strength < 0)
-            strength = 100;
-        if (strength == 100) {
-            stateString = "80";
-        } else if (strength < 20) {
-            stateString = "0";
-        } else {
-            stateString = QString::number(strength / 10 & ~0x1) + "0";
-        }
+        stateString = getStrengthStateString(strength);
         iconString = QString("wireless-%1-symbolic").arg(stateString);
         break;
     case Bconnected:
@@ -340,13 +332,7 @@ void NetworkItem::refreshIcon()
         m_timer->start();
         if (m_switchWire) {
             strength = QTime::currentTime().msec() / 10 % 100;
-            if (strength == 100) {
-                stateString = "80";
-            } else if (strength < 20) {
-                stateString = "0";
-            } else {
-                stateString = QString::number(strength / 10 & ~0x1) + "0";
-            }
+            stateString = getStrengthStateString(strength);
             iconString = QString("wireless-%1-symbolic").arg(stateString);
             if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                     && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
@@ -369,13 +355,7 @@ void NetworkItem::refreshIcon()
     case Aconnecting: {
         m_timer->start();
         strength = QTime::currentTime().msec() / 10 % 100;
-        if (strength == 100) {
-            stateString = "80";
-        } else if (strength < 20) {
-            stateString = "0";
-        } else {
-            stateString = QString::number(strength / 10 & ~0x1) + "0";
-        }
+        stateString = getStrengthStateString(strength);
         iconString = QString("wireless-%1-symbolic").arg(stateString);
         if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                 && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
@@ -467,6 +447,22 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
         }
     }
     return false;
+}
+
+QString NetworkItem::getStrengthStateString(int strength)
+{
+    if (5 >= strength)
+        return "0";
+    else if (5 < strength && 30 >= strength)
+        return "20";
+    else if (30 < strength && 55 >= strength)
+        return "40";
+    else if (55 < strength && 65 >= strength)
+        return "60";
+    else if (65 < strength)
+        return "80";
+    else
+        return "0";
 }
 
 void NetworkItem::wiredsEnable(bool enable)
