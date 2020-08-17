@@ -31,10 +31,7 @@
 
 #include <WirelessDevice>
 
-namespace Dock {
 class TipsWidget;
-}
-
 class WirelessItem : public DeviceItem
 {
     Q_OBJECT

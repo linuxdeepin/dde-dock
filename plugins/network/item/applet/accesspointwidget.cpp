@@ -34,6 +34,7 @@
 #include <QFontMetrics>
 #include <QIcon>
 
+using namespace Dock;
 using namespace dde::network;
 
 DWIDGET_USE_NAMESPACE

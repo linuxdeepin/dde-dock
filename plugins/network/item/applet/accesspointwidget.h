@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QDBusObjectPath>
 
+class StateButton;
 class StateLabel;
 class SsidButton : public QLabel
 {

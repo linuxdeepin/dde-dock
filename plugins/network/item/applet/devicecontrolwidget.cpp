@@ -30,12 +30,9 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QEvent>
-<<<<<<< HEAD
 #include <DGuiApplicationHelper>
 #include <QDBusConnection>
-=======
 #include <QLabel>
->>>>>>> 7cac6001... feat:format code
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE

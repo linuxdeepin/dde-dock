@@ -30,6 +30,7 @@
 #include <NetworkModel>
 #include <QVBoxLayout>
 
+using namespace Dock;
 DGUI_USE_NAMESPACE
 
 const int ItemHeight = 30;

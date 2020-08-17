@@ -24,7 +24,7 @@
 #include "horizontalseperator.h"
 
 #include <QWidget>
-
+#include <QLabel>
 #include <dloadingindicator.h>
 #include <dswitchbutton.h>
 
@@ -32,13 +32,9 @@
 
 using AirplanInter = com::deepin::daemon::AirplaneMode;
 
-
 DWIDGET_USE_NAMESPACE
-
-namespace Dock {
 class TipsWidget;
 class QLabel;
-
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
