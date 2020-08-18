@@ -683,18 +683,16 @@ void MainPanelControl::startDrag(DockItem *item)
 
         appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
         appDrag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
+        const QPixmap &dragPix = qobject_cast<AppItem *>(item)->appIcon();
+
+        appDrag->setPixmap(dragPix);
+        m_appDragWidget->show();
 
         if (DWindowManagerHelper::instance()->hasComposite()) {
-            appDrag->setPixmap(pixmap);
-            m_appDragWidget->show();
-
             static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
         } else {
-            const QPixmap &dragPix = qobject_cast<AppItem *>(item)->appIcon();
-
             appDrag->QDrag::setPixmap(dragPix);
-            appDrag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
-        }
+       }
 
         drag = appDrag;
     } else {

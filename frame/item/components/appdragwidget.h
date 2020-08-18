@@ -79,6 +79,7 @@ private:
     Dock::Position m_dockPosition;
     QRect m_dockGeometry;
     QPoint m_originPoint;
+    QSize m_iconSize;
     Dock::TipsWidget *m_removeTips;
     DockPopupWindow *m_popupWindow;
     /**

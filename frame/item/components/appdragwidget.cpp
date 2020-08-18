@@ -186,14 +186,23 @@ const QPoint AppDragWidget::topleftPoint() const
 const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
 {
     QPoint p(topleftPoint());
+    QRect r = rect();
+    //关闭特效,原本的图标设置小,然后隐藏,需要手动设置大小保证tips位置正确
+    if (!DWindowManagerHelper::instance()->hasComposite()) {
+        r.setWidth(m_iconSize.width() + 3);
+        r.setHeight(m_iconSize.height() + 3);
+    }
 
-    const QRect r = rect();
     switch (pos) {
     case Top:
         p += QPoint(r.width() / 2, r.height());
         break;
     case Bottom:
-        p += QPoint(r.width() / 2, 0);
+        if (!DWindowManagerHelper::instance()->hasComposite()) {
+            p += QPoint(0 , -r.height() / 2);
+        } else {
+            p += QPoint(r.width() / 2, 0);
+        }
         break;
     case Left:
         p += QPoint(r.width(), r.height() / 2);
@@ -210,12 +219,20 @@ void AppDragWidget::dropEvent(QDropEvent *event)
     m_followMouseTimer->stop();
 
     if (isRemoveAble()) {
-        showRemoveAnimation();
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            showRemoveAnimation();
+        } else {
+            hide();
+        }
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
         m_popupWindow->setVisible(false);
     } else {
-        showGoBackAnimation();
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            showGoBackAnimation();
+        } else {
+            hide();
+        }
     }
 }
 
@@ -226,9 +243,14 @@ void AppDragWidget::hideEvent(QHideEvent *event)
 
 void AppDragWidget::setAppPixmap(const QPixmap &pix)
 {
-    // QSize(3, 3) to fix pixmap be cliped
-    setFixedSize(pix.size() + QSize(3, 3));
+    if (DWindowManagerHelper::instance()->hasComposite()) {
+        // QSize(3, 3) to fix pixmap be cliped
+        setFixedSize(pix.size() + QSize(3, 3));
+    } else {
+        setFixedSize(QSize(10, 10));
+    }
 
+    m_iconSize = pix.size();
     m_object->setAppPixmap(pix);
     m_object->setTransformOriginPoint(pix.rect().center());
 }
