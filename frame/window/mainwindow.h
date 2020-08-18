@@ -27,8 +27,7 @@
 #include "dbus/sni/statusnotifierwatcher_interface.h"
 #include "panel/mainpanelcontrol.h"
 #include "util/multiscreenworker.h"
-
-#include <com_deepin_api_xeventmonitor.h>
+#include "util/touchsignalmanager.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -67,6 +66,10 @@ signals:
 private:
     void mousePressEvent(QMouseEvent *event) override
     {
+        // qt转发的触屏按下信号不进行响应
+        if (event->source() == Qt::MouseEventSynthesizedByQt) {
+            return;
+        }
         if (event->button() == Qt::LeftButton) {
             m_resizePoint = event->globalPos();
             m_dragStatus = true;
@@ -159,6 +162,7 @@ private slots:
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+    void touchRequestResizeDock();
 
 private:
     MainPanelControl *m_mainPanel;

@@ -196,6 +196,8 @@ public slots:
 
     void handleDbusSignal(QDBusMessage);
 
+    void updateTouchRegisterRegion(const QRect &rect);
+
 private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
@@ -241,6 +243,9 @@ private slots:
 
     void updateMonitorDockedInfo();
 
+    void onTouchPress(int type, int x, int y, const QString &key);
+    void onTouchRelease(int type, int x, int y, const QString &key);
+
 private:
     // 初始化数据信息
     void initMembers();
@@ -251,6 +256,12 @@ private:
      * @param screen    显示到目标屏幕上
      */
     void showAni(const QString &screen);
+    /**
+     * @brief tryToShowDock 根据xEvent监控区域信号的x，y坐标处理任务栏唤醒显示
+     * @param eventX        监控信号x坐标
+     * @param eventY        监控信号y坐标
+     */
+    void tryToShowDock(int eventX, int eventY);
     /**
      * @brief hideAni   任务栏隐藏动画
      * @param screen    从目标屏幕上隐藏
@@ -312,6 +323,8 @@ private:
     // monitor screen
     XEventMonitor *m_eventInter;
     XEventMonitor *m_extralEventInter;
+    // 触控屏唤起任务栏监控区域接口
+    XEventMonitor *m_touchEventInter;
 
     // DBus interface
     DBusDock *m_dockInter;
@@ -344,13 +357,18 @@ private:
     int m_screenRawWidth;
     QString m_registerKey;
     QString m_extralRegisterKey;
+    QString m_touchRegisterKey;                 // 触控屏唤起任务栏监控区域key
     bool m_aniStart;                            // changeDockPosition是否正在运行中
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
     QList<MonitRect> m_extralRectList;          // 任务栏外部区域,随m_monitorRectList一起更新
+    QList<MonitRect> m_touchRectList;           // 监听触屏唤起任务栏区域
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
+
+    bool m_touchPress;                          // 触屏按下
+    QPoint m_touchPos;                          // 触屏按下坐标
     /*****************************************************************/
 };
 

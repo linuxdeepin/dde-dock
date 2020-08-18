@@ -36,6 +36,7 @@
 #include <QGuiApplication>
 #include <QX11Info>
 #include <qpa/qplatformwindow.h>
+#include <QGSettings>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
@@ -264,6 +265,14 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
 
+    connect(m_dragWidget, &DragWidget::dragFinished, m_multiScreenWorker, [this]{
+        const QRect &dockRect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
+                                                              , m_multiScreenWorker->position()
+                                                              , HideMode::KeepShowing
+                                                              , m_multiScreenWorker->displayMode());
+        m_multiScreenWorker->updateTouchRegisterRegion(dockRect);
+    });
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
 
     connect(m_menuWorker, &MenuWorker::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);
@@ -274,6 +283,9 @@ void MainWindow::initConnections()
 
     //　更新拖拽区域
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDragArea, this, &MainWindow::resetDragWindow);
+
+    // 响应后端触控屏拖拽任务栏高度长按信号
+    connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
 }
 
 void MainWindow::getTrayVisableItemCount()
@@ -427,6 +439,45 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
         else
             m_platformWindowHandle.setBorderColor(QColor(QColor::Invalid));
     }
+}
+
+void MainWindow::touchRequestResizeDock()
+{
+    const QPoint touchPos(QCursor::pos());
+    QRect dockRect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
+                                                          , m_multiScreenWorker->position()
+                                                          , HideMode::KeepShowing
+                                                          , m_multiScreenWorker->displayMode());
+
+    // 隐藏状态返回
+    if (width() == 0 || height() == 0) {
+        return;
+    }
+
+    QGSettings settings("com.deepin.dde.dock.touch", QByteArray(), this);
+    int resizeHeight = settings.get("resizeHeight").toInt();
+
+    QRect touchRect;
+    // 任务栏屏幕 内侧边线 内外resizeHeight距离矩形区域内长按可拖动任务栏高度
+    switch (m_multiScreenWorker->position()) {
+    case Position::Top:
+        touchRect = QRect(dockRect.x(), dockRect.y() + dockRect.height() - resizeHeight, dockRect.width(), resizeHeight * 2);
+        break;
+    case Position::Bottom:
+        touchRect = QRect(dockRect.x(), dockRect.y() - resizeHeight, dockRect.width(), resizeHeight * 2);
+        break;
+    case Position::Left:
+        touchRect = QRect(dockRect.x() + dockRect.width() - resizeHeight, dockRect.y(), resizeHeight * 2, dockRect.height());
+        break;
+    case Position::Right:
+        touchRect = QRect(dockRect.x() - resizeHeight, dockRect.y(), resizeHeight * 2, dockRect.height());
+        break;
+    }
+
+    if (!touchRect.contains(touchPos)) {
+        return;
+    }
+    qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseButtonPress, QPoint(), touchPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
 }
 
 #include "mainwindow.moc"

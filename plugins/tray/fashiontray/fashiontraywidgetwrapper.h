@@ -79,9 +79,6 @@ private:
     bool m_pressed;
     QString m_itemKey;
     QPoint MousePressPoint;
-
-    static Gesture *m_gestureInter;
-    static bool m_longPressed;
 };
 
 #endif //FASHIONTRAYWIDGETWRAPPER_H

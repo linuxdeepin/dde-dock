@@ -41,6 +41,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_xcbMisc(XcbMisc::instance())
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
     , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
+    , m_touchEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus()))
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
@@ -200,73 +201,7 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     if (m_btnPress)
         return;
 
-    if (m_draging || m_aniStart) {
-        qDebug() << "dock is draging or animation is running";
-        return;
-    }
-
-    QString toScreen;
-    QScreen *screen = Utils::screenAtByScaled(QPoint(x, y));
-    if (!screen) {
-        qDebug() << "cannot find the screen" << QPoint(x, y);
-        return;
-    }
-
-    toScreen = screen->name();
-
-    /**
-     * 坐标位于当前屏幕边缘时,当做屏幕内移动处理(防止鼠标移动到边缘时不唤醒任务栏)
-     * 使用screenAtByScaled获取屏幕名时,实际上获取的不一定是当前屏幕
-     * 举例:点(100,100)不在(0,0,100,100)的屏幕上
-     */
-    if (onScreenEdge(m_ds.current(), QPoint(x, y))) {
-        toScreen = m_ds.current();
-    }
-
-    // 过滤重复坐标
-    static QPoint lastPos(0, 0);
-    if (lastPos == QPoint(x, y)) {
-        return;
-    }
-    lastPos = QPoint(x, y);
-
-#ifdef QT_DEBUG
-    qDebug() << x << y << m_ds.current() << toScreen;
-#endif
-
-    // 任务栏显示状态，但需要切换屏幕
-    if (toScreen != m_ds.current()) {
-        m_delayScreen = toScreen;
-
-        if (!m_delayTimer->isActive())
-            m_delayTimer->start();
-    } else {
-        // 任务栏隐藏状态，但需要显示
-        if (hideMode() == HideMode::KeepShowing) {
-#ifdef QT_DEBUG
-            qDebug() << "showing";
-#endif
-            parent()->setFixedSize(dockRect(m_ds.current()).size());
-            parent()->setGeometry(dockRect(m_ds.current()));
-            return;
-        }
-
-        if (m_showAni->state() == QVariantAnimation::Running) {
-#ifdef QT_DEBUG
-            qDebug() << "animation is running";
-#endif
-            return;
-        }
-
-        const QRect boundRect = parent()->visibleRegion().boundingRect();
-#ifdef QT_DEBUG
-        qDebug() << "boundRect:" << boundRect;
-#endif
-        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
-                && (boundRect.size().isEmpty())) {
-            showAni(m_ds.current());
-        }
-    }
+    tryToShowDock(x, y);
 }
 
 // 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
@@ -690,6 +625,9 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         }
     }
 
+    const QRect &rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    updateTouchRegisterRegion(rect);
+
     m_registerKey = m_eventInter->RegisterAreas(m_monitorRectList, flags);
     m_extralRegisterKey = m_extralEventInter->RegisterAreas(m_extralRectList, flags);
 }
@@ -1059,6 +997,11 @@ void MultiScreenWorker::initConnection()
     });
 
     connect(m_delayTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
+
+    // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
+    connect(m_touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {m_touchPress = false;});
+    connect(m_touchEventInter, &XEventMonitor::ButtonPress, this, &MultiScreenWorker::onTouchPress);
+    connect(m_touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
 
     checkDaemonDockService();
 }
@@ -1612,4 +1555,181 @@ QList<Monitor *> MultiScreenWorker::validMonitorList(const QMap<Monitor *, Monit
             list << it.key();
     }
     return list;
+}
+
+void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)
+{
+    Q_UNUSED(type);
+    if (key != m_touchRegisterKey) {
+        return;
+    }
+
+    m_touchPress = true;
+    m_touchPos = QPoint(x, y);
+}
+
+void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &key)
+{
+    Q_UNUSED(type);
+    if (key != m_touchRegisterKey) {
+        return;
+    }
+
+    if (!m_touchPress) {
+        return;
+    }
+    m_touchPress = false;
+
+    // 不从指定方向划入，不进行任务栏唤醒；如当任务栏在下，需从下往上划
+    switch (m_position) {
+    case Top:
+        if (m_touchPos.y() >= y) {
+            return;
+        }
+        break;
+    case Bottom:
+        if (m_touchPos.y() <= y) {
+            return;
+        }
+        break;
+    case Left:
+        if (m_touchPos.x() >= x) {
+            return;
+        }
+        break;
+    case Right:
+        if (m_touchPos.x() <= x) {
+            return;
+        }
+        break;
+    }
+
+    tryToShowDock(x, y);
+}
+
+void MultiScreenWorker::updateTouchRegisterRegion(const QRect &rect)
+{
+    if (!m_touchRegisterKey.isEmpty()) {
+        m_touchEventInter->UnregisterArea(m_touchRegisterKey);
+        m_touchRegisterKey.clear();
+    }
+
+    const int flags = Motion | Button | Key;
+
+    // 任务栏触屏唤起区域
+    m_touchRectList.clear();
+    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+        // 屏幕不可用或此位置不可停靠时，不用监听这块区域
+        if (!inter->enable() || !inter->dockPosition().docked(m_position))
+            continue;
+
+        MonitRect touchRect;
+        switch (m_position) {
+        case Top: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + rect.height() + WINDOWMARGIN;
+        }
+            break;
+        case Bottom: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y() + inter->h() - rect.height() - WINDOWMARGIN;
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + inter->h();
+        }
+            break;
+        case Left: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + rect.width() + WINDOWMARGIN;
+            touchRect.y2 = inter->y() + inter->h();
+        }
+            break;
+        case Right: {
+            touchRect.x1 = inter->x() + inter->w() - rect.width() - WINDOWMARGIN;
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + inter->h();
+        }
+            break;
+        }
+
+        if (!m_touchRectList.contains(touchRect)) {
+            m_touchRectList << touchRect;
+        }
+    }
+
+    m_touchRegisterKey = m_touchEventInter->RegisterAreas(m_touchRectList, flags);
+}
+
+void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
+{
+    if (m_draging || m_aniStart) {
+        qDebug() << "dock is draging or animation is running";
+        return;
+    }
+
+    QString toScreen;
+    QScreen *screen = Utils::screenAtByScaled(QPoint(eventX, eventY));
+    if (!screen) {
+        qDebug() << "cannot find the screen" << QPoint(eventX, eventY);
+        return;
+    }
+
+    toScreen = screen->name();
+
+    /**
+     * 坐标位于当前屏幕边缘时,当做屏幕内移动处理(防止鼠标移动到边缘时不唤醒任务栏)
+     * 使用screenAtByScaled获取屏幕名时,实际上获取的不一定是当前屏幕
+     * 举例:点(100,100)不在(0,0,100,100)的屏幕上
+     */
+    if (onScreenEdge(m_ds.current(), QPoint(eventX, eventY))) {
+        toScreen = m_ds.current();
+    }
+
+    // 过滤重复坐标
+    static QPoint lastPos(0, 0);
+    if (lastPos == QPoint(eventX, eventY)) {
+        return;
+    }
+    lastPos = QPoint(eventX, eventY);
+
+#ifdef QT_DEBUG
+    qDebug() << eventX << eventY << m_ds.current() << toScreen;
+#endif
+
+    // 任务栏显示状态，但需要切换屏幕
+    if (toScreen != m_ds.current()) {
+        m_delayScreen = toScreen;
+
+        if (!m_delayTimer->isActive())
+            m_delayTimer->start();
+    } else {
+        // 任务栏隐藏状态，但需要显示
+        if (hideMode() == HideMode::KeepShowing) {
+#ifdef QT_DEBUG
+            qDebug() << "showing";
+#endif
+            parent()->setFixedSize(dockRect(m_ds.current()).size());
+            parent()->setGeometry(dockRect(m_ds.current()));
+            return;
+        }
+
+        if (m_showAni->state() == QVariantAnimation::Running) {
+#ifdef QT_DEBUG
+            qDebug() << "animation is running";
+#endif
+            return;
+        }
+
+        const QRect boundRect = parent()->visibleRegion().boundingRect();
+#ifdef QT_DEBUG
+        qDebug() << "boundRect:" << boundRect;
+#endif
+        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
+                && (boundRect.size().isEmpty())) {
+            showAni(m_ds.current());
+        }
+    }
 }
