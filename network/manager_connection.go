@@ -562,3 +562,26 @@ func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	}
 	return
 }
+
+func (m *Manager) updateConnectionBand(conn *connection, band string) (err error) {
+	logger.Debug("updateConnectionBand:", conn, band)
+	cdata, err := conn.nmConn.GetSettings(0)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	// fix ipv6 addresses and routes data structure, interface{}
+	if isSettingIP6ConfigAddressesExists(cdata) {
+		setSettingIP6ConfigAddresses(cdata, getSettingIP6ConfigAddresses(cdata))
+	}
+	if isSettingIP6ConfigRoutesExists(cdata) {
+		setSettingIP6ConfigRoutes(cdata, getSettingIP6ConfigRoutes(cdata))
+	}
+	setSettingWirelessBand(cdata, band)
+	err = conn.nmConn.Update(0, cdata)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}

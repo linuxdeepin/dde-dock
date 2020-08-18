@@ -97,6 +97,8 @@ type Manager struct {
 
 	WirelessAccessPoints      string `prop:"access:r"` //用于读取AP
 	updateWirelessCountTicker *countTicker
+	debugChangeAPBand         string //调用接口切换ap频段
+	checkAPStrengthTimer      *time.Timer
 
 	//nolint
 	signals *struct {
@@ -113,6 +115,7 @@ type Manager struct {
 		ActivateAccessPoint          func() `in:"uuid,apPath,devPath" out:"cPath"`
 		ActivateConnection           func() `in:"uuid,devPath" out:"cPath"`
 		DeactivateConnection         func() `in:"uuid"`
+		DebugChangeAPChannel         func() `in:"band"`
 		DeleteConnection             func() `in:"uuid"`
 		DisableWirelessHotspotMode   func() `in:"devPath"`
 		DisconnectDevice             func() `in:"devPath"`
@@ -290,6 +293,10 @@ func (m *Manager) destroy() {
 	if m.updateWirelessCountTicker != nil {
 		m.updateWirelessCountTicker.Stop()
 		m.updateWirelessCountTicker = nil
+	}
+	if m.checkAPStrengthTimer != nil {
+		m.checkAPStrengthTimer.Stop()
+		m.checkAPStrengthTimer = nil
 	}
 }
 

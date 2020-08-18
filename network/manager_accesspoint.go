@@ -22,6 +22,7 @@ package network
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	dbus "github.com/godbus/dbus"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
@@ -37,6 +38,16 @@ const (
 	apSecWep
 	apSecPsk
 	apSecEap
+)
+const scanWifiDelayTime = 5 * time.Second
+const channelAutoChangeThreshold = 65
+
+//frequency range
+const (
+	frequency5GUpperlimit = 5825
+	frequency5GLowerlimit = 4915
+	frequency2GUpperlimit = 2484
+	frequency2GLowerlimit = 2412
 )
 
 func (v apSecType) String() string {
@@ -63,6 +74,7 @@ type accessPoint struct {
 	SecuredInEap bool
 	Strength     uint8
 	Path         dbus.ObjectPath
+	Frequency    uint32
 }
 
 func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoint, err error) {
@@ -152,6 +164,7 @@ func (a *accessPoint) updateProps() {
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
 	a.Strength, _ = a.nmAp.Strength().Get(0)
+	a.Frequency, _ = a.nmAp.Frequency().Get(0)
 }
 
 func getApSecType(ap *nmdbus.AccessPoint) apSecType {
@@ -214,6 +227,12 @@ func (m *Manager) clearAccessPoints() {
 }
 
 func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
+	logger.Warning("addAccessPoint", apPath)
+	if m.checkAPStrengthTimer == nil {
+		m.checkAPStrengthTimer = time.AfterFunc(scanWifiDelayTime, m.checkAPStrength)
+	} else {
+		m.checkAPStrengthTimer.Reset(scanWifiDelayTime)
+	}
 	if m.isAccessPointExists(apPath) {
 		return
 	}
@@ -387,4 +406,131 @@ func (m *Manager) activateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		}
 	}
 	return
+}
+
+func (m *Manager) DebugChangeAPChannel(band string) *dbus.Error {
+	if band != "a" && band != "bg" {
+		return dbusutil.ToError(errors.New("band input error"))
+	}
+	err := m.RequestWirelessScan()
+	if err != nil {
+		logger.Warning("RequestWirelessScan: ", err)
+		return dbusutil.ToError(err)
+	}
+	m.debugChangeAPBand = band
+	return nil
+}
+
+func (m *Manager) findAPByBand(ssid string, accessPoints []*accessPoint, band string) (apNow *accessPoint) {
+	logger.Debug("findAPByBand:", ssid, band)
+	apNow = nil
+	var strengthMax uint8 = 0
+	for _, ap := range accessPoints {
+		if band == "" {
+			if ap.Ssid == ssid && ap.Strength > strengthMax {
+				apNow = ap
+				strengthMax = ap.Strength
+			}
+		} else {
+			for _, ap := range accessPoints {
+				if ap.Ssid == ssid && band == "a" &&
+					ap.Frequency >= frequency5GLowerlimit &&
+					ap.Frequency <= frequency5GUpperlimit {
+					apNow = ap
+					break
+				} else if ap.Ssid == ssid && band == "bg" &&
+					ap.Frequency >= frequency2GLowerlimit &&
+					ap.Frequency <= frequency2GUpperlimit {
+					apNow = ap
+					break
+				}
+			}
+		}
+	}
+	return
+}
+
+func (m *Manager) getBandByFrequency(freq uint32) (band string) {
+	if freq >= frequency5GLowerlimit &&
+		freq <= frequency5GUpperlimit {
+		band = "a"
+	} else if freq >= frequency2GLowerlimit &&
+		freq <= frequency2GUpperlimit {
+		band = "bg"
+	} else {
+		band = "unknown"
+	}
+	return
+}
+
+func (m *Manager) checkAPStrength() {
+	band := m.debugChangeAPBand
+	m.debugChangeAPBand = ""
+	m.checkAPStrengthTimer = nil
+	logger.Debug("checkAPStrength:")
+	if devices, ok := m.devices[deviceWifi]; ok {
+		for _, dev := range devices {
+			apPath, _ := dev.nmDev.Wireless().ActiveAccessPoint().Get(0)
+			nmAp, _ := nmNewAccessPoint(apPath)
+			frequency, _ := nmAp.Frequency().Get(0)
+			strength, _ := nmAp.Strength().Get(0)
+			ssid, _ := nmAp.Ssid().Get(0)
+			if band == "" {
+				//当前信号比较好，无需切换
+				if strength > channelAutoChangeThreshold && frequency >= frequency5GLowerlimit &&
+					frequency <= frequency5GUpperlimit {
+					continue
+				}
+			}
+
+			apNow := m.findAPByBand(decodeSsid(ssid), m.accessPoints[dev.Path], band)
+			if apNow == nil {
+				logger.Debug("not found AP ")
+				continue
+			}
+			if apNow.Path == apPath {
+				logger.Debug("no need to change AP")
+				continue
+			}
+			logger.Debug("changeAPChanel,apPath:",  apPath)
+			if band == "" {
+				if apNow.Frequency >= frequency5GLowerlimit &&
+					apNow.Frequency <= frequency5GUpperlimit {
+					band = "a"
+				} else {
+					band = "bg"
+				}
+			}
+			if band == m.getBandByFrequency(frequency) {
+				logger.Debug("no need to change AP")
+				continue
+			}
+
+			aPath, err := dev.nmDev.ActiveConnection().Get(0)
+			if err != nil || !isObjPathValid(aPath) {
+				continue
+			}
+			aConn, err := nmNewActiveConnection(aPath)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+			connPath, err := aConn.Connection().Get(0)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+			conn := m.getConnection(connPath)
+			err = m.updateConnectionBand(conn, band)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+			_, err = m.activateAccessPoint(conn.Uuid, apNow.Path, dev.Path)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+		}
+	}
 }
