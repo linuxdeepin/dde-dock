@@ -22,13 +22,13 @@ package dock
 import (
 	"errors"
 	"os"
-	"pkg.deepin.io/lib/procfs"
 	"syscall"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/procfs"
 )
 
 func (e *AppEntry) GetInterfaceName() string {

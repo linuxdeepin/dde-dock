@@ -13,9 +13,9 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )

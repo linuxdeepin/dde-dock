@@ -27,9 +27,9 @@ import (
 	"strings"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	. "pkg.deepin.io/lib/gettext"
 )

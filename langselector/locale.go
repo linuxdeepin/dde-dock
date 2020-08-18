@@ -31,18 +31,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/godbus/dbus"
 	// dbus services:
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.localehelper"
 	libnetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.network"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/api/language_support"
 	"pkg.deepin.io/dde/api/userenv"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gsettings"

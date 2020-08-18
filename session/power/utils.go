@@ -24,9 +24,9 @@ import (
 	"os/exec"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"pkg.deepin.io/dde/api/soundutils"
-	dbus "pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"

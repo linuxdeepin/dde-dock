@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/godbus/dbus"
 )
 
 type syncConfig struct {

@@ -20,12 +20,11 @@
 package audio
 
 import (
+	"fmt"
 	"sort"
 
-	"fmt"
-
+	dbus "github.com/godbus/dbus"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 	"pkg.deepin.io/lib/strv"
 )

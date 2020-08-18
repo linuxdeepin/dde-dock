@@ -24,8 +24,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/log"

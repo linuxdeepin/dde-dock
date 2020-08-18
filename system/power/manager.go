@@ -28,11 +28,11 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
 	gudev "pkg.deepin.io/gir/gudev-1.0"
 	"pkg.deepin.io/lib/arch"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

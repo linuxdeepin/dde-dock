@@ -22,8 +22,8 @@ package trayicon
 import (
 	"errors"
 
+	"github.com/godbus/dbus"
 	x "github.com/linuxdeepin/go-x11-client"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

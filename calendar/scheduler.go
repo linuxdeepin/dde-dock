@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"github.com/jinzhu/gorm"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	libdate "github.com/rickb777/date"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"

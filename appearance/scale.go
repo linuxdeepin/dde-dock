@@ -22,8 +22,8 @@ package appearance
 import (
 	"sync/atomic"
 
+	"github.com/godbus/dbus"
 	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gettext"
 )
 

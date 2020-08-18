@@ -25,8 +25,8 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

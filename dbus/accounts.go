@@ -20,8 +20,8 @@
 package dbus
 
 import (
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func NewAccounts(systemConn *dbus.Conn) *accounts.Accounts {

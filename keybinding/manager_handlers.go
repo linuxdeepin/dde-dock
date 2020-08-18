@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	sys_network "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	power "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) shouldShowCapsLockOSD() bool {

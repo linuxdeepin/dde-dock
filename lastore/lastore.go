@@ -6,13 +6,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.system.power"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-
 	"pkg.deepin.io/dde/daemon/common/dsync"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/gettext"

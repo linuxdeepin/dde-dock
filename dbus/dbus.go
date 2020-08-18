@@ -20,8 +20,8 @@
 package dbus
 
 import (
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/dbus"
 )
 
 // IsSessionBusActivated check the special session bus name whether activated

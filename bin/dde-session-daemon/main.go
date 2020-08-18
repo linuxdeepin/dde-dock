@@ -36,12 +36,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/dde/api/userenv"
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"

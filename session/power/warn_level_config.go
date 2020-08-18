@@ -22,8 +22,8 @@ package power
 import (
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/gsettings"
 )

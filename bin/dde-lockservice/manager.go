@@ -27,8 +27,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/msteinert/pam"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

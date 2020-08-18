@@ -9,9 +9,9 @@ import (
 	"time"
 	"unicode/utf8"
 
+	dbus "github.com/godbus/dbus"
 	"github.com/gosexy/gettext"
 	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/strv"

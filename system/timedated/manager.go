@@ -27,9 +27,9 @@ import (
 	"sync"
 	"syscall"
 
+	dbus "github.com/godbus/dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	timedate1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
 )

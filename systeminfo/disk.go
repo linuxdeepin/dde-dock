@@ -22,7 +22,7 @@ package systeminfo
 import (
 	"fmt"
 
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/godbus/dbus"
 )
 //nolint
 type diskInfo struct {

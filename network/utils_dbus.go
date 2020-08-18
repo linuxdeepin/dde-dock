@@ -20,11 +20,11 @@
 package network
 
 import (
+	"github.com/godbus/dbus"
 	dbusmgr "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )

@@ -22,7 +22,7 @@ package main
 import (
 	"path"
 
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/lib/pinyin"
 	dutils "pkg.deepin.io/lib/utils"
 )

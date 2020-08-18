@@ -24,7 +24,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/utils"
 )

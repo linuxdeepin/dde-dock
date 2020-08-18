@@ -24,12 +24,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/session"
 	"pkg.deepin.io/dde/daemon/calltrace"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/gir/glib-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/log"

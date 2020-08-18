@@ -2,8 +2,9 @@ package network
 
 import (
 	"encoding/json"
+
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/common/dsync"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 type syncConfig struct {

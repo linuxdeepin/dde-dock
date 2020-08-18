@@ -21,27 +21,27 @@ package apps
 
 import (
 	"os"
-	"pkg.deepin.io/lib/fsnotify"
+
+	"github.com/fsnotify/fsnotify"
 )
 
 type FileEvent struct {
-	*fsnotify.FileEvent
+	fsnotify.Event
 	NotExist bool
 	IsDir    bool
 	IsFound  bool
 }
 
 func NewFileFoundEvent(name string) *FileEvent {
-	ev := &fsnotify.FileEvent{
-		Name: name,
-	}
 	return &FileEvent{
-		FileEvent: ev,
-		IsFound:   true,
+		Event: fsnotify.Event{
+			Name: name,
+		},
+		IsFound: true,
 	}
 }
 
-func NewFileEvent(ev *fsnotify.FileEvent) *FileEvent {
+func NewFileEvent(ev fsnotify.Event) *FileEvent {
 	var notExist bool
 	var isDir bool
 	if stat, err := os.Stat(ev.Name); os.IsNotExist(err) {
@@ -50,8 +50,8 @@ func NewFileEvent(ev *fsnotify.FileEvent) *FileEvent {
 		isDir = stat.IsDir()
 	}
 	return &FileEvent{
-		FileEvent: ev,
-		NotExist:  notExist,
-		IsDir:     isDir,
+		Event:    ev,
+		NotExist: notExist,
+		IsDir:    isDir,
 	}
 }

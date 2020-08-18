@@ -26,9 +26,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/fsnotify/fsnotify"
+	dbus "github.com/godbus/dbus"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 
@@ -139,14 +139,14 @@ func (r *ALRecorder) listenEvents() {
 		name := ev.Name
 
 		if isDesktopFile(name) {
-			if ev.IsFound || ev.IsCreate() || ev.IsModify() {
+			if ev.IsFound || (ev.Op&fsnotify.Create != 0) || (ev.Op&fsnotify.Write != 0) {
 				// added
 				r.handleAdded(name)
 			} else if ev.NotExist {
 				// removed
 				r.handleRemoved(name)
 			}
-		} else if ev.NotExist && ev.IsRename() {
+		} else if ev.NotExist && (ev.Op&fsnotify.Rename != 0) {
 			// may be dir removed
 			r.handleDirRemoved(name)
 		}

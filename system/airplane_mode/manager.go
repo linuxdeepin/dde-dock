@@ -9,9 +9,9 @@ import (
 	"os/exec"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus1"
+
+	"github.com/godbus/dbus"
 )
 
 const (

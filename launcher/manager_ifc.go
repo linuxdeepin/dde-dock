@@ -27,8 +27,8 @@ import (
 	"strings"
 	"sync/atomic"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/soundutils"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/procfs"

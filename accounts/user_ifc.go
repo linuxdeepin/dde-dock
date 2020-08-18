@@ -25,13 +25,12 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-
 	"strconv"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/imgutil"

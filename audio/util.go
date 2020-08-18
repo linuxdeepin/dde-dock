@@ -28,10 +28,10 @@ import (
 	"strings"
 	"unicode"
 
+	dbus "github.com/godbus/dbus"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	"pkg.deepin.io/dde/api/soundutils"
-	dbus "pkg.deepin.io/lib/dbus1"
 	//"pkg.deepin.io/lib/pulse"
 )
 

@@ -24,10 +24,10 @@ import (
 	"sync"
 	"syscall"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 )

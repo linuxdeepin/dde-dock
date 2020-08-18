@@ -20,8 +20,8 @@
 package inputdevices
 
 import (
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/langselector"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/fsnotify"
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/lib/strv"
 )
 
@@ -42,7 +42,7 @@ func (w *fsWatcher) loopCheck() {
 
 		w.mu.Lock()
 		for _, file := range w.try {
-			err := w.Watch(file)
+			err := w.Watcher.Add(file)
 			//logger.Debug("try watch", file)
 			if os.IsNotExist(err) {
 				newTryFiles = append(newTryFiles, file)
@@ -80,7 +80,7 @@ func (w *fsWatcher) addRoot(root string) {
 		return
 	}
 
-	err := w.Watch(root)
+	err := w.Watcher.Add(root)
 	if os.IsNotExist(err) {
 		w.addTry(root)
 	}
@@ -115,8 +115,8 @@ func (w *fsWatcher) removeTry(file string) {
 	w.mu.Unlock()
 }
 
-func (w *fsWatcher) handleEvent(event *fsnotify.FileEvent) {
-	if event.IsDelete() && strv.Strv(w.roots).Contains(event.Name) {
+func (w *fsWatcher) handleEvent(event fsnotify.Event) {
+	if event.Op&fsnotify.Remove != 0 && w.roots.Contains(event.Name) {
 		w.addTry(event.Name)
 	}
 }

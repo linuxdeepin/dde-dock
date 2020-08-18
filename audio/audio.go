@@ -29,10 +29,10 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"golang.org/x/xerrors"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/pulse"
@@ -70,7 +70,7 @@ var (
 	gMaxUIVolume                 float64
 )
 
-//go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import pkg.deepin.io/lib/dbus1 audio.go sink.go sinkinput.go source.go meter.go
+//go:generate dbusutil-gen -type Audio,Sink,SinkInput,Source,Meter -import github.com/godbus/dbus audio.go sink.go sinkinput.go source.go meter.go
 
 func objectPathSliceEqual(v1, v2 []dbus.ObjectPath) bool {
 	if len(v1) != len(v2) {

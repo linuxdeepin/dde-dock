@@ -23,8 +23,8 @@ import (
 	"sort"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/tasker"
 	dutils "pkg.deepin.io/lib/utils"

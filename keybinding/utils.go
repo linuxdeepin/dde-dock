@@ -28,14 +28,12 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/linuxdeepin/go-x11-client/ext/dpms"
-
+	dbus "github.com/godbus/dbus"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
-	"pkg.deepin.io/lib/strv"
-
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
+	"pkg.deepin.io/lib/strv"
 )
 
 func resetGSettings(gs *gio.Settings) {

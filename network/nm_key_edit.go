@@ -20,7 +20,7 @@
 package network
 
 import (
-	dbus "pkg.deepin.io/lib/dbus1"
+	dbus "github.com/godbus/dbus"
 )
 
 func getSettingKey(data connectionData, section, key string) (value interface{}) {

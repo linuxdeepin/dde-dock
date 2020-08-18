@@ -21,13 +21,14 @@ package gesture
 
 import (
 	"fmt"
+	"io/ioutil"
+	"strings"
+
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
-	"io/ioutil"
-	"pkg.deepin.io/lib/dbus1"
-	"strings"
 )
 
 var (

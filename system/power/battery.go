@@ -20,15 +20,14 @@
 package power
 
 import (
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
-	"path/filepath"
-
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/powersupply/battery"
 	gudev "pkg.deepin.io/gir/gudev-1.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

@@ -7,7 +7,7 @@ import (
 	"net"
 	"time"
 
-	dbus "pkg.deepin.io/lib/dbus1"
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

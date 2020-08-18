@@ -22,6 +22,7 @@ package dock
 import (
 	"time"
 
+	"github.com/godbus/dbus"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.daemon.launcher"
 	libDDELauncher "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.launcher"
@@ -31,7 +32,6 @@ import (
 	"github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gsettings"
 )

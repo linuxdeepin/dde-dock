@@ -25,12 +25,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/godbus/dbus"
 	huawei_fprint "github.com/linuxdeepin/go-dbus-factory/com.huawei.fingerprint"
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"golang.org/x/xerrors"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )
@@ -46,7 +46,7 @@ const (
 	systemdDBusInterface   = systemdDBusServiceName + ".Manager"
 )
 
-//go:generate dbusutil-gen -type Manager -import pkg.deepin.io/lib/dbus1 manager.go
+//go:generate dbusutil-gen -type Manager -import github.com/godbus/dbus manager.go
 
 type Manager struct {
 	service       *dbusutil.Service

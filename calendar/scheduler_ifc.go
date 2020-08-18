@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	libdate "github.com/rickb777/date"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

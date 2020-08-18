@@ -23,11 +23,11 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/log"
-	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/dde/daemon/loader"
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.system.systeminfo"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/log"
 )
 
 const (

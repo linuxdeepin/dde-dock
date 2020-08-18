@@ -24,9 +24,9 @@ import (
 	"os/exec"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
 	"pkg.deepin.io/lib/asound"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/pulse"
 )
 

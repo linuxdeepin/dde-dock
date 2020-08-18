@@ -27,8 +27,8 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"golang.org/x/xerrors"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/procfs"
 )

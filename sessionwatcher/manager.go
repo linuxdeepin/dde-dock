@@ -22,12 +22,11 @@ package sessionwatcher
 import (
 	"sync"
 
-	"pkg.deepin.io/lib/dbus1"
-	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/dbusutil/proxy"
-
+	"github.com/godbus/dbus"
 	libdisplay "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.display"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (

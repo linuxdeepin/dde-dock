@@ -22,8 +22,8 @@ package timedate
 import (
 	"time"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/timedate/zoneinfo"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	. "pkg.deepin.io/lib/gettext"
 )

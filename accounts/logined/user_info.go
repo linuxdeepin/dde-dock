@@ -20,8 +20,8 @@
 package logined
 
 import (
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 // SessionInfo Show logined session info, if type is tty or ssh, no desktop and display

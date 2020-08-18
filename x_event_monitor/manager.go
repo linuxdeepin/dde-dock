@@ -25,12 +25,12 @@ import (
 	"fmt"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/ge"
 	"github.com/linuxdeepin/go-x11-client/ext/input"
 	"github.com/linuxdeepin/go-x11-client/ext/xfixes"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"

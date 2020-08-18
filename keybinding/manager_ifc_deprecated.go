@@ -1,8 +1,8 @@
 package keybinding
 
 import (
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

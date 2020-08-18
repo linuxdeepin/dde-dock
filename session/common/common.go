@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/godbus/dbus"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func ActivateSysDaemonService(serviceName string) error {

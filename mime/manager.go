@@ -26,10 +26,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/strv"
@@ -93,7 +93,7 @@ func NewManager(service *dbusutil.Service) *Manager {
 		dirs := getDirsNeedWatched()
 		for _, dir := range dirs {
 			logger.Debugf("watch dir %q", dir)
-			if err := m.fsWatcher.Watch(dir); err != nil {
+			if err := m.fsWatcher.Add(dir); err != nil {
 				logger.Warning(err)
 			}
 		}
@@ -134,7 +134,7 @@ func (m *Manager) handleFileEvents() {
 	defer watcher.Close()
 	for {
 		select {
-		case event, ok := <-watcher.Event:
+		case event, ok := <-watcher.Events:
 			if !ok {
 				logger.Error("Invalid watcher event:", event)
 				return
@@ -146,7 +146,7 @@ func (m *Manager) handleFileEvents() {
 				m.deferEmitChange()
 			}
 
-		case err := <-watcher.Error:
+		case err := <-watcher.Errors:
 			logger.Warning("error:", err)
 			return
 		case <-m.done:
@@ -340,8 +340,8 @@ func toDesktopId(appId string) string {
 }
 
 const (
-	sectionDefaultApps         = "Default Applications"
-	sectionAddedAssociations   = "Added Associations"
+	sectionDefaultApps       = "Default Applications"
+	sectionAddedAssociations = "Added Associations"
 )
 
 func deleteMimeAssociation(mimeAppsKf *keyfile.KeyFile, mimeType string, desktopId string) {

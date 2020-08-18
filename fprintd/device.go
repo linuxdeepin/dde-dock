@@ -24,8 +24,8 @@ import (
 	"path"
 	"strings"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/net.reactivated.fprint"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )

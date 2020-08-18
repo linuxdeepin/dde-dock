@@ -24,6 +24,7 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	sysNetwork "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.network"
 	nmdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	secrets "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.secrets"
@@ -31,7 +32,6 @@ import (
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/dde/daemon/session/common"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/strv"

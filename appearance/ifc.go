@@ -25,9 +25,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )

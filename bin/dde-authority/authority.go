@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	fprint "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.fprintd"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/pam"
 )

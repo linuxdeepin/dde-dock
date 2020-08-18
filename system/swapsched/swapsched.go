@@ -6,11 +6,10 @@ import (
 	"path/filepath"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/cgroup"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )

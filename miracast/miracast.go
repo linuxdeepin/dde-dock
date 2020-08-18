@@ -25,15 +25,14 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/dbusutil/proxy"
-
+	"github.com/godbus/dbus"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wfd"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wifi"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
 	"pkg.deepin.io/dde/daemon/iw"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
 const (

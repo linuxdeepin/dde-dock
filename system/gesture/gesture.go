@@ -26,8 +26,8 @@ package gesture
 import "C"
 
 import (
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/loader"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )

@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	"github.com/jinzhu/gorm"
 	lunarcalendar "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.lunarcalendar"
 	libdate "github.com/rickb777/date"
 	"github.com/teambition/rrule-go"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/gettext"
 )
 

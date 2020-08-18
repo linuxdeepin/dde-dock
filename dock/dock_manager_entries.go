@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"sort"
 
+	dbus "github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"pkg.deepin.io/dde/daemon/session/common"
-	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Manager) allocEntryId() string {

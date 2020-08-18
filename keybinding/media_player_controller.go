@@ -23,11 +23,11 @@ import (
 	"errors"
 	"strings"
 
+	dbus "github.com/godbus/dbus"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	mpris2 "github.com/linuxdeepin/go-dbus-factory/org.mpris.mediaplayer2"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )

@@ -22,8 +22,8 @@ package network
 import (
 	"errors"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

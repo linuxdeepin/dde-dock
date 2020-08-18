@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	dbus "github.com/godbus/dbus"
 	huawei_fprint "github.com/linuxdeepin/go-dbus-factory/com.huawei.fingerprint"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 const (

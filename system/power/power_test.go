@@ -22,8 +22,8 @@ package power
 import (
 	"testing"
 
+	"github.com/godbus/dbus"
 	. "github.com/smartystreets/goconvey/convey"
-	"pkg.deepin.io/lib/dbus"
 )
 
 func Test_getValidName(t *testing.T) {

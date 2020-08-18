@@ -23,9 +23,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/utils"

@@ -32,9 +32,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/godbus/dbus"
 	polkit "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.policykit1"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/encoding/kv"
 	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/utils"

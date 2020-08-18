@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )

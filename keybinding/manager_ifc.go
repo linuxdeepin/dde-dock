@@ -25,9 +25,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

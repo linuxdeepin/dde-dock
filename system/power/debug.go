@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"pkg.deepin.io/gir/gudev-1.0"
-	"pkg.deepin.io/lib/dbus1"
+	"github.com/godbus/dbus"
 )
 
 func (m *Manager) Debug(cmd string) *dbus.Error {

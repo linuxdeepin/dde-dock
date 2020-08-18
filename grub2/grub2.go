@@ -32,8 +32,8 @@ import (
 	"sync"
 	"unicode"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/grub_common"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/procfs"

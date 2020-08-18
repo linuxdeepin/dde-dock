@@ -20,8 +20,8 @@
 package dock
 
 import (
+	"github.com/godbus/dbus"
 	x "github.com/linuxdeepin/go-x11-client"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 const (

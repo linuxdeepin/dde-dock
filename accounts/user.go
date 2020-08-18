@@ -32,7 +32,7 @@ import (
 	authenticate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.authenticate"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/gir/glib-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/strv"

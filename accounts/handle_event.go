@@ -24,8 +24,8 @@ import (
 	"sort"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/strv"
 )
 
@@ -59,11 +59,7 @@ func (m *Manager) getWatchFiles() []string {
 	return list
 }
 
-func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
-	if ev == nil {
-		return
-	}
-
+func (m *Manager) handleFileChanged(ev fsnotify.Event) {
 	var err error
 	switch ev.Name {
 	case userFilePasswd:

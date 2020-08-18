@@ -24,8 +24,8 @@ import (
 	"io/ioutil"
 	"strings"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/grub_common"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/dde/daemon/system/gesture"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func (*Daemon) SetLongPressDuration(duration uint32) *dbus.Error {

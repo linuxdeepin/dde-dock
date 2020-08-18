@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	huawei_fprint "github.com/linuxdeepin/go-dbus-factory/com.huawei.fingerprint"
 	fprintd_common "pkg.deepin.io/dde/daemon/fprintd/common"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/strv"
 )

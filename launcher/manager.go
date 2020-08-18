@@ -30,16 +30,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
+	"github.com/godbus/dbus"
 	libApps "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.apps"
 	libLastore "github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
+	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/dde/daemon/session/common"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/strv"
 )
@@ -166,7 +166,7 @@ func NewManager(service *dbusutil.Service) (*Manager, error) {
 	m.fsEventTimers = make(map[string]*time.Timer)
 	m.fsWatcher, err = fsnotify.NewWatcher()
 	if err == nil {
-		err = m.fsWatcher.Watch(lastoreDataDir)
+		err = m.fsWatcher.Add(lastoreDataDir)
 		if err == nil {
 			go m.handleFsWatcherEvents()
 		} else {

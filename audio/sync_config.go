@@ -3,9 +3,9 @@ package audio
 import (
 	"encoding/json"
 
+	dbus "github.com/godbus/dbus"
 	soundthemeplayer "github.com/linuxdeepin/go-dbus-factory/com.deepin.api.soundthemeplayer"
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 const (

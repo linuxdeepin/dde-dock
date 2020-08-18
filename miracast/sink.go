@@ -25,10 +25,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.audio"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wfd"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.miracle.wifi"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 

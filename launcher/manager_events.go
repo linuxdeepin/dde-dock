@@ -131,7 +131,7 @@ func (m *Manager) handleFsWatcherEvents() {
 	watcher := m.fsWatcher
 	for {
 		select {
-		case ev, ok := <-watcher.Event:
+		case ev, ok := <-watcher.Events:
 			if !ok {
 				logger.Error("Invalid watcher event:", ev)
 				return
@@ -139,7 +139,7 @@ func (m *Manager) handleFsWatcherEvents() {
 
 			logger.Debugf("fsWatcher event: %v", ev)
 			m.delayHandleFileEvent(ev.Name)
-		case err := <-watcher.Error:
+		case err := <-watcher.Errors:
 			logger.Warning("fsWatcher error", err)
 			return
 		}

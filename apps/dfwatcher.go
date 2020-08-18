@@ -25,8 +25,8 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/lib/dbusutil"
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -79,7 +79,7 @@ func (*DFWatcher) GetInterfaceName() string {
 func (w *DFWatcher) listenEvents() {
 	for {
 		select {
-		case ev, ok := <-w.fsWatcher.Event:
+		case ev, ok := <-w.fsWatcher.Events:
 			if !ok {
 				logger.Error("Invalid event:", ev)
 				return
@@ -87,14 +87,14 @@ func (w *DFWatcher) listenEvents() {
 			logger.Debug("event", ev)
 			w.handleEvent(ev)
 
-		case err := <-w.fsWatcher.Error:
+		case err := <-w.fsWatcher.Errors:
 			logger.Warning("error", err)
 			return
 		}
 	}
 }
 
-func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
+func (w *DFWatcher) handleEvent(event fsnotify.Event) {
 	w.fsWatcher.handleEvent(event)
 	ev := NewFileEvent(event)
 	file := ev.Name
@@ -104,7 +104,7 @@ func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
 		return
 	}
 
-	if (ev.IsCreate() || ev.IsRename()) && ev.IsDir {
+	if (ev.Op&fsnotify.Create != 0 || ev.Op&fsnotify.Rename != 0) && ev.IsDir {
 		// it exist and is dir
 		w.addRecursive(file, true)
 		return
@@ -123,12 +123,12 @@ func (w *DFWatcher) notifyEvent(ev *FileEvent) {
 
 func (w *DFWatcher) add(path string) error {
 	logger.Debug("DFWatcher.add", path)
-	return w.fsWatcher.Watch(path)
+	return w.fsWatcher.Watcher.Add(path)
 }
 
 func (w *DFWatcher) remove(path string) error {
 	logger.Debug("DFWatcher.remove", path)
-	return w.fsWatcher.RemoveWatch(path)
+	return w.fsWatcher.Watcher.Remove(path)
 }
 
 func (w *DFWatcher) addRecursive(path string, loadExisted bool) {

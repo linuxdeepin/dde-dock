@@ -22,8 +22,8 @@ package network
 import (
 	"os"
 
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/network/nm"
-	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func newWirelessHotspotConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {

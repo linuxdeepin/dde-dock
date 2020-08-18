@@ -25,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	dbus "pkg.deepin.io/lib/dbus1"
+	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
 )

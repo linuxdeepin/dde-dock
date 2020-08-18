@@ -3,8 +3,8 @@ package grub2
 import (
 	"syscall"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func (m *Grub2) enableShutdown() {

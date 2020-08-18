@@ -24,9 +24,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )

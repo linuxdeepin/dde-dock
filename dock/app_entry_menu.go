@@ -23,9 +23,9 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"pkg.deepin.io/lib/dbus1"
 	. "pkg.deepin.io/lib/gettext"
 )
 

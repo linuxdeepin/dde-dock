@@ -1,8 +1,8 @@
 package network
 
 import (
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.networkmanager"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 func getSettingConnectionTimestamp(settings map[string]map[string]dbus.Variant) uint64 {

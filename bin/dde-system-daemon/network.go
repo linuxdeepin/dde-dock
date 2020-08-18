@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/godbus/dbus"
 	. "pkg.deepin.io/dde/daemon/common/dsync"
 	"pkg.deepin.io/gir/glib-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

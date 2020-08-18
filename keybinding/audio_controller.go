@@ -20,10 +20,10 @@
 package keybinding
 
 import (
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.audio"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 const (

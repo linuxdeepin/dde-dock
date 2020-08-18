@@ -23,8 +23,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/godbus/dbus"
 	"pkg.deepin.io/dde/api/language_support"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
 

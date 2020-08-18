@@ -26,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 )
@@ -54,10 +55,10 @@ func (m *Manager) handleThemeChanged() {
 		case <-m.endWatcher:
 			logger.Debug("[Fsnotify] quit watch")
 			return
-		case err := <-m.watcher.Error:
+		case err := <-m.watcher.Errors:
 			logger.Warning("Receive file watcher error:", err)
 			return
-		case ev, ok := <-m.watcher.Event:
+		case ev, ok := <-m.watcher.Events:
 			if !ok {
 				logger.Error("Invalid event:", ev)
 				return
@@ -80,9 +81,10 @@ func (m *Manager) handleThemeChanged() {
 				case hasEventOccurred(file, bgDirs):
 					logger.Debug("fs event in bgDirs")
 
-					if ev.IsAttrib() {
+					if ev.Op&fsnotify.Chmod != 0 {
 						continue
 					}
+
 					background.NotifyChanged()
 					for iloop := range m.wsLoopMap {
 						m.wsLoopMap[iloop].NotifyFsChanged()
@@ -144,7 +146,7 @@ func (m *Manager) watchDirs(dirs []string) {
 			logger.Debugf("Mkdir '%s' failed: %v", dir, err)
 		}
 
-		err = m.watcher.Watch(dir)
+		err = m.watcher.Add(dir)
 		if err != nil {
 			logger.Debugf("Watch dir '%s' failed: %v", dir, err)
 		}

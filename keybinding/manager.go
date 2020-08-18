@@ -25,17 +25,16 @@ import (
 	"strings"
 	"time"
 
+	dbus "github.com/godbus/dbus"
 	backlight "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	inputdevices "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	lockfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.lockfront"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
-
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	gio "pkg.deepin.io/gir/gio-2.0"
-	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"

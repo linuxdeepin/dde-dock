@@ -26,11 +26,11 @@ import (
 	"os"
 	"os/user"
 	"path"
-	"pkg.deepin.io/lib/gsettings"
 	"regexp"
 	"strings"
 	"sync"
 
+	"github.com/godbus/dbus"
 	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
 	"github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
@@ -38,10 +38,10 @@ import (
 	"pkg.deepin.io/dde/api/dxinput"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
+	"pkg.deepin.io/lib/gsettings"
 	dutils "pkg.deepin.io/lib/utils"
 )
 

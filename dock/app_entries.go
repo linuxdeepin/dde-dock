@@ -25,9 +25,8 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/godbus/dbus"
 	x "github.com/linuxdeepin/go-x11-client"
-
-	"pkg.deepin.io/lib/dbus1"
 )
 
 type AppEntries struct {
