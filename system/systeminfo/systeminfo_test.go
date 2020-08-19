@@ -131,3 +131,34 @@ func Test_parseCurrentSpeed(t *testing.T) {
 		c.So(err, ShouldBeNil)
 	})
 }
+
+func Test_filterUnNumber(t *testing.T) {
+	Convey("filterUnNumber", t, func(c C) {
+		str := "Current Speed: 3200 MHz"
+		value := filterUnNumber(str)
+		t.Log(value)
+		c.So(value, ShouldEqual, "3200")
+	})
+}
+
+func Test_formatFileSize(t *testing.T) {
+	var infos = []struct {
+		sizeInt uint64
+		sizeString string
+	}{
+		{(1 << 10) - 1, "1023.00B"},
+		{(1 << 20) - (1 << 10), "1023.00KB"},
+		{(1 << 30) - (1 << 20), "1023.00MB"},
+		{(1 << 40) - (1 << 30), "1023.00GB"},
+		{(1 << 50) - (1 << 40), "1023.00TB"},
+		{(1 << 60) - (1 << 50), "1023.00EB"},
+	}
+
+	Convey("formatFileSize", t, func(c C) {
+		for _, info := range infos {
+			value := formatFileSize(info.sizeInt)
+			t.Log(value)
+			c.So(value, ShouldEqual, info.sizeString)
+		}
+	})
+}
