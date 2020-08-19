@@ -156,4 +156,4 @@ void DockUnitTest::dock_appItemCount_check()
 
 QTEST_APPLESS_MAIN(DockUnitTest)
 
-#include "dock_unit_test.moc"
+//#include "dock_unit_test.moc"
