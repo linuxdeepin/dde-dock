@@ -33,7 +33,7 @@
 #include <DApplication>
 #include <DStandardItem>
 
-#define WIDTH       200
+#define WIDTH       260
 #define MAX_HEIGHT  300
 #define ICON_SIZE   24
 #define ITEM_HEIGHT 24
@@ -454,13 +454,19 @@ Port *SoundApplet::findPort(const QString &portId, const uint &cardId) const
 void SoundApplet::addPort(const Port *port)
 {
     DStandardItem *pi = new DStandardItem;
-    pi->setText(port->name());
+    QString deviceName = port->name() + "(" + port->cardName() + ")";
+    pi->setText(deviceName);
     pi->setBackground(Qt::transparent);
     pi->setForeground(QBrush(Qt::black));
     pi->setData(QVariant::fromValue<const Port *>(port), Qt::WhatsThisPropertyRole);
 
-    connect(port, &Port::nameChanged, this, [ = ](const QString str) {
-        pi->setText(str);
+    connect(port, &Port::nameChanged, this, [ = ](const QString &str) {
+        QString devName = str + "(" + port->cardName() + ")";
+        pi->setText(devName);
+    });
+    connect(port, &Port::cardNameChanged, this, [ = ](const QString &str) {
+        QString devName = port->name() + "(" + str + ")";
+        pi->setText(devName);
     });
     connect(port, &Port::isActiveChanged, this, [ = ](bool isActive) {
         pi->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
