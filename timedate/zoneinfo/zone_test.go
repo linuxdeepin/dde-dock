@@ -20,8 +20,11 @@
 package zoneinfo
 
 import (
-	C "gopkg.in/check.v1"
+	"os"
 	"testing"
+	"time"
+
+	C "gopkg.in/check.v1"
 )
 
 type testWrapper struct{}
@@ -71,5 +74,104 @@ func (*testWrapper) TestZoneValid(c *C.C) {
 
 	for _, info := range infos {
 		c.Check(IsZoneValid(info.zone), C.Equals, info.valid)
+	}
+}
+
+var zoneInfos = []ZoneInfo{
+	{
+		"Europe/Andorra",
+		"Andorra",
+		3600,
+		DSTInfo{1585443600,1603587599,7200},
+	},
+	{
+		"Asia/Dubai",
+		"Dubai",
+		14400,
+		DSTInfo{0,0,0},
+	},
+	{
+		"Asia/Kabul",
+		"Kabul",
+		16200,
+		DSTInfo{0,0,0},
+	},
+	{
+		"Europe/Tirane",
+		"Tirane",
+		3600,
+		DSTInfo{1585443600,1603587599,7200},
+	},
+	{
+		"Asia/Yerevan",
+		"Yerevan",
+		14400,
+		DSTInfo{0,0,0},
+	},
+}
+
+func (*testWrapper) TestGetDSTTime(c *C.C) {
+	lang := os.Getenv("LANGUAGE")
+	_ = os.Setenv("LANGUAGE", "en_US")
+	defer func() {
+		_ = os.Setenv("LANGUAGE", lang)
+	}()
+
+	year := time.Now().Year()
+
+	for _, info := range zoneInfos {
+		first, second, ok := getDSTTime(info.Name, int32(year))
+		c.Check(first, C.Equals, info.DST.Enter)
+		c.Check(second, C.Equals, info.DST.Leave)
+		if first == 0 || second == 0 {
+			c.Check(ok, C.Equals, false)
+		} else {
+			c.Check(ok, C.Equals, true)
+		}
+	}
+}
+
+func (*testWrapper) TestGetRawUSec(c *C.C) {
+	lang := os.Getenv("LANGUAGE")
+	_ = os.Setenv("LANGUAGE", "en_US")
+	defer func() {
+		_ = os.Setenv("LANGUAGE", lang)
+	}()
+
+	for _, info := range zoneInfos {
+		enter := getRawUSec(info.Name, info.DST.Enter)
+		c.Check(enter + 1, C.Equals, info.DST.Enter)
+	}
+}
+
+func (*testWrapper) TestGetOffsetByUSec(c *C.C) {
+	lang := os.Getenv("LANGUAGE")
+	_ = os.Setenv("LANGUAGE", "en_US")
+	defer func() {
+		_ = os.Setenv("LANGUAGE", lang)
+	}()
+
+	for _, info := range zoneInfos {
+		offset := getOffsetByUSec(info.Name, info.DST.Enter)
+		if info.DST.Enter != 0 {
+			c.Check(offset, C.Equals, info.DST.Offset)
+		} else {
+			c.Check(offset, C.Equals, info.Offset)
+		}
+
+	}
+}
+
+func (*testWrapper) TestGetZoneInfo(c *C.C) {
+	lang := os.Getenv("LANGUAGE")
+	_ = os.Setenv("LANGUAGE", "en_US")
+	defer func() {
+		_ = os.Setenv("LANGUAGE", lang)
+	}()
+
+	for _, info := range zoneInfos {
+		zoneinfo, err := GetZoneInfo(info.Name)
+		c.Check(err, C.Equals, nil)
+		c.Check(*zoneinfo, C.Equals, info)
 	}
 }
