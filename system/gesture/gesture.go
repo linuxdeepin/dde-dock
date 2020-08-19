@@ -162,6 +162,11 @@ type Manager struct {
 			scaleX, scaleY float64
 		}
 
+		TouchPressTimeout struct {
+			fingers, time  int32
+			scaleX, scaleY float64
+		}
+
 		TouchUpOrCancel struct {
 			scaleX, scaleY float64
 		}
@@ -236,8 +241,6 @@ func handleGestureEvent(ty, direction, fingers C.int) {
 
 //export handleTouchEvent
 func handleTouchEvent(ty, btn C.int) {
-	logger.Debug("emit touch event:", TouchType(ty).String(),
-		TouchType(btn).String())
 	err := _m.service.Emit(_m, "Event", TouchType(ty).String(),
 		TouchType(btn).String(), 0)
 	if err != nil {
@@ -247,8 +250,6 @@ func handleTouchEvent(ty, btn C.int) {
 
 //export handleTouchScreenEvent
 func handleTouchScreenEvent(ty, direction, fingers C.int, scaleX, scaleY C.double) {
-	logger.Debug("emit touch event2:", TouchType(ty).String(),
-		TouchDirection(direction).String(), int32(fingers), float64(scaleX), float64(scaleY))
 	if int(ty) == int(C.get_edge_type()) {
 		err := _m.service.Emit(_m, "TouchEdgeEvent", TouchDirection(direction).String(), float64(scaleX), float64(scaleY))
 		if err != nil {
@@ -259,7 +260,6 @@ func handleTouchScreenEvent(ty, direction, fingers C.int, scaleX, scaleY C.doubl
 
 //export handleTouchEdgeMoveStop
 func handleTouchEdgeMoveStop(direction C.int, x, y C.double, duration C.int) {
-	logger.Debug("emit TouchEdgeMoveStop")
 	err := _m.service.Emit(_m, "TouchEdgeMoveStop", TouchDirection(direction).String(), float64(x), float64(y), int(duration))
 	if err != nil {
 		logger.Error("handleTouchEdgeMoveStop failed:", err)
@@ -268,7 +268,6 @@ func handleTouchEdgeMoveStop(direction C.int, x, y C.double, duration C.int) {
 
 //export handleTouchEdgeMoveStopLeave
 func handleTouchEdgeMoveStopLeave(direction C.int, x, y C.double, duration C.int) {
-	logger.Debug("emit TouchEdgeMoveStopLeave")
 	err := _m.service.Emit(_m, "TouchEdgeMoveStopLeave", TouchDirection(direction).String(), float64(x), float64(y), int(duration))
 	if err != nil {
 		logger.Error("handleTouchEdgeMoveStopLeave failed:", err)
@@ -284,10 +283,18 @@ func handleTouchMoving(scalex, scaley C.double) {
 }
 
 //export handleTouchShortPress
-func handleTouchShortPress(time int32, scalex, scaley C.double) {
-	err := _m.service.Emit(_m, "TouchSinglePressTimeout", time, float64(scalex), float64(scaley))
+func handleTouchShortPress(time C.int, scalex, scaley C.double) {
+	err := _m.service.Emit(_m, "TouchSinglePressTimeout", int32(time), float64(scalex), float64(scaley))
 	if err != nil {
 		logger.Error("handleTouchShortPress failed:", err)
+	}
+}
+
+//export handleTouchPressTimeout
+func handleTouchPressTimeout(fingers, time C.int, scalex, scaley C.double) {
+	err := _m.service.Emit(_m, "TouchPressTimeout", int32(fingers), int(time), float64(scalex), float64(scaley))
+	if err != nil {
+		logger.Error("handleTouchPressTimeout", err)
 	}
 }
 

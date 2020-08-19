@@ -68,7 +68,10 @@ static struct _short_press_timer {
     guint id;
 } short_press_timer;
 
+guint long_press_timer2 = 0;
+
 static int long_press_duration = ALARM_TIMEOUT_DEFAULT;
+static int long_press_duration2 = 1000;
 static double long_press_distance = LONG_PRESS_MAX_DISTANCE;
 static int short_press_duration = 200;
 
@@ -80,12 +83,12 @@ start_loop(int verbose, double distance)
         return -1;
     }
 
-	if (verbose) {
-		g_setenv("G_MESSAGES_DEBUG", "all", TRUE);
-	}
-	if (distance > 0) {
-		long_press_distance = distance;
-	}
+    if (verbose) {
+        g_setenv("G_MESSAGES_DEBUG", "all", TRUE);
+    }
+    if (distance > 0) {
+        long_press_distance = distance;
+    }
     ev_table = g_hash_table_new_full(g_str_hash,
                                      g_str_equal,
                                      (GDestroyNotify)g_free,
@@ -125,9 +128,9 @@ quit_loop(void)
 void
 set_timer_duration(int duration)
 {
-	g_debug("[Duration] set: %d --> %d", long_press_duration, duration);
+    g_debug("[Duration] set: %d --> %d", long_press_duration, duration);
     if (duration == long_press_duration) {
-    	return;
+        return;
     }
     long_press_duration = duration;
 }
@@ -137,10 +140,10 @@ void
 set_timer_short_duration(int duration)
 {
     g_debug("[Duration short ] set: %d --> %d", short_press_duration, duration);
-	if (duration == short_press_duration) {
-		return ;
-	}
-	short_press_duration = duration;
+    if (duration == short_press_duration) {
+        return ;
+    }
+    short_press_duration = duration;
 }
 
 
@@ -186,7 +189,7 @@ static gboolean
 touch_timer_handler(gpointer data)
 {
     g_debug("touch timer arrived: %u, data: (%f. %f)", touch_timer.id,
-			touch_timer.x, touch_timer.y);
+            touch_timer.x, touch_timer.y);
     handleTouchEvent(TOUCH_TYPE_RIGHT_BUTTON, BUTTON_TYPE_DOWN);
     touch_timer.sent = 1;
     return FALSE;
@@ -195,11 +198,16 @@ touch_timer_handler(gpointer data)
 static gboolean
 short_press_timer_handler(gpointer data)
 {
-    g_debug("short_press_timer_handler arrived: %u, data: (%f. %f)", short_press_timer.id,
-			touch_timer.x, touch_timer.y);
+    point scale = get_last_point_scale();
+    handleTouchShortPress(short_press_duration, scale.x, scale.y);
+    return FALSE;
+}
 
-	point scale = get_last_point_scale();
-	handleTouchShortPress(short_press_duration, scale.x, scale.y);
+static gboolean
+long_press_timer_handler2(gpointer data)
+{
+    point scale = get_last_point_scale();
+    handleTouchPressTimeout(1, long_press_duration2, scale.x, scale.y);
     return FALSE;
 }
 
@@ -207,9 +215,9 @@ static void
 touch_timer_destroy(gpointer data)
 {
     g_debug("touch timer destroy: %u, data: (%f, %f)", touch_timer.id,
-			touch_timer.x, touch_timer.y);
+            touch_timer.x, touch_timer.y);
     if (touch_timer.id != 0) {
-		touch_timer.id = 0;
+        touch_timer.id = 0;
     }
     touch_timer.x = 0;
     touch_timer.y = 0;
@@ -218,9 +226,13 @@ touch_timer_destroy(gpointer data)
 static void
 short_press_timer_destory(gpointer data)
 {
-   	if (short_press_timer.id != 0) {
-		short_press_timer.id = 0;
-   	}
+    short_press_timer.id = 0;
+}
+
+static void
+long_press_timer_destroy2(gpointer data)
+{
+    long_press_timer2 = 0;
 }
 
 static void
@@ -228,15 +240,12 @@ start_touch_timer()
 {
     g_debug("start touch timer: %u, fingers: %d, long_press_duration: %d, short_press_duration: %d", touch_timer.id, touch_timer.fingers, long_press_duration, short_press_duration);
     if (touch_timer.id != 0) {
-		g_debug("There has an touch_timer: %u", touch_timer.id);
-		return;
+        g_debug("There has an touch_timer: %u", touch_timer.id);
+        return;
     }
-    touch_timer.id = g_timeout_add_full(G_PRIORITY_DEFAULT, long_press_duration,
-										touch_timer_handler, NULL, touch_timer_destroy);
-
-
-	short_press_timer.id = g_timeout_add_full(G_PRIORITY_DEFAULT - 1, short_press_duration,
-			                                        short_press_timer_handler, NULL, short_press_timer_destory); 
+    touch_timer.id = g_timeout_add_full(G_PRIORITY_DEFAULT, long_press_duration, touch_timer_handler, NULL, touch_timer_destroy);
+    short_press_timer.id = g_timeout_add_full(G_PRIORITY_DEFAULT - 1, short_press_duration, short_press_timer_handler, NULL, short_press_timer_destory);
+    long_press_timer2 = g_timeout_add_full(G_PRIORITY_DEFAULT - 2, long_press_duration2, long_press_timer_handler2, NULL, long_press_timer_destroy2);
 }
 
 static void
@@ -244,21 +253,25 @@ stop_touch_timer()
 {
     g_debug("stop touch timer: %u, fingers: %d", touch_timer.id, touch_timer.fingers);
 
-	if (touch_timer.id != 0) {
-	     g_source_remove(touch_timer.id);           
-	     touch_timer.id = 0;
-	}
-	if (short_press_timer.id != 0) {
-		g_source_remove(short_press_timer.id);           
-		short_press_timer.id = 0;
-	}
+    if (touch_timer.id != 0) {
+         g_source_remove(touch_timer.id);
+         touch_timer.id = 0;
+    }
+    if (short_press_timer.id != 0) {
+        g_source_remove(short_press_timer.id);
+        short_press_timer.id = 0;
+    }
+    if (long_press_timer2 != 0) {
+        g_source_remove(long_press_timer2);
+        long_press_timer2 = 0;
+    }
 }
 
 static int
 valid_long_press_touch(double x, double y)
 {
     if (touch_timer.id == 0) {
-		return 0;
+        return 0;
     }
 
     double dx = x - touch_timer.x;
@@ -380,67 +393,67 @@ handle_touch_events(struct libinput_event *ev, int ty,struct movement *m)
     switch (ty) {
     case LIBINPUT_EVENT_TOUCH_MOTION:{
         handle_touch_event_motion(ev, m);
-		g_debug("Touch motion, id: %u, fingers: %d, sent: %d ",
-				touch_timer.id, touch_timer.fingers, touch_timer.sent);
-		if (touch_timer.id == 0) {
-			break;
-		}
-		struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
-		// only suupurted events: down and motion
-		double x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
-		double y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
-		g_debug("\t[Transformed] X: %lf, Y: %lf", x, y);
-		if (valid_long_press_touch(x, y) != 0) {
-			break;
-		}
-		// cancel touch_timer
-		stop_touch_timer();
-		break;
+        g_debug("Touch motion, id: %u, fingers: %d, sent: %d ",
+                touch_timer.id, touch_timer.fingers, touch_timer.sent);
+        if (touch_timer.id == 0) {
+            break;
+        }
+        struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
+        // only suupurted events: down and motion
+        double x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
+        double y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
+        g_debug("\t[Transformed] X: %lf, Y: %lf", x, y);
+        if (valid_long_press_touch(x, y) != 0) {
+            break;
+        }
+        // cancel touch_timer
+        stop_touch_timer();
+        break;
     }
     case LIBINPUT_EVENT_TOUCH_UP:
         handle_touch_event_up(ev, m);
         g_debug("Touch up, id: %u, fingers: %d, sent: %d ",
-				touch_timer.id, touch_timer.fingers, touch_timer.sent);
-		stop_touch_timer();
-		if (touch_timer.fingers > 0) {
-			touch_timer.fingers--;
-		}
-		if (touch_timer.sent) {
-			touch_timer.sent = 0;
-			handleTouchEvent(TOUCH_TYPE_RIGHT_BUTTON, BUTTON_TYPE_UP);
-		}
+                touch_timer.id, touch_timer.fingers, touch_timer.sent);
+        stop_touch_timer();
+        if (touch_timer.fingers > 0) {
+            touch_timer.fingers--;
+        }
+        if (touch_timer.sent) {
+            touch_timer.sent = 0;
+            handleTouchEvent(TOUCH_TYPE_RIGHT_BUTTON, BUTTON_TYPE_UP);
+        }
 
         scale = get_last_point_scale();
-		handleTouchUpOrCancel(scale.x, scale.y);
-		return;
+        handleTouchUpOrCancel(scale.x, scale.y);
+        return;
     case LIBINPUT_EVENT_TOUCH_DOWN: {
         handle_touch_event_down(ev, m);
         g_debug("Touch down, id: %u, fingers: %d, sent: %d ",
-				touch_timer.id, touch_timer.fingers, touch_timer.sent);
-		if (touch_timer.id != 0 || touch_timer.fingers > 0) {
-			stop_touch_timer();
-			touch_timer.fingers++;
-			break;
-		}
-		struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
-		start_touch_timer();
-		touch_timer.fingers = 1;
-		touch_timer.sent = 0;
-		touch_timer.width = SCREEN_WIDTH;
-		touch_timer.height = SCREEN_HEIGHT;
-		double w, h;
-		libinput_device_get_size(dev, &w, &h);
-		// TODO(jouyouyun): save device size to cache
-		if (w > 1) {
-			touch_timer.width = w;
-		}
-		if (h >1) {
-			touch_timer.height = h;
-		}
-		touch_timer.x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
-		touch_timer.y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
-		g_debug("\t[Transformed] X: %lf, Y: %lf", touch_timer.x, touch_timer.y);
-		break;
+                touch_timer.id, touch_timer.fingers, touch_timer.sent);
+        if (touch_timer.id != 0 || touch_timer.fingers > 0) {
+            stop_touch_timer();
+            touch_timer.fingers++;
+            break;
+        }
+        struct libinput_event_touch *touch = libinput_event_get_touch_event(ev);
+        start_touch_timer();
+        touch_timer.fingers = 1;
+        touch_timer.sent = 0;
+        touch_timer.width = SCREEN_WIDTH;
+        touch_timer.height = SCREEN_HEIGHT;
+        double w, h;
+        libinput_device_get_size(dev, &w, &h);
+        // TODO(jouyouyun): save device size to cache
+        if (w > 1) {
+            touch_timer.width = w;
+        }
+        if (h >1) {
+            touch_timer.height = h;
+        }
+        touch_timer.x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
+        touch_timer.y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
+        g_debug("\t[Transformed] X: %lf, Y: %lf", touch_timer.x, touch_timer.y);
+        break;
     }
     case LIBINPUT_EVENT_TOUCH_FRAME:
         /* g_debug("Touch frame:"); */
@@ -448,17 +461,17 @@ handle_touch_events(struct libinput_event *ev, int ty,struct movement *m)
     case LIBINPUT_EVENT_TOUCH_CANCEL:
         handle_touch_event_cancel(ev, m);
         g_debug("Touch cancel, id: %u, fingers: %d, sent: %d ",
-				touch_timer.id, touch_timer.fingers, touch_timer.sent);
-		stop_touch_timer();
-		touch_timer.fingers = 0;
-		if (touch_timer.sent) {
-			touch_timer.sent = 0;
-			handleTouchEvent(TOUCH_TYPE_RIGHT_BUTTON, BUTTON_TYPE_UP);
-		}
+                touch_timer.id, touch_timer.fingers, touch_timer.sent);
+        stop_touch_timer();
+        touch_timer.fingers = 0;
+        if (touch_timer.sent) {
+            touch_timer.sent = 0;
+            handleTouchEvent(TOUCH_TYPE_RIGHT_BUTTON, BUTTON_TYPE_UP);
+        }
 
         scale = get_last_point_scale();
-		handleTouchUpOrCancel(scale.x, scale.y);
-		return;
+        handleTouchUpOrCancel(scale.x, scale.y);
+        return;
     }
 }
 
