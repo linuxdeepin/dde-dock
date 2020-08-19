@@ -13,6 +13,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
+pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} power.qrc)
