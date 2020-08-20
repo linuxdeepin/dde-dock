@@ -47,5 +47,6 @@ int start_loop(int verbose, double distance);
 void quit_loop(void);
 void set_timer_duration(int duration);
 void set_timer_short_duration(int duration);
+void set_dblclick_duration(int duration);
 
 #endif

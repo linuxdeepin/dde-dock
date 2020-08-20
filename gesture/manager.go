@@ -147,7 +147,6 @@ func (m *Manager) init() {
 	m.systemSigLoop.Start()
 	m.gesture.InitSignalExt(m.systemSigLoop, true)
 	_, err = m.gesture.ConnectEvent(func(name string, direction string, fingers int32) {
-		logger.Debug("[Event] received:", name, direction, fingers)
 		err = m.Exec(name, direction, fingers)
 		if err != nil {
 			logger.Error("Exec failed:", err)
@@ -158,7 +157,6 @@ func (m *Manager) init() {
 	}
 
 	_, err = m.gesture.ConnectTouchEdgeMoveStopLeave(func(direction string, scaleX float64, scaleY float64, duration int32) {
-		logger.Debug("----------[ConnectTouchEdgeMoveStopLeave]:", direction, scaleX, scaleY, duration)
 		err = m.handleTouchEdgeMoveStopLeave(direction, scaleX, scaleY, duration)
 		if err != nil {
 			logger.Error("handleTouchEdgeMoveStopLeave failed:", err)
@@ -166,6 +164,39 @@ func (m *Manager) init() {
 	})
 	if err != nil {
 		logger.Error("connect TouchEdgeMoveStopLeave failed:", err)
+	}
+
+	_, err = m.gesture.ConnectDbclickDown(func(fingers int32) {
+		logger.Debug("[ConnectDblickDown]:", fingers)
+		err = m.handleDbclickDown(fingers)
+		if err != nil {
+			logger.Error("handleDbclickDown failed:", err)
+		}
+	})
+	if err != nil {
+		logger.Error("connect DblclickDown failed:", err)
+	}
+
+	_, err = m.gesture.ConnectSwipeMoving(func(fingers int32, accelX float64, accelY float64) {
+		logger.Debug("[ConnectSwipMoving]:", fingers, accelX, accelY)
+		err = m.handleSwipeMoving(fingers, accelX, accelY)
+		if err != nil {
+			logger.Error("handleSwipeMoving failed:", err)
+		}
+	})
+	if err != nil {
+		logger.Error("connect SwipeMoving failed:", err)
+	}
+
+	_, err = m.gesture.ConnectSwipeStop(func(fingers int32) {
+		logger.Debug("[ConnectSwipeStop]:", fingers)
+		err = m.handleSwipeStop(fingers)
+		if err != nil {
+			logger.Error("handleSwipeStop failed:", err)
+		}
+	})
+	if err != nil {
+		logger.Error("connect SwipeStop failed:", err)
 	}
 
 	m.listenGSettingsChanged()
@@ -293,6 +324,30 @@ func (m *Manager) handleTouchEdgeMoveStopLeave(edge string, scaleX float64, scal
 				return m.handleBuiltinAction("ShowWorkspace")
 			}
 		}
+	}
+	return nil
+}
+
+//touchpad double click down
+func (m *Manager) handleDbclickDown(fingers int32) error {
+	if fingers == 3 {
+		return m.wm.TouchToMove(0, 0, 0)
+	}
+	return nil
+}
+
+//touchpad swipe move
+func (m *Manager) handleSwipeMoving(fingers int32, accelX float64, accelY float64) error {
+	if fingers == 3 {
+		return m.wm.TouchToMove(0, int32(accelX), int32(accelY))
+	}
+	return nil
+}
+
+//touchpad swipe stop or interrupted
+func (m *Manager) handleSwipeStop(fingers int32) error {
+	if fingers == 3 {
+		return m.wm.ClearMoveStatus(0)
 	}
 	return nil
 }

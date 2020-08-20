@@ -36,9 +36,12 @@ struct raw_multitouch_event {
     double dx_unaccel, dy_unaccel;
     double scale;
     int fingers;
+    uint64_t t_start_tap;
+    guint tap_id;
+    bool dblclick;
 };
 
-static void raw_event_reset(struct raw_multitouch_event *event);
+static void raw_event_reset(struct raw_multitouch_event *event, bool reset_dblclick);
 
 static int is_touchpad(struct libinput_device *dev);
 static const char* get_multitouch_device_node(struct libinput_event *ev);
@@ -53,6 +56,7 @@ static void stop_touch_timer();
 static int valid_long_press_touch(double x, double y);
 
 static GHashTable *ev_table = NULL;
+struct raw_multitouch_event *raw = NULL;
 static int quit = 0;
 
 static struct _long_press_timer {
@@ -74,6 +78,7 @@ static int long_press_duration = ALARM_TIMEOUT_DEFAULT;
 static int long_press_duration2 = 1000;
 static double long_press_distance = LONG_PRESS_MAX_DISTANCE;
 static int short_press_duration = 200;
+static int dblclick_duration = 400;
 
 int
 start_loop(int verbose, double distance)
@@ -146,9 +151,16 @@ set_timer_short_duration(int duration)
     short_press_duration = duration;
 }
 
+void set_dblclick_duration(int duration) 
+{
+    if (duration == dblclick_duration) {
+        return ;
+    }
+    dblclick_duration = duration;
+}
 
 static void
-raw_event_reset(struct raw_multitouch_event *event)
+raw_event_reset(struct raw_multitouch_event *event, bool reset_dblclick)
 {
     if (!event) {
         return ;
@@ -158,6 +170,10 @@ raw_event_reset(struct raw_multitouch_event *event)
     event->dy_unaccel = 0.0;
     event->scale = 0.0;
     event->fingers = 0;
+    event->t_start_tap = 0;
+    event->tap_id = 0;
+    if (reset_dblclick)
+        event->dblclick = false;
 }
 
 static const char*
@@ -279,6 +295,38 @@ valid_long_press_touch(double x, double y)
     return fabs(dx) < long_press_distance && fabs(dy) < long_press_distance;
 }
 
+static gboolean
+ handle_tap()
+{
+    g_debug("[Tap] fingers: %d", raw->fingers);
+    handleGestureEvent(GESTURE_TYPE_TAP, GESTURE_DIRECTION_NONE, raw->fingers);
+    return FALSE;
+}
+
+static void
+handle_tap_destroy()
+{
+    if (raw && raw->tap_id) {
+        raw->tap_id = 0;
+    }
+}
+
+static void
+handle_tap_stop()
+{
+    if (raw && raw->tap_id) {
+         g_source_remove(raw->tap_id);
+         raw->tap_id = 0;
+    }
+}
+
+static int
+handle_tap_delay()
+{
+    raw->tap_id = g_timeout_add_full(G_PRIORITY_DEFAULT, dblclick_duration,
+                                                       handle_tap, NULL, handle_tap_destroy);
+}
+
 /**
  * calculation direction
  * Swipe: (begin -> end)
@@ -301,17 +349,28 @@ handle_gesture_events(struct libinput_event *ev, int type)
     }
 
     const char *node = udev_device_get_devnode(libinput_device_get_udev_device(dev));
-    struct raw_multitouch_event *raw = g_hash_table_lookup(ev_table, node);
+    raw = g_hash_table_lookup(ev_table, node);
     if (!raw) {
         fprintf(stderr, "Not found '%s' in table\n", node);
         return ;
     }
     struct libinput_event_gesture *gesture = libinput_event_get_gesture_event(ev);
+    if (raw->dblclick
+    && type != LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN
+    && type != LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE
+    && type != LIBINPUT_EVENT_GESTURE_SWIPE_END
+    && type != LIBINPUT_EVENT_GESTURE_TAP_UPDATE
+    && type != LIBINPUT_EVENT_GESTURE_TAP_END) {
+        raw->fingers = libinput_event_gesture_get_finger_count(gesture);
+        handleSwipeStop(raw->fingers);
+        raw->dblclick = false;
+    }
+
     switch (type) {
     case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
         // reset
-        raw_event_reset(raw);
+        raw_event_reset(raw, false);
         break;
     case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:{
         double scale = libinput_event_gesture_get_scale(gesture);
@@ -324,12 +383,18 @@ handle_gesture_events(struct libinput_event *ev, int type)
         double dy_unaccel = libinput_event_gesture_get_dy_unaccelerated(gesture);
         raw->dx_unaccel += dx_unaccel;
         raw->dy_unaccel += dy_unaccel;
+
+        int fingers = libinput_event_gesture_get_finger_count(gesture);
+        if (raw->dblclick) {
+            handleSwipeMoving(fingers, dx_unaccel, dy_unaccel);
+        }
+
         break;
     }
     case LIBINPUT_EVENT_GESTURE_PINCH_END:{
         // filter small scale threshold
         if (fabs(raw->scale) < 1) {
-            raw_event_reset(raw);
+            raw_event_reset(raw, true);
             break;
         }
 
@@ -339,17 +404,22 @@ handle_gesture_events(struct libinput_event *ev, int type)
         handleGestureEvent(GESTURE_TYPE_PINCH,
                            (raw->scale >= 0?GESTURE_DIRECTION_IN:GESTURE_DIRECTION_OUT),
                            raw->fingers);
-        raw_event_reset(raw);
+        raw_event_reset(raw, true);
         break;
     }
     case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+        raw->fingers = libinput_event_gesture_get_finger_count(gesture);
+        if (raw->dblclick) {
+            handleSwipeStop(raw->fingers);
+            raw_event_reset(raw, true);
+            break;
+        }
         // filter small movement threshold
         if (fabs(raw->dx_unaccel - raw->dy_unaccel) < 70) {
-            raw_event_reset(raw);
+            raw_event_reset(raw, true);
             break;
         }
 
-        raw->fingers = libinput_event_gesture_get_finger_count(gesture);
         if (fabs(raw->dx_unaccel) > fabs(raw->dy_unaccel)) {
             // right/left movement
             g_debug("[Swipe] direction: %s, fingers: %d",
@@ -365,17 +435,33 @@ handle_gesture_events(struct libinput_event *ev, int type)
                                (raw->dy_unaccel < 0?GESTURE_DIRECTION_UP:GESTURE_DIRECTION_DOWN),
                                raw->fingers);
         }
-        raw_event_reset(raw);
+
+        raw_event_reset(raw, true);
         break;
     case LIBINPUT_EVENT_GESTURE_TAP_BEGIN:
+        g_debug("[Tap begin] time: %u duration: %d fingers: %d \n", raw->t_start_tap, (libinput_event_gesture_get_time_usec(gesture) - raw->t_start_tap) / 1000, raw->fingers);
+        if (raw->t_start_tap > 0
+        &&  (libinput_event_gesture_get_time_usec(gesture) - raw->t_start_tap) / 1000 <= dblclick_duration
+        && raw->fingers == libinput_event_gesture_get_finger_count(gesture)) {
+            handleDbclickDown(raw->fingers);
+            handle_tap_stop();
+            raw_event_reset(raw, true);
+            raw->dblclick = true;
+        }
         break;
     case LIBINPUT_EVENT_GESTURE_TAP_END:
         if (libinput_event_gesture_get_cancelled(gesture)) {
+            raw_event_reset(raw, true);
             break;
         }
-        raw->fingers = libinput_event_gesture_get_finger_count(gesture);
-        g_debug("[Tap] fingers: %d", raw->fingers);
-        handleGestureEvent(GESTURE_TYPE_TAP, GESTURE_DIRECTION_NONE, raw->fingers);
+
+        if (!raw->dblclick) {
+            raw->fingers = libinput_event_gesture_get_finger_count(gesture);
+            raw->t_start_tap = libinput_event_gesture_get_time_usec(gesture);
+            handle_tap_delay();
+        } else {
+            raw_event_reset(raw, true);
+        }
         break;
     }
 }
@@ -403,7 +489,7 @@ handle_touch_events(struct libinput_event *ev, int ty,struct movement *m)
         double x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
         double y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
         g_debug("\t[Transformed] X: %lf, Y: %lf", x, y);
-        if (valid_long_press_touch(x, y) != 0) {
+        if (valid_long_press_touch(x, y) == 1) {
             break;
         }
         // cancel touch_timer

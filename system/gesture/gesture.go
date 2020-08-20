@@ -142,6 +142,7 @@ type Manager struct {
 	methods *struct {
 		SetShortPressDuration   func() `in:"duration"`
 		SetEdgeMoveStopDuration func() `in:"duration"`
+		SetDblclickDuration     func() `in:"duration"`
 	}
 
 	// nolint
@@ -150,6 +151,22 @@ type Manager struct {
 			name      string
 			direction string
 			fingers   int32
+		}
+
+		//gesture double click down
+		DbclickDown struct {
+			fingers int32
+		}
+
+		//gesture swipe moving info
+		SwipeMoving struct {
+			fingers        int32
+			accelX, accelY float64
+		}
+
+		//gesture swipe stop or interrupted
+		SwipeStop struct {
+			fingers int32
 		}
 
 		TouchEdgeEvent struct {
@@ -228,10 +245,15 @@ func (*Manager) SetEdgeMoveStopDuration(duration int) *dbus.Error {
 	return nil
 }
 
+//duration unit ms
+func (*Manager) SetDblclickDuration(duration int) *dbus.Error {
+	C.set_dblclick_duration(C.int(duration))
+	return nil
+}
+
+//touchpad gesture
 //export handleGestureEvent
 func handleGestureEvent(ty, direction, fingers C.int) {
-	logger.Debug("emit gesture event:", GestureType(ty).String(),
-		GestureType(direction).String(), int32(fingers))
 	err := _m.service.Emit(_m, "Event", GestureType(ty).String(),
 		GestureType(direction).String(), int32(fingers))
 	if err != nil {
@@ -239,6 +261,33 @@ func handleGestureEvent(ty, direction, fingers C.int) {
 	}
 }
 
+//export handleDbclickDown
+func handleDbclickDown(fingers C.int) {
+	err := _m.service.Emit(_m, "DbclickDown", int32(fingers))
+	if err != nil {
+		logger.Error("handleDbclickDown failed:", err)
+	}
+}
+
+//export handleSwipeMoving
+func handleSwipeMoving(fingers C.int, accelX, accelY C.double) {
+	logger.Debug("emit SwipeMoving:", float64(accelX), float64(accelY))
+	err := _m.service.Emit(_m, "SwipeMoving", int32(fingers), float64(accelX), float64(accelY))
+	if err != nil {
+		logger.Error("handleSwipeMoving failed:", err)
+	}
+}
+
+//export handleSwipeStop
+func handleSwipeStop(fingers C.int) {
+	logger.Debug("emit SwipeStop:", int32(fingers))
+	err := _m.service.Emit(_m, "SwipeStop", int32(fingers))
+	if err != nil {
+		logger.Error("handleSwipeStop failed:", err)
+	}
+}
+
+//touchscreen gesture
 //export handleTouchEvent
 func handleTouchEvent(ty, btn C.int) {
 	err := _m.service.Emit(_m, "Event", TouchType(ty).String(),
