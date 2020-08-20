@@ -3,6 +3,7 @@ package bluetooth
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
@@ -144,6 +145,8 @@ func (b *Bluetooth) SendFiles(devAddress string, files []string) (dbus.ObjectPat
 
 // CancelTransferSession 用来取消发送的会话，将会终止会话中所有的传送任务
 func (b *Bluetooth) CancelTransferSession(sessionPath dbus.ObjectPath) *dbus.Error {
+	//添加延时，确保sessionPath被remove，防止死锁
+	time.Sleep(500 * time.Millisecond)
 	b.sessionCancelChMapMu.Lock()
 	defer b.sessionCancelChMapMu.Unlock()
 
