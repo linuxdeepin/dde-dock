@@ -176,8 +176,6 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath, perm bool) (hwAddr string
 		hwAddr = ""
 		if perm {
 			hwAddr, err = devWired.PermHwAddress().Get(0)
-			hwAddr = strings.ToUpper(hwAddr)
-			return
 		}
 		if hwAddr == "" {
 			// may get PermHwAddress failed under NetworkManager 1.4.1
@@ -817,8 +815,8 @@ func nmGetIp6ConfigInfo(path dbus.ObjectPath) (address, prefix string, gateways,
 	}
 	for _, addr := range ipv6Addresses {
 		gateways = append(gateways, addr.Gateway)
-		if(addr.Address[:5] != "FE80:" &&     // link local
-			addr.Address[:5] != "FEC0:") {    // site local
+		if addr.Address[:5] != "FE80:" && // link local
+			addr.Address[:5] != "FEC0:" { // site local
 			address = addr.Address
 			prefix = fmt.Sprintf("%d", addr.Prefix)
 		}

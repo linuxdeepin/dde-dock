@@ -66,11 +66,13 @@ func initSettingSectionWired(data connectionData, devPath dbus.ObjectPath) {
 
 	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath, true)
 	if err != nil {
+		logger.Warning("failed to get hwAddr:", err)
 		return
 	}
 
 	macAddr, err := net.ParseMAC(hwAddr)
 	if err != nil {
+		logger.Warning("failed to parse mac addr:", err)
 		return
 	}
 

@@ -463,7 +463,7 @@ func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		if err != nil {
 			return
 		}
-		m.ActivateConnection(uuid,devPath)
+		m.ActivateConnection(uuid, devPath)
 	}
 
 	m.stateHandler.locker.Lock()
