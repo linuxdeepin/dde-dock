@@ -454,7 +454,6 @@ func (m *Manager) init() error {
 	m.sysSigLoop.Start()
 	m.login1Manager = login1.NewManager(systemBus)
 	m.login1Manager.InitSignalExt(m.sysSigLoop, true)
-	m.initWallpaperSlideshow()
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
@@ -552,6 +551,7 @@ func (m *Manager) init() error {
 	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
 	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
 		backgroundDBusPath, logger)
+	m.initWallpaperSlideshow()
 	return nil
 }
 
