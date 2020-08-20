@@ -31,7 +31,9 @@ import (
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	obex "github.com/linuxdeepin/go-dbus-factory/org.bluez.obex"
 	ofdbus "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.dbus"
+	"pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/dbusutil"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
 )
 
@@ -49,6 +51,10 @@ const (
 	daemonSysIFC     = daemonSysService
 
 	methodSysBlueGetDeviceTech = daemonSysIFC + ".BluetoothGetDeviceTechnologies"
+)
+const (
+	bluetoothSchema = "com.deepin.dde.bluetooth"
+	displaySwitch   = "display-switch"
 )
 
 const (
@@ -129,6 +135,9 @@ type Bluetooth struct {
 
 	sessionCancelChMap   map[dbus.ObjectPath]chan struct{}
 	sessionCancelChMapMu sync.Mutex
+
+	settings      *gio.Settings
+	DisplaySwitch gsprop.Bool `prop:"access:rw"`
 
 	// nolint
 	methods *struct {
@@ -310,6 +319,9 @@ func (b *Bluetooth) init() {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+	b.settings = gio.NewSettings(bluetoothSchema)
+	b.DisplaySwitch.Bind(b.settings, displaySwitch)
 
 	// initialize dbus object manager
 	b.objectManager = bluez.NewObjectManager(systemBus)
