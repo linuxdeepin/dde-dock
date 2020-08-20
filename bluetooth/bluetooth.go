@@ -227,6 +227,11 @@ type Bluetooth struct {
 			sessionPath  dbus.ObjectPath
 			done         bool
 		}
+		TransferFailed struct {
+			file        string
+			sessionPath dbus.ObjectPath
+			errInfo     string
+		}
 	}
 }
 
@@ -907,6 +912,11 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 	var transferredBase uint64
 
 	for i, f := range files {
+		_, err := os.Stat(f)
+		if err != nil {
+			b.emitTransferFailed(f, sessionPath, err.Error())
+			return
+		}
 		transferPath, properties, err := session.ObjectPush().SendFile(0, f)
 		if err != nil {
 			logger.Warningf("failed to send file: %s: %s", f, err)
@@ -1039,5 +1049,12 @@ func (b *Bluetooth) emitTransferRemoved(file string, transferPath dbus.ObjectPat
 	err := b.service.Emit(b, "TransferRemoved", file, transferPath, sessionPath, done)
 	if err != nil {
 		logger.Warning("failed to emit TransferRemoved:", err)
+	}
+}
+
+func (b *Bluetooth) emitTransferFailed(file string, sessionPath dbus.ObjectPath, errInfo string) {
+	err := b.service.Emit(b, "TransferFailed", file, sessionPath, errInfo)
+	if err != nil {
+		logger.Warning("failed to emit TransferFailed:", err)
 	}
 }
