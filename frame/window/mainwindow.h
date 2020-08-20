@@ -162,19 +162,16 @@ private slots:
 
 private:
     MainPanelControl *m_mainPanel;
-
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
     MultiScreenWorker *m_multiScreenWorker;
     MenuWorker *m_menuWorker;
-    XEventMonitor *m_eventInter;
-
     QTimer *m_shadowMaskOptimizeTimer;
-
     QDBusConnectionInterface *m_dbusDaemonInterface;
     org::kde::StatusNotifierWatcher *m_sniWatcher;
-    QString m_sniHostService;
     DragWidget *m_dragWidget;
+
+    QString m_sniHostService;
 
     bool m_launched;
     int m_dockSize;
