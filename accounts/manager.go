@@ -60,7 +60,6 @@ type Manager struct {
 	usersMapMu sync.Mutex
 
 	delayTaskManager *tasker.DelayTaskManager
-
 	userAddedChanMap map[string]chan string
 	//                    ^ username
 	//nolint
@@ -130,7 +129,7 @@ func (m *Manager) destroy() {
 func (m *Manager) initUsers(list []string) {
 	var userList []string
 	for _, p := range list {
-		u, err := NewUser(p, m.service)
+		u, err := NewUser(p, m.service, false)
 		if err != nil {
 			logger.Errorf("New user '%s' failed: %v", p, err)
 			continue
@@ -169,7 +168,7 @@ func (m *Manager) stopExportUsers(list []string) {
 }
 
 func (m *Manager) exportUserByPath(userPath string) error {
-	u, err := NewUser(userPath, m.service)
+	u, err := NewUser(userPath, m.service, true)
 	if err != nil {
 		return err
 	}

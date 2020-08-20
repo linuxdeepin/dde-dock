@@ -147,6 +147,20 @@ func (u *User) SetPassword(sender dbus.Sender, password string) *dbus.Error {
 		return dbusutil.ToError(err)
 	}
 
+	var count = 10
+	for {
+		_, err := users.GetShadowInfo(u.UserName)
+
+		if err == nil {
+			break
+		}
+		count--
+		if count == 0 {
+			return dbusutil.ToError(errors.New("shadow file error"))
+		}
+		time.Sleep(time.Second)
+	}
+
 	if err := users.ModifyPasswd(password, u.UserName); err != nil {
 		logger.Warning("DoAction: modify password failed:", err)
 		return dbusutil.ToError(err)

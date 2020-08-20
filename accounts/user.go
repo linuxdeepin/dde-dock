@@ -29,10 +29,10 @@ import (
 	"strings"
 	"sync"
 
+	dbus "github.com/godbus/dbus"
 	authenticate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.authenticate"
 	"pkg.deepin.io/dde/daemon/accounts/users"
-	"pkg.deepin.io/gir/glib-2.0"
-	dbus "github.com/godbus/dbus"
+	glib "pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/strv"
@@ -172,7 +172,7 @@ type User struct {
 	}
 }
 
-func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
+func NewUser(userPath string, service *dbusutil.Service, ignoreErr bool) (*User, error) {
 	userInfo, err := users.GetUserInfoByUid(getUidFromUserPath(userPath))
 	if err != nil {
 		return nil, err
@@ -180,7 +180,11 @@ func NewUser(userPath string, service *dbusutil.Service) (*User, error) {
 
 	shadowInfo, err := users.GetShadowInfo(userInfo.Name)
 	if err != nil {
-		return nil, err
+		if !ignoreErr {
+			return nil, err
+		} else {
+			shadowInfo = &users.ShadowInfo{Name: userInfo.Name, Status: users.PasswordStatusLocked}
+		}
 	}
 
 	var u = &User{
