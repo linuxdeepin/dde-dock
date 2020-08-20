@@ -64,7 +64,10 @@ ts_to_policy:
 build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/desktop-toggle out/pam_deepin_auth.so $(addprefix out/bin/, ${BINARIES}) ts_to_policy
 
 test: prepare
-	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
+	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" go test -v ./...
+
+print_gopath: prepare
+	GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}"
 
 install: build translate install-dde-data install-icons install-pam-module
 	mkdir -pv ${DESTDIR}${PREFIX}/lib/deepin-daemon
