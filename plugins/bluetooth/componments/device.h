@@ -57,6 +57,9 @@ public:
     inline State state() const { return m_state; }
     void setState(const State &state);
 
+    inline bool connectState() const { return m_connectState; }
+    void setConnectState(const bool connectState);
+
     inline bool trusted() const { return m_trusted; }
     void setTrusted(bool trusted);
 
@@ -76,6 +79,7 @@ Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void pairedChanged(const bool paired) const;
     void stateChanged(const State state) const;
+    void connectStateChanged(const bool connectState) const;
     void trustedChanged(const bool trusted) const;
     void connectingChanged(const bool &connecting) const;
     void rssiChanged(const int rssi) const;
@@ -88,6 +92,7 @@ private:
     bool m_connecting;
     int m_rssi;
     State m_state;
+    bool m_connectState;
     QString m_adapterId;
     QString m_deviceType;
 };

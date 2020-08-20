@@ -48,6 +48,7 @@ Device::Device(QObject *parent)
     , m_connecting(false)
     , m_rssi(0)
     , m_state(StateUnavailable)
+    , m_connectState(false)
 {
 }
 
@@ -82,6 +83,14 @@ void Device::setState(const State &state)
     if (state != m_state) {
         m_state = state;
         Q_EMIT stateChanged(state);
+    }
+}
+
+void Device::setConnectState(const bool connectState)
+{
+    if (connectState != m_connectState) {
+        m_connectState = connectState;
+        Q_EMIT connectStateChanged(connectState);
     }
 }
 

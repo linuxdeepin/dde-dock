@@ -79,7 +79,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
                 m_initDeviceState = Device::StateAvailable;
                 continue;
             }
-            if (device->state() == Device::StateConnected) {
+            if (device->state() == Device::StateConnected && device->connectState()) {
                 m_initDeviceState = Device::StateConnected;
                 break;
             }
@@ -207,18 +207,23 @@ void AdapterItem::addDeviceItem(const Device *constDevice)
 void AdapterItem::deviceChangeState(const Device::State state)
 {
     auto device = qobject_cast<Device *>(sender());
+
+    auto setUnavailableItem = [this](const Device::State state, DeviceItem *deviceItem){
+        int index = m_sortUnConnect.indexOf(deviceItem);
+        if (index < 0) {
+            m_sortConnected.removeOne(deviceItem);
+            m_sortUnConnect << deviceItem;
+            qSort(m_sortUnConnect);
+            moveDeviceItem(state, deviceItem);
+        }
+    };
+
     if (device) {
         DeviceItem *deviceItem = m_deviceItems.value(device->id());
         if (deviceItem) {
             switch (state) {
                 case Device::StateUnavailable: {
-                    int index = m_sortUnConnect.indexOf(deviceItem);
-                    if (index < 0) {
-                        m_sortConnected.removeOne(deviceItem);
-                        m_sortUnConnect << deviceItem;
-                        qSort(m_sortUnConnect);
-                        moveDeviceItem(state, deviceItem);
-                    }
+                    setUnavailableItem(state, deviceItem);
                 }
                     break;
                 case Device::StateAvailable: {
@@ -228,6 +233,10 @@ void AdapterItem::deviceChangeState(const Device::State state)
                 }
                     break;
                 case Device::StateConnected: {
+                    if (!device->connectState()) {
+                        setUnavailableItem(state, deviceItem);
+                        break;
+                    }
                     int index = m_sortConnected.indexOf(deviceItem);
                     if (index < 0) {
                         m_sortUnConnect.removeOne(deviceItem);

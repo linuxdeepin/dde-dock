@@ -53,6 +53,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     const bool paired = deviceObj["Paired"].toBool();
     const int rssi = deviceObj["RSSI"].toInt();
     const Device::State state = Device::State(deviceObj["State"].toInt());
+    const bool connectState = deviceObj["ConnectState"].toBool();
     const QString bluetoothDeviceType = deviceObj["Icon"].toString();
 
     removeDevice(id);
@@ -63,6 +64,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     device->setName(name);
     device->setPaired(paired);
     device->setState(state);
+    device->setConnectState(connectState);
     device->setRssi(rssi);
     device->setAdapterId(m_id);
     device->setDeviceType(bluetoothDeviceType);
@@ -92,6 +94,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
     const bool paired = dviceJson["Paired"].toBool();
     const int rssi = dviceJson["RSSI"].toInt();
     const Device::State state = Device::State(dviceJson["State"].toInt());
+    const bool connectState = dviceJson["ConnectState"].toBool();
     const QString bluetoothDeviceType = dviceJson["Icon"].toString();
 
     const Device *constdevice = m_devices.value(id);
@@ -102,6 +105,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
         device->setPaired(paired);
         device->setRssi(rssi);
         device->setState(state);
+        device->setConnectState(connectState);
         device->setDeviceType(bluetoothDeviceType);
     }
 }
@@ -156,6 +160,7 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         const bool paired = deviceObj["Paired"].toBool();
         const int rssi = deviceObj["RSSI"].toInt();
         const Device::State state = Device::State(deviceObj["State"].toInt());
+        const bool connectState = deviceObj["ConnectState"].toBool();
         const QString bluetoothDeviceType = deviceObj["Icon"].toString();
 
         auto device = new Device(this);
@@ -163,6 +168,7 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         device->setName(name);
         device->setPaired(paired);
         device->setState(state);
+        device->setConnectState(connectState);
         device->setRssi(rssi);
         device->setAdapterId(adapterId);
         device->setDeviceType(bluetoothDeviceType);
