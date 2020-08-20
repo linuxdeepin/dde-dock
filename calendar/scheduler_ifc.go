@@ -1,7 +1,6 @@
 package calendar
 
 import (
-	"strings"
 	"time"
 
 	dbus "github.com/godbus/dbus"
@@ -36,6 +35,38 @@ func (s *Scheduler) QueryJobs(paramsStr string) (string, *dbus.Error) {
 	return result, dbusutil.ToError(err)
 }
 
+func (s *Scheduler) QueryJobsWithLimit(paramsStr string, maxNum int32) (string, *dbus.Error) {
+	var params queryJobsParams
+	err := fromJson(paramsStr, &params)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	jobs, err := s.queryJobsWithLimit(params.Key, params.Start, params.End, maxNum)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	result, err := toJson(jobs)
+	return result, dbusutil.ToError(err)
+}
+
+func (s *Scheduler) QueryJobsWithRule(paramsStr string, rule string) (string, *dbus.Error) {
+	var params queryJobsParams
+	err := fromJson(paramsStr, &params)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	jobs, err := s.queryJobsWithRule(params.Key, params.Start, params.End, rule)
+	if err != nil {
+		return "", dbusutil.ToError(err)
+	}
+
+	result, err := toJson(jobs)
+	return result, dbusutil.ToError(err)
+}
+
 func (s *Scheduler) GetJobs(startYear, startMonth, startDay, endYear, endMonth, endDay int32) (string, *dbus.Error) {
 	startDate := libdate.New(int(startYear), time.Month(startMonth), int(startDay))
 	endDate := libdate.New(int(endYear), time.Month(endMonth), int(endDay))
@@ -64,23 +95,9 @@ func (s *Scheduler) getJobsWithLimit(startDate, endDate libdate.Date, maxNum int
 	if err != nil {
 		return nil, err
 	}
-	var result []dateJobsWrap
-	var jobCount int32
 	t0 := time.Now()
 	wraps := getJobsBetween(startDate, endDate, allJobs, false, "", false)
-	for _, item := range wraps {
-		if item.jobs != nil {
-			jobsLength := int32(len(item.jobs))
-			jobCount += jobsLength
-			if jobCount >= maxNum {
-				edge := jobsLength - (jobCount - maxNum)
-				item.jobs = item.jobs[:edge]
-				result = append(result, item)
-				break
-			}
-			result = append(result, item)
-		}
-	}
+	result := takeFirstNJobs(wraps, maxNum)
 	logger.Debug("cost time:", time.Since(t0))
 	return result, nil
 }
@@ -97,21 +114,10 @@ func (s *Scheduler) GetJobsWithRule(startYear, startMonth, startDay, endYear, en
 }
 
 func (s *Scheduler) getJobsWithRule(startDate, endDate libdate.Date, rule string) ([]dateJobsWrap, error) {
-	var allJobs []*Job
-	if !strings.Contains(rule, "BYDAY") && strings.Contains(rule, "DAILY") { // 每日
-		rule = "%" + rule + "%"
-		err := s.db.Where("r_rule LIKE ? AND r_rule NOT LIKE '%BYDAY%' ", rule).Find(&allJobs).Error
-		if err != nil {
-			return nil, err
-		}
-	} else { // 工作日 每周 每月 每年
-		rule = "%" + rule + "%"
-		err := s.db.Where("r_rule LIKE ?", rule).Find(&allJobs).Error
-		if err != nil {
-			return nil, err
-		}
+	allJobs, err := getJobsWithRule(s.db, rule)
+	if err != nil {
+		return nil, err
 	}
-
 	var result []dateJobsWrap
 	t0 := time.Now()
 	wraps := getJobsBetween(startDate, endDate, allJobs, true, "", false)

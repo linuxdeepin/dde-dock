@@ -32,14 +32,16 @@ type Scheduler struct {
 	quitChan   chan struct{}
 	//nolint
 	methods *struct {
-		GetJobs          func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
-		GetJob           func() `in:"id" out:"job"`
-		GetJobsWithLimit func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,maxNum" out:"jobs"`
-		GetJobsWithRule  func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,rule" out:"jobs"`
-		QueryJobs        func() `in:"params" out:"jobs"`
-		DeleteJob        func() `in:"id"`
-		UpdateJob        func() `in:"jobInfo"`
-		CreateJob        func() `in:"jobInfo" out:"id"`
+		GetJobs            func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay" out:"jobs"`
+		GetJob             func() `in:"id" out:"job"`
+		GetJobsWithLimit   func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,maxNum" out:"jobs"`
+		GetJobsWithRule    func() `in:"startYear,startMonth,startDay,endYear,endMonth,endDay,rule" out:"jobs"`
+		QueryJobs          func() `in:"params" out:"jobs"`
+		QueryJobsWithLimit func() `in:"params,maxNum" out:"jobs"`
+		QueryJobsWithRule  func() `in:"params,rule" out:"jobs"`
+		DeleteJob          func() `in:"id"`
+		UpdateJob          func() `in:"jobInfo"`
+		CreateJob          func() `in:"jobInfo" out:"id"`
 
 		GetTypes   func() `out:"types"`
 		GetType    func() `in:"id" out:"type"`
@@ -271,6 +273,47 @@ func (s *Scheduler) queryJobs(key string, startTime, endTime time.Time) ([]dateJ
 	return result, nil
 }
 
+func (s *Scheduler) queryJobsWithLimit(key string, startTime, endTime time.Time, maxNum int32) ([]dateJobsWrap, error) {
+	var allJobs []*Job
+	db := wrapDBConditionWithKey(s.db, key)
+	err := db.Find(&allJobs).Error
+	if err != nil {
+		return nil, err
+	}
+
+	startDate := libdate.NewAt(startTime)
+	endDate := libdate.NewAt(endTime)
+
+	wraps := getJobsBetween(startDate, endDate, allJobs, false, key, false)
+
+	timeRange := TimeRange{
+		start: startTime,
+		end:   endTime,
+	}
+	wraps = filterDateJobsWrap(wraps, timeRange)
+	result := takeFirstNJobs(wraps, maxNum)
+	return result, nil
+}
+
+func (s *Scheduler) queryJobsWithRule(key string, startTime time.Time, endTime time.Time, rule string) ([]dateJobsWrap, error) {
+	db := wrapDBConditionWithKey(s.db, key)
+	allJobs, err := getJobsWithRule(db, rule)
+	if err != nil {
+		return nil, err
+	}
+	startDate := libdate.NewAt(startTime)
+	endDate := libdate.NewAt(endTime)
+
+	wraps := getJobsBetween(startDate, endDate, allJobs, false, key, false)
+
+	timeRange := TimeRange{
+		start: startTime,
+		end:   endTime,
+	}
+	wraps = filterDateJobsWrap(wraps, timeRange)
+	return wraps, nil
+}
+
 func filterDateJobsWrap(wraps []dateJobsWrap, timeRange TimeRange) []dateJobsWrap {
 	var result []dateJobsWrap
 	for _, wrap := range wraps {
@@ -291,6 +334,54 @@ func filterJobs(jobs []*Job, timeRange TimeRange) []*Job {
 		}
 	}
 	return result
+}
+
+func wrapDBConditionWithKey(db *gorm.DB, key string) *gorm.DB {
+	key = strings.TrimSpace(key)
+	if canQueryByPinyin(key) {
+		var pinyin = createPinyinQuery(strings.ToLower(key))
+		return db.Where("instr(UPPER(title), UPPER(?)) OR title_pinyin LIKE ?", key, pinyin)
+	} else if key != "" {
+		return db.Where("instr(UPPER(title), UPPER(?))", key)
+	}
+	return db
+}
+
+func takeFirstNJobs(wraps []dateJobsWrap, maxNum int32) []dateJobsWrap {
+	var jobCount int32
+	var result []dateJobsWrap
+	for _, item := range wraps {
+		if item.jobs != nil {
+			jobsLength := int32(len(item.jobs))
+			jobCount += jobsLength
+			if jobCount >= maxNum {
+				edge := jobsLength - (jobCount - maxNum)
+				item.jobs = item.jobs[:edge]
+				result = append(result, item)
+				break
+			}
+			result = append(result, item)
+		}
+	}
+	return result
+}
+
+func getJobsWithRule(db *gorm.DB, rule string) ([]*Job, error) {
+	var jobs []*Job
+	if !strings.Contains(rule, "BYDAY") && strings.Contains(rule, "DAILY") { // 每日
+		rule = "%" + rule + "%"
+		err := db.Where("r_rule LIKE ? AND r_rule NOT LIKE '%BYDAY%' ", rule).Find(&jobs).Error
+		if err != nil {
+			return nil, err
+		}
+	} else { // 工作日 每周 每月 每年
+		rule = "%" + rule + "%"
+		err := db.Where("r_rule LIKE ?", rule).Find(&jobs).Error
+		if err != nil {
+			return nil, err
+		}
+	}
+	return jobs, nil
 }
 
 func (s *Scheduler) deleteJob(id uint) error {
@@ -581,15 +672,12 @@ func (s *Scheduler) setJobRemind(jj *JobJSON, remind string) error {
 			return err
 		}
 		s.notifyJobsChange(job.ID, newJob.ID)
-		s.emitJobsUpdated(job.ID, newJob.ID)
-
 	} else {
 		err = s.db.Model(&job).Update("Remind", remind).Error
 		if err != nil {
 			return err
 		}
 		s.notifyJobsChange(job.ID)
-		s.emitJobsUpdated(job.ID)
 	}
 
 	return nil
@@ -728,7 +816,7 @@ func (s *Scheduler) startRemindLoop() {
 					}
 				}
 				s.remindLaterTimersMu.Unlock()
-
+				s.emitJobsUpdated(ids...)
 			case <-s.quitChan:
 				return
 			}
