@@ -307,6 +307,8 @@ void MultiScreenWorker::onMonitorListChanged(const QList<QDBusObjectPath> &mons)
     for (auto op : ops)
         if (!pathList.contains(op))
             monitorRemoved(op);
+    //更新dock的显示,https://pms.uniontech.com/zentao/bug-view-43166.html
+    m_monitorUpdateTimer->start();
 }
 
 void MultiScreenWorker::monitorAdded(const QString &path)
