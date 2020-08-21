@@ -18,3 +18,19 @@
  */
 
 package keybinding
+
+import (
+	"os"
+	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+func Test_shouldUseDDEKwin(t *testing.T) {
+	Convey("parseKeystrokes", t, func(c C) {
+		_, err := os.Stat("/usr/bin/kwin_no_scale")
+		exist1 := err == nil
+		exist2 := shouldUseDDEKwin()
+		c.So(exist1, ShouldEqual, exist2)
+	})
+}

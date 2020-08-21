@@ -112,6 +112,17 @@ func TestParseKeystroke(t *testing.T) {
 	})
 }
 
+func TestParseKeystrokes(t *testing.T) {
+	Convey("ParseKeystrokes", t, func(c C) {
+		keystrokes := []string{
+			"<Super>S", "<Control>C",
+			"<Alt>A", "<Control><Alt>V",
+		}
+		ret := ParseKeystrokes(keystrokes)
+		c.So(len(ret), ShouldEqual, len(keystrokes))
+	})
+}
+
 func TestKeystrokeMethodString(t *testing.T) {
 	Convey("Keystroke.String", t, func(c C) {
 		var ks Keystroke
@@ -126,5 +137,82 @@ func TestKeystrokeMethodString(t *testing.T) {
 			Mods:   keysyms.ModMaskShift | keysyms.ModMaskSuper | keysyms.ModMaskAlt | keysyms.ModMaskControl,
 		}
 		c.So(ks.String(), ShouldEqual, "<Shift><Control><Alt><Super>T")
+	})
+}
+
+func TestParseLoopback(t *testing.T) {
+	Convey("TestParseLoopback", t, func(c C) {
+		ks, err := ParseKeystroke("<SHIFT><CONTROL><ALT><SUPER>T")
+		c.So(err, ShouldBeNil)
+		c.So(ks.String(), ShouldEqual, "<Shift><Control><Alt><Super>T")
+
+		ks, err = ParseKeystroke("<shift><control><alt><super>t")
+		c.So(err, ShouldBeNil)
+		c.So(ks.String(), ShouldEqual, "<Shift><Control><Alt><Super>t")
+	})
+}
+
+func TestParseMediaKey(t *testing.T) {
+	Convey("TestParseMediaKey", t, func(c C) {
+		keys := []string{
+			"XF86Messenger",
+			"XF86Save",
+			"XF86New",
+			"XF86WakeUp",
+			"XF86AudioRewind",
+			"XF86AudioMute",
+			"XF86MonBrightnessUp",
+			"XF86WLAN",
+			"XF86AudioMedia",
+			"XF86Reply",
+			"XF86Favorites",
+			"XF86AudioPlay",
+			"XF86AudioMicMute",
+			"XF86AudioPause",
+			"XF86AudioStop",
+			"XF86PowerOff",
+			"XF86Documents",
+			"XF86Game",
+			"XF86Search",
+			"XF86AudioRecord",
+			"XF86Display",
+			"XF86Reload",
+			"XF86Explorer",
+			"XF86Calculator",
+			"XF86Calendar",
+			"XF86Forward",
+			"XF86Cut",
+			"XF86MonBrightnessDown",
+			"XF86Copy",
+			"XF86Tools",
+			"XF86AudioRaiseVolume",
+			"XF86Close",
+			"XF86WWW",
+			"XF86HomePage",
+			"XF86Sleep",
+			"XF86AudioLowerVolume",
+			"XF86AudioPrev",
+			"XF86AudioNext",
+			"XF86Paste",
+			"XF86Open",
+			"XF86Send",
+			"XF86MyComputer",
+			"XF86Mail",
+			"XF86BrightnessAdjust",
+			"XF86LogOff",
+			"XF86Pictures",
+			"XF86Terminal",
+			"XF86Video",
+			"XF86Music",
+			"XF86ApplicationLeft",
+			"XF86ApplicationRight",
+			"XF86Meeting",
+		}
+
+		for _, key := range keys {
+			ks, err := ParseKeystroke(key)
+			c.So(err, ShouldBeNil)
+			c.So(ks.String(), ShouldEqual, key)
+		}
 	})
 }
