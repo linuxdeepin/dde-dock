@@ -25,6 +25,11 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
+var str = []string{"/bin/sh", "/bin/bash",
+	"/bin/zsh", "/usr/bin/zsh",
+	"/usr/bin/fish",
+}
+
 func TestGetLocaleFromFile(t *testing.T) {
 	Convey("getLocaleFromFile", t, func(c C) {
 		c.So(getLocaleFromFile("testdata/locale"), ShouldEqual, "zh_CN.UTF-8")
@@ -49,5 +54,35 @@ func TestAvailableShells(t *testing.T) {
 		}
 		shells := getAvailableShells("testdata/shells")
 		c.So(shells, ShouldResemble, ret)
+	})
+}
+
+func TestIsStrInArray(t *testing.T) {
+	Convey("IsStrInArray", t, func(c C) {
+		ret := isStrInArray("testdata/shells", str)
+		c.So(ret, ShouldEqual, false)
+		ret = isStrInArray("/bin/sh", str)
+		c.So(ret, ShouldEqual, true)
+	})
+}
+
+func TestIsStrvEqual(t *testing.T) {
+	Convey("IsStrvEqual", t, func(c C) {
+		var str1 = []string{"/bin/sh", "/bin/bash",
+			"/bin/zsh", "/usr/bin/zsh",
+			"/usr/bin/fish",
+		}
+		var str2 = []string{"/bin/sh", "/bin/bash"}
+		ret := isStrvEqual(str, str1)
+		c.So(ret, ShouldEqual, true)
+		ret = isStrvEqual(str, str2)
+		c.So(ret, ShouldEqual, false)
+	})
+}
+
+func TestGetValueFromLine(t *testing.T) {
+	Convey("GetValueFromLine", t, func(c C) {
+		ret := getValueFromLine("testdata/shells", "/")
+		c.So(ret, ShouldEqual, "shells")
 	})
 }
