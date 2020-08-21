@@ -127,6 +127,8 @@ func (pr *Priorities) RemoveUnavailable(cards CardList) {
 
 func (pr *Priorities) AddAvailable(cards CardList) {
 	for _, card := range cards {
+
+		logger.Debugf("+++++++++++++++++++++++++++++++++++ %v", card.Ports)
 		for _, port := range card.Ports {
 			if port.Available == pulse.AvailableTypeNo {
 				logger.Debugf("unavailable port %s %s", card.core.Name, port.Name)

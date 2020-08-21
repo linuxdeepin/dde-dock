@@ -149,9 +149,9 @@ type Audio struct {
 
 func newAudio(service *dbusutil.Service) *Audio {
 	a := &Audio{
-		service:     service,
-		meters:      make(map[string]*Meter),
-		MaxUIVolume: pulse.VolumeUIMax,
+		service:      service,
+		meters:       make(map[string]*Meter),
+		MaxUIVolume:  pulse.VolumeUIMax,
 		enableSource: true,
 	}
 
@@ -585,6 +585,12 @@ func (a *Audio) setPort(cardId uint32, portName string, direction int) error {
 	targetPortInfo, err := card.Ports.Get(portName, direction)
 	if err != nil {
 		return err
+	}
+
+	if isBluezAudio(card.core.Name) {
+		var bluezProfile string
+		portName, bluezProfile = bluezAudioParseVirtualPort(portName)
+		card.core.SetProfile(bluezProfile)
 	}
 
 	setDefaultPort := func() error {
