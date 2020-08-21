@@ -450,10 +450,32 @@ func (m *Manager) init() error {
 		logger.Warning(err)
 	}
 
+	m.initUserObj(systemBus)
+	m.initCurrentBgs()
+	m.display = display.NewDisplay(sessionBus)
+	m.display.InitSignalExt(m.sessionSigLoop, true)
+	err = m.display.Monitors().ConnectChanged(func(hasValue bool, value []dbus.ObjectPath) {
+		m.handleDisplayChanged(hasValue)
+	})
+	if err != nil {
+		logger.Warning("failed to connect Monitors changed:", err)
+	}
+	err = m.display.Primary().ConnectChanged(func(hasValue bool, value string) {
+		m.handleDisplayChanged(hasValue)
+	})
+	if err != nil {
+		logger.Warning("failed to connect Primary changed:", err)
+	}
+	m.updateMonitorMap()
+	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
+	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
+		backgroundDBusPath, logger)
+
 	m.sysSigLoop = dbusutil.NewSignalLoop(systemBus, 10)
 	m.sysSigLoop.Start()
 	m.login1Manager = login1.NewManager(systemBus)
 	m.login1Manager.InitSignalExt(m.sysSigLoop, true)
+	m.initWallpaperSlideshow()
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
@@ -531,27 +553,6 @@ func (m *Manager) init() error {
 		}
 	})
 
-	m.initUserObj(systemBus)
-	m.initCurrentBgs()
-	m.display = display.NewDisplay(sessionBus)
-	m.display.InitSignalExt(m.sessionSigLoop, true)
-	err = m.display.Monitors().ConnectChanged(func(hasValue bool, value []dbus.ObjectPath) {
-		m.handleDisplayChanged(hasValue)
-	})
-	if err != nil {
-		logger.Warning("failed to connect Monitors changed:", err)
-	}
-	err = m.display.Primary().ConnectChanged(func(hasValue bool, value string) {
-		m.handleDisplayChanged(hasValue)
-	})
-	if err != nil {
-		logger.Warning("failed to connect Primary changed:", err)
-	}
-	m.updateMonitorMap()
-	m.syncConfig = dsync.NewConfig("appearance", &syncConfig{m: m}, m.sessionSigLoop, dbusPath, logger)
-	m.bgSyncConfig = dsync.NewConfig("background", &backgroundSyncConfig{m: m}, m.sessionSigLoop,
-		backgroundDBusPath, logger)
-	m.initWallpaperSlideshow()
 	return nil
 }
 
