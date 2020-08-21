@@ -175,6 +175,15 @@ func (cards CardList) get(id uint32) (*Card, error) {
 	return nil, fmt.Errorf("invalid card id: %v", id)
 }
 
+func (cards CardList) getByName(cardName string) (*Card, error) {
+	for _, info := range cards {
+		if info.Name == cardName {
+			return info, nil
+		}
+	}
+	return nil, fmt.Errorf("invalid card name: %v", cardName)
+}
+
 func (cards CardList) add(info *Card) (CardList, bool) {
 	card, _ := cards.get(info.Id)
 	if card != nil {

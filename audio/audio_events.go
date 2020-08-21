@@ -118,6 +118,69 @@ func isDeviceValid(deviceName string) bool {
 	}
 }
 
+func (a *Audio) needAutoSwitchInputPort() bool {
+	cardName, portName := priorities.GetFirstInput()
+	currentCardName := a.getCardNameById(a.defaultSource.Card)
+	currentPortName := a.defaultSource.ActivePort.Name
+
+	if cardName == currentCardName && portName == currentPortName {
+		return false
+	}
+
+	firstPortType := GetPortType(cardName, portName)
+	currentPortType := GetPortType(currentCardName, currentPortName)
+	return priorities.IsInputTypeAfter(currentPortType, firstPortType)
+}
+
+func (a *Audio) needAutoSwitchOutputPort() bool {
+	cardName, portName := priorities.GetFirstOutput()
+	currentCardName := a.getCardNameById(a.defaultSink.Card)
+	currentPortName := a.defaultSink.ActivePort.Name
+
+	if cardName == currentCardName && portName == currentPortName {
+		return false
+	}
+
+	firstPortType := GetPortType(cardName, portName)
+	currentPortType := GetPortType(currentCardName, currentPortName)
+	return priorities.IsOutputTypeAfter(currentPortType, firstPortType)
+}
+
+func (a *Audio) autoSwitchPort() {
+
+	if a.needAutoSwitchInputPort() {
+		cardName, portName := priorities.GetFirstInput()
+		if cardName != "" && portName != "" {
+			logger.Debugf("input port auto switch to %s %s", cardName, portName)
+			card, err := a.cards.getByName(cardName)
+			if err == nil {
+				err = a.setPort(card.Id, portName, pulse.DirectionSource)
+			}
+			if err != nil {
+				logger.Warning(err)
+			}
+		} else {
+			logger.Debugf("no input port")
+		}
+	}
+
+	if a.needAutoSwitchOutputPort() {
+		cardName, portName := priorities.GetFirstOutput()
+		if cardName != "" && portName != "" {
+			logger.Debugf("output port auto switch to %s %s", cardName, portName)
+			card, err := a.cards.getByName(cardName)
+			if err == nil {
+				err = a.setPort(card.Id, portName, pulse.DirectionSink)
+			}
+			if err != nil {
+				logger.Warning(err)
+			}
+		} else {
+			logger.Debugf("no output port")
+		}
+	}
+}
+
 func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 	switch eventType {
 	case pulse.EventTypeNew:
@@ -137,6 +200,31 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			a.setPropCardsWithoutUnavailable(cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
 			a.cards = cards
+
+			card, err := cards.get(idx)
+			if err == nil {
+				for _, port := range cardInfo.Ports {
+					if port.Available == pulse.AvailableTypeNo {
+						logger.Warningf("port(%s %s) available is no", card.Name, port.Name)
+						continue
+					}
+
+					if port.Available == pulse.AvailableTypeUnknow {
+						logger.Warningf("port(%s %s) available is unknown", card.Name, port.Name)
+					}
+
+					if port.Direction == pulse.DirectionSink {
+						priorities.AddOutputPort(card.core.Name, port.Name)
+					} else {
+						priorities.AddInputPort(card.core.Name, port.Name)
+					}
+				}
+				err = priorities.Save(globalPrioritiesFilePath)
+				priorities.Print()
+			}
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
 		// fix change profile not work
 		time.AfterFunc(time.Millisecond*500, func() {
@@ -145,8 +233,14 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			if cardInfo.ActiveProfile.Name == "a2dp_sink" {
 				a.disableBluezSourceIfProfileIsA2dp()
 			}
+			a.autoSwitchPort()
 		})
 	case pulse.EventTypeRemove:
+		cardInfo, err := a.cards.get(idx)
+		if nil != err {
+			logger.Warning("get card info failed: ", err)
+			return
+		}
 		cards, deleted := a.cards.delete(idx)
 		logger.Debugf("[Event] card #%d removed %s", idx, cards.string())
 		if deleted {
@@ -155,7 +249,14 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			a.setPropCardsWithoutUnavailable(cards.stringWithoutUnavailable())
 			a.PropsMu.Unlock()
 			a.cards = cards
+			priorities.RemoveCard(cardInfo.core.Name)
+			err := priorities.Save(globalPrioritiesFilePath)
+			priorities.Print()
+			if err != nil {
+				logger.Warning(err)
+			}
 		}
+		a.autoSwitchPort()
 	case pulse.EventTypeChange:
 		cardInfo, err := a.ctx.GetCard(idx)
 		if nil != err {
@@ -180,6 +281,10 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			a.enableSource = false
 		}
 		a.mu.Unlock()
+		priorities.RemoveUnavailable(a.cards)
+		priorities.AddAvailable(a.cards)
+		priorities.Print()
+		a.autoSwitchPort()
 	}
 }
 

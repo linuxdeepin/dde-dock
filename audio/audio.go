@@ -215,7 +215,6 @@ func getCtx() (ctx *pulse.Context, err error) {
 		err = errors.New("failed to get pulse context")
 		return
 	}
-	ctx.LoadModule("module-switch-on-connect", "")
 	return
 }
 
@@ -325,6 +324,9 @@ func (a *Audio) init() error {
 
 	a.mu.Unlock()
 
+	priorities.Load(globalPrioritiesFilePath, a.cards)
+	priorities.Print()
+
 	go a.handleEvent()
 	go a.handleStateChanged()
 	logger.Debug("init done")
@@ -341,7 +343,7 @@ func (a *Audio) init() error {
 		a.trySelectBestPort()
 		a.settings.SetBoolean(gsKeyFirstRun, false)
 	} else {
-		a.applyConfig()
+		a.autoSwitchPort()
 	}
 
 	a.fixActivePortNotAvailable()
@@ -508,6 +510,28 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 	logger.Debugf("Audio.SetPort card idx: %d, port name: %q, direction: %d",
 		cardId, portName, direction)
 	err := a.setPort(cardId, portName, int(direction))
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	var card *Card
+	if int(direction) == pulse.DirectionSink {
+		card, err = a.cards.get(cardId)
+		if err == nil {
+			logger.Debugf("output port %s %s now is first priority", card.Name, portName)
+			priorities.SetOutputPortFirst(card.core.Name, portName)
+			err = priorities.Save(globalPrioritiesFilePath)
+			priorities.Print()
+		}
+	} else {
+		card, err = a.cards.get(cardId)
+		if err == nil {
+			logger.Debugf("input port %s %s now is first priority", card.Name, portName)
+			priorities.SetInputPortFirst(card.core.Name, portName)
+			err = priorities.Save(globalPrioritiesFilePath)
+			priorities.Print()
+		}
+	}
 	return dbusutil.ToError(err)
 }
 
