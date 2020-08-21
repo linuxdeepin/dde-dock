@@ -364,6 +364,9 @@ func (d *device) connectProperties() {
 		}
 		d.Paired = value
 		logger.Debugf("%s Paired: %v", d, value)
+		if d.Paired && d.connected && d.State == deviceStateConnected {
+			d.ConnectState = true
+		}
 		d.notifyDevicePropertiesChanged()
 	})
 
