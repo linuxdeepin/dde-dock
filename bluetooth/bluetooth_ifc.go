@@ -9,12 +9,23 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 )
 
-func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) *dbus.Error {
+func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath, apath dbus.ObjectPath) *dbus.Error {
 	d, err := b.getDevice(dpath)
+	b.prepareToConnectedLock.Lock()
+	b.prepareToConnectedDevice = dpath
+	b.prepareToConnectedLock.Unlock()
 	if err != nil {
-		return dbusutil.ToError(err)
+		logger.Debug("getDevice failed:", err)
+		a, err := b.getAdapter(apath)
+		if err != nil {
+			logger.Debug("getAdapter failed:", err)
+		}
+		a.startDiscovery()
+		a.scanReadyToConnectDeviceTimeoutFlag = true
+		a.scanReadyToConnectDeviceTimeout.Reset(defaultFindDeviceTimeout)
+	} else {
+		go d.Connect()
 	}
-	go d.Connect()
 	return nil
 }
 

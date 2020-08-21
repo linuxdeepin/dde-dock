@@ -102,6 +102,28 @@ type device struct {
 	removeLock sync.Mutex
 }
 
+//设备的备份，扫描结束3分钟后保存设备
+type backupDevice struct {
+	Path        dbus.ObjectPath
+	AdapterPath dbus.ObjectPath
+
+	Alias            string
+	Trusted          bool
+	Paired           bool
+	State            deviceState
+	ServicesResolved bool
+	ConnectState     bool
+
+	// optional
+	UUIDs   []string
+	Name    string
+	Icon    string
+	RSSI    int16
+	Address string
+
+	connected bool
+}
+
 type connectPhase uint32
 
 const (
@@ -732,4 +754,23 @@ func (d *device) GetInitiativeConnect() bool {
 	needEnsure := d.isInitiativeConnect
 	d.mu.Unlock()
 	return needEnsure
+}
+
+func newBackupDevice(d *device) (bd *backupDevice) {
+	bd = &backupDevice{}
+	bd.AdapterPath = d.AdapterPath
+	bd.Path = d.Path
+	bd.connected = d.connected
+	bd.Alias = d.Alias
+	bd.Paired = d.Paired
+	bd.Address = d.Address
+	bd.State = d.State
+	bd.Name = d.Name
+	bd.ConnectState = d.ConnectState
+	bd.Icon = d.Icon
+	bd.RSSI = d.RSSI
+	bd.ServicesResolved = d.ServicesResolved
+	bd.Trusted = d.Trusted
+	bd.UUIDs = d.UUIDs
+	return bd
 }

@@ -44,10 +44,13 @@ type adapter struct {
 	// discovering timer, when time is up, stop discovering until start button is clicked next time
 	discoveringTimeout *time.Timer
 	//Scan timeout flag
-	discoveringTimeoutFlag bool
+	discoveringTimeoutFlag              bool
+	scanReadyToConnectDeviceTimeout     *time.Timer
+	scanReadyToConnectDeviceTimeoutFlag bool
 }
 
 var defaultDiscoveringTimeout = 1 * time.Minute
+var defaultFindDeviceTimeout = 1 * time.Second
 
 func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *adapter) {
 	a = &adapter{Path: apath}
@@ -59,14 +62,41 @@ func newAdapter(systemSigLoop *dbusutil.SignalLoop, apath dbus.ObjectPath) (a *a
 	// 用于定时停止扫描
 	a.discoveringTimeout = time.AfterFunc(defaultDiscoveringTimeout, func() {
 		logger.Debug("discovery time out, stop discovering")
+		//扫描结束后添加备份
+		for adapterpath, devices := range globalBluetooth.devices {
+			for _, device := range devices {
+				bd := newBackupDevice(device)
+				globalBluetooth.backupDeviceLock.Lock()
+				globalBluetooth.backupDevices[adapterpath] = append(globalBluetooth.backupDevices[adapterpath], bd)
+				globalBluetooth.backupDeviceLock.Unlock()
+			}
+		}
 		//Scan timeout
 		a.discoveringTimeoutFlag = true
 		if err := a.core.StopDiscovery(0); err != nil {
 			logger.Warningf("stop discovery failed, err:%v", err)
 		}
+		globalBluetooth.prepareToConnectedDevice = ""
+	})
+	//扫描1S钟，未扫描到该设备弹出通知
+	a.scanReadyToConnectDeviceTimeout = time.AfterFunc(defaultFindDeviceTimeout, func() {
+		a.scanReadyToConnectDeviceTimeoutFlag = false
+		_, err := globalBluetooth.getDevice(globalBluetooth.prepareToConnectedDevice)
+		if err != nil {
+			backupdevice, err1 := globalBluetooth.getBackupDevice(globalBluetooth.prepareToConnectedDevice)
+			if err1 != nil {
+				logger.Debug("getBackupDevice Failed:", err1)
+			}
+			notifyConnectFailedHostDown(backupdevice.Alias)
+		}
+		//清空备份
+		globalBluetooth.backupDeviceLock.Lock()
+		globalBluetooth.backupDevices = make(map[dbus.ObjectPath][]*backupDevice)
+		globalBluetooth.backupDeviceLock.Unlock()
 	})
 	// stop timer at first
 	a.discoveringTimeout.Stop()
+	a.scanReadyToConnectDeviceTimeout.Stop()
 	// fix alias
 	alias, _ := a.core.Alias().Get(0)
 	if alias == "first-boot-hostname" {
