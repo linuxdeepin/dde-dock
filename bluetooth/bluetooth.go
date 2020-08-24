@@ -129,8 +129,7 @@ type Bluetooth struct {
 	State   uint32 // StateUnavailable/StateAvailable/StateConnected
 
 	// 当发起设备连接成功后，应该把连接的设备添加进设备列表
-	// 为了防止放同类设备被扫描到，且之前已配对过，会发起自动连接，而把当前连接的设备顶掉
-	connectedDevices map[string][]*device
+	connectedDevices map[dbus.ObjectPath][]*device
 	connectedLock    sync.RWMutex
 
 	sessionCancelChMap   map[dbus.ObjectPath]chan struct{}
@@ -303,7 +302,7 @@ func (b *Bluetooth) init() {
 	systemBus := b.systemSigLoop.Conn()
 
 	b.connectedLock.Lock()
-	b.connectedDevices = make(map[string][]*device, len(DeviceTypes))
+	b.connectedDevices = make(map[dbus.ObjectPath][]*device, len(DeviceTypes))
 	b.connectedLock.Unlock()
 
 	b.sessionCancelChMap = make(map[dbus.ObjectPath]chan struct{})
@@ -472,62 +471,35 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 
 	connected := b.config.getDeviceConfigConnected(d.getAddress())
 	if connected {
-		time.AfterFunc(25*time.Second, func() {
-			d, _ := b.getDevice(dpath)
-			if d == nil {
-				return
-			}
+		d, _ := b.getDevice(dpath)
+		if d == nil {
+			return
+		}
 
-			adapterPowered, err := d.adapter.core.Powered().Get(0)
-			if err != nil {
-				logger.Warning(err)
-				return
-			}
+		adapterPowered, err := d.adapter.core.Powered().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
 
-			if !adapterPowered {
-				return
-			}
+		if !adapterPowered {
+			return
+		}
 
-			paired, err := d.core.Paired().Get(0)
-			if err != nil {
-				logger.Warning(err)
-				return
-			}
+		paired, err := d.core.Paired().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
 
-			connected, err := d.core.Connected().Get(0)
-			if err != nil {
-				logger.Warning(err)
-				return
-			}
-
-			if paired && !connected {
-				// only audio card auto connect one device
-				// other devices try to auto connect all devices
-				if d.Icon != DeviceTypes[AudioCard] {
-					logger.Infof("auto connect %s", d)
-					// auto connect, dont show notification window
-					err = d.doConnect(false)
-					// if connect success, add dev into map
-					if err == nil && d.ConnectState {
-						b.addConnectedDevice(d)
-					}
-				} else {
-					// check if this type device connected already, if connected, dont connect again
-					// if not, try to auto connect
-					b.connectedLock.Lock()
-					connectedDevicesCount := len(b.connectedDevices[d.Icon])
-					b.connectedLock.Unlock()
-					if connectedDevicesCount == 0 {
-						logger.Infof("auto connect %s", d)
-						err = d.doConnect(false)
-						// if connect success, add dev into map
-						if err == nil && d.ConnectState {
-							b.addConnectedDevice(d)
-						}
-					}
-				}
-			}
-		})
+		connected, err := d.core.Connected().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		if paired && connected {
+			b.addConnectedDevice(d)
+		}
 	}
 
 	d.notifyDeviceAdded()
@@ -843,14 +815,14 @@ func (b *Bluetooth) isBREDRDevice(dev *device) bool {
 
 func (b *Bluetooth) addConnectedDevice(connectedDev *device) {
 	b.connectedLock.Lock()
-	b.connectedDevices[connectedDev.Icon] = append(b.connectedDevices[connectedDev.Icon], connectedDev)
+	b.connectedDevices[connectedDev.AdapterPath] = append(b.connectedDevices[connectedDev.AdapterPath], connectedDev)
 	b.connectedLock.Unlock()
 }
 
 func (b *Bluetooth) removeConnectedDevice(disconnectedDev *device) {
 	b.connectedLock.Lock()
 	// check if dev exist in connectedDevices map, if exist, remove device
-	if connectedDevices, ok := globalBluetooth.connectedDevices[disconnectedDev.Icon]; ok {
+	if connectedDevices, ok := globalBluetooth.connectedDevices[disconnectedDev.AdapterPath]; ok {
 		var tempDevices []*device
 		for _, dev := range connectedDevices {
 			// check if disconnected device exist in connected devices, if exist, abandon this
@@ -858,7 +830,7 @@ func (b *Bluetooth) removeConnectedDevice(disconnectedDev *device) {
 				tempDevices = append(tempDevices, dev)
 			}
 		}
-		globalBluetooth.connectedDevices[disconnectedDev.Icon] = tempDevices
+		globalBluetooth.connectedDevices[disconnectedDev.AdapterPath] = tempDevices
 	}
 	b.connectedLock.Unlock()
 }
@@ -889,7 +861,6 @@ func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, err
 
 		totalSize += uint64(info.Size())
 	}
-
 	// 创建 OBEX session
 	args := make(map[string]dbus.Variant)
 	args["Source"] = dbus.MakeVariant(dev.adapter.address) // 蓝牙适配器地址
@@ -899,7 +870,6 @@ func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, err
 		logger.Warning("failed to create obex session:", err)
 		return "", err
 	}
-
 	b.emitObexSessionCreated(sessionPath)
 
 	session, err := obex.NewSession(b.service.Conn(), sessionPath)

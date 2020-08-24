@@ -132,7 +132,6 @@ func (b *Bluetooth) SendFiles(devAddress string, files []string) (dbus.ObjectPat
 	if len(files) == 0 {
 		return "", dbusutil.ToError(errors.New("files is empty"))
 	}
-
 	// 检查设备是否已经连接
 	dev := b.getConnectedDeviceByAddress(devAddress)
 	if dev == nil {
