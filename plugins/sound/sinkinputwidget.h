@@ -41,7 +41,6 @@ public:
 private slots:
     void setVolume(const int value);
     void setMute();
-    void setMuteIcon();
     void onPlaySoundEffect();
     void onVolumeChanged();
 
