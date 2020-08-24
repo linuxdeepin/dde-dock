@@ -927,7 +927,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 		_, err := os.Stat(f)
 		if err != nil {
 			b.emitTransferFailed(f, sessionPath, err.Error())
-			return
+			break
 		}
 		transferPath, properties, err := session.ObjectPush().SendFile(0, f)
 		if err != nil {
