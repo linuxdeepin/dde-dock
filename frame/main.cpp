@@ -185,7 +185,6 @@ void sig_crash(int sig)
 int main(int argc, char *argv[])
 {
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
-    DApplication::loadDXcbPlugin();
     DApplication app(argc, argv);
 
     //崩溃信号
