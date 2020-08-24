@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
@@ -50,6 +50,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     , m_centralLayout(new QVBoxLayout)
     , m_centralWidget(new QWidget)
     , m_controlPanel(new DeviceControlWidget)
+    , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     setFixedHeight(ItemHeight);
 
