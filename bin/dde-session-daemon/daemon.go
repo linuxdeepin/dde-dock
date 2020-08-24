@@ -36,8 +36,8 @@ import (
 )
 
 const (
-	ProfTypeCPU = "cpu"			//nolint
-	ProfTypeMem = "memory"		//nolint
+	ProfTypeCPU = "cpu"    //nolint
+	ProfTypeMem = "memory" //nolint
 
 	dbusPath        = "/com/deepin/daemon/Daemon"
 	dbusServiceName = "com.deepin.daemon.Daemon"
@@ -80,7 +80,7 @@ type SessionDaemon struct {
 	part2EnabledModules  []string
 	part2DisabledModules []string
 
-	methods *struct {		//nolint
+	methods *struct { //nolint
 		CallTrace func() `in:"times,seconds"`
 	}
 }
@@ -129,6 +129,7 @@ func (s *SessionDaemon) initModules() {
 		"screensaver",
 		"sessionwatcher",
 		"power", // need screensaver and sessionwatcher
+		"uadpagent",
 		"service-trigger",
 		"clipboard",
 		"keybinding",

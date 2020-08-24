@@ -34,8 +34,9 @@ import (
 	_ "pkg.deepin.io/dde/daemon/system/swapsched"
 	_ "pkg.deepin.io/dde/daemon/system/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/system/timedated"
+	_ "pkg.deepin.io/dde/daemon/system/uadp"
 
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
+	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/gir/glib-2.0"
 	"pkg.deepin.io/lib/dbusutil"
