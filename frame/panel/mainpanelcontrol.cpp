@@ -204,7 +204,7 @@ void MainPanelControl::updateMainPanelLayout()
     case Position::Bottom:
         m_fixedAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_pluginAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        m_pluginAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         m_trayAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         m_mainPanelLayout->setDirection(QBoxLayout::LeftToRight);
         m_fixedAreaLayout->setDirection(QBoxLayout::LeftToRight);
@@ -218,7 +218,7 @@ void MainPanelControl::updateMainPanelLayout()
     case Position::Left:
         m_fixedAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_pluginAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        m_pluginAreaWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         m_trayAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_mainPanelLayout->setDirection(QBoxLayout::TopToBottom);
         m_fixedAreaLayout->setDirection(QBoxLayout::TopToBottom);
