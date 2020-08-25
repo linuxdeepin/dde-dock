@@ -105,6 +105,28 @@ func (m *Manager) initDeviceManage() {
 	}
 }
 
+// 调整nmDevice的状态
+func (m *Manager) adjustDeviceStatus() {
+	for _, path := range nmGetDevices() {
+		nmDev, err := nmNewDevice(path)
+		if err != nil {
+			continue
+		}
+	
+		// ignore virtual network interfaces
+		if isVirtualDeviceIfc(nmDev) {
+			continue
+		}
+
+		// 如果nmDevice在network启动之前就已经是密码待验证的状态，需要等待nm超时才能自动回连，导致wifi回连太慢
+		// 在这种情况下主动回连 
+		stat, _ := nmDev.State().Get(0)
+		if stat == nm.NM_DEVICE_STATE_NEED_AUTH {
+			m.enableDevice(path, true)
+		}
+	}
+}
+
 func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {

@@ -249,6 +249,9 @@ func (m *Manager) init() {
 	}()
 
 	m.initCountTicker()
+
+	// 调整nmDev的状态
+	m.adjustDeviceStatus()
 	// move to power module
 	// connect computer suspend signal
 	// _, err = loginManager.ConnectPrepareForSleep(func(active bool) {
