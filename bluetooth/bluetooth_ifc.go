@@ -135,6 +135,7 @@ func (b *Bluetooth) SendFiles(devAddress string, files []string) (dbus.ObjectPat
 	// 检查设备是否已经连接
 	dev := b.getConnectedDeviceByAddress(devAddress)
 	if dev == nil {
+		logger.Debug("device is nil", dev)
 		return "", dbusutil.ToError(errors.New("device not connected"))
 	}
 

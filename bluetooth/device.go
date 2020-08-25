@@ -280,6 +280,11 @@ func (d *device) connectProperties() {
 			d.ConnectState = true
 			d.connectedTime = time.Now()
 			globalBluetooth.config.setDeviceConfigConnected(d, true)
+			dev := globalBluetooth.getConnectedDeviceByAddress(d.Address)
+			if dev == nil {
+				globalBluetooth.addConnectedDevice(d)
+				logger.Debug("connectedDevices", globalBluetooth.connectedDevices)
+			}
 		} else {
 			//If the pairing is successful and connected, the signal will be sent when the device is disconnected
 			if d.Paired && d.ConnectState {
@@ -366,6 +371,10 @@ func (d *device) connectProperties() {
 		logger.Debugf("%s Paired: %v", d, value)
 		if d.Paired && d.connected && d.State == deviceStateConnected {
 			d.ConnectState = true
+			dev := globalBluetooth.getConnectedDeviceByAddress(d.Address)
+			if dev == nil {
+				globalBluetooth.addConnectedDevice(d)
+			}
 		}
 		d.notifyDevicePropertiesChanged()
 	})
@@ -643,10 +652,8 @@ func (d *device) Connect() {
 	// set ensure state as true
 	d.SetInitiativeConnect(true)
 	err := d.doConnect(true)
-	// add active connected device to map in case auto connect close this device
-	// when auto connect happens, this type device element is not nil, dont try to create connection
-	if err == nil && d.ConnectState {
-		globalBluetooth.addConnectedDevice(d)
+	if err != nil {
+		logger.Warning("connect Device Failed:", err)
 	}
 }
 
