@@ -94,30 +94,31 @@ AdaptersManager::AdaptersManager(QObject *parent)
 
 void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powered)
 {
-    if (adapter) {
-        QDBusObjectPath path(adapter->id());
-        QDBusPendingCall call  = m_bluetoothInter->SetAdapterPowered(path, powered);
+    if (!adapter)
+        return;
 
-        if (powered) {
-            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-            connect(watcher, &QDBusPendingCallWatcher::finished, [this, call, adapter] {
-                if (!call.isError()) {
-                    QDBusObjectPath dPath(adapter->id());
-                    m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
-                    m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
-                    m_bluetoothInter->RequestDiscovery(dPath);
-                } else {
-                    qWarning() << call.error().message();
-                }
-            });
-        } else {
-            QDBusPendingCall call = m_bluetoothInter->ClearUnpairedDevice();
-            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-            connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
-                if (call.isError())
-                    qWarning() << call.error().message();
-            });
-        }
+    QDBusObjectPath path(adapter->id());
+    QDBusPendingCall call = m_bluetoothInter->SetAdapterPowered(path, powered);
+
+    if (powered) {
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+        connect(watcher, &QDBusPendingCallWatcher::finished, [this, call, adapter] {
+            if (!call.isError()) {
+                QDBusObjectPath dPath(adapter->id());
+                m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
+                m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
+                m_bluetoothInter->RequestDiscovery(dPath);
+            } else {
+                qWarning() << call.error().message();
+            }
+        });
+    } else {
+        QDBusPendingCall call = m_bluetoothInter->ClearUnpairedDevice();
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+        connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
+            if (call.isError())
+                qWarning() << call.error().message();
+        });
     }
 }
 

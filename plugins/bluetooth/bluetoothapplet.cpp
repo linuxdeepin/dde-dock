@@ -97,7 +97,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_centrealLayout->addLayout(appletNameLayout);
     m_centrealLayout->addWidget(m_line);
     m_centrealLayout->addLayout(m_adapterLayout);
-    m_centrealLayout->addLayout(m_menueLayout);
+    m_centrealLayout->addWidget(m_openControlCenter);
     m_centralWidget->setLayout(m_centrealLayout);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -245,17 +245,15 @@ void BluetoothApplet::updateView()
                 isPowered = true;
                 itemCount += adapterItem->deviceCount();
             }
-            if (adapterItem->connectedDevsName().size())
+            if (adapterItem->connectedDevsName().size()) {
                 isAdapterConnected = false;
+            }
         }
     }
-
     m_openControlCenter->setVisible(isPowered);
-    if (isAdapterConnected) {
-        m_menueLayout->addWidget(m_openControlCenter);
+    if (isPowered) {
         contentHeight += ITEMHEIGHT;
-    } else
-        m_menueLayout->removeWidget(m_openControlCenter);
+    }
 
     int adaptersCnt = m_adapterItems.size();
     if (adaptersCnt > 1) {
