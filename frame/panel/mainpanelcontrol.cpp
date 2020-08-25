@@ -824,7 +824,9 @@ void MainPanelControl::moveAppSonWidget()
             if (rect.right() > m_appAreaWidget->geometry().right()) {
                 rect.moveRight(m_appAreaWidget->geometry().right());
             }
-
+            if (rect.left() < m_appAreaWidget->geometry().left()) {
+                rect.moveLeft(m_appAreaWidget->geometry().left());
+            }
             break;
         case Right:
         case Left:
@@ -832,7 +834,9 @@ void MainPanelControl::moveAppSonWidget()
             if (rect.bottom() > m_appAreaWidget->geometry().bottom()) {
                 rect.moveBottom(m_appAreaWidget->geometry().bottom());
             }
-
+            if (rect.top() < m_appAreaWidget->geometry().top()) {
+                rect.moveTop(m_appAreaWidget->geometry().top());
+            }
             break;
         }
     }
