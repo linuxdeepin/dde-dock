@@ -242,6 +242,7 @@ var validPinyinList []string = []string{
 	"jiong",
 	"jiu",
 	"ju",
+	"jun",
 	"juan",
 	"jue",
 	"#NAME?",
