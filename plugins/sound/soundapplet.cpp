@@ -395,11 +395,22 @@ void SoundApplet::refreshIcon()
     QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
     QString iconRight = QString("audio-volume-high-symbolic");
 
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+    QColor color;
+    switch (DGuiApplicationHelper::instance()->themeType()) {
+    case DGuiApplicationHelper::LightType:
+        color = Qt::black;
         iconLeft.append("-dark");
         iconRight.append("-dark");
+        break;
+    default:
+        color = Qt::white;
+        break;
     }
-
+    //主题改变时，同步修改item颜色
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        auto item = m_model->item(i);
+        item->setForeground(color);
+    }
     const auto ratio = devicePixelRatioF();
     QPixmap ret = ImageUtil::loadSvg(iconRight, ":/", ICON_SIZE, ratio);
     m_volumeIconMax->setPixmap(ret);
