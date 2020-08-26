@@ -22,6 +22,8 @@
 
 #include "device.h"
 
+#include <QDateTime>
+
 QMap<QString,QString> Device::deviceType2Icon = {
     {"unknow","other"},
     {"computer","pc"},
@@ -49,11 +51,17 @@ Device::Device(QObject *parent)
     , m_rssi(0)
     , m_state(StateUnavailable)
 {
+    m_time = static_cast<int>(QDateTime::currentDateTime().toTime_t());
 }
 
 Device::~Device()
 {
     emit stateChanged(StateUnavailable);
+}
+
+void Device::updateDeviceTime()
+{
+    m_time = static_cast<int>(QDateTime::currentDateTime().toTime_t());
 }
 
 void Device::setId(const QString &id)

@@ -133,13 +133,13 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
 //    }
 //}
 
-void AdaptersManager::connectDevice(Device *device)
+void AdaptersManager::connectDevice(Device *device, Adapter *adapter)
 {
     if (device) {
         QDBusObjectPath path(device->id());
         switch (device->state()) {
             case Device::StateUnavailable: {
-                m_bluetoothInter->ConnectDevice(path);
+                m_bluetoothInter->ConnectDevice(path, QDBusObjectPath(adapter->id()));
                 qDebug() << "connect to device: " << device->name();
             }
                 break;

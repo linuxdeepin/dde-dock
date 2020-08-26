@@ -109,6 +109,7 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
 
 bool DeviceItem::operator <(const DeviceItem &item)
 {
+//    return  this->device()->deviceTime() < item.device()->deviceTime();
     return  this->device()->rssi() < item.device()->rssi();
 }
 
@@ -119,6 +120,7 @@ void DeviceItem::setTitle(const QString &name)
 
 void DeviceItem::mousePressEvent(QMouseEvent *event)
 {
+    m_device->updateDeviceTime();
     emit clicked(m_device);
     QWidget::mousePressEvent(event);
 }
