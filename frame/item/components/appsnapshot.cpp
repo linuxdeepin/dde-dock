@@ -74,11 +74,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_title);
-    centralLayout->addWidget(m_closeBtn2D);
-    centralLayout->setSpacing(5);
     centralLayout->setMargin(0);
-
-    centralLayout->setAlignment(m_closeBtn2D, Qt::AlignRight);
 
     setLayout(centralLayout);
     setAcceptDrops(true);
@@ -202,6 +198,7 @@ void AppSnapshot::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 
     if (!m_wmHelper->hasComposite()) {
+        m_closeBtn2D->move(width() - m_closeBtn2D->width() - 5, (height() - m_closeBtn2D->height()) / 2);
         m_closeBtn2D->setVisible(true);
     } else {
         emit entered(wid());

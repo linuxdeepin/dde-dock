@@ -73,6 +73,7 @@ protected:
     void resizeEvent(QResizeEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
     bool eventFilter(QObject *obj,QEvent *event) override;
+    QString getStrengthStateString(int strength = 0);
 
 private slots:
     void wiredsEnable(bool enable);
