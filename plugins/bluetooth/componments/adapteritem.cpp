@@ -299,7 +299,9 @@ void AdapterItem::createDeviceItem(Device *device)
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
     connect(device, &Device::rssiChanged, this, &AdapterItem::deviceRssiChanged);
-    connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, &AdaptersManager::connectDevice);
+    connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, [this](Device *device){
+        m_adaptersManager->connectDevice(device, m_adapter);
+    });
 }
 
 void AdapterItem::updateView()

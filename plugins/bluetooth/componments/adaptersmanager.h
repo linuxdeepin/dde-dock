@@ -39,7 +39,7 @@ public:
 
     void setAdapterPowered(const Adapter *adapter, const bool &powered);
 //    void connectAllPairedDevice(const Adapter *adapter);
-    void connectDevice(Device *deviceId);
+    void connectDevice(Device *device, Adapter *adapter);
     bool defaultAdapterInitPowerState();
     int adaptersCount();
     void adapterRefresh(const Adapter *adapter);

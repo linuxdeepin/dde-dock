@@ -75,6 +75,9 @@ public:
     inline QString deviceType() const { return m_deviceType; }
     void setDeviceType(const QString &deviceType);
 
+    inline int deviceTime() const { return m_time; }
+    void updateDeviceTime();
+
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void pairedChanged(const bool paired) const;
@@ -95,6 +98,7 @@ private:
     bool m_connectState;
     QString m_adapterId;
     QString m_deviceType;
+    int m_time;
 };
 
 QDebug &operator<<(QDebug &stream, const Device *device);
