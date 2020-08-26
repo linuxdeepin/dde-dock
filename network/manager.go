@@ -44,6 +44,7 @@ const (
 )
 
 const maxPortalDetectionTime = 600 * time.Second
+const checkRepeatTime = 1 * time.Second
 
 type connectionData map[string]map[string]dbus.Variant
 
@@ -392,11 +393,14 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 }
 
 func (m *Manager) doPortalAuthentication() {
+	sincePortalDetection := time.Since(m.portalLastDetectionTime)
+	if sincePortalDetection < checkRepeatTime {
+		return
+	}
 	err := exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
 	if err != nil {
 		logger.Warning(err)
 	}
-	sincePortalDetection := time.Since(m.portalLastDetectionTime)
 	m.portalLastDetectionTime = time.Now()
 	if sincePortalDetection < maxPortalDetectionTime {
 		return

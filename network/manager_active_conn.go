@@ -148,6 +148,17 @@ func (m *Manager) initActiveConnectionManage() {
 			}
 			logger.Debugf("active connection %s state changed %v", sig.Path, state)
 			m.updateActiveConnState(sig.Path, state)
+
+			if state == nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+				connectivity, err := nmManager.CheckConnectivity(0)
+				if err != nil {
+					logger.Warning(err)
+					return
+				}
+				if connectivity == nm.NM_CONNECTIVITY_PORTAL {
+					m.doPortalAuthentication()
+				}
+			}
 		}
 	})
 
