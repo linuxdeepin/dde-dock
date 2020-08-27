@@ -51,12 +51,83 @@ var xmlData string = `<?xml version="1.0" standalone="yes" ?>
   </node>
 </list>`
 
+var dmidecodeData string = `# dmidecode 3.2
+Getting SMBIOS data from sysfs.
+SMBIOS 2.7 present.
+
+Handle 0x0033, DMI type 4, 42 bytes
+Processor Information
+        Socket Designation: SOCKET 0
+        Type: Central Processor
+        Family: Core i5
+        Manufacturer: Intel
+        ID: C3 06 03 00 FF FB EB BF
+        Signature: Type 0, Family 6, Model 60, Stepping 3
+        Flags:
+                FPU (Floating-point unit on-chip)
+                VME (Virtual mode extension)
+                DE (Debugging extension)
+                PSE (Page size extension)
+                TSC (Time stamp counter)
+                MSR (Model specific registers)
+                PAE (Physical address extension)
+                MCE (Machine check exception)
+                CX8 (CMPXCHG8 instruction supported)
+                APIC (On-chip APIC hardware supported)
+                SEP (Fast system call)
+                MTRR (Memory type range registers)
+                PGE (Page global enable)
+                MCA (Machine check architecture)
+                CMOV (Conditional move instruction supported)
+                PAT (Page attribute table)
+                PSE-36 (36-bit page size extension)
+                CLFSH (CLFLUSH instruction supported)
+                DS (Debug store)
+                ACPI (ACPI supported)
+                MMX (MMX technology supported)
+                FXSR (FXSAVE and FXSTOR instructions supported)
+                SSE (Streaming SIMD extensions)
+                SSE2 (Streaming SIMD extensions 2)
+                SS (Self-snoop)
+                HTT (Multi-threading)
+                TM (Thermal monitor supported)
+                PBE (Pending break enabled)
+        Version: Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz
+        Voltage: 1.2 V
+        External Clock: 100 MHz
+        Max Speed: 3800 MHz
+        Current Speed: 3200 MHz
+        Status: Populated, Enabled
+        Upgrade: Socket BGA1155
+        L1 Cache Handle: 0x0034
+        L2 Cache Handle: 0x0035
+        L3 Cache Handle: 0x0036
+        Serial Number: Not Specified
+        Asset Tag: Fill By OEM
+        Part Number: Fill By OEM
+        Core Count: 4
+        Core Enabled: 4
+        Thread Count: 4
+        Characteristics:
+                64-bit capable
+`
+
 func Test_parseXml(t *testing.T) {
 	Convey("parseXml", t, func(c C) {
 		value, err := parseXml([]byte(xmlData))
 		v := value.Size
 		t.Log(v)
 		c.So(v, ShouldEqual, uint64(3221225472))
+		c.So(err, ShouldBeNil)
+	})
+}
+
+func Test_parseCurrentSpeed(t *testing.T) {
+	Convey("parseCurrentSpeed", t, func(c C) {
+		value, err := parseCurrentSpeed(dmidecodeData, 64)
+		v := value
+		t.Log(v)
+		c.So(v, ShouldEqual, 3200)
 		c.So(err, ShouldBeNil)
 	})
 }

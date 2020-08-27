@@ -97,3 +97,10 @@ func TestSystemBit(t *testing.T) {
 		}
 	})
 }
+
+func TestIsFloatEqual(t *testing.T) {
+	Convey("Test memory info", t, func(c C) {
+		c.So(isFloatEqual(0.001, 0.0), ShouldEqual, false)
+		c.So(isFloatEqual(0.001, 0.001), ShouldEqual, true)
+	})
+}

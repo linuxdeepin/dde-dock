@@ -21,6 +21,7 @@ package systeminfo
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -37,6 +38,7 @@ const (
 	lscpuKeyMaxMHz     = "CPU max MHz"
 	lscpuKeyModelName  = "Model name"
 	lscpuKeyCount      = "CPU(s)"
+	compareAllowMin    = 1e-6
 )
 
 func getProcessorByLscpu(data map[string]string) (string, error) {
@@ -67,6 +69,11 @@ func getCPUMaxMHzByLscpu(data map[string]string) (float64, error) {
 	}
 
 	return strconv.ParseFloat(maxMHz, 64)
+}
+
+//float数比较
+func isFloatEqual(f1, f2 float64) bool {
+	return math.Abs(f1-f2) < compareAllowMin
 }
 
 func GetCPUInfo(file string) (string, error) {

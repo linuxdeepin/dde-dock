@@ -27,7 +27,7 @@ import (
 	"path/filepath"
 
 	"pkg.deepin.io/dde/api/powersupply/battery"
-	"pkg.deepin.io/gir/gudev-1.0"
+	gudev "pkg.deepin.io/gir/gudev-1.0"
 	dbus "pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -62,8 +62,6 @@ type Battery struct {
 	TimeToEmpty uint64
 	TimeToFull  uint64
 	UpdateTime  int64
-
-	timeToFullHistory []uint64
 
 	batteryHistory []float64
 

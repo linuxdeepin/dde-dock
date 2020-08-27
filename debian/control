@@ -82,7 +82,8 @@ Depends: ${shlibs:Depends},
  libnotify-bin,
  rfkill,
  hwinfo,
- geoclue-2.0
+ geoclue-2.0,
+ dmidecode
 Breaks: dde-daemon(<< 2.92.2), dde-workspace, lastore-daemon(<< 0.9.64)
 Replaces: lastore-daemon(<< 0.9.64)
 Conflicts: dde-workspace, lastore-daemon-migration
