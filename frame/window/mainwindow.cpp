@@ -431,5 +431,4 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
-
 #include "mainwindow.moc"

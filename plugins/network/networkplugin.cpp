@@ -141,7 +141,7 @@ int NetworkPlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
-    return m_proxyInter->getValue(this, key, 2).toInt();
+    return m_proxyInter->getValue(this, key, 3).toInt();
 }
 
 void NetworkPlugin::setSortKey(const QString &itemKey, const int order)
