@@ -84,6 +84,7 @@ type device struct {
 	connectedTime     time.Time
 	retryConnectCount int
 	agentWorking      bool
+	needNotify        bool
 
 	connectPhase      connectPhase
 	disconnectPhase   disconnectPhase
@@ -162,7 +163,8 @@ func (d *device) setConnectPhase(value connectPhase) {
 
 	d.updateState()
 	d.notifyDevicePropertiesChanged()
-	if d.Paired && d.State == deviceStateConnected && d.ConnectState {
+	if d.Paired && d.State == deviceStateConnected && d.ConnectState && d.needNotify {
+		d.needNotify = false
 		notifyConnected(d.Alias)
 	}
 }
@@ -211,6 +213,7 @@ func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath) (d *de
 	d.ServicesResolved, _ = d.core.ServicesResolved().Get(0)
 	d.Icon, _ = d.core.Icon().Get(0)
 	d.RSSI, _ = d.core.RSSI().Get(0)
+	d.needNotify = true
 	d.updateState()
 	if d.Paired && d.connected {
 		d.ConnectState = true
@@ -262,8 +265,6 @@ func (d *device) connectProperties() {
 		logger.Debugf("%s Connected: %v", d, connected)
 		d.connected = connected
 
-		needNotify := true
-
 		// check if device need to be removed, if is, remove device
 		needRemove := d.getAndResetNeedRemove()
 		if needRemove {
@@ -290,6 +291,7 @@ func (d *device) connectProperties() {
 			if d.Paired && d.ConnectState {
 				notifyDisconnected(d.Alias)
 			}
+			d.needNotify = true
 			d.ConnectState = false
 
 			// if disconnect success, remove device from map
@@ -311,7 +313,6 @@ func (d *device) connectProperties() {
 			select {
 			case d.disconnectChan <- struct{}{}:
 				logger.Debugf("%s disconnectChan send done", d)
-				needNotify = false
 			default:
 			}
 		}
@@ -319,7 +320,7 @@ func (d *device) connectProperties() {
 		d.updateState()
 		d.notifyDevicePropertiesChanged()
 
-		if needNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
+		if d.needNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
 			d.notifyConnectedChanged()
 		}
 	})
@@ -369,12 +370,18 @@ func (d *device) connectProperties() {
 		}
 		d.Paired = value
 		logger.Debugf("%s Paired: %v", d, value)
+
 		if d.Paired && d.connected && d.State == deviceStateConnected {
 			d.ConnectState = true
 			dev := globalBluetooth.getConnectedDeviceByAddress(d.Address)
 			if dev == nil {
 				globalBluetooth.addConnectedDevice(d)
 			}
+		}
+
+		if d.needNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
+			notifyConnected(d.Alias)
+			d.needNotify = false
 		}
 		d.notifyDevicePropertiesChanged()
 	})
@@ -449,6 +456,7 @@ func (d *device) notifyConnectedChanged() {
 
 	if d.connected {
 		notifyConnected(d.Alias)
+		d.needNotify = false
 		//} else {
 		//	if time.Since(d.pairingFailedTime) < 2*time.Second {
 		//		return
@@ -534,8 +542,9 @@ func (d *device) doConnect(hasNotify bool) error {
 
 	d.ConnectState = true
 	d.notifyDevicePropertiesChanged()
-	if hasNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
+	if d.needNotify && d.Paired && d.State == deviceStateConnected && d.ConnectState {
 		notifyConnected(d.Alias)
+		d.needNotify = false
 	}
 	return nil
 }
@@ -694,6 +703,7 @@ func (d *device) Disconnect() {
 
 	<-ch
 	notifyDisconnected(d.Alias)
+	d.needNotify = true
 }
 
 func (d *device) goWaitDisconnect() chan struct{} {
