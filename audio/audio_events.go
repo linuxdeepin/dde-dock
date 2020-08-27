@@ -118,7 +118,20 @@ func isDeviceValid(deviceName string) bool {
 	}
 }
 
+func (a *Audio) isCardIdValid(cardId uint32) bool {
+	for _, card := range a.cards {
+		if card.Id == cardId {
+			return true
+		}
+	}
+	return false
+}
+
 func (a *Audio) needAutoSwitchInputPort() bool {
+	if a.defaultSource == nil || !a.isCardIdValid(a.defaultSource.Card) {
+		return true
+	}
+
 	cardName, portName := priorities.GetFirstInput()
 	currentCardName := a.getCardNameById(a.defaultSource.Card)
 	currentPortName := a.defaultSource.ActivePort.Name
@@ -133,6 +146,10 @@ func (a *Audio) needAutoSwitchInputPort() bool {
 }
 
 func (a *Audio) needAutoSwitchOutputPort() bool {
+	if a.defaultSink == nil || !a.isCardIdValid(a.defaultSink.Card) {
+		return true
+	}
+
 	cardName, portName := priorities.GetFirstOutput()
 	currentCardName := a.getCardNameById(a.defaultSink.Card)
 	currentPortName := a.defaultSink.ActivePort.Name
@@ -147,7 +164,6 @@ func (a *Audio) needAutoSwitchOutputPort() bool {
 }
 
 func (a *Audio) autoSwitchPort() {
-
 	if a.needAutoSwitchInputPort() {
 		cardName, portName := priorities.GetFirstInput()
 		if cardName != "" && portName != "" {

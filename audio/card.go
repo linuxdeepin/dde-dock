@@ -69,6 +69,10 @@ func getCardName(card *pulse.Card) (name string) {
 }
 
 func (a *Audio) getCardNameById(cardId uint32) string {
+	if !a.isCardIdValid(cardId) {
+		logger.Warningf("invalid card ID %d", cardId)
+		return ""
+	}
 	card, err := a.ctx.GetCard(cardId)
 	if err != nil {
 		logger.Warning(err)
