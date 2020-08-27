@@ -38,6 +38,7 @@ TrashWidget::TrashWidget(QWidget *parent)
     : QWidget(parent)
     , m_popupApplet(new PopupControlWidget(this))
 {
+    setMouseTracking(true);
     m_popupApplet->setVisible(false);
 
     connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIconAndRefresh);

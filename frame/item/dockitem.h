@@ -76,11 +76,12 @@ signals:
     void requestRefreshWindowVisible() const;
 
 protected:
-    bool event(QEvent *event);
-    void paintEvent(QPaintEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    bool event(QEvent *event) override;
+    void paintEvent(QPaintEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
 
     const QRect perfectIconRect() const;
     const QPoint popupMarkPoint() ;
@@ -100,6 +101,7 @@ protected:
 protected slots:
     void showContextMenu();
     void onContextMenuAccepted();
+    bool containCursorPos();
 
 private:
     void updatePopupPosition();

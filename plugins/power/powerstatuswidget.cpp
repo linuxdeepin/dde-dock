@@ -35,6 +35,7 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
       m_powerInter(new DBusPower(this))
 {
 //    QIcon::setThemeName("deepin");
+    setMouseTracking(true);
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
     connect(m_powerInter, &DBusPower::BatteryStateChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));

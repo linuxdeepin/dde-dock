@@ -64,6 +64,7 @@ private:
     void handleMouseMove(QMouseEvent *event);
     void onTrayWidgetNeedAttention();
     void onTrayWidgetClicked();
+    bool containCursorPos();
 
 private:
     QPointer<AbstractTrayWidget> m_absTrayWidget;

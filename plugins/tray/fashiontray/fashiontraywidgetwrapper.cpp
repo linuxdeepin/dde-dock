@@ -52,6 +52,7 @@ FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, Abstr
     setStyleSheet("background: transparent;");
     setAcceptDrops(true);
     setObjectName(itemKey);
+    setMouseTracking(true);
 
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
@@ -85,6 +86,10 @@ void FashionTrayWidgetWrapper::paintEvent(QPaintEvent *event)
 
     if (m_dragging) {
         return;
+    }
+
+    if (m_itemKey == "sound-item-key") {
+        qDebug() << m_itemKey << rect() << m_absTrayWidget << m_absTrayWidget->rect();
     }
 
     if (rect().height() > PLUGIN_BACKGROUND_MIN_SIZE) {
@@ -136,7 +141,12 @@ void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
         MousePressPoint = event->pos();
     }
 
-    m_pressed = true;
+    if (containCursorPos()) {
+        m_pressed = true;
+    } else {
+        m_pressed = false;
+    }
+
     update();
 
     QWidget::mousePressEvent(event);
@@ -169,7 +179,12 @@ void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
 
 void FashionTrayWidgetWrapper::enterEvent(QEvent *event)
 {
-    m_hover = true;
+    if (containCursorPos()) {
+        m_hover = true;
+    } else {
+        m_hover = false;
+    }
+
     update();
 
     QWidget::enterEvent(event);
@@ -213,6 +228,14 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
     if(m_absTrayWidget.isNull())
         return;
 
+    if (containCursorPos()) {
+        m_hover = true;
+    } else {
+        m_hover = false;
+    }
+
+    update();
+
     if (event->buttons() != Qt::MouseButton::LeftButton) {
         return QWidget::mouseMoveEvent(event);
     }
@@ -254,6 +277,20 @@ void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()
 void FashionTrayWidgetWrapper::onTrayWidgetClicked()
 {
     setAttention(false);
+}
+
+bool FashionTrayWidgetWrapper::containCursorPos()
+{
+    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
+    QRect rect(this->rect());
+
+    int iconSize = qMin(rect.width(), rect.height());
+    int w = (rect.width() - iconSize) / 2;
+    int h = (rect.height() - iconSize) / 2;
+
+    rect = rect.adjusted(w, h, -w, -h);
+
+    return rect.contains(cursorPos);
 }
 
 bool FashionTrayWidgetWrapper::attention() const

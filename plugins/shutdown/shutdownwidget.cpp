@@ -122,9 +122,28 @@ const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size
     return pixmap;
 }
 
+bool ShutdownWidget::containCursorPos()
+{
+    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
+    QRect rect(this->rect());
+
+    int iconSize = qMin(rect.width(), rect.height());
+    int w = (rect.width() - iconSize) / 2;
+    int h = (rect.height() - iconSize) / 2;
+
+    rect = rect.adjusted(w, h, -w, -h);
+
+    return rect.contains(cursorPos);
+}
+
 void ShutdownWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_pressed = true;
+    if (containCursorPos()) {
+        m_pressed = true;
+    } else {
+        m_pressed = false;
+    }
+
     update();
 
     QWidget::mousePressEvent(event);
@@ -141,7 +160,14 @@ void ShutdownWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void ShutdownWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    m_hover = true;
+    if (containCursorPos()) {
+        m_hover = true;
+    } else {
+        m_hover = false;
+    }
+
+    update();
+
     QWidget::mouseMoveEvent(event);
 }
 

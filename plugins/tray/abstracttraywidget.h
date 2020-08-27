@@ -60,6 +60,7 @@ protected:
     void handleMouseRelease();
     const QRect perfectIconRect() const;
     void resizeEvent(QResizeEvent *event) override;
+    bool containCursorPos();
 
 private:
     QTimer *m_handleMouseReleaseTimer;

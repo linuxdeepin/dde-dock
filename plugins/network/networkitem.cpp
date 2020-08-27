@@ -46,6 +46,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
 {
+    setMouseTracking(true);
     m_timer->setInterval(100);
 
     m_tipsWidget->setVisible(false);

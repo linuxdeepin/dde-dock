@@ -140,7 +140,10 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    m_hover = false;
+    if (!containCursorPos()) {
+        return;
+    }
+
     update();
 
     if (PopupWindow->isVisible())
@@ -159,8 +162,7 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if (e->buttons() != Qt::LeftButton)
-        return DockItem::mouseMoveEvent(e);
+    DockItem::mouseMoveEvent(e);
 
     e->accept();
 
@@ -175,8 +177,6 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    DockItem::mouseReleaseEvent(e);
-
     if (e->button() != Qt::LeftButton)
         return;
 
@@ -186,6 +186,10 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     }
 
     e->accept();
+
+    if (!containCursorPos()) {
+        return;
+    }
 
     const QPoint distance = e->pos() - MousePressPoint;
     if (distance.manhattanLength() < PLUGIN_ITEM_DRAG_THRESHOLD)
@@ -198,7 +202,6 @@ void PluginsItem::enterEvent(QEvent *event)
         return;
     }
 
-    m_hover = true;
     update();
 
     DockItem::enterEvent(event);
@@ -233,10 +236,6 @@ bool PluginsItem::eventFilter(QObject *watched, QEvent *event)
             if (checkGSettingsControl()) {
                 return true;
             }
-        }
-        if (event->type() == QEvent::MouseButtonRelease) {
-            m_hover = false;
-            update();
         }
     }
 

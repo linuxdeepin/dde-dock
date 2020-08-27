@@ -45,6 +45,7 @@ FashionTrayControlWidget::FashionTrayControlWidget(Dock::Position position, QWid
     m_expandDelayTimer->setInterval(400);
     m_expandDelayTimer->setSingleShot(true);
 
+    setMouseTracking(true);
     setDockPostion(m_dockPosition);
     setExpanded(m_expanded);
 
@@ -147,7 +148,10 @@ void FashionTrayControlWidget::mouseReleaseEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton) {
         event->accept();
-        setExpanded(!m_expanded);
+
+        if (containCursorPos()) {
+            setExpanded(!m_expanded);
+        }
         return;
     }
 
@@ -161,7 +165,12 @@ void FashionTrayControlWidget::mousePressEvent(QMouseEvent *event)
         return QWidget::mousePressEvent(event);
     }
 
-    m_pressed = true;
+    if (containCursorPos()) {
+        m_pressed = true;
+    } else {
+        m_pressed = false;
+    }
+
     update();
 
     QWidget::mousePressEvent(event);
@@ -169,7 +178,12 @@ void FashionTrayControlWidget::mousePressEvent(QMouseEvent *event)
 
 void FashionTrayControlWidget::enterEvent(QEvent *event)
 {
-    m_hover = true;
+    if (containCursorPos()) {
+        m_hover = true;
+    } else {
+        m_hover = false;
+    }
+
     update();
 
     QWidget::enterEvent(event);
@@ -187,6 +201,19 @@ void FashionTrayControlWidget::leaveEvent(QEvent *event)
 void FashionTrayControlWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
+}
+
+void FashionTrayControlWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (containCursorPos()) {
+        m_hover = true;
+    } else {
+        m_hover = false;
+    }
+
+    update();
+
+    QWidget::mouseMoveEvent(event);
 }
 
 void FashionTrayControlWidget::refreshArrowPixmap()
@@ -210,4 +237,18 @@ void FashionTrayControlWidget::refreshArrowPixmap()
 
     const auto ratio = devicePixelRatioF();
     m_arrowPix = ImageUtil::loadSvg(iconPath, ":/icons/resources/", PLUGIN_ICON_MAX_SIZE, ratio);
+}
+
+bool FashionTrayControlWidget::containCursorPos()
+{
+    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
+    QRect rect(this->rect());
+
+    int iconSize = qMin(rect.width(), rect.height());
+    int w = (rect.width() - iconSize) / 2;
+    int h = (rect.height() - iconSize) / 2;
+
+    rect = rect.adjusted(w, h, -w, -h);
+
+    return rect.contains(cursorPos);
 }

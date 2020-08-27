@@ -560,7 +560,12 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
 
 void SNITrayWidget::enterEvent(QEvent *event)
 {
-    m_popupTipsDelayTimer->start();
+    if (containCursorPos()) {
+        m_popupTipsDelayTimer->start();
+    } else {
+        m_popupTipsDelayTimer->stop();
+        hidePopup();
+    }
 
     AbstractTrayWidget::enterEvent(event);
 }
@@ -574,6 +579,18 @@ void SNITrayWidget::leaveEvent(QEvent *event)
     update();
 
     AbstractTrayWidget::leaveEvent(event);
+}
+
+void SNITrayWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (containCursorPos()) {
+        m_popupTipsDelayTimer->start();
+    } else {
+        m_popupTipsDelayTimer->stop();
+        hidePopup();
+    }
+
+    AbstractTrayWidget::mouseMoveEvent(event);
 }
 
 void SNITrayWidget::showHoverTips()

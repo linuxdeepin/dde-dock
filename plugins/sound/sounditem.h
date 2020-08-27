@@ -52,9 +52,9 @@ signals:
     void requestContextMenu() const;
 
 protected:
-    void resizeEvent(QResizeEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
 
 private slots:
     void refreshTips(const bool force = false);

@@ -30,6 +30,8 @@ AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
     , m_handleMouseReleaseTimer(new QTimer(this))
 {
+    setMouseTracking(true);
+
     m_handleMouseReleaseTimer->setSingleShot(true);
     m_handleMouseReleaseTimer->setInterval(100);
 
@@ -131,4 +133,18 @@ void AbstractTrayWidget::resizeEvent(QResizeEvent *event)
         setMaximumHeight(width());
         setMaximumWidth(QWIDGETSIZE_MAX);
     }
+}
+
+bool AbstractTrayWidget::containCursorPos()
+{
+    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
+    QRect rect(this->rect());
+
+    int iconSize = qMin(rect.width(), rect.height());
+    int w = (rect.width() - iconSize) / 2;
+    int h = (rect.height() - iconSize) / 2;
+
+    rect = rect.adjusted(w, h, -w, -h);
+
+    return rect.contains(cursorPos);
 }

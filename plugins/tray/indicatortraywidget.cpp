@@ -33,6 +33,7 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorName, QWidget *
     , m_indicatorName(indicatorName)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+    setMouseTracking(true);
 
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

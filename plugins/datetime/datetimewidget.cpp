@@ -41,6 +41,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     , m_24HourFormat(false)
     , m_timeOffset(false)
 {
+    setMouseTracking(true);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
 }
 

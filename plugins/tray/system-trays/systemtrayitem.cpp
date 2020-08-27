@@ -41,6 +41,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_itemKey(itemKey)
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
+    setMouseTracking(true);
 
     m_centralWidget->setParent(this);
     m_centralWidget->setVisible(true);
@@ -202,7 +203,13 @@ void SystemTrayItem::enterEvent(QEvent *event)
         return;
     }
 
-    m_popupTipsDelayTimer->start();
+    if (containCursorPos()) {
+        m_popupTipsDelayTimer->start();
+    } else {
+        m_popupTipsDelayTimer->stop();
+        hidePopup();
+    }
+
     update();
 
     AbstractTrayWidget::enterEvent(event);
@@ -249,6 +256,19 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
+    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
+    QRect rect(this->rect());
+
+    int iconSize = qMin(rect.width(), rect.height());
+    int w = (rect.width() - iconSize) / 2;
+    int h = (rect.height() - iconSize) / 2;
+
+    rect = rect.adjusted(w, h, -w, -h);
+
+    if (!rect.contains(cursorPos)) {
+        return;
+    }
+
     if (checkAndResetTapHoldGestureState() && event->source() == Qt::MouseEventSynthesizedByQt) {
         qDebug() << "SystemTray: tap and hold gesture detected, ignore the synthesized mouse release event";
         return;
@@ -272,6 +292,18 @@ void SystemTrayItem::showEvent(QShowEvent *event)
     });
 
     return AbstractTrayWidget::showEvent(event);
+}
+
+void SystemTrayItem::mouseMoveEvent(QMouseEvent *event)
+{
+    if (containCursorPos()) {
+        m_popupTipsDelayTimer->start();
+    } else {
+        m_popupTipsDelayTimer->stop();
+        hidePopup();
+    }
+
+    AbstractTrayWidget::mouseMoveEvent(event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const

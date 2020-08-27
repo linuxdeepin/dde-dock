@@ -46,6 +46,7 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
 {
+    setMouseTracking(true);
     m_applet->setVisible(false);
     m_adapterPowered = m_applet->poweredInitState();
 
