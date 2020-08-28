@@ -82,7 +82,7 @@
     },
     {
         "Name": "swipe",
-        "Direction": "left",
+        "Direction": "right",
         "Fingers": 4,
         "Action": {
             "Type": "built-in",
@@ -91,7 +91,7 @@
     },
     {
         "Name": "swipe",
-        "Direction": "right",
+        "Direction": "left",
         "Fingers": 4,
         "Action": {
             "Type": "built-in",
@@ -127,7 +127,7 @@
     },
     {
         "Name": "swipe",
-        "Direction": "left",
+        "Direction": "right",
         "Fingers": 5,
         "Action": {
             "Type": "built-in",
@@ -136,7 +136,7 @@
     },
     {
         "Name": "swipe",
-        "Direction": "right",
+        "Direction": "left",
         "Fingers": 5,
         "Action": {
             "Type": "built-in",
