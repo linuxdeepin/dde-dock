@@ -34,11 +34,7 @@ class AdaptersManager : public QObject
 public:
     explicit AdaptersManager(QObject *parent = nullptr);
 
-//    QMap<QString, const Adapter *> adapters() const;
-//    const Adapter *adapterById(const QString &id);
-
     void setAdapterPowered(const Adapter *adapter, const bool &powered);
-//    void connectAllPairedDevice(const Adapter *adapter);
     void connectDevice(Device *device, Adapter *adapter);
     bool defaultAdapterInitPowerState();
     int adaptersCount();

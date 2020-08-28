@@ -151,12 +151,11 @@ void MultiScreenWorker::onAutoHideChanged(bool autoHide)
 
 void MultiScreenWorker::updateDaemonDockSize(int dockSize)
 {
-    const qreal scale = qApp->devicePixelRatio();
-    m_dockInter->setWindowSize(uint(dockSize * scale));
+    m_dockInter->setWindowSize(uint(dockSize));
     if (m_displayMode == DisplayMode::Fashion)
-        m_dockInter->setWindowSizeFashion(uint(dockSize * scale));
+        m_dockInter->setWindowSizeFashion(uint(dockSize));
     else
-        m_dockInter->setWindowSizeEfficient(uint(dockSize * scale));
+        m_dockInter->setWindowSizeEfficient(uint(dockSize));
 }
 
 void MultiScreenWorker::onDragStateChanged(bool draging)
@@ -1347,7 +1346,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     if (withoutScale) {//后端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * scale;
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
                 switch (static_cast<Position>(pos)) {
                 case Top: {
                     rect.setX(inter->x() + WINDOWMARGIN);
@@ -1383,7 +1382,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     } else {//前端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
+                // 注意这里的dockSize是除以缩放的
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) / scale;
                 switch (static_cast<Position>(pos)) {
                 case Top: {
                     rect.setX(inter->x() + WINDOWMARGIN);
