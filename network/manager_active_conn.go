@@ -156,7 +156,7 @@ func (m *Manager) initActiveConnectionManage() {
 					return
 				}
 				if connectivity == nm.NM_CONNECTIVITY_PORTAL {
-					m.doPortalAuthentication()
+					go m.doPortalAuthentication()
 				}
 			}
 		}
