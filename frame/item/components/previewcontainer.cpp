@@ -241,6 +241,7 @@ void PreviewContainer::previewEntered(const WId wid)
     AppSnapshot *preSnap = m_floatingPreview->trackedWindow();
     if (preSnap && preSnap != snap) {
         preSnap->setContentsMargins(0, 0, 0, 0);
+        preSnap->setWindowState();
     }
 
     m_currentWId = wid;

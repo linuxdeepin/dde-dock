@@ -57,10 +57,12 @@ using namespace Dock;
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
+    , m_isWidowHidden(false)
     , m_title(new TipsWidget)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DIconButton(this))
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     m_closeBtn2D->setFixedSize(24, 24);
     m_closeBtn2D->setIconSize(QSize(24, 24));
@@ -83,6 +85,13 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     connect(m_closeBtn2D, &DIconButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
     QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
+}
+
+void AppSnapshot::setWindowState()
+{
+    if (m_isWidowHidden) {
+        m_dockDaemonInter->MinimizeWindow(m_wid);
+    }
 }
 
 void AppSnapshot::closeWindow() const
@@ -118,6 +127,7 @@ void AppSnapshot::setWindowInfo(const WindowInfo &info)
     QFontMetrics fm(m_title->font());
     QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, width());
     m_title->setText(strTtile);
+    getWindowState();
 }
 
 void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)
@@ -346,5 +356,41 @@ QRect AppSnapshot::rectRemovedShadow(const QImage &qimage, unsigned char *prop_t
         return QRect(left, top, width - left - right, height - top - bottom);
     } else {
         return QRect(0, 0, qimage.width(), qimage.height());
+    }
+}
+
+void AppSnapshot::getWindowState()
+{
+    Atom actual_type;
+    int actual_format;
+    unsigned long i, num_items, bytes_after;
+    unsigned char *properties = nullptr;
+
+    m_isWidowHidden = false;
+
+    const auto display = QX11Info::display();
+    Atom atom_prop = XInternAtom(display, "_NET_WM_STATE", true);
+    if (!atom_prop) {
+        return;
+    }
+
+    Status status = XGetWindowProperty(display, m_wid, atom_prop, 0, LONG_MAX, False, AnyPropertyType, &actual_type, &actual_format, &num_items, &bytes_after, &properties);
+    if (status != Success) {
+        qDebug() << "Fail to get window state";
+        return;
+    }
+
+    Atom *atoms = reinterpret_cast<Atom *>(properties);
+    for(i = 0; i < num_items; ++i) {
+        const char *atomName = XGetAtomName(display, atoms[i]);
+
+        if (strcmp(atomName, "_NET_WM_STATE_HIDDEN") == 0) {
+            m_isWidowHidden = true;
+            break;
+        }
+    }
+
+    if (properties) {
+        XFree(properties);
     }
 }

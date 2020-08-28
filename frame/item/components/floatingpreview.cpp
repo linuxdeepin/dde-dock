@@ -186,6 +186,7 @@ void FloatingPreview::hideEvent(QHideEvent *event)
 {
     if (m_tracked) {
         m_tracked->setContentsMargins(0, 0, 0, 0);
+        m_tracked->setWindowState();
     }
 
     QWidget::hideEvent(event);

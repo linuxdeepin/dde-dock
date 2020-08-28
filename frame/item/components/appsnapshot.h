@@ -29,6 +29,7 @@
 #include <DIconButton>
 #include <DWindowManagerHelper>
 
+#include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_dde_daemon_dock_entry.h>
 
 DWIDGET_USE_NAMESPACE
@@ -40,6 +41,8 @@ DGUI_USE_NAMESPACE
 struct SHMInfo;
 struct _XImage;
 typedef _XImage XImage;
+
+using DockDaemonInter = com::deepin::dde::daemon::Dock;
 
 namespace Dock {
 class TipsWidget;
@@ -59,6 +62,7 @@ public:
     inline const QImage snapshot() const { return m_snapshot; }
     inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
     inline const QString title() const { return m_windowInfo.title; }
+    void setWindowState();
 
 signals:
     void entered(const WId wid) const;
@@ -82,13 +86,14 @@ private:
     SHMInfo *getImageDSHM();
     XImage *getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
+    void getWindowState();
 
 private:
     const WId m_wid;
     WindowInfo m_windowInfo;
 
     bool m_closeAble;
-
+    bool m_isWidowHidden;
     QImage m_snapshot;
     QRectF m_snapshotSrcRect;
 
@@ -96,6 +101,7 @@ private:
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
+    DockDaemonInter *m_dockDaemonInter;
 };
 
 #endif // APPSNAPSHOT_H
