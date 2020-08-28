@@ -695,11 +695,12 @@ void MainPanelControl::startDrag(DockItem *item)
        }
 
         drag = appDrag;
+        drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
     } else {
         drag = new QDrag(item);
         drag->setPixmap(pixmap);
+        drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     }
-    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 

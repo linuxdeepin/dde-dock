@@ -107,7 +107,11 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_followMouseTimer->setInterval(1);
     connect(m_followMouseTimer, &QTimer::timeout, [this] {
         QPoint destPos = QCursor::pos();
-        move(destPos.x() - width() / 2, destPos.y() - height() / 2);
+        if (DWindowManagerHelper::instance()->hasComposite()) {
+            move(destPos.x() - width() / 2, destPos.y() - height() / 2);
+        } else {
+            move(destPos.x(), destPos.y()); //窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
+        }
     });
     m_followMouseTimer->start();
 }
@@ -297,7 +301,7 @@ void AppDragWidget::initConfigurations()
     const QByteArray &schema_id {
         cschema.toUtf8()
     };
-    
+
     const QByteArray &path_id {
         cpath.toUtf8()
     };
