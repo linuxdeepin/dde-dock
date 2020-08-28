@@ -83,6 +83,7 @@ private:
     void updateMasterControlSwitch();
     void updateView();
     int getStrongestAp();
+    void wirelessItemsRequireScan();
 
 private:
     Dock::TipsWidget *m_tipsWidget;

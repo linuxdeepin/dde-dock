@@ -145,6 +145,8 @@ NetworkItem::NetworkItem(QWidget *parent)
 QWidget *NetworkItem::itemApplet()
 {
     m_applet->setVisible(true);
+    wirelessItemsRequireScan();
+
     return m_applet;
 }
 
@@ -458,12 +460,7 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == m_loadingIndicator) {
         if (event->type() == QEvent::MouseButtonPress) {
-            for (auto wirelessItem : m_wirelessItems) {
-                if (wirelessItem) {
-                    wirelessItem->requestWirelessScan();
-                }
-            }
-            wirelessScan();
+            wirelessItemsRequireScan();
         }
     }
     return false;
@@ -1080,6 +1077,19 @@ int NetworkItem::getStrongestAp()
             retStrength = strength;
     }
     return retStrength;
+}
+
+/**
+ * @brief NetworkItem::wirelessItemsRequireScan
+ */
+void NetworkItem::wirelessItemsRequireScan()
+{
+    for (auto wirelessItem : m_wirelessItems) {
+        if (wirelessItem) {
+            wirelessItem->requestWirelessScan();
+        }
+    }
+    wirelessScan();
 }
 
 void NetworkItem::updateMasterControlSwitch()
