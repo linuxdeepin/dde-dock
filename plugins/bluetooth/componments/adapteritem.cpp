@@ -299,8 +299,10 @@ void AdapterItem::createDeviceItem(Device *device)
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
     connect(device, &Device::rssiChanged, this, &AdapterItem::deviceRssiChanged);
-    connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, [this](Device *device){
+    connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, [this, deviceItem](Device *device) {
         m_adaptersManager->connectDevice(device, m_adapter);
+        m_deviceLayout->removeWidget(deviceItem);
+        m_deviceLayout->insertWidget(1, deviceItem);
     });
 }
 

@@ -109,8 +109,7 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
 
 bool DeviceItem::operator <(const DeviceItem &item)
 {
-//    return  this->device()->deviceTime() < item.device()->deviceTime();
-    return  this->device()->rssi() < item.device()->rssi();
+    return  this->device()->deviceTime() < item.device()->deviceTime();
 }
 
 void DeviceItem::setTitle(const QString &name)
