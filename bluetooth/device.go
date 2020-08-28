@@ -217,11 +217,10 @@ func newDevice(systemSigLoop *dbusutil.SignalLoop, dpath dbus.ObjectPath) (d *de
 	d.updateState()
 	if d.Paired && d.connected {
 		d.ConnectState = true
+		//切換用户时添加设备到connectedDevices列表中
+		globalBluetooth.addConnectedDevice(d)
 	}
 	d.disconnectChan = make(chan struct{})
-	if d.Paired && d.connected {
-		d.ConnectState = true
-	}
 	d.core.InitSignalExt(systemSigLoop, true)
 	d.connectProperties()
 	return

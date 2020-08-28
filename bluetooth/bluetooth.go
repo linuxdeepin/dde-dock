@@ -469,39 +469,6 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath) {
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	b.devicesLock.Unlock()
 
-	connected := b.config.getDeviceConfigConnected(d.getAddress())
-	if connected {
-		d, _ := b.getDevice(dpath)
-		if d == nil {
-			return
-		}
-
-		adapterPowered, err := d.adapter.core.Powered().Get(0)
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
-
-		if !adapterPowered {
-			return
-		}
-
-		paired, err := d.core.Paired().Get(0)
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
-
-		connected, err := d.core.Connected().Get(0)
-		if err != nil {
-			logger.Warning(err)
-			return
-		}
-		if paired && connected {
-			b.addConnectedDevice(d)
-		}
-	}
-
 	d.notifyDeviceAdded()
 }
 

@@ -198,7 +198,7 @@ func (c *config) addDeviceConfig(addDevice *device) {
 	deviceInfo.Icon = addDevice.Icon
 	// connect status is set false as default,so device has not been connected yet
 	deviceInfo.LatestTime = 0
-	deviceInfo.Connected = false
+	deviceInfo.Connected = addDevice.connected
 	//add device info to devices map
 	c.Devices[addDevice.getAddress()] = deviceInfo
 	c.core.Unlock()
