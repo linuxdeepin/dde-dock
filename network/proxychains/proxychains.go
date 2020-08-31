@@ -208,18 +208,22 @@ func (m *Manager) set(type0, ip string, port uint32, user, password string) erro
 	}
 
 	if !disable && !validIPv4(ip) {
+		notifyAppProxyEnableFailed()
 		return InvalidParamError{"IP"}
 	}
 
 	if !validUser(user) {
+		notifyAppProxyEnableFailed()
 		return InvalidParamError{"User"}
 	}
 
 	if !validPassword(password) {
+		notifyAppProxyEnableFailed()
 		return InvalidParamError{"Password"}
 	}
 
 	if (user == "" && password != "") || (user != "" && password == "") {
+		notifyAppProxyEnableFailed()
 		return errors.New("user and password are not provided at the same time")
 	}
 
@@ -254,6 +258,7 @@ func (m *Manager) set(type0, ip string, port uint32, user, password string) erro
 
 	err := m.saveConfig()
 	if err != nil {
+		notifyAppProxyEnableFailed()
 		return err
 	}
 
@@ -262,7 +267,13 @@ func (m *Manager) set(type0, ip string, port uint32, user, password string) erro
 	}
 
 	// enable
-	return m.writeConf()
+	err = m.writeConf()
+	if err != nil {
+		notifyAppProxyEnableFailed()
+	} else {
+		notifyAppProxyEnabled()
+	}
+	return err
 }
 
 func (m *Manager) writeConf() error {

@@ -624,7 +624,10 @@ func (m *Manager) RequestWirelessScan() *dbus.Error {
 	m.PropsMu.Lock()
 	m.WirelessAccessPoints = wirelessAccessPointsJsonStr
 	m.PropsMu.Unlock()
-	m.emitPropChangedWirelessAccessPoints(wirelessAccessPointsJsonStr)
+	err = m.emitPropChangedWirelessAccessPoints(wirelessAccessPointsJsonStr)
+	if err != nil {
+		logger.Warning(err)
+	}
 	return nil
 }
 

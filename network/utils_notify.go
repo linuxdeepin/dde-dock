@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/godbus/dbus"
-	"github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
+	notifications "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.notifications"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 )
