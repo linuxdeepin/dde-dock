@@ -1,23 +1,5 @@
 [
     {
-        "Name": "pinch",
-        "Direction": "in",
-        "Fingers": 2,
-        "Action": {
-            "Type": "shortcut",
-            "Action": "ctrl+minus"
-        }
-    },
-    {
-        "Name": "pinch",
-        "Direction": "out",
-        "Fingers": 2,
-        "Action": {
-            "Type": "shortcut",
-            "Action": "ctrl+equal"
-        }
-    },
-    {
         "Name": "swipe",
         "Direction": "up",
         "Fingers": 3,
