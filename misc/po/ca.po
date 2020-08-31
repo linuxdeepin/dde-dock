@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-31 15:33+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Davidmp <medipas@gmail.com>, 2020\n"
 "Language-Team: Catalan (https://www.transifex.com/linuxdeepin/teams/3617/ca/)\n"
@@ -38,23 +38,23 @@ msgstr ""
 "La contrasenya ha de contenir lletres angleses (majúscules o minúscules), "
 "números o símbols especials (~!@#$%^&*()[]{}\\|/?,.<>)."
 
-#: ../../accounts/checkers/username.go:63
+#: ../../accounts/checkers/username.go:62
 msgid "Username cannot be empty"
 msgstr "El nom d'usuari no es pot deixar en blanc"
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be a letter or number"
 msgstr "El primer caràcter ha de ser una lletra o un número."
 
-#: ../../accounts/checkers/username.go:70
+#: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
 msgstr "El nom d'usuari ja existeix."
 
-#: ../../accounts/checkers/username.go:72
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "El nom d'usuari ja l'ha usat el sistema."
 
-#: ../../accounts/checkers/username.go:74
+#: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
 msgstr "El nom d'usuari ha de tenir de 3 a 32 caràcters de llargada."
 
@@ -82,94 +82,135 @@ msgstr "La verificació de l'empremta ha fallat."
 msgid "Fingerprint verification timed out"
 msgstr "La verificació de l'empremta ha trigat massa."
 
-#: ../../bluetooth/bluez_profile.go:29
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Serial port"
 msgstr "Port de sèrie"
 
-#: ../../bluetooth/bluez_profile.go:30
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Dial-Up networking"
 msgstr "Xarxa de marcatge"
 
-#: ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free device"
 msgstr "Dispositiu de mans lliures"
 
-#: ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free voice gateway"
 msgstr "Passarel·la de veu de mans lliures"
 
-#: ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Headset voice gateway"
 msgstr "Passarel·la de veu d'auriculars"
 
-#: ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Object push"
 msgstr "Premuda d'objecte"
 
-#: ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:36
 msgid "File transfer"
 msgstr "Transferència de fitxer"
 
-#: ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:37
 msgid "Synchronization"
 msgstr "Sincronització"
 
-#: ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access"
 msgstr "Accés a l'agenda de telèfons"
 
-#: ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access client"
 msgstr "Client d'accés a l'agenda de telèfons"
 
-#: ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Message access"
 msgstr "Accés a missatges"
 
-#: ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message notification"
 msgstr "Notificació de missatge"
+
+#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr "Es reben %s fitxers de \"%s\""
+
+#: ../../bluetooth/obex_agent.go:344
+msgid "View"
+msgstr "Visualització"
+
+#: ../../bluetooth/obex_agent.go:351
+msgid "Done"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "File Transfer Failed"
+msgstr "Ha fallat la transferència de fitxers."
+
+#: ../../bluetooth/obex_agent.go:370
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+"El dispositiu de Bluetooth està desconnectat. Si us plau, comproveu-ho."
+
+#: ../../bluetooth/obex_agent.go:399
+msgid "Decline"
+msgstr "Rebutja-ho"
+
+#: ../../bluetooth/obex_agent.go:399
+msgid "Receive"
+msgstr "Rep"
+
+#: ../../bluetooth/obex_agent.go:404
+msgid "Bluetooth File Transfer"
+msgstr "Transferència de fitxers per Bluetooth"
+
+#: ../../bluetooth/obex_agent.go:405
+#, c-format
+msgid "%s"
+msgstr "%s"
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Connexió amb %q correcta"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Desconnectat"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:336
+#: ../../network/state_handler.go:361
+msgid "%q disconnected"
+msgstr "%q desconnectada"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Assegureu-vos que %q estigui activada i a l'abast."
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Ha fallat la connexió de Bluetooth."
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
 msgstr "Cliqueu aquí per connectar amb %q"
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:147
 msgid "Add Bluetooth devices"
 msgstr "Afegeix dispositius Bluetooth"
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:157
 msgid "Pair"
 msgstr "Enllaça"
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
 msgstr "avui"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:511 ../../calendar/job.go:518
 msgid "tomorrow"
 msgstr "demà"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:531
 #, c-format
 msgid "%s to %s"
 msgstr "%s a %s"
@@ -186,24 +227,24 @@ msgstr "Vida"
 msgid "Other"
 msgstr "Altres"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:588
 msgid "One day before start"
 msgstr "Un dia abans de l'inici"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:589 ../../calendar/scheduler.go:594
+#: ../../calendar/scheduler.go:602 ../../calendar/scheduler.go:606
 msgid "Close"
 msgstr "Tanca"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:593
 msgid "Remind me tomorrow"
 msgstr "Recorda-m'ho demà."
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:601
 msgid "Remind me later"
 msgstr "Recorda-m'ho més tard."
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:611
 msgid "Schedule Reminder"
 msgstr "Programació del recrdatori"
 
@@ -223,15 +264,15 @@ msgstr "Tanca-ho tot"
 msgid "Force Quit"
 msgstr "Força'n la sortida"
 
-#: ../../dock/app_entry_menu.go:132
+#: ../../dock/app_entry_menu.go:135
 msgid "Dock"
 msgstr "Acoblador"
 
-#: ../../dock/app_entry_menu.go:139
+#: ../../dock/app_entry_menu.go:145
 msgid "Undock"
 msgstr "Treu de l'acoblador"
 
-#: ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:155
 msgid "All Windows"
 msgstr "Totes les finestres"
 
@@ -423,7 +464,7 @@ msgstr "Mostra l'espai de treball"
 msgid "Switch monitors"
 msgstr "Commuta els monitors"
 
-#: ../../langselector/locale.go:63
+#: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
 msgstr "Cal autenticació per canviar la llengua."
 
@@ -445,60 +486,48 @@ msgstr ""
 "S'ha canviat la llengua del sistema. Si us plau, sortiu de la sessió i "
 "torneu-hi a entrar."
 
-#: ../../langselector/locale.go:403
+#: ../../langselector/locale.go:402
 msgid "Failed to change system language, please try later"
 msgstr ""
 "Ha fallat canviar la llengua del sistema. Si us plau, torneu-ho a provar més"
 " tard."
 
-#: ../../lastore/lastore.go:248
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Torna-ho a provar"
 
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Cancel·la"
-
-#: ../../lastore/lastore.go:270
+#: ../../lastore/lastore.go:269
 msgid "Update Now"
 msgstr "Actualitza ara"
 
-#: ../../lastore/notify.go:97
+#: ../../lastore/notify.go:96
 msgid "%q installed successfully."
 msgstr "%q s'ha instal·lat correctament."
 
-#: ../../lastore/notify.go:100
+#: ../../lastore/notify.go:99
 msgid "%q failed to install."
 msgstr "Ha fallat la instal·lació de %q"
 
-#: ../../lastore/notify.go:108
+#: ../../lastore/notify.go:107
 msgid "Removed successfully"
 msgstr "S'ha eliminat correctament."
 
-#: ../../lastore/notify.go:110
+#: ../../lastore/notify.go:109
 msgid "Failed to remove the app"
 msgstr "Ha fallat eliminar l'aplicació."
 
-#: ../../lastore/notify.go:117
+#: ../../lastore/notify.go:116
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr ""
 "Per tal d'evitar l'aturada automàtica, connecteu-vos per a l'actualització "
 "normal."
 
-#: ../../lastore/notify.go:122
+#: ../../lastore/notify.go:121
 msgid "Package cache wiped"
 msgstr "S'ha netejat la cau de paquets."
 
-#: ../../lastore/notify.go:127
-msgid ""
-"Your system source has been modified, please restore to official source for "
-"your normal use"
-msgstr ""
-"La font del sistema s'ha modificat; si us plau, restaureu-la a la font "
-"oficial per a un ús normal."
-
-#: ../../lastore/notify.go:132
+#: ../../lastore/notify.go:126
 msgid "New system edition available"
 msgstr "Hi ha disponible una edició nova del sistema."
 
@@ -510,143 +539,98 @@ msgstr "%q eliminada correctament"
 msgid "Failed to uninstall %q"
 msgstr "Ha fallat desinstal·lar %q."
 
-#: ../../network/manager_active_conn.go:351
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:362
+#: ../../network/manager_active_conn.go:367
 msgid "None"
 msgstr "Cap"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:369
 msgid "WEP 40/128-bit Key"
 msgstr "Clau WEP de 40/128 bits"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:371
 msgid "WPA/WPA2 Personal"
 msgstr "WPA / WPA2 personal"
 
-#: ../../network/manager_active_conn.go:368
+#: ../../network/manager_active_conn.go:379
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:370
+#: ../../network/manager_active_conn.go:381
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:372
+#: ../../network/manager_active_conn.go:383
 msgid "LEAP"
 msgstr "SALT"
 
-#: ../../network/manager_active_conn.go:374
+#: ../../network/manager_active_conn.go:385
 msgid "FAST"
 msgstr "Ràpid"
 
-#: ../../network/manager_active_conn.go:376
+#: ../../network/manager_active_conn.go:387
 msgid "Tunneled TLS"
 msgstr "TLS per túnel"
 
-#: ../../network/manager_active_conn.go:378
+#: ../../network/manager_active_conn.go:389
 msgid "Protected EAP"
 msgstr "EAP protegit"
 
-#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:334
 msgid "Wired Connection"
 msgstr "Connexió amb fil"
 
-#: ../../network/nm_custom_type.go:223
-msgid "Connection"
-msgstr "Connexió"
+#: ../../network/proxychains/utils_notify.go:45
+msgid "Application proxy is set successfully"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:227
-msgid "Wireless Connection"
-msgstr "Connexió sense fil"
+#: ../../network/proxychains/utils_notify.go:45
+#: ../../network/proxychains/utils_notify.go:48
+#: ../../network/utils_notify.go:195 ../../network/utils_notify.go:199
+#: ../../network/utils_notify.go:202 ../../network/utils_notify.go:304
+msgid "Network"
+msgstr "Xarxa"
 
-#: ../../network/nm_custom_type.go:229
-msgid "Wireless Ad-Hoc"
-msgstr "Sense fil Ad-Hoc"
+#: ../../network/proxychains/utils_notify.go:48
+msgid "Failed to set the application proxy"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr "Sense fil Ap-Hotspot"
-
-#: ../../network/nm_custom_type.go:233
-msgid "PPPoE Connection"
-msgstr "Connexió PPPoE"
-
-#: ../../network/nm_custom_type.go:235
-msgid "Mobile Connection"
-msgstr "Connexió de mòbil"
-
-#: ../../network/nm_custom_type.go:237
-msgid "Mobile GSM Connection"
-msgstr "Connexió de mòbil GSM"
-
-#: ../../network/nm_custom_type.go:239
-msgid "Mobile CDMA Connection"
-msgstr "Connexió de mòbil CDMA"
-
-#: ../../network/nm_custom_type.go:241
-msgid "VPN Connection"
-msgstr "Connexió d'XPV"
-
-#: ../../network/nm_custom_type.go:243
-msgid "VPN L2TP"
-msgstr "XPV L2TP"
-
-#: ../../network/nm_custom_type.go:245
-msgid "VPN OpenConnect"
-msgstr "XPV OpenConnect"
-
-#: ../../network/nm_custom_type.go:247
-msgid "VPN OpenVPN"
-msgstr "XPV OpenVPN"
-
-#: ../../network/nm_custom_type.go:249
-msgid "VPN PPTP"
-msgstr "XPV PPTP"
-
-#: ../../network/nm_custom_type.go:251
-msgid "VPN StrongSwan"
-msgstr "XPV StrongSwan"
-
-#: ../../network/nm_custom_type.go:253
-msgid "VPN VPNC"
-msgstr "XPV VPNC"
-
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:38
 msgid "Device state changed"
 msgstr "Ha canviat l'estat del dispositiu."
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:39
 msgid "Device state changed, reason unknown"
 msgstr "Ha canviat l'estat del dispositiu. No se'n sap el motiu."
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:40
 msgid "The device is now managed"
 msgstr "El dispositiu ara és gestionat."
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:41
 msgid "The device is no longer managed"
 msgstr "El dispositiu ja no és gestionat."
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:42
 msgid "The device has not been ready for configuration"
 msgstr "El dispositiu no estava a punt per configurar."
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:43
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
 "La configuració d'IP no s'ha pogut reservar (sense adreça disponible, temps "
 "d'espera, etc.)"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:44
 msgid "The IP configuration is no longer valid"
 msgstr "La configuració d'IP ja no és vàlida."
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:45
 msgid "Passwords were required but not provided"
 msgstr "Les contrasenyes s'han demanat però no s'han proporcionat."
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:46
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
@@ -654,382 +638,379 @@ msgstr ""
 "El 802.1X sol·licitant s'ha desconnectat del punt d'accés o del servidor "
 "d'autenticació."
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:47
 msgid "Configuration of the 802.1X supplicant failed"
 msgstr "Ha fallat la configuració del 802.1X sol·licitant."
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:48
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
 msgstr "El 802.1X sol·licitant ha sortit o ha fallat inesperadament."
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant took too long time to authenticate"
 msgstr "El 802.1X sol·licitant ha trigat massa per a l'autenticació."
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:50
 msgid "The PPP service failed to start within the allowed time"
 msgstr "El servei PPP ha fallat iniciar-se durant del temps permès."
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:51
 msgid "The PPP service disconnected unexpectedly"
 msgstr "El servei PPP s'ha desconnectat inesperadament."
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:52
 msgid "The PPP service quitted or failed unexpectedly"
 msgstr "El servei PPP ha sortit o ha fallat inesperadament."
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:53
 msgid "The DHCP service failed to start within the allowed time"
 msgstr "El servei DHCP ha fallat iniciar-se durant del temps permès."
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:54
 msgid "The DHCP service reported an unexpected error"
 msgstr "El servei DHCP ha informat d'un error inesperat."
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:55
 msgid "The DHCP service quitted or failed unexpectedly"
 msgstr "El servei DHCP ha sortit o ha fallat inesperadament."
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:56
 msgid "The shared connection service failed to start"
 msgstr "El servei de connexió compartida ha fallat l'inici."
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:57
 msgid "The shared connection service quitted or failed unexpectedly"
 msgstr ""
 "El servei de connexió compartida ha sortit o ha fallat inesperadament."
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:58
 msgid "The AutoIP service failed to start"
 msgstr "El servei AutoIP ha fallat l'inici."
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:59
 msgid "The AutoIP service reported an unexpected error"
 msgstr "El servei AutoIP ha informat d'un error inesperat."
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:60
 msgid "The AutoIP service quitted or failed unexpectedly"
 msgstr "El servei AutoIP ha sortit o ha fallat inesperadament."
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:61
 msgid "Dialing failed due to busy lines"
 msgstr "El marcatge ha fallat a causa de línies ocupades."
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:62
 msgid "Dialing failed due to no dial tone"
 msgstr "El marcatge ha fallat a causa de manca de to."
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:63
 msgid "Dialing failed due to the carrier"
 msgstr "El marcatge ha fallat a causa del proveïdor."
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:64
 msgid "Dialing timed out"
 msgstr "El marcatge ha esgotat el temps d'espera."
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:65
 msgid "Dialing failed"
 msgstr "El marcatge ha fallat."
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:66
 msgid "Modem initialization failed"
 msgstr "Ha fallat l'inici del mòdem."
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:67
 msgid "Failed to select the specified GSM APN"
 msgstr "Ha fallat seleccionar el GSM APN especificat."
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:68
 msgid "No networks searched"
 msgstr "No s'han cercat xarxes."
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:69
 msgid "Network registration was denied"
 msgstr "S'ha denegat el registre de xarxa."
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:70
 msgid "Network registration timed out"
 msgstr "El registre de xarxa ha esgotat el temps d'espera."
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:71
 msgid "Failed to register to the requested GSM network"
 msgstr "Ha fallat connectar-se a la xarxa GSM sol·licitada."
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:72
 msgid "PIN check failed"
 msgstr "Ha fallat la comprovació del PIN."
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:73
 msgid "Necessary firmware for the device may be missed"
 msgstr "Pot mancar el microprogramari necessari per al dispositiu."
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:74
 msgid "The device was removed"
 msgstr "El dispositiu s'ha extret."
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:75
 msgid "NetworkManager went to sleep"
 msgstr "El NetworkManager s'ha suspès."
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:76
 msgid "The device's active connection was removed or disappeared"
 msgstr "La connexió activa del dispositiu s'ha eliminat o ha desaparegut."
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:77
 msgid "A user or client requested to disconnect"
 msgstr "Un usuari o un client ha demanat desconnectar-se."
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:78
 msgid "The device's carrier/link changed"
 msgstr "Ha canviat el proveïdor / enllaç del dispositiu."
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:79
 msgid "The device's existing connection was assumed"
 msgstr "S'ha assumit la connexió existent del dispostiu."
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:80
 msgid "The 802.1x supplicant is now available"
 msgstr "El 802.1X sol·licitant ara està disponible."
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:81
 msgid "The modem could not be found"
 msgstr "No s'ha pogut trobar el mòdem."
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:82
 msgid "The Bluetooth connection timed out or failed"
 msgstr "La connexió de Bluetooth ha esgotat el temps d'espera o ha fallat."
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:83
 msgid "GSM Modem's SIM Card was not inserted"
 msgstr "No s'ha inserit la targeta SIM del mòdem GSM."
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM PIN required"
 msgstr "Cal el PIN de la SIM del mòdem GSM."
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PUK required"
 msgstr "Cal el PUK de la SIM del mòdem GSM."
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:86
 msgid "SIM card error in GSM Modem"
 msgstr "Error de la targeta SIM al mòdem de GSM"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:87
 msgid "InfiniBand device does not support connected mode"
 msgstr "El dispositiu InfiniBand no admet el mode connectat."
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:88
 msgid "A dependency of the connection failed"
 msgstr "Ha fallat una dependència de la connexió."
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:89
 msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr "Error de pont d'Ethernet RFC 2684 vers l'ADSL"
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:90
 msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "El ModemManager no s'executava o ha sortit inesperadament."
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:91
 msgid "The 802.11 WLAN network could not be found"
 msgstr "La xarxa WLAN 802.11 no s'ha pogut trobar."
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:92
 msgid "A secondary connection of the base connection failed"
 msgstr "Ha fallat una connexió secundària de la connexió de base."
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:95
 msgid "DCB or FCoE setup failed"
 msgstr "Ha fallat la configuració de DCB o FCoE."
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:96
 msgid "Network teaming control failed"
 msgstr "Ha fallat el control de l'equip de xarxa."
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:97
 msgid "Modem failed to run or not available"
 msgstr "El mòdem ha fallat executar-se o no està disponible."
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:98
 msgid "Modem now ready and available"
 msgstr "El mòdem ara està a punt i disponible."
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:99
 msgid "SIM PIN is incorrect"
 msgstr "El PIN de la SIM no és correcte."
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:100
 msgid "New connection activation is enqueuing"
 msgstr "Activació de la nova connexió a la cua"
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:101
 msgid "Parent device changed"
 msgstr "Ha canviat el dispostiu pare."
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:102
 msgid "Management status of parent device changed"
 msgstr "Ha canviat l'estat de gestió del dispositiu pare."
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:105
 msgid "Network cable is unplugged"
 msgstr "El cable de xarxa està desconnectat."
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:106
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
 "Si us plau, assegureu-vos que la targeta SIM estigui inserida i que tingui "
 "senyal de xarxa mòbil."
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:107
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
 "Si us plau, assegureu-vos que teniu una contractació correcta sense un "
 "reajustament de la targeta SIM."
 
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:110
 msgid "Failed to activate VPN connection, reason unknown"
 msgstr "Ha fallat activar la connexió d'XPV. No se'n sap el motiu."
 
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection"
 msgstr "Ha fallat activar la connexió d'XPV."
 
-#: ../../network/state_handler.go:113
+#: ../../network/state_handler.go:112
 msgid "The VPN connection state changed due to being disconnected by users"
 msgstr ""
 "La connexió d'XPV ha canviat l'estat a causa de la desconnexió feta per "
 "usuaris."
 
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:113
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
 msgstr ""
 "La connexió d'XPV ha canviat l'estat a causa de la desconnexió de "
 "dispositius."
 
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:114
 msgid "VPN service stopped"
 msgstr "El servei d'XPV s'ha aturat."
 
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:115
 msgid "The IP config of VPN connection was invalid"
 msgstr "La configuració d'IP de la connexió d'XPV no és vàlida."
 
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:116
 msgid "The connection attempt to VPN service timed out"
 msgstr "L'intent de connexió al servei d'XPV ha esgotat el temps d'espera."
 
-#: ../../network/state_handler.go:118
+#: ../../network/state_handler.go:117
 msgid "The VPN service start timed out"
 msgstr "L'inici del servei d'XPV ha esgotat el temps d'espera."
 
-#: ../../network/state_handler.go:119
+#: ../../network/state_handler.go:118
 msgid "The VPN service failed to start"
 msgstr "El servei d'XPV ha fallat l'inici."
 
-#: ../../network/state_handler.go:120
+#: ../../network/state_handler.go:119
 msgid "The VPN connection password was not provided"
 msgstr "No s'ha proporcionat la contrasenya de la connexió d'XPV."
 
-#: ../../network/state_handler.go:121
+#: ../../network/state_handler.go:120
 msgid "Authentication to VPN server failed"
 msgstr "Ha fallat l'autenticació al servidor d'XPV."
 
-#: ../../network/state_handler.go:122
+#: ../../network/state_handler.go:121
 msgid "The connection was deleted from settings"
 msgstr "La connexió s'ha eliminat de la configuració."
 
-#: ../../network/state_handler.go:251
+#: ../../network/state_handler.go:250
 msgid "Enabling hotspot"
 msgstr "S'habilita el punt d'accés."
 
-#: ../../network/state_handler.go:253
+#: ../../network/state_handler.go:252
 msgid "Connecting %q"
 msgstr "Es connecta amb %q"
 
-#: ../../network/state_handler.go:261
+#: ../../network/state_handler.go:260
 msgid "Hotspot enabled"
 msgstr "Punt d'accés habilitat"
 
-#: ../../network/state_handler.go:263
+#: ../../network/state_handler.go:262
 msgid "%q connected"
 msgstr "%q connectada"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:279 ../../network/state_handler.go:334
 msgid "Hotspot disabled"
 msgstr "Punt d'accés inhabilitat"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q desconnectada"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:342
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 "No es pot compartir el punt d'accés. Si us plau, comproveu la configuració "
 "de dnsmasq."
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:344
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "No es pot connectar amb %q. Si us plau, mantingueu-vos a prop de "
 "l'encaminador."
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:346
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "No es pot connectar amb %q, comproveu l'encaminador o el cable de xarxa."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:349
 msgid "Password is required to connect %q"
 msgstr "Cal la contrasenya per connectar amb %q"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:352
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 "Ha fallat la connexió. No es pot connectar amb %q. Contrasenya incorrecta."
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:259
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../../network/utils_notify.go:185
-msgid "You are now offline."
-msgstr "Ara esteu fora de línia."
-
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:183
 msgid "Airplane mode enabled."
 msgstr "Mode d'avió habilitat."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:183 ../../network/utils_notify.go:187
+#: ../../network/utils_notify.go:191 ../../network/utils_notify.go:209
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:301
+msgid "Disconnected"
+msgstr "Desconnectat"
+
+#: ../../network/utils_notify.go:191
 msgid "Access Point mode is not supported by this device."
 msgstr "El mode de punt d'accés no l'admet aquest dispositiu."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
-msgid "Network"
-msgstr "Xarxa"
-
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:195
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 "L'interruptor de la targeta WLAN està desactivat. Activeu-lo quan sigui "
 "necessari."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:199
 msgid "System proxy is set successfully."
 msgstr "L'intermediari del sistema s'ha configurat correctament."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:202
 msgid "System proxy has been cancelled."
 msgstr "L'intermediari del sistema s'ha cancel·lat."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:206
 msgid "Connected"
 msgstr "Connectat"
+
+#: ../../network/utils_notify.go:304
+msgid "Portal network authentication successful"
+msgstr "L'autenticació de xarxa del portal és correcta."
 
 #: ../../service_trigger/msg.go:7
 #, c-format
@@ -1038,46 +1019,46 @@ msgstr ""
 "\"%s\" no ha superat el sistema de verificació de seguretat i no es pot "
 "executar ara."
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:201
 msgid "Battery critically low"
 msgstr "Bateria molt baixa"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:222
+#: ../../session/power/manager_events.go:227
+#: ../../session/power/manager_events.go:232
 msgid "Battery low, please plug in"
 msgstr "Bateria baixa, endolleu-lo, si us plau."
 
+#: ../../session/power/utils.go:349 ../../session/power/utils.go:353
 #: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr "S'ha canviat la configuració de l'energia."
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:376
 msgid "When the lid is closed, "
 msgstr "Quan la tapa estigui tancada,"
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:380
 msgid "When pressing the power button, "
 msgstr "Quan es premi el botó d'engegar,"
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:390
 msgid "your computer will shut down"
 msgstr "l'ordinador s'aturarà."
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:392
 msgid "your computer will suspend"
 msgstr "l'ordinador es posarà en suspens."
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:394
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "l'ordinador hibernarà."
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:396
 msgid "your monitor will turn off"
 msgstr "el monitor s'aturarà."
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:398
 msgid "it will do nothing to your computer"
 msgstr "no significarà res per a l'ordinador."
 

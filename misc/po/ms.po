@@ -5,17 +5,17 @@
 # 
 # Translators:
 # inashdeen <inashdeen@gmail.com>, 2020
-# abuyop <abuyop@gmail.com>, 2020
 # Cindy0514, 2020
+# abuyop <abuyop@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 15:53+0800\n"
+"POT-Creation-Date: 2020-08-31 15:33+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: abuyop <abuyop@gmail.com>, 2020\n"
 "Language-Team: Malay (https://www.transifex.com/linuxdeepin/teams/3617/ms/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,23 +35,23 @@ msgstr ""
 "Kata laluan mesti mengandungi abjad Bahasa Inggeris (sensitif-kata), nombor "
 "atau simbol khas (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:63
+#: ../../accounts/checkers/username.go:62
 msgid "Username cannot be empty"
 msgstr "Nama pengguna tidak boleh kosong"
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be a letter or number"
 msgstr "Aksara pertama mesti satu abjad atau angka"
 
-#: ../../accounts/checkers/username.go:70
+#: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
 msgstr "Nama pengguna sudah wujud"
 
-#: ../../accounts/checkers/username.go:72
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Nama pengguna telah digunakan oleh sistem"
 
-#: ../../accounts/checkers/username.go:74
+#: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
 msgstr "Nama pengguna mestilah antara 3 hingga 32 aksara"
 
@@ -79,94 +79,134 @@ msgstr "Pengecaman cap jari gagal"
 msgid "Fingerprint verification timed out"
 msgstr "Pengecaman cap jari telah tamat masa"
 
-#: ../../bluetooth/bluez_profile.go:29
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Serial port"
 msgstr "Port serial"
 
-#: ../../bluetooth/bluez_profile.go:30
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Dial-Up networking"
 msgstr "Perangkaian dailan"
 
-#: ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free device"
 msgstr "Peranti Bebas-Tangan"
 
-#: ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free voice gateway"
 msgstr "Get laluan suara Bebas-Tangan"
 
-#: ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Headset voice gateway"
 msgstr "Get laluan suara set kepala"
 
-#: ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Object push"
 msgstr "Tolak objek"
 
-#: ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:36
 msgid "File transfer"
 msgstr "Pemindahan fail"
 
-#: ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:37
 msgid "Synchronization"
 msgstr "Penyegerakan"
 
-#: ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access"
 msgstr "Capaian buku telefon"
 
-#: ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access client"
 msgstr "Klien capaian buku telefon"
 
-#: ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Message access"
 msgstr "Capaian mesej"
 
-#: ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message notification"
 msgstr "Pemberitahuan mesej"
+
+#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "Batal"
+
+#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:344
+msgid "View"
+msgstr "Lihat"
+
+#: ../../bluetooth/obex_agent.go:351
+msgid "Done"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
+msgid "File Transfer Failed"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:370
+msgid "The Bluetooth device is disconnected, please have a check"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:399
+msgid "Decline"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:399
+msgid "Receive"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:404
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:405
+#, c-format
+msgid "%s"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
 msgstr "Sambungan %q berjaya"
 
-#: ../../bluetooth/utils_notify.go:102 ../../network/utils_notify.go:185
-#: ../../network/utils_notify.go:189 ../../network/utils_notify.go:193
-#: ../../network/utils_notify.go:197 ../../network/utils_notify.go:215
-#: ../../network/utils_notify.go:218 ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Terputus"
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:336
+#: ../../network/state_handler.go:361
+msgid "%q disconnected"
+msgstr "%q terputus"
 
-#: ../../bluetooth/utils_notify.go:106
+#: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Pastikan %q dihidupkan dan berada dalam julat"
 
-#: ../../bluetooth/utils_notify.go:111
+#: ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Sambungan Bluetooth telah gagal"
 
-#: ../../bluetooth/utils_notify.go:139
+#: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:140
+#: ../../bluetooth/utils_notify.go:147
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:150
+#: ../../bluetooth/utils_notify.go:157
 msgid "Pair"
 msgstr ""
 
-#: ../../calendar/job.go:514 ../../calendar/job.go:521
+#: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
 msgstr "hari ini"
 
-#: ../../calendar/job.go:516 ../../calendar/job.go:523
+#: ../../calendar/job.go:511 ../../calendar/job.go:518
 msgid "tomorrow"
 msgstr "semalam"
 
-#: ../../calendar/job.go:536
+#: ../../calendar/job.go:531
 #, c-format
 msgid "%s to %s"
 msgstr "%s hingga %s"
@@ -183,24 +223,24 @@ msgstr "Lapang"
 msgid "Other"
 msgstr "Lain-lain"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:588
 msgid "One day before start"
 msgstr "Satu hari sebelum mula"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:589 ../../calendar/scheduler.go:594
+#: ../../calendar/scheduler.go:602 ../../calendar/scheduler.go:606
 msgid "Close"
 msgstr "Tutup"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:593
 msgid "Remind me tomorrow"
 msgstr "Ingatkan saya esok hari"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:601
 msgid "Remind me later"
 msgstr "Ingatkan saya kemudian"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:611
 msgid "Schedule Reminder"
 msgstr "Peringatan Berjadual"
 
@@ -220,15 +260,15 @@ msgstr "Tutup Semua"
 msgid "Force Quit"
 msgstr "Paksa Keluar"
 
-#: ../../dock/app_entry_menu.go:132
+#: ../../dock/app_entry_menu.go:135
 msgid "Dock"
 msgstr "Labuh"
 
-#: ../../dock/app_entry_menu.go:139
+#: ../../dock/app_entry_menu.go:145
 msgid "Undock"
 msgstr "Nyahlabuh"
 
-#: ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:155
 msgid "All Windows"
 msgstr "Semua Tetingkap"
 
@@ -420,7 +460,7 @@ msgstr "Papar ruang kerja"
 msgid "Switch monitors"
 msgstr ""
 
-#: ../../langselector/locale.go:63
+#: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
 msgstr "Pengesahihan diperlukan untuk mengubah bahasa"
 
@@ -440,58 +480,46 @@ msgstr "Mengubah bahasa sistem, tunggu sebentar..."
 msgid "System language changed, please log out and then log in"
 msgstr "Bahasa sistem telah diubah, sila daftar keluar kemudian daftar masuk"
 
-#: ../../langselector/locale.go:403
+#: ../../langselector/locale.go:402
 msgid "Failed to change system language, please try later"
 msgstr "Gagal mengubah bahasa sistem, sila cuba lagi kemudian..."
 
-#: ../../lastore/lastore.go:248
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Cuba lagi"
 
-#: ../../lastore/lastore.go:256
-msgid "Cancel"
-msgstr "Batal"
-
-#: ../../lastore/lastore.go:270
+#: ../../lastore/lastore.go:269
 msgid "Update Now"
 msgstr "Kemaskini Sekarang"
 
-#: ../../lastore/notify.go:97
+#: ../../lastore/notify.go:96
 msgid "%q installed successfully."
 msgstr "%q berjaya dipasangkan."
 
-#: ../../lastore/notify.go:100
+#: ../../lastore/notify.go:99
 msgid "%q failed to install."
 msgstr "%q gagal dipasangkan."
 
-#: ../../lastore/notify.go:108
+#: ../../lastore/notify.go:107
 msgid "Removed successfully"
 msgstr ""
 
-#: ../../lastore/notify.go:110
+#: ../../lastore/notify.go:109
 msgid "Failed to remove the app"
 msgstr ""
 
-#: ../../lastore/notify.go:117
+#: ../../lastore/notify.go:116
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr ""
 "Untuk menghindari komputer dimatikan secara automatik, sila palamkan bagi "
 "kemaskini biasa."
 
-#: ../../lastore/notify.go:122
+#: ../../lastore/notify.go:121
 msgid "Package cache wiped"
 msgstr "Cache pakej disapu bersih"
 
-#: ../../lastore/notify.go:127
-msgid ""
-"Your system source has been modified, please restore to official source for "
-"your normal use"
-msgstr ""
-"Sumber sistem anda telah diubahsuai, sila pulihkan dengan sumber rasmi untuk"
-" kegunaan biasa anda"
-
-#: ../../lastore/notify.go:132
+#: ../../lastore/notify.go:126
 msgid "New system edition available"
 msgstr "Edisi sistem baharu telah tersedia"
 
@@ -503,517 +531,469 @@ msgstr "%q berjaya dibuang"
 msgid "Failed to uninstall %q"
 msgstr "Gagal menyahpasang %q"
 
-#: ../../network/manager_active_conn.go:351
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:362
+#: ../../network/manager_active_conn.go:367
 msgid "None"
 msgstr "Tiada"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:369
 msgid "WEP 40/128-bit Key"
 msgstr "Kunci WEP 40/128-bit"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:371
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Persendirian"
 
-#: ../../network/manager_active_conn.go:368
+#: ../../network/manager_active_conn.go:379
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:370
+#: ../../network/manager_active_conn.go:381
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:372
+#: ../../network/manager_active_conn.go:383
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:374
+#: ../../network/manager_active_conn.go:385
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:376
+#: ../../network/manager_active_conn.go:387
 msgid "Tunneled TLS"
 msgstr "TLS Berterowong"
 
-#: ../../network/manager_active_conn.go:378
+#: ../../network/manager_active_conn.go:389
 msgid "Protected EAP"
 msgstr "EAP Terlindung"
 
-#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:334
 msgid "Wired Connection"
 msgstr "Sambungan Berwayar"
 
-#: ../../network/nm_custom_type.go:223
-msgid "Connection"
-msgstr "Sambungan"
+#: ../../network/proxychains/utils_notify.go:45
+msgid "Application proxy is set successfully"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:227
-msgid "Wireless Connection"
-msgstr "Sambungan Tanpa Wayar"
+#: ../../network/proxychains/utils_notify.go:45
+#: ../../network/proxychains/utils_notify.go:48
+#: ../../network/utils_notify.go:195 ../../network/utils_notify.go:199
+#: ../../network/utils_notify.go:202 ../../network/utils_notify.go:304
+msgid "Network"
+msgstr "Rangkaian"
 
-#: ../../network/nm_custom_type.go:229
-msgid "Wireless Ad-Hoc"
-msgstr "Ad-Hoc Tanpa Wayar"
+#: ../../network/proxychains/utils_notify.go:48
+msgid "Failed to set the application proxy"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr "Kawasan-Khas-AP Tanpa Wayar"
-
-#: ../../network/nm_custom_type.go:233
-msgid "PPPoE Connection"
-msgstr "Sambungan PPPoE"
-
-#: ../../network/nm_custom_type.go:235
-msgid "Mobile Connection"
-msgstr "Sambungan Mudah Alih"
-
-#: ../../network/nm_custom_type.go:237
-msgid "Mobile GSM Connection"
-msgstr "Sambungan GSM Mudah Alih"
-
-#: ../../network/nm_custom_type.go:239
-msgid "Mobile CDMA Connection"
-msgstr "Sambungan CDMA Mudah Alih"
-
-#: ../../network/nm_custom_type.go:241
-msgid "VPN Connection"
-msgstr "Sambungan VPN"
-
-#: ../../network/nm_custom_type.go:243
-msgid "VPN L2TP"
-msgstr "L2TP VPN"
-
-#: ../../network/nm_custom_type.go:245
-msgid "VPN OpenConnect"
-msgstr "OpenConnect VPN"
-
-#: ../../network/nm_custom_type.go:247
-msgid "VPN OpenVPN"
-msgstr "OpenVPN VPN"
-
-#: ../../network/nm_custom_type.go:249
-msgid "VPN PPTP"
-msgstr "PPTP VPN"
-
-#: ../../network/nm_custom_type.go:251
-msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
-
-#: ../../network/nm_custom_type.go:253
-msgid "VPN VPNC"
-msgstr "VPNC VPN"
-
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:38
 msgid "Device state changed"
 msgstr "Keadaan peranti berubah"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:39
 msgid "Device state changed, reason unknown"
 msgstr "Keadaan peranti berubah, sebab tidak diketahui"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:40
 msgid "The device is now managed"
 msgstr "Peranti kini diurus"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:41
 msgid "The device is no longer managed"
 msgstr "Peranti tidak lagi diurus"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:42
 msgid "The device has not been ready for configuration"
 msgstr "Peranti belum bersedia untuk konfigurasi"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:43
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
 "Konfigurasi IP tidak dapat disimpan (tiada alamat, had masa tamat, dan lain-"
 "lain)"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:44
 msgid "The IP configuration is no longer valid"
 msgstr "Konfigurasi IP tidak lagi sah"
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:45
 msgid "Passwords were required but not provided"
 msgstr "Kata laluan diperlukan tetapi tidak disediakan"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:46
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
 msgstr "Perayuan 802.1X terputus dari titik capaian atau pelayan pengesahihan"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:47
 msgid "Configuration of the 802.1X supplicant failed"
 msgstr "Konfigurasi perayuan 802.1X telah gagal"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:48
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
 msgstr "Perayuan 802.1X ditamatkan atau gagal dengan tidak dijangka"
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant took too long time to authenticate"
 msgstr "Perayuan 802.1X mengambil masa terlalu lama untuk disahihkan"
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:50
 msgid "The PPP service failed to start within the allowed time"
 msgstr "Perkhidmatan PPP gagal dimulakan dalam tempoh yang ditetapkan"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:51
 msgid "The PPP service disconnected unexpectedly"
 msgstr "Perkhidmatan PPP terputus dengan tidak dijangka"
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:52
 msgid "The PPP service quitted or failed unexpectedly"
 msgstr "Perkhidmatan PPP ditamatkan atau gagal dengan tidak dijangka"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:53
 msgid "The DHCP service failed to start within the allowed time"
 msgstr "Perkhidmatan DHCP gagal dimulakan dalam tempoh yang ditetapkan"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:54
 msgid "The DHCP service reported an unexpected error"
 msgstr "Perkhidmatan PPP melaporkan ralat tidak dijangka"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:55
 msgid "The DHCP service quitted or failed unexpectedly"
 msgstr "Perkhidmatan DHCP ditamatkan atau gagal dengan tidak dijangka"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:56
 msgid "The shared connection service failed to start"
 msgstr "Perkhidmatan sambungan terkongsi gagal dimulakan"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:57
 msgid "The shared connection service quitted or failed unexpectedly"
 msgstr ""
 "Perkhidmatan sambungan terkongsi ditamatkan atau gagal dengan tidak dijangka"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:58
 msgid "The AutoIP service failed to start"
 msgstr "Perkhidmatan AutoIP gagal dimulakan"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:59
 msgid "The AutoIP service reported an unexpected error"
 msgstr "Perkhidmatan AutoIP melaporkan ralat tidak dijangka"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:60
 msgid "The AutoIP service quitted or failed unexpectedly"
 msgstr "Perkhidmatan AutoIP ditamatkan atau gagal dengan tidak dijangka"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:61
 msgid "Dialing failed due to busy lines"
 msgstr "Pendailan gagal kerana talian sibuk"
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:62
 msgid "Dialing failed due to no dial tone"
 msgstr "Pendailan gagal kerana tiada nada dail"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:63
 msgid "Dialing failed due to the carrier"
 msgstr "Pendailan gagal disebabkan oleh penyedia"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:64
 msgid "Dialing timed out"
 msgstr "Pendailan telah tamat masa"
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:65
 msgid "Dialing failed"
 msgstr "Pendailan gagal"
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:66
 msgid "Modem initialization failed"
 msgstr "Pengawalan modem gagal"
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:67
 msgid "Failed to select the specified GSM APN"
 msgstr "Gagal memilih APN GSM yang dinyatakan"
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:68
 msgid "No networks searched"
 msgstr "Tiada rangkaian digelintar"
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:69
 msgid "Network registration was denied"
 msgstr "Pendaftaran rangkaian telah dinafikan"
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:70
 msgid "Network registration timed out"
 msgstr "Pendaftaran rangkaian telah tamat masa"
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:71
 msgid "Failed to register to the requested GSM network"
 msgstr "Pendaftaran ke rangkaian GSM yang dipinta telah gagal."
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:72
 msgid "PIN check failed"
 msgstr "Semakan PIN gagal"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:73
 msgid "Necessary firmware for the device may be missed"
 msgstr "Perisian tegar yang diperlukan oleh peranti telah hilang"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:74
 msgid "The device was removed"
 msgstr "Peranti telah dibuang"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:75
 msgid "NetworkManager went to sleep"
 msgstr "Pengurus Rangkaian telah tidur"
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:76
 msgid "The device's active connection was removed or disappeared"
 msgstr "Sambungan aktif peranti telah dibuang atau hilang"
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:77
 msgid "A user or client requested to disconnect"
 msgstr "Pengguna atau klien telah minta diputuskan"
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:78
 msgid "The device's carrier/link changed"
 msgstr "Talian/penyedia peranti telah berubah"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:79
 msgid "The device's existing connection was assumed"
 msgstr "Sambungan sedia ada peranti telah dijangka"
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:80
 msgid "The 802.1x supplicant is now available"
 msgstr "Perayuan 802.1X kini telah tersedia"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:81
 msgid "The modem could not be found"
 msgstr "Modem tidak ditemui"
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:82
 msgid "The Bluetooth connection timed out or failed"
 msgstr "Sambungan Bluetooth telah tamat masa atau gagal"
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:83
 msgid "GSM Modem's SIM Card was not inserted"
 msgstr "Kad SIM Modem GSM tidak dimasukkan"
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM PIN required"
 msgstr "PIN SIM Modem GSM diperlukan"
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PUK required"
 msgstr "PUK SIM Modem GSM diperlukan"
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:86
 msgid "SIM card error in GSM Modem"
 msgstr "Ralat kad SIM dalam Modem GSM"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:87
 msgid "InfiniBand device does not support connected mode"
 msgstr "Peranti InfiniBand tidak menyokong mod bersambung"
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:88
 msgid "A dependency of the connection failed"
 msgstr "Satu dependensi sambungan mengalami kegagalan"
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:89
 msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr "Ralat titian Ethernet RFC 2684 pada ADSL"
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:90
 msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "Pengurus Modem tidak dijalankan atau keluar tanpa dijangka"
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:91
 msgid "The 802.11 WLAN network could not be found"
 msgstr "Rangkaian WLAN 802.11 tidak ditemui"
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:92
 msgid "A secondary connection of the base connection failed"
 msgstr "Sambungan sekunder bagi sambungan dasar telah gagal"
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:95
 msgid "DCB or FCoE setup failed"
 msgstr "Persediaan DCB atay FCoE gagal"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:96
 msgid "Network teaming control failed"
 msgstr "Kawalan pasukan rangkaian telah gagal"
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:97
 msgid "Modem failed to run or not available"
 msgstr "Modem gagal dijalankan atau tidak tersedia"
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:98
 msgid "Modem now ready and available"
 msgstr "Modem kini tersedia"
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:99
 msgid "SIM PIN is incorrect"
 msgstr "PIN SIM adalah salah"
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:100
 msgid "New connection activation is enqueuing"
 msgstr "Pengaktifan sambungan baharu sedang dibaris gilirkan"
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:101
 msgid "Parent device changed"
 msgstr "Peranti induk berubah"
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:102
 msgid "Management status of parent device changed"
 msgstr "Status pengurusan peranti induk berubah"
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:105
 msgid "Network cable is unplugged"
 msgstr "Kabel rangkaian telah dicabut"
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:106
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
 "Sila pastikan kad SIM telah disisip dengan isyarat rangkaian mudah alih"
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:107
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
 "Sila pastikan plan yang betul telah dipilih tanpa menyusun semula kad SIM"
 
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:110
 msgid "Failed to activate VPN connection, reason unknown"
 msgstr "Gagal mengaktifkan sambungan VPN, sebab tidak diketahui"
 
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection"
 msgstr "Gagal mengaktifkan sambungan VPN"
 
-#: ../../network/state_handler.go:113
+#: ../../network/state_handler.go:112
 msgid "The VPN connection state changed due to being disconnected by users"
 msgstr ""
 "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan "
 "pengguna"
 
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:113
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
 msgstr ""
 "Keadaan sambungan VPN telah berubah kerana terputus sambungan dengan peranti"
 
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:114
 msgid "VPN service stopped"
 msgstr "Perkhidmatan VPN terhenti"
 
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:115
 msgid "The IP config of VPN connection was invalid"
 msgstr "Konfig IP bagi sambungan VPN tidah sah"
 
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:116
 msgid "The connection attempt to VPN service timed out"
 msgstr "Percubaan sambungan ke perkhidmatan VPN telah tamat masa"
 
-#: ../../network/state_handler.go:118
+#: ../../network/state_handler.go:117
 msgid "The VPN service start timed out"
 msgstr "Perkhidmatan memulakan VPN telah tamat masa"
 
-#: ../../network/state_handler.go:119
+#: ../../network/state_handler.go:118
 msgid "The VPN service failed to start"
 msgstr "Perkhidmatan VPN gagal dimulakan"
 
-#: ../../network/state_handler.go:120
+#: ../../network/state_handler.go:119
 msgid "The VPN connection password was not provided"
 msgstr "Kata laluan sambungan VPN tidak disediakan"
 
-#: ../../network/state_handler.go:121
+#: ../../network/state_handler.go:120
 msgid "Authentication to VPN server failed"
 msgstr "Pengesahihan ke pelayan VPN telah gagal"
 
-#: ../../network/state_handler.go:122
+#: ../../network/state_handler.go:121
 msgid "The connection was deleted from settings"
 msgstr "Sambungan telah dipadam dari tetapan"
 
-#: ../../network/state_handler.go:251
+#: ../../network/state_handler.go:250
 msgid "Enabling hotspot"
 msgstr "Membenarkan kawasan khas"
 
-#: ../../network/state_handler.go:253
+#: ../../network/state_handler.go:252
 msgid "Connecting %q"
 msgstr "Menyambungkan %q"
 
-#: ../../network/state_handler.go:261
+#: ../../network/state_handler.go:260
 msgid "Hotspot enabled"
 msgstr "Kawasan khas dibenarkan"
 
-#: ../../network/state_handler.go:263
+#: ../../network/state_handler.go:262
 msgid "%q connected"
 msgstr "%q bersambung"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:329
+#: ../../network/state_handler.go:279 ../../network/state_handler.go:334
 msgid "Hotspot disabled"
 msgstr "Kawasan khas dilumpuhkan"
 
-#: ../../network/state_handler.go:331 ../../network/state_handler.go:355
-msgid "%q disconnected"
-msgstr "%q terputus"
-
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:342
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "Tidak boleh berkongsi kawasan khas, sila periksa tetapan dnsmasq"
 
-#: ../../network/state_handler.go:339
+#: ../../network/state_handler.go:344
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Tidak boleh bersambung dengan %q, pastikan anda berhampiran dengan penghala "
 "tanpa wayar"
 
-#: ../../network/state_handler.go:341
+#: ../../network/state_handler.go:346
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "Tidak boleh bersambung dengan %q, sila periksa penghala atau kabel rangkaian"
 " anda."
 
-#: ../../network/state_handler.go:344
+#: ../../network/state_handler.go:349
 msgid "Password is required to connect %q"
 msgstr "Kata laluan diperlukan untuk bersambung dengan %q"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:352
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "Sambungan gagal, tidak dapat bersambung dengan %q, kata laluan salah"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:259
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
-#: ../../network/utils_notify.go:185
-msgid "You are now offline."
-msgstr "Anda kini berada diluar talian."
-
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:183
 msgid "Airplane mode enabled."
 msgstr "Mod kapal terbang dibenarkan."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:183 ../../network/utils_notify.go:187
+#: ../../network/utils_notify.go:191 ../../network/utils_notify.go:209
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:301
+msgid "Disconnected"
+msgstr "Terputus"
+
+#: ../../network/utils_notify.go:191
 msgid "Access Point mode is not supported by this device."
 msgstr "Mod Titik Capaian tidak disokong oleh peranti ini."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208
-msgid "Network"
-msgstr "Rangkaian"
-
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:195
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Suis perkakasan Kad WLAN dimatikan, sila hidupkan jika perlu."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:199
 msgid "System proxy is set successfully."
 msgstr "Proksi sistem berjaya ditetapkan."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:202
 msgid "System proxy has been cancelled."
 msgstr "Proksi sistem dibatalkan."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:206
 msgid "Connected"
 msgstr "Bersambung"
+
+#: ../../network/utils_notify.go:304
+msgid "Portal network authentication successful"
+msgstr ""
 
 #: ../../service_trigger/msg.go:7
 #, c-format
@@ -1022,46 +1002,46 @@ msgstr ""
 "\"%s\" tidak melepasi pengesahan keselamatan sistem, dan kini tidak dapat "
 "dijalankan"
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:201
 msgid "Battery critically low"
 msgstr "Kuasa bateri sangat rendah"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:222
+#: ../../session/power/manager_events.go:227
+#: ../../session/power/manager_events.go:232
 msgid "Battery low, please plug in"
 msgstr "Kuasa bateri lemah, sila palamkan kuasa"
 
+#: ../../session/power/utils.go:349 ../../session/power/utils.go:353
 #: ../../session/power/utils.go:357 ../../session/power/utils.go:361
-#: ../../session/power/utils.go:365 ../../session/power/utils.go:369
 msgid "Power settings changed"
 msgstr ""
 
-#: ../../session/power/utils.go:384
+#: ../../session/power/utils.go:376
 msgid "When the lid is closed, "
 msgstr ""
 
-#: ../../session/power/utils.go:388
+#: ../../session/power/utils.go:380
 msgid "When pressing the power button, "
 msgstr ""
 
-#: ../../session/power/utils.go:398
+#: ../../session/power/utils.go:390
 msgid "your computer will shut down"
 msgstr ""
 
-#: ../../session/power/utils.go:400
+#: ../../session/power/utils.go:392
 msgid "your computer will suspend"
 msgstr ""
 
-#: ../../session/power/utils.go:402
+#: ../../session/power/utils.go:394
 msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:404
+#: ../../session/power/utils.go:396
 msgid "your monitor will turn off"
 msgstr ""
 
-#: ../../session/power/utils.go:406
+#: ../../session/power/utils.go:398
 msgid "it will do nothing to your computer"
 msgstr ""
 

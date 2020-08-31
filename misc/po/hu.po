@@ -19,17 +19,17 @@
 # Walton Henry <waltonh@mail.com>, 2020
 # hungi <lukacspeter1977@gmail.com>, 2020
 # e7b367b198a92ab3e6fd7f551a36a082, 2020
-# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Cindy0514, 2020
+# Maggie Liu <maggie.liufei@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 13:36+0800\n"
+"POT-Creation-Date: 2020-08-31 15:33+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Cindy0514, 2020\n"
+"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>, 2020\n"
 "Language-Team: Hungarian (https://www.transifex.com/linuxdeepin/teams/3617/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,23 +49,23 @@ msgstr ""
 "A jelszó nem tartalmazhat ékezeteket (de kis és nagy betűket igen), valamint"
 " számokat és speciális karaktereket (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/username.go:63
+#: ../../accounts/checkers/username.go:62
 msgid "Username cannot be empty"
 msgstr "A felhasználónév nem maradhat üres"
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be a letter or number"
 msgstr "Az első karakternek betűnek vagy számnak kell lennie"
 
-#: ../../accounts/checkers/username.go:70
+#: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
 msgstr "A felhasználónév már létezik"
 
-#: ../../accounts/checkers/username.go:72
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "Ez a felhasználónév már használatban van"
 
-#: ../../accounts/checkers/username.go:74
+#: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
 msgstr "A felhasználónév hosszának 3 és 32 karakter között kell lennie"
 
@@ -93,84 +93,92 @@ msgstr "Az ujjlenyomat-azonosítás sikertelen"
 msgid "Fingerprint verification timed out"
 msgstr "Az ujjlenyomat-azonosítás túllépte a megengedett időt"
 
-#: ../../bluetooth/bluez_profile.go:29
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Serial port"
 msgstr "Soros port"
 
-#: ../../bluetooth/bluez_profile.go:30
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Dial-Up networking"
 msgstr "Betárcsázós hálózat"
 
-#: ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free device"
 msgstr "Kihangosító"
 
-#: ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free voice gateway"
 msgstr "Kihangosító hang átjáró"
 
-#: ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Headset voice gateway"
 msgstr "Headset hang átjáró"
 
-#: ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Object push"
 msgstr "Elem küldés"
 
-#: ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:36
 msgid "File transfer"
 msgstr "Fájlküldés"
 
-#: ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:37
 msgid "Synchronization"
 msgstr "Szinkronizálás "
 
-#: ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access"
 msgstr "Telefonkönyv hozzáférés"
 
-#: ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access client"
 msgstr "Telefonkönyv-kliens"
 
-#: ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Message access"
 msgstr "Üzenet hozzáférés"
 
-#: ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message notification"
 msgstr "Üzenet értesítés"
 
-#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: ../../bluetooth/obex_agent.go:321
+#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:339
+#: ../../bluetooth/obex_agent.go:344
+msgid "View"
+msgstr "Megtekintés"
+
+#: ../../bluetooth/obex_agent.go:351
+msgid "Done"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
 msgid "File Transfer Failed"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:340
+#: ../../bluetooth/obex_agent.go:370
 msgid "The Bluetooth device is disconnected, please have a check"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
+#: ../../bluetooth/obex_agent.go:399
 msgid "Decline"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
+#: ../../bluetooth/obex_agent.go:399
 msgid "Receive"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:374
+#: ../../bluetooth/obex_agent.go:404
 msgid "Bluetooth File Transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:375
+#: ../../bluetooth/obex_agent.go:405
 #, c-format
 msgid "%s"
 msgstr ""
@@ -179,8 +187,8 @@ msgstr ""
 msgid "Connect %q successfully"
 msgstr "%q csatlakoztatása sikeres"
 
-#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
-#: ../../network/state_handler.go:362
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:336
+#: ../../network/state_handler.go:361
 msgid "%q disconnected"
 msgstr "%q szétkapcsolva"
 
@@ -192,27 +200,27 @@ msgstr "Ellenőrizd, hogy a %q be van e kapcsolva és hatótávolságon belül v
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth kapcsolódás sikertelen"
 
-#: ../../bluetooth/utils_notify.go:141
+#: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:142
+#: ../../bluetooth/utils_notify.go:147
 msgid "Add Bluetooth devices"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:152
+#: ../../bluetooth/utils_notify.go:157
 msgid "Pair"
 msgstr ""
 
-#: ../../calendar/job.go:510 ../../calendar/job.go:517
+#: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
 msgstr "ma"
 
-#: ../../calendar/job.go:512 ../../calendar/job.go:519
+#: ../../calendar/job.go:511 ../../calendar/job.go:518
 msgid "tomorrow"
 msgstr "holnap"
 
-#: ../../calendar/job.go:532
+#: ../../calendar/job.go:531
 #, c-format
 msgid "%s to %s"
 msgstr "%s és %s között"
@@ -229,24 +237,24 @@ msgstr "Magánélet"
 msgid "Other"
 msgstr "Egyéb"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:588
 msgid "One day before start"
 msgstr "Egy nappal kezdés előtt"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:589 ../../calendar/scheduler.go:594
+#: ../../calendar/scheduler.go:602 ../../calendar/scheduler.go:606
 msgid "Close"
 msgstr "Bezárás"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:593
 msgid "Remind me tomorrow"
 msgstr "Emlékeztetés holnap"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:601
 msgid "Remind me later"
 msgstr "Emlékeztetés később"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:611
 msgid "Schedule Reminder"
 msgstr "Ütemezési emlékeztető"
 
@@ -266,15 +274,15 @@ msgstr "Összes bezárása"
 msgid "Force Quit"
 msgstr "Kényszerített kilépés"
 
-#: ../../dock/app_entry_menu.go:132
+#: ../../dock/app_entry_menu.go:135
 msgid "Dock"
 msgstr "Kitűzés a Dokkra"
 
-#: ../../dock/app_entry_menu.go:139
+#: ../../dock/app_entry_menu.go:145
 msgid "Undock"
 msgstr "Eltávolítás a Dokkról"
 
-#: ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:155
 msgid "All Windows"
 msgstr "Összes ablak"
 
@@ -466,7 +474,7 @@ msgstr "Munkaterület  megjelenítése"
 msgid "Switch monitors"
 msgstr ""
 
-#: ../../langselector/locale.go:63
+#: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
 msgstr "Hitelesítés szükség a nyelvi beállítások módosításához"
 
@@ -486,54 +494,46 @@ msgstr "Rendszer nyelv váltása, kérlek várj..."
 msgid "System language changed, please log out and then log in"
 msgstr "Rendszer nyelv váltása megtörtént, kérlek jelentkezz ki majd be"
 
-#: ../../langselector/locale.go:403
+#: ../../langselector/locale.go:402
 msgid "Failed to change system language, please try later"
 msgstr "A rendszer nyelv váltása sikertelen volt, próbáld meg később"
 
-#: ../../lastore/lastore.go:248
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "Újra"
 
-#: ../../lastore/lastore.go:270
+#: ../../lastore/lastore.go:269
 msgid "Update Now"
 msgstr "Frissítés most"
 
-#: ../../lastore/notify.go:97
+#: ../../lastore/notify.go:96
 msgid "%q installed successfully."
 msgstr "%q sikeresen telepítve."
 
-#: ../../lastore/notify.go:100
+#: ../../lastore/notify.go:99
 msgid "%q failed to install."
 msgstr "%q telepítése nem sikerült."
 
-#: ../../lastore/notify.go:108
+#: ../../lastore/notify.go:107
 msgid "Removed successfully"
 msgstr ""
 
-#: ../../lastore/notify.go:110
+#: ../../lastore/notify.go:109
 msgid "Failed to remove the app"
 msgstr ""
 
-#: ../../lastore/notify.go:117
+#: ../../lastore/notify.go:116
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr ""
 "Az automatikus kikapcsolás megelőzése érdekében csatlakoztasd az eszközt az "
 "áramforráshoz."
 
-#: ../../lastore/notify.go:122
+#: ../../lastore/notify.go:121
 msgid "Package cache wiped"
 msgstr "A gyorsítótár kiürítve"
 
-#: ../../lastore/notify.go:127
-msgid ""
-"Your system source has been modified, please restore to official source for "
-"your normal use"
-msgstr ""
-"A rendszer forrástárolója meg lett változtatva, állítsd vissza a hivatalos "
-"forrástárolót a megfelelő működés érdekében"
-
-#: ../../lastore/notify.go:132
+#: ../../lastore/notify.go:126
 msgid "New system edition available"
 msgstr "Új rendszer verzió érhető el"
 
@@ -545,143 +545,98 @@ msgstr "%q sikeresen eltávolítva"
 msgid "Failed to uninstall %q"
 msgstr "%q eltávolítása sikertelen"
 
-#: ../../network/manager_active_conn.go:351
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:362
+#: ../../network/manager_active_conn.go:367
 msgid "None"
 msgstr "Nincs"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:369
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128 bites kulcs"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:371
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Személyes"
 
-#: ../../network/manager_active_conn.go:368
+#: ../../network/manager_active_conn.go:379
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:370
+#: ../../network/manager_active_conn.go:381
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:372
+#: ../../network/manager_active_conn.go:383
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:374
+#: ../../network/manager_active_conn.go:385
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:376
+#: ../../network/manager_active_conn.go:387
 msgid "Tunneled TLS"
 msgstr "Elrejtett TLS"
 
-#: ../../network/manager_active_conn.go:378
+#: ../../network/manager_active_conn.go:389
 msgid "Protected EAP"
 msgstr "Protected EAP"
 
-#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:334
 msgid "Wired Connection"
 msgstr "Vezetékes kapcsolat"
 
-#: ../../network/nm_custom_type.go:223
-msgid "Connection"
-msgstr "Kapcsolat"
+#: ../../network/proxychains/utils_notify.go:45
+msgid "Application proxy is set successfully"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:227
-msgid "Wireless Connection"
-msgstr "Vezeték-nélküli kapcsolat"
+#: ../../network/proxychains/utils_notify.go:45
+#: ../../network/proxychains/utils_notify.go:48
+#: ../../network/utils_notify.go:195 ../../network/utils_notify.go:199
+#: ../../network/utils_notify.go:202 ../../network/utils_notify.go:304
+msgid "Network"
+msgstr "Hálózat"
 
-#: ../../network/nm_custom_type.go:229
-msgid "Wireless Ad-Hoc"
-msgstr "Központi vezérlés nélküli vezeték nélküli hálózat"
+#: ../../network/proxychains/utils_notify.go:48
+msgid "Failed to set the application proxy"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr "Vezeték nélküli Ap-Hotspot"
-
-#: ../../network/nm_custom_type.go:233
-msgid "PPPoE Connection"
-msgstr "PPPoE kapcsolat"
-
-#: ../../network/nm_custom_type.go:235
-msgid "Mobile Connection"
-msgstr "Mobil kapcsolat"
-
-#: ../../network/nm_custom_type.go:237
-msgid "Mobile GSM Connection"
-msgstr "Mobil GSM kapcsolat"
-
-#: ../../network/nm_custom_type.go:239
-msgid "Mobile CDMA Connection"
-msgstr "Mobil CDMA Kapcsolat"
-
-#: ../../network/nm_custom_type.go:241
-msgid "VPN Connection"
-msgstr "VPN Kapcsolat"
-
-#: ../../network/nm_custom_type.go:243
-msgid "VPN L2TP"
-msgstr "VPN L2TP"
-
-#: ../../network/nm_custom_type.go:245
-msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
-
-#: ../../network/nm_custom_type.go:247
-msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
-
-#: ../../network/nm_custom_type.go:249
-msgid "VPN PPTP"
-msgstr "VPN PPTP"
-
-#: ../../network/nm_custom_type.go:251
-msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
-
-#: ../../network/nm_custom_type.go:253
-msgid "VPN VPNC"
-msgstr "VPN VPNC"
-
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:38
 msgid "Device state changed"
 msgstr "Az eszköz állapota megváltozott"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:39
 msgid "Device state changed, reason unknown"
 msgstr "Eszközállapot megváltozott, az oka ismeretlen"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:40
 msgid "The device is now managed"
 msgstr "Az eszköz menedzselt"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:41
 msgid "The device is no longer managed"
 msgstr "Az eszköz nem menedzselt"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:42
 msgid "The device has not been ready for configuration"
 msgstr "Az eszköz nem áll készen a konfigurálásra"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:43
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
 "IP konfiguráció lefoglalása sikertelen (nincs rendelkezésre álló cím, "
 "időtúllépés, stb)"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:44
 msgid "The IP configuration is no longer valid"
 msgstr "Az IP konfiguráció többé nem érvényes "
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:45
 msgid "Passwords were required but not provided"
 msgstr "Jelszó megadása szükséges"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:46
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
@@ -689,388 +644,378 @@ msgstr ""
 "A 802.1X hitelesítendő fél lecsatlakozott a hozzáférési pontról vagy a "
 "hitelesítő szerverről"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:47
 msgid "Configuration of the 802.1X supplicant failed"
 msgstr "A 802.1X hitelesítendő fél konfigurálása sikertelen"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:48
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
 msgstr "A 802.1X hitelesítendő fél kilépett vagy váratlanul leállt"
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant took too long time to authenticate"
 msgstr "A 802.1X hitelesítendő fél hitelesítés időtúllépés miatt sikertelen"
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:50
 msgid "The PPP service failed to start within the allowed time"
 msgstr "A PPP szolgáltatás nem indult el a megengedett időn belül"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:51
 msgid "The PPP service disconnected unexpectedly"
 msgstr "A PPP szolgáltatás váratlanul megszakadt"
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:52
 msgid "The PPP service quitted or failed unexpectedly"
 msgstr "A PPP szolgáltatás leállításra került vagy váratlanul leállt"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:53
 msgid "The DHCP service failed to start within the allowed time"
 msgstr "A DHCP szolgáltatás nem indult el a megengedett időn belül"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:54
 msgid "The DHCP service reported an unexpected error"
 msgstr "A DHCP szolgáltatás egy váratlan hibát jelzett"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:55
 msgid "The DHCP service quitted or failed unexpectedly"
 msgstr "A DHCP szolgáltatás leállításra került vagy váratlanul leállt"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:56
 msgid "The shared connection service failed to start"
 msgstr "A megosztott kapcsolat szolgáltatás elindítása sikertelen"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:57
 msgid "The shared connection service quitted or failed unexpectedly"
 msgstr ""
 "A megosztott kapcsolat szolgáltatás leállításra került vagy váratlanul "
 "leállt"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:58
 msgid "The AutoIP service failed to start"
 msgstr "Az AutoIP szolgáltatás elindítása sikertelen"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:59
 msgid "The AutoIP service reported an unexpected error"
 msgstr "Az AutoIP szolgáltatás egy váratlan hibát jelzett"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:60
 msgid "The AutoIP service quitted or failed unexpectedly"
 msgstr "Az AutoIP szolgáltatás leállításra került vagy váratlanul leállt"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:61
 msgid "Dialing failed due to busy lines"
 msgstr "A betárcsázás a foglalt vonal miatt sikertelen"
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:62
 msgid "Dialing failed due to no dial tone"
 msgstr "A betárcsázás a tárcsahang hiányában sikertelen"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:63
 msgid "Dialing failed due to the carrier"
 msgstr "A betárcsázás nem sikerült a fizikai adatszállító miatt"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:64
 msgid "Dialing timed out"
 msgstr "A betárcsázás időtúllépés miatt sikertelen"
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:65
 msgid "Dialing failed"
 msgstr "Betárcsázás sikertelen"
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:66
 msgid "Modem initialization failed"
 msgstr "Modem inicializálása sikertelen"
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:67
 msgid "Failed to select the specified GSM APN"
 msgstr "A megadott GSM APN kiválasztása sikertelen"
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:68
 msgid "No networks searched"
 msgstr "Nincs hálózat keresés"
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:69
 msgid "Network registration was denied"
 msgstr "Hálózat regisztráció elutasítva"
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:70
 msgid "Network registration timed out"
 msgstr "Hálózat regisztráció időtúllépés miatt sikertelen"
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:71
 msgid "Failed to register to the requested GSM network"
 msgstr "Sikertelen a regisztráció a kiválasztott GSM hálózaton"
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:72
 msgid "PIN check failed"
 msgstr "PIN ellenőrzése sikertelen"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:73
 msgid "Necessary firmware for the device may be missed"
 msgstr "Az eszközhöz szükséges firmware hiányozhat"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:74
 msgid "The device was removed"
 msgstr "Az eszköz eltávolítva"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:75
 msgid "NetworkManager went to sleep"
 msgstr "NetworkManager alvó állapotba került"
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:76
 msgid "The device's active connection was removed or disappeared"
 msgstr "Az eszköz aktív kapcsolata megszakadt vagy eltűnt"
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:77
 msgid "A user or client requested to disconnect"
 msgstr "A felhasználó vagy kliens kezdeményezte a kapcsolat bontását"
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:78
 msgid "The device's carrier/link changed"
 msgstr "Az eszköz fizikai adatszállítója/lánca megváltozott"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:79
 msgid "The device's existing connection was assumed"
 msgstr "Az eszköz létező kapcsolata feltételezett"
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:80
 msgid "The 802.1x supplicant is now available"
 msgstr "A 802.1X hitelesítendő fél elérhető"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:81
 msgid "The modem could not be found"
 msgstr "A modem nem található"
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:82
 msgid "The Bluetooth connection timed out or failed"
 msgstr "A Bluetooth kapcsolat időtúllépés vagy más miatt sikertelen"
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:83
 msgid "GSM Modem's SIM Card was not inserted"
 msgstr "GSM modem SIM kártyája nincs behelyezve"
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM PIN required"
 msgstr "GSM modem SIM PIN szükséges"
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PUK required"
 msgstr "GSM modem SIM PUK szükséges"
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:86
 msgid "SIM card error in GSM Modem"
 msgstr "SIM kártya hiba a GSM Modemben"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:87
 msgid "InfiniBand device does not support connected mode"
 msgstr "InfiniBand eszköz nem támogatja a kapcsolódott módot"
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:88
 msgid "A dependency of the connection failed"
 msgstr "Nem sikerült a kapcsolatot létrehozni"
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:89
 msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr "RFC 2684 Ethernet bridgelési hiba az ADSL-hez"
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:90
 msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "ModemManager nem futott vagy váratlanul leállt"
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:91
 msgid "The 802.11 WLAN network could not be found"
 msgstr ""
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:92
 msgid "A secondary connection of the base connection failed"
 msgstr "Az alapkapcsolat egy másodlagos kapcsolata sikertelen"
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:95
 msgid "DCB or FCoE setup failed"
 msgstr "DCB vagy FCoE telepítése sikertelen"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:96
 msgid "Network teaming control failed"
 msgstr "Hálózati csoportosítás irányítás sikertelen"
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:97
 msgid "Modem failed to run or not available"
 msgstr "Modem nem futott vagy nem elérhető"
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:98
 msgid "Modem now ready and available"
 msgstr "Modem készen áll és elérhető"
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:99
 msgid "SIM PIN is incorrect"
 msgstr "SIM PIN helytelen"
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:100
 msgid "New connection activation is enqueuing"
 msgstr "Új kapcsolat aktiválása sorban áll"
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:101
 msgid "Parent device changed"
 msgstr "Szülőeszköz megváltozott"
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:102
 msgid "Management status of parent device changed"
 msgstr "A szülőeszköz menedzsment állapota megváltozott"
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:105
 msgid "Network cable is unplugged"
 msgstr "Hálózati kábel nincs bedugva"
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:106
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
 "Kérem ellenőrizze, hogy a SIM kártya mobil hálózati jellel lett behelyezve"
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:107
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
 "Kérem ellenőrizze, hogy egy megfelelő csomag ki lett választva a SIM kártya "
 "hátraléka nélkül"
 
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:110
 msgid "Failed to activate VPN connection, reason unknown"
 msgstr "A VPN kapcsolat sikertelen, oka ismeretlen"
 
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection"
 msgstr "A VPN kapcsolat sikertelen"
 
-#: ../../network/state_handler.go:113
+#: ../../network/state_handler.go:112
 msgid "The VPN connection state changed due to being disconnected by users"
 msgstr ""
 "A VPN kapcsolat állapota megváltozott, mert a kapcsolatot a felhasználó "
 "bezárta"
 
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:113
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
 msgstr ""
 "A VPN kapcsolat állapota megváltozott, mert a kapcsolat az eszközzel "
 "megszakadt"
 
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:114
 msgid "VPN service stopped"
 msgstr "VPN szolgáltatás leállt"
 
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:115
 msgid "The IP config of VPN connection was invalid"
 msgstr "A VPN kapcsolat IP konfigurációja érvénytelen"
 
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:116
 msgid "The connection attempt to VPN service timed out"
 msgstr ""
 "A VPN szolgáltatáshoz való csatlakozási kísérlet időtúllépés miatt "
 "sikertelen"
 
-#: ../../network/state_handler.go:118
+#: ../../network/state_handler.go:117
 msgid "The VPN service start timed out"
 msgstr "A VPN szolgáltatás indítása időtúllépés miatt sikertelen"
 
-#: ../../network/state_handler.go:119
+#: ../../network/state_handler.go:118
 msgid "The VPN service failed to start"
 msgstr "A VPN szolgáltatás elindítása sikertelen"
 
-#: ../../network/state_handler.go:120
+#: ../../network/state_handler.go:119
 msgid "The VPN connection password was not provided"
 msgstr "A VPN kapcsolat jelszava nincs megadva"
 
-#: ../../network/state_handler.go:121
+#: ../../network/state_handler.go:120
 msgid "Authentication to VPN server failed"
 msgstr "Hitelesítés a VPN szerverhez sikertelen"
 
-#: ../../network/state_handler.go:122
+#: ../../network/state_handler.go:121
 msgid "The connection was deleted from settings"
 msgstr "A kapcsolat eltávolításra került a beállításokból"
 
-#: ../../network/state_handler.go:251
+#: ../../network/state_handler.go:250
 msgid "Enabling hotspot"
 msgstr "Hotspot engedélyezése"
 
-#: ../../network/state_handler.go:253
+#: ../../network/state_handler.go:252
 msgid "Connecting %q"
 msgstr "Csatlakozás %q"
 
-#: ../../network/state_handler.go:261
+#: ../../network/state_handler.go:260
 msgid "Hotspot enabled"
 msgstr "Hotspot bekapcsolva"
 
-#: ../../network/state_handler.go:263
+#: ../../network/state_handler.go:262
 msgid "%q connected"
 msgstr "%q kapcsolódva"
 
-#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
+#: ../../network/state_handler.go:279 ../../network/state_handler.go:334
 msgid "Hotspot disabled"
 msgstr "Hotspot kikapcsolva"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:342
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
 "Nem sikerült a hotspot megosztás, kérjük, ellenőrizze a netmasztk beállítást"
 
-#: ../../network/state_handler.go:345
+#: ../../network/state_handler.go:344
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "Nem sikerült csatlakozni %q -hoz, próbáljon meg a router hatótávolságán "
 "belül kapcsolódni."
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:346
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "Csatlakozás sikertelen %q, kérem ellenőrizze a routert és a LAN-kábelt."
 
-#: ../../network/state_handler.go:350
+#: ../../network/state_handler.go:349
 msgid "Password is required to connect %q"
 msgstr "Jelszó szükéges a csatlakozáshoz %q"
 
-#: ../../network/state_handler.go:353
+#: ../../network/state_handler.go:352
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr ""
 "Nem sikerült csatlakoztatni a %q -hoz, kérem ellenőrizze a beírt jelszót."
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:259
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
-#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
-#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
-#: ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "Szétkapcsolva"
-
-#: ../../network/utils_notify.go:185
-msgid "You are now offline."
-msgstr "Kapcsolat bontásra került."
-
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:183
 msgid "Airplane mode enabled."
 msgstr "Repülési üzemmód engedélyezve. "
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:183 ../../network/utils_notify.go:187
+#: ../../network/utils_notify.go:191 ../../network/utils_notify.go:209
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:301
+msgid "Disconnected"
+msgstr "Szétkapcsolva"
+
+#: ../../network/utils_notify.go:191
 msgid "Access Point mode is not supported by this device."
 msgstr "A hozzáférési pont módot nem támogatja az eszköz. "
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
-msgid "Network"
-msgstr "Hálózat"
-
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:195
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 "A számítógépen ki van kapcsolva a vezeték nélküli adapter. Kapcsoljuk be ha "
 "szükséges."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:199
 msgid "System proxy is set successfully."
 msgstr "Rendszer Proxy sikeresen beállítva."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:202
 msgid "System proxy has been cancelled."
 msgstr "Rendszer Proxy leállítva."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:206
 msgid "Connected"
 msgstr "Kapcsolódva"
 
-#: ../../network/utils_notify.go:310
+#: ../../network/utils_notify.go:304
 msgid "Portal network authentication successful"
 msgstr ""
 
@@ -1081,46 +1026,46 @@ msgstr ""
 "\"%s\" nem felelt meg a a rendszerbiztonsági ellenőrzésnek és jelenleg nem "
 "futtatható"
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:201
 msgid "Battery critically low"
 msgstr "Az akkumlátor töltöttsége kritikusan alacsony"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:222
+#: ../../session/power/manager_events.go:227
+#: ../../session/power/manager_events.go:232
 msgid "Battery low, please plug in"
 msgstr "Akkutöltöttség alacsony, kérem csatlakoztassa a töltőt"
 
-#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
-#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
+#: ../../session/power/utils.go:349 ../../session/power/utils.go:353
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
 msgid "Power settings changed"
 msgstr ""
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:376
 msgid "When the lid is closed, "
 msgstr ""
 
-#: ../../session/power/utils.go:391
+#: ../../session/power/utils.go:380
 msgid "When pressing the power button, "
 msgstr ""
 
-#: ../../session/power/utils.go:401
+#: ../../session/power/utils.go:390
 msgid "your computer will shut down"
 msgstr ""
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:392
 msgid "your computer will suspend"
 msgstr ""
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:394
 msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:407
+#: ../../session/power/utils.go:396
 msgid "your monitor will turn off"
 msgstr ""
 
-#: ../../session/power/utils.go:409
+#: ../../session/power/utils.go:398
 msgid "it will do nothing to your computer"
 msgstr ""
 

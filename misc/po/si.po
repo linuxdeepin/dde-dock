@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 13:36+0800\n"
+"POT-Creation-Date: 2020-08-31 15:33+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Roshan Karunarathna <rkvisit@gmail.com>, 2020\n"
 "Language-Team: Sinhala (https://www.transifex.com/linuxdeepin/teams/3617/si/)\n"
@@ -34,23 +34,23 @@ msgstr ""
 "මුරපදයේ ඉංග්‍රීසි අකුරු (සිද්ධි සංවේදී), අංක හෝ විශේෂ සංකේත "
 "(~!@#$%^&*()[]{}\\|/?,.<>) අඩංගු විය යුතුය."
 
-#: ../../accounts/checkers/username.go:63
+#: ../../accounts/checkers/username.go:62
 msgid "Username cannot be empty"
 msgstr "පරිශීලක නාමය හිස් විය නොහැක"
 
-#: ../../accounts/checkers/username.go:68
+#: ../../accounts/checkers/username.go:67
 msgid "The first character must be a letter or number"
 msgstr "පළමු අක්‍ෂරය අකුරක් හෝ අංකයක් විය යුතුය"
 
-#: ../../accounts/checkers/username.go:70
+#: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
 msgstr "පරිශීලක නාමය දැනටමත් පවතී"
 
-#: ../../accounts/checkers/username.go:72
+#: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
 msgstr "පරිශීලක නාමය පද්ධතිය විසින් භාවිතා කර ඇත"
 
-#: ../../accounts/checkers/username.go:74
+#: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
 msgstr "පරිශීලක නාමය අක්ෂර 3 ත් 32 ත් අතර විය යුතුය"
 
@@ -78,84 +78,92 @@ msgstr "ඇඟිලි සලකුණු සත්‍යාපනය අසා
 msgid "Fingerprint verification timed out"
 msgstr "ඇඟිලි සලකුණු සත්‍යාපනය කල් ඉකුත් විය"
 
-#: ../../bluetooth/bluez_profile.go:29
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Serial port"
 msgstr "ශ්‍රේණිගත කෙවෙනිය - Serial port"
 
-#: ../../bluetooth/bluez_profile.go:30
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Dial-Up networking"
 msgstr "Dial-Up ජාලකරණය"
 
-#: ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free device"
 msgstr "ඇල්ලීමෙන් තොර- Hands-Free උපාංගය"
 
-#: ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free voice gateway"
 msgstr "ඇල්ලීමෙන් තොර- Hands-Free හඬ ද්වාරය"
 
-#: ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Headset voice gateway"
 msgstr "හිස මත දරන-headset හඬ ද්වාරය"
 
-#: ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Object push"
 msgstr "වස්තු තල්ලු කරන්න"
 
-#: ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:36
 msgid "File transfer"
 msgstr "ගොනු හුවමාරුව"
 
-#: ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:37
 msgid "Synchronization"
 msgstr "සමමුහුර්තකරණය"
 
-#: ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access"
 msgstr "දුරකථන අංක ප්‍රවේශය"
 
-#: ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access client"
 msgstr "දුරකථන අංක ප්‍රවේශ සේවාදායකයා"
 
-#: ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Message access"
 msgstr "පණිවිඩ ප්‍රවේශය"
 
-#: ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message notification"
 msgstr "පණිවිඩ දැනුම්දීම්"
 
-#: ../../bluetooth/obex_agent.go:312 ../../lastore/lastore.go:256
+#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "අවලංගු කරන්න"
 
-#: ../../bluetooth/obex_agent.go:321
+#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:339
+#: ../../bluetooth/obex_agent.go:344
+msgid "View"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:351
+msgid "Done"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:369
 msgid "File Transfer Failed"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:340
+#: ../../bluetooth/obex_agent.go:370
 msgid "The Bluetooth device is disconnected, please have a check"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
+#: ../../bluetooth/obex_agent.go:399
 msgid "Decline"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
+#: ../../bluetooth/obex_agent.go:399
 msgid "Receive"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:374
+#: ../../bluetooth/obex_agent.go:404
 msgid "Bluetooth File Transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:375
+#: ../../bluetooth/obex_agent.go:405
 #, c-format
 msgid "%s"
 msgstr ""
@@ -164,8 +172,8 @@ msgstr ""
 msgid "Connect %q successfully"
 msgstr "%q සාර්ථකව සම්බන්ධ කර ඇත."
 
-#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:337
-#: ../../network/state_handler.go:362
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:336
+#: ../../network/state_handler.go:361
 msgid "%q disconnected"
 msgstr "%q විසන්ධි විය"
 
@@ -177,27 +185,27 @@ msgstr "%q සක්‍රිය බව සහ පරාසය තුළ ඇත�
 msgid "Bluetooth connection failed"
 msgstr "බ්ලූටූත් සම්බන්ධතාවය අසාර්ථක විය"
 
-#: ../../bluetooth/utils_notify.go:141
+#: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
 msgstr "%q හා සම්බන්ධ වීමට මෙතන ක්ලික් කරන්න"
 
-#: ../../bluetooth/utils_notify.go:142
+#: ../../bluetooth/utils_notify.go:147
 msgid "Add Bluetooth devices"
 msgstr "බ්ලූටූත් උපාංග එක් කරන්න"
 
-#: ../../bluetooth/utils_notify.go:152
+#: ../../bluetooth/utils_notify.go:157
 msgid "Pair"
 msgstr "එකිනෙක සම්බන්ධ කරන්න"
 
-#: ../../calendar/job.go:510 ../../calendar/job.go:517
+#: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
 msgstr "අද"
 
-#: ../../calendar/job.go:512 ../../calendar/job.go:519
+#: ../../calendar/job.go:511 ../../calendar/job.go:518
 msgid "tomorrow"
 msgstr "හෙට"
 
-#: ../../calendar/job.go:532
+#: ../../calendar/job.go:531
 #, c-format
 msgid "%s to %s"
 msgstr "%s සිට %s දක්වා"
@@ -214,24 +222,24 @@ msgstr "ජීවිතය"
 msgid "Other"
 msgstr "වෙනත්"
 
-#: ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:588
 msgid "One day before start"
 msgstr "ආරම්භ කිරීමට ඇත්තේ එක් දිනක් පමණි"
 
-#: ../../calendar/scheduler.go:496 ../../calendar/scheduler.go:501
-#: ../../calendar/scheduler.go:509 ../../calendar/scheduler.go:513
+#: ../../calendar/scheduler.go:589 ../../calendar/scheduler.go:594
+#: ../../calendar/scheduler.go:602 ../../calendar/scheduler.go:606
 msgid "Close"
 msgstr "වසා දමන්න"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:593
 msgid "Remind me tomorrow"
 msgstr "මට හෙට මතක් කරන්න"
 
-#: ../../calendar/scheduler.go:508
+#: ../../calendar/scheduler.go:601
 msgid "Remind me later"
 msgstr "මට පසුව මතක් කරන්න"
 
-#: ../../calendar/scheduler.go:518
+#: ../../calendar/scheduler.go:611
 msgid "Schedule Reminder"
 msgstr "මතක් කිරීමක් සකසන්න"
 
@@ -251,15 +259,15 @@ msgstr "සියල්ල වසා දමන්න"
 msgid "Force Quit"
 msgstr "බලෙන් ඉවත් වන්න"
 
-#: ../../dock/app_entry_menu.go:132
+#: ../../dock/app_entry_menu.go:135
 msgid "Dock"
 msgstr "ඩොක් එක"
 
-#: ../../dock/app_entry_menu.go:139
+#: ../../dock/app_entry_menu.go:145
 msgid "Undock"
 msgstr "අහෝසි කරන්න"
 
-#: ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:155
 msgid "All Windows"
 msgstr "සියලුම කවුළු"
 
@@ -451,7 +459,7 @@ msgstr "වැඩ අවකාශය පෙන්වන්න"
 msgid "Switch monitors"
 msgstr ""
 
-#: ../../langselector/locale.go:63
+#: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
 msgstr "භාෂාව මාරු කිරීම සඳහා සත්‍යාපනය අවශ්‍ය වේ"
 
@@ -471,54 +479,46 @@ msgstr "පද්ධති භාෂාව වෙනස් කිරීම, ක�
 msgid "System language changed, please log out and then log in"
 msgstr "පද්ධති භාෂාව වෙනස් වී ඇත, කරුණාකර පද්ධතියෙන් ඉවත් වී නැවත ඇතුළු වන්න"
 
-#: ../../langselector/locale.go:403
+#: ../../langselector/locale.go:402
 msgid "Failed to change system language, please try later"
 msgstr "පද්ධති භාෂාව වෙනස් කිරීමට අපොහොසත් විය, කරුණාකර පසුව උත්සාහ කරන්න"
 
-#: ../../lastore/lastore.go:248
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "නැවත උත්සාහ කරන්න"
 
-#: ../../lastore/lastore.go:270
+#: ../../lastore/lastore.go:269
 msgid "Update Now"
 msgstr "දැන් යාවත්කාලීන කරන්න"
 
-#: ../../lastore/notify.go:97
+#: ../../lastore/notify.go:96
 msgid "%q installed successfully."
 msgstr "%q සාර්ථකව ස්ථාපනය කර ඇත."
 
-#: ../../lastore/notify.go:100
+#: ../../lastore/notify.go:99
 msgid "%q failed to install."
 msgstr "%q ස්ථාපනය කිරීමට අසමත් විය."
 
-#: ../../lastore/notify.go:108
+#: ../../lastore/notify.go:107
 msgid "Removed successfully"
 msgstr "සාර්ථකව ඉවත් කරන ලදි."
 
-#: ../../lastore/notify.go:110
+#: ../../lastore/notify.go:109
 msgid "Failed to remove the app"
 msgstr "යෙදවුම ඉවත් කිරීම අසාර්ථක විය."
 
-#: ../../lastore/notify.go:117
+#: ../../lastore/notify.go:116
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr ""
 "ස්වයංක්‍රීයව පද්ධතිය නැවතීම වැළැක්වීම සඳහා කරුණාකර සාමාන්‍ය යාවත්කාලීන "
 "කිරීමේදී විදුලි සැපයුම ලබා දෙන්න."
 
-#: ../../lastore/notify.go:122
+#: ../../lastore/notify.go:121
 msgid "Package cache wiped"
 msgstr "පැකේජ වාරක/කෑෂ් මතකය ඉවත් කරන ලදි"
 
-#: ../../lastore/notify.go:127
-msgid ""
-"Your system source has been modified, please restore to official source for "
-"your normal use"
-msgstr ""
-"ඔබේ පද්ධති ප්‍රභවය වෙනස් කර ඇත, කරුණාකර ඔබගේ සාමාන්‍ය භාවිතය සඳහා නිල "
-"ප්‍රභවයට නැවත පිහිටුවන්න"
-
-#: ../../lastore/notify.go:132
+#: ../../lastore/notify.go:126
 msgid "New system edition available"
 msgstr "නව පද්ධති සංස්කරණය ලබා ගත හැක"
 
@@ -530,521 +530,466 @@ msgstr "%q සාර්ථකව ඉවත් කර ඇත."
 msgid "Failed to uninstall %q"
 msgstr "%q අස්ථාපනය කිරීමට අසමත් විය."
 
-#: ../../network/manager_active_conn.go:351
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:362
+#: ../../network/manager_active_conn.go:367
 msgid "None"
 msgstr "කිසිවක් නැත"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:369
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit යතුර"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:371
 msgid "WPA/WPA2 Personal"
 msgstr "WPA / WPA2 පුද්ගලික"
 
-#: ../../network/manager_active_conn.go:368
+#: ../../network/manager_active_conn.go:379
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:370
+#: ../../network/manager_active_conn.go:381
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:372
+#: ../../network/manager_active_conn.go:383
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:374
+#: ../../network/manager_active_conn.go:385
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:376
+#: ../../network/manager_active_conn.go:387
 msgid "Tunneled TLS"
 msgstr "උමං TLS"
 
-#: ../../network/manager_active_conn.go:378
+#: ../../network/manager_active_conn.go:389
 msgid "Protected EAP"
 msgstr "ආරක්ෂිත EAP"
 
-#: ../../network/manager_connection.go:337 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:334
 msgid "Wired Connection"
 msgstr "රැහැන් සම්බන්ධතාවය"
 
-#: ../../network/nm_custom_type.go:223
-msgid "Connection"
-msgstr "සම්බන්ධතාවය"
+#: ../../network/proxychains/utils_notify.go:45
+msgid "Application proxy is set successfully"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:227
-msgid "Wireless Connection"
-msgstr "රැහැන් රහිත සම්බන්ධතාවය"
+#: ../../network/proxychains/utils_notify.go:45
+#: ../../network/proxychains/utils_notify.go:48
+#: ../../network/utils_notify.go:195 ../../network/utils_notify.go:199
+#: ../../network/utils_notify.go:202 ../../network/utils_notify.go:304
+msgid "Network"
+msgstr "ජාලය"
 
-#: ../../network/nm_custom_type.go:229
-msgid "Wireless Ad-Hoc"
-msgstr "රැහැන් රහිත Ad-Hoc"
+#: ../../network/proxychains/utils_notify.go:48
+msgid "Failed to set the application proxy"
+msgstr ""
 
-#: ../../network/nm_custom_type.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr "රැහැන් රහිත Ap-Hotspot"
-
-#: ../../network/nm_custom_type.go:233
-msgid "PPPoE Connection"
-msgstr "PPPoE සම්බන්ධතාවය"
-
-#: ../../network/nm_custom_type.go:235
-msgid "Mobile Connection"
-msgstr "ජංගම සම්බන්ධතාවය"
-
-#: ../../network/nm_custom_type.go:237
-msgid "Mobile GSM Connection"
-msgstr "ජංගම GSM සම්බන්ධතාවය"
-
-#: ../../network/nm_custom_type.go:239
-msgid "Mobile CDMA Connection"
-msgstr "ජංගම CDMA සම්බන්ධතාවය"
-
-#: ../../network/nm_custom_type.go:241
-msgid "VPN Connection"
-msgstr "VPN සම්බන්ධතාවය"
-
-#: ../../network/nm_custom_type.go:243
-msgid "VPN L2TP"
-msgstr "VPN L2TP"
-
-#: ../../network/nm_custom_type.go:245
-msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
-
-#: ../../network/nm_custom_type.go:247
-msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
-
-#: ../../network/nm_custom_type.go:249
-msgid "VPN PPTP"
-msgstr "VPN PPTP"
-
-#: ../../network/nm_custom_type.go:251
-msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
-
-#: ../../network/nm_custom_type.go:253
-msgid "VPN VPNC"
-msgstr "VPN VPNC"
-
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:38
 msgid "Device state changed"
 msgstr "උපාංග තත්වය වෙනස් විය"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:39
 msgid "Device state changed, reason unknown"
 msgstr "උපාංග තත්වය වෙනස් විය, හේතුව නොදන්නා කරුණකි"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:40
 msgid "The device is now managed"
 msgstr "උපාංගය දැන් කළමනාකරණය කර ඇත"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:41
 msgid "The device is no longer managed"
 msgstr "උපාංගය තවදුරටත් කළමනාකරණය නොවේ"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:42
 msgid "The device has not been ready for configuration"
 msgstr "උපාංගය සැකසුම් කිරීමට සූදානම් නැත"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:43
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
 "IP වින්‍යාසය වෙන් කරවා ගත නොහැක ( හේතු: ලබා ගත හැකි ලිපිනයක් නැත වීම, කල් "
 "ඉකුත් වීම ආදිය)"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:44
 msgid "The IP configuration is no longer valid"
 msgstr "IP වින්‍යාසය තවදුරටත් වලංගු නොවේ"
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:45
 msgid "Passwords were required but not provided"
 msgstr "මුරපද අත්‍යවශ්‍ය වන නමුත් ලබා දී නැත"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:46
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
 msgstr ""
 "802.1X ඉල්ලුම්කරු පිවිසුම් ස්ථානයෙන් හෝ සත්‍යාපන සේවාදායකයෙන් විසන්ධි කර ඇත"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:47
 msgid "Configuration of the 802.1X supplicant failed"
 msgstr "802.1X ඉල්ලුම්කරුගේ වින්‍යාසය අසාර්ථක විය"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:48
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
 msgstr "802.1X ඉල්ලුම්කරුගේ වින්‍යාසය අසාර්ථක විය"
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:49
 msgid "The 802.1X supplicant took too long time to authenticate"
 msgstr "802.1X ඉල්ලුම්කරු සත්‍යාපනය කිරීමට බොහෝ කාලයක් ගත් බව පෙනේ."
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:50
 msgid "The PPP service failed to start within the allowed time"
 msgstr "PPP සේවාව අවසර ලත් කාලය තුළ ආරම්භ වීමට අසමත් විය"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:51
 msgid "The PPP service disconnected unexpectedly"
 msgstr "PPP සේවාව අනපේක්ෂිත ලෙස විසන්ධි විය"
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:52
 msgid "The PPP service quitted or failed unexpectedly"
 msgstr "PPP සේවාව අනපේක්ෂිත ලෙස ඉවත් වීම හෝ ඇණහිටීම සිදුවී ඇත"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:53
 msgid "The DHCP service failed to start within the allowed time"
 msgstr "DHCP සේවාව අවසර ලත් කාලය තුළ ආරම්භ වීමට අසමත් විය"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:54
 msgid "The DHCP service reported an unexpected error"
 msgstr "DHCP සේවාව අනපේක්ෂිත දෝෂයක් වාර්තා කළේය"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:55
 msgid "The DHCP service quitted or failed unexpectedly"
 msgstr "DHCP සේවාව අනපේක්ෂිත ලෙස ඉවත් වීම හෝ ඇණහිටීම සිදුවී ඇත"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:56
 msgid "The shared connection service failed to start"
 msgstr "හවුල් සම්බන්ධතා සේවාව ආරම්භ කිරීමට අසමත් විය"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:57
 msgid "The shared connection service quitted or failed unexpectedly"
 msgstr "හවුල් සම්බන්ධතාව අනපේක්ෂිත ලෙස ඉවත් වීම හෝ ඇණහිටීම සිදුවී ඇත"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:58
 msgid "The AutoIP service failed to start"
 msgstr "AutoIP සේවාව ආරම්භ කිරීමට අසමත් විය"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:59
 msgid "The AutoIP service reported an unexpected error"
 msgstr "AutoIP සේවාව අනපේක්ෂිත දෝෂයක් වාර්තා කළේය"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:60
 msgid "The AutoIP service quitted or failed unexpectedly"
 msgstr "AutoIP සේවාව අනපේක්ෂිත ලෙස ඉවත් වීම හෝ ඇණහිටීම සිදුවී ඇත"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:61
 msgid "Dialing failed due to busy lines"
 msgstr "කාර්යබහුල මාර්ග නිසා ඇමතුම් අසාර්ථක විය"
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:62
 msgid "Dialing failed due to no dial tone"
 msgstr "ඇමතුම් නාදයක් නොමැති නිසා ඇමතුම ගැනීම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:63
 msgid "Dialing failed due to the carrier"
 msgstr "වාහකයා-carrier නිසා ඇමතීම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:64
 msgid "Dialing timed out"
 msgstr "ඇමතුම් කාලය ඉකුත්වී ඇත"
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:65
 msgid "Dialing failed"
 msgstr "ඇමතීම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:66
 msgid "Modem initialization failed"
 msgstr "මොඩමය ආරම්භ කිරීම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:67
 msgid "Failed to select the specified GSM APN"
 msgstr "නිශ්චිත GSM APN තෝරා ගැනීමට අපොහොසත් විය"
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:68
 msgid "No networks searched"
 msgstr "ජාල කිසිවක් හමු නොවිනි."
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:69
 msgid "Network registration was denied"
 msgstr "ජාල ලියාපදිංචිය ප්‍රතික්ෂේප විය"
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:70
 msgid "Network registration timed out"
 msgstr "ජාල ලියාපදිංචිය කල් ඉකුත් වී ඇත"
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:71
 msgid "Failed to register to the requested GSM network"
 msgstr "ඉල්ලාසිටි GSM ජාලයට ලියාපදිංචි වීමට අපොහොසත් විය"
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:72
 msgid "PIN check failed"
 msgstr "PIN පරීක්ෂාව අසාර්ථක විය"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:73
 msgid "Necessary firmware for the device may be missed"
 msgstr "උපාංගය සඳහා අවශ්‍ය ස්ථිරාංග-firmware මඟ හැරි තිබිය හැක"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:74
 msgid "The device was removed"
 msgstr "උපාංගය ඉවත් කරන ලදි"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:75
 msgid "NetworkManager went to sleep"
 msgstr "NetworkManager යෙදුම නිද්‍රාගතව ඇත"
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:76
 msgid "The device's active connection was removed or disappeared"
 msgstr "උපාංගයේ ක්‍රියාකාරී සම්බන්ධතාවය ඉවත් කර හෝ සොයාගත නොහැකිව ඇත"
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:77
 msgid "A user or client requested to disconnect"
 msgstr "පරිශීලකයෙකුගෙන් හෝ සේවාදායකයෙකුුුුුුගෙන් විසන්ධි කිරීමට ඉල්ලීමක් ඇත"
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:78
 msgid "The device's carrier/link changed"
 msgstr "උපාංගයේ වාහකය/සබැඳිය වෙනස් විය"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:79
 msgid "The device's existing connection was assumed"
 msgstr "උපාංගයේ පවතින සම්බන්ධතාවය උපකල්පනය කරන ලදි"
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:80
 msgid "The 802.1x supplicant is now available"
 msgstr "802.1x ඉල්ලුම්කරු දැන් ලබා ගත හැකිය"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:81
 msgid "The modem could not be found"
 msgstr "මොඩමය සොයාගත නොහැකි විය"
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:82
 msgid "The Bluetooth connection timed out or failed"
 msgstr "බ්ලූටූත් සම්බන්ධතාවය කල් ඉකුත් වීම හෝ අසාර්ථක වීම සිදුවිනි."
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:83
 msgid "GSM Modem's SIM Card was not inserted"
 msgstr "GSM මොඩමයේ SIM-සිම් කාඩ් පත ඇතුළත් කර නැත"
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:84
 msgid "GSM Modem's SIM PIN required"
 msgstr "GSM මොඩමයේ සිම් PIN අංකය අවශ්‍ය වේ"
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:85
 msgid "GSM Modem's SIM PUK required"
 msgstr "GSM මොඩමයේ සිම් PUK අංකය අවශ්‍යයි"
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:86
 msgid "SIM card error in GSM Modem"
 msgstr "GSM මොඩමයේ සිම් පතේ දෝෂයකි"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:87
 msgid "InfiniBand device does not support connected mode"
 msgstr "සම්බන්ධිත ප්‍රකාරයට InfiniBand උපාංගය සහාය නොදක්වයි"
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:88
 msgid "A dependency of the connection failed"
 msgstr "සම්බන්ධතාවයට අවශ්‍ය සාධකයක්/පරායත්තතාවය අසාර්ථක විය"
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:89
 msgid "RFC 2684 Ethernet bridging error to ADSL"
 msgstr "RFC 2684 ADSL වෙත ඊතර්නෙට් හරහා සම්බන්ධ කිරීමේ දෝෂයකි"
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:90
 msgid "ModemManager did not run or quitted unexpectedly"
 msgstr "මොඩම් කළමනාකරණ යෙදුම අනපේක්ෂිත ලෙස ධාවනය නොවීය"
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:91
 msgid "The 802.11 WLAN network could not be found"
 msgstr "802.11 WLAN ජාලය සොයාගත නොහැකි විය"
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:92
 msgid "A secondary connection of the base connection failed"
 msgstr "මූලික සම්බන්ධතාවයේ ද්විතියික සම්බන්ධතාවයක් අසාර්ථක විය"
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:95
 msgid "DCB or FCoE setup failed"
 msgstr "DCB හෝ FCoE සැකසුම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:96
 msgid "Network teaming control failed"
 msgstr "ජාල කණ්ඩායම් පාලනය අසාර්ථක විය"
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:97
 msgid "Modem failed to run or not available"
 msgstr "මොඩමය සම්බන්ධතාවය ක්‍රියාත්මක කිරීමට හෝ හදුනා ගැනීමට අසමත් විය"
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:98
 msgid "Modem now ready and available"
 msgstr "මොඩමය දැන් සම්බන්ධ කිරීම සඳහා සුදානම්"
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:99
 msgid "SIM PIN is incorrect"
 msgstr "සිම් පතේ PIN අංකය වැරදිය"
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:100
 msgid "New connection activation is enqueuing"
 msgstr "නව සම්බන්ධතා සක්‍රිය කිරීම පෙළගස්වමින්"
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:101
 msgid "Parent device changed"
 msgstr "ප්‍රධාන උපාංගය වෙනස් විය"
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:102
 msgid "Management status of parent device changed"
 msgstr "මව් උපාංගයේ කළමනාකරණ තත්ත්වය වෙනස් විය"
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:105
 msgid "Network cable is unplugged"
 msgstr "ජාල කේබලය විසන්ධි වී ඇත"
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:106
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
 "කරුණාකර ජංගම දුරකථන ජාල සම්බන්ධතාවය සමඟ සිම් පත ඇතුළත් කර ඇති බවට වග බලා "
 "ගන්න"
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:107
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
 "හිඟ මුදල් නොමැති සිම් පතක් සහ නිවැරදි සබදතා සැලැස්මක් තෝරාගෙන ඇති බවට "
 "කරුණාකර සහතික වන්න"
 
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:110
 msgid "Failed to activate VPN connection, reason unknown"
 msgstr "VPN සම්බන්ධතාවය සක්‍රිය කිරීමට අපොහොසත් විය, හේතුව නොදන්නා කරුණකි"
 
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:111
 msgid "Failed to activate VPN connection"
 msgstr "VPN සම්බන්ධතාවය සක්‍රිය කිරීමට අසමත් විය"
 
-#: ../../network/state_handler.go:113
+#: ../../network/state_handler.go:112
 msgid "The VPN connection state changed due to being disconnected by users"
 msgstr "පරිශීලකයින් විසන්ධි කිරීම හේතුවෙන් VPN සම්බන්ධතා තත්ත්වය වෙනස් විය"
 
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:113
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
 msgstr "උපාංග වලින් විසන්ධි වීම නිසා VPN සම්බන්ධතා තත්ත්වය වෙනස් විය"
 
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:114
 msgid "VPN service stopped"
 msgstr "VPN සේවාව නතර විය"
 
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:115
 msgid "The IP config of VPN connection was invalid"
 msgstr "VPN සම්බන්ධතාවයේ IP වින්‍යාසය අවලංගු විය"
 
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:116
 msgid "The connection attempt to VPN service timed out"
 msgstr "VPN සේවාව සඳහා සම්බන්ධතා උත්සාහය කල් ඉකුත් විය"
 
-#: ../../network/state_handler.go:118
+#: ../../network/state_handler.go:117
 msgid "The VPN service start timed out"
 msgstr "VPN සේවාව ඇරඹීමේ කාලය ඉකුත්වී ඇත"
 
-#: ../../network/state_handler.go:119
+#: ../../network/state_handler.go:118
 msgid "The VPN service failed to start"
 msgstr "VPN සේවාව ආරම්භ කිරීමට අසමත් විය"
 
-#: ../../network/state_handler.go:120
+#: ../../network/state_handler.go:119
 msgid "The VPN connection password was not provided"
 msgstr "VPN සම්බන්ධතාවයේ මුරපදය ලබා දී නොමැත"
 
-#: ../../network/state_handler.go:121
+#: ../../network/state_handler.go:120
 msgid "Authentication to VPN server failed"
 msgstr "VPN සේවාදායකය-server සත්‍යාපනය කිරීම අසාර්ථක විය"
 
-#: ../../network/state_handler.go:122
+#: ../../network/state_handler.go:121
 msgid "The connection was deleted from settings"
 msgstr "සැකසුම් වලින් සම්බන්ධතාවය මකා දමන ලදි"
 
-#: ../../network/state_handler.go:251
+#: ../../network/state_handler.go:250
 msgid "Enabling hotspot"
 msgstr "හොට්ස්පොට් සක්‍රීය කරමින්"
 
-#: ../../network/state_handler.go:253
+#: ../../network/state_handler.go:252
 msgid "Connecting %q"
 msgstr "%q සම්බන්ධ වෙමින් පවතී"
 
-#: ../../network/state_handler.go:261
+#: ../../network/state_handler.go:260
 msgid "Hotspot enabled"
 msgstr "හොට්ස්පොට් සක්‍රීයයි"
 
-#: ../../network/state_handler.go:263
+#: ../../network/state_handler.go:262
 msgid "%q connected"
 msgstr "%q සම්බන්ධයි"
 
-#: ../../network/state_handler.go:280 ../../network/state_handler.go:335
+#: ../../network/state_handler.go:279 ../../network/state_handler.go:334
 msgid "Hotspot disabled"
 msgstr "හොට්ස්පොට් අක්‍රීයයි"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:342
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr "හොට්ස්පොට් බෙදා ගැනීමට නොහැක, කරුණාකර dnsmasq සැකසුම් පරීක්ෂා කරන්න"
 
-#: ../../network/state_handler.go:345
+#: ../../network/state_handler.go:344
 msgid "Unable to connect %q, please keep closer to the wireless router"
 msgstr ""
 "%q සම්බන්ධ කිරීමට නොහැකි විය, කරුණාකර රැහැන් රහිත රවුටරයට සමීපව සිටින්න"
 
-#: ../../network/state_handler.go:347
+#: ../../network/state_handler.go:346
 msgid "Unable to connect %q, please check your router or net cable."
 msgstr ""
 "%q සම්බන්ධ කිරීමට නොහැකි විය, කරුණාකර ඔබේ රවුටරය හෝ ජාල කේබලය පරීක්ෂා කරන්න."
 
-#: ../../network/state_handler.go:350
+#: ../../network/state_handler.go:349
 msgid "Password is required to connect %q"
 msgstr "%q සම්බන්ධ කිරීමට මුරපදය අවශ්‍ය වේ"
 
-#: ../../network/state_handler.go:353
+#: ../../network/state_handler.go:352
 msgid "Connection failed, unable to connect %q, wrong password"
 msgstr "සම්බන්ධතාවය අසාර්ථක විය, %q සම්බන්ධ කිරීමට නොහැකි විය, වැරදි මුරපදයකි"
 
-#: ../../network/utils_dbus_nm.go:271
+#: ../../network/utils_dbus_nm.go:259
 msgid "Unknown"
 msgstr "නොදත් "
 
-#: ../../network/utils_notify.go:185 ../../network/utils_notify.go:189
-#: ../../network/utils_notify.go:193 ../../network/utils_notify.go:197
-#: ../../network/utils_notify.go:215 ../../network/utils_notify.go:218
-#: ../../network/utils_notify.go:307
-msgid "Disconnected"
-msgstr "විසන්ධි වි ඇත"
-
-#: ../../network/utils_notify.go:185
-msgid "You are now offline."
-msgstr "ඔබ දැන් ජාලගතවී නොමැත"
-
-#: ../../network/utils_notify.go:189
+#: ../../network/utils_notify.go:183
 msgid "Airplane mode enabled."
 msgstr "ගුවන් යානා ප්‍රකාරය සක්‍රීය කර ඇත."
 
-#: ../../network/utils_notify.go:197
+#: ../../network/utils_notify.go:183 ../../network/utils_notify.go:187
+#: ../../network/utils_notify.go:191 ../../network/utils_notify.go:209
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:301
+msgid "Disconnected"
+msgstr "විසන්ධි වි ඇත"
+
+#: ../../network/utils_notify.go:191
 msgid "Access Point mode is not supported by this device."
 msgstr "ප්‍රවේශ උපාංග ප්‍රකාරයට මෙම උපාංගය සහාය නොදක්වයි."
 
-#: ../../network/utils_notify.go:201 ../../network/utils_notify.go:205
-#: ../../network/utils_notify.go:208 ../../network/utils_notify.go:310
-msgid "Network"
-msgstr "ජාලය"
-
-#: ../../network/utils_notify.go:201
+#: ../../network/utils_notify.go:195
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 "WLAN කාඩ්පතේ දෘඩාංග ස්විචය අක්‍රියයි, කරුණාකර අවශ්‍ය පරිදි ක්‍රියාත්මක "
 "කරන්න."
 
-#: ../../network/utils_notify.go:205
+#: ../../network/utils_notify.go:199
 msgid "System proxy is set successfully."
 msgstr "පද්ධති ප්‍රොක්සිය සාර්ථකව සකසා ඇත."
 
-#: ../../network/utils_notify.go:208
+#: ../../network/utils_notify.go:202
 msgid "System proxy has been cancelled."
 msgstr "පද්ධති ප්‍රොක්සි අවලංගු කර ඇත."
 
-#: ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:206
 msgid "Connected"
 msgstr "සම්බන්ධයි"
 
-#: ../../network/utils_notify.go:310
+#: ../../network/utils_notify.go:304
 msgid "Portal network authentication successful"
 msgstr ""
 
@@ -1053,46 +998,46 @@ msgstr ""
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "\"%s\" සත්‍යාපනය සමත් නොවූ අතර දැන් ක්‍රියාත්මක කළ නොහැක"
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:201
 msgid "Battery critically low"
 msgstr "බැටරි ධාරිතාවය ඉතා අඩුය"
 
-#: ../../session/power/manager_events.go:204
-#: ../../session/power/manager_events.go:209
-#: ../../session/power/manager_events.go:214
+#: ../../session/power/manager_events.go:222
+#: ../../session/power/manager_events.go:227
+#: ../../session/power/manager_events.go:232
 msgid "Battery low, please plug in"
 msgstr "අඩු බැටරි ධාරිතාවක් පවතී, කරුණාකර විදුලි සැපයුමක් ලබා දෙන්න"
 
-#: ../../session/power/utils.go:360 ../../session/power/utils.go:364
-#: ../../session/power/utils.go:368 ../../session/power/utils.go:372
+#: ../../session/power/utils.go:349 ../../session/power/utils.go:353
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
 msgid "Power settings changed"
 msgstr "බල සැකසුම් වෙනස් විය"
 
-#: ../../session/power/utils.go:387
+#: ../../session/power/utils.go:376
 msgid "When the lid is closed, "
 msgstr "පියන වසා ඇති විට,"
 
-#: ../../session/power/utils.go:391
+#: ../../session/power/utils.go:380
 msgid "When pressing the power button, "
 msgstr "බල බොත්තම එබීමේදී,"
 
-#: ../../session/power/utils.go:401
+#: ../../session/power/utils.go:390
 msgid "your computer will shut down"
 msgstr "ඔබේ පරිගණකය වසා දමනු ඇත"
 
-#: ../../session/power/utils.go:403
+#: ../../session/power/utils.go:392
 msgid "your computer will suspend"
 msgstr "ඔබේ පරිගණකය අත්හිටුවනු ඇත"
 
-#: ../../session/power/utils.go:405
+#: ../../session/power/utils.go:394
 msgid "your computer will hibernate"
 msgstr ""
 
-#: ../../session/power/utils.go:407
+#: ../../session/power/utils.go:396
 msgid "your monitor will turn off"
 msgstr "ඔබගේ මොනිටරය ක්‍රියා විරහිත වනු ඇත"
 
-#: ../../session/power/utils.go:409
+#: ../../session/power/utils.go:398
 msgid "it will do nothing to your computer"
 msgstr "එය ඔබේ පරිගණකයට කිසිවක් නොකරනු ඇත"
 
