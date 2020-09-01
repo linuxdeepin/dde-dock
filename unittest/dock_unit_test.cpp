@@ -277,6 +277,19 @@ void DockUnitTest::dock_coreDump_check()
     delete process;
 }
 
+/**
+ * @brief DockUnitTest::dock_appIconSize_check
+ * 判断dbus和gsettings获取的任务栏图标大小是否一致
+ */
+void DockUnitTest::dock_appIconSize_check()
+{
+    DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    QGSettings *setting = new QGSettings("com.deepin.dde.dock");
+    unsigned int iconSize = dockInter->iconSize();
+    qDebug() << "Please check the size of icons:" << iconSize;
+    QCOMPARE(iconSize, setting->get("icon-size").toUInt());
+}
+
 QTEST_APPLESS_MAIN(DockUnitTest)
 
 #include "dock_unit_test.moc"
