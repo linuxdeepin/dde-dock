@@ -309,7 +309,9 @@ void MainPanelControl::setPositonValue(Dock::Position position)
         return;
 
     m_position = position;
-    updateMainPanelLayout();
+    QTimer::singleShot(0, this, [=] {
+        updateMainPanelLayout();
+    });
 }
 
 void MainPanelControl::insertItem(int index, DockItem *item)
