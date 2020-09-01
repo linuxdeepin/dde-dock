@@ -37,6 +37,7 @@
 #define MAX_HEIGHT  300
 #define ICON_SIZE   24
 #define ITEM_HEIGHT 24
+#define ITEM_SPACING 5
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -118,7 +119,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_listView->setBackgroundType(DStyledItemDelegate::NoBackground);
     m_listView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     m_listView->setViewportMargins(QMargins(0, 0, 12, 0));
-    m_listView->setSpacing(1);
+    m_listView->setSpacing(ITEM_SPACING);
     m_listView->setFixedHeight(0);
 
     m_centralWidget->setAccessibleName("volumn-centralwidget");
@@ -357,8 +358,9 @@ void SoundApplet::cardsChanged(const QString &cards)
     else {
         m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
-    m_listView->setFixedHeight(count * ITEM_HEIGHT);
-    int height = m_volumeSlider->height() + m_soundShow->height() + (count + 3) * ITEM_HEIGHT;//三倍的ITEM_HEIGHT为设备音量和滑块所占高度大概值
+    m_listView->setFixedHeight((count + 1) * (ITEM_HEIGHT + ITEM_SPACING));
+    //2倍的ITEM_HEIGHT为设备音量空白区域和滑块所占高度大概值
+    int height = m_volumeSlider->height() + m_soundShow->height() + (count + 2) * ITEM_HEIGHT + count * ITEM_SPACING;
     setFixedHeight(height);
     m_centralWidget->setFixedHeight(height);
 }
