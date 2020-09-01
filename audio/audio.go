@@ -714,6 +714,7 @@ func (a *Audio) updateDefaultSink(sinkName string) {
 
 	if sinkInfo == nil {
 		logger.Warning("failed to get sinkInfo for name:", sinkName)
+		a.setPropDefaultSink("/")
 		return
 	}
 	logger.Debugf("updateDefaultSink #%d %s", sinkInfo.Index, sinkName)
@@ -730,6 +731,7 @@ func (a *Audio) updateDefaultSink(sinkName string) {
 	if !ok {
 		a.mu.Unlock()
 		logger.Warningf("not found sink #%d", sinkInfo.Index)
+		a.setPropDefaultSink("/")
 		return
 	}
 
@@ -768,6 +770,7 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	sourceInfo := a.getSourceInfoByName(sourceName)
 	if sourceInfo == nil {
 		logger.Warning("failed to get sourceInfo for name:", sourceName)
+		a.setPropDefaultSource("/")
 		return
 	}
 	logger.Debugf("updateDefaultSource #%d %s", sourceInfo.Index, sourceName)
@@ -786,6 +789,7 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	if !ok {
 		a.mu.Unlock()
 		logger.Warningf("not found source #%d", sourceInfo.Index)
+		a.setPropDefaultSource("/")
 		return
 	}
 	a.defaultSource = source
