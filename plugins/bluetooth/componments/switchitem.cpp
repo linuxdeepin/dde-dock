@@ -76,6 +76,7 @@ SwitchItem::SwitchItem(QWidget *parent)
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {
         m_checkState = change;
+        m_loadingIndicator->setVisible(change);
         emit checkedChanged(change);
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
