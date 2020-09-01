@@ -244,6 +244,10 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
         return;
     }
 
+    if (!containCursorPos()) {
+        return;
+    }
+
     event->accept();
 
     QDrag drag(this);

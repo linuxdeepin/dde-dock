@@ -611,6 +611,10 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins && item->itemType() != DockItem::FixedPlugin)
         return false;
 
+    if (!item->containCursorPos()) {
+        return  false;
+    }
+
     const QPoint pos = mouseEvent->globalPos();
     const QPoint distance = pos - m_mousePressPos;
     if (distance.manhattanLength() < QApplication::startDragDistance())

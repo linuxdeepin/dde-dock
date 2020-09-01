@@ -60,6 +60,7 @@ public:
 
     QSize sizeHint() const override;
     virtual QString accessibleName();
+    bool containCursorPos();
 
 public slots:
     virtual void refershIcon() {}
@@ -101,7 +102,6 @@ protected:
 protected slots:
     void showContextMenu();
     void onContextMenuAccepted();
-    bool containCursorPos();
 
 private:
     void updatePopupPosition();

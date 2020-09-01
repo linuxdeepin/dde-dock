@@ -164,6 +164,10 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 
     DockItem::mouseMoveEvent(e);
 
+    if (!containCursorPos()) {
+        return;
+    }
+
     e->accept();
 
     const QPoint distance = e->pos() - MousePressPoint;
