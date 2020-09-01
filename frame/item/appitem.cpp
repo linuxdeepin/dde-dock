@@ -96,7 +96,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_active = m_itemEntryInter->isActive();
 
     m_appNameTips->setObjectName("AppItemTips");
-    m_appNameTips->setObjectName(m_itemEntryInter->name());
+    m_appNameTips->setAccessibleName(m_itemEntryInter->name());
     m_appNameTips->setVisible(false);
     m_appNameTips->installEventFilter(this);
 
