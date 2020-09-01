@@ -22,6 +22,9 @@
 #define ACCESSIBLEDEFINE_H
 
 // 为了方便使用,把相关定义独立出来,如有需要,直接包含这个头文件,然后使用SET_*的宏去设置,USE_*宏开启即可
+// 注意：对项目中出现的所有的QWidget的派生类都要再启用一次accessiblity，包括qt的原生控件[qt未限制其标记名称为空的情况]
+// 注意：使用USE_ACCESSIBLE_BY_OBJECTNAME开启accessiblity的时候，一定要再最这个类用一下USE_ACCESSIBLE，否则标记可能会遗漏
+
 /* 宏参数说明
 * classname:类名,例如DLineEdit
 * accessiblename:accessible唯一标识,需保证唯一性[getAccessibleName函数处理],优先使用QObject::setAccessibleName值
@@ -36,6 +39,7 @@
 * FUNC_PRESS_SHOWMENU:上两者的综合
 * FUNC_RECT:实现rect接口
 * FUNC_TEXT:实现text接口
+* FUNC_TEXT_BY_LABEL:实现text接口,使用这个宏，需要被添加的类有text接口，从而得到其Value
 * USE_ACCESSIBLE:对传入的类型设置其accessible功能
 * USE_ACCESSIBLE_BY_OBJECTNAME:同上,[指定objectname]---适用同一个类，但objectname不同的情况
 *
@@ -179,7 +183,8 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
 #define FUNC_RECT(classobj) QRect rect() const override{\
         if (!classobj->isVisible())\
             return QRect();\
-        return classobj->geometry();\
+        QPoint pos = classobj->mapToGlobal(QPoint(0, 0));\
+        return QRect(pos.x(), pos.y(), classobj->width(), classobj->height());\
     }\
 
 #define FUNC_TEXT(classname,accessiblename) QString Accessible##classname::text(QAccessible::Text t) const{\
@@ -193,42 +198,38 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         }\
     }\
 
+#define FUNC_TEXT_BY_LABEL(classname,accessiblename) QString Accessible##classname::text(QAccessible::Text t) const{\
+        switch (t) {\
+        case QAccessible::Name:\
+            return getAccessibleName(m_w, this->role(), accessiblename);\
+        case QAccessible::Description:\
+            return m_description;\
+        case QAccessible::Value:\
+            return m_w->text();\
+        default:\
+            return QString();\
+        }\
+    }\
+
 #define USE_ACCESSIBLE(classnamestring,classname)    if (classnamestring == QLatin1String(#classname) && object && object->isWidgetType())\
     {\
         interface = new Accessible##classname(static_cast<classname *>(object));\
     }\
 
-// [指定objectname]---适用同一个类，但objectname不同的情况
 #define USE_ACCESSIBLE_BY_OBJECTNAME(classnamestring,classname,objectname)    if (classnamestring == QLatin1String(#classname) && object && (object->objectName() == objectname) && object->isWidgetType())\
     {\
         interface = new Accessible##classname(static_cast<classname *>(object));\
     }\
 
-#define SET_BUTTON_ACCESSIBLE_PRESS_DESCRIPTION(classname,accessiblename,accessdescription)  class Accessible##classname : public QAccessibleWidget\
+#define SET_ACCESSIBLE_WITH_PRESS_SHOWMENU_DESCRIPTION(classname,aaccessibletype,accessdescription)  class Accessible##classname : public QAccessibleWidget\
     {\
     public:\
-        FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
-        QString text(QAccessible::Text t) const override;\
-        FUNC_PRESS(m_w)\
-    };\
-
-#define SET_BUTTON_ACCESSIBLE_SHOWMENU_DESCRIPTION(classname,accessiblename,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-    {\
-    public:\
-        FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
-        QString text(QAccessible::Text t) const override;\
-        FUNC_SHOWMENU(m_w)\
-    };\
-
-#define SET_BUTTON_ACCESSIBLE_PRESS_SHOEMENU_DESCRIPTION(classname,accessiblename,accessdescription)  class Accessible##classname : public QAccessibleWidget\
-    {\
-    public:\
-        FUNC_CREATE(classname,QAccessible::Button,accessdescription)\
+        FUNC_CREATE(classname,aaccessibletype,accessdescription)\
         QString text(QAccessible::Text t) const override;\
         FUNC_PRESS_SHOWMENU(m_w)\
     };\
 
-#define SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,aaccessibletype,accessiblename,accessdescription)  class Accessible##classname : public QAccessibleWidget\
+#define SET_ACCESSIBLE_WITH_DESCRIPTION(classname,aaccessibletype,accessdescription)  class Accessible##classname : public QAccessibleWidget\
     {\
     public:\
         FUNC_CREATE(classname,aaccessibletype,accessdescription)\
@@ -236,26 +237,17 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         FUNC_RECT(m_w)\
     };\
 
-// /*******************************************简化使用*******************************************/
-#define SET_BUTTON_ACCESSIBLE_PRESS_SHOWMENU(classname,accessiblename)         SET_BUTTON_ACCESSIBLE_PRESS_SHOEMENU_DESCRIPTION(classname,accessiblename,"")\
+/*******************************************简化使用*******************************************/
+#define SET_BUTTON_ACCESSIBLE(classname,accessiblename)                         SET_ACCESSIBLE_WITH_PRESS_SHOWMENU_DESCRIPTION(classname,QAccessible::Button,"")\
     FUNC_TEXT(classname,accessiblename)
 
-#define SET_BUTTON_ACCESSIBLE_SHOWMENU(classname,accessiblename)               SET_BUTTON_ACCESSIBLE_SHOWMENU_DESCRIPTION(classname,accessiblename,"")\
+#define SET_MENU_ACCESSIBLE(classname,accessiblename)                           SET_ACCESSIBLE_WITH_PRESS_SHOWMENU_DESCRIPTION(classname,QAccessible::PopupMenu,"")\
     FUNC_TEXT(classname,accessiblename)
 
-#define SET_BUTTON_ACCESSIBLE(classname,accessiblename)                        SET_BUTTON_ACCESSIBLE_PRESS_DESCRIPTION(classname,accessiblename,"")\
-    FUNC_TEXT(classname,accessiblename)
+#define SET_LABEL_ACCESSIBLE(classname,accessiblename)                          SET_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::StaticText,"")\
+    FUNC_TEXT_BY_LABEL(classname,accessiblename)
 
-#define SET_LABEL_ACCESSIBLE(classname,accessiblename)                         SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::StaticText,accessiblename,"")\
-    FUNC_TEXT(classname,accessiblename)
-
-#define SET_FORM_ACCESSIBLE(classname,accessiblename)                          SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Form,accessiblename,"");\
-    FUNC_TEXT(classname,accessiblename)
-
-#define SET_SLIDER_ACCESSIBLE(classname,accessiblename)                        SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Slider,accessiblename,"")\
-    FUNC_TEXT(classname,accessiblename)
-
-#define SET_SEPARATOR_ACCESSIBLE(classname,accessiblename)                     SET_LABEL_ACCESSIBLE_WITH_DESCRIPTION(classname,QAccessible::Separator,accessiblename,"")\
+#define SET_WIDGET_ACCESSIBLE(classname,aaccessibletype,accessiblename)         SET_ACCESSIBLE_WITH_DESCRIPTION(classname,aaccessibletype,"");\
     FUNC_TEXT(classname,accessiblename)
 /************************************************************************************************/
 

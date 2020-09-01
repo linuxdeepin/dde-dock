@@ -83,6 +83,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     setAcceptDrops(true);
     setMouseTracking(true);
     m_desktopWidget->setMouseTracking(true);
+    m_desktopWidget->setObjectName("showdesktoparea");
 
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
