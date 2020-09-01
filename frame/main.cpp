@@ -154,54 +154,6 @@ void sig_crash(int sig)
     exit(0);
 }
 
-QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
-{
-    QAccessibleInterface *interface = nullptr;
-
-    GET_ACCESSIBLE(classname, MainWindow);
-    GET_ACCESSIBLE(classname, MainPanelControl);
-    GET_ACCESSIBLE(classname, TipsWidget);
-    GET_ACCESSIBLE(classname, DockPopupWindow);
-    GET_ACCESSIBLE(classname, LauncherItem);
-    GET_ACCESSIBLE(classname, AppItem);
-    GET_ACCESSIBLE(classname, PreviewContainer);
-    GET_ACCESSIBLE(classname, PluginsItem);
-    GET_ACCESSIBLE(classname, TrayPluginItem);
-    GET_ACCESSIBLE(classname, PlaceholderItem);
-    GET_ACCESSIBLE(classname, AppDragWidget);
-    GET_ACCESSIBLE(classname, AppSnapshot);
-    GET_ACCESSIBLE(classname, FloatingPreview);
-    GET_ACCESSIBLE(classname, SNITrayWidget);
-    GET_ACCESSIBLE(classname, SystemTrayItem);
-    GET_ACCESSIBLE(classname, FashionTrayItem);
-    GET_ACCESSIBLE(classname, FashionTrayWidgetWrapper);
-    GET_ACCESSIBLE(classname, FashionTrayControlWidget);
-    GET_ACCESSIBLE(classname, AttentionContainer);
-    GET_ACCESSIBLE(classname, HoldContainer);
-    GET_ACCESSIBLE(classname, NormalContainer);
-    GET_ACCESSIBLE(classname, SpliterAnimated);
-    GET_ACCESSIBLE(classname, IndicatorTrayWidget);
-    GET_ACCESSIBLE(classname, XEmbedTrayWidget);
-    GET_ACCESSIBLE(classname, SoundItem);
-    GET_ACCESSIBLE(classname, SoundApplet);
-    GET_ACCESSIBLE(classname, SinkInputWidget);
-    GET_ACCESSIBLE(classname, VolumeSlider);
-    GET_ACCESSIBLE(classname, HorizontalSeparator);
-    GET_ACCESSIBLE(classname, DatetimeWidget);
-    GET_ACCESSIBLE(classname, OnboardItem);
-    GET_ACCESSIBLE(classname, TrashWidget);
-    GET_ACCESSIBLE(classname, PopupControlWidget);
-    GET_ACCESSIBLE(classname, ShutdownWidget);
-    GET_ACCESSIBLE(classname, MultitaskingWidget);
-    GET_ACCESSIBLE(classname, ShowDesktopWidget);
-    //    USE_ACCESSIBLE(classname,OverlayWarningWidget);
-    GET_ACCESSIBLE_BY_OBJECTNAME(classname, QWidget, "Btn_showdesktoparea");//TODO 点击坐标有偏差
-    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-2d");
-    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, "closebutton-3d");
-    GET_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
-
-    return interface;
-}
 
 int main(int argc, char *argv[])
 {
