@@ -86,6 +86,7 @@ DockSettings::DockSettings(QWidget *parent)
     , m_aiAssistantVisible(true)
 {
     m_settingsMenu->setTitle("docksettingsmenu");
+    m_settingsMenu->setAccessibleName("settingsmenu");
     checkService();
 
     m_primaryRawRect = m_displayInter->primaryRawRect();

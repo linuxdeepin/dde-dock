@@ -177,6 +177,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this)),
       m_dragWidget(new DragWidget(this))
 {
+    setAccessibleName("mainwindow");
+    m_mainPanel->setAccessibleName("mainpanel");
     Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window;
     setWindowFlags(windowFlags() | flags);
     setAttribute(Qt::WA_TranslucentBackground);
