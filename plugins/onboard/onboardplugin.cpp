@@ -35,6 +35,7 @@ OnboardPlugin::OnboardPlugin(QObject *parent)
 {
     m_tipsLabel->setText(tr("Onboard"));
     m_tipsLabel->setVisible(false);
+    m_tipsLabel->setAccessibleName(tr("Onboard"));
 }
 
 const QString OnboardPlugin::pluginName() const

@@ -39,6 +39,15 @@ public:
     virtual bool appIsOnDock(const QString &appDesktop) = 0;
 };
 
+class DesktopWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    DesktopWidget(QWidget *parent) : QWidget(parent){
+    }
+};
+
 class DockItem;
 class PlaceholderItem;
 class AppDragWidget;
@@ -113,7 +122,7 @@ private:
     QWidget *m_appAreaWidget;
     QWidget *m_trayAreaWidget;
     QWidget *m_pluginAreaWidget;
-    QWidget *m_desktopWidget;
+    DesktopWidget *m_desktopWidget;
     QBoxLayout *m_fixedAreaLayout;
     QBoxLayout *m_trayAreaLayout;
     QBoxLayout *m_pluginLayout;

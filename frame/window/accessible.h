@@ -95,7 +95,7 @@ SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objec
 SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? m_w->objectName().isEmpty() ? "text" : m_w->objectName() : m_w->text())
 SET_BUTTON_ACCESSIBLE(DImageButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
-
+SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
     QAccessibleInterface *interface = nullptr;
@@ -129,6 +129,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 //    USE_ACCESSIBLE(classname, SinkInputWidget);
 //    USE_ACCESSIBLE(classname, VolumeSlider);
 //    USE_ACCESSIBLE(classname, HorizontalSeparator);
+    USE_ACCESSIBLE(classname, DesktopWidget);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, OnboardItem);
     USE_ACCESSIBLE(classname, TrashWidget);
