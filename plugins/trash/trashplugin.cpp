@@ -37,7 +37,7 @@ TrashPlugin::TrashPlugin(QObject *parent)
     , m_trashWidget(nullptr)
     , m_tipsLabel(new Dock::TipsWidget)
 {
-    m_tipsLabel->setObjectName("trash");
+    m_tipsLabel->setObjectName("trashtips");
 }
 
 const QString TrashPlugin::pluginName() const

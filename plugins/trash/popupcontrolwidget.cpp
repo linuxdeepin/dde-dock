@@ -53,7 +53,6 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
 {
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &PopupControlWidget::trashStatusChanged, Qt::QueuedConnection);
 
-    setObjectName("trash");
     setFixedWidth(80);
 
     trashStatusChanged();

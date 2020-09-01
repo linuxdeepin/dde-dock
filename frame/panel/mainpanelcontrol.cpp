@@ -109,6 +109,8 @@ void MainPanelControl::init()
     m_pluginAreaWidget->setAccessibleName("Form_pluginarea");
     m_desktopWidget->setObjectName("Btn_showdesktoparea");// 单独处理，accessible标记为button类型
 
+    m_appAreaWidget->setAccessibleName("AppFullArea");
+
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
     m_mainPanelLayout->addWidget(m_fixedSpliter);
     m_mainPanelLayout->addWidget(m_appAreaWidget);

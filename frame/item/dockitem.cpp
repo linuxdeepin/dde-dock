@@ -55,6 +55,7 @@ DockItem::DockItem(QWidget *parent)
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
+        arrowRectangle->setObjectName("apppopup");
         PopupWindow = arrowRectangle;
     }
 
