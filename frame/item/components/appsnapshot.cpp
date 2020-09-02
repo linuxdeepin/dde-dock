@@ -35,6 +35,9 @@
 #include <QVBoxLayout>
 #include <QSizeF>
 #include <QTimer>
+#include <com_deepin_dde_daemon_dock.h>
+
+using DBusDock = com::deepin::dde::daemon::Dock;
 
 struct SHMInfo {
     long shmid;
@@ -84,22 +87,25 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
 }
 
-void AppSnapshot::closeWindow() const
+void AppSnapshot::closeWindow()
 {
-    const auto display = QX11Info::display();
+    //const auto display = QX11Info::display();
 
-    XEvent e;
+    //XEvent e;
 
-    memset(&e, 0, sizeof(e));
-    e.xclient.type = ClientMessage;
-    e.xclient.window = m_wid;
-    e.xclient.message_type = XInternAtom(display, "WM_PROTOCOLS", true);
-    e.xclient.format = 32;
-    e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
-    e.xclient.data.l[1] = CurrentTime;
+    //memset(&e, 0, sizeof(e));
+    //e.xclient.type = ClientMessage;
+    //e.xclient.window = m_wid;
+    //e.xclient.message_type = XInternAtom(display, "WM_PROTOCOLS", true);
+    //e.xclient.format = 32;
+    //e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
+    //e.xclient.data.l[1] = CurrentTime;
 
-    XSendEvent(display, m_wid, false, NoEventMask, &e);
-    XFlush(display);
+    //XSendEvent(display, m_wid, false, NoEventMask, &e);
+    //XFlush(display);
+
+    DBusDock dockInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    dockInter.CloseWindow(static_cast<uint>(m_wid));
 }
 
 void AppSnapshot::compositeChanged() const

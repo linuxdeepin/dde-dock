@@ -66,7 +66,7 @@ signals:
 
 public slots:
     void fetchSnapshot();
-    void closeWindow() const;
+    void closeWindow();
     void compositeChanged() const;
     void setWindowInfo(const WindowInfo &info);
 
