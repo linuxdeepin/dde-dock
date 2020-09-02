@@ -1,0 +1,137 @@
+[
+    {
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 3,
+        "Action": {
+            "Type": "built-in",
+            "Action": "ToggleMaximize"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
+        "Fingers": 3,
+        "Action": {
+            "Type": "built-in",
+            "Action": "ToggleMaximize"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "left",
+        "Fingers": 3,
+        "Action": {
+            "Type": "built-in",
+            "Action": "SplitWindowLeft"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "right",
+        "Fingers": 3,
+        "Action": {
+            "Type": "built-in",
+            "Action": "SplitWindowRight"
+        }
+    },
+    {
+        "Name": "tap",
+        "Direction": "none",
+        "Fingers": 3,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "ctrl+alt+u"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 4,
+        "Action": {
+            "Type": "built-in",
+            "Action": "Handle4Or5FingersSwipeUp"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
+        "Fingers": 4,
+        "Action": {
+            "Type": "built-in",
+            "Action": "Handle4Or5FingersSwipeDown"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "right",
+        "Fingers": 4,
+        "Action": {
+            "Type": "built-in",
+            "Action": "ReverseSwitchWorkspace"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "left",
+        "Fingers": 4,
+        "Action": {
+            "Type": "built-in",
+            "Action": "SwitchWorkspace"
+        }
+    },
+    {
+        "Name": "tap",
+        "Direction": "none",
+        "Fingers": 4,
+        "Action": {
+            "Type": "commandline",
+            "Action": "dbus-send --type=method_call --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 5,
+        "Action": {
+            "Type": "built-in",
+            "Action": "Handle4Or5FingersSwipeUp"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
+        "Fingers": 5,
+        "Action": {
+            "Type": "built-in",
+            "Action": "Handle4Or5FingersSwipeDown"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "right",
+        "Fingers": 5,
+        "Action": {
+            "Type": "built-in",
+            "Action": "ReverseSwitchWorkspace"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "left",
+        "Fingers": 5,
+        "Action": {
+            "Type": "built-in",
+            "Action": "SwitchWorkspace"
+        }
+    },
+    {
+        "Name": "tap",
+        "Direction": "none",
+        "Fingers": 5,
+        "Action": {
+            "Type": "commandline",
+            "Action": "dbus-send --type=method_call --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
+        }
+    }
+]
