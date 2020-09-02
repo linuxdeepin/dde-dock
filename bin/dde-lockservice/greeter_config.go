@@ -22,6 +22,7 @@ package main
 import (
 	"os"
 	"path"
+
 	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/utils"
 )
@@ -49,10 +50,7 @@ func setGreeterUser(file, username string) error {
 		return err
 	}
 
-	v, err := kf.GetString(greeterGroupGeneral, greeterKeyLastUser)
-	if err != nil {
-		return err
-	}
+	v, _ := kf.GetString(greeterGroupGeneral, greeterKeyLastUser)
 	if v == username {
 		return nil
 	}
