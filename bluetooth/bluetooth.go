@@ -929,7 +929,6 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 			if !hasValue {
 				return
 			}
-
 			// 成功或者失败，说明这个传输结束
 			if value == transferStatusComplete || value == transferStatusError {
 				ch <- value == transferStatusComplete
@@ -966,7 +965,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 				logger.Warning("failed to cancel transfer:", err)
 			}
 		}
-
+		transfer.RemoveAllHandlers()
 		b.emitTransferRemoved(f, transferPath, sessionPath, res)
 
 		if cancel {
@@ -976,7 +975,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 		info, err := os.Stat(f)
 		if err != nil {
 			logger.Warning("failed to stat file:", err)
-			continue
+			break
 		} else {
 			transferredBase += uint64(info.Size())
 		}
