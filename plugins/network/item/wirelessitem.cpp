@@ -42,7 +42,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
       m_APList(nullptr)
 {
     m_refreshTimer->setSingleShot(true);
-    m_refreshTimer->setInterval(100);
+    m_refreshTimer->setInterval(0);
 
     m_wirelessApplet->setVisible(false);
 

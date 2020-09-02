@@ -123,12 +123,12 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if(ap.strength() < 20 && ap.path() == m_apList.at(mIndex).path())
+        if(ap.strength() < 10 && ap.path() == m_apList.at(mIndex).path())
             m_apList.removeAt(mIndex);
          else
             m_apList.replace(mIndex, ap);
     } else {
-        if(ap.strength() < 20)
+        if(ap.strength() < 10)
             return;
         m_apList.append(ap);
     }
@@ -252,7 +252,10 @@ void WirelessList::updateAPList()
             if (ap2 == m_activeAP)
                 return false;
 
-            return ap1.strength() > ap2.strength();
+            if (ap1.strength() != ap2.strength())
+                return ap1.strength() > ap2.strength();
+
+            return  ap1.ssid() > ap2.ssid();
         });
 
         // update the content of AccessPointWidget by the order of ApList
