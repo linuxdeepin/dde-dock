@@ -296,12 +296,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
         const QRect windowRect = m_settings->windowRect(m_curDockPos, false);
 
+
+
         QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
 
         m_mainPanel->move(QPoint(0, 0));
+        setMaskAlpha(m_settings->Opacity());//显示时，恢复dock透明度
 
         resizeMainPanelWindow();
+
         qDebug() << "Show animation finished:" << frameGeometry();
         qDebug() << "Show animation finished not frame:" << geometry();
         QWidget::update();
@@ -315,9 +319,7 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget::setFixedSize(windowRect.size());
 
         m_mainPanel->move(QPoint(0, 0));
-
-        if (m_settings->hideMode() != KeepShowing)
-            this->setVisible(false);
+        setMaskAlpha(0); //隐藏时（窗口高度为一个像素，显示为一条白线）设置dock透明度为0
 
         qDebug() << "Hide animation finished" << frameGeometry();
         qDebug() << "Hide animation finished not frame:" << geometry();
@@ -349,7 +351,6 @@ void MainWindow::launch()
                 QWidget::move(m_settings->windowRect(m_curDockPos).topLeft());
                 setVisible(true);
                 updatePanelVisible();
-                expand();
                 resetPanelEnvironment(false);
             });
         }
@@ -438,6 +439,37 @@ void MainWindow::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
         return;
+
+    if (m_settings->displayMode() == Fashion) {
+        //时尚模式，dock下有10个像素的空间间隙，光标处于该区域触发多次leaveEvent，做判断是否在dock区域内,在dock区域里就不处理
+        //目前wayland窗口上，触发事件时获取到的光标坐标值与实际有差异，这里+/-20个像素空间判断光标是否处于dock区域内部
+        QPoint cp = QCursor::pos();
+        switch (m_curDockPos) {
+        case Top:
+            if (cp.y() < (geometry().top()+geometry().height()-20))
+                return;
+            else
+                break;
+        case Right:
+            if (cp.x() > (geometry().left()+20))
+                return;
+            else
+                break;
+        case Bottom:
+            if (cp.y() > (geometry().top()+20))
+                return;
+            else
+                break;
+        case Left:
+            if (cp.x() < (geometry().left()+geometry().width()-20))
+                return;
+            else
+                break;
+        default:
+            break;
+        }
+
+    }
 
     m_expandDelayTimer->stop();
     m_leaveDelayTimer->start();
@@ -822,13 +854,14 @@ void MainWindow::expand()
 
     const auto showAniState = m_panelShowAni->state();
 
-    int startValue = 2;
-    int endValue = 2;
+    int startValue = 1;
+    int endValue = 1;
 
     resetPanelEnvironment(true, false);
     if (showAniState != QPropertyAnimation::Running /*&& pos() != m_panelShowAni->currentValue()*/) {
         bool isHide = m_settings->hideState() == Hide && !testAttribute(Qt::WA_UnderMouse);
         const QRectF windowRect = m_settings->windowRect(m_curDockPos, isHide);
+
         switch (m_curDockPos) {
         case Top:
         case Bottom:
@@ -858,21 +891,8 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-    int startValue = 2;
-    int endValue = 2;
-
-    switch (prevPos) {
-    case Top:
-    case Bottom:
-        startValue = height();
-        endValue = 2;
-        break;
-    case Left:
-    case Right:
-        startValue = width();
-        endValue = 2;
-        break;
-    }
+    int startValue = (m_curDockPos == Top || m_curDockPos == Bottom) ? height() : width();
+    int endValue = 1;
 
     m_panelShowAni->stop();
     m_panelHideAni->setStartValue(startValue);
@@ -932,9 +952,9 @@ void MainWindow::updatePanelVisible()
             r.setWidth(r.width() + margin);
             break;
         }
-        if (r.contains(QCursor::pos())) {
-            break;
-        }
+        //  if (r.contains(QCursor::pos())) {
+        //      break;
+        //  }
 
         //        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
         //        move(windowRect.topLeft());
