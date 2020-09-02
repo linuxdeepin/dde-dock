@@ -85,7 +85,6 @@ MainWindow::MainWindow(QWidget *parent)
     , m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
     , m_dragWidget(new DragWidget(this))
     , m_launched(false)
-    , m_dockSize(0)
 {
     setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
@@ -347,6 +346,7 @@ bool MainWindow::appIsOnDock(const QString &appDesktop)
 
 void MainWindow::resetDragWindow()
 {
+    int dockSize = 0;
     switch (m_multiScreenWorker->position()) {
     case Dock::Top:
         m_dragWidget->setGeometry(0, height() - DRAG_AREA_SIZE, width(), DRAG_AREA_SIZE);
@@ -364,13 +364,13 @@ void MainWindow::resetDragWindow()
 
     if (m_multiScreenWorker->position() == Position::Left
             || m_multiScreenWorker->position() == Position::Right) {
-        m_dockSize = this->width() * qApp->devicePixelRatio();
+        dockSize = this->width();
     } else {
-        m_dockSize = this->height() * qApp->devicePixelRatio();
+        dockSize = this->height();
     }
 
     // 通知窗管和后端更新数据
-    m_multiScreenWorker->updateDaemonDockSize(m_dockSize);                              // 1.先更新任务栏高度
+    m_multiScreenWorker->updateDaemonDockSize(dockSize);                              // 1.先更新任务栏高度
     m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
 
@@ -387,34 +387,33 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
                                                       , m_multiScreenWorker->position()
                                                       , HideMode::KeepShowing,
                                                       m_multiScreenWorker->displayMode());
-    const qreal scale = qApp->devicePixelRatio();
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
     case Top: {
         newRect.setX(rect.x());
         newRect.setY(rect.y());
         newRect.setWidth(rect.width());
-        newRect.setHeight(qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.height() + offset.y(), int(MAINWINDOW_MAX_SIZE / scale)));
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset.y(), MAINWINDOW_MAX_SIZE));
     }
     break;
     case Bottom: {
         newRect.setX(rect.x());
-        newRect.setY(rect.y() + rect.height() - qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.height() - offset.y(), int(MAINWINDOW_MAX_SIZE / scale)));
+        newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
         newRect.setWidth(rect.width());
-        newRect.setHeight(qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.height() - offset.y(), int(MAINWINDOW_MAX_SIZE / scale) ));
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE ));
     }
     break;
     case Left: {
         newRect.setX(rect.x());
         newRect.setY(rect.y());
-        newRect.setWidth(qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.width() + offset.x(), int(MAINWINDOW_MAX_SIZE / scale)));
+        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() + offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
     }
     break;
     case Right: {
-        newRect.setX(rect.x() + rect.width() - qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.width() - offset.x(), int(MAINWINDOW_MAX_SIZE / scale)));
+        newRect.setX(rect.x() + rect.width() - qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setY(rect.y());
-        newRect.setWidth(qBound(qMax(int(MAINWINDOW_MIN_SIZE / scale), MAINWINDOW_MIN_SIZE), rect.width() - offset.x(), int(MAINWINDOW_MAX_SIZE / scale)));
+        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
     }
     break;

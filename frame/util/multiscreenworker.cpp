@@ -530,7 +530,8 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
 
     const static int flags = Motion | Button | Key;
     const static int monitorHeight = 15;
-    const int dockSize = int(m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10/*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient());
+    // 后端认为的任务栏大小(无缩放因素影响)
+    const int realDockSize = int(m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10/*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient());
 
     // 任务栏唤起区域
     m_monitorRectList.clear();
@@ -589,7 +590,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         switch (m_position) {
         case Top: {
             rect.x1 = inter->x();
-            rect.y1 = inter->y() + dockSize;
+            rect.y1 = inter->y() + realDockSize;
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
         }
@@ -598,11 +599,11 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             rect.x1 = inter->x();
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w();
-            rect.y2 = inter->y() + inter->h() - dockSize;
+            rect.y2 = inter->y() + inter->h() - realDockSize;
         }
         break;
         case Left: {
-            rect.x1 = inter->x() + dockSize;
+            rect.x1 = inter->x() + realDockSize;
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
@@ -611,7 +612,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         case Right: {
             rect.x1 = inter->x();
             rect.y1 = inter->y();
-            rect.x2 = inter->x() + inter->w() - dockSize;
+            rect.x2 = inter->x() + inter->w() - realDockSize;
             rect.y2 = inter->y() + inter->h();
         }
         break;
@@ -1289,7 +1290,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     if (withoutScale) {//后端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
+                // windowSizeFashion和windowSizeEfficient给出的值始终对应前端认为的界面高度或宽度（受缩放影响）
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * scale;
                 switch (static_cast<Position>(pos)) {
                 case Top: {
                     rect.setX(inter->x() + WINDOWMARGIN);
@@ -1325,8 +1327,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     } else {//前端真实大小
         foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
             if (inter->name() == screenName) {
-                // 注意这里的dockSize是除以缩放的
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) / scale;
+                // windowSizeFashion和windowSizeEfficient给出的值始终对应前端认为的界面高度或宽度（受缩放影响）
+                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
                 switch (static_cast<Position>(pos)) {
                 case Top: {
                     rect.setX(inter->x() + WINDOWMARGIN);

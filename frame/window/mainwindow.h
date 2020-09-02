@@ -178,7 +178,6 @@ private:
     QString m_sniHostService;
 
     bool m_launched;
-    int m_dockSize;
     QString m_registerKey;
     QStringList m_registerKeys;
 };
