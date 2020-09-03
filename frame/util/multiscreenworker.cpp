@@ -34,6 +34,8 @@
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
 // Monitor数据－＞屏幕是否可停靠更新－＞监视唤醒区域更新，任务栏显示区域更新－＞拖拽区域更新－＞通知后端接口，通知窗管
 
+// TODO　后续需要去除使用qt的接口获取屏幕信息，统一使用从com.deepin.daemon.Display服务中给定的数据
+
 MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper)
     : QObject(nullptr)
     , m_parent(parent)
@@ -481,6 +483,11 @@ void MultiScreenWorker::onHideStateChanged()
 
     // 检查当前屏幕的当前位置是否允许显示,不允许需要更新显示信息(这里应该在函数外部就处理好,不应该走到这里)
     Monitor *currentMonitor = monitorByName(validMonitorList(m_monitorInfo), m_ds.current());
+    if (!currentMonitor) {
+        qDebug() << "cannot find monitor by name: " << m_ds.current();
+        return;
+    }
+
     if (!currentMonitor->dockPosition().docked(m_position)) {
         Q_ASSERT(false);
         m_ds.updateDockedScreen(getValidScreen(m_position));
@@ -1261,8 +1268,10 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     }
 
     Monitor *primaryMonitor = monitorByName(validMonitorList(m_monitorInfo), primaryName);
-
-    Q_ASSERT(primaryMonitor);
+    if (!primaryMonitor) {
+        qDebug() << "cannot find monitor by name: " << primaryName;
+        return QString();
+    }
 
     // 优先选用主屏显示
     if (primaryMonitor->dockPosition().docked(pos))
@@ -1283,6 +1292,10 @@ void MultiScreenWorker::autosetDockScreen()
     QList<Monitor *> monitorList = validMonitorList(m_monitorInfo);
     if (monitorList.size() == 2) {
         Monitor *primaryMonitor = monitorByName(validMonitorList(m_monitorInfo), m_ds.primary());
+        if (!primaryMonitor) {
+            qDebug() << "cannot find monitor by name: " << m_ds.primary();
+            return;
+        }
         if (!primaryMonitor->dockPosition().docked(position())) {
             foreach (auto monitor, monitorList) {
                 if (monitor->name() != m_ds.current()
