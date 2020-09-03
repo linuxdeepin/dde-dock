@@ -528,6 +528,11 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         m_extralRegisterKey.clear();
     }
 
+    if (!m_touchRegisterKey.isEmpty()) {
+        m_touchEventInter->UnregisterArea(m_touchRegisterKey);
+        m_touchRegisterKey.clear();
+    }
+
     const static int flags = Motion | Button | Key;
     const static int monitorHeight = 15;
     // 后端认为的任务栏大小(无缩放因素影响)
@@ -626,11 +631,55 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         }
     }
 
-    const QRect &rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-    updateTouchRegisterRegion(rect);
+    // 触屏监控高度固定调整为最大任务栏高度100+任务栏与屏幕边缘间距
+    const int monitHeight = 100 + WINDOWMARGIN;
+    // 任务栏触屏唤起区域
+    m_touchRectList.clear();
+    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
+        // 屏幕不可用或此位置不可停靠时，不用监听这块区域
+        if (!inter->enable() || !inter->dockPosition().docked(m_position))
+            continue;
+
+        MonitRect touchRect;
+        switch (m_position) {
+        case Top: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + monitHeight;
+        }
+        break;
+        case Bottom: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y() + inter->h() - monitHeight;
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + inter->h();
+        }
+        break;
+        case Left: {
+            touchRect.x1 = inter->x();
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + monitHeight;
+            touchRect.y2 = inter->y() + inter->h();
+        }
+        break;
+        case Right: {
+            touchRect.x1 = inter->x() + inter->w() - monitHeight;
+            touchRect.y1 = inter->y();
+            touchRect.x2 = inter->x() + inter->w();
+            touchRect.y2 = inter->y() + inter->h();
+        }
+        break;
+        }
+
+        if (!m_touchRectList.contains(touchRect)) {
+            m_touchRectList << touchRect;
+        }
+    }
 
     m_registerKey = m_eventInter->RegisterAreas(m_monitorRectList, flags);
     m_extralRegisterKey = m_extralEventInter->RegisterAreas(m_extralRectList, flags);
+    m_touchRegisterKey = m_touchEventInter->RegisterAreas(m_touchRectList, flags);
 }
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry()
@@ -1607,62 +1656,6 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
     }
 
     tryToShowDock(x, y);
-}
-
-void MultiScreenWorker::updateTouchRegisterRegion(const QRect &rect)
-{
-    if (!m_touchRegisterKey.isEmpty()) {
-        m_touchEventInter->UnregisterArea(m_touchRegisterKey);
-        m_touchRegisterKey.clear();
-    }
-
-    const int flags = Motion | Button | Key;
-
-    // 任务栏触屏唤起区域
-    m_touchRectList.clear();
-    foreach (Monitor *inter, validMonitorList(m_monitorInfo)) {
-        // 屏幕不可用或此位置不可停靠时，不用监听这块区域
-        if (!inter->enable() || !inter->dockPosition().docked(m_position))
-            continue;
-
-        MonitRect touchRect;
-        switch (m_position) {
-        case Top: {
-            touchRect.x1 = inter->x();
-            touchRect.y1 = inter->y();
-            touchRect.x2 = inter->x() + inter->w();
-            touchRect.y2 = inter->y() + rect.height() + WINDOWMARGIN;
-        }
-            break;
-        case Bottom: {
-            touchRect.x1 = inter->x();
-            touchRect.y1 = inter->y() + inter->h() - rect.height() - WINDOWMARGIN;
-            touchRect.x2 = inter->x() + inter->w();
-            touchRect.y2 = inter->y() + inter->h();
-        }
-            break;
-        case Left: {
-            touchRect.x1 = inter->x();
-            touchRect.y1 = inter->y();
-            touchRect.x2 = inter->x() + rect.width() + WINDOWMARGIN;
-            touchRect.y2 = inter->y() + inter->h();
-        }
-            break;
-        case Right: {
-            touchRect.x1 = inter->x() + inter->w() - rect.width() - WINDOWMARGIN;
-            touchRect.y1 = inter->y();
-            touchRect.x2 = inter->x() + inter->w();
-            touchRect.y2 = inter->y() + inter->h();
-        }
-            break;
-        }
-
-        if (!m_touchRectList.contains(touchRect)) {
-            m_touchRectList << touchRect;
-        }
-    }
-
-    m_touchRegisterKey = m_touchEventInter->RegisterAreas(m_touchRectList, flags);
 }
 
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)

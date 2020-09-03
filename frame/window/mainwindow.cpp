@@ -264,14 +264,6 @@ void MainWindow::initConnections()
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
 
-    connect(m_dragWidget, &DragWidget::dragFinished, m_multiScreenWorker, [this]{
-        const QRect &dockRect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
-                                                              , m_multiScreenWorker->position()
-                                                              , HideMode::KeepShowing
-                                                              , m_multiScreenWorker->displayMode());
-        m_multiScreenWorker->updateTouchRegisterRegion(dockRect);
-    });
-
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
 
     connect(m_menuWorker, &MenuWorker::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);

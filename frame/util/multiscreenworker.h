@@ -196,8 +196,6 @@ public slots:
 
     void handleDbusSignal(QDBusMessage);
 
-    void updateTouchRegisterRegion(const QRect &rect);
-
 private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
