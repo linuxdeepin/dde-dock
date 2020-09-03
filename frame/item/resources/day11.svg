@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="26" viewBox="0 0 28 26">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="112" height="104" viewBox="0 0 112 104">
   <defs>
-    <path id="day11-b" d="M10.484375,22.2216797 L10.484375,3 L7.72900391,3 L5,4.99072266 L5,7.91748047 L7.72900391,5.91357422 L7.72900391,22.2216797 L10.484375,22.2216797 Z M22.4438477,22.2216797 L22.4438477,3 L19.6884766,3 L16.9594727,4.99072266 L16.9594727,7.91748047 L19.6884766,5.91357422 L19.6884766,22.2216797 L22.4438477,22.2216797 Z"/>
+    <path id="day11-b" d="M41.9375,88.8867188 L41.9375,12 L30.9160156,12 L20,19.9628906 L20,31.6699219 L30.9160156,23.6542969 L30.9160156,88.8867188 L41.9375,88.8867188 Z M89.7753906,88.8867188 L89.7753906,12 L78.7539062,12 L67.8378906,19.9628906 L67.8378906,31.6699219 L78.7539062,23.6542969 L78.7539062,88.8867188 L89.7753906,88.8867188 Z"/>
     <filter id="day11-a" width="140.1%" height="136.4%" x="-20.1%" y="-13%" filterUnits="objectBoundingBox">
-      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
-      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="4"/>
       <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.000854821203   0 0 0 0 0.168099661   0 0 0 0 0.309386322  0 0 0 0.2 0"/>
     </filter>
   </defs>
-  <g fill="none" transform="rotate(-8 13.722 12.61)">
+  <g fill="none" transform="rotate(-8 54.888 50.443)">
     <use fill="#000" filter="url(#day11-a)" xlink:href="#day11-b"/>
     <use fill="#000" fill-opacity=".7" xlink:href="#day11-b"/>
     <use fill="#2D394F" xlink:href="#day11-b"/>

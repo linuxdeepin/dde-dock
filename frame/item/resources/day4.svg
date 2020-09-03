@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="26" viewBox="0 0 28 26">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="112" height="104" viewBox="0 0 112 104">
   <defs>
-    <polygon id="day4-b" points="18.771 22.222 18.771 19.361 20.3 19.361 20.3 16.764 18.771 16.764 18.771 11.24 16.016 11.24 16.016 16.764 10.993 16.764 17.492 3 14.42 3 8 16.764 8 19.361 16.016 19.361 16.016 22.222"/>
+    <polygon id="day4-b" points="75.084 88.887 75.084 77.443 81.201 77.443 81.201 67.055 75.084 67.055 75.084 44.959 64.063 44.959 64.063 67.055 43.971 67.055 69.969 12 57.682 12 32 67.055 32 77.443 64.063 77.443 64.063 88.887"/>
     <filter id="day4-a" width="156.9%" height="136.4%" x="-28.5%" y="-13%" filterUnits="objectBoundingBox">
-      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
-      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+      <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="4"/>
       <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.000854821203   0 0 0 0 0.168099661   0 0 0 0 0.309386322  0 0 0 0.2 0"/>
     </filter>
   </defs>
-  <g fill="none" transform="rotate(-8 14.15 12.61)">
+  <g fill="none" transform="rotate(-8 56.6 50.443)">
     <use fill="#000" filter="url(#day4-a)" xlink:href="#day4-b"/>
     <use fill="#000" fill-opacity=".7" xlink:href="#day4-b"/>
     <use fill="#2D394F" xlink:href="#day4-b"/>
