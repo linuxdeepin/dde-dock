@@ -212,7 +212,6 @@ SoundApplet::SoundApplet(QWidget *parent)
         const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();
         if (port) {
             m_audioInter->SetPort(port->cardId(), port->id(), int(port->direction()));
-            activePort(port->id(),port->cardId());
         }
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundApplet::refreshIcon);
@@ -244,6 +243,9 @@ VolumeSlider *SoundApplet::mainSlider()
 
 void SoundApplet::defaultSinkChanged()
 {
+    //防止手动切换设备，与后端交互时，获取到多个信号，设备切换多次，造成混乱
+    QThread::msleep(200);
+
     if (m_defSinkInter) {
         delete m_defSinkInter;
         m_defSinkInter = nullptr;
