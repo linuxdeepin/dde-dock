@@ -43,6 +43,7 @@ const (
 	obexAgentDBusInterface = "org.bluez.obex.Agent1"
 
 	receiveFileNotifyTimeout = 5 * 1000
+	receiveFileTimeout       = 40 * time.Second
 )
 
 var receiveBaseDir = userdir.Get(userdir.Download)
@@ -93,7 +94,6 @@ func (a *obexAgent) init() {
 
 	a.sigLoop = dbusutil.NewSignalLoop(a.service.Conn(), 0)
 	a.sigLoop.Start()
-
 }
 
 // registerAgent 注册 OBEX 的代理
@@ -158,7 +158,7 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 		deviceName = dev.Name
 	}
 
-	accepted, err := a.isSessionAccepted(sessionPath, deviceName, transfer)
+	accepted, err := a.isSessionAccepted(sessionPath, deviceName, filename, transfer)
 	if err != nil {
 		logger.Debug("isSessionAccepted err", err)
 		return "", dbusutil.ToError(err)
@@ -170,14 +170,14 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 	return filename, nil
 }
 
-func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName string, transfer *obex.Transfer) (bool, error) {
+func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName, filename string, transfer *obex.Transfer) (bool, error) {
 	a.acceptedSessionsMu.Lock()
 	defer a.acceptedSessionsMu.Unlock()
 
 	_, accepted := a.acceptedSessions[sessionPath]
 	if !accepted {
 		var err error
-		accepted, err = a.requestReceive(deviceName)
+		accepted, err = a.requestReceive(deviceName, filename)
 		if err != nil {
 			return false, err
 		}
@@ -387,12 +387,11 @@ func (a *obexAgent) Cancel() *dbus.Error {
 	}
 
 	a.requestNotifyCh <- false
-
 	return nil
 }
 
 // requestReceive 询问用户是否接收文件
-func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
+func (a *obexAgent) requestReceive(deviceName, filename string) (bool, error) {
 	notify := notifications.NewNotifications(a.service.Conn())
 	notify.InitSignalExt(a.sigLoop, true)
 
@@ -434,7 +433,6 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 		if notifyID != id {
 			return
 		}
-
 		a.requestNotifyChMu.Lock()
 		if a.requestNotifyCh != nil {
 			a.requestNotifyCh <- false
@@ -445,7 +443,13 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 		logger.Warning("ConnectNotificationClosed failed:", err)
 		return false, dbusutil.ToError(err)
 	}
-	result := <-a.requestNotifyCh
+
+	var result bool
+	select {
+	case result = <-a.requestNotifyCh:
+	case <-time.After(receiveFileTimeout):
+		a.notifyReceiveFileTimeout(notify, notifyID, filename)
+	}
 
 	a.requestNotifyChMu.Lock()
 	a.requestNotifyCh = nil
@@ -454,4 +458,20 @@ func (a *obexAgent) requestReceive(deviceName string) (bool, error) {
 	notify.RemoveAllHandlers()
 
 	return result, nil
+}
+
+// notifyReceiveFileTimeout 接收文件请求超时通知
+func (a *obexAgent) notifyReceiveFileTimeout(notify *notifications.Notifications, replaceID uint32, filename string) {
+	_, err := notify.Notify(0,
+		"dde-control-center",
+		replaceID,
+		notifyIconBluetoothConnectFailed,
+		gettext.Tr("File Transfer Failed"),
+		fmt.Sprintf(gettext.Tr("Receiving %s timed out"), filename),
+		nil,
+		nil,
+		receiveFileNotifyTimeout)
+	if err != nil {
+		logger.Warning("failed to send notify:", err)
+	}
 }
