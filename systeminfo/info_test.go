@@ -21,6 +21,7 @@ package systeminfo
 
 import (
 	"os"
+	"strconv"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -102,5 +103,52 @@ func TestIsFloatEqual(t *testing.T) {
 	Convey("Test memory info", t, func(c C) {
 		c.So(isFloatEqual(0.001, 0.0), ShouldEqual, false)
 		c.So(isFloatEqual(0.001, 0.001), ShouldEqual, true)
+	})
+}
+
+func TestParseInfoFile(t *testing.T) {
+	Convey("Test ParseInfoFile", t, func(c C) {
+		v, err := parseInfoFile("testdata/lsb-release", "=")
+		c.So(err, ShouldBeNil)
+		c.So(v["DISTRIB_ID"], ShouldEqual, "Deepin")
+		c.So(v["DISTRIB_RELEASE"], ShouldEqual, "2014.3")
+		c.So(v["DISTRIB_DESCRIPTION"], ShouldEqual, strconv.Quote("Deepin 2014.3"))
+	})
+}
+
+func TestGetCPUMaxMHzByLscpu(t *testing.T) {
+	Convey("Test GetCPUMaxMHzByLscpu", t, func(c C) {
+		ret, err := parseInfoFile("testdata/lsCPU", ":")
+		c.So(err, ShouldBeNil)
+		v, err := getCPUMaxMHzByLscpu(ret)
+		c.So(err, ShouldBeNil)
+		c.So(v, ShouldEqual, 3600.0000)
+	})
+}
+
+func TestGetProcessorByLscpuu(t *testing.T) {
+	Convey("Test GetProcessorByLscpu", t, func(c C) {
+		ret, err := parseInfoFile("testdata/lsCPU", ":")
+		c.So(err, ShouldBeNil)
+		v, err := getProcessorByLscpu(ret)
+		c.So(err, ShouldBeNil)
+		c.So(v, ShouldEqual,"Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz x 4")
+	})
+}
+
+func TestDoReadCache(t *testing.T) {
+	Convey("Test DoReadCache", t, func(c C) {
+		ret, err := doReadCache("testdata/systeminfo.cache")
+		c.So(err, ShouldBeNil)
+		c.So(ret.Version, ShouldEqual, "20 专业版")
+		c.So(ret.DistroID, ShouldEqual, "uos")
+		c.So(ret.DistroDesc, ShouldEqual, "UnionTech OS 20")
+		c.So(ret.DistroVer, ShouldEqual, "20")
+		c.So(ret.Processor, ShouldEqual, "Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz x 4")
+		c.So(ret.DiskCap, ShouldEqual, 500107862016)
+		c.So(ret.MemoryCap, ShouldEqual, 8280711168)
+		c.So(ret.SystemType, ShouldEqual, 64)
+		c.So(ret.CPUMaxMHz, ShouldEqual, 3600)
+		c.So(ret.CurrentSpeed, ShouldEqual, 0)
 	})
 }
