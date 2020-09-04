@@ -185,11 +185,11 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Местонахождение</translation>
+        <translation>Расположение</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Статус</translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <source>Plugins</source>
@@ -200,7 +200,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Выбор Программ</translation>
+        <translation>Запуск программ</translation>
     </message>
 </context>
 <context>
@@ -381,7 +381,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Спящий Режим</translation>
+        <translation>Спящий режим</translation>
     </message>
     <message>
         <source>Lock</source>

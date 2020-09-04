@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1, potpuno napunjen</translation>
     </message>
 </context>
 <context>

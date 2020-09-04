@@ -319,11 +319,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Carica %1, %2 min. rimanenti</translation>
+        <translation>Autonomia %1, %2 min. rimanenti</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Carica %1, %2 ore e %3 min. rimanenti</translation>
+        <translation>Autonomia %1, %2 ore e %3 min. rimanenti</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>

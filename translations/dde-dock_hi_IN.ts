@@ -3,7 +3,56 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation>प्लगिन %1 सिस्टम हेतु संगत नहीं है।</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ब्लूटूथ</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>ब्लूएटूथ सेवाएं</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>ऑफ करें</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>ऑन करें</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>ब्लूएटूथ सेवाएं</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ब्लूटूथ</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ब्लूटूथ</translation>
     </message>
 </context>
 <context>
@@ -20,16 +69,16 @@
         <translation>दिनांक व समय</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 घंटे का समय</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 घंटे का समय</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>समय संबंधी सेटिंग्स</translation>
+        <source>Time settings</source>
+        <translation>समय सेवाएं</translation>
     </message>
 </context>
 <context>
@@ -51,7 +100,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>क्या आप निश्चित ही %1 वस्तुएँ हटाना चाहते हैं?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -63,14 +112,14 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>इस कार्रवाई को पुनः स्थापित नहीं किया जा सकता है</translation>
+        <translation>यह कार्य पूर्ववत नहीं हो सकता है</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation>अज्ञात डिवाइस</translation>
+        <translation>अज्ञात उपकरण</translation>
     </message>
     <message>
         <source>Unknown volume</source>
@@ -100,7 +149,7 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>कुशल मोड</translation>
+        <translation>दक्षता मोड</translation>
     </message>
     <message>
         <source>Top</source>
@@ -128,7 +177,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>उपयोग के अनुरूप छिपाएँ</translation>
+        <translation>उपयोग अनुरूप छिपाएँ</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -158,11 +207,78 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>बहु-कार्य दृश्य</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>डॉक से हटाएँ</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>केबल कनेक्शन निष्क्रिय करें</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>केबल कनेक्शन सक्रिय करें</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>केबल रहित कनेक्शन निष्क्रिय करें</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>केबल रहित कनेक्शन सक्रिय करें</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>नेटवर्क निष्क्रिय करें</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>नेटवर्क सक्रिय करें</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>नेटवर्क सेटिंग्स</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>उपकरण निष्क्रिय है</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>केबल रहित कनेक्शन : %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>केबल कनेक्शन : %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>कनेक्ट नहीं है</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>कनेक्ट हो रहा है </translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>कनेक्ट है परंतु नेटवर्क हेतु अभिगम नहीं है </translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>नेटवर्क केबल हटी हुई है</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>बेतार नेटवर्क</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>तार वाला नेटवर्क</translation>
     </message>
 </context>
 <context>
@@ -170,6 +286,14 @@
     <message>
         <source>Network</source>
         <translation>नेटवर्क </translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>केबल नेटवर्क</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>केबल नेटवर्क %1</translation>
     </message>
 </context>
 <context>
@@ -195,30 +319,38 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>क्षमता %1, %2 मिनट शेष</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">चार्ज है %1</translation>
+        <translation>क्षमता %1, %2 घंटे %3 मिनट शेष</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>%1 चार्ज हो रहा है, पूर्ण होने में %2 मिनट शेष</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>%1 चार्ज हो रहा है, पूर्ण होने में %2 घंटे %3 मिनट शेष</translation>
     </message>
     <message>
         <source>Charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>चार्ज हो रहा है %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -230,7 +362,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>डॉक से हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -244,16 +376,12 @@
         <translation>बंद करें</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>पुनः आरंभ करें</translation>
-    </message>
-    <message>
         <source>Suspend</source>
         <translation>स्थगित करें</translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>हाइबरनेट</translation>
+        <translation>सुप्त करें</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -265,18 +393,22 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>खाता बदलें</translation>
+        <translation>अकाउंट बदलें</translation>
     </message>
     <message>
         <source>Power settings</source>
         <translation>पॉवर सेटिंग्स</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>पुनः आरंभ करें</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation>डिवाइस</translation>
+        <translation>उपकरण</translation>
     </message>
     <message>
         <source>Application</source>
@@ -294,12 +426,12 @@
         <translation>ध्वनि बंद करें</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>ऑडियो सेटिंग्स</translation>
+        <source>Sound settings</source>
+        <translation>ध्वनि सेटिंग्स</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>वर्तमान ध्वनि का स्तर %1</translation>
+        <source>Volume %1</source>
+        <translation>ध्वनि %1</translation>
     </message>
 </context>
 <context>
@@ -313,15 +445,15 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>रद्दी</translation>
+        <translation>ट्रैश</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>कचरा - %1 फ़ाइल</translation>
+        <translation>ट्रैश - %1 फाइल</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>कचरा - %1 फ़ाइलें</translation>
+        <translation>ट्रैश - %1 फाइलें</translation>
     </message>
 </context>
 <context>
@@ -332,7 +464,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>खाली </translation>
+        <translation>खाली करें </translation>
     </message>
 </context>
 <context>
@@ -343,40 +475,14 @@
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>अज्ञात</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>तार वाला कनेक्शन : %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>कोई नेटवर्क नहीं</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>बेतार कनेक्शन : %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>कनेक्टेड लेकिन इंटरनेट आक्सेस नही है</translation>
-    </message>
-</context>
-<context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>बेतार नेटवर्क</translation>
+        <translation>केबल रहित नेटवर्क</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>बेतार नेटवर्क %1</translation>
+        <translation>केबल रहित नेटवर्क %1</translation>
     </message>
 </context>
 </TS>

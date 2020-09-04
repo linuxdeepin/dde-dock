@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Eteint</translation>
     </message>
 </context>
 <context>

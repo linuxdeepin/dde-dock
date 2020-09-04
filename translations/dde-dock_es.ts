@@ -311,7 +311,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energía</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -347,11 +347,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Capacidad %1 ....</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Capacidad% 1, completamente cargada</translation>
     </message>
 </context>
 <context>

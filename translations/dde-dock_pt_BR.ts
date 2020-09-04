@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Configurações de Bluetooth</translation>
+        <translation>Configurações do Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Configurações de Bluetooth</translation>
+        <translation>Configurações do Bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
@@ -59,7 +59,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar o layout de teclado</translation>
+        <translation>Adicionar layout de teclado</translation>
     </message>
 </context>
 <context>
@@ -78,7 +78,7 @@
     </message>
     <message>
         <source>Time settings</source>
-        <translation>Configurações de Data e Hora</translation>
+        <translation>Configurações de data e hora</translation>
     </message>
 </context>
 <context>
@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta ação não pode ser desfeita</translation>
+        <translation>Esta ação não pode ser revertida</translation>
     </message>
 </context>
 <context>
@@ -138,18 +138,18 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Desmontar todos</translation>
+        <translation>Desmontar tudo</translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Modo Fashion</translation>
+        <translation>Fashion</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Modo Eficiente</translation>
+        <translation>Eficiente</translation>
     </message>
     <message>
         <source>Top</source>
@@ -169,15 +169,15 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Sempre Exibir</translation>
+        <translation>Sempre exibir</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Sempre Ocultar</translation>
+        <translation>Sempre ocultar</translation>
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultar Inteligente</translation>
+        <translation>Ocultar inteligente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Complementos</translation>
+        <translation>Plugins</translation>
     </message>
 </context>
 <context>
@@ -211,26 +211,26 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da Dock</translation>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
     <name>NetworkItem</name>
     <message>
         <source>Disable wired connection</source>
-        <translation>Desativar a conexão cabeada</translation>
+        <translation>Desativar conexão cabeada</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation>Ativar a conexão cabeada</translation>
+        <translation>Ativar conexão cabeada</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation>Desativar a conexão Wi-Fi</translation>
+        <translation>Desativar conexão Wi-Fi</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation>Ativar a conexão Wi-Fi</translation>
+        <translation>Ativar conexão Wi-Fi</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -300,7 +300,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Teclado Virtual</translation>
+        <translation>Teclado virtual</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -315,7 +315,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de Energia</translation>
+        <translation>Configurações de energia</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -362,7 +362,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da Dock</translation>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
@@ -389,7 +389,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Encerrar sessão</translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -397,7 +397,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de Energia</translation>
+        <translation>Configurações de energia</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -419,15 +419,15 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Com Áudio</translation>
+        <translation>Com áudio</translation>
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sem Áudio</translation>
+        <translation>Sem áudio</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation>Configurações de Som</translation>
+        <translation>Configurações de som</translation>
     </message>
     <message>
         <source>Volume %1</source>

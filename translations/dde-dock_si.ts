@@ -181,7 +181,7 @@
     </message>
     <message>
         <source>Mode</source>
-        <translation>ආකාරය</translation>
+        <translation>ප්‍රකාරය</translation>
     </message>
     <message>
         <source>Location</source>
@@ -478,7 +478,7 @@
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය</translation>
+        <translation>රැහැන් රහිත ජාලය</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

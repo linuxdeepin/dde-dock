@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Плагін %1 не сумісний із системою.</translation>
+        <translation>Додаток %1 не сумісний із системою.</translation>
     </message>
 </context>
 <context>
@@ -149,15 +149,15 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Режим ефективності</translation>
+        <translation>Практичний режим</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>Верх</translation>
+        <translation>Вгорі</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Вниз</translation>
+        <translation>Внизу</translation>
     </message>
     <message>
         <source>Left</source>
@@ -185,7 +185,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Місце знаходження</translation>
+        <translation>Розташування</translation>
     </message>
     <message>
         <source>Status</source>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation>Плагіни</translation>
+        <translation>Додатки</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>Програма</translation>
+        <translation>Застосунок</translation>
     </message>
 </context>
 <context>

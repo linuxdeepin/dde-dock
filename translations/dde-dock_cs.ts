@@ -319,7 +319,7 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Stav %1, %2 min zbývá</translation>
+        <translation>Energie %1, %2 min zbývá</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Vypínání</translation>
+        <translation>Vypnout</translation>
     </message>
     <message>
         <source>Suspend</source>

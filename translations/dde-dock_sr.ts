@@ -200,7 +200,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Покретач Програма</translation>
+        <translation>Покретач програма</translation>
     </message>
 </context>
 <context>
@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Искључи</translation>
+        <translation>Искључивање</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -389,7 +389,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Одјави се</translation>
+        <translation>Одјављивање</translation>
     </message>
     <message>
         <source>Switch account</source>

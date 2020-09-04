@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>종료</translation>
+        <translation>컴퓨터 끄기</translation>
     </message>
     <message>
         <source>Suspend</source>

@@ -331,7 +331,7 @@
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
+        <translation>%1 doluyor, doluma %2 saat %3 dakika var</translation>
     </message>
     <message>
         <source>Charged</source>

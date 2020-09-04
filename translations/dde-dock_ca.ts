@@ -389,7 +389,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Tanca la sessió</translation>
+        <translation>Surt de la sessió</translation>
     </message>
     <message>
         <source>Switch account</source>

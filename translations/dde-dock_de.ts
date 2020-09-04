@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 verbunden</translation>
     </message>
     <message>
         <source>Connecting...</source>

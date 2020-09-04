@@ -70,11 +70,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>orë 12-orëshe</translation>
+        <translation>Orë 12-orëshe</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>orë 24-orëshe</translation>
+        <translation>Orë 24-orëshe</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -100,7 +100,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Jeni i sigurt se doni të zbrazni $1 objekte?</translation>
+        <translation>Jeni i sigurt se doni të zbrazen $1 objekte?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -145,7 +145,7 @@
     <name>DockSettings</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Mënyrë Moda</translation>
+        <translation>Mënyra Modë</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -331,7 +331,7 @@
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Po ngarkohet %1, edhe %2 hr e %3 min deri sa të jetë plot</translation>
+        <translation>Po ngarkohet %1, edhe %2 hr e 3% min deri sa të jetë plot</translation>
     </message>
     <message>
         <source>Charged</source>

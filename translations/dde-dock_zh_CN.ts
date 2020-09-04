@@ -21,11 +21,11 @@
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation>关闭蓝牙</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation>开启蓝牙</translation>
+        <translation>开启</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
