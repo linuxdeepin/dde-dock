@@ -452,6 +452,7 @@ void MultiScreenWorker::onDisplayModeChanged()
     emit requestUpdateRegionMonitor();
     emit requestUpdateFrontendGeometry();
     emit requestNotifyWindowManager();
+    emit requestUpdateDragArea();
 }
 
 void MultiScreenWorker::onHideModeChanged()
