@@ -518,7 +518,7 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 	if int(direction) == pulse.DirectionSink {
 		card, err = a.cards.get(cardId)
 		if err == nil {
-			logger.Debugf("output port %s %s now is first priority", card.Name, portName)
+			logger.Debugf("output port %s %s now is first priority", card.core.Name, portName)
 			priorities.SetOutputPortFirst(card.core.Name, portName)
 			err = priorities.Save(globalPrioritiesFilePath)
 			priorities.Print()
@@ -526,7 +526,7 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 	} else {
 		card, err = a.cards.get(cardId)
 		if err == nil {
-			logger.Debugf("input port %s %s now is first priority", card.Name, portName)
+			logger.Debugf("input port %s %s now is first priority", card.core.Name, portName)
 			priorities.SetInputPortFirst(card.core.Name, portName)
 			err = priorities.Save(globalPrioritiesFilePath)
 			priorities.Print()
@@ -742,17 +742,16 @@ func (a *Audio) updateDefaultSink(sinkName string) {
 	a.PropsMu.Lock()
 	a.setPropDefaultSink(defaultSinkPath)
 	a.PropsMu.Unlock()
+
 	logger.Debug("set prop default sink:", defaultSinkPath)
 
 	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sink.Card), sink.ActivePort.Name)
-	err := sink.SetVolume(portConfig.Volume, false)
+
+	err := sink.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = sink.SetBalance(portConfig.Balance, false)
-	if err != nil {
-		logger.Warning(err)
-	}
+
 	err = sink.SetMute(portConfig.Mute)
 	if err != nil {
 		logger.Warning(err)
@@ -801,11 +800,7 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	a.PropsMu.Unlock()
 
 	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(source.Card), source.ActivePort.Name)
-	err := source.SetVolume(portConfig.Volume, false)
-	if err != nil {
-		logger.Warning(err)
-	}
-	err = source.SetBalance(portConfig.Balance, false)
+	err := source.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
 	if err != nil {
 		logger.Warning(err)
 	}

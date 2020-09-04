@@ -49,7 +49,7 @@ func NewPortConfig(name string) *PortConfig {
 	return &PortConfig{
 		Name:           name,
 		Enabled:        true,
-		Volume:         1.0,
+		Volume:         0.5,
 		IncreaseVolume: false,
 		Balance:        0.0,
 		ReduceNoise:    false,

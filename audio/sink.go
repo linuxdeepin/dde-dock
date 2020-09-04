@@ -96,6 +96,7 @@ func newSink(sinkInfo *pulse.Sink, audio *Audio) *Sink {
 //
 // isPlay: 是否播放声音反馈
 func (s *Sink) SetVolume(v float64, isPlay bool) *dbus.Error {
+	logger.Debugf("set #%d sink %q volume %f", s.index, s.Name, v)
 	if !isVolumeValid(v) {
 		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
@@ -164,6 +165,35 @@ func (s *Sink) SetFade(v float64) *dbus.Error {
 	s.PropsMu.RUnlock()
 	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
 	s.playFeedback()
+	return nil
+}
+
+// 设置同时设置音量和平衡
+//
+// v: volume音量值
+// b: balance左右平衡值
+// f: fade前后平衡值
+//
+func (s *Sink) setVBF(v, b, f float64) *dbus.Error {
+	if v < -1.00 || v > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
+	}
+
+	if b < -1.00 || b > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid balance value: %v", b))
+	}
+
+	if f < -1.00 || b > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid fade value: %v", f))
+	}
+
+	s.PropsMu.RLock()
+	cv := s.cVolume.SetAvg(v)
+	cv = cv.SetBalance(s.channelMap, b)
+	cv = cv.SetFade(s.channelMap, f)
+	s.PropsMu.RUnlock()
+	s.audio.context().SetSinkVolumeByIndex(s.index, cv)
+
 	return nil
 }
 

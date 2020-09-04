@@ -75,6 +75,7 @@ func newSource(sourceInfo *pulse.Source, audio *Audio) *Source {
 
 // 如何反馈输入音量？
 func (s *Source) SetVolume(v float64, isPlay bool) *dbus.Error {
+	logger.Debugf("set source %q volume %f", s.Name, v)
 	if !isVolumeValid(v) {
 		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
 	}
@@ -134,6 +135,35 @@ func (s *Source) SetFade(v float64) *dbus.Error {
 	s.audio.context().SetSourceVolumeByIndex(s.index, cv)
 
 	playFeedback()
+	return nil
+}
+
+// 设置同时设置音量和平衡
+//
+// v: volume音量值
+// b: balance左右平衡值
+// f: fade前后平衡值
+//
+func (s *Source) setVBF(v, b, f float64) *dbus.Error {
+	if v < -1.00 || v > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid volume value: %v", v))
+	}
+
+	if b < -1.00 || b > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid balance value: %v", b))
+	}
+
+	if f < -1.00 || b > 1.00 {
+		return dbusutil.ToError(fmt.Errorf("invalid fade value: %v", f))
+	}
+
+	s.PropsMu.RLock()
+	cv := s.cVolume.SetAvg(v)
+	cv = cv.SetBalance(s.channelMap, b)
+	cv = cv.SetFade(s.channelMap, f)
+	s.PropsMu.RUnlock()
+	s.audio.context().SetSourceVolumeByIndex(s.index, cv)
+
 	return nil
 }
 
