@@ -22,6 +22,12 @@
 #define DOCK_UNIT_TEST_H
 #include <QObject>
 
+#include <com_deepin_dde_daemon_dock.h>
+
+#include "../interfaces/constants.h"
+
+using DBusDock = com::deepin::dde::daemon::Dock;
+
 class DockUnitTest : public QObject
 {
     Q_OBJECT
@@ -30,12 +36,22 @@ public:
     DockUnitTest();
     ~DockUnitTest();
 
+private:
+    QDBusInterface *m_dockInter;
+    DBusDock *m_daemonDockInter;
+
+private:
+    const DockRect dockGeometry();              // 获取任务栏实际位置
+    const DockRect frontendWindowRect();        // 后端记录的任务栏前端界面位置(和实际位置不一定对应)
+    void setPosition(Dock::Position pos);
+
 private slots:
     void dock_geometry_check();         // 显示区域
     void dock_position_check();         // 位置检查
     void dock_displayMode_check();      // 显示模式检查
     void dock_appItemCount_check();     // 应用显示数量检查
     void dock_defaultVolume_Check(float defaultVolume = 50.0f);  // 设备默认音量检查
+    void dock_frontWindowRect_check();  // 检查FrontendWindowRect接口数据是否正确
 };
 
 #endif // DOCK_UNIT_TEST_H

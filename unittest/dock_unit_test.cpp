@@ -25,21 +25,53 @@
 #include <QDBusMessage>
 #include <QDBusArgument>
 #include <QGSettings/QGSettings>
+#include <QThread>
 
 #include <com_deepin_daemon_display.h>
-#include <com_deepin_dde_daemon_dock.h>
 
 #include "dock_unit_test.h"
 
-using DBusDock = com::deepin::dde::daemon::Dock;
+#define SLEEP1 QThread::sleep(1);
+
 DockUnitTest::DockUnitTest()
+    : m_dockInter(new QDBusInterface("com.deepin.dde.Dock", "/com/deepin/dde/Dock", "org.freedesktop.DBus.Properties"))
+    , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     qDBusRegisterMetaType<ScreenRect>();
 }
 
 DockUnitTest::~DockUnitTest()
 {
+    delete m_dockInter;
+    delete m_daemonDockInter;
+}
 
+const DockRect DockUnitTest::dockGeometry()
+{
+    DockRect dockRect;
+    QDBusInterface inter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", "org.freedesktop.DBus.Properties");
+    QString interface = "com.deepin.dde.Dock";
+    QString arg = "geometry";
+    QDBusMessage msg = inter.call("Get", interface, arg);
+
+    QVariant var = msg.arguments().first();
+    QDBusVariant dbvFirst = var.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+    dbusArgs >> dockRect;
+
+    return dockRect;
+}
+
+const DockRect DockUnitTest::frontendWindowRect()
+{
+    DBusDock dockInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    return dockInter.frontendWindowRect();
+}
+
+void DockUnitTest::setPosition(Dock::Position pos)
+{
+    m_daemonDockInter->setPosition(pos);
 }
 /**
  * @brief DockUnitTest::dock_geometry_test   比较任务栏自身的位置和通知给后端的位置是否吻合
@@ -151,7 +183,33 @@ void DockUnitTest::dock_appItemCount_check()
     for (auto inter : dockInter->entries()) {
         qDebug() << inter.path();
     }
+}
 
+/**
+ * @brief DockUnitTest::dock_frontWindowRect_check
+ * 原理：将任务栏设置为一直显示模式，然后切换四个位置，查看其frontendWindowRect与实际位置是否一致．
+ * 前提条件：　开启系统缩放(大于１即可)
+ * Tips:　任务栏在副屏时，frontendWindowRect对应的是上一次在主屏设置过的值．
+ * 可测出问题：任务栏在5.3.0.2版本时，开启缩放后，启动器打开时位置和任务栏有重叠，5.3.0.5版本修复了这个问题
+ * 对应Bug: https://pms.uniontech.com/zentao/bug-view-42095.html
+ */
+void DockUnitTest::dock_frontWindowRect_check()
+{
+    setPosition(Dock::Position::Top);
+    SLEEP1;
+    QVERIFY(dockGeometry() == frontendWindowRect());
+
+    setPosition(Dock::Position::Right);
+    SLEEP1;
+    QVERIFY(dockGeometry() == frontendWindowRect());
+
+    setPosition(Dock::Position::Bottom);
+    SLEEP1;
+    QVERIFY(dockGeometry() == frontendWindowRect());
+
+    setPosition(Dock::Position::Left);
+    SLEEP1;
+    QVERIFY(dockGeometry() == frontendWindowRect());
 }
 
 /**

@@ -19,7 +19,7 @@ pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 add_executable(${BIN_NAME} ${SRCS} ${INTERFACES})
 
 # 包含路径
-target_include_directories(${BIN_NAME} PUBLIC ${DFrameworkDBus_INCLUDE_DIRS})
+target_include_directories(${BIN_NAME} PUBLIC ${DFrameworkDBus_INCLUDE_DIRS}  ../../interfaces)
 
 # 链接库
 target_link_libraries(${BIN_NAME} PRIVATE
