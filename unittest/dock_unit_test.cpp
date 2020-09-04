@@ -154,6 +154,25 @@ void DockUnitTest::dock_appItemCount_check()
 
 }
 
+/**
+ * @brief DockUnitTest::dock_defaultVolume_Check　判断音量实际值是否与默认值是否相等
+ * @param defaultVolume 默认音量
+ */
+void DockUnitTest::dock_defaultVolume_Check(float defaultVolume)
+{
+    float volume = 0;
+    QDBusInterface audioInterface("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio", QDBusConnection::sessionBus(), this);
+    QDBusObjectPath defaultPath = audioInterface.property("DefaultSink").value<QDBusObjectPath>();
+    if (defaultPath.path() == "/") { //路径为空
+        qDebug() << "defaultPath" << defaultPath.path();
+        return;
+    } else {
+         QDBusInterface sinkInterface("com.deepin.daemon.Audio", defaultPath.path(), "com.deepin.daemon.Audio.Sink", QDBusConnection::sessionBus(), this);
+         volume = sinkInterface.property("Volume").toFloat() * 100.0f;
+    }
+    QCOMPARE(volume, defaultVolume);
+}
+
 QTEST_APPLESS_MAIN(DockUnitTest)
 
 #include "dock_unit_test.moc"
