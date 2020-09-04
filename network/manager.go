@@ -43,7 +43,6 @@ const (
 	dbusInterface   = "com.deepin.daemon.Network"
 )
 
-const maxPortalDetectionTime = 600 * time.Second
 const checkRepeatTime = 1 * time.Second
 
 type connectionData map[string]map[string]dbus.Variant
@@ -409,26 +408,4 @@ func (m *Manager) doPortalAuthentication() {
 		logger.Warning(err)
 	}
 	m.portalLastDetectionTime = time.Now()
-	if sincePortalDetection < maxPortalDetectionTime {
-		return
-	}
-	logger.Info("portal authentication begin")
-	for {
-		sincePortalDetection := time.Since(m.portalLastDetectionTime)
-		if sincePortalDetection >= maxPortalDetectionTime {
-			break
-		}
-		connectivity, err := nmManager.CheckConnectivity(0)
-		if err != nil {
-			logger.Warning(err)
-		}
-		if connectivity == nm.NM_CONNECTIVITY_FULL {
-			logger.Info("portal authentication successful")
-			notifyPortalSuccess()
-			break
-		}
-		time.Sleep(1 * time.Second)
-	}
-
-	logger.Info("portal authentication end")
 }
