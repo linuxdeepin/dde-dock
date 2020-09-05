@@ -63,6 +63,9 @@ private slots:
 
 private:
     QString duplicateCheck(const QString &kb);
+    //解决右键菜单时，光标变大的问题（与dock其他插件，app右键菜单一样处理，为临时解决方案)
+    void kbtLoadQCursorForUpdateMenu(QWidget *menu_win);
+    QCursor* kbtLoadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
 
 private:
     Keyboard *m_keyboard;

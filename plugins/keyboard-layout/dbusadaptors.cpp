@@ -20,6 +20,54 @@
 #include "dbusadaptors.h"
 #include <DDBusSender>
 #include <QDebug>
+#include <QWindow>
+#include <QCursor>
+#include <QGSettings>
+
+#include <X11/Xcursor/Xcursor.h>
+
+
+QCursor* DBusAdaptors::kbtLoadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize)
+{
+    if (theme == nullptr || cursorName == nullptr || cursorSize <= 0)
+        return nullptr;
+
+   XcursorImages *images = XcursorLibraryLoadImages(cursorName, theme, cursorSize);
+    if (images == nullptr || images->images[0] == nullptr) {
+        qWarning() << "loadCursorFalied, theme =" << theme << ", cursorName=" << cursorName;
+        return nullptr;
+    }
+    const int imgW = images->images[0]->width;
+    const int imgH = images->images[0]->height;
+    QImage img((const uchar*)images->images[0]->pixels, imgW, imgH, QImage::Format_ARGB32);
+    QPixmap pixmap = QPixmap::fromImage(img);
+    QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
+    delete images;
+    return cursor;
+}
+
+void DBusAdaptors::kbtLoadQCursorForUpdateMenu(QWidget *menu_win)
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        qDebug() << QString("Menu Update Cursor (theme=%1,%2 ; size=%3,%4)...").arg(lastCursorTheme).arg(theme).arg(lastCursorSize).arg(cursorSize);
+        QCursor *cursor = kbtLoadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        if(menu_win)
+            menu_win->setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
+}
 
 DBusAdaptors::DBusAdaptors(QObject *parent)
     : QDBusAbstractAdaptor(parent),
@@ -29,6 +77,12 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
       m_menu(new QMenu())
 {
     m_keyboard->setSync(false);
+
+    //qt自定义插件包增加menu属性,供QMenu使用显示属性。
+    m_menu->setAttribute(Qt::WA_NativeWindow);
+    m_menu->windowHandle()->setProperty("_d_dwayland_window-type" , "menu");
+    //修复右键菜单光标变大问题，临时解决方案
+    kbtLoadQCursorForUpdateMenu(m_menu);
 
     connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onCurrentLayoutChanged);
     connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onUserLayoutListChanged);
