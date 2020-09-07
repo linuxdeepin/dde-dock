@@ -287,6 +287,10 @@
         <source>Wired Network</source>
         <translation>Rede Cabeada</translation>
     </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -322,7 +326,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de Energia</translation>
+        <translation>Configurações de energia</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -404,7 +408,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Configurações de Energia</translation>
+        <translation>Configurações de energia</translation>
     </message>
     <message>
         <source>Reboot</source>

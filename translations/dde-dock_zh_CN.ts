@@ -287,6 +287,10 @@
         <source>Wired Network</source>
         <translation>有线网络</translation>
     </message>
+    <message>
+        <source>Connection failed</source>
+        <translation>连接失败</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -471,7 +475,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>清空列表</translation>
+        <translation>清空</translation>
     </message>
 </context>
 <context>

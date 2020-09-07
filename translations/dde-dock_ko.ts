@@ -287,6 +287,10 @@
         <source>Wired Network</source>
         <translation>유선 네트워크</translation>
     </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>

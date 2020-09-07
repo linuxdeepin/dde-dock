@@ -141,7 +141,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>開放</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <source>Unmount all</source>
@@ -175,11 +175,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>左聲道</translation>
+        <translation>左側</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>右聲道</translation>
+        <translation>右側</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -286,6 +286,10 @@
     <message>
         <source>Wired Network</source>
         <translation>有線網路</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation>連線失敗</translation>
     </message>
 </context>
 <context>
@@ -452,7 +456,7 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>垃圾桶</translation>
+        <translation>回收桶</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
@@ -467,7 +471,7 @@
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>開放</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <source>Empty</source>

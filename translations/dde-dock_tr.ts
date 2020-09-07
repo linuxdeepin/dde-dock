@@ -287,6 +287,10 @@
         <source>Wired Network</source>
         <translation>Kablolu Ağ</translation>
     </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>

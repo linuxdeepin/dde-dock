@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Eteint</translation>
     </message>
 </context>
 <context>
@@ -286,6 +286,10 @@
     <message>
         <source>Wired Network</source>
         <translation>Réseau filaire</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

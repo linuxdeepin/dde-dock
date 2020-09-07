@@ -40,7 +40,7 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 verbunden</translation>
     </message>
     <message>
         <source>Connecting...</source>
@@ -286,6 +286,10 @@
     <message>
         <source>Wired Network</source>
         <translation>Kabelgebundenes Netzwerk</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

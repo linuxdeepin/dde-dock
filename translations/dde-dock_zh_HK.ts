@@ -17,7 +17,7 @@
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth</source>
-        <translation>蓝牙</translation>
+        <translation>藍牙</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
@@ -48,7 +48,7 @@
     </message>
     <message>
         <source>Bluetooth</source>
-        <translation>蓝牙</translation>
+        <translation>藍牙</translation>
     </message>
     <message>
         <source>Turned off</source>
@@ -59,7 +59,7 @@
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
-        <translation>蓝牙</translation>
+        <translation>藍牙</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>删除</translation>
+        <translation>刪除</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -152,7 +152,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>启动器</translation>
+        <translation>啟動器</translation>
     </message>
 </context>
 <context>
@@ -199,7 +199,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>檔位置</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <source>Status</source>
@@ -265,7 +265,7 @@
     </message>
     <message>
         <source>Not connected</source>
-        <translation>未连接</translation>
+        <translation>未連接</translation>
     </message>
     <message>
         <source>Connecting</source>
@@ -281,22 +281,26 @@
     </message>
     <message>
         <source>Wireless Network</source>
-        <translation>无线网络</translation>
+        <translation>無線網絡</translation>
     </message>
     <message>
         <source>Wired Network</source>
-        <translation>有线网络</translation>
+        <translation>有線網絡</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation>連接失敗</translation>
     </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
-        <translation>网络</translation>
+        <translation>網絡</translation>
     </message>
     <message>
         <source>Wired Network</source>
-        <translation>有线网络</translation>
+        <translation>有線網絡</translation>
     </message>
     <message>
         <source>Wired Network %1</source>
@@ -307,7 +311,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>屏幕鍵盤</translation>
+        <translation>螢幕鍵盤</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -380,7 +384,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>关机</translation>
+        <translation>關機</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -396,7 +400,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>注销</translation>
+        <translation>登出</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -445,14 +449,14 @@
     <name>SoundPlugin</name>
     <message>
         <source>Sound</source>
-        <translation>声音</translation>
+        <translation>聲音</translation>
     </message>
 </context>
 <context>
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>垃圾桶</translation>
+        <translation>回收站</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
@@ -485,7 +489,7 @@
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
-        <translation>无线网络</translation>
+        <translation>無線網絡</translation>
     </message>
     <message>
         <source>Wireless Network %1</source>

@@ -3,7 +3,63 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>قىستۇرما %1 بىلەن سىستېما نەشرى ماسلاشمايدۇ</translation>
+    </message>
+</context>
+<context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation>چىقىرىۋېتىش</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>كۆكچىش</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>كۆكچىش تەڭشىكى</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>كۆكچىشنى تاقاش</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>كۆكچىشنى ئېچىش</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>كۆكچىش تەڭشىكى</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 ئۇلاندى</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>ئۇلىنىۋاتىدۇ...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>كۆكچىش</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>كۆكچىشنى تاقاش</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>كۆكچىش</translation>
     </message>
 </context>
 <context>
@@ -20,15 +76,15 @@
         <translation>چېسىلا ۋە ۋاقىت</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation>12 سائەتلىك</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation>24 سائەتلىك</translation>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation>ۋاقىت تەڭشىكى</translation>
     </message>
 </context>
@@ -51,7 +107,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>راستلا ئەخلەت ساندۇقىدىكى %1 تۈرلۈك مەزمۇننى تازىلامسىز؟</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -63,18 +119,18 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation type="unfinished"/>
+        <translation>بۇ مەشغۇلاتنى ئەسلىگە قايتۇرغىلى بولمايدۇ</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>نامەلۇم ئۈسكۈنە</translation>
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>سىغىمى نامەلۇم</translation>
     </message>
 </context>
 <context>
@@ -85,7 +141,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>ئېچىش</translation>
+        <translation>ئوچۇق</translation>
     </message>
     <message>
         <source>Unmount all</source>
@@ -93,18 +149,25 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>ئۈستەليۈزى قوزغاتقۇچ</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>مودا ھالەت</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>يۇقىرى ئۈنۈملۈك ھالەت</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>ئۈستى</translation>
     </message>
     <message>
         <source>Bottom</source>
@@ -144,24 +207,88 @@
     </message>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>ئۈستەليۈزى</translation>
+        <translation>قىستۇرما</translation>
     </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>كۆپ ۋەزىپە كۆرۈنۈشى</translation>
     </message>
     <message>
         <source>Undock</source>
+        <translation>چىقىرىۋېتىش</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>سىملىق تورنى تاقاش</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>سىملىق تورنى ئېچىش</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>سىمسىز تورنى تاقاش</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>سىمسىز تورنى ئېچىش</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>تورنى تاقاش</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>تورنى قوزغىتىش </translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>تور تەڭشىكى </translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>ئۈسكىنە چەكلەش</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>سىمسىز تور:  %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>سىملىق تور:  %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>ئۇلانمىدى</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>ئۇلىنىۋاتىدۇ</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>تور سىمى ئۇلانمىغان </translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>سىمسىز تور</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>سىملىق تور</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -171,12 +298,20 @@
         <source>Network</source>
         <translation>تور</translation>
     </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>سىملىق تور</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>سىملىق تور%1</translation>
+    </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>ئېكران كۇنۇپكىسى</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -187,7 +322,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>قۇۋۋەت</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -195,27 +330,39 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>توك %1 قالدى، %2 مىنۇت يېتىدۇ</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <translation>توك %1 قالدى، %2 سائەت %3 مىنۇت يېتىدۇ</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>زەرەتلىنىۋاتىدۇ%1، يەنە %2 مىنۇتتا توشىدۇ</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
+        <translation>زەرەتلىنىۋاتىدۇ%1، يەنە %2 سائەت %3 مىنۇتتا توشىدۇ</translation>
     </message>
     <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <source>Charged</source>
+        <translation>توشتى</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>توك%1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>زەرەتلەۋاتىدۇ%1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation>توك%1...</translation>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation>توك%1، توشتى</translation>
     </message>
 </context>
 <context>
@@ -226,22 +373,18 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>تۇرغۇنلارنى چىقىرىۋېتىش</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>قۇۋۋەت</translation>
     </message>
     <message>
         <source>Shut down</source>
-        <translation>ئۈسكۈنىنى تاقاش</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>قايتا قوزغىتىش</translation>
+        <translation>تاقاش</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -249,7 +392,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>ئۇخلاش ھالىتى</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -261,18 +404,22 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>ئاكونت ئالمىشىش</translation>
     </message>
     <message>
         <source>Power settings</source>
         <translation>باتارىيە تەڭشىكى</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>قايتا قوزغىتىش</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation type="unfinished"/>
+        <translation>ئۈسكۈنە</translation>
     </message>
     <message>
         <source>Application</source>
@@ -283,19 +430,19 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋازلىق</translation>
     </message>
     <message>
         <source>Mute</source>
         <translation>ئاۋازسىز</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation>ئاۋاز تەڭشىكى</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation type="unfinished"/>
+        <source>Volume %1</source>
+        <translation>ئاۋاز%1</translation>
     </message>
 </context>
 <context>
@@ -309,59 +456,33 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى - %1ھۆججەت</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى - %1ھۆججەت</translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>ئېچىش</translation>
+        <translation>ئوچۇق</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation type="unfinished"/>
+        <translation>قۇرۇق</translation>
     </message>
 </context>
 <context>
     <name>TrayPlugin</name>
     <message>
         <source>System Tray</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>نامەلۇم</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>تور يوق </translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
+        <translation>سىستېما يۈكلەنگەن دىسكا</translation>
     </message>
 </context>
 <context>
@@ -372,7 +493,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تور%1</translation>
     </message>
 </context>
 </TS>

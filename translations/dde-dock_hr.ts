@@ -10,7 +10,7 @@
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Ukloni</translation>
     </message>
 </context>
 <context>
@@ -287,6 +287,10 @@
         <source>Wired Network</source>
         <translation>Žična mreža</translation>
     </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,11 +358,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitet %1, potpuno napunjen</translation>
     </message>
 </context>
 <context>

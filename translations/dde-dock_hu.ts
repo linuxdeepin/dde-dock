@@ -21,30 +21,30 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth beállítások</translation>
     </message>
 </context>
 <context>
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Kikapcsolás</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Bekapcsolás</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth beállítások</translation>
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 kapcsolódva</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Kapcsolódás...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Kikapcsolva</translation>
     </message>
 </context>
 <context>
@@ -77,15 +77,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12 órás formátum</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24 órás formátum</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Idő beállítások</translation>
     </message>
 </context>
 <context>
@@ -225,19 +225,19 @@
     <name>NetworkItem</name>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>Vezetékes kapcsolat megszüntetése</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>Vezetékes kapcsolat engedélyezése</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>Vezeték-nélküli kapcsolat megszüntetése</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>Vezeték-nélküli kapcsolat engedélyezése</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>Vezeték-nélküli kapcsolat: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
@@ -286,6 +286,10 @@
     <message>
         <source>Wired Network</source>
         <translation>Vezetékes hálózat </translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -346,7 +350,7 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitás %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -354,11 +358,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitás %1...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Kapacitás %1, teljesen feltöltve</translation>
     </message>
 </context>
 <context>
@@ -434,11 +438,11 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Hang beállítások</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Hangerő: %1%</translation>
     </message>
 </context>
 <context>

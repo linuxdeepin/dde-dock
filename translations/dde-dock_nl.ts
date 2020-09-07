@@ -3,7 +3,63 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>De invoegtoepassing is niet verenigbaar met het systeem.</translation>
+        <translation>De invoegtoepassing &apos;%1&apos; is niet compatibel met het systeem.</translation>
+    </message>
+</context>
+<context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation>Verwijderen</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth-instellingen</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Uitschakelen</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Inschakelen</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth-instellingen</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 verbonden</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Bezig met verbinden...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Uitgeschakeld</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -17,19 +73,19 @@
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>DatumTijd</translation>
+        <translation>Datum en tijd</translation>
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12-uursklok</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24-uursklok</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Tijdinstellingen</translation>
     </message>
 </context>
 <context>
@@ -51,7 +107,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Weet u zeker dat u 1% objecten wilt leegmaken?</translation>
+        <translation>Weet je zeker dat je 1% objecten wilt verwijderen?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -74,7 +130,7 @@
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Onbekend volume</translation>
+        <translation>Onbekende schijf</translation>
     </message>
 </context>
 <context>
@@ -93,14 +149,21 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Programmastarter</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Moderne Modus</translation>
+        <translation>Moderne modus</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Efficiënte Modus</translation>
+        <translation>Efficiënte modus</translation>
     </message>
     <message>
         <source>Top</source>
@@ -120,11 +183,11 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Blijf weergeven</translation>
+        <translation>Altijd tonen</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Altijd verbegen</translation>
+        <translation>Altijd verbergen</translation>
     </message>
     <message>
         <source>Smart Hide</source>
@@ -148,21 +211,85 @@
     </message>
 </context>
 <context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Starter</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Multitasking Beeld</translation>
+        <translation>Multitaskingoverzicht</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Undock</translation>
+        <translation>Losmaken</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Bekabelde verbinding uitschakelen</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Bekabelde verbinding inschakelen</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Draadloze verbinding uitschakelen</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Draadloze verbinding inschakelen</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Netwerk uitschakelen</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Netwerk inschakelen</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Netwerkinstellingen</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Apparaat uitgeschakeld</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Draadloze verbinding: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Bekabelde verbinding: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Niet verbonden</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Bezig met verbinden</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Verbonden, maar geen internettoegang</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Netwerkkabel is niet aangesloten</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Draadloos netwerk</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Bekabeld netwerk</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -170,6 +297,14 @@
     <message>
         <source>Network</source>
         <translation>Netwerk</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Bekabeld netwerk</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Bekabeld netwerk: %1</translation>
     </message>
 </context>
 <context>
@@ -195,19 +330,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capaciteit %1, %2 min resterend</translation>
+        <translation>Capaciteit: %1 - %2 min resterend</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capaciteit %1, %2 hr %3 min resterend</translation>
+        <translation>Capaciteit: %1 - %2 uur en %3 min resterend</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Opladen %1, %2 min tot vol</translation>
+        <translation>%1 opgeladen - klaar over %2 min</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Opladen %1, %2 hr %3 min tot vol</translation>
+        <translation>%1 opgeladen - klaar over %2 uur en %3 min</translation>
     </message>
     <message>
         <source>Charged</source>
@@ -215,30 +350,30 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Capaciteit: %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
-        <translation>Laden %1</translation>
+        <translation>Bezig met opladen %1</translation>
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Capaciteit: %1 ...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Capaciteit: %1 - volledig opgeladen</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Toon Bureaublad</translation>
+        <translation>Bureaublad tonen</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Undock</translation>
+        <translation>Losmaken</translation>
     </message>
 </context>
 <context>
@@ -269,7 +404,7 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>Account wisselen</translation>
+        <translation>Ander account</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -288,14 +423,14 @@
     </message>
     <message>
         <source>Application</source>
-        <translation>Toepassing</translation>
+        <translation>Programma</translation>
     </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Dempen uit</translation>
+        <translation>Ontdempen</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -303,11 +438,11 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Geluidsinstellingen</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 volume</translation>
     </message>
 </context>
 <context>
@@ -321,15 +456,15 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>Prullenmand</translation>
+        <translation>Prullenbak</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>Prullenmand - %1 bestand</translation>
+        <translation>Prullenbak - %1 bestand</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>Prullenmand - %1 bestanden</translation>
+        <translation>Prullenbak - %1 bestanden</translation>
     </message>
 </context>
 <context>
@@ -351,32 +486,6 @@
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Onbekend</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Bedrade verbinding: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Geen netwerk</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Verbonden maar geen internettoegang</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>WirelessList</name>
     <message>
         <source>Wireless Network</source>
@@ -384,7 +493,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Draadloos Netwerk %1</translation>
+        <translation>Draadloos netwerk: %1</translation>
     </message>
 </context>
 </TS>
