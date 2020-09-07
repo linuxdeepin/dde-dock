@@ -62,6 +62,8 @@ type obexAgent struct {
 	receiveCh   chan struct{}
 	recevieChMu sync.Mutex
 
+	isCancel bool
+
 	acceptedSessions   map[dbus.ObjectPath]int
 	acceptedSessionsMu sync.Mutex
 
@@ -254,9 +256,17 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 			a.notifyID = a.notifyProgress(a.notify, a.notifyID, basename, device, 100)
 			notifyMu.Unlock()
 		} else {
-			notifyMu.Lock()
-			a.notifyID = a.notifyFailed(a.notify, a.notifyID)
-			notifyMu.Unlock()
+			// 区分点击取消的传输失败和蓝牙断开的传输失败
+			if a.isCancel {
+				notifyMu.Lock()
+				a.notifyID = a.notifyFailed(a.notify, a.notifyID, true)
+				notifyMu.Unlock()
+				a.isCancel = false
+			} else {
+				notifyMu.Lock()
+				a.notifyID = a.notifyFailed(a.notify, a.notifyID, false)
+				notifyMu.Unlock()
+			}
 		}
 
 		a.recevieChMu.Lock()
@@ -308,7 +318,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		if actionKey != "cancel" {
 			return
 		}
-
+		a.isCancel = true
 		err := transfer.Cancel(0)
 		if err != nil {
 			logger.Warning("failed to cancel transfer:", err)
@@ -347,7 +357,7 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 			"dde-control-center",
 			replaceID,
 			notifyIconBluetoothConnected,
-			fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), device, filename),
+			fmt.Sprintf(gettext.Tr("You have received files from %s successfully"), device),
 			gettext.Tr("Done"),
 			actions,
 			hints,
@@ -361,13 +371,21 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 }
 
 // notifyFailed 发送文件传输失败通知
-func (a *obexAgent) notifyFailed(notify *notifications.Notifications, replaceID uint32) uint32 {
+func (a *obexAgent) notifyFailed(notify *notifications.Notifications, replaceID uint32, isCancel bool) uint32 {
+	var body string
+	summary := gettext.Tr("Stop Receiving Files")
+	if isCancel {
+		body = gettext.Tr("You have cancelled the file transfer")
+	} else {
+		body = gettext.Tr("Bluetooth connection failed")
+	}
+
 	notifyID, err := notify.Notify(0,
 		"dde-control-center",
 		replaceID,
 		notifyIconBluetoothConnectFailed,
-		gettext.Tr("File Transfer Failed"),
-		gettext.Tr("The Bluetooth device is disconnected, please have a check"),
+		summary,
+		body,
 		nil,
 		nil,
 		receiveFileNotifyTimeout)
@@ -385,7 +403,6 @@ func (a *obexAgent) Cancel() *dbus.Error {
 	if a.requestNotifyCh == nil {
 		return dbusutil.ToError(errors.New("no such process"))
 	}
-
 	a.requestNotifyCh <- false
 	return nil
 }
