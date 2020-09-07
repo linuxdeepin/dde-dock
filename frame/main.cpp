@@ -23,13 +23,13 @@
 #include "window/accessible.h"
 #include "util/themeappicon.h"
 #include "controller/dockitemmanager.h"
+#include "util/dockapplication.h"
 
 #include <QAccessible>
 #include <QDir>
 #include <QStandardPaths>
 #include <QDateTime>
 
-#include <DApplication>
 #include <DLog>
 #include <DDBusSender>
 #include <DGuiApplicationHelper>
@@ -185,7 +185,7 @@ void sig_crash(int sig)
 int main(int argc, char *argv[])
 {
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
-    DApplication app(argc, argv);
+    DockApplication app(argc, argv);
 
     //崩溃信号
     signal(SIGTERM, sig_crash);

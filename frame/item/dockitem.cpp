@@ -182,7 +182,11 @@ void DockItem::enterEvent(QEvent *e)
     m_hover = true;
     //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
 //    m_hoverEffect->setHighlighting(true);
-    m_popupTipsDelayTimer->start();
+
+    // 触屏不显示hover效果
+    if (!qApp->property(IS_TOUCH_STATE).toBool()) {
+        m_popupTipsDelayTimer->start();
+    }
 
     update();
 

@@ -91,6 +91,8 @@ enum HideState {
     Hide        = 2,
 };
 
+#define IS_TOUCH_STATE "isTouchState"
+
 }
 
 Q_DECLARE_METATYPE(Dock::DisplayMode)

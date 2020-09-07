@@ -566,7 +566,10 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
 
 void SNITrayWidget::enterEvent(QEvent *event)
 {
-    m_popupTipsDelayTimer->start();
+    // 触屏不显示hover效果
+    if (!qApp->property(IS_TOUCH_STATE).toBool()) {
+        m_popupTipsDelayTimer->start();
+    }
 
     AbstractTrayWidget::enterEvent(event);
 }

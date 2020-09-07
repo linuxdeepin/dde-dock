@@ -206,7 +206,10 @@ void SystemTrayItem::enterEvent(QEvent *event)
         return;
     }
 
-    m_popupTipsDelayTimer->start();
+    // 触屏不显示hover效果
+    if (!qApp->property(IS_TOUCH_STATE).toBool()) {
+        m_popupTipsDelayTimer->start();
+    }
     update();
 
     AbstractTrayWidget::enterEvent(event);
