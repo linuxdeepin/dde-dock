@@ -55,6 +55,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    void enterEvent(QEvent *event);
 
 private:
     void initAnimations();

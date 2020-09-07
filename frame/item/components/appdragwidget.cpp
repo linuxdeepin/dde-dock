@@ -363,3 +363,11 @@ bool AppDragWidget::isRemoveAble()
     }
     return false;
 }
+
+void AppDragWidget::enterEvent(QEvent *event)
+{
+    if (m_goBackAnim->state() != QPropertyAnimation::State::Running
+        && m_animGroup->state() != QParallelAnimationGroup::Running) {
+        hide();
+    }
+}
