@@ -277,6 +277,16 @@ void MainWindow::initConnections()
 
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
+    connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, [ this ](){
+        static QPoint lastPos;
+        QPoint curPos = QCursor::pos();
+        if (lastPos == curPos) {
+            return;
+        }
+        lastPos = curPos;
+        qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseMove, m_dragWidget->mapFromGlobal(curPos)
+                                                      , curPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
+    });
 }
 
 void MainWindow::getTrayVisableItemCount()
@@ -468,7 +478,8 @@ void MainWindow::touchRequestResizeDock()
     if (!touchRect.contains(touchPos)) {
         return;
     }
-    qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseButtonPress, QPoint(), touchPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
+    qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseButtonPress, m_dragWidget->mapFromGlobal(touchPos)
+                                                  , touchPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
 }
 
 #include "mainwindow.moc"

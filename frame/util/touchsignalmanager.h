@@ -43,6 +43,7 @@ signals:
     void touchRelease(double scaleX, double scaleY);
     // 转发后端拖拽任务栏高度单指触控按压信号，当前设计1000ms
     void middleTouchPress(double scaleX, double scaleY);
+    void touchMove(double scaleX, double scaleY);
 
 private slots:
     void dealShortTouchPress(int time, double scaleX, double scaleY);

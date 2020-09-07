@@ -19,6 +19,7 @@ TouchSignalManager::TouchSignalManager(QObject *parent)
     connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, &TouchSignalManager::dealTouchRelease);
 
     connect(m_gestureInter, &Gesture::TouchPressTimeout, this, &TouchSignalManager::dealTouchPress);
+    connect(m_gestureInter, &Gesture::TouchMoving, this, &TouchSignalManager::touchMove);
 }
 
 TouchSignalManager::~TouchSignalManager()
