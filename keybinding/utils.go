@@ -36,6 +36,17 @@ import (
 	"pkg.deepin.io/lib/strv"
 )
 
+// nolint
+const (
+	suspendStateUnknown = iota + 1
+	suspendStateFinish
+	suspendStateWakeup
+	suspendStateLidOpen
+	suspendStatePrepare
+	suspendStateLidClose
+	suspendStateButtonClick
+)
+
 func resetGSettings(gs *gio.Settings) {
 	for _, key := range gs.ListKeys() {
 		userVal := gs.GetUserValue(key)
@@ -100,7 +111,11 @@ func systemLock() {
 
 func systemSuspend() {
 	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
+	go func() {
+		doPrepareSuspend()
+		sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
+		undoPrepareSuspend()
+	}()
 }
 
 func (m *Manager) systemHibernate() {
@@ -159,6 +174,7 @@ func (m *Manager) systemTurnOffScreen() {
 		m.doLock(true)
 	}
 
+	doPrepareSuspend()
 	if useWayland {
 		err = exec.Command("dde_wldpms", "-s", "Off").Run()
 	} else {
@@ -167,6 +183,7 @@ func (m *Manager) systemTurnOffScreen() {
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
 	}
+	undoPrepareSuspend()
 }
 
 func systemLogout() {
@@ -245,5 +262,23 @@ func (m *Manager) doLock(autoStartAuth bool) {
 	err := m.lockFront.ShowAuth(0, autoStartAuth)
 	if err != nil {
 		logger.Warning("failed to call lockFront ShowAuth:", err)
+	}
+}
+
+func doPrepareSuspend() {
+	sessionDBus, _ := dbus.SessionBus()
+	obj := sessionDBus.Object("com.deepin.daemon.Power", "/com/deepin/daemon/Power")
+	err := obj.Call("com.deepin.daemon.Power.SetPrepareSuspend", 0, suspendStateButtonClick).Err
+	if err != nil {
+		logger.Warning(err)
+	}
+}
+
+func undoPrepareSuspend() {
+	sessionDBus, _ := dbus.SessionBus()
+	obj := sessionDBus.Object("com.deepin.daemon.Power", "/com/deepin/daemon/Power")
+	err := obj.Call("com.deepin.daemon.Power.SetPrepareSuspend", 0, suspendStateFinish).Err
+	if err != nil {
+		logger.Warning(err)
 	}
 }

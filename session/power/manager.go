@@ -119,14 +119,20 @@ type Manager struct {
 	savingModeBrightnessDropPercent gsprop.Int // 用来接收和保存来自system power中降低的屏幕亮度值
 
 	AmbientLightAdjustBrightness gsprop.Bool `prop:"access:rw"`
-	ambientLightClaimed          bool
-	lightLevelUnit               string
-	lidSwitchState               uint
-	sessionActive                bool
+
+	ambientLightClaimed bool
+	lightLevelUnit      string
+	lidSwitchState      uint
+	sessionActive       bool
 
 	// if prepare suspend, ignore idle off
 	prepareSuspend       int
 	prepareSuspendLocker sync.Mutex
+
+	// nolint
+	methods *struct {
+		SetPrepareSuspend func() `in:"suspendState"`
+	}
 }
 
 var _manager *Manager
@@ -411,4 +417,9 @@ func (m *Manager) permitLogind() {
 		}
 		m.inhibitFd = -1
 	}
+}
+
+func (m *Manager) SetPrepareSuspend(v int) *dbus.Error {
+	m.setPrepareSuspend(v)
+	return nil
 }

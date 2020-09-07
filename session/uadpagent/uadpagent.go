@@ -43,6 +43,7 @@ type UadpAgent struct {
 
 	secretData map[string]string // 密钥缓存
 
+	// nolint
 	methods *struct {
 		SetDataKey func() `in:"keyName, dataKey"`
 		GetDataKey func() `in:"keyName" out:"dataKey"`

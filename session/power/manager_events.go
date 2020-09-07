@@ -27,6 +27,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 )
 
+// nolint
 const (
 	suspendStateUnknown = iota + 1
 	suspendStateFinish
@@ -34,6 +35,7 @@ const (
 	suspendStateLidOpen
 	suspendStatePrepare
 	suspendStateLidClose
+	suspendStateButtonClick
 )
 
 func (m *Manager) setPrepareSuspend(v int) {
