@@ -26,6 +26,7 @@
 #include <QDBusArgument>
 #include <QGSettings/QGSettings>
 #include <QThread>
+#include <QProcess>
 
 #include <com_deepin_daemon_display.h>
 
@@ -210,6 +211,25 @@ void DockUnitTest::dock_frontWindowRect_check()
     setPosition(Dock::Position::Left);
     SLEEP1;
     QVERIFY(dockGeometry() == frontendWindowRect());
+}
+
+/**
+ * @brief DockUnitTest::dock_multi_process
+ * 检查dde-dock是否在没进程存在时能否正常启动，在已有dde-dock进程存在时能否正常退出
+ */
+void DockUnitTest::dock_multi_process()
+{
+    QProcess *dockProc = new QProcess();
+    dockProc->start("dde-dock");
+    connect(dockProc, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+        QCOMPARE(exitCode, 255);
+        QCOMPARE(exitStatus, QProcess::ExitStatus::NormalExit);
+    });
+    connect(dockProc, &QProcess::errorOccurred, this, [=](QProcess::ProcessError error) {
+        qDebug() << "dde-dock error occurred: " << error;
+        QFAIL("control center error occurred");
+    });
+    dockProc->waitForFinished();
 }
 
 /**

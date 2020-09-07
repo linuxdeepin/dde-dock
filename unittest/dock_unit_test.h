@@ -52,6 +52,7 @@ private slots:
     void dock_appItemCount_check();     // 应用显示数量检查
     void dock_defaultVolume_Check(float defaultVolume = 50.0f);  // 设备默认音量检查
     void dock_frontWindowRect_check();  // 检查FrontendWindowRect接口数据是否正确
+    void dock_multi_process(); // 检查是否正常启动
 };
 
 #endif // DOCK_UNIT_TEST_H
