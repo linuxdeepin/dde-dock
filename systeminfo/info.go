@@ -25,9 +25,9 @@ import (
 
 	systeminfo "github.com/linuxdeepin/go-dbus-factory/com.deepin.system.systeminfo"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus1"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
-	"pkg.deepin.io/lib/dbus1"
 )
 
 const (
@@ -144,6 +144,20 @@ func (d *Daemon) initSysSystemInfo() {
 	if err != nil {
 		logger.Warning("systeminfo.CurrentSpeed().ConnectChanged err : ", err)
 	}
+
+	if isFloatEqual(d.info.CPUMaxMHz, 0.0) {
+		currentSpeed, err := d.systeminfo.CurrentSpeed().Get(0)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		if currentSpeed != 0 {
+			d.info.CurrentSpeed = currentSpeed
+			d.info.CPUMaxMHz = float64(currentSpeed)
+		} else {
+			logger.Warning("get CurrentSpeed value is 0")
+		}
+	}
 }
 
 func NewSystemInfo() *SystemInfo {
@@ -207,11 +221,9 @@ func (info *SystemInfo) init() {
 
 		info.Processor, err = getProcessorByLscpu(lscpuRes)
 		if err != nil {
-			logger.Warning("get CPU Max MHz failed:", err)
-			return
+			logger.Warning("get Processor failed:", err)
 		} else {
 			if isFloatEqual(info.CPUMaxMHz, 0.0) {
-				//关联信号,接收system的信号 : line139
 				//此时若info.CurrentSpeed不为0, 则可以直接使用备用的currentspeed赋值
 				if info.CurrentSpeed != 0 {
 					info.CPUMaxMHz = float64(info.CurrentSpeed)
