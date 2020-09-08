@@ -429,6 +429,7 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
 
 void MainWindow::onDragFinished()
 {
+    qDebug() << "drag finished";
     resetDragWindow();
 }
 

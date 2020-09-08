@@ -59,9 +59,79 @@ class QWidget;
 class QTimer;
 class MainWindow;
 
-class DockScreen : QObject
+/**
+ * @brief The MonitorInfo class
+ * 保存显示器信息
+ */
+class MonitorInfo : public QObject
 {
     Q_OBJECT
+public:
+    explicit MonitorInfo() {}
+
+    /**
+     * @brief data
+     * @return 所有的显示器信息
+     */
+    inline const QMap<Monitor *, MonitorInter *> data() {return m_monitorInfo;}
+
+    /**
+     * @brief validMonitor
+     * @return 返回一个列表，包含所有可用的显示器
+     */
+    const QList<Monitor *> validMonitor()
+    {
+        QList<Monitor *> list;
+        QMapIterator<Monitor *, MonitorInter *>it(m_monitorInfo);
+        while (it.hasNext()) {
+            it.next();
+            if (it.key()->enable())
+                list << it.key();
+        }
+        return list;
+    }
+
+    /**
+     * @brief insert 插入新的屏幕信息
+     * @param mon　插入的屏幕信息
+     * @param monInter　插入的屏幕对应的dbus指针
+     */
+    void insert(Monitor *mon, MonitorInter *monInter)
+    {
+        m_monitorInfo.insert(mon, monInter);
+
+        Q_EMIT monitorChanged();
+    }
+
+    /**
+     * @brief remove 删除显示其信息
+     * @param mon　待删除的数据
+     */
+    void remove(Monitor *mon)
+    {
+        m_monitorInfo.value(mon)->deleteLater();
+        m_monitorInfo.remove(mon);
+        mon->deleteLater();
+
+        Q_EMIT monitorChanged();
+    }
+
+signals:
+    /**
+     * @brief monitorChanged 显示器信息发生变化
+     */
+    void monitorChanged();
+
+private:
+    QMap<Monitor *, MonitorInter *> m_monitorInfo;
+};
+
+/**
+ * @brief The DockScreen class
+ * 保存任务栏的屏幕信息
+ */
+class DockScreen
+{
 public:
     explicit DockScreen(const QString &current, const QString &last, const QString &primary)
         : m_currentScreen(current)
@@ -176,7 +246,7 @@ signals:
     void displayModeChanegd();
 
     // 更新监视区域
-    void requestUpdateRegionMonitor();
+    void requestUpdateRegionMonitor();                          // 更新监听区域
     void requestUpdateFrontendGeometry();                       //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
@@ -311,23 +381,20 @@ private:
     bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
     const QPoint scaledPos(const QPoint &rawXPos);
-    QList<Monitor *> validMonitorList(const QMap<Monitor *, MonitorInter *> &map);
 
 private:
     QWidget *m_parent;
     DWindowManagerHelper *m_wmHelper;
-    XcbMisc *m_xcbMisc;
 
     // monitor screen
     XEventMonitor *m_eventInter;
     XEventMonitor *m_extralEventInter;
-    // 触控屏唤起任务栏监控区域接口
     XEventMonitor *m_touchEventInter;
 
     // DBus interface
     DBusDock *m_dockInter;
     DisplayInter *m_displayInter;
-    DBusLuncher* m_launcherInter;
+    DBusLuncher *m_launcherInter;
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
@@ -339,6 +406,8 @@ private:
 
     // 屏幕名称信息
     DockScreen m_ds;
+    // 显示器信息
+    MonitorInfo m_mtrInfo;
 
     // 任务栏属性
     double m_opacity;
@@ -346,10 +415,7 @@ private:
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
-    /**
-     * @brief m_monitorInfo 屏幕信息(注意需要保证内容实时更新,且有效)
-     */
-    QMap<Monitor *, MonitorInter *> m_monitorInfo;
+
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;
     int m_screenRawWidth;
@@ -360,13 +426,12 @@ private:
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
+    bool m_touchPress;                          // 触屏按下
+    QPoint m_touchPos;                          // 触屏按下坐标
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
     QList<MonitRect> m_extralRectList;          // 任务栏外部区域,随m_monitorRectList一起更新
     QList<MonitRect> m_touchRectList;           // 监听触屏唤起任务栏区域
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
-
-    bool m_touchPress;                          // 触屏按下
-    QPoint m_touchPos;                          // 触屏按下坐标
     /*****************************************************************/
 };
 
