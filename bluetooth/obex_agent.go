@@ -117,6 +117,10 @@ func (a *obexAgent) unregisterAgent() {
 
 // AuthorizePush 用于请求用户接收文件
 func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.Error) {
+	if a.b.ObexSessionPath != "/" {
+		return "", dbusutil.ToError(errors.New("declined"))
+	}
+
 	transfer, err := obex.NewTransfer(a.service.Conn(), transferPath)
 	if err != nil {
 		logger.Error("failed to new transfer:", err)
@@ -141,6 +145,8 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 		logger.Warning("failed to get transfer session:", err)
 		return "", dbusutil.ToError(err)
 	}
+
+	a.b.setPropObexSessionPath(sessionPath)
 
 	deviceAddress, err := session.Destination().Get(0)
 	if err != nil {
@@ -238,7 +244,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		if value != transferStatusComplete && value != transferStatusError {
 			return
 		}
-
+		a.b.setPropObexSessionPath("/")
 		// 手机会在一个传送完成之后再开始下一个传送，所以 transfer path 会一样
 		transfer.RemoveAllHandlers()
 
@@ -319,6 +325,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 			return
 		}
 		a.isCancel = true
+		a.b.setPropObexSessionPath("/")
 		err := transfer.Cancel(0)
 		if err != nil {
 			logger.Warning("failed to cancel transfer:", err)
