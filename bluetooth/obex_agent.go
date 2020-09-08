@@ -446,21 +446,6 @@ func (a *obexAgent) requestReceive(deviceName, filename string) (bool, error) {
 		return false, dbusutil.ToError(err)
 	}
 
-	_, err = notify.ConnectNotificationClosed(func(id uint32, reason uint32) {
-		if notifyID != id {
-			return
-		}
-		a.requestNotifyChMu.Lock()
-		if a.requestNotifyCh != nil {
-			a.requestNotifyCh <- false
-		}
-		a.requestNotifyChMu.Unlock()
-	})
-	if err != nil {
-		logger.Warning("ConnectNotificationClosed failed:", err)
-		return false, dbusutil.ToError(err)
-	}
-
 	var result bool
 	select {
 	case result = <-a.requestNotifyCh:
