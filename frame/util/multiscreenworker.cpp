@@ -51,13 +51,6 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_showAni(new QVariantAnimation(this))
     , m_hideAni(new QVariantAnimation(this))
     , m_ds(m_displayInter->primary())
-    , m_opacity(0.4)
-    , m_position(Dock::Position(m_dockInter->position()))
-    , m_hideMode(Dock::HideMode(m_dockInter->hideMode()))
-    , m_hideState(Dock::HideState(m_dockInter->hideState()))
-    , m_displayMode(Dock::DisplayMode(m_dockInter->displayMode()))
-    , m_screenRawHeight(m_displayInter->screenHeight())
-    , m_screenRawWidth(m_displayInter->screenWidth())
     , m_aniStart(false)
     , m_draging(false)
     , m_autoHide(true)
@@ -65,7 +58,9 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
 {
     qDebug() << "init dock screen: " << m_ds.current();
     initMembers();
+    initDBus();
     initConnection();
+    initDisplayData();
     initUI();
 }
 
@@ -350,7 +345,7 @@ void MultiScreenWorker::primaryScreenChanged()
 
     // 无效值
     if (screenRawHeight == 0 || screenRawWidth == 0) {
-        qDebug() << "screen raw data is not valid:" <<screenRawHeight << screenRawWidth;
+        qDebug() << "screen raw data is not valid:" << screenRawHeight << screenRawWidth;
         return;
     }
 
@@ -889,11 +884,6 @@ void MultiScreenWorker::onRequestDelayShowDock(const QString &screenName)
 
 void MultiScreenWorker::initMembers()
 {
-    DockItem::setDockPosition(m_position);
-    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
-    DockItem::setDockDisplayMode(m_displayMode);
-    qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
-
     m_monitorUpdateTimer->setInterval(10);
     m_monitorUpdateTimer->setSingleShot(true);
 
@@ -918,17 +908,10 @@ void MultiScreenWorker::initMembers()
     m_showAni->setDuration(duration);
     m_hideAni->setDuration(duration);
 
-    //1\初始化monitor信息
-    onMonitorListChanged(m_displayInter->monitors());
-
-    //2\初始化屏幕停靠信息
-    updateMonitorDockedInfo();
-
-    //3\初始化监视区域
-    onRequestUpdateRegionMonitor();
-
-    //4\初始化任务栏停靠屏幕
-    autosetDockScreen();
+    // init check
+    checkDaemonDockService();
+    checkDaemonDisplayService();
+    checkXEventMonitorService();
 }
 
 void MultiScreenWorker::initConnection()
@@ -965,32 +948,6 @@ void MultiScreenWorker::initConnection()
                                           "sa{sv}as",
                                           this, SLOT(handleDbusSignal(QDBusMessage)));
 #endif
-    connect(m_dockInter, &DBusDock::ServiceRestarted, this, [ = ] {
-        autosetDockScreen();
-
-        emit requestUpdateFrontendGeometry();
-    });
-    connect(m_dockInter, &DBusDock::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
-    connect(m_dockInter, &DBusDock::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
-    connect(m_dockInter, &DBusDock::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
-
-    connect(m_displayInter, &DisplayInter::ScreenWidthChanged, this, [ = ](ushort  value) {m_screenRawWidth = value;});
-    connect(m_displayInter, &DisplayInter::ScreenHeightChanged, this, [ = ](ushort  value) {m_screenRawHeight = value;});
-    connect(m_displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::onMonitorListChanged);
-    connect(m_displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::requestUpdateRegionMonitor);
-
-    connect(m_displayInter, &DisplayInter::PrimaryRectChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenHeightChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::ScreenWidthChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-
-    connect(m_eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
-    connect(m_eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
-    connect(m_eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
-
-    connect(m_extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
-
-    // 屏幕信息变化后应更新一下任务栏的显示
     connect(&m_mtrInfo, &MonitorInfo::monitorChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
     connect(this, &MultiScreenWorker::requestUpdateRegionMonitor, this, &MultiScreenWorker::onRequestUpdateRegionMonitor);
@@ -999,6 +956,8 @@ void MultiScreenWorker::initConnection()
     connect(this, &MultiScreenWorker::requestNotifyWindowManager, this, &MultiScreenWorker::onRequestNotifyWindowManager);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
     connect(this, &MultiScreenWorker::requestDelayShowDock, this, &MultiScreenWorker::onRequestDelayShowDock);
+
+    connect(m_delayTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
 
     //　更新任务栏内容展示
     connect(this, &MultiScreenWorker::requestUpdateLayout, this, [ = ] {
@@ -1013,7 +972,7 @@ void MultiScreenWorker::initConnection()
         // 更新屏幕停靠信息
         updateMonitorDockedInfo();
         // 更新所在屏幕
-        autosetDockScreen();
+        resetDockScreen();
         // 更新任务栏自身信息
         /**
           *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
@@ -1031,15 +990,6 @@ void MultiScreenWorker::initConnection()
         // 通知窗管
         emit requestNotifyWindowManager();
     });
-
-    connect(m_delayTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
-
-    // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
-    connect(m_touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {m_touchPress = false;});
-    connect(m_touchEventInter, &XEventMonitor::ButtonPress, this, &MultiScreenWorker::onTouchPress);
-    connect(m_touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
-
-    checkDaemonDockService();
 }
 
 void MultiScreenWorker::initUI()
@@ -1058,6 +1008,49 @@ void MultiScreenWorker::initUI()
 
     // 初始化透明度
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
+}
+
+void MultiScreenWorker::initDBus()
+{
+    if (m_dockInter->isValid()) {
+        m_position = static_cast<Dock::Position >(m_dockInter->position());
+        m_hideMode = static_cast<Dock::HideMode >(m_dockInter->hideMode());
+        m_hideState = static_cast<Dock::HideState >(m_dockInter->hideState());
+        m_displayMode = static_cast<Dock::DisplayMode >(m_dockInter->displayMode());
+        m_opacity = m_dockInter->opacity();
+
+        DockItem::setDockPosition(m_position);
+        qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
+        DockItem::setDockDisplayMode(m_displayMode);
+        qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
+    }
+
+    if (m_displayInter->isValid()) {
+        m_screenRawHeight = m_displayInter->screenHeight();
+        m_screenRawWidth = m_displayInter->screenWidth();
+        m_ds = DockScreen(m_displayInter->primary());
+    }
+}
+
+void MultiScreenWorker::initDisplayData()
+{
+    //1\初始化monitor信息
+    onMonitorListChanged(m_displayInter->monitors());
+
+    //2\初始化屏幕停靠信息
+    updateMonitorDockedInfo();
+
+    //3\初始化监视区域
+    onRequestUpdateRegionMonitor();
+
+    //4\初始化任务栏停靠屏幕
+    resetDockScreen();
+}
+
+void MultiScreenWorker::reInitDisplayData()
+{
+    initDBus();
+    initDisplayData();
 }
 
 void MultiScreenWorker::showAni(const QString &screen)
@@ -1262,7 +1255,7 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     Q_UNREACHABLE();
 }
 
-void MultiScreenWorker::autosetDockScreen()
+void MultiScreenWorker::resetDockScreen()
 {
     QList<Monitor *> monitorList = m_mtrInfo.validMonitor();
     if (monitorList.size() == 2) {
@@ -1285,7 +1278,17 @@ void MultiScreenWorker::autosetDockScreen()
 
 void MultiScreenWorker::checkDaemonDockService()
 {
-    // com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
+    auto connectionInit = [ = ](DBusDock * dockInter) {
+        connect(dockInter, &DBusDock::ServiceRestarted, this, [ = ] {
+            resetDockScreen();
+
+            emit requestUpdateFrontendGeometry();
+        });
+        connect(dockInter, &DBusDock::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
+        connect(dockInter, &DBusDock::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+        connect(dockInter, &DBusDock::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+    };
+
     const QString serverName = "com.deepin.dde.daemon.Dock";
     QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
 
@@ -1293,13 +1296,16 @@ void MultiScreenWorker::checkDaemonDockService()
         connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
             Q_UNUSED(oldOwner)
             if (name == serverName && !newOwner.isEmpty()) {
-                if (m_dockInter) {
-                    delete m_dockInter;
-                    m_dockInter = nullptr;
-                }
+                FREE_POINT(m_dockInter);
 
                 m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+                // connect
+                connectionInit(m_dockInter);
 
+                // reinit data
+                reInitDisplayData();
+
+                // operation
                 onPositionChanged();
                 onDisplayModeChanged();
                 onHideModeChanged();
@@ -1309,6 +1315,88 @@ void MultiScreenWorker::checkDaemonDockService()
                 disconnect(ifc);
             }
         });
+    } else {
+        connectionInit(m_dockInter);
+    }
+}
+
+void MultiScreenWorker::checkDaemonDisplayService()
+{
+    auto connectionInit = [ = ](DisplayInter * displayInter) {
+        connect(displayInter, &DisplayInter::ScreenWidthChanged, this, [ = ](ushort  value) {m_screenRawWidth = value;});
+        connect(displayInter, &DisplayInter::ScreenHeightChanged, this, [ = ](ushort  value) {m_screenRawHeight = value;});
+        connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::onMonitorListChanged);
+        connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::requestUpdateRegionMonitor);
+        connect(displayInter, &DisplayInter::PrimaryRectChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+        connect(displayInter, &DisplayInter::ScreenHeightChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+        connect(displayInter, &DisplayInter::ScreenWidthChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+        connect(displayInter, &DisplayInter::PrimaryChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+    };
+
+    const QString serverName = "com.deepin.daemon.Display";
+    QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
+
+    if (!ifc->isServiceRegistered(serverName)) {
+        connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
+            Q_UNUSED(oldOwner)
+            if (name == serverName && !newOwner.isEmpty()) {
+                FREE_POINT(m_displayInter);
+
+                m_displayInter = new DisplayInter(serverName, "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this);
+                // connect
+                connectionInit(m_displayInter);
+
+                // reinit data
+                reInitDisplayData();
+
+                // 更新任务栏显示位置
+                m_monitorUpdateTimer->start();
+
+                disconnect(ifc);
+            }
+        });
+    } else {
+        connectionInit(m_displayInter);
+    }
+}
+
+void MultiScreenWorker::checkXEventMonitorService()
+{
+    auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
+        connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
+        connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
+        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
+
+        connect(extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
+
+        // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
+        connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {m_touchPress = false;});
+        connect(touchEventInter, &XEventMonitor::ButtonPress, this, &MultiScreenWorker::onTouchPress);
+        connect(touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
+    };
+
+    const QString serverName = "com.deepin.api.XEventMonitor";
+    QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
+
+    if (!ifc->isServiceRegistered(serverName)) {
+        connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
+            Q_UNUSED(oldOwner)
+            if (name == serverName && !newOwner.isEmpty()) {
+                FREE_POINT(m_eventInter);
+                FREE_POINT(m_extralEventInter);
+                FREE_POINT(m_touchEventInter);
+
+                m_eventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
+                m_extralEventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
+                m_touchEventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
+                // connect
+                connectionInit(m_eventInter, m_extralEventInter, m_touchEventInter);
+
+                disconnect(ifc);
+            }
+        });
+    } else {
+        connectionInit(m_eventInter, m_extralEventInter, m_touchEventInter);
     }
 }
 

@@ -40,6 +40,10 @@
 
 #define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
+#define FREE_POINT(p) if (p) {\
+delete p;\
+p = nullptr;\
+}\
 
 DGUI_USE_NAMESPACE
 /**
@@ -156,6 +160,9 @@ public:
     void updatePrimary(const QString &primary)
     {
         m_primary = primary;
+        if (m_currentScreen.isEmpty()) {
+            updateDockedScreen(primary);
+        }
     }
 
 private:
@@ -317,8 +324,19 @@ private slots:
 private:
     // 初始化数据信息
     void initMembers();
+    void initDBus();
     void initConnection();
     void initUI();
+    /**
+     * @brief initDisplayData
+     * 初始化任务栏的所有必要信息,并更新其位置
+     */
+    void initDisplayData();
+    /**
+     * @brief reInitDisplayData
+     * 重新初始化任务栏的所有必要信息,并更新其位置
+     */
+    void reInitDisplayData();
     /**
      * @brief showAni   任务栏显示动画
      * @param screen    显示到目标屏幕上
@@ -354,11 +372,24 @@ private:
      */
     QString getValidScreen(const Position &pos);
     /**
-     * @brief autosetDockScreen     检查一下当前屏幕所在边缘是够允许任务栏停靠，不允许的情况需要更换下一块屏幕
+     * @brief resetDockScreen     检查一下当前屏幕所在边缘是够允许任务栏停靠，不允许的情况需要更换下一块屏幕
      */
-    void autosetDockScreen();
-
+    void resetDockScreen();
+    /**
+     * @brief checkDaemonDockService
+     * 避免com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
+     */
     void checkDaemonDockService();
+    /**
+     * @brief checkDaemonDisplayService
+     * 避免com.deepin.daemon.Display服务比dock晚启动，导致dock启动后的状态错误
+     */
+    void checkDaemonDisplayService();
+    /**
+     * @brief checkDaemonXEventMonitorService
+     * 避免com.deepin.api.XEventMonitor服务比dock晚启动，导致dock启动后的状态错误
+     */
+    void checkXEventMonitorService();
 
     MainWindow *parent();
     /**

@@ -51,7 +51,7 @@ public:
 
 public:
     explicit DockItem(QWidget *parent = nullptr);
-    ~DockItem();
+    ~DockItem() override;
 
     static void setDockPosition(const Position side);
     static void setDockDisplayMode(const DisplayMode mode);
