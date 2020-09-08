@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>, 2020\n"
 "Language-Team: Albanian (https://www.transifex.com/linuxdeepin/teams/3617/sq/)\n"
@@ -127,47 +127,65 @@ msgstr "Hyrje në mesazhe"
 msgid "Message notification"
 msgstr "Njoftim mesazhesh"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Anuloje"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr "Po merren %s kartela nga \"%s\""
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
+msgstr "Shiheni"
+
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
+msgstr "U bë"
+
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
-msgstr "Shpërngulja e Kartelave Dështoi"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
+msgstr ""
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr "Pajisja Bluetooth është shkëputur, ju lutemi, kontrollojeni"
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Lidhja përmes Bluetooth-it dështoi"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
 msgstr "Hidhe poshtë"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
 msgstr "Merre"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
 msgstr "Shpërngulje Bluetooth Kartelash"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
 msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Shpërngulja e Kartelave Dështoi"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
@@ -181,10 +199,6 @@ msgstr "%q u shkëput"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Sigurohuni që %q është hapur dhe brenda intervali"
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Lidhja përmes Bluetooth-it dështoi"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -246,7 +260,7 @@ msgstr "Kujtues Planesh"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "Festival"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -1003,13 +1017,13 @@ msgstr ""
 "\"%s\" s’e kaloi verifikimin e sigurisë së sistemit, dhe s’mund të xhirohet "
 "këtë herë"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Bateri e pakët në nivel kritik"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "Bateri e pakët, ju lutemi, vëreni në prizë"
 

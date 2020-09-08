@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>, 2020\n"
 "Language-Team: Ukrainian (https://www.transifex.com/linuxdeepin/teams/3617/uk/)\n"
@@ -130,47 +130,65 @@ msgstr "Доступ до повідомлень"
 msgid "Message notification"
 msgstr "Сповіщення про повідомлення"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr "Отримуємо %s файлів з «%s»"
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
 msgstr "Переглянути"
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
 msgstr "Виконано"
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
-msgstr "Помилка передавання файлів"
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
+msgstr ""
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr "Пристірй Bluetooth від'єднано, будь ласка, перевірте"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
+msgstr ""
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Збій підключення з Bluetooth"
+
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
 msgstr "Відхилити"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
 msgstr "Отримати"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
 msgstr "Передавання файлів Bluetooth"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
 msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Помилка передавання файлів"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
@@ -184,10 +202,6 @@ msgstr "%q відключено"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Переконайтеся, що %q увімкнений і знаходиться у межах досяжності "
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Збій підключення з Bluetooth"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -1008,13 +1022,13 @@ msgstr ""
 "«%s» не пройдено перевіркою засобів захисту системи. Цю програму зараз не "
 "можна запускати."
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Акумулятор критично розряджено"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr ""
 "Низький рівень заряду акумулятора, будь ласка, приєднайте комп'ютер до "

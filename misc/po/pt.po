@@ -6,20 +6,20 @@
 # Translators:
 # Manuela Silva <manuelarodsilva@gmail.com>, 2020
 # Luís Lima <geral@liqensoft.com>, 2020
+# Ricardo Simões <xmcorporation@gmail.com>, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
 # Jesse Brandao <www.jwb@gmail.com>, 2020
 # Cindy0514, 2020
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2020
-# Ricardo Simões <xmcorporation@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Ricardo Simões <xmcorporation@gmail.com>, 2020\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2020\n"
 "Language-Team: Portuguese (https://www.transifex.com/linuxdeepin/teams/3617/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,47 +131,65 @@ msgstr "Acesso de mensagem"
 msgid "Message notification"
 msgstr "Notificação de mensagem"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr "A receber %s ficheiros de \"%s\""
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
-msgstr "Visualizar"
+msgstr "Ver"
 
-#: ../../bluetooth/obex_agent.go:351
-msgid "Done"
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
-msgstr "Falha na transferência de ficheiros"
+#: ../../bluetooth/obex_agent.go:361
+msgid "Done"
+msgstr "Concluído"
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr "O dispositivo Bluetooth está desligado, efetue uma verificação"
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
+msgstr ""
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Falha na ligação por Bluetooth"
+
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
 msgstr "Recusar"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
 msgstr "Receber"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
 msgstr "Transferência de ficheiros Bluetooth"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
 msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Falha na transferência de ficheiros"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
@@ -185,10 +203,6 @@ msgstr "%q desligado"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Certifique-se que %q está ligado e dentro do alcance"
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Falha na ligação por Bluetooth"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -578,7 +592,7 @@ msgstr "Ligação por cabo"
 
 #: ../../network/proxychains/utils_notify.go:45
 msgid "Application proxy is set successfully"
-msgstr ""
+msgstr "O proxy da aplicação está definido com sucesso"
 
 #: ../../network/proxychains/utils_notify.go:45
 #: ../../network/proxychains/utils_notify.go:48
@@ -589,7 +603,7 @@ msgstr "Rede"
 
 #: ../../network/proxychains/utils_notify.go:48
 msgid "Failed to set the application proxy"
-msgstr ""
+msgstr "Falha ao definir o proxy da aplicação"
 
 #: ../../network/state_handler.go:38
 msgid "Device state changed"
@@ -1007,13 +1021,13 @@ msgstr ""
 "O \"%s\" não passou na verificação de segurança do sistema e não pode ser "
 "executado agora"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Bateria em estado crítico"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "Bateria fraca, ligue à corrente"
 

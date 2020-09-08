@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Cindy0514, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/linuxdeepin/teams/3617/zh_CN/)\n"
@@ -130,47 +130,65 @@ msgstr "消息访问"
 msgid "Message notification"
 msgstr "消息通知"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "取消"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr "正在接收来自“%s”的%s个文件"
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
 msgstr "查看"
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr "您已成功接收来自%s的文件"
+
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
 msgstr "完成"
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
-msgstr "文件传输失败"
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
+msgstr "文件接收中止"
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr "蓝牙设备连接中断，请检查设备连接"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
+msgstr "您已取消接收文件"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "蓝牙连接失败"
+
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
 msgstr "拒绝"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
 msgstr "接收"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
 msgstr "蓝牙文件传输"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
 msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "文件传输失败"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr "接收%s超时"
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
@@ -184,10 +202,6 @@ msgstr "%q已断开"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "请确定%q已打开而且在通讯范围内"
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "蓝牙连接失败"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -987,13 +1001,13 @@ msgstr "Portal网络认证成功"
 msgid "\"%s\" did not pass the system security verification, and cannot run now"
 msgstr "“%s”没有通过系统安全验证，无法运行"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "电池电量耗尽"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "电池电量低，请连接电源"
 

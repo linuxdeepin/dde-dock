@@ -11,17 +11,17 @@
 # Lars Acou <lars.acou@gmail.com>, 2020
 # Hans van Schooten <hans@schootenvan.nl>, 2020
 # Cindy0514, 2020
-# Heimen Stoffels <vistausss@outlook.com>, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Heimen Stoffels <vistausss@outlook.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>, 2020\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>, 2020\n"
 "Language-Team: Dutch (https://www.transifex.com/linuxdeepin/teams/3617/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -133,48 +133,65 @@ msgstr "Berichttoegang"
 msgid "Message notification"
 msgstr "Berichtmelding"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
 msgstr "Bezig met ontvangen van %s bestanden van \"%s\""
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
 msgstr "Bekijk"
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
+msgstr "Klaar"
+
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
-msgstr "Bestandsoverdracht mislukt"
-
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
 msgstr ""
-"Het Bluetooth-apparaat is niet meer verbonden - controleer de instellingen"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Bluetoothverbinding mislukt"
+
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
 msgstr "Weigeren"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
 msgstr "Ontvangen"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
 msgstr "Bluetooth-bestandsoverdracht"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
 msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Bestandsoverdracht mislukt"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
 msgid "Connect %q successfully"
@@ -188,10 +205,6 @@ msgstr "Verbinding verbroken met %q"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Zorg dat %q is ingeschakeld en binnen bereik is"
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Bluetoothverbinding mislukt"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -581,7 +594,7 @@ msgstr "Bekabelde verbinding"
 
 #: ../../network/proxychains/utils_notify.go:45
 msgid "Application proxy is set successfully"
-msgstr ""
+msgstr "De programmaproxy is ingesteld"
 
 #: ../../network/proxychains/utils_notify.go:45
 #: ../../network/proxychains/utils_notify.go:48
@@ -592,7 +605,7 @@ msgstr "Netwerk"
 
 #: ../../network/proxychains/utils_notify.go:48
 msgid "Failed to set the application proxy"
-msgstr ""
+msgstr "De programmaproxy kan niet worden ingesteld"
 
 #: ../../network/state_handler.go:38
 msgid "Device state changed"
@@ -1014,13 +1027,13 @@ msgstr ""
 "\"%s\" voldeed niet aan de systeemveiligheidsvereisten en kan momenteel niet"
 " worden uitgevoerd"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Het accuniveau is zeer laag"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "De accu is bijna leeg - sluit de netstroomadapter aan"
 

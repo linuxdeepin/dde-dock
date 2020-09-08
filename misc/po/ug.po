@@ -1,22 +1,30 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# مۇختەر مەخمۇت <yeganaaa@163.com>, 2017
+# مۇختەر مەخمۇت <yeganaaa@163.com>, 2020
+# Cindy0514, 2020
+# Abdusalam Huxur <2250907458@qq.com>, 2020
+# Muhammadali Abliz <ordam2@163.com>, 2020
+# 伊力亚斯 伊德日斯 <2032517177@qq.com>, 2020
+# 阿迪力 买买提明 <251078110@qq.com>, 2020
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Deepin Desktop Environment\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 10:32+0800\n"
-"PO-Revision-Date: 2019-11-13 03:52+0000\n"
-"Last-Translator: transifex deepin <transifex@deepin.com>\n"
-"Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ug/)\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
+"PO-Revision-Date: 2020-05-29 07:18+0000\n"
+"Last-Translator: 阿迪力 买买提明 <251078110@qq.com>, 2020\n"
+"Language-Team: Uyghur (https://www.transifex.com/linuxdeepin/teams/3617/ug/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ug\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/checkers/password.go:53
 msgid "Please enter a password not less than 8 characters"
@@ -26,196 +34,263 @@ msgstr "پارول 8 خانىگە يەتمىسە يېڭى بىر پارول كى
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "پارول چوقۇم ئىنگلىزچە ھەرىپ-بەلگە(چوڭ كىچىك يېزىشنى ئايرىيدۇ) رەقەم ياكى بوشلۇق ئالاھىدە ھەرپ بەلگىلەر(~!@#$%^&*()[]{}\\|/?,.<>) نى ئۆز ئىچىگە ئېلىشى كېرەك"
+msgstr ""
+"پارول چوقۇم ئىنگلىزچە ھەرىپ-بەلگە(چوڭ كىچىك يېزىشنى ئايرىيدۇ) رەقەم ياكى "
+"بوشلۇق ئالاھىدە ھەرپ بەلگىلەر(~!@#$%^&*()[]{}\\|/?,.<>) نى ئۆز ئىچىگە ئېلىشى"
+" كېرەك"
 
-#: ../../accounts/checkers/username.go:63
+#: ../../accounts/checkers/username.go:62
 msgid "Username cannot be empty"
-msgstr ""
-
-#: ../../accounts/checkers/username.go:65
-msgid "Username must only contain a~z, 0~9, - or _"
-msgstr ""
+msgstr "ئىشلەتكۈچى ئىسمى قۇرۇق قالسا بولمايدۇ"
 
 #: ../../accounts/checkers/username.go:67
-msgid "The first character must be in lower case"
-msgstr ""
+msgid "The first character must be a letter or number"
+msgstr "بىرىنچى ھەرپ چوقۇم بىر ھەرپ ياكى سان بولۇشى كېرەك"
 
 #: ../../accounts/checkers/username.go:69
 msgid "The username already exists"
-msgstr ""
+msgstr "بۇ ئىسىم ئاللىبۇرۇن مەۋجۇت"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username has been used by system"
-msgstr ""
+msgstr "بۇ ئەزالىق نامى سىستېما تەرىپىدىن ئىشلىتىلىپ بولغان"
 
 #: ../../accounts/checkers/username.go:73
 msgid "Username must be between 3 and 32 characters"
-msgstr ""
-
-#: ../../appearance/scale.go:61
-msgid "Set successfully"
-msgstr ""
-
-#: ../../appearance/scale.go:62
-msgid "Please log back in to view the changes"
-msgstr ""
+msgstr "ئىشلەتكۈچى ئىسمى 3 دىن 32 ھەرپ ئارىلىقىدا بولۇشى كېرەك"
 
 #: ../../appearance/scale.go:66
+msgid "Set successfully"
+msgstr "تەڭشەلدى"
+
+#: ../../appearance/scale.go:67
+msgid "Please log back in to view the changes"
+msgstr ""
+"ئېكران چوڭلۇقىنى تەڭشىگەندىن كېيىن، ئىشلەتكۈچىنى چىقىرىپ قايتا تەكشۈرۈپ "
+"بېقىڭ"
+
+#: ../../appearance/scale.go:74
 msgid "Display scaling"
 msgstr "كۆرۈنىش كىچىكلىتىش"
 
-#: ../../appearance/scale.go:67
+#: ../../appearance/scale.go:75
 msgid "Setting display scaling"
-msgstr ""
-
-#: ../../bin/dde-authority/fprint_transaction.go:20
-msgid "Fingerprint verification failed"
-msgstr ""
+msgstr "كۆرۈنۈش نىسبىتىنى تەڭشىمەكچى"
 
 #: ../../bin/dde-authority/fprint_transaction.go:21
-msgid "Fingerprint verification timed out"
-msgstr ""
+msgid "Fingerprint verification failed"
+msgstr "بارماق ئىزىنى دەلىللەش مەغلۇپ بولدى"
 
-#: ../../bluetooth/bluez_profile.go:29
+#: ../../bin/dde-authority/fprint_transaction.go:22
+msgid "Fingerprint verification timed out"
+msgstr "بارماق ئىزىنى دەلىللەش ۋاقتى ئۆتتى"
+
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Serial port"
 msgstr "ئارقىمۇ-ئارقا ئۇلىنىش ئېغىزى"
 
-#: ../../bluetooth/bluez_profile.go:30
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Dial-Up networking"
 msgstr "نومۇر بۇراپ ئۇلىنىدىغان تور"
 
-#: ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Hands-Free device"
 msgstr "ياڭراتقۇ ئۈسكۈنىسى"
 
-#: ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free voice gateway"
 msgstr "مىكروفونلۇق ياڭراتقۇ ئۈسكۈنىسى"
 
-#: ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Headset voice gateway"
 msgstr "تېلېفون سۆزلىشىش ئۈسكۈنىسى"
 
-#: ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Object push"
 msgstr "ھۆججەت چىقىرىش"
 
-#: ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:36
 msgid "File transfer"
 msgstr "ھۆججەت ئەۋەتىش"
 
-#: ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:37
 msgid "Synchronization"
 msgstr "ماس قەدەملىك"
 
-#: ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Phone book access"
 msgstr "تېلېفون خاتىرىسىنى زىيارەت قىلىش"
 
-#: ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access client"
 msgstr "تېلېفون خاتىرىسىنى زىيارەت قىلىش تېرمىنالى"
 
-#: ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Message access"
 msgstr "ئۇچۇرلارنى زىيارەت قىلىش"
 
-#: ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message notification"
 msgstr "ئۇچۇر ئەسكەرتىشى"
 
-#: ../../bluetooth/utils_notify.go:52 ../../network/utils_notify.go:107
-msgid "Connected"
-msgstr "ئۇلاندى"
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
+msgid "Cancel"
+msgstr "بىكار قىلىش"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/utils_notify.go:80
-#: ../../network/utils_notify.go:84 ../../network/utils_notify.go:88
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:113 ../../network/utils_notify.go:202
-msgid "Disconnected"
-msgstr "ئۇلانمىدى"
+#: ../../bluetooth/obex_agent.go:345
+#, c-format
+msgid "Receiving %s files from \"%s\""
+msgstr "%sدىن كەلگەن %s ھۆججەتنى قوبۇللاۋاتىدۇ"
 
-#: ../../bluetooth/utils_notify.go:59
-msgid "Make sure %q is turned on and in range"
-msgstr "%q ئىچىلىپ بولغانلىقىنى جەزملەشتۈرۈڭ"
+#: ../../bluetooth/obex_agent.go:354
+msgid "View"
+msgstr "كۆرۈش"
 
-#: ../../bluetooth/utils_notify.go:64
-msgid "Failed to connect %q, pairing failed"
-msgstr ""
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr "%sيوللىغان ھۆججەتنى قوبۇللىدىڭىز"
 
-#: ../../bluetooth/utils_notify.go:69
+#: ../../bluetooth/obex_agent.go:361
+msgid "Done"
+msgstr "تامام"
+
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
+msgstr "ھۆججەت قوبۇللاش ئۈزۈلۈپ قالدى"
+
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
+msgstr "ھۆججەت قوبۇللاشنى بىكار قىلدىڭىز"
+
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "كۆكچىش ئۇلىنىشى مەغلۇپ بولدى"
 
-#: ../../calendar/job.go:413 ../../calendar/job.go:420
+#: ../../bluetooth/obex_agent.go:415
+msgid "Decline"
+msgstr "رەت قىلىش"
+
+#: ../../bluetooth/obex_agent.go:415
+msgid "Receive"
+msgstr "قوبۇللاش"
+
+#: ../../bluetooth/obex_agent.go:420
+msgid "Bluetooth File Transfer"
+msgstr "كۆكچىشتە ھۆججەت يوللاش"
+
+#: ../../bluetooth/obex_agent.go:421
+#, c-format
+msgid "%s"
+msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "ھۆججەت يوللاش مەغلۇپ بولدى"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
+msgstr "%sنى قوبۇللاش ۋاقتى ئۇزۇن بولۇپ كەتتى"
+
+#: ../../bluetooth/utils_notify.go:98
+msgid "Connect %q successfully"
+msgstr "%qغا ئۇلاندى"
+
+#: ../../bluetooth/utils_notify.go:103 ../../network/state_handler.go:336
+#: ../../network/state_handler.go:361
+msgid "%q disconnected"
+msgstr "%qدىن ئۈزۈلدى"
+
+#: ../../bluetooth/utils_notify.go:108
+msgid "Make sure %q is turned on and in range"
+msgstr "%q ئىچىلىپ بولغانلىقىنى جەزملەشتۈرۈڭ"
+
+#: ../../bluetooth/utils_notify.go:146
+msgid "Click here to connect to %q"
+msgstr "چېكىپ %q نى قوشۇڭ"
+
+#: ../../bluetooth/utils_notify.go:147
+msgid "Add Bluetooth devices"
+msgstr "كۆك چىش ئۈسكۈنىسىنى قوشۇڭ"
+
+#: ../../bluetooth/utils_notify.go:157
+msgid "Pair"
+msgstr "جۈپلەش"
+
+#: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
-msgstr ""
+msgstr "بۈگۈن"
 
-#: ../../calendar/job.go:415 ../../calendar/job.go:422
+#: ../../calendar/job.go:511 ../../calendar/job.go:518
 msgid "tomorrow"
-msgstr ""
+msgstr "ئەتە"
 
-#: ../../calendar/job.go:435
+#: ../../calendar/job.go:531
 #, c-format
 msgid "%s to %s"
-msgstr ""
+msgstr "%sدىن %sگىچە"
 
-#: ../../calendar/module.go:126
+#: ../../calendar/module.go:127 ../../calendar/type.go:25
 msgid "Work"
-msgstr ""
+msgstr "Work"
 
-#: ../../calendar/module.go:127
+#: ../../calendar/module.go:128 ../../calendar/type.go:30
 msgid "Life"
-msgstr ""
+msgstr "Life"
 
-#: ../../calendar/module.go:128
+#: ../../calendar/module.go:129 ../../calendar/type.go:35
 msgid "Other"
-msgstr ""
+msgstr "Other"
 
-#: ../../calendar/scheduler.go:477
+#: ../../calendar/scheduler.go:588
 msgid "One day before start"
-msgstr ""
+msgstr "1 كۈن بۇرۇن ئەسكەرتىش"
 
-#: ../../calendar/scheduler.go:478 ../../calendar/scheduler.go:483
-#: ../../calendar/scheduler.go:491 ../../calendar/scheduler.go:495
+#: ../../calendar/scheduler.go:589 ../../calendar/scheduler.go:594
+#: ../../calendar/scheduler.go:602 ../../calendar/scheduler.go:606
 msgid "Close"
-msgstr ""
+msgstr "تاقاش"
 
-#: ../../calendar/scheduler.go:482
+#: ../../calendar/scheduler.go:593
 msgid "Remind me tomorrow"
-msgstr ""
+msgstr "ئەتە ئەسكەرتسۇن"
 
-#: ../../calendar/scheduler.go:490
+#: ../../calendar/scheduler.go:601
 msgid "Remind me later"
-msgstr ""
+msgstr "ھېلىغىچە ئەسكەرتسۇن"
 
-#: ../../calendar/scheduler.go:500
+#: ../../calendar/scheduler.go:611
 msgid "Schedule Reminder"
-msgstr ""
+msgstr "كۈنتەرتىپ ئەسكەرتىشى"
 
-#: ../../dock/app_entry_menu.go:100
+#: ../../calendar/type.go:40
+msgid "Festival"
+msgstr "بايرام"
+
+#: ../../dock/app_entry_menu.go:102
 msgid "Open"
 msgstr "ئوچۇق"
 
-#: ../../dock/app_entry_menu.go:107
+#: ../../dock/app_entry_menu.go:109
 msgid "Close All"
-msgstr ""
+msgstr "ھەممىسىنى ئۆچۈرۈش"
 
-#: ../../dock/app_entry_menu.go:123
+#: ../../dock/app_entry_menu.go:125
 msgid "Force Quit"
-msgstr ""
+msgstr "مەجبۇرىي چېكىنىش"
 
-#: ../../dock/app_entry_menu.go:130
+#: ../../dock/app_entry_menu.go:135
 msgid "Dock"
-msgstr ""
+msgstr "ۋەزىپە ئىستونى"
 
-#: ../../dock/app_entry_menu.go:137
+#: ../../dock/app_entry_menu.go:145
 msgid "Undock"
-msgstr ""
+msgstr "تۇرغۇنلارنى چىقىرىۋېتىش"
 
-#: ../../dock/app_entry_menu.go:144
+#: ../../dock/app_entry_menu.go:155
 msgid "All Windows"
-msgstr ""
+msgstr "بارلىق كۆزنەكلەر"
 
 #: ../../housekeeping/init.go:90
 msgid "Insufficient disk space, please clean up in time!"
@@ -231,7 +306,7 @@ msgstr "تېرمىنال"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Screen Recorder"
-msgstr ""
+msgstr "ئېكراننى سىنغا ئېلىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Lock screen"
@@ -243,7 +318,7 @@ msgstr "ۋەزىپە بالدىقىنى كۆرسىتىش ياكى يوشۇرۇش
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 msgid "Shutdown interface"
-msgstr ""
+msgstr "كۆرۈنمە يۈزنى تاقاش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:34
 msgid "Terminal Quake Window"
@@ -251,7 +326,7 @@ msgstr "تېرمىنال كۆزنىكى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:35
 msgid "Screenshot"
-msgstr "ئېكران رەسىمگە تۇتۇش"
+msgstr "ئېكران رەسىمى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:36
 msgid "Full screenshot"
@@ -283,7 +358,7 @@ msgstr "تىزلا ئېكراننى ئۆچۈرۈش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:43
 msgid "System Monitor"
-msgstr ""
+msgstr "سىستېما نازارەتچىسى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:44
 msgid "Deepin Picker"
@@ -291,730 +366,722 @@ msgstr "Deepin تاللىغۇچى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:45
 msgid "Desktop AI Assistant"
-msgstr ""
+msgstr "ئۈستەل يۈزى ئەقلىي ياردەمچىسى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:46
 msgid "Text to Speech"
-msgstr ""
+msgstr "ئاۋازلىق ئوقۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:47
 msgid "Speech to Text"
-msgstr ""
+msgstr "ئاۋازلىق ئاڭلاپ يېزىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/id_name_map.go:48
+msgid "Clipboard"
+msgstr "چاپلاش تاختىسى"
+
+#: ../../keybinding/shortcuts/id_name_map.go:49
+msgid "Translation"
+msgstr "تېكىست تەرجىمىسى"
+
+#: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
 msgstr "ئورۇنلاشتۇرۇشنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:73
+#: ../../keybinding/shortcuts/id_name_map.go:75
 msgid "Switch to left workspace"
 msgstr "سول تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:74
+#: ../../keybinding/shortcuts/id_name_map.go:76
 msgid "Switch to right workspace"
 msgstr "ئوڭ تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:75
+#: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Switch to upper workspace"
 msgstr "ئۈستى تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:76
+#: ../../keybinding/shortcuts/id_name_map.go:78
 msgid "Switch to lower workspace"
 msgstr "ئاستى تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:80
 msgid "Switch similar windows"
 msgstr "ئوخشاش كۆزنەكلەرنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:81
 msgid "Switch similar windows in reverse"
 msgstr "ئوخشاش كۆزنەكلەرنى تەتۈرسىگە ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:82
 msgid "Switch windows"
 msgstr "كۆزنەكلەرنى ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Switch windows in reverse"
 msgstr "كۆزنەكلەرنى تەتۈرسىگە ئالماشتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:92
+#: ../../keybinding/shortcuts/id_name_map.go:94
 msgid "Show desktop"
 msgstr "ئۈستەليۈزىنى كۆرسىتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/id_name_map.go:103
 msgid "Maximize window"
 msgstr "كۆزنەكنى چوڭايتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/id_name_map.go:104
 msgid "Restore window"
 msgstr "كۆزنەكنى ئەسلى چوڭلۇقىغا قايتۇرۇش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/id_name_map.go:106
 msgid "Minimize window"
 msgstr "كۆزنەكنى كىچىكلىتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:105
+#: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Close window"
 msgstr "كۆزنەكنى تاقاش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:106
+#: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move window"
 msgstr "كۆزنەكنى يۆتكەش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:107
+#: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Resize window"
 msgstr "كۆزنەكنىڭ چوڭلۇقىنى ئۆزگەرتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:124
 msgid "Move to left workspace"
 msgstr "سول خىزمەت رايونىغا يۆتكەش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:125
 msgid "Move to right workspace"
 msgstr "ئوڭ خىزمەت رايونىغا يۆتكەش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:124
+#: ../../keybinding/shortcuts/id_name_map.go:126
 msgid "Move to upper workspace"
 msgstr "ئۈستى خىزمەت رايونىغا يۆتكەش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:125
+#: ../../keybinding/shortcuts/id_name_map.go:127
 msgid "Move to lower workspace"
 msgstr "ئاستى خىزمەت رايونىغا يۆتكەش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:147
+#: ../../keybinding/shortcuts/id_name_map.go:149
 msgid "Display windows of all workspaces"
 msgstr "كۆزنەكنى بارلىق خىزمەت رايونلىرىدا كۆرسىتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:148
+#: ../../keybinding/shortcuts/id_name_map.go:150
 msgid "Display windows of current workspace"
 msgstr "كۆزنەكنى نۆۋەتتىكى خىزمەت رايونلىرىدا كۆرسىتىش"
 
-#: ../../keybinding/shortcuts/id_name_map.go:149
+#: ../../keybinding/shortcuts/id_name_map.go:151
 msgid "Display workspace"
 msgstr "خىزمەت رايونىنى كۆرسىتىش"
 
-#: ../../langselector/locale.go:63
+#: ../../keybinding/shortcuts/id_name_map.go:210
+msgid "Switch monitors"
+msgstr "كۆپ ئېكران ئالماشتۇرۇش"
+
+#: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
-msgstr "دەلىللەش مەشغۇلاتى سىستېما تىلىنى ئۆزگەرتىشنى تەلەپ قىلىدۇ"
+msgstr "سىستېما تىلىنى ئۆزگەرتىش ئاۋۋال سالاھىيەت دەلىللەشنى تەلەپ قىلىدۇ"
 
-#: ../../langselector/locale.go:390
-msgid "Failed to change system language, please try later"
-msgstr ""
-
-#: ../../langselector/locale.go:414
+#: ../../langselector/locale.go:159
 msgid ""
 "Changing system language and installing the required language packages, "
 "please wait..."
 msgstr ""
+"سىستېما تىلىنى ئالماشتۇرۇۋاتىدۇ ۋە يوقاپ كەتكەن تىل بولىقىنى ئورنىتىۋاتىدۇ، "
+"ساقلاپ تۇرۇڭ ..."
 
-#: ../../langselector/locale.go:417
+#: ../../langselector/locale.go:160
 msgid "Changing system language, please wait..."
-msgstr ""
+msgstr "سىستېما تىلىنى ئالماشتۇرۇۋاتىدۇ, سەل ساقلاپ تۇرۇڭ..."
 
-#: ../../langselector/locale.go:465
+#: ../../langselector/locale.go:161
 msgid "System language changed, please log out and then log in"
-msgstr ""
+msgstr "سىستېما تىلى ئۆزگەرتىلدى، چېكىنىپ قايتا كىرىڭ"
 
-#: ../../lastore/check_source.go:51
-msgid "Restore"
-msgstr "ئەسلىگە قايتۇرۇش"
+#: ../../langselector/locale.go:402
+msgid "Failed to change system language, please try later"
+msgstr "سىستېما تىلىنى ئۆزگەرتىش مەغلۇپ بولدى، قايتا سىناپ بېقىڭ."
 
-#: ../../lastore/check_source.go:70 ../../lastore/lastore.go:248
-msgid "Cancel"
-msgstr "بىكار قىلىش"
-
-#: ../../lastore/lastore.go:240
+#: ../../lastore/lastore.go:247
 msgid "Retry"
 msgstr "قايتا سىناش"
 
-#: ../../lastore/notify.go:82
+#: ../../lastore/lastore.go:269
+msgid "Update Now"
+msgstr "يېڭىلايمەن"
+
+#: ../../lastore/notify.go:96
 msgid "%q installed successfully."
 msgstr "%q قاچىلاش مۇۋەپپەقيەتلىك بولدى"
 
-#: ../../lastore/notify.go:85
+#: ../../lastore/notify.go:99
 msgid "%q failed to install."
 msgstr "%q قاچىلاش مەغلۇپ بولدى"
 
-#: ../../lastore/notify.go:93
-msgid "%q removed successfully."
-msgstr "%q ئۆچۈرۈش مۇۋەپپەقيەتلىك بولدى"
+#: ../../lastore/notify.go:107
+msgid "Removed successfully"
+msgstr "ئۆچۈرۈلدى"
 
-#: ../../lastore/notify.go:95
-msgid "%q failed to remove."
-msgstr "%q چىقىرۋىتىش مەغلۇپ بولدى"
+#: ../../lastore/notify.go:109
+msgid "Failed to remove the app"
+msgstr "ئۆچۈرۈلمىدى"
 
-#: ../../lastore/notify.go:102
+#: ../../lastore/notify.go:116
 msgid ""
 "In order to prevent automatic shutdown, please plug in for normal update."
 msgstr "ئاپتۇماتىك ئېتىشلىنىڭ ئالدىنى ئېلىش ئۈچۈن ، نورمال يېڭىلاشقا كىرگۈزۈڭ"
 
-#: ../../lastore/notify.go:107
+#: ../../lastore/notify.go:121
 msgid "Package cache wiped"
 msgstr "بوغچا قالدۇقىنى تازىلاش"
 
-#: ../../lastore/notify.go:112
-msgid ""
-"Your system source has been modified, please restore to official source for "
-"your normal use"
-msgstr "سېستىمىزنىڭ مەنبەسى ئۆزگەرتىلگەن ، ئوشىغاندىن كېيىن نۇرمال ئىشلىتەلەيسىز"
+#: ../../lastore/notify.go:126
+msgid "New system edition available"
+msgstr "سىستېمىنىڭ يېڭى نەشرى بايقالدى"
 
-#: ../../launcher/manager_uninstall.go:69
+#: ../../launcher/manager_uninstall.go:71
 msgid "%q removed successfully"
 msgstr "%q چىقىرىۋېتىش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../launcher/manager_uninstall.go:71
+#: ../../launcher/manager_uninstall.go:73
 msgid "Failed to uninstall %q"
 msgstr "%q چىقىرىۋېتىش مەغلۇپ بولدى"
 
-#: ../../network/manager_active_conn.go:318
-msgid "A (5 GHz)"
-msgstr "A (5 GHz)"
-
-#: ../../network/manager_active_conn.go:320
-msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 GHz)"
-
-#: ../../network/manager_active_conn.go:322
-msgid "Automatic"
-msgstr "ئاپتوماتىك"
-
-#: ../../network/manager_active_conn.go:333
-#: ../../network/manager_active_conn.go:338
+#: ../../network/manager_active_conn.go:362
+#: ../../network/manager_active_conn.go:367
 msgid "None"
 msgstr "قۇرۇق"
 
-#: ../../network/manager_active_conn.go:340
+#: ../../network/manager_active_conn.go:369
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit پارول"
 
-#: ../../network/manager_active_conn.go:342
+#: ../../network/manager_active_conn.go:371
 msgid "WPA/WPA2 Personal"
 msgstr "شەخسىي"
 
-#: ../../network/manager_active_conn.go:350
+#: ../../network/manager_active_conn.go:379
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active_conn.go:352
+#: ../../network/manager_active_conn.go:381
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active_conn.go:354
+#: ../../network/manager_active_conn.go:383
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active_conn.go:356
+#: ../../network/manager_active_conn.go:385
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active_conn.go:358
+#: ../../network/manager_active_conn.go:387
 msgid "Tunneled TLS"
 msgstr "تونېلللانغان TLS"
 
-#: ../../network/manager_active_conn.go:360
+#: ../../network/manager_active_conn.go:389
 msgid "Protected EAP"
 msgstr "قوغدالغان EAP"
 
-#: ../../network/manager_connection.go:278 ../../network/nm_custom_type.go:225
+#: ../../network/manager_connection.go:334
 msgid "Wired Connection"
 msgstr "سىملىق تور ئۇلىنىشى"
 
-#: ../../network/nm_custom_type.go:223
-msgid "Connection"
-msgstr "ئۇلىنىش"
+#: ../../network/proxychains/utils_notify.go:45
+msgid "Application proxy is set successfully"
+msgstr "سىستېما ۋاكالەتچىلىكىنى تەڭشەش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../network/nm_custom_type.go:227
-msgid "Wireless Connection"
-msgstr "سىمسىز تور ئۇلىنىش"
+#: ../../network/proxychains/utils_notify.go:45
+#: ../../network/proxychains/utils_notify.go:48
+#: ../../network/utils_notify.go:195 ../../network/utils_notify.go:199
+#: ../../network/utils_notify.go:202 ../../network/utils_notify.go:304
+msgid "Network"
+msgstr "تور"
 
-#: ../../network/nm_custom_type.go:229
-msgid "Wireless Ad-Hoc"
-msgstr "سىمسىز Ad-Hoc"
+#: ../../network/proxychains/utils_notify.go:48
+msgid "Failed to set the application proxy"
+msgstr "سىستېما ۋاكالەتچىلىكىنى تەڭشەش مەغلۇپ بولدى"
 
-#: ../../network/nm_custom_type.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr " Ap-Hotspotسىمسىز"
-
-#: ../../network/nm_custom_type.go:233
-msgid "PPPoE Connection"
-msgstr "PPPoE ئۇلىنىشى"
-
-#: ../../network/nm_custom_type.go:235
-msgid "Mobile Connection"
-msgstr "كۆچمە تور ئۇلىنىشى"
-
-#: ../../network/nm_custom_type.go:237
-msgid "Mobile GSM Connection"
-msgstr "كۆچمە GSM تور ئۇلىنىشى"
-
-#: ../../network/nm_custom_type.go:239
-msgid "Mobile CDMA Connection"
-msgstr "كۆچمە CDMA تور ئۇلىنىشى"
-
-#: ../../network/nm_custom_type.go:241
-msgid "VPN Connection"
-msgstr "VPN ئۇلىنىشى"
-
-#: ../../network/nm_custom_type.go:243
-msgid "VPN L2TP"
-msgstr "VPN L2TP"
-
-#: ../../network/nm_custom_type.go:245
-msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
-
-#: ../../network/nm_custom_type.go:247
-msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
-
-#: ../../network/nm_custom_type.go:249
-msgid "VPN PPTP"
-msgstr "VPN PPTP"
-
-#: ../../network/nm_custom_type.go:251
-msgid "VPN StrongSwan"
-msgstr "VPN StrongSwan"
-
-#: ../../network/nm_custom_type.go:253
-msgid "VPN VPNC"
-msgstr "VPN VPNC"
-
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:38
 msgid "Device state changed"
 msgstr "ئۈسكۈنە ھالىتى ئۆزگەردى"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:39
 msgid "Device state changed, reason unknown"
-msgstr ""
+msgstr "ئۈسكۈنە ھالىتى ئۆزگەردى، سەۋەبى نامەلۇم"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:40
 msgid "The device is now managed"
 msgstr "بۇ ئۈسكۈنە ھازىر باشقۇرۇلدى"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:41
 msgid "The device is no longer managed"
 msgstr "بۇ ئۈسكۈنە ئۇزۇنغىچە باشقۇرۇلمىدى"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:42
 msgid "The device has not been ready for configuration"
 msgstr "بۇ ئۈسكۈنە تېخى تەڭشەشكە تەييارلىنىپ بولالمىدى"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:43
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
 msgstr ""
+"IP سەپلىمىسىنى ساقلىغىلى بولمىدى (ئىشلەتكىلى بولىدىغان ئادرېس يوق، ئۇلىنىش "
+"ۋاقتى ئۆتۈش قاتارلىقلار)"
+
+#: ../../network/state_handler.go:44
+msgid "The IP configuration is no longer valid"
+msgstr "IP سەپلىمىسى ئىناۋەتلىك بولمايدۇ"
 
 #: ../../network/state_handler.go:45
-msgid "The IP configuration is no longer valid"
-msgstr ""
+msgid "Passwords were required but not provided"
+msgstr "پارول تەلەپ قىلىنغان، ئەمما تەمىنلەنمىگەن"
 
 #: ../../network/state_handler.go:46
-msgid "Passwords were required but not provided"
-msgstr ""
-
-#: ../../network/state_handler.go:47
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
 msgstr ""
+"802.1X تېرمىنالىنىڭ زىيارەت نۇقتىسى ياكى دەلىللەش مۇلازىمىتىرىدىن ئۈزۈلدى"
+
+#: ../../network/state_handler.go:47
+msgid "Configuration of the 802.1X supplicant failed"
+msgstr "802.1X تېرمىنالىنى سەپلەش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:48
-msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgid "The 802.1X supplicant quitted or failed unexpectedly"
+msgstr "802.1X تېرمىنالى بىنورمال چېكىندى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:49
-msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgid "The 802.1X supplicant took too long time to authenticate"
+msgstr "802.1X تېرمىنالىنىڭ دەلىللەش ۋاقتى ئۇزۇن بولۇپ كەتتى"
 
 #: ../../network/state_handler.go:50
-msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgid "The PPP service failed to start within the allowed time"
+msgstr "PPP مۇلازىمىتىنى چەكلىك مۇددەت ئىچىدە باشلىغىلى بولمايدۇ"
 
 #: ../../network/state_handler.go:51
-msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgid "The PPP service disconnected unexpectedly"
+msgstr "PPP مۇلازىمىتى نورمالسىز ئۈزۈلۈپ قالدى"
 
 #: ../../network/state_handler.go:52
-msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgid "The PPP service quitted or failed unexpectedly"
+msgstr "PPP مۇلازىمىتى بىنورمال چېكىندى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:53
-msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgid "The DHCP service failed to start within the allowed time"
+msgstr "DHCP مۇلازىمىتىنى چەكلىك ۋاقىت ئىچىدە باشلىغىلى بولمايدۇ"
 
 #: ../../network/state_handler.go:54
-msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgid "The DHCP service reported an unexpected error"
+msgstr "DHCP مۇلازىمىتى بىنورمال خاتالىق بارلىقىنى دوكلات قىلدى"
 
 #: ../../network/state_handler.go:55
-msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgid "The DHCP service quitted or failed unexpectedly"
+msgstr "DHCP مۇلازىمىتى بىنورمال چېكىندى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:56
-msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgid "The shared connection service failed to start"
+msgstr "ئورتاق ئۇلىنىش مۇلازىمىتى قوزغىتىلمىدى"
 
 #: ../../network/state_handler.go:57
-msgid "The shared connection service failed to start"
-msgstr ""
+msgid "The shared connection service quitted or failed unexpectedly"
+msgstr "ئورتاق ئۇلىنىش مۇلازىمىتى نورمالسىز چېكىندى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:58
-msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgid "The AutoIP service failed to start"
+msgstr "ئاپتوماتىك IP مۇلازىمىتى قوزغالمىدى"
 
 #: ../../network/state_handler.go:59
-msgid "The AutoIP service failed to start"
-msgstr ""
+msgid "The AutoIP service reported an unexpected error"
+msgstr "ئاپتوماتىك IP مۇلازىمىتى بىنورمال خاتالىق بارلىقىنى دوكلات قىلدى"
 
 #: ../../network/state_handler.go:60
-msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgid "The AutoIP service quitted or failed unexpectedly"
+msgstr "ئاپتوماتىك IP مۇلازىمىتى بىنورمال چېكىندى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:61
-msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgid "Dialing failed due to busy lines"
+msgstr "لىنىيە ئالدىراش بولغانلىقتىن ئۇلاش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:62
-msgid "Dialing failed due to busy lines"
-msgstr ""
+msgid "Dialing failed due to no dial tone"
+msgstr "ئاۋاز بولمىغانلىقتىن ئۇلاش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:63
-msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgid "Dialing failed due to the carrier"
+msgstr "توشىغۇچىدا كاشىلا بولغاچقا ئۇلاش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:64
-msgid "Dialing failed due to the carrier"
-msgstr ""
+msgid "Dialing timed out"
+msgstr "ئۇلاش ۋاقتى ئۇزۇن بولۇپ كەتتى"
 
 #: ../../network/state_handler.go:65
-msgid "Dialing timed out"
-msgstr ""
+msgid "Dialing failed"
+msgstr "ئۇلانمىدى"
 
 #: ../../network/state_handler.go:66
-msgid "Dialing failed"
-msgstr ""
+msgid "Modem initialization failed"
+msgstr "مودېلنى  دەسلەپكى قوزغىتىش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:67
-msgid "Modem initialization failed"
-msgstr ""
+msgid "Failed to select the specified GSM APN"
+msgstr "كۆرسىتىلگەن GSM APN نى تاللىيالمايدۇ"
 
 #: ../../network/state_handler.go:68
-msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgid "No networks searched"
+msgstr "تور ئۇلىنىشى يوق"
 
 #: ../../network/state_handler.go:69
-msgid "No networks searched"
-msgstr ""
+msgid "Network registration was denied"
+msgstr "تورغا تىزىملاش رەت قىلىندى"
 
 #: ../../network/state_handler.go:70
-msgid "Network registration was denied"
-msgstr ""
+msgid "Network registration timed out"
+msgstr "تورغا تىزىملاش ۋاقتى ئۇزۇن بولۇپ كەتتى"
 
 #: ../../network/state_handler.go:71
-msgid "Network registration timed out"
-msgstr ""
+msgid "Failed to register to the requested GSM network"
+msgstr "GSM تورىغا تىزىملىتالمىدى"
 
 #: ../../network/state_handler.go:72
-msgid "Failed to register to the requested GSM network"
-msgstr ""
+msgid "PIN check failed"
+msgstr "PIN كودىنى تەكشۈرۈش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:73
-msgid "PIN check failed"
-msgstr ""
+msgid "Necessary firmware for the device may be missed"
+msgstr "ئۈسكۈنىنىڭ زۆرۈر يۇمشاق دېتاللىرى يوقاپ كەتكەن بولۇشى مۇمكىن"
 
 #: ../../network/state_handler.go:74
-msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgid "The device was removed"
+msgstr "بۇ ئۈسكۈنە ئۆچۈرۈلدى"
 
 #: ../../network/state_handler.go:75
-msgid "The device was removed"
-msgstr ""
+msgid "NetworkManager went to sleep"
+msgstr "NetworkManager كۈتۈش ھالىتىگە كىرىدۇ"
 
 #: ../../network/state_handler.go:76
-msgid "NetworkManager went to sleep"
-msgstr ""
+msgid "The device's active connection was removed or disappeared"
+msgstr "ئۈسكۈنىنىڭ نۆۋەتتىكى ئۇلىنىشى ئۆچۈرۈلىدۇ ياكى يوقىلىدۇ"
 
 #: ../../network/state_handler.go:77
-msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgid "A user or client requested to disconnect"
+msgstr "ئىشلەتكۈچى ياكى تېرمىنال ئۈزۈشنى تەلەپ قىلدى"
 
 #: ../../network/state_handler.go:78
-msgid "A user or client requested to disconnect"
-msgstr ""
+msgid "The device's carrier/link changed"
+msgstr "ئۈسكۈنە توشۇغۇچى/ئۇلىنىش ئۆزگىرىشى"
 
 #: ../../network/state_handler.go:79
-msgid "The device's carrier/link changed"
-msgstr ""
+msgid "The device's existing connection was assumed"
+msgstr "بۇ ئۈسكۈنىنىڭ ھازىرقى ئۇلىنىشى"
 
 #: ../../network/state_handler.go:80
-msgid "The device's existing connection was assumed"
-msgstr ""
+msgid "The 802.1x supplicant is now available"
+msgstr "802.1x تېرمىنالىنى ئىشلەتكىلى بولىدۇ"
 
 #: ../../network/state_handler.go:81
-msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgid "The modem could not be found"
+msgstr "مودېم تېپىلمىدى"
 
 #: ../../network/state_handler.go:82
-msgid "The modem could not be found"
-msgstr ""
+msgid "The Bluetooth connection timed out or failed"
+msgstr "كۆكچىش ئۇلىنىشى ۋاقتى ئۆتۈپ كەتتى ياكى مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:83
-msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgid "GSM Modem's SIM Card was not inserted"
+msgstr "GSM مودېمى بار SIM كارتا سېلىنمىدى"
 
 #: ../../network/state_handler.go:84
-msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgid "GSM Modem's SIM PIN required"
+msgstr "GSM مودېمى بار SIM كارتا PIN كودى تەلەپ قىلىدۇ"
 
 #: ../../network/state_handler.go:85
-msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgid "GSM Modem's SIM PUK required"
+msgstr "GSM مودېمى بار SIM كارتا PUK كودى تەلەپ قىلىدۇ"
 
 #: ../../network/state_handler.go:86
-msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgid "SIM card error in GSM Modem"
+msgstr "GSM لىق مودېم SIM كارتا خاتالىقى"
 
 #: ../../network/state_handler.go:87
-msgid "SIM card error in GSM Modem"
-msgstr ""
+msgid "InfiniBand device does not support connected mode"
+msgstr "InfiniBand ئۈسكۈنىلىرى بۇ ئۇلىنىش ھالىتىنى قوللىمايدۇ"
 
 #: ../../network/state_handler.go:88
-msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgid "A dependency of the connection failed"
+msgstr "ئۇلىنىشقا تايىنىش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:89
-msgid "A dependency of the connection failed"
-msgstr ""
+msgid "RFC 2684 Ethernet bridging error to ADSL"
+msgstr "RFC 2684 سىملىق تورى ADSL غا ئۇلانغاندا خاتالىق كۆرۈلدى"
 
 #: ../../network/state_handler.go:90
-msgid "RFC 2684 Ethernet bridging error to ADSL"
-msgstr ""
+msgid "ModemManager did not run or quitted unexpectedly"
+msgstr "ModemManager  ئىشلىمىدى ياكى نورمال چېكىنمىدى"
 
 #: ../../network/state_handler.go:91
-msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgid "The 802.11 WLAN network could not be found"
+msgstr "802.11 WLAN تورىنى تاپقىلى بولمىدى"
 
 #: ../../network/state_handler.go:92
-msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
-
-#: ../../network/state_handler.go:93
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "ئاساسى ئۇلىنىشنىڭ ئىككىنچى ئۇلىنىشى مەغلۇپ بولدى"
+
+#: ../../network/state_handler.go:95
+msgid "DCB or FCoE setup failed"
+msgstr "DCB ياكى FCoE سەپلەش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:96
-msgid "DCB or FCoE setup failed"
-msgstr ""
+msgid "Network teaming control failed"
+msgstr "گۇرۇپپا تورىنى كونترول قىلىش مەغلۇپ بولدى"
 
 #: ../../network/state_handler.go:97
-msgid "Network teaming control failed"
-msgstr ""
+msgid "Modem failed to run or not available"
+msgstr "مودېل ئىشلىمىدى ياكى ئىشلەتكىلى بولمايدۇ"
 
 #: ../../network/state_handler.go:98
-msgid "Modem failed to run or not available"
-msgstr ""
+msgid "Modem now ready and available"
+msgstr "مودېل تەييار بولدى"
 
 #: ../../network/state_handler.go:99
-msgid "Modem now ready and available"
-msgstr ""
+msgid "SIM PIN is incorrect"
+msgstr "SIM كارتىنىڭ PIN كودى خاتا"
 
 #: ../../network/state_handler.go:100
-msgid "SIM PIN is incorrect"
-msgstr ""
+msgid "New connection activation is enqueuing"
+msgstr "ئاكتىپلاش مەشغۇلاتىنى ئىجرا قىلىشنى كۈتمەكتە"
 
 #: ../../network/state_handler.go:101
-msgid "New connection activation is enqueuing"
-msgstr ""
+msgid "Parent device changed"
+msgstr "باش ئۈسكۈنىدە ئۆزگىرىش بولدى"
 
 #: ../../network/state_handler.go:102
-msgid "Parent device changed"
-msgstr ""
-
-#: ../../network/state_handler.go:103
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "باش ئۈسكۈنىنى باشقۇرۇش ھالىتى ئۆزگەردى"
+
+#: ../../network/state_handler.go:105
+msgid "Network cable is unplugged"
+msgstr "تور سىمى چىقىرىۋېتىلدى"
 
 #: ../../network/state_handler.go:106
-msgid "Network cable is unplugged"
-msgstr ""
-
-#: ../../network/state_handler.go:107
 msgid "Please make sure SIM card has been inserted with mobile network signal"
 msgstr ""
+"SIM كارتىنىڭ سېلىنغانلىقىنى ۋە كۆچمە تور سىگنالى بارلىقىنى جەزملەشتۈرۈڭ"
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:107
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
 msgstr ""
+"SIM كارتىنىڭ نېسى قالمىغانلىقىغا ۋە توغرا ئىنتېرنېت مۇلازىمىتى "
+"تاللانغانلىقىغا كاپالەتلىك قىلىڭ"
+
+#: ../../network/state_handler.go:110
+msgid "Failed to activate VPN connection, reason unknown"
+msgstr "نامەلۇم سەۋەبلەر تۈپەيلىدىن VPN غا ئۇلىنالمىدى"
 
 #: ../../network/state_handler.go:111
-msgid "Failed to activate VPN connection, reason unknown"
-msgstr ""
+msgid "Failed to activate VPN connection"
+msgstr "VPN غا ئۇلىنالمىدى"
 
 #: ../../network/state_handler.go:112
-msgid "Failed to activate VPN connection"
-msgstr ""
-
-#: ../../network/state_handler.go:113
 msgid "The VPN connection state changed due to being disconnected by users"
 msgstr ""
+"ئىشلەتكۈچىنىڭ ئۈزۈشى VPN ئۇلىنىش ھالىتىنىڭ ئۆزگىرىشىنى كەلتۈرۈپ چىقاردى"
 
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:113
 msgid ""
 "The VPN connection state changed due to being disconnected from devices"
 msgstr ""
+"ئۈسكۈنىنىڭ ئۈزۈلۈشى VPN ئۇلىنىش ھالىتىنىڭ ئۆزگىرىشىنى كەلتۈرۈپ چىقاردى"
 
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:114
 msgid "VPN service stopped"
 msgstr "VPN مۇلازىمىتى توختىتىلدى"
 
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:115
 msgid "The IP config of VPN connection was invalid"
 msgstr "نۆۋەتتىكى VPN ئۇلىنىشى IP تەڭشىكى ئىناۋەتسىز"
 
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:116
 msgid "The connection attempt to VPN service timed out"
 msgstr "بۇ ئۇلىنىشنىڭ VPN مۇلازىمىتېرغا ئۇلىنىپ بېقىش ۋاقتى ئېشىپ كەتتى"
 
-#: ../../network/state_handler.go:118
+#: ../../network/state_handler.go:117
 msgid "The VPN service start timed out"
 msgstr "بۇ VPN مۇلازىمىتېرىنى قوزغىتىش ۋاقتى ئېشىپ كەتتى"
 
-#: ../../network/state_handler.go:119
+#: ../../network/state_handler.go:118
 msgid "The VPN service failed to start"
 msgstr "بۇ VPN مۇلازىمىتىنى قوزغىتىش مەغلۇپ بولدى"
 
-#: ../../network/state_handler.go:120
+#: ../../network/state_handler.go:119
 msgid "The VPN connection password was not provided"
-msgstr ""
+msgstr "VPN  ئۇلىنىشىغا زۆرۈر پارول تەمىنلەنمىگەن"
 
-#: ../../network/state_handler.go:121
+#: ../../network/state_handler.go:120
 msgid "Authentication to VPN server failed"
 msgstr "VPN مۇلازىمىتېرىغا دەلىللەش مەغلۇپ بولدى"
 
-#: ../../network/state_handler.go:122
+#: ../../network/state_handler.go:121
 msgid "The connection was deleted from settings"
 msgstr "بۇ ئۇلىنىش تەڭشەكتىن ئۆچۈرۋىتىلىپتۇ"
 
-#: ../../network/state_handler.go:251
+#: ../../network/state_handler.go:250
 msgid "Enabling hotspot"
-msgstr ""
+msgstr "قىزىق نۇقتىا ئېچىلىۋاتىدۇ"
 
-#: ../../network/state_handler.go:253
+#: ../../network/state_handler.go:252
 msgid "Connecting %q"
-msgstr ""
+msgstr "%qغا ئۇلىنىۋاتىدۇ"
 
-#: ../../network/state_handler.go:261
+#: ../../network/state_handler.go:260
 msgid "Hotspot enabled"
-msgstr ""
+msgstr "قىزىق نۇقتا ھەمبەھرىلەندى"
 
-#: ../../network/state_handler.go:263
+#: ../../network/state_handler.go:262
 msgid "%q connected"
-msgstr ""
+msgstr "%qغا ئۇلاندى"
 
-#: ../../network/state_handler.go:274 ../../network/state_handler.go:325
+#: ../../network/state_handler.go:279 ../../network/state_handler.go:334
 msgid "Hotspot disabled"
-msgstr ""
+msgstr "قىزىق نۇقتا تاقالدى"
 
-#: ../../network/state_handler.go:327 ../../network/state_handler.go:347
-msgid "%q disconnected"
-msgstr ""
-
-#: ../../network/state_handler.go:333
+#: ../../network/state_handler.go:342
 msgid "Unable to share hotspot, please check dnsmasq settings"
 msgstr ""
+"قىزىق نۇقتىنى ئورتاقلىشالمىدى ،dnsmasq غا مۇناسىۋەتلىك تەڭشەكلەرنى تەكشۈرۈپ "
+"بېقىڭ"
 
-#: ../../network/state_handler.go:335
+#: ../../network/state_handler.go:344
 msgid "Unable to connect %q, please keep closer to the wireless router"
-msgstr ""
+msgstr "%qغا ئۇلانمىدى، سىمسىز روتېرغا يېقىنلىشىپ سىناپ بېقىڭ"
 
-#: ../../network/state_handler.go:337
+#: ../../network/state_handler.go:346
 msgid "Unable to connect %q, please check your router or net cable."
-msgstr ""
+msgstr "%qغا ئۇلانمىدى. روتېرنى ياكى تور سىمىنى تەكشۈرۈڭ"
 
-#: ../../network/state_handler.go:340
+#: ../../network/state_handler.go:349
 msgid "Password is required to connect %q"
-msgstr ""
+msgstr "%qغا ئۇلاش ئۈچۈن پارول كېتىدۇ"
 
-#: ../../network/state_handler.go:343
+#: ../../network/state_handler.go:352
 msgid "Connection failed, unable to connect %q, wrong password"
-msgstr ""
+msgstr "ئۇلانمىدى، %qغا كىرەلمىدى، پارول خاتا"
 
-#: ../../network/utils_dbus_nm.go:229
+#: ../../network/utils_dbus_nm.go:259
 msgid "Unknown"
 msgstr "نامەلۇم"
 
-#: ../../network/utils_notify.go:80
-msgid "You are now offline."
-msgstr "سىز ھازىر تورسىز مۇھىتتا."
-
-#: ../../network/utils_notify.go:84
+#: ../../network/utils_notify.go:183
 msgid "Airplane mode enabled."
 msgstr "ئايروپىلان ھالىتى قوزغىتىلدى."
 
-#: ../../network/utils_notify.go:92
+#: ../../network/utils_notify.go:183 ../../network/utils_notify.go:187
+#: ../../network/utils_notify.go:191 ../../network/utils_notify.go:209
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:301
+msgid "Disconnected"
+msgstr "ئۇلانمىدى"
+
+#: ../../network/utils_notify.go:191
 msgid "Access Point mode is not supported by this device."
 msgstr "زىيارەت نۇقتىسى شەكلى سىزنىڭ ئۈسكۈنىڭىزنى قوللىمايدۇ"
 
-#: ../../network/utils_notify.go:96 ../../network/utils_notify.go:100
-#: ../../network/utils_notify.go:103
-msgid "Network"
-msgstr "تور"
-
-#: ../../network/utils_notify.go:96
+#: ../../network/utils_notify.go:195
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "بۇ ئۈسكۈنىنىڭ سىمسىز تور كارتىسى تاقاق ئىكەن، سىمسىز تور ئۇزچاتنى ئىچىڭ"
+msgstr ""
+"بۇ ئۈسكۈنىنىڭ سىمسىز تور كارتىسى تاقاق ئىكەن، سىمسىز تور ئۇزچاتنى ئىچىڭ"
 
-#: ../../network/utils_notify.go:100
+#: ../../network/utils_notify.go:199
 msgid "System proxy is set successfully."
 msgstr "سىستېما ۋاكالەتچىلىك تەڭشەش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../network/utils_notify.go:103
+#: ../../network/utils_notify.go:202
 msgid "System proxy has been cancelled."
 msgstr "سىستېما ۋاكالەتچىلىكى بىكار قىلىندى"
 
-#: ../../session/power/manager_events.go:151
-msgid "Battery Critically Low"
-msgstr ""
+#: ../../network/utils_notify.go:206
+msgid "Connected"
+msgstr "ئۇلاندى"
 
-#: ../../session/power/manager_events.go:152
-msgid "Computer will suspend very soon, please plug in now"
-msgstr ""
+#: ../../network/utils_notify.go:304
+msgid "Portal network authentication successful"
+msgstr "Portal تورىنى دەلىللەش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../session/power/manager_events.go:175
-#: ../../session/power/manager_events.go:182
-msgid "Battery Low"
-msgstr "باتارېيە توك مىقدارى ئاز"
+#: ../../service_trigger/msg.go:7
+#, c-format
+msgid "\"%s\" did not pass the system security verification, and cannot run now"
+msgstr "«%s»سىستېما بىخەتەرلىك تەكشۈرۈشىدىن ئۆتەلمىدى، ئىجرا قىلغىلى بولمايدۇ"
 
-#: ../../session/power/manager_events.go:176
-msgid "Computer will suspend soon, please plug in"
-msgstr ""
+#: ../../session/power/manager_events.go:203
+msgid "Battery critically low"
+msgstr "باتارېيەدە توك تۈگىدى"
 
-#: ../../session/power/manager_events.go:183
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
-msgstr ""
+msgstr "باتارېيەدە توك ئاز قالدى، توكقا چېتىڭ"
+
+#: ../../session/power/utils.go:349 ../../session/power/utils.go:353
+#: ../../session/power/utils.go:357 ../../session/power/utils.go:361
+msgid "Power settings changed"
+msgstr "توك تەڭشىكىدە ئۆزگىرىش بولدى"
+
+#: ../../session/power/utils.go:376
+msgid "When the lid is closed, "
+msgstr "«خاتىرە كومپيۇتېرنىڭ ئېكرانى يېپىلغاندا»"
+
+#: ../../session/power/utils.go:380
+msgid "When pressing the power button, "
+msgstr "«قوزغىتىش كۇنۇپكىسىنى باسقاندا»"
+
+#: ../../session/power/utils.go:390
+msgid "your computer will shut down"
+msgstr "تاقاشقا ئۆزگەرتىش"
+
+#: ../../session/power/utils.go:392
+msgid "your computer will suspend"
+msgstr "كۈتۈش ھالىتىگە ئۆزگەرتىش"
+
+#: ../../session/power/utils.go:394
+msgid "your computer will hibernate"
+msgstr "ئۇيقۇ ھالىتىگە ئۆزگەرتىش"
+
+#: ../../session/power/utils.go:396
+msgid "your monitor will turn off"
+msgstr "ئېكراننى تاقاشقا ئۆزگەرتىش"
+
+#: ../../session/power/utils.go:398
+msgid "it will do nothing to your computer"
+msgstr "ھېچقانداق مەشغۇلات قىلماسلىققا ئۆزگەرتىش"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
-msgstr ""
+msgstr "سىستېما ۋاقتىنى بەلگىلەش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ"
 
 #: ../../timedate/manager_ifc.go:72
 msgid ""
 "Authentication is required to control whether network time synchronization "
 "shall be enabled"
-msgstr ""
+msgstr "تور ۋاقتىنى ماسقەدەملەشنى قوزغىتىش ياكى تاقاش دەلىللەشنى تەلەپ قىلىدۇ"
 
 #: ../../timedate/manager_ifc.go:82
 msgid "Authentication is required to change NTP server"
-msgstr ""
+msgstr "ۋاقىت مۇلازىمېتىرىنى ئۆزگەرتىش دەلىللەشنى تەلەپ قىلىدۇ"
 
 #: ../../timedate/manager_ifc.go:122
 msgid ""
 "Authentication is required to control whether the RTC stores the local or "
 "UTC time"
 msgstr ""
+"قاتتىق دېتال سائىتىنى يەرلىك ۋاقىت ياكى UTC ئىشلىتىش ئۈچۈن دەلىللەش تەلەپ "
+"قىلىنىدۇ"
 
 #: ../../timedate/manager_ifc.go:141
 msgid "Authentication is required to set the system timezone"
-msgstr ""
+msgstr "سىستېما ۋاقىت رايونىنى بەلگىلەش ئۈچۈن دەلىللەش تەلەپ قىلىنىدۇ"

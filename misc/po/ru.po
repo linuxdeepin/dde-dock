@@ -12,15 +12,16 @@
 # Cindy0514, 2020
 # Владимир Киреев <vovan_kireev@mail.ru>, 2020
 # Валерий Владимирович, 2020
+# gandalfthewhite19890404 <gandalfthewhite@mail.ru>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Валерий Владимирович, 2020\n"
+"Last-Translator: gandalfthewhite19890404 <gandalfthewhite@mail.ru>, 2020\n"
 "Language-Team: Russian (https://www.transifex.com/linuxdeepin/teams/3617/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,46 +133,64 @@ msgstr "Доступ  к сообщениям"
 msgid "Message notification"
 msgstr "Уведомление о сообщении"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
-msgstr ""
+msgstr "Получение файлов %s из \"%s\""
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
 msgstr "Просмотр"
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
+msgstr "Готово"
+
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr ""
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Bluetooth-подключение не удалось"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
-msgstr ""
+msgstr "Отказаться"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
-msgstr ""
+msgstr "Получить"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
-msgstr ""
+msgstr "Передача файлов по Bluetooth"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
+msgstr "1%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Сбой передачи Файлов"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
@@ -186,10 +205,6 @@ msgstr "%q отсоединено"
 #: ../../bluetooth/utils_notify.go:108
 msgid "Make sure %q is turned on and in range"
 msgstr "Убедитесь, что %q включено и доступно"
-
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Bluetooth-подключение не удалось"
 
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
@@ -580,7 +595,7 @@ msgstr "Проводное Соединение"
 
 #: ../../network/proxychains/utils_notify.go:45
 msgid "Application proxy is set successfully"
-msgstr ""
+msgstr "Прокси-сервер приложения успешно установлен"
 
 #: ../../network/proxychains/utils_notify.go:45
 #: ../../network/proxychains/utils_notify.go:48
@@ -591,7 +606,7 @@ msgstr "Сеть"
 
 #: ../../network/proxychains/utils_notify.go:48
 msgid "Failed to set the application proxy"
-msgstr ""
+msgstr "Не удалось установить прокси-сервер приложения"
 
 #: ../../network/state_handler.go:38
 msgid "Device state changed"
@@ -993,7 +1008,7 @@ msgstr "Подключено"
 
 #: ../../network/utils_notify.go:304
 msgid "Portal network authentication successful"
-msgstr ""
+msgstr "Проверка подлинности сети прошла успешно"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
@@ -1002,13 +1017,13 @@ msgstr ""
 "\"%s\" не прошел проверку безопасности системы и не может быть запущен "
 "сейчас"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Критически низкий заряд батареи"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "Низкий заряд батареи, пожалуйста подключите питание"
 

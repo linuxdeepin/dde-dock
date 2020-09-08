@@ -21,15 +21,16 @@
 # e7b367b198a92ab3e6fd7f551a36a082, 2020
 # Cindy0514, 2020
 # Maggie Liu <maggie.liufei@gmail.com>, 2020
+# Béla Bajza <bajzabela@gmail.com>, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:33+0800\n"
+"POT-Creation-Date: 2020-09-08 10:27+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
-"Last-Translator: Maggie Liu <maggie.liufei@gmail.com>, 2020\n"
+"Last-Translator: Béla Bajza <bajzabela@gmail.com>, 2020\n"
 "Language-Team: Hungarian (https://www.transifex.com/linuxdeepin/teams/3617/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -141,46 +142,64 @@ msgstr "Üzenet hozzáférés"
 msgid "Message notification"
 msgstr "Üzenet értesítés"
 
-#: ../../bluetooth/obex_agent.go:328 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: ../../bluetooth/obex_agent.go:335 ../../bluetooth/obex_agent.go:350
+#: ../../bluetooth/obex_agent.go:345
 #, c-format
 msgid "Receiving %s files from \"%s\""
-msgstr ""
+msgstr " %s fájl fogadása a \"%s\"- fájlból"
 
-#: ../../bluetooth/obex_agent.go:344
+#: ../../bluetooth/obex_agent.go:354
 msgid "View"
 msgstr "Megtekintés"
 
-#: ../../bluetooth/obex_agent.go:351
+#: ../../bluetooth/obex_agent.go:360
+#, c-format
+msgid "You have received files from %s successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:361
 msgid "Done"
+msgstr "Kész"
+
+#: ../../bluetooth/obex_agent.go:376
+msgid "Stop Receiving Files"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:369
-msgid "File Transfer Failed"
+#: ../../bluetooth/obex_agent.go:378
+msgid "You have cancelled the file transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:370
-msgid "The Bluetooth device is disconnected, please have a check"
-msgstr ""
+#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+msgid "Bluetooth connection failed"
+msgstr "Bluetooth kapcsolódás sikertelen"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Decline"
-msgstr ""
+msgstr "Elutasítás"
 
-#: ../../bluetooth/obex_agent.go:399
+#: ../../bluetooth/obex_agent.go:415
 msgid "Receive"
-msgstr ""
+msgstr "Fogadás"
 
-#: ../../bluetooth/obex_agent.go:404
+#: ../../bluetooth/obex_agent.go:420
 msgid "Bluetooth File Transfer"
-msgstr ""
+msgstr "Bluetooth fájlküldés"
 
-#: ../../bluetooth/obex_agent.go:405
+#: ../../bluetooth/obex_agent.go:421
 #, c-format
 msgid "%s"
+msgstr "%s"
+
+#: ../../bluetooth/obex_agent.go:486
+msgid "File Transfer Failed"
+msgstr "Fájlküldés sikertelen"
+
+#: ../../bluetooth/obex_agent.go:487
+#, c-format
+msgid "Receiving %s timed out"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
@@ -196,21 +215,17 @@ msgstr "%q szétkapcsolva"
 msgid "Make sure %q is turned on and in range"
 msgstr "Ellenőrizd, hogy a %q be van e kapcsolva és hatótávolságon belül van."
 
-#: ../../bluetooth/utils_notify.go:113
-msgid "Bluetooth connection failed"
-msgstr "Bluetooth kapcsolódás sikertelen"
-
 #: ../../bluetooth/utils_notify.go:146
 msgid "Click here to connect to %q"
-msgstr ""
+msgstr "Kattintson ide a %q -hoz való csatlakozáshoz"
 
 #: ../../bluetooth/utils_notify.go:147
 msgid "Add Bluetooth devices"
-msgstr ""
+msgstr "Bluetooth eszközök hozzáadása"
 
 #: ../../bluetooth/utils_notify.go:157
 msgid "Pair"
-msgstr ""
+msgstr "Párosítás"
 
 #: ../../calendar/job.go:509 ../../calendar/job.go:516
 msgid "today"
@@ -260,7 +275,7 @@ msgstr "Ütemezési emlékeztető"
 
 #: ../../calendar/type.go:40
 msgid "Festival"
-msgstr ""
+msgstr "Fesztivál"
 
 #: ../../dock/app_entry_menu.go:102
 msgid "Open"
@@ -376,7 +391,7 @@ msgstr "Vágólap"
 
 #: ../../keybinding/shortcuts/id_name_map.go:49
 msgid "Translation"
-msgstr ""
+msgstr "Fordító"
 
 #: ../../keybinding/shortcuts/id_name_map.go:56
 msgid "Switch Layout"
@@ -472,7 +487,7 @@ msgstr "Munkaterület  megjelenítése"
 
 #: ../../keybinding/shortcuts/id_name_map.go:210
 msgid "Switch monitors"
-msgstr ""
+msgstr "Monitor váltása"
 
 #: ../../langselector/locale.go:62
 msgid "Authentication is required to switch language"
@@ -516,11 +531,11 @@ msgstr "%q telepítése nem sikerült."
 
 #: ../../lastore/notify.go:107
 msgid "Removed successfully"
-msgstr ""
+msgstr "Sikeresen eltávolítva"
 
 #: ../../lastore/notify.go:109
 msgid "Failed to remove the app"
-msgstr ""
+msgstr "Az alkalmazás eltávolítása sikertelen"
 
 #: ../../lastore/notify.go:116
 msgid ""
@@ -588,7 +603,7 @@ msgstr "Vezetékes kapcsolat"
 
 #: ../../network/proxychains/utils_notify.go:45
 msgid "Application proxy is set successfully"
-msgstr ""
+msgstr "Alkalmazás proxy sikeresen beállítva"
 
 #: ../../network/proxychains/utils_notify.go:45
 #: ../../network/proxychains/utils_notify.go:48
@@ -599,7 +614,7 @@ msgstr "Hálózat"
 
 #: ../../network/proxychains/utils_notify.go:48
 msgid "Failed to set the application proxy"
-msgstr ""
+msgstr "Alkalmazás proxy beállítása sikertelen"
 
 #: ../../network/state_handler.go:38
 msgid "Device state changed"
@@ -824,7 +839,7 @@ msgstr "ModemManager nem futott vagy váratlanul leállt"
 
 #: ../../network/state_handler.go:91
 msgid "The 802.11 WLAN network could not be found"
-msgstr ""
+msgstr "A 802.11 Wi-Fi hálózat nem található"
 
 #: ../../network/state_handler.go:92
 msgid "A secondary connection of the base connection failed"
@@ -1017,7 +1032,7 @@ msgstr "Kapcsolódva"
 
 #: ../../network/utils_notify.go:304
 msgid "Portal network authentication successful"
-msgstr ""
+msgstr "A portál hálózati hitelesítése sikeres"
 
 #: ../../service_trigger/msg.go:7
 #, c-format
@@ -1026,48 +1041,48 @@ msgstr ""
 "\"%s\" nem felelt meg a a rendszerbiztonsági ellenőrzésnek és jelenleg nem "
 "futtatható"
 
-#: ../../session/power/manager_events.go:201
+#: ../../session/power/manager_events.go:203
 msgid "Battery critically low"
 msgstr "Az akkumlátor töltöttsége kritikusan alacsony"
 
-#: ../../session/power/manager_events.go:222
-#: ../../session/power/manager_events.go:227
-#: ../../session/power/manager_events.go:232
+#: ../../session/power/manager_events.go:224
+#: ../../session/power/manager_events.go:229
+#: ../../session/power/manager_events.go:234
 msgid "Battery low, please plug in"
 msgstr "Akkutöltöttség alacsony, kérem csatlakoztassa a töltőt"
 
 #: ../../session/power/utils.go:349 ../../session/power/utils.go:353
 #: ../../session/power/utils.go:357 ../../session/power/utils.go:361
 msgid "Power settings changed"
-msgstr ""
+msgstr "Energiagazdálkodási beállítások megváltoztatva"
 
 #: ../../session/power/utils.go:376
 msgid "When the lid is closed, "
-msgstr ""
+msgstr "Képernyő lecsukásakor"
 
 #: ../../session/power/utils.go:380
 msgid "When pressing the power button, "
-msgstr ""
+msgstr "Főkapcsoló megnyomásakor"
 
 #: ../../session/power/utils.go:390
 msgid "your computer will shut down"
-msgstr ""
+msgstr "A számítógép le fog állni"
 
 #: ../../session/power/utils.go:392
 msgid "your computer will suspend"
-msgstr ""
+msgstr "A számítógép alvó állapotba kerül"
 
 #: ../../session/power/utils.go:394
 msgid "your computer will hibernate"
-msgstr ""
+msgstr "A számítógép hibernált állapotba kerül"
 
 #: ../../session/power/utils.go:396
 msgid "your monitor will turn off"
-msgstr ""
+msgstr "A monitor leállításra kerül"
 
 #: ../../session/power/utils.go:398
 msgid "it will do nothing to your computer"
-msgstr ""
+msgstr "semmit sem fog tenni a számítógépével"
 
 #: ../../timedate/manager_ifc.go:59
 msgid "Authentication is required to set the system time"
