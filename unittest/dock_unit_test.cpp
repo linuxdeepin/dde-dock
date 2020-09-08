@@ -230,6 +230,8 @@ void DockUnitTest::dock_multi_process()
         QFAIL("control center error occurred");
     });
     dockProc->waitForFinished();
+
+    delete dockProc;
 }
 
 /**
@@ -249,6 +251,30 @@ void DockUnitTest::dock_defaultVolume_Check(float defaultVolume)
          volume = sinkInterface.property("Volume").toFloat() * 100.0f;
     }
     QCOMPARE(volume, defaultVolume);
+}
+/**
+ * @brief DockUnitTest::dock_coreDump_check
+ *  间隔一段时间判断dock是不是同一个pid,判断是否一直在崩溃
+ *
+ */
+void DockUnitTest::dock_coreDump_check()
+{
+    auto process = new QProcess();
+    process->start("pidof -s  dde-dock");
+    process->waitForFinished();
+    QByteArray pid = process->readAllStandardOutput();
+    process->close();
+
+    QThread::sleep(1);
+
+    process->start("pidof -s  dde-dock");
+    process->waitForFinished();
+    QByteArray pid2 = process->readAllStandardOutput();
+    process->close();
+
+    QCOMPARE(pid,pid2);
+
+    delete process;
 }
 
 QTEST_APPLESS_MAIN(DockUnitTest)
