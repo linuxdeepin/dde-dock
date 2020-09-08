@@ -145,6 +145,15 @@ type Audio struct {
 		SetPortEnabled func() `in:"cardId,portName,enabled"`
 		IsPortEnabled  func() `in:"cardId,portName" out:"enabled"`
 	}
+
+	// nolint
+	signals *struct {
+		PortEnabledChanged struct {
+			cardId   uint32
+			portName string
+			enabled  bool
+		}
+	}
 }
 
 func newAudio(service *dbusutil.Service) *Audio {
@@ -539,14 +548,15 @@ func (a *Audio) SetPortEnabled(cardId uint32, portName string, enabled bool) *db
 	configKeeper.SetEnabled(a.getCardNameById(cardId), portName, enabled)
 	err := configKeeper.Save(configKeeperFile)
 	if err != nil {
+		logger.Warning(err)
 		return dbusutil.ToError(err)
 	}
 
-	// TODO : 自动切换，将在SP3二期实现
-	// if a.defaultSink.Card == cardId && a.defaultSink.ActivePort.Name == portName {
-	// }
-	// if a.defaultSource.Card == cardId && a.defaultSource.ActivePort.Name == portName {
-	// }
+	err = a.service.Emit(a, "PortEnabledChanged", cardId, portName, enabled)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
 
 	return nil
 }
