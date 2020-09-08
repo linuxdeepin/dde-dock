@@ -29,6 +29,7 @@ import (
 	backlight "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.helper.backlight"
 	inputdevices "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.inputdevices"
 	lockfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.lockfront"
+	shutdownfront "github.com/linuxdeepin/go-dbus-factory/com.deepin.dde.shutdownfront"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	x "github.com/linuxdeepin/go-x11-client"
@@ -91,6 +92,7 @@ type Manager struct {
 	customShortcutManager *shortcuts.CustomShortcutManager
 
 	lockFront *lockfront.LockFront
+	shutdownFront *shutdownfront.ShutdownFront
 
 	sessionSigLoop  *dbusutil.SignalLoop
 	systemSigLoop   *dbusutil.SignalLoop
@@ -237,6 +239,15 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 		logger.Warning("connect ChangKey signal failed:", err)
 	}
 
+	m.shutdownFront = shutdownfront.NewShutdownFront(sessionBus)
+	m.shutdownFront.InitSignalExt(m.sessionSigLoop, true)
+	_, err = m.shutdownFront.ConnectChangKey(func(changKey string) {
+		m.handleKeyEventFromShutdownFront(changKey)
+	})
+	if err != nil {
+		logger.Warning("connect ChangKey signal failed:", err)
+	}
+
 	if shouldUseDDEKwin() {
 		logger.Debug("Use DDE KWin")
 		m.shortcutManager.AddKWin(m.wm)
@@ -320,6 +331,18 @@ func (m *Manager) handleKeyEventFromLockFront(changKey string) {
 					}
 				}
 			}
+		}
+	}
+}
+
+func (m *Manager) handleKeyEventFromShutdownFront(changKey string) {
+	logger.Debugf("handleKeyEvent %s from ShutdownFront", changKey)
+	action := shortcuts.GetAction(changKey)
+	if action.Type == shortcuts.ActionTypeSystemShutdown {
+		if handler := m.handlers[int(action.Type)]; handler != nil {
+			handler(nil)
+		} else {
+			logger.Warning("handler is nil")
 		}
 	}
 }
