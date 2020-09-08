@@ -276,7 +276,7 @@ func (s *Scheduler) queryJobs(key string, startTime, endTime time.Time) ([]dateJ
 func (s *Scheduler) queryJobsWithLimit(key string, startTime, endTime time.Time, maxNum int32) ([]dateJobsWrap, error) {
 	var allJobs []*Job
 	db := wrapDBConditionWithKey(s.db, key)
-	err := db.Find(&allJobs).Error
+	err := db.Order("start asc").Find(&allJobs).Error
 	if err != nil {
 		return nil, err
 	}
