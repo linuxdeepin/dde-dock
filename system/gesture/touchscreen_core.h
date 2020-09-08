@@ -57,8 +57,8 @@ static point last_point;
 static point last_point_scale;
 static screeninfo screen;
 static int move_stop_distance = 1;
-static int edge_error_limit = 2;	//edge error limit when swipe to touchscreen from edge
-static uint32_t edge_move_stop_time = 500;
+static int edge_error_limit = 3;	//edge error limit when swipe to touchscreen from edge
+static uint32_t edge_move_stop_time = 0;
 static Direction edge_move_stop_direction = DIR_NONE;
 static double min_edge_distance = 10.0;   // minimum gesture distance from edge (in mm)
 
