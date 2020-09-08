@@ -43,7 +43,6 @@ import (
 	imageeffect "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.imageeffect"
 	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
-	geoclue "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.geoclue2"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	timedate "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
 	x "github.com/linuxdeepin/go-x11-client"
@@ -150,7 +149,6 @@ type Manager struct {
 	imageEffect         *imageeffect.ImageEffect
 	xSettings           *sessionmanager.XSettings
 	login1Manager       *login1.Manager
-	geoclueClient       *geoclue.Client
 	themeAutoTimer      *time.Timer
 	display             *display.Display
 	latitude            float64
@@ -506,7 +504,7 @@ func (m *Manager) init() error {
 		logger.Warning("LoadLocation Failed :", err)
 	}
 	m.loc = l
-	m.timeDate.Timezone().ConnectChanged(func(hasValue bool, value string) {
+	err = m.timeDate.Timezone().ConnectChanged(func(hasValue bool, value string) {
 		if err != nil {
 			logger.Warning(err)
 		}
@@ -527,6 +525,10 @@ func (m *Manager) init() error {
 			m.resetThemeAutoTimer()
 		}
 	})
+
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
