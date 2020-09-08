@@ -41,10 +41,6 @@ class DockApplication : public DApplication
 public:
     explicit DockApplication(int &argc, char **argv);
     virtual bool notify(QObject *obj, QEvent *event) override;
-
-signals:
-
-public slots:
 };
 
 #endif // DOCKAPPLICATION_H
