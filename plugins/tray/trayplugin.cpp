@@ -448,10 +448,11 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
         const QString sniServerName = list.first();
 
         if (sniServerName.isEmpty()) {
+            qWarning() << "SNI service error: " << sniServerName;
             return false;
         }
 
-        QDBusInterface sniItemDBus(sniServerName, list.last());
+        QDBusInterface sniItemDBus(sniServerName, "/" + list.last());
         if (!sniItemDBus.isValid()) {
             qDebug() << "sni dbus service error : " << sniServerName;
             return false;
