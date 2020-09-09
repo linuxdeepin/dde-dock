@@ -402,11 +402,16 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 }
 
 func (m *Manager) doPortalAuthentication() {
+	err := exec.Command("pgrep", "startdde").Run()
+	if err != nil  {
+		return
+	}
+
 	sincePortalDetection := time.Since(m.portalLastDetectionTime)
 	if sincePortalDetection < checkRepeatTime {
 		return
 	}
-	err := exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
+	err = exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
 	if err != nil {
 		logger.Warning(err)
 	}
