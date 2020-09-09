@@ -42,6 +42,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_itemKey(itemKey)
     , m_dragging(false)
+    , m_active(false)
     , m_gsettings(nullptr)
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
@@ -304,6 +305,14 @@ void PluginsItem::mouseClicked()
         QProcess *proc = new QProcess(this);
 
         connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+
+        //此处增加的判断是为了解决onBoard程序执行时第一次起不来的BUG，使用先Hide可修复开机第一次点击屏幕键盘时起不来的问题。
+        if (!m_active) {
+            QProcess *process = new QProcess(this);
+            connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished), process, &QProcess::deleteLater);
+            process->execute("dbus-send --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.Hide");
+            m_active = true;
+        }
 
         proc->startDetached(command);
         return;

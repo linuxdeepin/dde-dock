@@ -82,6 +82,7 @@ private:
 
     const QString m_itemKey;
     bool m_dragging;
+    bool m_active;
 
     static QPoint MousePressPoint;
     QGSettings *m_gsettings;
