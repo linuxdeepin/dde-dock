@@ -371,6 +371,14 @@ void MainWindow::resetDragWindow()
         dockSize = this->height();
     }
 
+    /** FIX ME
+     * 作用：限制dockSize的值在40～100之间。
+     * 问题1：如果dockSize为39，会导致dock的mainwindow高度变成99，显示的内容高度却是39。
+     * 问题2：dockSize的值在这里不应该为39，但在高分屏上开启缩放后，拉高任务栏操作会概率出现。
+     * 暂时未分析出原因，后面再修改。
+     */
+    dockSize = qBound(MAINWINDOW_MIN_SIZE, dockSize, MAINWINDOW_MAX_SIZE);
+
     // 通知窗管和后端更新数据
     m_multiScreenWorker->updateDaemonDockSize(dockSize);                              // 1.先更新任务栏高度
     m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
