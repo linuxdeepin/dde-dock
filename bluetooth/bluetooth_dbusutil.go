@@ -2,10 +2,6 @@
 
 package bluetooth
 
-import (
-	dbus "github.com/godbus/dbus"
-)
-
 func (v *Bluetooth) setPropState(value uint32) (changed bool) {
 	if v.State != value {
 		v.State = value
@@ -19,15 +15,15 @@ func (v *Bluetooth) emitPropChangedState(value uint32) error {
 	return v.service.EmitPropertyChanged(v, "State", value)
 }
 
-func (v *Bluetooth) setPropObexSessionPath(value dbus.ObjectPath) (changed bool) {
-	if v.ObexSessionPath != value {
-		v.ObexSessionPath = value
-		v.emitPropChangedObexSessionPath(value)
+func (v *Bluetooth) setPropTransportable(value bool) (changed bool) {
+	if v.Transportable != value {
+		v.Transportable = value
+		v.emitPropChangedTransportable(value)
 		return true
 	}
 	return false
 }
 
-func (v *Bluetooth) emitPropChangedObexSessionPath(value dbus.ObjectPath) error {
-	return v.service.EmitPropertyChanged(v, "ObexSessionPath", value)
+func (v *Bluetooth) emitPropChangedTransportable(value bool) error {
+	return v.service.EmitPropertyChanged(v, "Transportable", value)
 }

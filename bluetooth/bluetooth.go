@@ -129,9 +129,9 @@ type Bluetooth struct {
 	backupDeviceLock sync.Mutex
 	backupDevices    map[dbus.ObjectPath][]*backupDevice
 
-	PropsMu         sync.RWMutex
-	State           uint32          // StateUnavailable/StateAvailable/StateConnected
-	ObexSessionPath dbus.ObjectPath //当前是否有文件被传输 " "表示无文件传输，可进行传输
+	PropsMu       sync.RWMutex
+	State         uint32 // StateUnavailable/StateAvailable/StateConnected
+	Transportable bool   //能否传输 True可以传输 false不能传输
 
 	// 当发起设备连接成功后，应该把连接的设备添加进设备列表
 	connectedDevices map[dbus.ObjectPath][]*device
@@ -259,11 +259,11 @@ func newBluetooth(service *dbusutil.Service) (b *Bluetooth) {
 	}
 
 	b = &Bluetooth{
-		service:         service,
-		sigLoop:         dbusutil.NewSignalLoop(service.Conn(), 0),
-		systemSigLoop:   dbusutil.NewSignalLoop(systemConn, 10),
-		obexManager:     obex.NewManager(service.Conn()),
-		ObexSessionPath: "/",
+		service:       service,
+		sigLoop:       dbusutil.NewSignalLoop(service.Conn(), 0),
+		systemSigLoop: dbusutil.NewSignalLoop(systemConn, 10),
+		obexManager:   obex.NewManager(service.Conn()),
+		Transportable: true,
 	}
 
 	b.adapters = make(map[dbus.ObjectPath]*adapter)
@@ -881,7 +881,7 @@ func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, err
 		return "", err
 	}
 	b.emitObexSessionCreated(sessionPath)
-	b.setPropObexSessionPath(sessionPath)
+	b.emitPropChangedTransportable(false)
 
 	session, err := obex.NewSession(b.service.Conn(), sessionPath)
 	if err != nil {
@@ -991,7 +991,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 	b.sessionCancelChMapMu.Unlock()
 
 	b.emitObexSessionRemoved(sessionPath)
-	b.setPropObexSessionPath("/")
+	b.emitPropChangedTransportable(true)
 
 	objs, err := obex.NewObjectManager(b.service.Conn()).GetManagedObjects(0)
 	if err != nil {
