@@ -34,6 +34,7 @@
 
 #include <QSettings>
 #include <QLabel>
+#include <mutex>
 
 class FashionTrayItem;
 namespace Dock {
@@ -102,6 +103,7 @@ private:
 
     Dock::TipsWidget *m_tipsLabel;
     bool m_pluginLoaded;
+    std::mutex        m_sniMutex;
 };
 
 #endif // TRAYPLUGIN_H

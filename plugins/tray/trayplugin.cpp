@@ -29,6 +29,9 @@
 #include <QWidget>
 #include <QX11Info>
 #include <QGSettings>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QFutureWatcher>
 
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
@@ -397,41 +400,67 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
 {
-    if (m_trayMap.contains(itemKey) || !SNITrayWidget::isSNIKey(itemKey) || m_passiveSNITrayMap.contains(itemKey)) {
-        return;
-    }
+    QFutureWatcher<bool> *watcher = new QFutureWatcher<bool>();
+    connect(watcher, &QFutureWatcher<int>::finished, this, [=] {
+        watcher->deleteLater();
+        if (!watcher->result()) {
+            return;
+        }
 
-    QGSettings settings("com.deepin.dde.dock.module.systemtray");
-    if (settings.keys().contains("enable") && !settings.get("enable").toBool()) {
-        return;
-    }
+        SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
 
-    if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
-        qDebug() << "SNI service path invalid";
-        return;
-    }
+        // TODO(lxz): 在future里已经对dbus进行过检查了，这里应该不需要再次检查。
+        if (!trayWidget->isValid())
+            return;
 
-    QStringList list = sniServicePath.split("/");
-    QString nsiServerName = list.takeFirst();
+        std::lock_guard<std::mutex> lock(m_sniMutex);
+        if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
+            m_passiveSNITrayMap.insert(itemKey, trayWidget);
+        } else {
+            addTrayWidget(itemKey, trayWidget);
+        }
 
-    QProcess p;
-    p.start("qdbus", {nsiServerName});
-    if (!p.waitForFinished(1000)) {
-        qDebug() << "sni dbus service error : " << nsiServerName;
-        return;
-    }
+        connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
+    });
 
-    SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
-    if (!trayWidget->isValid())
-        return;
+    // Start the computation.
+    QFuture<bool> future = QtConcurrent::run([=]() -> bool {
+        {
+            std::lock_guard<std::mutex> lock(m_sniMutex);
+            if (m_trayMap.contains(itemKey) || !SNITrayWidget::isSNIKey(itemKey) || m_passiveSNITrayMap.contains(itemKey)) {
+                return false;
+            }
+        }
 
-    if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
-        m_passiveSNITrayMap.insert(itemKey, trayWidget);
-    } else {
-        addTrayWidget(itemKey, trayWidget);
-    }
+        QGSettings settings("com.deepin.dde.dock.module.systemtray");
+        if (settings.keys().contains("enable") && !settings.get("enable").toBool()) {
+            return false;
+        }
 
-    connect(trayWidget, &SNITrayWidget::statusChanged, this, &TrayPlugin::onSNIItemStatusChanged);
+        if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
+            qDebug() << "SNI service path invalid";
+            return false;
+        }
+
+        // NOTE(lxz): The data from the sni daemon is interface/methd
+        // e.g. org.kde.StatusNotifierItem-1741-1/StatusNotifierItem
+        const QStringList list = sniServicePath.split("/");
+        const QString sniServerName = list.first();
+
+        if (sniServerName.isEmpty()) {
+            return false;
+        }
+
+        QDBusInterface sniItemDBus(sniServerName, list.last());
+        if (!sniItemDBus.isValid()) {
+            qDebug() << "sni dbus service error : " << sniServerName;
+            return false;
+        }
+
+        return true;
+    });
+
+    watcher->setFuture(future);
 }
 
 void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indicatorName)
