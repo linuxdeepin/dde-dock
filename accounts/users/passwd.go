@@ -31,7 +31,10 @@ import "C"
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"os"
+	"os/user"
+	"strconv"
 	"strings"
 	"sync"
 	"unsafe"
@@ -102,7 +105,18 @@ func updatePasswd(password, username string) error {
 		return fmt.Errorf("The username not exist.")
 	}
 
-	return writeStrvToFile(datas, userFileShadow, 0600)
+	err = writeStrvToFile(datas, userFileShadow, math.MaxUint32)
+	if err != nil {
+		return nil
+	}
+
+	usr, _ := user.Lookup("root")
+	grp, _ := user.LookupGroup("shadow")
+	uid, _ := strconv.Atoi(usr.Uid)
+	gid, _ := strconv.Atoi(grp.Gid)
+	err = os.Chown(userFileShadow, uid, gid)
+
+	return err
 }
 
 func writeStrvToFile(datas []string, file string, mode os.FileMode) error {
@@ -131,6 +145,11 @@ func writeStrvToFile(datas []string, file string, mode os.FileMode) error {
 	err = f.Sync()
 	if err != nil {
 		return err
+	}
+
+	info, err := os.Stat(file)
+	if err == nil && mode == math.MaxUint32 {
+		mode = info.Mode()
 	}
 
 	os.Rename(file+".bak~", file)
