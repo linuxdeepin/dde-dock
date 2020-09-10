@@ -415,17 +415,14 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
-    QRect rect = QRect();
-    foreach (auto item, DockItemManager::instance()->itemList()) {
-        DockItem *dockItem = item.data();
-        PluginsItem *pluginItem = qobject_cast<PluginsItem *>(dockItem);
-        if (pluginItem && pluginItem->pluginName() == "trash") {
-            rect = pluginItem->geometry();
-        }
+    //拖拽图标到任务栏时，如果拖拽到垃圾箱插件图标widget上，则默认不允许拖拽，其他位置默认为允许拖拽
+    QWidget *widget = QApplication::widgetAt(QCursor::pos());
+    //"trash-centralwidget"名称是在PluginsItem类中m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
+    if (widget && widget->objectName() == "trash-centralwidget") {
+        return;
     }
 
-    if (!rect.contains(e->pos()))
-        e->accept();
+    e->accept();
 }
 
 void MainPanelControl::dragLeaveEvent(QDragLeaveEvent *e)
