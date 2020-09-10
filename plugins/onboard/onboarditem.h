@@ -44,7 +44,6 @@ private:
     void mouseMoveEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    bool containCursorPos();
 
 private:
     Dock::DisplayMode m_displayMode;

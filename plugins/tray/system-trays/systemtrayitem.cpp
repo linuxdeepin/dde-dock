@@ -203,12 +203,7 @@ void SystemTrayItem::enterEvent(QEvent *event)
         return;
     }
 
-    if (containCursorPos()) {
-        m_popupTipsDelayTimer->start();
-    } else {
-        m_popupTipsDelayTimer->stop();
-        hidePopup();
-    }
+    m_popupTipsDelayTimer->start();
 
     update();
 
@@ -292,18 +287,6 @@ void SystemTrayItem::showEvent(QShowEvent *event)
     });
 
     return AbstractTrayWidget::showEvent(event);
-}
-
-void SystemTrayItem::mouseMoveEvent(QMouseEvent *event)
-{
-    if (containCursorPos()) {
-        m_popupTipsDelayTimer->start();
-    } else {
-        m_popupTipsDelayTimer->stop();
-        hidePopup();
-    }
-
-    AbstractTrayWidget::mouseMoveEvent(event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const

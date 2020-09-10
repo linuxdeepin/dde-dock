@@ -43,7 +43,6 @@ protected:
 
 private:
     const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
-    bool containCursorPos();
 
 private:
     Dock::DisplayMode m_displayMode;

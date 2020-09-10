@@ -140,10 +140,6 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    if (!containCursorPos()) {
-        return;
-    }
-
     update();
 
     if (PopupWindow->isVisible())
@@ -163,10 +159,6 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
     }
 
     DockItem::mouseMoveEvent(e);
-
-    if (!containCursorPos()) {
-        return;
-    }
 
     e->accept();
 
@@ -190,10 +182,6 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
     }
 
     e->accept();
-
-    if (!containCursorPos()) {
-        return;
-    }
 
     const QPoint distance = e->pos() - MousePressPoint;
     if (distance.manhattanLength() < PLUGIN_ITEM_DRAG_THRESHOLD)

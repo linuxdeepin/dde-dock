@@ -149,11 +149,6 @@ void AbstractContainer::setExpand(const bool expand)
     refreshVisible();
 }
 
-//QSize AbstractContainer::sizeHint() const
-//{
-//    return totalSize();
-//}
-
 void AbstractContainer::setItemSize(int itemSize)
 {
     m_itemSize = itemSize;

@@ -121,11 +121,7 @@ const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) c
 
 void OnboardItem::mousePressEvent(QMouseEvent *event)
 {
-    if (containCursorPos()) {
-        m_pressed = true;
-    } else {
-        m_pressed = false;
-    }
+    m_pressed = true;
 
     update();
 
@@ -143,11 +139,7 @@ void OnboardItem::mouseReleaseEvent(QMouseEvent *event)
 
 void OnboardItem::mouseMoveEvent(QMouseEvent *event)
 {
-    if (containCursorPos()) {
-        m_hover = true;
-    } else {
-        m_hover = false;
-    }
+    m_hover = true;
 
     update();
 
@@ -166,18 +158,4 @@ void OnboardItem::leaveEvent(QEvent *event)
 void OnboardItem::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-}
-
-bool OnboardItem::containCursorPos()
-{
-    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
-    QRect rect(this->rect());
-
-    int iconSize = qMin(rect.width(), rect.height());
-    int w = (rect.width() - iconSize) / 2;
-    int h = (rect.height() - iconSize) / 2;
-
-    rect = rect.adjusted(w, h, -w, -h);
-
-    return rect.contains(cursorPos);
 }

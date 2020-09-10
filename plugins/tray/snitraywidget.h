@@ -101,7 +101,6 @@ private Q_SLOTS:
     void popupWindowAccept();
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     void paintEvent(QPaintEvent *e) override;

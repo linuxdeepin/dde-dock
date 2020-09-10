@@ -48,11 +48,9 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     void refreshArrowPixmap();
-    bool containCursorPos();
 
 private:
     QTimer *m_expandDelayTimer;

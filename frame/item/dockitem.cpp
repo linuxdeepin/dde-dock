@@ -179,15 +179,9 @@ void DockItem::enterEvent(QEvent *e)
         return;
     }
 
-    if (containCursorPos()) {
-        m_hover = true;
-        m_hoverEffect->setHighlighting(true);
-        m_popupTipsDelayTimer->start();
-    } else {
-        m_hover = false;
-        m_hoverEffect->setHighlighting(false);
-        m_popupTipsDelayTimer->stop();
-    }
+    m_hover = true;
+    m_hoverEffect->setHighlighting(true);
+    m_popupTipsDelayTimer->start();
 
     update();
 
@@ -213,16 +207,9 @@ void DockItem::leaveEvent(QEvent *e)
 
 void DockItem::mouseMoveEvent(QMouseEvent *e)
 {
-    if (containCursorPos()) {
-        m_hover = true;
-        m_hoverEffect->setHighlighting(true);
-        m_popupTipsDelayTimer->start();
-    } else {
-        m_hover = false;
-        m_hoverEffect->setHighlighting(false);
-        m_popupTipsDelayTimer->stop();
-        hidePopup();
-    }
+    m_hover = true;
+    m_hoverEffect->setHighlighting(true);
+    m_popupTipsDelayTimer->start();
 
     update();
 
@@ -289,20 +276,6 @@ void DockItem::onContextMenuAccepted()
 {
     emit requestRefreshWindowVisible();
     emit requestWindowAutoHide(true);
-}
-
-bool DockItem::containCursorPos()
-{
-    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
-    QRect rect(this->rect());
-
-    int iconSize = qMin(rect.width(), rect.height());
-    int w = (rect.width() - iconSize) / 2;
-    int h = (rect.height() - iconSize) / 2;
-
-    rect = rect.adjusted(w, h, -w, -h);
-
-    return rect.contains(cursorPos);
 }
 
 void DockItem::showHoverTips()

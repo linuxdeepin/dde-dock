@@ -141,11 +141,7 @@ void FashionTrayWidgetWrapper::mousePressEvent(QMouseEvent *event)
         MousePressPoint = event->pos();
     }
 
-    if (containCursorPos()) {
-        m_pressed = true;
-    } else {
-        m_pressed = false;
-    }
+    m_pressed = true;
 
     update();
 
@@ -179,11 +175,7 @@ void FashionTrayWidgetWrapper::dragEnterEvent(QDragEnterEvent *event)
 
 void FashionTrayWidgetWrapper::enterEvent(QEvent *event)
 {
-    if (containCursorPos()) {
-        m_hover = true;
-    } else {
-        m_hover = false;
-    }
+    m_hover = true;
 
     update();
 
@@ -228,11 +220,7 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
     if(m_absTrayWidget.isNull())
         return;
 
-    if (containCursorPos()) {
-        m_hover = true;
-    } else {
-        m_hover = false;
-    }
+    m_hover = true;
 
     update();
 
@@ -241,10 +229,6 @@ void FashionTrayWidgetWrapper::handleMouseMove(QMouseEvent *event)
     }
 
     if ((event->pos() - MousePressPoint).manhattanLength() < TRAY_ITEM_DRAG_THRESHOLD) {
-        return;
-    }
-
-    if (!containCursorPos()) {
         return;
     }
 
@@ -281,20 +265,6 @@ void FashionTrayWidgetWrapper::onTrayWidgetNeedAttention()
 void FashionTrayWidgetWrapper::onTrayWidgetClicked()
 {
     setAttention(false);
-}
-
-bool FashionTrayWidgetWrapper::containCursorPos()
-{
-    QPoint cursorPos = this->mapFromGlobal(QCursor::pos());
-    QRect rect(this->rect());
-
-    int iconSize = qMin(rect.width(), rect.height());
-    int w = (rect.width() - iconSize) / 2;
-    int h = (rect.height() - iconSize) / 2;
-
-    rect = rect.adjusted(w, h, -w, -h);
-
-    return rect.contains(cursorPos);
 }
 
 bool FashionTrayWidgetWrapper::attention() const

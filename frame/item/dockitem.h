@@ -60,7 +60,6 @@ public:
 
     QSize sizeHint() const override;
     virtual QString accessibleName();
-    bool containCursorPos();
 
 public slots:
     virtual void refershIcon() {}

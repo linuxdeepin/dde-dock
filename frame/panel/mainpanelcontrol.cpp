@@ -255,8 +255,12 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
-    m_pluginLayout->insertWidget(index, wdg, 0, Qt::AlignCenter);
-    resizeDockIcon();
+    //因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
+    //因此在处理插件图标时，需要通过两层布局判断是否为需要的插件，例如拖动插件位置等判断
+    QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
+    m_pluginLayout->insertLayout(index, boxLayout, 0);
+    resizeDockIcon();;
     m_pluginAreaWidget->adjustSize();
 }
 
@@ -277,7 +281,16 @@ void MainPanelControl::removeTrayAreaItem(QWidget *wdg)
 
 void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 {
-    m_pluginLayout->removeWidget(wdg);
+    //因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
+    //因此remove插件图标时，需要从多的一层布局中取widget进行判断是否需要移除的插件
+    for (int i = 0; i < m_pluginLayout->count(); ++i) {
+        QLayoutItem *layoutItem = m_pluginLayout->itemAt(i);
+        QLayout *boxLayout = layoutItem->layout();
+        if (boxLayout && boxLayout->itemAt(0)->widget() == wdg) {
+            boxLayout->removeWidget(wdg);
+            m_pluginLayout->removeItem(layoutItem);
+        }
+    }
 }
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
@@ -375,9 +388,17 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
     int idx = -1;
     if (targetItem->itemType() == DockItem::App)
         idx = m_appAreaSonLayout->indexOf(targetItem);
-    else if (targetItem->itemType() == DockItem::Plugins)
-        idx = m_pluginLayout->indexOf(targetItem);
-    else if (targetItem->itemType() == DockItem::FixedPlugin)
+    else if (targetItem->itemType() == DockItem::Plugins){
+        //因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+        //因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
+        for (int i = 0; i < m_pluginLayout->count(); ++i) {
+            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+            if (layout && layout->itemAt(0)->widget() == targetItem) {
+                idx = i;
+                break;
+            }
+        }
+    } else if (targetItem->itemType() == DockItem::FixedPlugin)
         idx = m_fixedAreaLayout->indexOf(targetItem);
     else
         return;
@@ -611,10 +632,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     if (item->itemType() != DockItem::App && item->itemType() != DockItem::Plugins && item->itemType() != DockItem::FixedPlugin)
         return false;
 
-    if (!item->containCursorPos()) {
-        return  false;
-    }
-
     const QPoint pos = mouseEvent->globalPos();
     const QPoint distance = pos - m_mousePressPos;
     if (distance.manhattanLength() < QApplication::startDragDistance())
@@ -720,22 +737,21 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 
     for (int i = 0 ; i < parentLayout->count(); ++i) {
         QLayoutItem *layoutItem = parentLayout->itemAt(i);
-        DockItem *dockItem = qobject_cast<DockItem *>(layoutItem->widget());
+
+        DockItem *dockItem = nullptr;
+        if (parentWidget == m_pluginAreaWidget) {
+            QLayout *layout = layoutItem->layout();
+            if (layout) {
+                dockItem = qobject_cast<DockItem *>(layout->itemAt(0)->widget());
+            }
+        } else{
+            dockItem = qobject_cast<DockItem *>(layoutItem->widget());
+        }
+
         if (!dockItem)
             continue;
 
-        QRect rect;
-
-        rect.setTopLeft(dockItem->pos());
-        if (dockItem->itemType() == DockItem::Plugins) {
-            if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-                rect.setSize(QSize(PLUGIN_MAX_SIZE, height()));
-            } else {
-                rect.setSize(QSize(width(), PLUGIN_MAX_SIZE));
-            }
-        } else {
-            rect.setSize(dockItem->size());
-        }
+        QRect rect(dockItem->pos(), dockItem->size());
         if (rect.contains(point)) {
             targetItem = dockItem;
             break;
@@ -866,31 +882,39 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
 
 void MainPanelControl::resizeDockIcon()
 {
-    if (!m_tray)
-        return;
     // 插件有点特殊，因为会引入第三方的插件，并不会受dock的缩放影响，我们只能限制我们自己的插件，否则会导致显示错误。
     // 以下是受控制的插件
     PluginsItem *trashPlugin = nullptr;
     PluginsItem *shutdownPlugin = nullptr;
     PluginsItem *keyboardPlugin = nullptr;
     PluginsItem *notificationPlugin = nullptr;
+
+    //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+    //因此需要通过多一层布局来获取各插件
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-        PluginsItem *w = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-        if (w->pluginName() == "trash") {
-            trashPlugin = w;
-        } else if (w->pluginName() == "shutdown") {
-            shutdownPlugin = w;
-        } else if (w->pluginName() == "onboard") {
-            keyboardPlugin = w;
-        } else if (w->pluginName() == "notifications") {
-            notificationPlugin = w;
+        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+        if (layout) {
+            PluginsItem *w = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
+            if (w) {
+                if (w->pluginName() == "trash") {
+                    trashPlugin = w;
+                } else if (w->pluginName() == "shutdown") {
+                    shutdownPlugin = w;
+                } else if (w->pluginName() == "onboard") {
+                    keyboardPlugin = w;
+                } else if (w->pluginName() == "notifications") {
+                    notificationPlugin = w;
+                }
+            }
         }
     }
 
     // 总宽度
     int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
     // 减去托盘间隔区域
-    totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+    if (m_tray) {
+        totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+    }
     // 减去3个分割线的宽度
     totalLength -= 3 * SPLITER_SIZE;
 
@@ -915,7 +939,12 @@ void MainPanelControl::resizeDockIcon()
         return;
 
     // 参与计算的插件的个数（包含托盘和插件，垃圾桶，关机，屏幕键盘）
-    int pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
+    int pluginCount = 0;
+    if (m_tray) {
+        pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
+    } else {
+        pluginCount = (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
+    }
     // icon个数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
     // 余数
@@ -956,8 +985,10 @@ void MainPanelControl::resizeDockIcon()
 
 void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin)
 {
+    int appItemSize = qMin(w, h);
+
     for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
-        m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(w, h);
+        m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
     }
 
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
@@ -971,7 +1002,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     }
 
     for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
-        m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(w, h);
+        m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
     }
 
     // 托盘上每个图标大小
@@ -988,55 +1019,80 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     if (tray_item_size < 20)
         return;
 
-    m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
-
-    // 插件
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        if (shutdownPlugin)
-            shutdownPlugin->setFixedSize(tray_item_size, h - 20);
-        if (keyboardPlugin)
-            keyboardPlugin->setFixedSize(tray_item_size, h - 20);
-        if (notificationPlugin)
-            notificationPlugin->setFixedSize(tray_item_size, h - 20);
-        if (trashPlugin)
-            trashPlugin->setFixedSize(tray_item_size, h - 20);
-    } else {
-        if (shutdownPlugin)
-            shutdownPlugin->setFixedSize(w - 20, tray_item_size);
-        if (keyboardPlugin)
-            keyboardPlugin->setFixedSize(w - 20, tray_item_size);
-        if (notificationPlugin)
-            notificationPlugin->setFixedSize(w - 20, tray_item_size);
-        if (trashPlugin)
-            trashPlugin->setFixedSize(w - 20, tray_item_size);
+    if (m_tray) {
+        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
     }
 
+    if (shutdownPlugin)
+        shutdownPlugin->setFixedSize(tray_item_size, tray_item_size);
+    if (keyboardPlugin)
+        keyboardPlugin->setFixedSize(tray_item_size, tray_item_size);
+    if (notificationPlugin)
+        notificationPlugin->setFixedSize(tray_item_size, tray_item_size);
+    if (trashPlugin)
+        trashPlugin->setFixedSize(tray_item_size, tray_item_size);
+
+    //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+    //因此需要通过多一层布局来获取各插件
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-            PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                if (pItem->pluginName() == "datetime"){
-                    pItem->setFixedSize(pItem->sizeHint().width(), h);
-                } else if (pItem->pluginName() == "AiAssistant"){
-                    pItem->setFixedSize(tray_item_size, h - 20);
-                } else {
-                    pItem->setFixedSize(pItem->sizeHint().width(), h - 20);
+            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+            if (layout) {
+                PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
+                    if (pItem->pluginName() == "datetime") {
+                        pItem->setFixedSize(pItem->sizeHint().width(), h);
+                    } else {
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                    }
                 }
             }
         }
     } else {
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-            PluginsItem *pItem = static_cast<PluginsItem *>(m_pluginLayout->itemAt(i)->widget());
-            if (pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                if (pItem->pluginName() == "datetime"){
-                    pItem->setFixedSize(w, pItem->sizeHint().height());
-                } else if (pItem->pluginName() == "AiAssistant"){
-                    pItem->setFixedSize(w - 20, tray_item_size);
-                } else {
-                    pItem->setFixedSize(w - 20, pItem->sizeHint().height());
+            QLayout *layout =  m_pluginLayout->itemAt(i)->layout();
+            if (layout) {
+                PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
+                    if (pItem->pluginName() == "datetime") {
+                        pItem->setFixedSize(w, pItem->sizeHint().height());
+                    } else {
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                    }
                 }
+            }
+        }
+    }
+
+    int appTopAndBottomMargin = 0;
+    int appLeftAndRightMargin = 0;
+
+    int trayTopAndBottomMargin = 0;
+    int trayLeftAndRightMargin = 0;
+
+    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
+        appTopAndBottomMargin = (m_fixedAreaWidget->height() - appItemSize) / 2;
+        trayTopAndBottomMargin = (m_trayAreaWidget->height() - tray_item_size) / 2;
+    } else {
+        appLeftAndRightMargin = (m_fixedAreaWidget->width() - appItemSize) / 2;
+        trayLeftAndRightMargin = (m_trayAreaWidget->width() - tray_item_size) / 2;
+    }
+
+    m_fixedAreaLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
+    m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
+    m_trayAreaLayout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
+
+    //因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
+    //而不对日期时间插件设置边距
+    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
+        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+        if (layout) {
+            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+
+            if (pItem && pItem->pluginName() != "datetime") {
+                layout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
             }
         }
     }

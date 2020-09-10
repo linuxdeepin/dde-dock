@@ -147,11 +147,7 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if (containCursorPos()) {
-        m_sendHoverEvent->start();;
-    } else {
-        m_sendHoverEvent->stop();
-    }
+    m_sendHoverEvent->start();
 }
 
 void XEmbedTrayWidget::configContainerPosition()
