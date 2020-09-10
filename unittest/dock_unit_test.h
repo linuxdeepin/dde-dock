@@ -46,6 +46,7 @@ private:
     void setPosition(Dock::Position pos);
 
 private slots:
+    void dock_defaultGsettings_check();                         // 默认配置项检查
     void dock_geometry_check();         // 显示区域
     void dock_position_check();         // 位置检查
     void dock_displayMode_check();      // 显示模式检查

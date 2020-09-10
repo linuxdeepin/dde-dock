@@ -74,6 +74,36 @@ void DockUnitTest::setPosition(Dock::Position pos)
 {
     m_daemonDockInter->setPosition(pos);
 }
+
+/**
+ * @brief DockUnitTest::dock_defaultGsettings_check
+ * 验证任务栏的默认配置值是否正确，用于检查新安装系统或新创建用户的默认配置文件的正确性。
+ * 后续如果还有类似验证，应一并放到这里：
+ * 1.任务栏默认显示模式。
+ * 2.任务栏默认显示状态。
+ * 3.任务栏默认位置。
+ */
+void DockUnitTest::dock_defaultGsettings_check()
+{
+    QGSettings setting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
+
+    if (setting.keys().contains("displayMode")) {
+        QString currentDisplayMode = setting.get("display-mode").toString();
+        QString defaultDisplayMode = "efficient";
+        QCOMPARE(currentDisplayMode, defaultDisplayMode);
+    }
+    if (setting.keys().contains("hideMode")) {
+        QString currentHideMode = setting.get("hide-mode").toString();
+        QString defaultHideMode = "keep-showing";
+        QCOMPARE(currentHideMode, defaultHideMode);
+    }
+    if (setting.keys().contains("position")) {
+        QString currentPosition = setting.get("position").toString();
+        QString defaultPosition = "bottom";
+        QCOMPARE(currentPosition, defaultPosition);
+    }
+}
+
 /**
  * @brief DockUnitTest::dock_geometry_test   比较任务栏自身的位置和通知给后端的位置是否吻合
  */
