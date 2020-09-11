@@ -114,7 +114,7 @@ sed -i 's/google-chrome/chromium-browser/g' misc/dde-daemon/mime/data.json
 %build
 BUILDID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 export GOPATH=/usr/share/gocode
-%make_build flags=-trimpath GOBUILD="go build -compiler gc -ldflags \"-B $BUILDID\""
+%make_build GO_BUILD_FLAGS=-trimpath GOBUILD="go build -compiler gc -ldflags \"-B $BUILDID\""
 #make GOPATH=/usr/share/gocode
 
 %install
