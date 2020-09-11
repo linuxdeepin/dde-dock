@@ -78,7 +78,7 @@ static int long_press_duration = ALARM_TIMEOUT_DEFAULT;
 static int long_press_duration2 = 1000;
 static double long_press_distance = LONG_PRESS_MAX_DISTANCE;
 static int short_press_duration = 200;
-static int dblclick_duration = 400;
+static int dblclick_duration = 0; // 判断两次单击的间隔，是否为双击
 
 int
 start_loop(int verbose, double distance)

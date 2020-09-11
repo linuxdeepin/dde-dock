@@ -174,39 +174,6 @@ func (m *Manager) init() {
 		logger.Error("connect TouchEdgeMoveStopLeave failed:", err)
 	}
 
-	_, err = m.gesture.ConnectDbclickDown(func(fingers int32) {
-		logger.Debug("[ConnectDblickDown]:", fingers)
-		err = m.handleDbclickDown(fingers)
-		if err != nil {
-			logger.Error("handleDbclickDown failed:", err)
-		}
-	})
-	if err != nil {
-		logger.Error("connect DblclickDown failed:", err)
-	}
-
-	_, err = m.gesture.ConnectSwipeMoving(func(fingers int32, accelX float64, accelY float64) {
-		logger.Debug("[ConnectSwipMoving]:", fingers, accelX, accelY)
-		err = m.handleSwipeMoving(fingers, accelX, accelY)
-		if err != nil {
-			logger.Error("handleSwipeMoving failed:", err)
-		}
-	})
-	if err != nil {
-		logger.Error("connect SwipeMoving failed:", err)
-	}
-
-	_, err = m.gesture.ConnectSwipeStop(func(fingers int32) {
-		logger.Debug("[ConnectSwipeStop]:", fingers)
-		err = m.handleSwipeStop(fingers)
-		if err != nil {
-			logger.Error("handleSwipeStop failed:", err)
-		}
-	})
-	if err != nil {
-		logger.Error("connect SwipeStop failed:", err)
-	}
-
 	m.listenGSettingsChanged()
 }
 

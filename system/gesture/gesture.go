@@ -142,7 +142,6 @@ type Manager struct {
 	methods *struct {
 		SetShortPressDuration   func() `in:"duration"`
 		SetEdgeMoveStopDuration func() `in:"duration"`
-		SetDblclickDuration     func() `in:"duration"`
 	}
 
 	// nolint
@@ -242,12 +241,6 @@ func (*Manager) SetShortPressDuration(duration int) *dbus.Error {
 //duration unit ms
 func (*Manager) SetEdgeMoveStopDuration(duration int) *dbus.Error {
 	C.set_edge_move_stop_time(C.int(duration))
-	return nil
-}
-
-//duration unit ms
-func (*Manager) SetDblclickDuration(duration int) *dbus.Error {
-	C.set_dblclick_duration(C.int(duration))
 	return nil
 }
 
