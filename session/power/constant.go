@@ -53,7 +53,6 @@ const (
 	settingKeyFullScreenWorkaroundEnabled = "fullscreen-workaround-enabled"
 	settingKeyUsePercentageForPolicy      = "use-percentage-for-policy"
 
-	settingKeyPowerModuleInitialized = "power-module-initialized"
 	settingKeyLowPercentage          = "percentage-low"
 	settingKeyDangerlPercentage      = "percentage-danger"
 	settingKeyCriticalPercentage     = "percentage-critical"

@@ -307,31 +307,10 @@ func (m *Manager) init() {
 
 	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
 
-	m.initPowerModule()
-
 	m.initOnBatteryChangedHandler()
 	m.initSubmodules()
 	m.startSubmodules()
 	m.inhibitLogind()
-}
-
-func (m *Manager) initPowerModule() {
-	init := m.settings.GetBoolean(settingKeyPowerModuleInitialized)
-	if !init {
-		// TODO: 也许有更好的判断台式机的方法
-		power := m.helper.Power
-		hasBattery, err := power.HasBattery().Get(0)
-		if err != nil {
-			logger.Warning(err)
-		} else {
-			if !hasBattery {
-				// 无电池，判断为台式机, 设置待机为 从不
-				m.LinePowerSleepDelay.Set(0)
-				m.BatterySleepDelay.Set(0)
-			}
-		}
-		m.settings.SetBoolean(settingKeyPowerModuleInitialized, true)
-	}
 }
 
 func (m *Manager) isX11SessionActive() (bool, error) {
