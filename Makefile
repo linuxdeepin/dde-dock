@@ -1,7 +1,7 @@
 PREFIX = /usr
 GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.deepin.io/dde/daemon
-GOBUILD = go build
+GOBUILD = go build $(flags)
 
 BINARIES =  \
 	    dde-session-daemon \
