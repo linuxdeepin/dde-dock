@@ -881,7 +881,8 @@ func (b *Bluetooth) sendFiles(dev *device, files []string) (dbus.ObjectPath, err
 		return "", err
 	}
 	b.emitObexSessionCreated(sessionPath)
-	b.emitPropChangedTransportable(false)
+	b.setPropTransportable(false)
+	logger.Debug("Transportable", b.Transportable)
 
 	session, err := obex.NewSession(b.service.Conn(), sessionPath)
 	if err != nil {
@@ -991,7 +992,7 @@ func (b *Bluetooth) doSendFiles(session *obex.Session, files []string, totalSize
 	b.sessionCancelChMapMu.Unlock()
 
 	b.emitObexSessionRemoved(sessionPath)
-	b.emitPropChangedTransportable(true)
+	b.setPropTransportable(true)
 
 	objs, err := obex.NewObjectManager(b.service.Conn()).GetManagedObjects(0)
 	if err != nil {

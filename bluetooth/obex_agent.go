@@ -146,7 +146,7 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 		return "", dbusutil.ToError(err)
 	}
 
-	a.b.emitPropChangedTransportable(false)
+	a.b.setPropTransportable(false)
 
 	deviceAddress, err := session.Destination().Get(0)
 	if err != nil {
@@ -244,7 +244,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		if value != transferStatusComplete && value != transferStatusError {
 			return
 		}
-		a.b.emitPropChangedTransportable(true)
+		a.b.setPropTransportable(true)
 		// 手机会在一个传送完成之后再开始下一个传送，所以 transfer path 会一样
 		transfer.RemoveAllHandlers()
 
@@ -325,7 +325,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 			return
 		}
 		a.isCancel = true
-		a.b.emitPropChangedTransportable(true)
+		a.b.setPropTransportable(true)
 		err := transfer.Cancel(0)
 		if err != nil {
 			logger.Warning("failed to cancel transfer:", err)
