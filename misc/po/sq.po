@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 10:27+0800\n"
+"POT-Creation-Date: 2020-09-11 15:04+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>, 2020\n"
 "Language-Team: Albanian (https://www.transifex.com/linuxdeepin/teams/3617/sq/)\n"
@@ -127,64 +127,56 @@ msgstr "Hyrje në mesazhe"
 msgid "Message notification"
 msgstr "Njoftim mesazhesh"
 
-#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:345 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Anuloje"
 
-#: ../../bluetooth/obex_agent.go:345
-#, c-format
-msgid "Receiving %s files from \"%s\""
-msgstr "Po merren %s kartela nga \"%s\""
-
-#: ../../bluetooth/obex_agent.go:354
-msgid "View"
-msgstr "Shiheni"
-
-#: ../../bluetooth/obex_agent.go:360
-#, c-format
-msgid "You have received files from %s successfully"
+#: ../../bluetooth/obex_agent.go:352
+msgid "Receiving %q files from %q"
 msgstr ""
 
 #: ../../bluetooth/obex_agent.go:361
+msgid "View"
+msgstr "Shiheni"
+
+#: ../../bluetooth/obex_agent.go:367
+msgid "You have received files from %q successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:368
 msgid "Done"
 msgstr "U bë"
 
-#: ../../bluetooth/obex_agent.go:376
+#: ../../bluetooth/obex_agent.go:383 ../../bluetooth/obex_agent.go:478
 msgid "Stop Receiving Files"
-msgstr ""
+msgstr "Resht Së Marri Kartela"
 
-#: ../../bluetooth/obex_agent.go:378
+#: ../../bluetooth/obex_agent.go:385
 msgid "You have cancelled the file transfer"
-msgstr ""
+msgstr "E keni anuluar shpërnguljen e kartelave"
 
-#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+#: ../../bluetooth/obex_agent.go:387 ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Lidhja përmes Bluetooth-it dështoi"
 
-#: ../../bluetooth/obex_agent.go:415
+#: ../../bluetooth/obex_agent.go:422
 msgid "Decline"
 msgstr "Hidhe poshtë"
 
-#: ../../bluetooth/obex_agent.go:415
+#: ../../bluetooth/obex_agent.go:422
 msgid "Receive"
 msgstr "Merre"
 
-#: ../../bluetooth/obex_agent.go:420
+#: ../../bluetooth/obex_agent.go:427
 msgid "Bluetooth File Transfer"
 msgstr "Shpërngulje Bluetooth Kartelash"
 
-#: ../../bluetooth/obex_agent.go:421
-#, c-format
-msgid "%s"
-msgstr "%s"
+#: ../../bluetooth/obex_agent.go:428
+msgid "%q wants to send files to you. Receive?"
+msgstr ""
 
-#: ../../bluetooth/obex_agent.go:486
-msgid "File Transfer Failed"
-msgstr "Shpërngulja e Kartelave Dështoi"
-
-#: ../../bluetooth/obex_agent.go:487
-#, c-format
-msgid "Receiving %s timed out"
+#: ../../bluetooth/obex_agent.go:479
+msgid "Receiving %q timed out"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 10:27+0800\n"
+"POT-Creation-Date: 2020-09-11 15:04+0800\n"
 "PO-Revision-Date: 2020-05-29 07:18+0000\n"
 "Last-Translator: scootergrisen, 2020\n"
 "Language-Team: Danish (https://www.transifex.com/linuxdeepin/teams/3617/da/)\n"
@@ -128,64 +128,56 @@ msgstr "Adgang til beskeder"
 msgid "Message notification"
 msgstr "Meddelelsesnotifikation"
 
-#: ../../bluetooth/obex_agent.go:338 ../../lastore/lastore.go:255
+#: ../../bluetooth/obex_agent.go:345 ../../lastore/lastore.go:255
 msgid "Cancel"
 msgstr "Annuller"
 
-#: ../../bluetooth/obex_agent.go:345
-#, c-format
-msgid "Receiving %s files from \"%s\""
-msgstr ""
-
-#: ../../bluetooth/obex_agent.go:354
-msgid "View"
-msgstr "Vis"
-
-#: ../../bluetooth/obex_agent.go:360
-#, c-format
-msgid "You have received files from %s successfully"
+#: ../../bluetooth/obex_agent.go:352
+msgid "Receiving %q files from %q"
 msgstr ""
 
 #: ../../bluetooth/obex_agent.go:361
+msgid "View"
+msgstr "Vis"
+
+#: ../../bluetooth/obex_agent.go:367
+msgid "You have received files from %q successfully"
+msgstr ""
+
+#: ../../bluetooth/obex_agent.go:368
 msgid "Done"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:376
+#: ../../bluetooth/obex_agent.go:383 ../../bluetooth/obex_agent.go:478
 msgid "Stop Receiving Files"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:378
+#: ../../bluetooth/obex_agent.go:385
 msgid "You have cancelled the file transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:380 ../../bluetooth/utils_notify.go:113
+#: ../../bluetooth/obex_agent.go:387 ../../bluetooth/utils_notify.go:113
 msgid "Bluetooth connection failed"
 msgstr "Bluetooth-forbindelsen fejlede"
 
-#: ../../bluetooth/obex_agent.go:415
+#: ../../bluetooth/obex_agent.go:422
 msgid "Decline"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:415
+#: ../../bluetooth/obex_agent.go:422
 msgid "Receive"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:420
+#: ../../bluetooth/obex_agent.go:427
 msgid "Bluetooth File Transfer"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:421
-#, c-format
-msgid "%s"
+#: ../../bluetooth/obex_agent.go:428
+msgid "%q wants to send files to you. Receive?"
 msgstr ""
 
-#: ../../bluetooth/obex_agent.go:486
-msgid "File Transfer Failed"
-msgstr ""
-
-#: ../../bluetooth/obex_agent.go:487
-#, c-format
-msgid "Receiving %s timed out"
+#: ../../bluetooth/obex_agent.go:479
+msgid "Receiving %q timed out"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:98
