@@ -305,7 +305,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		}
 
 		progress = newProgress
-		logger.Infof("transferPath: %s, progress: %d", transfer.Path_(), progress)
+		logger.Infof("transferPath: %q, progress: %d", transfer.Path_(), progress)
 
 		notifyMu.Lock()
 		a.notifyID = a.notifyProgress(a.notify, a.notifyID, basename, device, progress)
@@ -349,7 +349,7 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 			"dde-control-center",
 			replaceID,
 			notifyIconBluetoothConnected,
-			fmt.Sprintf(gettext.Tr("Receiving %s files from \"%s\""), device, filename),
+			fmt.Sprintf(gettext.Tr("Receiving %q files from %q"), device, filename),
 			fmt.Sprintf("%d%%", progress),
 			actions,
 			hints,
@@ -364,7 +364,7 @@ func (a *obexAgent) notifyProgress(notify *notifications.Notifications, replaceI
 			"dde-control-center",
 			replaceID,
 			notifyIconBluetoothConnected,
-			fmt.Sprintf(gettext.Tr("You have received files from %s successfully"), device),
+			fmt.Sprintf(gettext.Tr("You have received files from %q successfully"), device),
 			gettext.Tr("Done"),
 			actions,
 			hints,
@@ -425,7 +425,7 @@ func (a *obexAgent) requestReceive(deviceName, filename string) (bool, error) {
 		0,
 		notifyIconBluetoothConnected,
 		gettext.Tr("Bluetooth File Transfer"),
-		fmt.Sprintf(gettext.Tr(`"%s" wants to send files to you. Receive?`), deviceName),
+		fmt.Sprintf(gettext.Tr("%q wants to send files to you. Receive?"), deviceName),
 		actions,
 		nil,
 		receiveFileNotifyTimeout)
@@ -475,8 +475,8 @@ func (a *obexAgent) notifyReceiveFileTimeout(notify *notifications.Notifications
 		"dde-control-center",
 		replaceID,
 		notifyIconBluetoothConnectFailed,
-		gettext.Tr("File Transfer Failed"),
-		fmt.Sprintf(gettext.Tr("Receiving %s timed out"), filename),
+		gettext.Tr("Stop Receiving Files"),
+		fmt.Sprintf(gettext.Tr("Receiving %q timed out"), filename),
 		nil,
 		nil,
 		receiveFileNotifyTimeout)
