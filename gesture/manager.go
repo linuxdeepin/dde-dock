@@ -157,6 +157,14 @@ func (m *Manager) init() {
 	}
 
 	_, err = m.gesture.ConnectTouchEdgeMoveStopLeave(func(direction string, scaleX float64, scaleY float64, duration int32) {
+		m.mu.RLock()
+		defer m.mu.RUnlock()
+		// 多用户存在，防止非当前用户响应触摸屏手势
+		if !m.enabled || !isSessionActive() {
+			logger.Debug("Gesture had been disabled or session inactive")
+			return
+		}
+
 		err = m.handleTouchEdgeMoveStopLeave(direction, scaleX, scaleY, duration)
 		if err != nil {
 			logger.Error("handleTouchEdgeMoveStopLeave failed:", err)
