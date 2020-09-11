@@ -16,39 +16,22 @@ Release:        5
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
 URL:            http://shuttle.corp.deepin.com/cache/tasks/18802/unstable-amd64/
-Source0:        %{name}-%{version}-%{release_name}.orig.tar.xz
-Patch0:         0001-fix-building-error.patch
+Source0:        %{name}-%{version}.orig.tar.xz
 
-BuildRequires:  python37
+BuildRequires:  python3
+BuildRequires:  gocode
 BuildRequires:  compiler(go-compiler)
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  fontpackages-devel
 BuildRequires:  librsvg2-tools
 BuildRequires:  pam-devel >= 1.3.1
 BuildRequires:  pam >= 1.3.1
-BuildRequires:  golang-github-linuxdeepin-go-x11-client-devel
-BuildRequires:  golang-golang-org-net-devel
 BuildRequires:  glib2-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  systemd-devel
-BuildRequires:  golang-github-axgle-mahonia-devel
-BuildRequires:  golang-golang-x-xerrors-devel
-BuildRequires:  golang-gopkg-alecthomas-kingpin-devel
-BuildRequires:  dde-api-devel
-BuildRequires:  golang.org-x-image-devel
-BuildRequires:  text-devel
 BuildRequires:  resize-devel
-BuildRequires:  golang-github-teambition-rrule-go-devel
-BuildRequires:  golang-github-rickb777-date-devel
-BuildRequires:  golang-github-mozillazg-go-pinyin-devel
-BuildRequires:  golang-github-kelvins-sunrisesunset-devel
 BuildRequires:  gorm-devel
-BuildRequires:  golang-github-cryptix-wav-devel
-BuildRequires:  golang-github-mattn-go-sqlite3-devel
-BuildRequires:  golang-github-alecthomas-template-devel
 BuildRequires:  inflection-devel
-BuildRequires:  golang-github-rickb777-plural-devel
-BuildRequires:  golang-github-alecthomas-units-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  alsa-lib
 BuildRequires:  pulseaudio-libs-devel
@@ -58,17 +41,13 @@ BuildRequires:  libnl3-devel
 BuildRequires:  libnl3
 BuildRequires:  libgudev-devel
 BuildRequires:  libgudev
-BuildRequires:  golang-github-davecgh-go-spew-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libinput
-BuildRequires:  golang-github-gosexy-gettext-devel
 BuildRequires:  librsvg2-devel
 BuildRequires:  librsvg2
-BuildRequires:  golang-github-msteinert-pam-devel
-BuildRequires:  go-lib-devel
-BuildRequires:  golang-github-linuxdeepin-go-dbus-factory-devel
-BuildRequires:  deepin-gir-generator
 BuildRequires:  libXcursor-devel
+BuildRequires:  ddcutil-devel
+BuildRequires:  pkgconfig(sqlite3)
 
 Requires:       bluez-libs
 Requires:       deepin-desktop-base
@@ -89,8 +68,7 @@ Recommends:     google-noto-sans-fonts
 Daemon handling the DDE session settings
 
 %prep
-%setup -q -n %{name}-%{version}-%{release_name}
-%patch0 -p1
+%setup -q -n %{name}-%{version}
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile
@@ -140,8 +118,9 @@ export GOPATH=/usr/share/gocode
 #make GOPATH=/usr/share/gocode
 
 %install
+BUILDID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 export GOPATH=/usr/share/gocode
-%make_install
+%make_install PAM_MODULE_DIR=%{_libdir}/security GOBUILD="go build -compiler gc -ldflags \"-B $BUILDID\""
 
 # fix systemd/logind config
 install -d %{buildroot}/usr/lib/systemd/logind.conf.d/
@@ -150,9 +129,6 @@ cat > %{buildroot}/usr/lib/systemd/logind.conf.d/10-%{sname}.conf <<EOF
 HandlePowerKey=ignore
 HandleSuspendKey=ignore
 EOF
-
-install -d %{buildroot}/%{_libdir}/security/
-install -Dm755 %{buildroot}/pam_deepin_auth.so %{buildroot}/%{_libdir}/security/pam_deepin_auth.so
 
 %find_lang %{name}
 
