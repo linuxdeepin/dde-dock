@@ -135,11 +135,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		Path:      nmDev.Path_(),
 	}
 	dev.udi, _ = nmDev.Udi().Get(0)
-	dev.State, _ = nmDev.State().Get(0)
-	dev.Interface, _ = nmDev.Interface().Get(0)
 	dev.Driver, _ = nmDev.Driver().Get(0)
 
-	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 	dev.Vendor = nmGeneralGetDeviceDesc(devPath)
 	dev.UsbDevice = nmGeneralIsUsbDevice(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
@@ -362,6 +359,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	if err != nil {
 		logger.Warning(err)
 	}
+
+	dev.State, _ = nmDev.State().Get(0)
+	dev.Interface, _ = nmDev.Interface().Get(0)
+	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 
 	// TODO: NetworkManager 升级 1.22 后，直接使用 NetworkManager 的 InterfaceFlags 属性
 	dev.InterfaceFlags = m.getInterfaceFlags(dev)
