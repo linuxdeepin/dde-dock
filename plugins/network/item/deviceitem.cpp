@@ -20,10 +20,13 @@
  */
 
 #include "deviceitem.h"
+#include "../frame/util/utils.h"
 
 #include <DDBusSender>
 
 #include <QJsonDocument>
+#include <QGSettings>
+#include <QFile>
 
 using namespace dde::network;
 
@@ -62,11 +65,13 @@ const QString DeviceItem::itemContextMenu()
     enable["isActive"] = true;
     items.push_back(enable);
 
-    QMap<QString, QVariant> settings;
-    settings["itemId"] = "settings";
-    settings["itemText"] = tr("Network settings");
-    settings["isActive"] = true;
-    items.push_back(settings);
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        QMap<QString, QVariant> settings;
+        settings["itemId"] = "settings";
+        settings["itemText"] = tr("Network settings");
+        settings["isActive"] = true;
+        items.push_back(settings);
+    }
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

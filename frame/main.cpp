@@ -21,6 +21,8 @@
 
 #include "window/mainwindow.h"
 #include "window/accessible.h"
+#include "dbus/dbusdockadaptors.h"
+#include "util/utils.h"
 #include "util/themeappicon.h"
 #include "controller/dockitemmanager.h"
 #include "util/dockapplication.h"
@@ -29,15 +31,16 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QDateTime>
+#include <QGSettings>
 
+#include <DApplication>
 #include <DLog>
 #include <DDBusSender>
 #include <DGuiApplicationHelper>
 
 #include <unistd.h>
-#include "dbus/dbusdockadaptors.h"
 #include <string>
-
+#include <sys/mman.h>
 #include <stdio.h>
 #include <time.h>
 #include <execinfo.h>
@@ -203,6 +206,13 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
+    if (Utils::isSettingConfigured("com.deepin.dde.dock.icbc", "/com/deepin/dde/dock/icbc/", "already-clear")) {
+        QGSettings clear_setting("com.deepin.dde.dock.icbc", "/com/deepin/dde/dock/icbc/");
+        clear_setting.set("already-clear", false);
+        QGSettings apps_setting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
+        apps_setting.set("docked-apps", QStringList());
+        system("killall dde-session-daemon");
+    }
     QAccessible::installFactory(accessibleFactory);
 
     // load dde-network-utils translator
