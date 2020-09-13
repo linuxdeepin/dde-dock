@@ -151,23 +151,27 @@ func (a *adapter) connectProperties() {
 			if err != nil {
 				logger.Warningf("failed to set discoverable for %s: %v", a, err)
 			}
-			// start discovery
-			err = a.core.StartDiscovery(0)
-			if err != nil {
-				logger.Warningf("failed to start discovery for %s: %v", a, err)
-			}
-			// dont need to start discovering, according to blueZ, scan will be called, when power is set on
-			a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
-			// sleep for 2 seconds in case user click paired device, but blueZ service is not ready
-			time.Sleep(2 * time.Second)
-			a.notifyPropertiesChanged()
-			// in case auto connect to device failed, only when signal power on is received, try to auto connect device
-			go globalBluetooth.tryConnectPairedDevices(a.Path)
+			go func() {
+				time.Sleep(1 * time.Second)
+				err = a.core.StopDiscovery(0)
+				// sleep for 1 second
+				time.Sleep(1 * time.Second)
+				a.notifyPropertiesChanged()
+				// in case auto connect to device failed, only when signal power on is received, try to auto connect device
+				globalBluetooth.tryConnectPairedDevices(a.Path)
+				// start discovery
+				err = a.core.StartDiscovery(0)
+				if err != nil {
+					logger.Warningf("failed to start discovery for %s: %v", a, err)
+				}
+				// dont need to start discovering, according to blueZ, scan will be called, when power is set on
+				a.discoveringTimeout.Reset(defaultDiscoveringTimeout)
+			}()
 		} else {
 			// if power off, stop discovering time out
 			a.discoveringTimeout.Stop()
-			// sleep for 2 seconds in case
-			time.Sleep(2 * time.Second)
+			// sleep for 1 second
+			time.Sleep(1 * time.Second)
 			a.notifyPropertiesChanged()
 		}
 	})
