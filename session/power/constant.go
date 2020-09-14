@@ -63,6 +63,8 @@ const (
 	settingKeyCriticalTime = "time-to-empty-critical"
 	settingKeyActionTime   = "time-to-empty-action"
 
+	settingKeyMode = "mode"
+
 	// cmd
 	cmdDDELowPower = "/usr/lib/deepin-daemon/dde-lowpower"
 

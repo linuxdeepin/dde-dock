@@ -59,6 +59,9 @@ type Manager struct {
 	// 初始化是否完成
 	initDone bool
 
+	// CPU操作接口
+	cpus *CpuHandlers
+
 	PropsMu      sync.RWMutex
 	OnBattery    bool
 	HasLidSwitch bool
@@ -83,10 +86,21 @@ type Manager struct {
 	// 开启节能模式时降低亮度的百分比值
 	PowerSavingModeBrightnessDropPercent uint32 `prop:"access:rw"`
 
+	// CPU频率调节模式，支持powersave和performance
+	CpuGovernor string
+
+	// CPU频率增强是否开启
+	CpuBoost bool
+
+	// 是否支持Boost
+	IsBoostSupported bool
+
 	// nolint
 	methods *struct {
-		GetBatteries func() `out:"batteries"`
-		Debug        func() `in:"cmd"`
+		GetBatteries   func() `out:"batteries"`
+		Debug          func() `in:"cmd"`
+		SetCpuGovernor func() `in:"governor"`
+		SetCpuBoost    func() `in:"enabled"`
 	}
 
 	// nolint
@@ -112,6 +126,7 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m := &Manager{
 		service:           service,
 		BatteryPercentage: 100,
+		cpus:              NewCpuHandlers(),
 	}
 	err := m.init()
 	if err != nil {
@@ -203,6 +218,18 @@ func (m *Manager) init() error {
 	m.initDone = true
 	// init LMT config
 	m.updatePowerSavingMode()
+
+	var err error
+	m.IsBoostSupported = m.cpus.IsBoostFileExist()
+	m.CpuBoost, err = m.cpus.GetBoostEnabled()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	m.CpuGovernor, err = m.cpus.GetGovernor()
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	return nil
 }

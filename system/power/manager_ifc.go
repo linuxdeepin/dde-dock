@@ -21,6 +21,7 @@ package power
 
 import (
 	dbus "github.com/godbus/dbus"
+	"pkg.deepin.io/lib/dbusutil"
 )
 
 const (
@@ -86,4 +87,20 @@ func (m *Manager) Refresh() *dbus.Error {
 		return err
 	}
 	return nil
+}
+
+func (m *Manager) SetCpuBoost(enabled bool) *dbus.Error {
+	err := m.cpus.SetBoostEnabled(enabled)
+	if err == nil {
+		m.CpuBoost = enabled
+	}
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) SetCpuGovernor(governor string) *dbus.Error {
+	err := m.cpus.SetGovernor(governor)
+	if err == nil {
+		m.CpuGovernor = governor
+	}
+	return dbusutil.ToError(err)
 }
