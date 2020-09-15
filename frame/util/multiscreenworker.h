@@ -137,11 +137,6 @@ private:
 class DockScreen
 {
 public:
-    explicit DockScreen(const QString &current, const QString &last, const QString &primary)
-        : m_currentScreen(current)
-        , m_lastScreen(last)
-        , m_primary(primary)
-    {}
     explicit DockScreen(const QString &primary)
         : m_currentScreen(primary)
         , m_lastScreen(primary)
@@ -350,9 +345,16 @@ private:
     void tryToShowDock(int eventX, int eventY);
     /**
      * @brief hideAni   任务栏隐藏动画
-     * @param screen    从目标屏幕上隐藏
+     * @param screen    从目标屏幕上隐藏,使用当前的位置和显示模式
      */
     void hideAni(const QString &screen);
+    /**
+     * @brief hideAni   任务栏隐藏动画
+     * @param screen    屏幕名
+     * @param pos       位置
+     * @param displayMode   显示模式
+     */
+    void hideAni(const QString &screen, const Position &pos, const DisplayMode &displayMode);
     /**
      * @brief changeDockPosition    做一个动画操作
      * @param lastScreen            上次任务栏所在的屏幕
