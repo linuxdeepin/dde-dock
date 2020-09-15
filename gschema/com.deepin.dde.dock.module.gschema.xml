@@ -291,4 +291,16 @@
       </description>
     </key>
   </schema>
+ <schema path="/com/deepin/dde/dock/mainwidow/" id="com.deepin.dde.dock.mainwidow" gettext-domain="DDE">
+    <key type="u" name="monitors-switch-time">
+      <default>2000</default>
+      <summary>Unit: ms</summary>
+      <description>Control duration of dock switch in monitors</description>
+    </key>
+    <key type="b" name="only-show-primary">
+      <default>false</default>
+      <summary></summary>
+      <description>Determine to show dock only in primary monitor</description>
+    </key>
+  </schema>
 </schemalist>

@@ -41,9 +41,9 @@
 #define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
 #define FREE_POINT(p) if (p) {\
-delete p;\
-p = nullptr;\
-}\
+        delete p;\
+        p = nullptr;\
+    }\
 
 DGUI_USE_NAMESPACE
 /**
@@ -62,6 +62,7 @@ class QVariantAnimation;
 class QWidget;
 class QTimer;
 class MainWindow;
+class QGSettings;
 
 /**
  * @brief The MonitorInfo class
@@ -77,7 +78,7 @@ public:
      * @brief data
      * @return 所有的显示器信息
      */
-    inline const QMap<Monitor *, MonitorInter *> data() {return m_monitorInfo;}
+    inline QMap<Monitor *, MonitorInter *> data() {return m_monitorInfo;}
 
     /**
      * @brief validMonitor
@@ -89,12 +90,14 @@ public:
         QMapIterator<Monitor *, MonitorInter *>it(m_monitorInfo);
         while (it.hasNext()) {
             it.next();
-            if (it.key()->enable())
+            // 仅显示在主屏的情况下，可用屏幕信息只提供主屏幕
+            if ((!m_showInPrimary && it.key()->enable())
+                    || (m_showInPrimary && it.key()->name() == m_primary)) {
                 list << it.key();
+            }
         }
         return list;
     }
-
     /**
      * @brief insert 插入新的屏幕信息
      * @param mon　插入的屏幕信息
@@ -106,7 +109,6 @@ public:
 
         Q_EMIT monitorChanged();
     }
-
     /**
      * @brief remove 删除显示其信息
      * @param mon　待删除的数据
@@ -119,6 +121,24 @@ public:
 
         Q_EMIT monitorChanged();
     }
+    /**
+     * @brief setShowInPrimary  设置仅显示在主屏
+     * @param showIn
+     */
+    void setShowInPrimary(const bool &showIn)
+    {
+        if (m_showInPrimary != showIn)
+            m_showInPrimary = showIn;
+    }
+    /**
+     * @brief setPrimary 记录一下主屏信息
+     * @param primary
+     */
+    void setPrimary(const QString &primary)
+    {
+        if (m_primary != primary)
+            m_primary = primary;
+    }
 
 signals:
     /**
@@ -128,6 +148,8 @@ signals:
 
 private:
     QMap<Monitor *, MonitorInter *> m_monitorInfo;
+    QString m_primary;
+    bool m_showInPrimary = false;
 };
 
 /**
@@ -316,9 +338,13 @@ private slots:
     void onTouchPress(int type, int x, int y, const QString &key);
     void onTouchRelease(int type, int x, int y, const QString &key);
 
+    // gsetting配置改变响应槽
+    void onConfigChange(const QString &changeKey);
+
 private:
     // 初始化数据信息
     void initMembers();
+    void initGSettingConfig();
     void initDBus();
     void initConnection();
     void initUI();
@@ -431,7 +457,9 @@ private:
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
-    QTimer *m_delayTimer;               // sp3需求,切换屏幕显示延时2秒唤起任务栏
+    QTimer *m_delayTimer;               // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
+
+    QGSettings *m_monitorSetting;       // 多屏配置控制
 
     // animation
     QVariantAnimation *m_showAni;

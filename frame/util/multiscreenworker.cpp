@@ -31,6 +31,9 @@
 
 #include <QDBusConnection>
 
+const QString MonitorsSwitchTime = "monitorsSwitchTime";
+const QString OnlyShowPrimary = "onlyShowPrimary";
+
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
 // Monitor数据－＞屏幕是否可停靠更新－＞监视唤醒区域更新，任务栏显示区域更新－＞拖拽区域更新－＞通知后端接口，通知窗管
 
@@ -48,6 +51,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayTimer(new QTimer(this))
+    , m_monitorSetting(nullptr)
     , m_showAni(new QVariantAnimation(this))
     , m_hideAni(new QVariantAnimation(this))
     , m_ds(m_displayInter->primary())
@@ -58,6 +62,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
 {
     qDebug() << "init dock screen: " << m_ds.current();
     initMembers();
+    initGSettingConfig();
     initDBus();
     initConnection();
     initDisplayData();
@@ -339,6 +344,7 @@ void MultiScreenWorker::primaryScreenChanged()
 {
     // 先更新主屏信息
     m_ds.updatePrimary(m_displayInter->primary());
+    m_mtrInfo.setPrimary(m_displayInter->primary());
 
     const int screenRawHeight = m_displayInter->screenHeight();
     const int screenRawWidth = m_displayInter->screenWidth();
@@ -914,6 +920,26 @@ void MultiScreenWorker::initMembers()
     checkXEventMonitorService();
 }
 
+void MultiScreenWorker::initGSettingConfig()
+{
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.mainwidow")) {
+        m_monitorSetting = new QGSettings("com.deepin.dde.dock.mainwidow", "/com/deepin/dde/dock/mainwidow/", this);
+        if (m_monitorSetting->keys().contains(MonitorsSwitchTime)) {
+            m_delayTimer->setInterval(m_monitorSetting->get(MonitorsSwitchTime).toInt());
+        } else {
+            qDebug() << "can not find key:" << MonitorsSwitchTime;
+        }
+
+        if (m_monitorSetting->keys().contains(OnlyShowPrimary)) {
+            m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
+        } else {
+            qDebug() << "can not find key:" << OnlyShowPrimary;
+        }
+    } else {
+        qDebug() << "com.deepin.dde.dock is uninstalled.";
+    }
+}
+
 void MultiScreenWorker::initConnection()
 {
     connect(m_showAni, &QVariantAnimation::valueChanged, this, static_cast<void (MultiScreenWorker::*)(const QVariant &value)>(&MultiScreenWorker::updateParentGeometry));
@@ -990,6 +1016,8 @@ void MultiScreenWorker::initConnection()
         // 通知窗管
         emit requestNotifyWindowManager();
     });
+
+    connect(m_monitorSetting, &QGSettings::changed, this, &MultiScreenWorker::onConfigChange);
 }
 
 void MultiScreenWorker::initUI()
@@ -1029,6 +1057,7 @@ void MultiScreenWorker::initDBus()
         m_screenRawHeight = m_displayInter->screenHeight();
         m_screenRawWidth = m_displayInter->screenWidth();
         m_ds = DockScreen(m_displayInter->primary());
+        m_mtrInfo.setPrimary(m_displayInter->primary());
     }
 }
 
@@ -1759,10 +1788,10 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
-        m_delayScreen = toScreen;
-
-        if (!m_delayTimer->isActive())
+        if (!m_delayTimer->isActive()) {
+            m_delayScreen = toScreen;
             m_delayTimer->start();
+        }
     } else {
         // 任务栏隐藏状态，但需要显示
         if (hideMode() == HideMode::KeepShowing) {
@@ -1789,4 +1818,15 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 void MultiScreenWorker::hideAni(const QString &screen)
 {
     return hideAni(screen, m_position, m_displayMode);
+}
+
+void MultiScreenWorker::onConfigChange(const QString &changeKey)
+{
+    if (changeKey == MonitorsSwitchTime) {
+        m_delayTimer->setInterval(m_monitorSetting->get(MonitorsSwitchTime).toInt());
+    } else if (changeKey == OnlyShowPrimary) {
+        m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
+        // 每次切换都更新一下屏幕显示的信息
+        emit requestUpdateMonitorInfo();
+    }
 }
