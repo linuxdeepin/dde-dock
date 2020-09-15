@@ -142,7 +142,7 @@ func (a *Audio) needAutoSwitchInputPort() bool {
 
 	firstPortType := GetPortType(cardName, portName)
 	currentPortType := GetPortType(currentCardName, currentPortName)
-	return priorities.IsInputTypeAfter(currentPortType, firstPortType)
+	return priorities.IsInputTypeAfter(firstPortType, currentPortType)
 }
 
 func (a *Audio) needAutoSwitchOutputPort() bool {
@@ -160,7 +160,7 @@ func (a *Audio) needAutoSwitchOutputPort() bool {
 
 	firstPortType := GetPortType(cardName, portName)
 	currentPortType := GetPortType(currentCardName, currentPortName)
-	return priorities.IsOutputTypeAfter(currentPortType, firstPortType)
+	return priorities.IsOutputTypeAfter(firstPortType, currentPortType)
 }
 
 func (a *Audio) autoSwitchPort() {

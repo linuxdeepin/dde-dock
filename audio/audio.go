@@ -352,6 +352,12 @@ func (a *Audio) init() error {
 		a.trySelectBestPort()
 		a.settings.SetBoolean(gsKeyFirstRun, false)
 	} else {
+		err := configKeeper.Load(configKeeperFile)
+		if err != nil {
+			logger.Warningf("load %q failed : %s", configKeeperFile, err)
+		}
+		a.resumeSinkConfig(a.defaultSink)
+		a.resumeSourceConfig(a.defaultSource)
 		a.autoSwitchPort()
 	}
 
@@ -719,6 +725,48 @@ func (*Audio) GetInterfaceName() string {
 	return dbusInterface
 }
 
+func (a *Audio) resumeSinkConfig(s *Sink) {
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
+
+	err := s.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = s.SetMute(portConfig.Mute)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	a.IncreaseVolume.Set(portConfig.IncreaseVolume)
+	if portConfig.IncreaseVolume {
+		a.MaxUIVolume = increaseMaxVolume
+	} else {
+		a.MaxUIVolume = normalMaxVolume
+	}
+}
+
+func (a *Audio) resumeSourceConfig(s *Source) {
+	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
+
+	err := s.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	err = s.SetMute(portConfig.Mute)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	a.IncreaseVolume.Set(portConfig.IncreaseVolume)
+	if portConfig.IncreaseVolume {
+		a.MaxUIVolume = increaseMaxVolume
+	} else {
+		a.MaxUIVolume = normalMaxVolume
+	}
+}
+
 func (a *Audio) updateDefaultSink(sinkName string) {
 	sinkInfo := a.getSinkInfoByName(sinkName)
 
@@ -754,25 +802,7 @@ func (a *Audio) updateDefaultSink(sinkName string) {
 	a.PropsMu.Unlock()
 
 	logger.Debug("set prop default sink:", defaultSinkPath)
-
-	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sink.Card), sink.ActivePort.Name)
-
-	err := sink.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	err = sink.SetMute(portConfig.Mute)
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	a.IncreaseVolume.Set(portConfig.IncreaseVolume)
-	if portConfig.IncreaseVolume {
-		a.MaxUIVolume = increaseMaxVolume
-	} else {
-		a.MaxUIVolume = normalMaxVolume
-	}
+	a.resumeSinkConfig(sink)
 }
 
 func (a *Audio) updateDefaultSource(sourceName string) {
@@ -809,23 +839,8 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	a.setPropDefaultSource(defaultSourcePath)
 	a.PropsMu.Unlock()
 
-	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(source.Card), source.ActivePort.Name)
-	err := source.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
-	if err != nil {
-		logger.Warning(err)
-	}
-	err = source.SetMute(portConfig.Mute)
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	if isPhysicalDevice(sourceName) {
-		err := a.setReduceNoise(portConfig.ReduceNoise)
-		if err != nil {
-			logger.Warning("set reduce noise fail:", err)
-		}
-		a.ReduceNoise.Set(portConfig.ReduceNoise)
-	}
+	logger.Debug("set prop default source:", defaultSourcePath)
+	a.resumeSourceConfig(source)
 }
 
 func (a *Audio) context() *pulse.Context {

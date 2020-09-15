@@ -280,6 +280,7 @@ func (pr *Priorities) GetFirstOutput() (string, string) {
 	}
 }
 
+// 这个判断的是 type2 是否在 type1 之后
 func (pr *Priorities) IsInputTypeAfter(type1 int, type2 int) bool {
 	for _, t := range pr.InputTypePriority {
 		if t == type1 {
@@ -294,6 +295,7 @@ func (pr *Priorities) IsInputTypeAfter(type1 int, type2 int) bool {
 	return false
 }
 
+// 这个判断的是 type2 是否在 type1 之后
 func (pr *Priorities) IsOutputTypeAfter(type1 int, type2 int) bool {
 	for _, t := range pr.OutputTypePriority {
 		if t == type1 {

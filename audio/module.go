@@ -52,12 +52,8 @@ func (*Module) GetDependencies() []string {
 
 func (m *Module) start() error {
 	service := loader.GetService()
-	err := configKeeper.Load(configKeeperFile)
-	if err != nil {
-		logger.Warningf("load %q failed : %s", configKeeperFile, err)
-	}
 	m.audio = newAudio(service)
-	err = m.audio.init()
+	err := m.audio.init()
 	if err != nil {
 		logger.Warning("failed to init audio module:", err)
 		return nil
