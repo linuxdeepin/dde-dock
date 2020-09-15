@@ -87,7 +87,6 @@ func (d *Daemon) Start() error {
 
 	d.info = NewSystemInfo()
 	d.initSysSystemInfo()
-
 	err := service.Export(dbusPath, d.info)
 	if err != nil {
 		d.info = nil
@@ -144,6 +143,17 @@ func (d *Daemon) initSysSystemInfo() {
 	if err != nil {
 		logger.Warning("systeminfo.CurrentSpeed().ConnectChanged err : ", err)
 	}
+
+	d.PropsMu.Lock()
+	d.info.CurrentSpeed, err = d.systeminfo.CurrentSpeed().Get(0)
+	if err != nil {
+		logger.Warning("get systeminfo.CurrentSpeed err : ", err)
+		d.PropsMu.Unlock()
+		return
+	}
+	d.info.CPUMaxMHz = float64(d.info.CurrentSpeed)
+	d.PropsMu.Unlock()
+	logger.Info("d.info.CurrentSpeed : ",d.info.CurrentSpeed, " , d.info.CPUMaxMHz : ", d.info.CPUMaxMHz)
 }
 
 func NewSystemInfo() *SystemInfo {
