@@ -456,7 +456,11 @@ func (a *obexAgent) requestReceive(deviceName, filename string) (bool, error) {
 	var result bool
 	select {
 	case result = <-a.requestNotifyCh:
+		if result == false {
+			a.b.setPropTransportable(true)
+		}
 	case <-time.After(receiveFileTimeout):
+		a.b.setPropTransportable(true)
 		a.notifyReceiveFileTimeout(notify, notifyID, filename)
 	}
 
