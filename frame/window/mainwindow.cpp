@@ -285,7 +285,8 @@ void MainWindow::initConnections()
         }
         lastPos = curPos;
         qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseMove, m_dragWidget->mapFromGlobal(curPos)
-                                                      , curPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
+                                                      , QPoint(), curPos, Qt::LeftButton, Qt::LeftButton
+                                                      , Qt::NoModifier, Qt::MouseEventSynthesizedByApplication));
     });
 }
 
@@ -488,7 +489,8 @@ void MainWindow::touchRequestResizeDock()
         return;
     }
     qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseButtonPress, m_dragWidget->mapFromGlobal(touchPos)
-                                                  , touchPos, Qt::LeftButton, Qt::NoButton, Qt::NoModifier));
+                                                  , QPoint(), touchPos, Qt::LeftButton, Qt::NoButton
+                                                  , Qt::NoModifier, Qt::MouseEventSynthesizedByApplication));
 }
 
 #include "mainwindow.moc"
