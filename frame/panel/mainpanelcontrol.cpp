@@ -1132,9 +1132,6 @@ void MainPanelControl::getTrayVisableItemCount()
     }
 
     resizeDockIcon();
-
-    // 模式切换时，托盘区域宽度错误，对应任务11933
-    m_trayAreaWidget->adjustSize();
 }
 
 void MainPanelControl::resizeDesktopWidget()
