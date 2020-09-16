@@ -300,6 +300,10 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 		priorities.RemoveUnavailable(a.cards)
 		priorities.AddAvailable(a.cards)
 		priorities.Print()
+		err = priorities.Save(globalPrioritiesFilePath)
+		if err != nil {
+			logger.Warning(err)
+		}
 		a.autoSwitchPort()
 	}
 }
@@ -572,12 +576,10 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		a.sourceIdx = idx
 		a.addSource(sourceInfo)
 
-		_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(sourceInfo.Card), sourceInfo.ActivePort.Name)
-		err = a.setReduceNoise(portConfig.ReduceNoise)
-		if err != nil {
-			logger.Debug("reduce physical device noise failed:", err)
+		source, ok := a.sources[idx]
+		if ok {
+			a.resumeSourceConfig(source, true)
 		}
-		a.ReduceNoise.Set(portConfig.ReduceNoise)
 	case pulse.EventTypeRemove:
 		a.mu.Lock()
 		source, ok := a.sources[idx]

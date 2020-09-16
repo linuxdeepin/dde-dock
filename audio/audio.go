@@ -335,6 +335,10 @@ func (a *Audio) init() error {
 
 	priorities.Load(globalPrioritiesFilePath, a.cards)
 	priorities.Print()
+	err = priorities.Save(globalPrioritiesFilePath)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	go a.handleEvent()
 	go a.handleStateChanged()
@@ -357,7 +361,7 @@ func (a *Audio) init() error {
 			logger.Warningf("load %q failed : %s", configKeeperFile, err)
 		}
 		a.resumeSinkConfig(a.defaultSink)
-		a.resumeSourceConfig(a.defaultSource)
+		a.resumeSourceConfig(a.defaultSource, true)
 		a.autoSwitchPort()
 	}
 
@@ -746,7 +750,7 @@ func (a *Audio) resumeSinkConfig(s *Sink) {
 	}
 }
 
-func (a *Audio) resumeSourceConfig(s *Source) {
+func (a *Audio) resumeSourceConfig(s *Source, isPhyDev bool) {
 	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
 
 	err := s.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
@@ -759,11 +763,12 @@ func (a *Audio) resumeSourceConfig(s *Source) {
 		logger.Warning(err)
 	}
 
-	a.IncreaseVolume.Set(portConfig.IncreaseVolume)
-	if portConfig.IncreaseVolume {
-		a.MaxUIVolume = increaseMaxVolume
-	} else {
-		a.MaxUIVolume = normalMaxVolume
+	if isPhyDev {
+		err := a.setReduceNoise(portConfig.ReduceNoise)
+		if err != nil {
+			logger.Warning("set reduce noise fail:", err)
+		}
+		a.ReduceNoise.Set(portConfig.ReduceNoise)
 	}
 }
 
@@ -840,7 +845,7 @@ func (a *Audio) updateDefaultSource(sourceName string) {
 	a.PropsMu.Unlock()
 
 	logger.Debug("set prop default source:", defaultSourcePath)
-	a.resumeSourceConfig(source)
+	a.resumeSourceConfig(source, isPhysicalDevice(sourceName))
 }
 
 func (a *Audio) context() *pulse.Context {
