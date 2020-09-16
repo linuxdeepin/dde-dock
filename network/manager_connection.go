@@ -479,6 +479,22 @@ func (m *Manager) activateConnection(uuid string, devPath dbus.ObjectPath) (cpat
 		return
 	}
 
+	// if need enable device
+	enable, err := m.getDeviceEnabled(devPath)
+	if err != nil {
+		logger.Warningf("get device enabled state failed, err: %v", err)
+		return
+	}
+	if !enable {
+		// add new connection but device is disabled, need to update device enabled state as true
+		// but dont need to auto connect ActivateConnection, else may cause unexpected connection
+		err = m.enableDevice(devPath, true, false)
+		if err != nil {
+			logger.Warningf("enable device failed, err: %v", err)
+			return
+		}
+	}
+
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
 		// connection will be activated in ensureUniqueConnectionExists() if not exists

@@ -20,6 +20,7 @@
 package network
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -502,16 +503,18 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (bool, *dbus.Error) {
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) *dbus.Error {
-	err := m.enableDevice(devPath, enabled)
+	// device is active clicked, need auto connect ActivateConnection
+	err := m.enableDevice(devPath, enabled, true)
 	return dbusutil.ToError(err)
 }
 
-func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
+func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool, activate bool) (err error) {
 	cpath, err := m.sysNetwork.EnableDevice(0, string(devPath), enabled)
 	if err != nil {
 		return
 	}
-	if enabled {
+	// check if need activate connection
+	if enabled && activate {
 		var uuid string
 		uuid, err = nmGetConnectionUuid(cpath)
 		if err != nil {
@@ -520,6 +523,12 @@ func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		m.ActivateConnection(uuid, devPath)
 	}
 
+	// set enable device state
+	m.setDeviceEnabled(enabled, devPath)
+	return
+}
+
+func (m *Manager) setDeviceEnabled(enabled bool, devPath dbus.ObjectPath) {
 	m.stateHandler.locker.Lock()
 	defer m.stateHandler.locker.Unlock()
 	dsi, ok := m.stateHandler.devices[devPath]
@@ -528,6 +537,16 @@ func (m *Manager) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	}
 	dsi.enabled = enabled
 	return
+}
+
+func (m *Manager) getDeviceEnabled(devPath dbus.ObjectPath) (bool, error) {
+	m.stateHandler.locker.Lock()
+	defer m.stateHandler.locker.Unlock()
+	dsi, ok := m.stateHandler.devices[devPath]
+	if !ok {
+		return false, errors.New("device path not exist")
+	}
+	return dsi.enabled, nil
 }
 
 // SetDeviceManaged set target device managed or unmnaged from
