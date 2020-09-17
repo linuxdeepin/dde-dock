@@ -573,15 +573,17 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_appAreaSonWidget) {
-        if (event->type() == QEvent::LayoutRequest) {
+        switch (event->type()) {
+        case QEvent::LayoutRequest:
             m_appAreaSonWidget->adjustSize();
             resizeDockIcon();
-        } else {
+            break;
+        case QEvent::Paint:
+            resizeDockIcon();
+            break;
+        default:
             moveAppSonWidget();
-        }
-
-        if (event->type() == QEvent::Resize) {
-            moveAppSonWidget();
+            break;
         }
     }
 
