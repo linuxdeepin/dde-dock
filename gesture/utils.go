@@ -108,7 +108,7 @@ func getCurrentActionWindowCmd() string {
 	return string(data)
 }
 
-func isSessionActive() bool {
+func isSessionActive(sessionPath dbus.ObjectPath) bool {
 	if _dconn == nil {
 		conn, err := dbus.SystemBus()
 		if err != nil {
@@ -119,7 +119,7 @@ func isSessionActive() bool {
 	}
 
 	if _self == nil {
-		self, err := login1.NewSession(_dconn, "/org/freedesktop/login1/session/self")
+		self, err := login1.NewSession(_dconn, sessionPath)
 		if err != nil {
 			logger.Error("Failed to connect self session:", err)
 			return false

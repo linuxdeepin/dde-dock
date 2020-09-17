@@ -21,6 +21,7 @@ import (
 	"pkg.deepin.io/lib/dbusutil/proxy"
 	"pkg.deepin.io/lib/gsettings"
 	dutils "pkg.deepin.io/lib/utils"
+	sessionmanager "github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager"
 )
 
 const (
@@ -45,6 +46,7 @@ type Manager struct {
 	tsSetting     *gio.Settings
 	enabled       bool
 	Infos         gestureInfos
+	sessionmanager *sessionmanager.SessionManager
 	//nolint
 	methods *struct {
 		SetLongPressDuration    func() `in:"duration"`
@@ -116,6 +118,7 @@ func newManager() (*Manager, error) {
 		dock:      dock.NewDock(sessionConn),
 		display:   display.NewDisplay(sessionConn),
 		sysDaemon: daemon.NewDaemon(systemConn),
+		sessionmanager:sessionmanager.NewSessionManager(sessionConn),
 	}
 
 	m.gesture = gesture.NewGesture(systemConn)
@@ -160,7 +163,12 @@ func (m *Manager) init() {
 		m.mu.RLock()
 		defer m.mu.RUnlock()
 		// 多用户存在，防止非当前用户响应触摸屏手势
-		if !m.enabled || !isSessionActive() {
+		currentSessionPath, err := m.sessionmanager.CurrentSessionPath().Get(0)
+		if err != nil {
+			logger.Error("get login1 session path failed:", err)
+			return
+		}
+		if !m.enabled || !isSessionActive(currentSessionPath) {
 			logger.Debug("Gesture had been disabled or session inactive")
 			return
 		}
@@ -180,8 +188,12 @@ func (m *Manager) init() {
 func (m *Manager) Exec(name, direction string, fingers int32) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
-
-	if !m.enabled || !isSessionActive() {
+	currentSessionPath, err := m.sessionmanager.CurrentSessionPath().Get(0)
+	if err != nil {
+		logger.Error("get login1 session path failed:", err)
+		return err
+	}
+	if !m.enabled || !isSessionActive(currentSessionPath) {
 		logger.Debug("Gesture had been disabled or session inactive")
 		return nil
 	}
