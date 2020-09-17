@@ -428,22 +428,31 @@ func (m *Manager) SetPrepareSuspend(v int) *dbus.Error {
 func (m *Manager) doSetMode(mode string) error {
 	var err error
 	switch mode {
-	case "balance":
-		err = m.systemPower.SetCpuGovernor(0, "performance")
+	case "balance": // governor=performance boost=false
+		err = m.systemPower.PowerSavingModeEnabled().Set(0, false)
+		if err == nil {
+			err = m.systemPower.SetCpuGovernor(0, "performance")
+		}
 		if err == nil && m.IsHighPerformanceSupported {
 			err = m.systemPower.SetCpuBoost(0, false)
 		}
-	case "powersave":
-		err = m.systemPower.SetCpuGovernor(0, "powersave")
+	case "powersave": // governor=powersave boost=false
+		err = m.systemPower.PowerSavingModeEnabled().Set(0, true)
+		if err == nil {
+			err = m.systemPower.SetCpuGovernor(0, "powersave")
+		}
 		if err == nil && m.IsHighPerformanceSupported {
 			err = m.systemPower.SetCpuBoost(0, false)
 		}
-	case "performance":
+	case "performance": // governor=performance boost=true
 		if !m.IsHighPerformanceSupported {
 			err = fmt.Errorf("%q mode is not supported", mode)
 			break
 		}
-		err = m.systemPower.SetCpuGovernor(0, "performance")
+		err = m.systemPower.PowerSavingModeEnabled().Set(0, false)
+		if err == nil {
+			err = m.systemPower.SetCpuGovernor(0, "performance")
+		}
 		if err == nil {
 			err = m.systemPower.SetCpuBoost(0, true)
 		}
@@ -459,7 +468,6 @@ func (m *Manager) SetMode(mode string) *dbus.Error {
 	err := m.doSetMode(mode)
 	if err != nil {
 		logger.Warning(err)
-		return dbusutil.ToError(err)
 	}
 
 	m.Mode.Set(mode)

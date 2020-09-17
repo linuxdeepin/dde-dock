@@ -49,7 +49,7 @@ func NewCpuHandlers() *CpuHandlers {
 	dirs, err := ioutil.ReadDir(globalCpuDirPath)
 	if err != nil {
 		logger.Warning(err)
-		return nil
+		return &cpus
 	}
 
 	pattern, _ := regexp.Compile(`cpu[0-9]+`)
