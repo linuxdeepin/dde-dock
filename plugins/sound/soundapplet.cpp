@@ -38,6 +38,7 @@
 #define ICON_SIZE   24
 #define ITEM_HEIGHT 24
 #define ITEM_SPACING 5
+#define DEVICE_SPACING 10
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -107,11 +108,18 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
+    , m_separator(new HorizontalSeparator)
     , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
     , m_deviceInfo("")
+
+{
+    initUi();
+}
+
+void SoundApplet::initUi()
 {
     m_listView->setEditTriggers(DListView::NoEditTriggers);
     m_listView->setSelectionMode(QAbstractItemView::NoSelection);
@@ -146,9 +154,9 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     QVBoxLayout *deviceLineLayout = new QVBoxLayout;
     deviceLineLayout->addLayout(deviceLayout);
-    deviceLineLayout->addWidget(new HorizontalSeparator);
+    deviceLineLayout->addWidget(m_separator);
     deviceLineLayout->setMargin(0);
-    deviceLineLayout->setSpacing(10);
+    deviceLineLayout->setSpacing(DEVICE_SPACING);
 
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->addSpacing(2);
@@ -160,22 +168,6 @@ SoundApplet::SoundApplet(QWidget *parent)
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
-    TipsWidget *appLabel = new TipsWidget;
-    appLabel->setText(tr("Application"));
-
-    QVBoxLayout *appLineHLayout = new QVBoxLayout;
-    appLineHLayout->addWidget(new HorizontalSeparator);
-    appLineHLayout->addWidget(appLabel);
-    appLineHLayout->setMargin(0);
-    appLineHLayout->setSpacing(10);
-
-    QVBoxLayout *appLineVLayout = new QVBoxLayout;
-    appLineVLayout->addSpacing(10);
-    appLineVLayout->addLayout(appLineHLayout);
-    appLineVLayout->addSpacing(8);
-    appLineVLayout->setSpacing(0);
-    appLineVLayout->setMargin(0);
-
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_volumeBtn->setFlat(true);
@@ -186,6 +178,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_centralLayout->addLayout(deviceLineLayout);
     m_centralLayout->addSpacing(8);
     m_centralLayout->addLayout(volumeCtrlLayout);
+    m_centralLayout->setContentsMargins(8, 8, 8, 0);
 
     m_listView->setModel(m_model);
     m_centralLayout->addWidget(m_listView);
@@ -202,6 +195,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
 
+    connect(qApp, &QGuiApplication::fontChanged, this, &SoundApplet::updateListHeight);
     connect(m_volumeBtn, &DIconButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
@@ -351,20 +345,7 @@ void SoundApplet::cardsChanged(const QString &cards)
         }
     }
 
-    //设备数多于10个时显示滚动条,固定高度
-    int count = m_model->rowCount();
-    if (m_model->rowCount() > 10) {
-        count = 10;
-        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    }
-    else {
-        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    }
-    m_listView->setFixedHeight((count + 1) * (ITEM_HEIGHT + ITEM_SPACING));
-    //2倍的ITEM_HEIGHT为设备音量空白区域和滑块所占高度大概值
-    int height = m_volumeSlider->height() + m_soundShow->height() + (count + 2) * ITEM_HEIGHT + count * ITEM_SPACING;
-    setFixedHeight(height);
-    m_centralWidget->setFixedHeight(height);
+    updateListHeight();
 }
 void SoundApplet::toggleMute()
 {
@@ -545,3 +526,34 @@ void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
 
     getCradsInfo();
 }
+
+void SoundApplet::updateListHeight()
+{
+    //设备数多于10个时显示滚动条,固定高度
+    int count = m_model->rowCount();
+    if (m_model->rowCount() > 10) {
+        count = 10;
+        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    } else {
+        m_listView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+
+    int visualHeight = 0;
+    for (int i = 0; i < count; i++)
+        visualHeight += m_listView->visualRect(m_model->index(i, 0)).height();
+
+    int listMargin = m_listView->contentsMargins().top() + m_listView->contentsMargins().bottom();
+    //显示声音设备列表高度 = 设备的高度 + 间隔 + 边距
+    int viewHeight = visualHeight + m_listView->spacing() * count * 2 + listMargin;
+    // 设备信息高度 = 设备标签 + 分隔线 + 滚动条 + 间隔
+    int infoHeight = m_soundShow->height() + m_separator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
+    int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
+    //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
+    int totalHeight = viewHeight + infoHeight + margain;
+    m_listView->setFixedHeight(viewHeight);
+    setFixedHeight(totalHeight);
+    m_centralWidget->setFixedHeight(totalHeight);
+    update();
+}
+
+

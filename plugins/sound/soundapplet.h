@@ -40,6 +40,8 @@ DWIDGET_USE_NAMESPACE
 using DBusAudio = com::deepin::daemon::Audio;
 using DBusSink = com::deepin::daemon::audio::Sink;
 
+class HorizontalSeparator;
+
 namespace Dock{
 class TipsWidget;
 }
@@ -105,6 +107,7 @@ public:
     bool containsPort(const Port *port);
     Port *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
+    void initUi();
 
 signals:
     void volumeChanged(const int value) const;
@@ -123,6 +126,7 @@ private slots:
     void addPort(const Port *port);
     void activePort(const QString &portId,const uint &cardId);
     void haldleDbusSignal(const QDBusMessage &msg);
+    void updateListHeight();
 
 private:
     void refreshIcon();
@@ -130,12 +134,12 @@ private:
 
 private:
     QWidget *m_centralWidget;
-    QWidget *m_applicationTitle;
     DIconButton *m_volumeBtn;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     Dock::TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
+    HorizontalSeparator *m_separator;
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;
