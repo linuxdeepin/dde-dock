@@ -192,7 +192,8 @@ func getDefaultLocale() (locale string) {
 	if locale == "" {
 		return defaultLocale
 	}
-	return locale
+
+	return strings.Trim(locale, "\"'")
 }
 
 func getLocaleFromFile(file string) string {
