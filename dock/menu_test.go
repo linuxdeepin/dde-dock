@@ -26,6 +26,31 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
+func IsContainItem(items []*MenuItem, item *MenuItem) bool {
+	for _, i := range items {
+		if i.Text == item.Text && i.IsActive == item.IsActive && i.Id != "" {
+			return true
+		}
+	}
+	return false
+}
+
+func Test_AppendItem(t *testing.T) {
+	Convey("AppendItem", t, func(c C) {
+		menu := NewMenu()
+		item0 := NewMenuItem("item 0", nil, true)
+		item1 := NewMenuItem("item 1", nil, true)
+		item2 := NewMenuItem("item 2", nil, true)
+		item3 := NewMenuItem("item 3", nil, true)
+		menu.AppendItem(item0, item1, item2)
+
+		c.So(IsContainItem(menu.Items, item0), ShouldBeTrue)
+		c.So(IsContainItem(menu.Items, item1), ShouldBeTrue)
+		c.So(IsContainItem(menu.Items, item2), ShouldBeTrue)
+		c.So(IsContainItem(menu.Items, item3), ShouldBeFalse)
+	})
+}
+
 func Test_GenerateMenuJson(t *testing.T) {
 	Convey("GenerateMenuJson", t, func(c C) {
 		menu := NewMenu()
