@@ -389,6 +389,9 @@ func (sa *SecretAgent) GetSecrets(connectionData map[string]map[string]dbus.Vari
 	secretsData, err = sa.getSecrets(connectionData, connectionPath, settingName, hints, flags)
 	if err != nil {
 		if err == errSecretAgentUserCanceled {
+			connId, _ := getConnectionDataString(connectionData, "connection", "id")
+			msg := fmt.Sprintf(("Password is required to connect %q"), connId)
+			notify(notifyIconWirelessDisconnected, "", msg)
 			return nil, &dbus.Error{
 				Name: "org.freedesktop.NetworkManager.SecretAgent.UserCanceled",
 				Body: []interface{}{"user canceled"},
