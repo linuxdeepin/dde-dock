@@ -89,3 +89,14 @@ func Test_getDesktopIdByFilePath(t *testing.T) {
 		c.So(desktopId, ShouldEqual, "dirfortest-dir2-space test.desktop")
 	})
 }
+
+func Test_addDirTrailingSlash(t *testing.T) {
+	Convey("addDirTrailingSlash", t, func(c C) {
+		dir := "/usr/shareapplication"
+		dir2 := addDirTrailingSlash(dir)
+		c.So(dir2, ShouldEqual, dir + "/")
+
+		dir3 := addDirTrailingSlash(dir2)
+		c.So(dir3, ShouldEqual, dir2)
+	})
+}
