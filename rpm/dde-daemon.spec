@@ -68,7 +68,8 @@ Recommends:     google-noto-sans-fonts
 Daemon handling the DDE session settings
 
 %prep
-%setup -q -n %{name}-%{version}
+%autosetup
+patch langselector/locale.go < rpm/locale.go.patch
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile
