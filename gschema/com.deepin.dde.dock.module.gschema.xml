@@ -291,7 +291,7 @@
       </description>
     </key>
   </schema>
- <schema path="/com/deepin/dde/dock/mainwidow/" id="com.deepin.dde.dock.mainwidow" gettext-domain="DDE">
+ <schema path="/com/deepin/dde/dock/mainwindow/" id="com.deepin.dde.dock.mainwindow" gettext-domain="DDE">
     <key type="u" name="monitors-switch-time">
       <default>2000</default>
       <summary>Unit: ms</summary>

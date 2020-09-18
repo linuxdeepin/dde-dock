@@ -922,8 +922,8 @@ void MultiScreenWorker::initMembers()
 
 void MultiScreenWorker::initGSettingConfig()
 {
-    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.mainwidow")) {
-        m_monitorSetting = new QGSettings("com.deepin.dde.dock.mainwidow", "/com/deepin/dde/dock/mainwidow/", this);
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.mainwindow")) {
+        m_monitorSetting = new QGSettings("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this);
         if (m_monitorSetting->keys().contains(MonitorsSwitchTime)) {
             m_delayTimer->setInterval(m_monitorSetting->get(MonitorsSwitchTime).toInt());
         } else {
