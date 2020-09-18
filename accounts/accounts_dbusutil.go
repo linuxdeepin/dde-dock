@@ -2,8 +2,6 @@
 
 package accounts
 
-import "strings"
-
 func (v *Manager) setPropAllowGuest(value bool) (changed bool) {
 	if v.AllowGuest != value {
 		v.AllowGuest = value
@@ -109,7 +107,6 @@ func (v *User) emitPropChangedShell(value string) error {
 }
 
 func (v *User) setPropLocale(value string) (changed bool) {
-	value = strings.Trim(value, "\"'")
 	if v.Locale != value {
 		v.Locale = value
 		v.emitPropChangedLocale(value)

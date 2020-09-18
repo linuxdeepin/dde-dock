@@ -26,6 +26,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	dbus "github.com/godbus/dbus"
@@ -348,6 +349,13 @@ func (u *User) EnableNoPasswdLogin(sender dbus.Sender, enabled bool) *dbus.Error
 	return nil
 }
 
+func (v *User) setLocale(value string) {
+	value = strings.Trim(value, "\"'")
+	if v.Locale != value {
+		v.Locale = value
+	}
+}
+
 func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 	logger.Debug("[SetLocale] locale:", locale)
 
@@ -374,7 +382,7 @@ func (u *User) SetLocale(sender dbus.Sender, locale string) *dbus.Error {
 	if err != nil {
 		return dbusutil.ToError(err)
 	}
-	u.Locale = locale
+	u.setLocale(locale)
 	_ = u.emitPropChangedLocale(locale)
 	return nil
 }

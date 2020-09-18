@@ -222,7 +222,7 @@ func NewUser(userPath string, service *dbusutil.Service, ignoreErr bool) (*User,
 		u.XSession = xSession
 		u.SystemAccount = false
 		u.Layout = getDefaultLayout()
-		u.Locale = getDefaultLocale()
+		u.setLocale(getDefaultLocale())
 		u.IconFile = defaultUserIcon
 		defaultUserBackground := getDefaultUserBackground()
 		u.DesktopBackgrounds = []string{defaultUserBackground}
@@ -259,9 +259,9 @@ func NewUser(userPath string, service *dbusutil.Service, ignoreErr bool) (*User,
 		isSave = true
 	}
 	locale, _ := kf.GetString(confGroupUser, confKeyLocale)
-	u.Locale = locale
+	u.setLocale(locale)
 	if locale == "" {
-		u.Locale = getDefaultLocale()
+		u.setLocale(getDefaultLocale())
 		isSave = true
 	}
 	layout, _ := kf.GetString(confGroupUser, confKeyLayout)
