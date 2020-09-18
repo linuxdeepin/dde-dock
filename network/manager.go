@@ -94,10 +94,9 @@ type Manager struct {
 
 	portalLastDetectionTime time.Time
 
-	WirelessAccessPoints      string `prop:"access:r"` //用于读取AP
-	updateWirelessCountTicker *countTicker
-	debugChangeAPBand         string //调用接口切换ap频段
-	checkAPStrengthTimer      *time.Timer
+	WirelessAccessPoints string `prop:"access:r"` //用于读取AP
+	debugChangeAPBand    string //调用接口切换ap频段
+	checkAPStrengthTimer *time.Timer
 
 	//nolint
 	signals *struct {
@@ -109,6 +108,7 @@ type Manager struct {
 			enabled bool
 		}
 	}
+
 	//nolint
 	methods *struct {
 		ActivateAccessPoint          func() `in:"uuid,apPath,devPath" out:"cPath"`
@@ -248,8 +248,6 @@ func (m *Manager) init() {
 		}
 	}()
 
-	m.initCountTicker()
-
 	// 调整nmDev的状态
 	m.adjustDeviceStatus()
 	// move to power module
@@ -292,10 +290,6 @@ func (m *Manager) destroy() {
 	m.setPropNetworkingEnabled(false)
 	m.updatePropState()
 
-	if m.updateWirelessCountTicker != nil {
-		m.updateWirelessCountTicker.Stop()
-		m.updateWirelessCountTicker = nil
-	}
 	if m.checkAPStrengthTimer != nil {
 		m.checkAPStrengthTimer.Stop()
 		m.checkAPStrengthTimer = nil
@@ -403,7 +397,7 @@ func (m *Manager) initNMObjManager(systemBus *dbus.Conn) {
 
 func (m *Manager) doPortalAuthentication() {
 	err := exec.Command("pgrep", "startdde").Run()
-	if err != nil  {
+	if err != nil {
 		return
 	}
 

@@ -21,7 +21,6 @@ package network
 
 import (
 	"errors"
-	"time"
 
 	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/dde/daemon/network/nm"
@@ -48,44 +47,19 @@ func (m *Manager) vpnEnabledWriteCb(write *dbusutil.PropertyWrite) *dbus.Error {
 	return nil
 }
 
-func (m *Manager) setPropNetworkingEnabled(value bool) {
-	m.NetworkingEnabled = value
-	err := m.service.EmitPropertyChanged(m, "NetworkingEnabled", value)
-	if err != nil {
-		logger.Warning(err)
-	}
-}
-
-func (m *Manager) setPropVpnEnabled(value bool) {
-	m.VpnEnabled = value
-	err := m.service.EmitPropertyChanged(m, "VpnEnabled", value)
-	if err != nil {
-		logger.Warning(err)
-	}
-}
-
 func (m *Manager) updatePropActiveConnections() {
-	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
-	err := m.service.EmitPropertyChanged(m, "ActiveConnections", m.ActiveConnections)
-	if err != nil {
-		logger.Warning("failed to emit signal:", err)
-	}
+	activeConnections, _ := marshalJSON(m.activeConnections)
+	m.setPropActiveConnections(activeConnections)
 }
 
 func (m *Manager) updatePropState() {
-	m.State = nmGetManagerState()
-	err := m.service.EmitPropertyChanged(m, "State", m.State)
-	if err != nil {
-		logger.Warning("failed to emit signal:", err)
-	}
+	state := nmGetManagerState()
+	m.setPropState(state)
 }
 
 func (m *Manager) updatePropConnectivity() {
-	m.Connectivity, _ = nmManager.Connectivity().Get(0)
-	err := m.service.EmitPropertyChanged(m, "Connectivity", m.Connectivity)
-	if err != nil {
-		logger.Warning("failed to emit signal:", err)
-	}
+	connectivity, _ := nmManager.Connectivity().Get(0)
+	m.setPropConnectivity(connectivity)
 }
 
 func (m *Manager) updatePropDevices() {
@@ -101,31 +75,16 @@ func (m *Manager) updatePropDevices() {
 			}
 		}
 	}
-	m.Devices, _ = marshalJSON(filteredDevices)
-	err := m.service.EmitPropertyChanged(m, "Devices", m.Devices)
-	if err != nil {
-		logger.Warning("failed to emit signal:", err)
-	}
+	devices, _ := marshalJSON(filteredDevices)
+	m.setPropDevices(devices)
 }
 
 func (m *Manager) updatePropConnections() {
-	m.Connections, _ = marshalJSON(m.connections)
-	err := m.service.EmitPropertyChanged(m, "Connections", m.Connections)
-	if err != nil {
-		logger.Warning("failed to emit signal:", err)
-	}
+	connections, _ := marshalJSON(m.connections)
+	m.setPropConnections(connections)
 }
 
-func (m *Manager) emitPropChangedWirelessAccessPoints(value string) error {
-	return m.service.EmitPropertyChanged(m, "WirelessAccessPoints", value)
-}
-
-// 每60s自动更新一次WirelessAccessPoints属性，并发送属性改变信号
-func (m *Manager) initCountTicker() {
-	m.updateWirelessCountTicker = newCountTicker(60*time.Second, func(count int) {
-		err := m.RequestWirelessScan()
-		if err != nil {
-			logger.Warning("RequestWirelessScan: ", err)
-		}
-	})
+func (m *Manager) updatePropWirelessAccessPoints() {
+	aps, _ := marshalJSON(m.accessPoints)
+	m.setPropWirelessAccessPoints(aps)
 }

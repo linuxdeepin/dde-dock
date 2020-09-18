@@ -226,17 +226,29 @@ func (m *Manager) clearAccessPoints() {
 	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
 }
 
-func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
-	logger.Warning("addAccessPoint", apPath)
-	if m.checkAPStrengthTimer == nil {
-		m.checkAPStrengthTimer = time.AfterFunc(scanWifiDelayTime, m.checkAPStrength)
-	} else {
-		m.checkAPStrengthTimer.Reset(scanWifiDelayTime)
+func (m *Manager) initAccessPoints(devPath dbus.ObjectPath, apPaths []dbus.ObjectPath) {
+	accessPoints := make([]*accessPoint, 0, len(apPaths))
+	for _, apPath := range apPaths {
+		ap, err := m.newAccessPoint(devPath, apPath)
+		if err != nil {
+			continue
+		}
+		if ap.shouldBeIgnore() {
+			continue
+		}
+		//logger.Debug("add access point", devPath, apPath)
+		accessPoints = append(accessPoints, ap)
 	}
+
+	m.accessPointsLock.Lock()
+	m.accessPoints[devPath] = accessPoints
+	m.accessPointsLock.Unlock()
+}
+
+func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if m.isAccessPointExists(apPath) {
 		return
 	}
-
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
 	ap, err := m.newAccessPoint(devPath, apPath)
@@ -252,12 +264,11 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 		return
 	}
 	_, i := m.getAccessPointIndex(apPath)
-
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
-	//logger.Debug("remove access point", devPath, apPath)
 	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
 }
+
 func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint {
 	m.destroyAccessPoint(aps[i])
 	copy(aps[i:], aps[i+1:])
@@ -270,6 +281,7 @@ func (m *Manager) isAccessPointExists(apPath dbus.ObjectPath) bool {
 	_, i := m.getAccessPointIndex(apPath)
 	return i >= 0
 }
+
 func (m *Manager) getAccessPointIndex(apPath dbus.ObjectPath) (devPath dbus.ObjectPath, index int) {
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
@@ -492,7 +504,7 @@ func (m *Manager) checkAPStrength() {
 				logger.Debug("no need to change AP")
 				continue
 			}
-			logger.Debug("changeAPChanel,apPath:",  apPath)
+			logger.Debug("changeAPChanel, apPath:", apPath)
 			if band == "" {
 				if apNow.Frequency >= frequency5GLowerlimit &&
 					apNow.Frequency <= frequency5GUpperlimit {

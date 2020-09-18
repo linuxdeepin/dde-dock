@@ -20,7 +20,6 @@
 package network
 
 import (
-	"encoding/json"
 	"fmt"
 	"net"
 	"strings"
@@ -112,17 +111,20 @@ func (m *Manager) adjustDeviceStatus() {
 		if err != nil {
 			continue
 		}
-	
+
 		// ignore virtual network interfaces
 		if isVirtualDeviceIfc(nmDev) {
 			continue
 		}
 
 		// 如果nmDevice在network启动之前就已经是密码待验证的状态，需要等待nm超时才能自动回连，导致wifi回连太慢
-		// 在这种情况下主动回连 
+		// 在这种情况下主动回连
 		stat, _ := nmDev.State().Get(0)
 		if stat == nm.NM_DEVICE_STATE_NEED_AUTH {
-			m.enableDevice(path, true)
+			err := m.enableDevice(path, true)
+			if err != nil {
+				logger.Warning("failed to enable device:", err)
+			}
 		}
 	}
 }
@@ -261,27 +263,40 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		if err != nil {
 			logger.Warning(err)
 		}
+
 		// connect signals AccessPointAdded() and AccessPointRemoved()
 		_, err = nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
+			if m.checkAPStrengthTimer == nil {
+				m.checkAPStrengthTimer = time.AfterFunc(scanWifiDelayTime, m.checkAPStrength)
+			} else {
+				m.checkAPStrengthTimer.Reset(scanWifiDelayTime)
+			}
+
 			m.addAccessPoint(dev.Path, apPath)
+
+			m.PropsMu.Lock()
+			m.updatePropWirelessAccessPoints()
+			m.PropsMu.Unlock()
+		})
+		if err != nil {
+			logger.Warning(err)
+		}
+		_, err = nmDevWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
+			m.removeAccessPoint(dev.Path, apPath)
+
+			m.PropsMu.Lock()
+			m.updatePropWirelessAccessPoints()
+			m.PropsMu.Unlock()
 		})
 		if err != nil {
 			logger.Warning(err)
 		}
 
-		_, err = nmDevWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
-			if dev.State == nm.NM_DEVICE_STATE_UNMANAGED {
-				//在待机时，不能删除全部热点，唤醒时再清除
-				return
-			}
-			m.removeAccessPoint(dev.Path, apPath)
-		})
-		if err != nil {
-			logger.Warning(err)
-		}
-		for _, apPath := range nmGetAccessPoints(dev.Path) {
-			m.addAccessPoint(dev.Path, apPath)
-		}
+		accessPoints := nmGetAccessPoints(devPath)
+		m.initAccessPoints(dev.Path, accessPoints)
+
+		m.WirelessAccessPoints, _ = marshalJSON(m.accessPoints)
+
 	case nm.NM_DEVICE_TYPE_MODEM:
 		if len(dev.id) == 0 {
 			// some times, modem device will not be identified
@@ -625,45 +640,16 @@ func (m *Manager) listDeviceConnections(devPath dbus.ObjectPath) ([]dbus.ObjectP
 // RequestWirelessScan request all wireless devices re-scan access point list.
 func (m *Manager) RequestWirelessScan() *dbus.Error {
 	m.devicesLock.Lock()
-	wirelessAccessPoints := make(map[dbus.ObjectPath][]*accessPoint)
+	defer m.devicesLock.Unlock()
 	if devices, ok := m.devices[deviceWifi]; ok {
 		for _, dev := range devices {
 			err := dev.nmDev.RequestScan(0, nil)
 			if err != nil {
 				logger.Debug(err)
 			}
-
-			accessPoints := m.getAccessPointsByPath(dev.Path)
-			wirelessAccessPoints[dev.Path] = accessPoints
 		}
-	}
-	m.devicesLock.Unlock()
-	wirelessAccessPointsJson, err := json.Marshal(wirelessAccessPoints)
-	if err != nil {
-		logger.Warning(err)
-	}
-	wirelessAccessPointsJsonStr := string(wirelessAccessPointsJson)
-	m.PropsMu.Lock()
-	m.WirelessAccessPoints = wirelessAccessPointsJsonStr
-	m.PropsMu.Unlock()
-	err = m.emitPropChangedWirelessAccessPoints(wirelessAccessPointsJsonStr)
-	if err != nil {
-		logger.Warning(err)
 	}
 	return nil
-}
-
-func (m *Manager) getAccessPointsByPath(path dbus.ObjectPath) []*accessPoint {
-	m.accessPointsLock.Lock()
-	defer m.accessPointsLock.Unlock()
-	accessPoints := m.accessPoints[path]
-	var filteredAccessPoints []*accessPoint
-	for _, ap := range accessPoints {
-		if !ap.shouldBeIgnore() {
-			filteredAccessPoints = append(filteredAccessPoints, ap)
-		}
-	}
-	return filteredAccessPoints
 }
 
 func (m *Manager) wirelessReActiveConnection(nmDev *nmdbus.Device) error {

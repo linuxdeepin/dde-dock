@@ -608,7 +608,7 @@ func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 	}
 	devWireless := dev.Wireless()
 
-	apPaths, err = devWireless.GetAccessPoints(0)
+	apPaths, err = devWireless.AccessPoints().Get(0)
 	if err != nil {
 		logger.Error(err)
 	}
