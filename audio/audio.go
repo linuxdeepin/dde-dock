@@ -730,6 +730,7 @@ func (*Audio) GetInterfaceName() string {
 }
 
 func (a *Audio) resumeSinkConfig(s *Sink) {
+	logger.Debugf("resume sink %s %s", a.getCardNameById(s.Card), s.ActivePort.Name)
 	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
 
 	err := s.setVBF(portConfig.Volume, portConfig.Balance, 0.0)
@@ -751,6 +752,7 @@ func (a *Audio) resumeSinkConfig(s *Sink) {
 }
 
 func (a *Audio) resumeSourceConfig(s *Source, isPhyDev bool) {
+	logger.Debugf("resume source %s %s", a.getCardNameById(s.Card), s.ActivePort.Name)
 	_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
 
 	err := s.setVBF(portConfig.Volume, portConfig.Balance, 0.0)

@@ -603,7 +603,11 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 			if err != nil {
 				logger.Warning("set reduce noise fail:", err)
 			}
-			a.ReduceNoise.Set(false)
+			s := a.defaultSource
+			_, portConfig := configKeeper.GetCardAndPortConfig(a.getCardNameById(s.Card), s.ActivePort.Name)
+			if portConfig.ReduceNoise != a.ReduceNoise.Get() {
+				a.ReduceNoise.Set(portConfig.ReduceNoise)
+			}
 		}
 	case pulse.EventTypeChange:
 		sourceInfo, err := a.ctx.GetSource(idx)
@@ -691,6 +695,7 @@ func (a *Audio) listenGSettingReduceNoiseChanged() {
 		} else {
 			source := a.defaultSource
 			configKeeper.SetReduceNoise(a.getCardNameById(source.Card), source.ActivePort.Name, reduce)
+			logger.Debugf("configKeeper.SetReduceNoise %s %s %v", a.getCardNameById(source.Card), source.ActivePort.Name, reduce)
 			err = configKeeper.Save(configKeeperFile)
 			if err != nil {
 				logger.Warning(err)
