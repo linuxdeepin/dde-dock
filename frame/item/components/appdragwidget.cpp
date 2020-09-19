@@ -141,38 +141,8 @@ void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    bool model = true;
-    Dock::Position pos = Dock::Position::Bottom;
-
-    DockPopupWindow *popup = m_popupWindow;
-    if (isRemoveAble()) {
-        QWidget *lastContent = popup->getContent();
-        if (lastContent)
-            lastContent->setVisible(false);
-
-        switch (pos) {
-        case Top:    popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
-        case Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
-        case Left:   popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
-        case Right:  popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
-        }
-        popup->resize(m_removeTips->sizeHint());
-        popup->setContent(m_removeTips);
-
-        const QPoint p = popupMarkPoint(pos);
-        if (!popup->isVisible())
-            QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
-        else
-            popup->show(p, model);
-
-        m_object->setOpacity(0.5);
-        m_animOpacity->setStartValue(0.5);
-    } else {
-        m_object->setOpacity(1.0);
-        m_animOpacity->setStartValue(1.0);
-        if (popup->isVisible())
-            popup->setVisible(false);
-    }
+    Q_UNUSED(event);
+    showRemoveTips();
 }
 
 const QPoint AppDragWidget::topleftPoint() const
@@ -370,4 +340,46 @@ void AppDragWidget::enterEvent(QEvent *event)
         && m_animGroup->state() != QParallelAnimationGroup::Running) {
         hide();
     }
+}
+
+void AppDragWidget::showRemoveTips()
+{
+   bool model = true;
+    Dock::Position pos = Dock::Position::Bottom;
+
+    DockPopupWindow *popup = m_popupWindow;
+    if (isRemoveAble()) {
+        QWidget *lastContent = popup->getContent();
+        if (lastContent)
+            lastContent->setVisible(false);
+
+        switch (pos) {
+        case Top:    popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
+        case Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
+        case Left:   popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
+        case Right:  popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
+        }
+        popup->resize(m_removeTips->sizeHint());
+        popup->setContent(m_removeTips);
+
+        const QPoint p = popupMarkPoint(pos);
+        if (!popup->isVisible())
+            QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+        else
+            popup->show(p, model);
+
+        m_object->setOpacity(0.5);
+        m_animOpacity->setStartValue(0.5);
+    } else {
+        m_object->setOpacity(1.0);
+        m_animOpacity->setStartValue(1.0);
+        if (popup->isVisible())
+            popup->setVisible(false);
+    }
+}
+
+void AppDragWidget::moveEvent(QMoveEvent *event)
+{
+    Q_UNUSED(event);
+    showRemoveTips();
 }

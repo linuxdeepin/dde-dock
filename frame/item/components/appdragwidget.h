@@ -55,7 +55,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void hideEvent(QHideEvent *event) override;
-    void enterEvent(QEvent *event);
+    void moveEvent(QMoveEvent *event) override;
+    void enterEvent(QEvent *event) override;
 
 private:
     void initAnimations();
@@ -66,6 +67,7 @@ private:
             QAbstractAnimation::State oldState);
     const QPoint popupMarkPoint(Dock::Position pos);
     const QPoint topleftPoint() const;
+    void showRemoveTips();
 
 private:
     AppGraphicsObject *m_object;
