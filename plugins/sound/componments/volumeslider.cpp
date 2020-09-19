@@ -66,7 +66,9 @@ void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 
     QSlider::setValue(normalized);
 
+    blockSignals(true);
     emit valueChanged(normalized);
+    blockSignals(false);
 }
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
