@@ -45,6 +45,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_switchWire(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
+    , m_airplaneInter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     m_timer->setInterval(100);
 
@@ -140,6 +141,9 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
+    connect(m_airplaneInter, &AirplanInter::EnabledChanged, this, [=](bool enable){
+        wirelessEnable(!enable);
+    });
 }
 
 QWidget *NetworkItem::itemApplet()

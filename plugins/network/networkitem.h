@@ -10,6 +10,10 @@
 #include <QLabel>
 #include <QTimer>
 
+#include <com_deepin_daemon_airplanemode.h>
+
+using AirplanInter = com::deepin::daemon::AirplaneMode;
+
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -113,6 +117,7 @@ private:
     PluginState m_pluginState;
     QTimer *m_timer;
     QTimer *m_switchWireTimer;
+    AirplanInter *m_airplaneInter;
 };
 
 #endif // NETWORKITEM_H
