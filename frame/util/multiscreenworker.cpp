@@ -717,7 +717,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
 
     // 在副屏时,且为一直显示时,不要挤占应用,这是sp3的新需求
-    if (m_ds.current() != qApp->primaryScreen()->name() && m_hideMode == HideMode::KeepShowing) {
+    if (m_ds.current() != m_ds.primary() && m_hideMode == HideMode::KeepShowing) {
         qDebug() << "don`t set dock area";
         return;
     }
@@ -994,19 +994,18 @@ void MultiScreenWorker::initConnection()
         parent()->panel()->update();
     });
 
+    // 此时屏幕的显示器信息已经更新到m_mtrInfo中，需要根据这些信息顺序更新任务栏的以下信息：
+    //1、屏幕停靠信息，
+    //2、任务栏当前显示在哪个屏幕也需要更新
+    //2、监视任务栏唤醒区域信息，
+    //3、任务栏高度或宽度调整的拖拽区域，
+    //4、通知窗管的任务栏显示区域信息，
+    //5、通知后端的任务栏显示区域信息
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, [ = ] {
         // 更新屏幕停靠信息
         updateMonitorDockedInfo();
         // 更新所在屏幕
         resetDockScreen();
-        // 更新任务栏自身信息
-        /**
-          *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
-          */
-        parent()->setFixedSize(dockRect(m_ds.current()).size());
-        parent()->setGeometry(dockRect(m_ds.current()));
-        parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
-        parent()->panel()->move(0, 0);
         // 通知后端
         emit requestUpdateFrontendGeometry();
         // 拖拽区域
@@ -1254,14 +1253,15 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     // 查找主屏
     QString primaryName;
     foreach (auto monitor, monitorList) {
-        if (monitor->name() == qApp->primaryScreen()->name()) {
+        if (monitor->name() == m_ds.primary()) {
             primaryName = monitor->name();
             break;
         }
     }
 
     if (primaryName.isEmpty()) {
-        qDebug() << "cannnot find primary screen";
+        qDebug() << "cannnot find primary screen, wait for 3s to update...";
+        QTimer::singleShot(3000, this, &MultiScreenWorker::requestUpdateMonitorInfo);
         return QString();
     }
 
@@ -1304,6 +1304,15 @@ void MultiScreenWorker::resetDockScreen()
             }
         }
     }
+
+    // 更新任务栏自身信息
+    /**
+      *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
+      */
+    parent()->setFixedSize(dockRect(m_ds.current()).size());
+    parent()->setGeometry(dockRect(m_ds.current()));
+    parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
+    parent()->panel()->move(0, 0);
 }
 
 void MultiScreenWorker::checkDaemonDockService()
@@ -1620,16 +1629,6 @@ QScreen *MultiScreenWorker::screenByName(const QString &screenName)
     return nullptr;
 }
 
-qreal MultiScreenWorker::scaleByName(const QString &screenName)
-{
-    foreach (auto screen, qApp->screens()) {
-        if (screen->name() == screenName)
-            return screen->devicePixelRatio();
-    }
-
-    return qApp->devicePixelRatio();;
-}
-
 bool MultiScreenWorker::onScreenEdge(const QString &screenName, const QPoint &point)
 {
     bool ret = false;
@@ -1688,16 +1687,6 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
            (scaledPos - screen->geometry().topLeft()) *
            screen->devicePixelRatio()
            : scaledPos;
-}
-
-const QPoint MultiScreenWorker::scaledPos(const QPoint &rawXPos)
-{
-    QScreen const *screen = Utils::screenAt(rawXPos);
-
-    return screen
-           ? screen->geometry().topLeft() +
-           (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-           : rawXPos;
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)

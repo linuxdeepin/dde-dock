@@ -58,21 +58,6 @@ inline QScreen * screenAt(const QPoint &point) {
     return nullptr;
 }
 
-//　判断坐标是否位于屏幕边缘
-//!!! 注意:这里传入的QPoint是未计算缩放的
-inline bool onScreenEdge(const QPoint &point) {
-    for (QScreen *screen : qApp->screens()) {
-        const QRect r { screen->geometry() };
-        QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
-        if ( point.y() == screen->geometry().y()+screen->geometry().height()
-             || point.x() == screen->geometry().x()+screen->geometry().width()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 //!!! 注意:这里传入的QPoint是未计算缩放的
 inline QScreen * screenAtByScaled(const QPoint &point) {
     for (QScreen *screen : qApp->screens()) {

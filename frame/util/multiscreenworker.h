@@ -433,13 +433,11 @@ private:
 
     Monitor *monitorByName(const QList<Monitor *> &list, const QString &screenName);
     QScreen *screenByName(const QString &screenName);
-    qreal scaleByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     bool onScreenEdge(const QPoint &point);
     bool contains(const MonitRect &rect, const QPoint &pos);
     bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
-    const QPoint scaledPos(const QPoint &rawXPos);
 
 private:
     QWidget *m_parent;
