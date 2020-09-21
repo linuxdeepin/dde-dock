@@ -267,17 +267,16 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
         hidePopup();
     }
 
-    QWidget *const applet = trayPopupApplet();
-    if (!applet) {
-        m_appletOpen = false;
-        return;
-    }
-
     if (!m_appletOpen) {
-        showPopupApplet(trayPopupApplet());
+        QWidget *const applet = trayPopupApplet();
+        if (!applet) {
+            return;
+        }
+        showPopupApplet(applet);
         m_appletOpen = true;
-    } else
+    } else {
         m_appletOpen = false;
+    }
 
     AbstractTrayWidget::mouseReleaseEvent(event);
 }
