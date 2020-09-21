@@ -27,7 +27,6 @@ import (
 	"strings"
 
 	dbus "github.com/godbus/dbus"
-	"pkg.deepin.io/dde/daemon/bin/backlight_helper/ddcci"
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/log"
 )
@@ -45,7 +44,7 @@ const (
 
 type Manager struct {
 	service *dbusutil.Service
-	methods *struct {		//nolint
+	methods *struct { //nolint
 		SetBrightness func() `in:"type,name,value"`
 	}
 }
@@ -109,16 +108,6 @@ func main() {
 	err = service.Export(dbusPath, m)
 	if err != nil {
 		logger.Fatal("failed to export:", err)
-	}
-
-	ddcciManager, err := ddcci.NewManager()
-	if err != nil {
-		logger.Warning(err)
-	} else {
-		err = service.Export(ddcci.DbusPath, ddcciManager)
-		if err != nil {
-			logger.Warning("failed to export:", err)
-		}
 	}
 
 	err = service.RequestName(dbusServiceName)
