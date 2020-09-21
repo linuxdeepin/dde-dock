@@ -182,6 +182,29 @@ func (m *Manager) init() {
 		logger.Error("connect TouchEdgeMoveStopLeave failed:", err)
 	}
 
+	_, err = m.gesture.ConnectTouchEdgeEvent(func(direction string, scaleX float64, scaleY float64) {
+		m.mu.RLock()
+		defer m.mu.RUnlock()
+		// 多用户存在，防止非当前用户响应触摸屏手势
+		currentSessionPath, err := m.sessionmanager.CurrentSessionPath().Get(0)
+		if err != nil {
+			logger.Error("get login1 session path failed:", err)
+			return
+		}
+		if !m.enabled || !isSessionActive(currentSessionPath) {
+			logger.Debug("Gesture had been disabled or session inactive")
+			return
+		}
+
+		err = m.handleTouchEdgeEvent(direction, scaleX, scaleY)
+		if err != nil {
+			logger.Error("handleTouchEdgeEvent failed:", err)
+		}
+	})
+	if err != nil {
+		logger.Error("connect handleTouchEdgeEvent failed:", err)
+	}
+
 	m.listenGSettingsChanged()
 }
 
@@ -310,6 +333,35 @@ func (m *Manager) handleTouchEdgeMoveStopLeave(edge string, scaleX float64, scal
 			if screenHeight > 0 && float64(dockPly)/float64(screenHeight)+scaleY < 1 {
 				return m.handleBuiltinAction("ShowWorkspace")
 			}
+		}
+	}
+	return nil
+}
+
+func (m *Manager) handleTouchEdgeEvent(edge string, scaleX float64, scaleY float64) error {
+	var cmd = ""
+	screenWight, err := m.display.ScreenWidth().Get(0)
+	if err != nil {
+		logger.Error("get display.ScreenWidth failed:", err)
+		return err
+	}
+
+	if edge == "left" {
+		if scaleX * float64(screenWight) > 100 {
+			cmd = "xdotool key ctrl+alt+v"
+		}
+	}
+
+	if edge == "right" {
+		if (1 - scaleX) * float64(screenWight) > 100 {
+			cmd = "dbus-send --type=method_call --dest=com.deepin.dde.osd /org/freedesktop/Notifications com.deepin.dde.Notification.Toggle"
+		}
+	}
+
+	if len(cmd) != 0 {
+		out, err := exec.Command("/bin/sh", "-c", cmd).CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("%s", string(out))
 		}
 	}
 	return nil
