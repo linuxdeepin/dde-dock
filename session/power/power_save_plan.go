@@ -20,12 +20,16 @@
 package power
 
 import (
+	"encoding/json"
 	"errors"
 	"math"
 	"os"
 	"strings"
 	"sync"
 	"time"
+
+	gio "pkg.deepin.io/gir/gio-2.0"
+	"pkg.deepin.io/lib/dbusutil/gsprop"
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
@@ -52,13 +56,17 @@ type powerSavePlan struct {
 	atomNetWMStateFullscreen    x.Atom
 	atomNetWMStateFocused       x.Atom
 	fullscreenWorkaroundAppList []string
-	enableSaveModeTime          time.Time
-	setBrightnessTime           time.Time
+
+	brightnessSave         gsprop.String
+	multiBrightnessWithPsm *multiBrightnessWithPsm
+	psmEnabledTime         time.Time
 }
 
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
 	p := new(powerSavePlan)
 	p.manager = manager
+	p.multiBrightnessWithPsm = newMultiBrightnessWithPsm()
+	p.initMultiBrightnessWithPsm()
 
 	conn := manager.helper.xConn
 	var err error
@@ -136,6 +144,9 @@ func (psp *powerSavePlan) Start() error {
 	psp.Reset()
 	psp.initSettingsChangedHandler()
 
+	gs := gio.NewSettings(gsSchemaPower)
+	psp.brightnessSave.Bind(gs, settingKeySaveBrightnessWhilePsm)
+
 	helper := psp.manager.helper
 	power := helper.Power
 	display := helper.Display
@@ -163,7 +174,7 @@ func (psp *powerSavePlan) Start() error {
 	if err != nil {
 		logger.Warning("failed to ConnectIdleOff:", err)
 	}
-	err = display.Brightness().ConnectChanged(psp.saveSetBrightnessTime)
+	err = display.Brightness().ConnectChanged(psp.handleBrightnessPropertyChanged)
 	if err != nil {
 		logger.Warning("failed to connectChanged Brightness:", err)
 	}
@@ -211,10 +222,9 @@ func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasV
 		// adjust brightness by lowerBrightnessScale
 		var unSavingModeBrightness float64
 		// 判断亮度修改是手动调节亮度还是调节了节能选项
-		brightnessChangedByManual := psp.isBrightnessChangedByManual()
 		lowerBrightnessScale := 1 - newLowerBrightnessScale/100
 		for key, value := range brightnessTable { // 反求未节能时的亮度
-			if !brightnessChangedByManual {
+			if !psp.multiBrightnessWithPsm.isManuallyModified(key) {
 				unSavingModeBrightness = value / (1 - oldLowerBrightnessScale/100)
 				if unSavingModeBrightness > 1 {
 					unSavingModeBrightness = 1
@@ -228,9 +238,8 @@ func (psp *powerSavePlan) handlePowerSavingModeBrightnessDropPercentChanged(hasV
 				value = 0.1
 			}
 			brightnessTable[key] = value
-			psp.mu.Lock()
-			psp.enableSaveModeTime = time.Now()
-			psp.mu.Unlock()
+
+			psp.psmEnabledTime = time.Now()
 		}
 	} else {
 		//else中(非节能状态下的调节)不需要做响应,需要降低亮度的预设值在之前已经保存了
@@ -272,7 +281,6 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 	// 判断亮度调节方式是分级调节还是百分比滑动：最大亮度小于100且最大亮度不为0时，为分级调节
 	isMultiLevelAdjustment := maxBacklightBrightness < multiLevelAdjustmentThreshold && maxBacklightBrightness != 0
 	// 判断亮度修改是手动调节亮度还是调节了节能选项
-	brightnessChangedByManual := psp.isBrightnessChangedByManual()
 	lowerBrightnessScale := 1 - float64(psp.manager.savingModeBrightnessDropPercent.Get())/100
 	oneStepValue := 1 / float64(maxBacklightBrightness)
 	numSteps := math.Round(float64(maxBacklightBrightness) * multiLevelAdjustmentScale)
@@ -294,31 +302,19 @@ func (psp *powerSavePlan) handlePowerSavingModeChanged(hasValue bool, enabled bo
 			}
 			brightnessTable[key] = value
 		}
-		psp.mu.Lock()
-		psp.enableSaveModeTime = time.Now()
-		psp.mu.Unlock()
+
+		psp.multiBrightnessWithPsm.init()
+		psp.setBrightnessFromDisplay()
+		psp.multiBrightnessWithPsm.mapToObject()
+		psp.setToBrightnessSave()
+		psp.psmEnabledTime = time.Now()
 	} else {
-		if !brightnessChangedByManual {
-			logger.Debug("not manual adjust brightness")
-			// increase brightness when disabled saveMode
-			for key, value := range brightnessTable {
-				if isMultiLevelAdjustment {
-					// 分级调节,加上需要提升的亮度
-					value += oneStepValue * numSteps
-				} else {
-					// 非分级调节
-					value /= lowerBrightnessScale
-				}
-				if value > 1 {
-					value = 1
-				}
-				brightnessTable[key] = value
+		for _, val := range psp.multiBrightnessWithPsm.MultiBrightness {
+			if !val.ManuallyModified {
+				brightnessTable[val.MonitorName] = val.Brightness
 			}
-		} else {
-			logger.Debug("manual adjust brightness")
-			return
-			// brightnessTable不变
 		}
+		psp.brightnessSave.Set("")
 	}
 	psp.manager.setAndSaveDisplayBrightness(brightnessTable)
 }
@@ -342,14 +338,6 @@ func (psp *powerSavePlan) addTask(t *delayedTask) {
 	psp.mu.Lock()
 	psp.addTaskNoLock(t)
 	psp.mu.Unlock()
-}
-
-func (psp *powerSavePlan) isBrightnessChangedByManual() bool {
-	const interval = 2 * time.Second
-	psp.mu.Lock()
-	defer psp.mu.Unlock()
-
-	return psp.setBrightnessTime.Sub(psp.enableSaveModeTime) > interval
 }
 
 type metaTask struct {
@@ -693,11 +681,134 @@ func (psp *powerSavePlan) isWindowFullScreenAndFocused(xid x.Window) (bool, erro
 	return false, nil
 }
 
-func (psp *powerSavePlan) saveSetBrightnessTime(value bool, value2 map[string]float64) {
+func (psp *powerSavePlan) setBrightnessFromDisplay() {
+	d := psp.manager.helper.Display
+	var err error
+	psp.multiBrightnessWithPsm.valueTmp, err = d.Brightness().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+}
+
+func (psp *powerSavePlan) initMultiBrightnessWithPsm() {
+	b := psp.brightnessSave.Get()
+
+	err := psp.multiBrightnessWithPsm.toObject(b)
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	psp.setBrightnessFromDisplay()
+}
+
+func (psp *powerSavePlan) setToBrightnessSave() {
+	data, err := psp.multiBrightnessWithPsm.toString()
+	if err != nil {
+		logger.Warning(err)
+	}
+	psp.brightnessSave.Set(data)
+}
+
+func (psp *powerSavePlan) handleBrightnessPropertyChanged(value bool, value2 map[string]float64) {
 	if !value {
 		return
 	}
-	psp.mu.Lock()
-	psp.setBrightnessTime = time.Now()
-	psp.mu.Unlock()
+
+	p := psp.manager.helper.Power
+	psmEnabled, err := p.PowerSavingModeEnabled().Get(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if psmEnabled {
+		if time.Now().Sub(psp.psmEnabledTime) < time.Second*2 {
+			psp.multiBrightnessWithPsm.valueTmp = value2
+			return
+		}
+
+		changed := psp.multiBrightnessWithPsm.checkBrightnessChanged(value2)
+		if changed {
+			psp.setToBrightnessSave()
+		}
+	}
+}
+
+type brightnessWithPsp struct {
+	MonitorName      string
+	Brightness       float64
+	ManuallyModified bool
+}
+
+type multiBrightnessWithPsm struct {
+	MultiBrightness []brightnessWithPsp
+	valueTmp        map[string]float64
+}
+
+func newMultiBrightnessWithPsm() *multiBrightnessWithPsm {
+	return &multiBrightnessWithPsm{valueTmp: make(map[string]float64)}
+}
+
+func (mb *multiBrightnessWithPsm) init() {
+	mb.MultiBrightness = mb.MultiBrightness[:0]
+}
+
+func (mb *multiBrightnessWithPsm) setBrightnessManuallyModified(name string, m bool) {
+	for i, b := range mb.MultiBrightness {
+		if b.MonitorName == name {
+			mb.MultiBrightness[i].ManuallyModified = m
+			break
+		}
+	}
+}
+
+func (mb *multiBrightnessWithPsm) checkBrightnessChanged(data map[string]float64) bool {
+	var changed bool
+	for k, v := range data {
+		if vTmp, ok := mb.valueTmp[k]; ok {
+			if !isFloatEqual(v, vTmp) {
+				changed = true
+				mb.setBrightnessManuallyModified(k, true)
+			}
+		}
+	}
+
+	mb.valueTmp = data
+	return changed
+}
+
+func (mb *multiBrightnessWithPsm) toString() (string, error) {
+	bytes, err := json.Marshal(mb.MultiBrightness)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
+
+func (mb *multiBrightnessWithPsm) toObject(b string) error {
+	if b == "" {
+		return nil
+	}
+	err := json.Unmarshal([]byte(b), &mb.MultiBrightness)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mb *multiBrightnessWithPsm) mapToObject() {
+	for k, v := range mb.valueTmp {
+		mb.MultiBrightness = append(mb.MultiBrightness, brightnessWithPsp{MonitorName: k, Brightness: v})
+	}
+}
+
+func (mb *multiBrightnessWithPsm) isManuallyModified(key string) bool {
+	for _, v := range mb.MultiBrightness {
+		if v.MonitorName == key {
+			return v.ManuallyModified
+		}
+	}
+	return false
 }

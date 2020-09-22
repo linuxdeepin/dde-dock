@@ -20,6 +20,7 @@
 package power
 
 import (
+	"math"
 	"os"
 	"os/exec"
 	"time"
@@ -398,4 +399,8 @@ func getPowerActionString(action int32) string {
 		return Tr("it will do nothing to your computer")
 	}
 	return ""
+}
+
+func isFloatEqual(f1, f2 float64) bool {
+	return math.Abs(f1-f2) < 1e-6
 }
