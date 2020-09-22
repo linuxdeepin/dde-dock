@@ -199,6 +199,9 @@ void MainWindow::moveEvent(QMoveEvent *event)
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
+    // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
+    Q_EMIT panelGeometryChanged();
+
     adjustShadowMask();
 
     return DBlurEffectWidget::resizeEvent(event);
