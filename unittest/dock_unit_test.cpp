@@ -320,6 +320,55 @@ void DockUnitTest::dock_appIconSize_check()
     QCOMPARE(iconSize, setting->get("icon-size").toUInt());
 }
 
+/**
+ * @brief dock_appDockUndock_check
+ * 取靠近启动器的应用区域的第一个应用,先 undock ,然后 dock 进行检测
+ */
+void DockUnitTest::dock_appDockUndock_check()
+{
+    const QString service_name = "com.deepin.dde.daemon.Dock";
+    const QString dock_path = "/com/deepin/dde/daemon/Dock";
+
+    DBusDock dockInter(service_name, dock_path, QDBusConnection::sessionBus(), this);
+
+    // get all desktopfiles and entries
+    QStringList appDesktopFiles=dockInter.GetDockedAppsDesktopFiles();
+    QList<QDBusObjectPath> appEntries = dockInter.entries();
+
+    if (appEntries.size() == 0) {
+        qDebug() << "at least one app on the dock !";
+        return;
+    }
+
+    int appIndex = 0; // location in the dock (start with 0)
+    const QString appDockPath = appEntries[appIndex].path();
+
+    // get DesktopFile
+    QDBusInterface appPropertyInter(service_name,appDockPath, "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), this);
+    QDBusInterface appSlotInter(service_name,appDockPath, "com.deepin.dde.daemon.Dock.Entry", QDBusConnection::sessionBus(), this);
+
+    QDBusReply<QVariant> replyDesktopFile = appPropertyInter.call("Get", "com.deepin.dde.daemon.Dock.Entry", "DesktopFile");
+    QString desktopFile = QVariant(replyDesktopFile).toString(); // desktopFile
+
+    // ForceQuit
+     QDBusReply<void> replyQuit = appSlotInter.call("ForceQuit");
+
+    // Undock app
+    appSlotInter.call("RequestUndock");
+    QThread::sleep(1);
+
+    // check if app still dock
+    appDesktopFiles=dockInter.GetDockedAppsDesktopFiles();
+    QCOMPARE(appDesktopFiles.contains(desktopFile), false);
+
+    // dock app
+    dockInter.RequestDock(desktopFile, appIndex);
+    QThread::msleep(100); // must
+
+    // check if app is docked
+    QCOMPARE(dockInter.IsDocked(desktopFile), true);
+}
+
 QTEST_APPLESS_MAIN(DockUnitTest)
 
 #include "dock_unit_test.moc"

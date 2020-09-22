@@ -56,6 +56,7 @@ private slots:
     void dock_multi_process(); // 检查是否正常启动
     void dock_coreDump_check();     // dock是否一直崩溃
     void dock_appIconSize_check();                              // 图标大小检查
+    void dock_appDockUndock_check(); // 任务栏上的应用移除和加载检测
 };
 
 #endif // DOCK_UNIT_TEST_H
