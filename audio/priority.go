@@ -29,6 +29,8 @@ type Priorities struct {
 	InputInstancePriority  []*PortToken
 }
 
+type Skipper func(cardName string, portName string) bool
+
 var (
 	priorities               = NewPriorities()
 	globalPrioritiesFilePath = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/priorities.json")
@@ -271,6 +273,15 @@ func (pr *Priorities) GetFirstInput() (string, string) {
 	}
 }
 
+func (pr *Priorities) GetFirstInputSkip(skipper Skipper) (string, string) {
+	for _, port := range pr.InputInstancePriority {
+		if !skipper(port.CardName, port.CardName) {
+			return port.CardName, port.CardName
+		}
+	}
+	return "", ""
+}
+
 func (pr *Priorities) GetFirstOutput() (string, string) {
 	if len(pr.OutputInstancePriority) > 0 {
 		port := pr.OutputInstancePriority[0]
@@ -278,6 +289,15 @@ func (pr *Priorities) GetFirstOutput() (string, string) {
 	} else {
 		return "", ""
 	}
+}
+
+func (pr *Priorities) GetFirstOutputSkip(skipper Skipper) (string, string) {
+	for _, port := range pr.OutputInstancePriority {
+		if !skipper(port.CardName, port.CardName) {
+			return port.CardName, port.CardName
+		}
+	}
+	return "", ""
 }
 
 // 这个判断的是 type2 是否在 type1 之后
