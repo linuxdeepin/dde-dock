@@ -97,12 +97,12 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 	// connect property changed signals
 	ap.nmAp.InitSignalExt(m.sysSigLoop, true)
 	_, err = ap.nmAp.AccessPoint().ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
+		m.accessPointsLock.Lock()
+		defer m.accessPointsLock.Unlock()
 		if !m.isAccessPointExists(apPath) {
 			return
 		}
 
-		m.accessPointsLock.Lock()
-		defer m.accessPointsLock.Unlock()
 		ignoredBefore := ap.shouldBeIgnore()
 		ap.updateProps()
 		ignoredNow := ap.shouldBeIgnore()
@@ -139,9 +139,9 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 		logger.Debugf("new access point is ignored %#v", ap)
 	} else {
 		apJSON, _ := marshalJSON(ap)
-		err = m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
-		if err != nil {
-			logger.Warning("failed to emit signal:", err)
+		err1 := m.service.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+		if err1 != nil {
+			logger.Warning("failed to emit signal:", err1)
 		}
 	}
 
@@ -246,11 +246,11 @@ func (m *Manager) initAccessPoints(devPath dbus.ObjectPath, apPaths []dbus.Objec
 }
 
 func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
 	if m.isAccessPointExists(apPath) {
 		return
 	}
-	m.accessPointsLock.Lock()
-	defer m.accessPointsLock.Unlock()
 	ap, err := m.newAccessPoint(devPath, apPath)
 	if err != nil {
 		return
@@ -260,12 +260,12 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 }
 
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
 	if !m.isAccessPointExists(apPath) {
 		return
 	}
 	_, i := m.getAccessPointIndex(apPath)
-	m.accessPointsLock.Lock()
-	defer m.accessPointsLock.Unlock()
 	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
 }
 
@@ -283,8 +283,6 @@ func (m *Manager) isAccessPointExists(apPath dbus.ObjectPath) bool {
 }
 
 func (m *Manager) getAccessPointIndex(apPath dbus.ObjectPath) (devPath dbus.ObjectPath, index int) {
-	m.accessPointsLock.Lock()
-	defer m.accessPointsLock.Unlock()
 	for d, aps := range m.accessPoints {
 		for i, ap := range aps {
 			if ap.Path == apPath {
