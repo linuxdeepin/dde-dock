@@ -93,7 +93,10 @@ type Manager struct {
 	CpuBoost bool
 
 	// 是否支持Boost
-	IsBoostSupported bool
+	IsHighPerformanceSupported bool
+
+	// 当前模式
+	Mode string
 
 	// nolint
 	methods *struct {
@@ -101,6 +104,7 @@ type Manager struct {
 		Debug          func() `in:"cmd"`
 		SetCpuGovernor func() `in:"governor"`
 		SetCpuBoost    func() `in:"enabled"`
+		SetMode        func() `in:"mode"`
 	}
 
 	// nolint
@@ -207,6 +211,7 @@ func (m *Manager) init() error {
 	m.PowerSavingModeAuto = cfg.PowerSavingModeAuto                                   // 自动切换节能模式，依据为是否插拔电源
 	m.PowerSavingModeAutoWhenBatteryLow = cfg.PowerSavingModeAutoWhenBatteryLow       // 低电量时自动开启
 	m.PowerSavingModeBrightnessDropPercent = cfg.PowerSavingModeBrightnessDropPercent // 开启节能模式时降低亮度的百分比值
+	m.Mode = cfg.Mode
 
 	m.initAC(devices)
 	m.initBatteries(devices)
@@ -220,7 +225,7 @@ func (m *Manager) init() error {
 	m.updatePowerSavingMode()
 
 	var err error
-	m.IsBoostSupported = m.cpus.IsBoostFileExist()
+	m.IsHighPerformanceSupported = m.cpus.IsBoostFileExist()
 	m.CpuBoost, err = m.cpus.GetBoostEnabled()
 	if err != nil {
 		logger.Warning(err)
@@ -385,6 +390,7 @@ type Config struct {
 	PowerSavingModeAuto                  bool
 	PowerSavingModeAutoWhenBatteryLow    bool
 	PowerSavingModeBrightnessDropPercent uint32
+	Mode                                 string
 }
 
 func loadConfig() (*Config, error) {
@@ -414,6 +420,7 @@ func loadConfigSafe() *Config {
 			PowerSavingModeEnabled:               false,
 			PowerSavingModeAutoWhenBatteryLow:    false,
 			PowerSavingModeBrightnessDropPercent: 20,
+			Mode:                                 "balance",
 		}
 	}
 	// 新增字段后第一次启动时,缺少两个新增字段的json,导致亮度下降百分比字段默认为0,导致与默认值不符,需要处理
@@ -421,6 +428,10 @@ func loadConfigSafe() *Config {
 	// 正常情况下该字段范围为10-40,只有在该情况下会出现0的可能
 	if cfg.PowerSavingModeBrightnessDropPercent == 0 {
 		cfg.PowerSavingModeBrightnessDropPercent = 20
+	}
+
+	if cfg.Mode == "" {
+		cfg.Mode = "balance"
 	}
 	return cfg
 }
@@ -434,6 +445,7 @@ func (m *Manager) saveConfig() error {
 	cfg.PowerSavingModeEnabled = m.PowerSavingModeEnabled
 	cfg.PowerSavingModeAutoWhenBatteryLow = m.PowerSavingModeAutoWhenBatteryLow
 	cfg.PowerSavingModeBrightnessDropPercent = m.PowerSavingModeBrightnessDropPercent
+	cfg.Mode = m.Mode
 	m.PropsMu.RUnlock()
 
 	dir := filepath.Dir(configFile)
@@ -447,4 +459,63 @@ func (m *Manager) saveConfig() error {
 		return err
 	}
 	return ioutil.WriteFile(configFile, content, 0644)
+}
+
+func (m *Manager) doSetMode(mode string) error {
+	var err error
+	switch mode {
+	case "balance": // governor=performance boost=false
+		m.setPropPowerSavingModeEnabled(false)
+		if m.isCpuGovernorSupported() {
+			err = m.doSetCpuGovernor("performance")
+		}
+		if err == nil && m.IsHighPerformanceSupported {
+			err = m.doSetCpuBoost(false)
+		}
+	case "powersave": // governor=powersave boost=false
+		m.setPropPowerSavingModeEnabled(true)
+		if m.isCpuGovernorSupported() {
+			err = m.doSetCpuGovernor("powersave")
+		}
+		if err == nil && m.IsHighPerformanceSupported {
+			err = m.doSetCpuBoost(false)
+		}
+	case "performance": // governor=performance boost=true
+		if !m.IsHighPerformanceSupported {
+			err = dbusutil.MakeErrorf(m, "PowerMode", "%q mode is not supported", mode)
+			break
+		}
+		if m.isCpuGovernorSupported() {
+			m.setPropPowerSavingModeEnabled(false)
+		}
+		err = m.doSetCpuGovernor("performance")
+		if err == nil {
+			err = m.doSetCpuBoost(true)
+		}
+
+	default:
+		err = dbusutil.MakeErrorf(m, "PowerMode", "%q mode is not supported", mode)
+	}
+
+	return err
+}
+
+func (m *Manager) isCpuGovernorSupported() bool {
+	return len(*m.cpus) > 0
+}
+
+func (m *Manager) doSetCpuBoost(enabled bool) error {
+	err := m.cpus.SetBoostEnabled(enabled)
+	if err == nil {
+		m.setPropCpuBoost(enabled)
+	}
+	return err
+}
+
+func (m *Manager) doSetCpuGovernor(governor string) error {
+	err := m.cpus.SetGovernor(governor)
+	if err == nil {
+		m.setPropCpuGovernor(governor)
+	}
+	return err
 }

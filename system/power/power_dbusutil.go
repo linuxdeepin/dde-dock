@@ -162,6 +162,58 @@ func (v *Manager) emitPropChangedPowerSavingModeBrightnessDropPercent(value uint
 	return v.service.EmitPropertyChanged(v, "PowerSavingModeBrightnessDropPercent", value)
 }
 
+func (v *Manager) setPropCpuGovernor(value string) (changed bool) {
+	if v.CpuGovernor != value {
+		v.CpuGovernor = value
+		v.emitPropChangedCpuGovernor(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedCpuGovernor(value string) error {
+	return v.service.EmitPropertyChanged(v, "CpuGovernor", value)
+}
+
+func (v *Manager) setPropCpuBoost(value bool) (changed bool) {
+	if v.CpuBoost != value {
+		v.CpuBoost = value
+		v.emitPropChangedCpuBoost(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedCpuBoost(value bool) error {
+	return v.service.EmitPropertyChanged(v, "CpuBoost", value)
+}
+
+func (v *Manager) setPropIsHighPerformanceSupported(value bool) (changed bool) {
+	if v.IsHighPerformanceSupported != value {
+		v.IsHighPerformanceSupported = value
+		v.emitPropChangedIsHighPerformanceSupported(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedIsHighPerformanceSupported(value bool) error {
+	return v.service.EmitPropertyChanged(v, "IsHighPerformanceSupported", value)
+}
+
+func (v *Manager) setPropMode(value string) (changed bool) {
+	if v.Mode != value {
+		v.Mode = value
+		v.emitPropChangedMode(value)
+		return true
+	}
+	return false
+}
+
+func (v *Manager) emitPropChangedMode(value string) error {
+	return v.service.EmitPropertyChanged(v, "Mode", value)
+}
+
 func (v *Battery) setPropSysfsPath(value string) (changed bool) {
 	if v.SysfsPath != value {
 		v.SysfsPath = value

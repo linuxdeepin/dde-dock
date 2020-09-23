@@ -92,7 +92,7 @@ func (m *Manager) Refresh() *dbus.Error {
 func (m *Manager) SetCpuBoost(enabled bool) *dbus.Error {
 	err := m.cpus.SetBoostEnabled(enabled)
 	if err == nil {
-		m.CpuBoost = enabled
+		m.setPropCpuBoost(enabled)
 	}
 	return dbusutil.ToError(err)
 }
@@ -100,7 +100,18 @@ func (m *Manager) SetCpuBoost(enabled bool) *dbus.Error {
 func (m *Manager) SetCpuGovernor(governor string) *dbus.Error {
 	err := m.cpus.SetGovernor(governor)
 	if err == nil {
-		m.CpuGovernor = governor
+		m.setPropCpuGovernor(governor)
 	}
+	return dbusutil.ToError(err)
+}
+
+func (m *Manager) SetMode(mode string) *dbus.Error {
+	err := m.doSetMode(mode)
+	if err == nil {
+		m.setPropMode(mode)
+		err = m.saveConfig()
+	}
+
+	logger.Warning(err)
 	return dbusutil.ToError(err)
 }

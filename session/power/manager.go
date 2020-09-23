@@ -20,7 +20,6 @@
 package power
 
 import (
-	"fmt"
 	"os"
 	"sync"
 	"syscall"
@@ -135,13 +134,9 @@ type Manager struct {
 	// 是否支持高性能模式
 	IsHighPerformanceSupported bool
 
-	// 当前模式
-	Mode gsprop.String
-
 	// nolint
 	methods *struct {
 		SetPrepareSuspend func() `in:"suspendState"`
-		SetMode           func() `in:"mode"`
 	}
 }
 
@@ -171,7 +166,6 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	m.settings = gio.NewSettings(gsSchemaPower)
 	m.warnLevelConfig = NewWarnLevelConfigManager(m.settings)
 
-	m.Mode.Bind(m.settings, settingKeyMode)
 	m.LinePowerScreensaverDelay.Bind(m.settings, settingKeyLinePowerScreensaverDelay)
 	m.LinePowerScreenBlackDelay.Bind(m.settings, settingKeyLinePowerScreenBlackDelay)
 	m.LinePowerSleepDelay.Bind(m.settings, settingKeyLinePowerSleepDelay)
@@ -228,10 +222,6 @@ func newManager(service *dbusutil.Service) (*Manager, error) {
 	// 初始化电源模式
 	m.systemPower = systemPower.NewPower(systemBus)
 	m.IsHighPerformanceSupported, err = m.systemPower.IsBoostSupported().Get(0)
-	if err != nil {
-		logger.Warning(err)
-	}
-	err = m.doSetMode(m.Mode.Get())
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -423,58 +413,4 @@ func (m *Manager) permitLogind() {
 func (m *Manager) SetPrepareSuspend(v int) *dbus.Error {
 	m.setPrepareSuspend(v)
 	return nil
-}
-
-func (m *Manager) doSetMode(mode string) error {
-	var err error
-	switch mode {
-	case "balance": // governor=performance boost=false
-		err = m.systemPower.PowerSavingModeEnabled().Set(0, false)
-		if err == nil {
-			err = m.systemPower.SetCpuGovernor(0, "performance")
-		}
-		if err == nil && m.IsHighPerformanceSupported {
-			err = m.systemPower.SetCpuBoost(0, false)
-		}
-	case "powersave": // governor=powersave boost=false
-		err = m.systemPower.PowerSavingModeEnabled().Set(0, true)
-		if err == nil {
-			err = m.systemPower.SetCpuGovernor(0, "powersave")
-		}
-		if err == nil && m.IsHighPerformanceSupported {
-			err = m.systemPower.SetCpuBoost(0, false)
-		}
-	case "performance": // governor=performance boost=true
-		if !m.IsHighPerformanceSupported {
-			err = fmt.Errorf("%q mode is not supported", mode)
-			break
-		}
-		err = m.systemPower.PowerSavingModeEnabled().Set(0, false)
-		if err == nil {
-			err = m.systemPower.SetCpuGovernor(0, "performance")
-		}
-		if err == nil {
-			err = m.systemPower.SetCpuBoost(0, true)
-		}
-
-	default:
-		err = fmt.Errorf("%q mode is not supported", mode)
-	}
-
-	return err
-}
-
-func (m *Manager) SetMode(mode string) *dbus.Error {
-	err := m.doSetMode(mode)
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	m.Mode.Set(mode)
-	err = m.service.EmitPropertyChanged(m, "Mode", mode)
-	if err != nil {
-		logger.Warning(err)
-	}
-
-	return dbusutil.ToError(err)
 }

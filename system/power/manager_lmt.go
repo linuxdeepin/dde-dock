@@ -23,11 +23,6 @@ const (
 
 const lowBatteryThreshold = 20.0
 
-const (
-	sessionPowerBus     = "com.deepin.daemon.Power"
-	sessionPowerBusPath = "/com/deepin/daemon/Power"
-)
-
 func isLaptopModeBinOk() bool {
 	_, err := os.Stat(laptopModeBin)
 	return err == nil
@@ -238,10 +233,19 @@ func (m *Manager) updatePowerSavingMode() { // 根据用户设置以及当前状
 	} else {
 		return // 未开启两个自动节能开关
 	}
+
 	if enable {
 		logger.Debugf("auto switch to powersave mode")
-		m.switchToPowerSaveMode()
+		err = m.doSetMode("powersave")
+	} else {
+		logger.Debugf("auto switch to balance mode")
+		err = m.doSetMode("balance")
 	}
+
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	logger.Info("updatePowerSavingMode PowerSavingModeEnabled: ", enable)
 	m.PropsMu.Lock()
 	changed := m.setPropPowerSavingModeEnabled(enable)
@@ -264,18 +268,5 @@ func (m *Manager) updatePowerSavingMode() { // 根据用户设置以及当前状
 				logger.Warning(err)
 			}
 		}
-	}
-}
-
-func (m *Manager) switchToPowerSaveMode() {
-	sessionBus, err := dbus.SessionBus()
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	obj := sessionBus.Object(sessionPowerBus, sessionPowerBusPath)
-	err = obj.Call("SetMode", 0, "powersave").Err
-	if err != nil {
-		logger.Warning(err)
 	}
 }
