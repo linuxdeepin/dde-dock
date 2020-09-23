@@ -267,6 +267,8 @@ void DockUnitTest::dock_multi_process()
 /**
  * @brief DockUnitTest::dock_defaultVolume_Check　判断音量实际值是否与默认值是否相等
  * @param defaultVolume 默认音量
+ * 运行此用例时需满足用户未手动修改过声音值这一条件，才能保证得到的是默认值，测试才能通过
+ * 所以最好在新创建的用户，或者是新装的系统时进行测试
  */
 void DockUnitTest::dock_defaultVolume_Check(float defaultVolume)
 {
