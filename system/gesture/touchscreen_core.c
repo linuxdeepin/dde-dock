@@ -271,6 +271,7 @@ void init_move_stop(movement m) {
 	moveStop.x = m.start.x;
     moveStop.y = m.start.y;
     moveStop.start = m.t_start;
+    edge_move_stop_direction = DIR_NONE;
 }
 
 void update_move_stop(movement m) {
