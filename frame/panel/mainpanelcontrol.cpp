@@ -578,7 +578,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             m_appAreaSonWidget->adjustSize();
             resizeDockIcon();
             break;
-        case QEvent::Paint:
+        case QEvent::Resize:
             resizeDockIcon();
             break;
         default:
