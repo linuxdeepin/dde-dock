@@ -4,11 +4,35 @@ import (
 	"regexp"
 	"strings"
 
+	dbus "github.com/godbus/dbus"
+	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/pulse"
 )
 
 func isBluezAudio(name string) bool {
 	return strings.Contains(strings.ToLower(name), "bluez")
+}
+
+func isBluezDeviceValid(bluezPath string) bool {
+	systemBus, err := dbus.SystemBus()
+	if err != nil {
+		logger.Warning("[isDeviceValid] dbus connect failed:", err)
+		return false
+	}
+	bluezDevice, err := bluez.NewDevice(systemBus, dbus.ObjectPath(bluezPath))
+	if err != nil {
+		logger.Warning("[isDeviceValid] new device failed:", err)
+		return false
+	}
+	icon, err := bluezDevice.Icon().Get(0)
+	if err != nil {
+		logger.Warning("[isDeviceValid] get icon failed:", err)
+		return false
+	}
+	if icon == "computer" {
+		return false
+	}
+	return true
 }
 
 func createBluezVirtualCardPorts(ports pulse.CardPortInfos) pulse.CardPortInfos {

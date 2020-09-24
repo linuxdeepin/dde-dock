@@ -26,7 +26,6 @@ import (
 	"time"
 
 	dbus "github.com/godbus/dbus"
-	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/gsettings"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -87,37 +86,6 @@ func (a *Audio) handleStateChanged() {
 	}
 }
 
-func isDeviceValid(deviceName string) bool {
-	if strings.Contains(deviceName, "bluez") {
-		systemBus, err := dbus.SystemBus()
-		if err != nil {
-			logger.Warning("[isDeviceValid] dbus connect failed:", err)
-			return false
-		}
-		nameArray := strings.Split(deviceName, ".")
-		if len(nameArray) < 2 {
-			return false
-		}
-		var path string = "/org/bluez/hci0/dev_" + nameArray[1]
-		bluezDevice, err := bluez.NewDevice(systemBus, dbus.ObjectPath(path))
-		if err != nil {
-			logger.Warning("[isDeviceValid] new device failed:", err)
-			return false
-		}
-		icon, err := bluezDevice.Icon().Get(0)
-		if err != nil {
-			logger.Warning("[isDeviceValid] get icon failed:", err)
-			return false
-		}
-		if icon == "computer" {
-			return false
-		}
-		return true
-	} else {
-		return true
-	}
-}
-
 func (a *Audio) isCardIdValid(cardId uint32) bool {
 	for _, card := range a.cards {
 		if card.Id == cardId {
@@ -135,6 +103,10 @@ func (a *Audio) needAutoSwitchInputPort() bool {
 	cardName, portName := priorities.GetFirstInput()
 	currentCardName := a.getCardNameById(a.defaultSource.Card)
 	currentPortName := a.defaultSource.ActivePort.Name
+
+	if currentCardName == "" || currentPortName == "" {
+		return true
+	}
 
 	if cardName == currentCardName && portName == currentPortName {
 		return false
@@ -154,6 +126,10 @@ func (a *Audio) needAutoSwitchOutputPort() bool {
 	currentCardName := a.getCardNameById(a.defaultSink.Card)
 	currentPortName := a.defaultSink.ActivePort.Name
 
+	if currentCardName == "" || currentPortName == "" {
+		return true
+	}
+
 	if cardName == currentCardName && portName == currentPortName {
 		return false
 	}
@@ -164,13 +140,45 @@ func (a *Audio) needAutoSwitchOutputPort() bool {
 }
 
 func (a *Audio) autoSwitchPort() {
+	// 用于输出为a2dp时，输入跳过headset
+	outputCardName := ""
+	outputPortName := ""
+	outputCard, err := a.cards.get(a.defaultSink.Card)
+	if err == nil {
+		outputCardName = outputCard.core.Name
+		outputPortName = a.defaultSink.ActivePort.Name
+	} else {
+		logger.Warning(err)
+	}
+
+	if a.needAutoSwitchOutputPort() {
+		cardName, portName := priorities.GetFirstOutput()
+		if cardName != "" && portName != "" {
+			logger.Debugf("output port auto switch to %s %s", cardName, portName)
+			card, err := a.cards.getByName(cardName)
+			if err == nil {
+				err = a.setPort(card.Id, portName, pulse.DirectionSink)
+			}
+			if err != nil {
+				logger.Warning(err)
+			} else {
+				outputCardName = cardName
+				outputPortName = portName
+			}
+		} else {
+			logger.Debugf("no output port")
+		}
+	} else {
+		logger.Debug("need not to switch output port")
+	}
+
 	if a.needAutoSwitchInputPort() {
 		cardName, portName := priorities.GetFirstInputSkip(func(cardName, portName string) bool {
 			// 当输出使用a2dp时，输入跳过headset
-			outputCard, err := a.cards.get(a.defaultSink.Card)
+			logger.Debugf("outputCard %s ", outputCard.core.Name)
 			return err == nil &&
-				cardName == outputCard.Name &&
-				strings.Contains(a.defaultSink.ActivePort.Name, "a2dp") &&
+				cardName == outputCardName &&
+				strings.Contains(outputPortName, "a2dp") &&
 				strings.Contains(portName, "headset")
 		})
 		if cardName != "" && portName != "" {
@@ -185,22 +193,8 @@ func (a *Audio) autoSwitchPort() {
 		} else {
 			logger.Debugf("no input port")
 		}
-	}
-
-	if a.needAutoSwitchOutputPort() {
-		cardName, portName := priorities.GetFirstOutput()
-		if cardName != "" && portName != "" {
-			logger.Debugf("output port auto switch to %s %s", cardName, portName)
-			card, err := a.cards.getByName(cardName)
-			if err == nil {
-				err = a.setPort(card.Id, portName, pulse.DirectionSink)
-			}
-			if err != nil {
-				logger.Warning(err)
-			}
-		} else {
-			logger.Debugf("no output port")
-		}
+	} else {
+		logger.Debug("need not to switch input port")
 	}
 }
 
@@ -212,7 +206,7 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
-		if !isDeviceValid(cardInfo.Name) {
+		if isBluezAudio(cardInfo.Name) && !isBluezDeviceValid(cardInfo.PropList["bluez.path"]) {
 			return
 		}
 		logger.Debugf("[Event] card #%d added %s", idx, cardInfo.Name)
@@ -286,7 +280,7 @@ func (a *Audio) handleCardEvent(eventType int, idx uint32) {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
-		if !isDeviceValid(cardInfo.Name) {
+		if isBluezAudio(cardInfo.Name) && !isBluezDeviceValid(cardInfo.PropList["bluez.path"]) {
 			return
 		}
 		logger.Debugf("[Event] card #%d changed %s", idx, cardInfo.Name)
@@ -351,7 +345,7 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		if !isPhysicalDevice(sinkInfo.Name) {
 			return
 		}
-		if !isDeviceValid(sinkInfo.Name) {
+		if isBluezAudio(sinkInfo.Name) && !isBluezDeviceValid(sinkInfo.PropList["bluez.path"]) {
 			return
 		}
 		a.mu.Lock()
@@ -389,7 +383,7 @@ func (a *Audio) handleSinkEvent(eventType int, idx uint32) {
 		if !isPhysicalDevice(sinkInfo.Name) {
 			return
 		}
-		if !isDeviceValid(sinkInfo.Name) {
+		if isBluezAudio(sinkInfo.Name) && !isBluezDeviceValid(sinkInfo.PropList["bluez.path"]) {
 			return
 		}
 		a.mu.Lock()
@@ -571,7 +565,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		if !isPhysicalDevice(sourceInfo.Name) {
 			return
 		}
-		if !isDeviceValid(sourceInfo.Name) {
+		if isBluezAudio(sourceInfo.Name) && !isBluezDeviceValid(sourceInfo.Proplist["bluez.path"]) {
 			return
 		}
 		a.mu.Lock()
@@ -626,7 +620,7 @@ func (a *Audio) handleSourceEvent(eventType int, idx uint32) {
 		if !isPhysicalDevice(sourceInfo.Name) {
 			return
 		}
-		if !isDeviceValid(sourceInfo.Name) {
+		if isBluezAudio(sourceInfo.Name) && !isBluezDeviceValid(sourceInfo.Proplist["bluez.path"]) {
 			return
 		}
 		a.mu.Lock()

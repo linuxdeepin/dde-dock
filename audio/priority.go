@@ -275,9 +275,11 @@ func (pr *Priorities) GetFirstInput() (string, string) {
 
 func (pr *Priorities) GetFirstInputSkip(skipper Skipper) (string, string) {
 	for _, port := range pr.InputInstancePriority {
-		if !skipper(port.CardName, port.CardName) {
-			return port.CardName, port.CardName
+		if !skipper(port.CardName, port.PortName) {
+			logger.Debugf("select %s %s", port.CardName, port.PortName)
+			return port.CardName, port.PortName
 		}
+		logger.Debugf("skip %s %s", port.CardName, port.PortName)
 	}
 	return "", ""
 }
@@ -293,9 +295,11 @@ func (pr *Priorities) GetFirstOutput() (string, string) {
 
 func (pr *Priorities) GetFirstOutputSkip(skipper Skipper) (string, string) {
 	for _, port := range pr.OutputInstancePriority {
-		if !skipper(port.CardName, port.CardName) {
-			return port.CardName, port.CardName
+		if !skipper(port.CardName, port.PortName) {
+			logger.Debugf("select %s %s", port.CardName, port.PortName)
+			return port.CardName, port.PortName
 		}
+		logger.Debugf("skip %s %s", port.CardName, port.PortName)
 	}
 	return "", ""
 }
