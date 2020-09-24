@@ -532,8 +532,6 @@ func (a *Audio) addSource(sourceInfo *pulse.Source) {
 	//如果不能启用输入源,说明声卡配置文件是"a2dp",此时不能添加a2dp输入设备
 	if !a.enableSource {
 		a.enableSource = true
-		a.defaultSource = nil
-		a.setPropDefaultSource("/")
 		return
 	}
 	source := newSource(sourceInfo, a)
