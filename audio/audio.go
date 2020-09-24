@@ -318,6 +318,7 @@ func (a *Audio) init() error {
 	}
 
 	a.mu.Lock()
+	loadBluezConfig(bluezAudioConfigFilePath) // 注意：这个要在newCardList之前调用
 	a.cards = newCardList(a.ctx.GetCardList())
 
 	a.PropsMu.Lock()
@@ -533,23 +534,29 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) *dbus.E
 		return dbusutil.ToError(err)
 	}
 
-	var card *Card
+	card, err := a.cards.get(cardId)
+	if err != nil {
+		logger.Warning(err)
+		return dbusutil.ToError(err)
+	}
+
+	// 保存蓝牙音频模式
+	if strings.Contains(portName, "a2dp") {
+		setBluezConfig(card.core.Name, bluezModeA2dp)
+	} else if strings.Contains(portName, "headset") {
+		setBluezConfig(card.core.Name, bluezModeHeadset)
+	}
+
 	if int(direction) == pulse.DirectionSink {
-		card, err = a.cards.get(cardId)
-		if err == nil {
-			logger.Debugf("output port %s %s now is first priority", card.core.Name, portName)
-			priorities.SetOutputPortFirst(card.core.Name, portName)
-			err = priorities.Save(globalPrioritiesFilePath)
-			priorities.Print()
-		}
+		logger.Debugf("output port %s %s now is first priority", card.core.Name, portName)
+		priorities.SetOutputPortFirst(card.core.Name, portName)
+		err = priorities.Save(globalPrioritiesFilePath)
+		priorities.Print()
 	} else {
-		card, err = a.cards.get(cardId)
-		if err == nil {
-			logger.Debugf("input port %s %s now is first priority", card.core.Name, portName)
-			priorities.SetInputPortFirst(card.core.Name, portName)
-			err = priorities.Save(globalPrioritiesFilePath)
-			priorities.Print()
-		}
+		logger.Debugf("input port %s %s now is first priority", card.core.Name, portName)
+		priorities.SetInputPortFirst(card.core.Name, portName)
+		err = priorities.Save(globalPrioritiesFilePath)
+		priorities.Print()
 	}
 	return dbusutil.ToError(err)
 }

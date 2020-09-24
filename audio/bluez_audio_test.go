@@ -39,12 +39,13 @@ func Test_isBluezAudio(t *testing.T) {
 
 func Test_createBluezVirtualCardPorts(t *testing.T) {
 	Convey("createBluezVirtualCardPorts", t, func(c C) {
-		name := "bluez.abcd.1234"
+		cardName := "bluez.test.a2dp"
+		portName := "bluez.test.port0"
 		desc := "headset"
-		var cards pulse.CardPortInfos
-		cards = append(cards, pulse.CardPortInfo{
+		var cardPorts pulse.CardPortInfos
+		cardPorts = append(cardPorts, pulse.CardPortInfo{
 			PortInfo: pulse.PortInfo{
-				Name:        name,
+				Name:        portName,
 				Description: desc,
 				Priority:    0,
 				Available:   pulse.AvailableTypeUnknow,
@@ -52,10 +53,10 @@ func Test_createBluezVirtualCardPorts(t *testing.T) {
 			Direction: pulse.DirectionSink,
 			Profiles:  pulse.ProfileInfos2{},
 		})
-		portinfos := createBluezVirtualCardPorts(cards)
+		portinfos := createBluezVirtualCardPorts(cardName, cardPorts)
 		c.So(len(portinfos), ShouldEqual, 0)
 
-		cards[0].Profiles = append(cards[0].Profiles, pulse.ProfileInfo2{
+		cardPorts[0].Profiles = append(cardPorts[0].Profiles, pulse.ProfileInfo2{
 			Name:        "a2dp_sink",
 			Description: "A2DP",
 			Priority:    0,
@@ -63,10 +64,10 @@ func Test_createBluezVirtualCardPorts(t *testing.T) {
 			NSources:    0,
 			Available:   pulse.AvailableTypeUnknow,
 		})
-		portinfos = createBluezVirtualCardPorts(cards)
+		portinfos = createBluezVirtualCardPorts(cardName, cardPorts)
 		c.So(len(portinfos), ShouldEqual, 1)
 
-		cards[0].Profiles = append(cards[0].Profiles, pulse.ProfileInfo2{
+		cardPorts[0].Profiles = append(cardPorts[0].Profiles, pulse.ProfileInfo2{
 			Name:        "headset_head_unit",
 			Description: "Headset",
 			Priority:    0,
@@ -74,10 +75,10 @@ func Test_createBluezVirtualCardPorts(t *testing.T) {
 			NSources:    0,
 			Available:   pulse.AvailableTypeUnknow,
 		})
-		portinfos = createBluezVirtualCardPorts(cards)
+		portinfos = createBluezVirtualCardPorts(cardName, cardPorts)
 		c.So(len(portinfos), ShouldEqual, 2)
-		c.So(portinfos[0].Name, ShouldEqual, name+"(headset_head_unit)")
-		c.So(portinfos[1].Name, ShouldEqual, name+"(a2dp_sink)")
+		c.So(portinfos[0].Name, ShouldEqual, portName+"(headset_head_unit)")
+		c.So(portinfos[1].Name, ShouldEqual, portName+"(a2dp_sink)")
 	})
 }
 

@@ -97,6 +97,7 @@ func (a *Audio) isCardIdValid(cardId uint32) bool {
 
 func (a *Audio) needAutoSwitchInputPort() bool {
 	if a.defaultSource == nil || !a.isCardIdValid(a.defaultSource.Card) {
+		logger.Debug("default source is invalid")
 		return true
 	}
 
@@ -105,15 +106,18 @@ func (a *Audio) needAutoSwitchInputPort() bool {
 	currentPortName := a.defaultSource.ActivePort.Name
 
 	if currentCardName == "" || currentPortName == "" {
+		logger.Debug("current source is empty")
 		return true
 	}
 
 	if cardName == currentCardName && portName == currentPortName {
+		logger.Debug("current source is first")
 		return false
 	}
 
 	firstPortType := GetPortType(cardName, portName)
 	currentPortType := GetPortType(currentCardName, currentPortName)
+	logger.Debugf("firstPortType == %d, currentPortType == %d", firstPortType, currentPortType)
 	return priorities.IsInputTypeAfter(firstPortType, currentPortType)
 }
 
@@ -528,6 +532,8 @@ func (a *Audio) addSource(sourceInfo *pulse.Source) {
 	//如果不能启用输入源,说明声卡配置文件是"a2dp",此时不能添加a2dp输入设备
 	if !a.enableSource {
 		a.enableSource = true
+		a.defaultSource = nil
+		a.setPropDefaultSource("/")
 		return
 	}
 	source := newSource(sourceInfo, a)

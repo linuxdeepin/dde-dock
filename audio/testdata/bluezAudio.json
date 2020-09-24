@@ -1,0 +1,5 @@
+{
+    "bluez_card.test.a2dp": "a2dp",
+    "bluez_card.test.headset": "headset",
+    "bluez_card.test.error": "error"
+}

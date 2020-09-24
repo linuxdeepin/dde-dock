@@ -1,13 +1,73 @@
 package audio
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"path/filepath"
 	"regexp"
 	"strings"
 
 	dbus "github.com/godbus/dbus"
 	bluez "github.com/linuxdeepin/go-dbus-factory/org.bluez"
 	"pkg.deepin.io/lib/pulse"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
+
+var (
+	bluezAudioConfig         = make(map[string]string)
+	bluezAudioConfigFilePath = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/bluezAudio.json")
+)
+
+const (
+	bluezModeA2dp    = "a2dp"
+	bluezModeHeadset = "headset"
+	bluezModeDefault = bluezModeA2dp
+)
+
+func saveBluezConfig(filepath string) {
+	data, err := json.MarshalIndent(bluezAudioConfig, "", "  ")
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	err = ioutil.WriteFile(filepath, data, 0644)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+}
+
+func loadBluezConfig(filepath string) {
+	data, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	err = json.Unmarshal(data, &bluezAudioConfig)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	logger.Debugf("%v", bluezAudioConfig)
+}
+
+func setBluezConfig(cardName string, mode string) {
+	if mode != bluezModeA2dp && mode != bluezModeHeadset {
+		logger.Warningf("unsupported bluez mode %s", mode)
+		return
+	}
+	bluezAudioConfig[cardName] = mode
+	saveBluezConfig(bluezAudioConfigFilePath)
+}
+
+func getBluezConfig(cardName string) string {
+	mode, ok := bluezAudioConfig[cardName]
+	if ok {
+		return mode
+	} else {
+		return bluezModeDefault
+	}
+}
 
 func isBluezAudio(name string) bool {
 	return strings.Contains(strings.ToLower(name), "bluez")
@@ -35,7 +95,7 @@ func isBluezDeviceValid(bluezPath string) bool {
 	return true
 }
 
-func createBluezVirtualCardPorts(ports pulse.CardPortInfos) pulse.CardPortInfos {
+func createBluezVirtualCardPorts(cardName string, ports pulse.CardPortInfos) pulse.CardPortInfos {
 	var virtualPorts = make(pulse.CardPortInfos, 0)
 	for _, port := range ports {
 		if port.Direction == pulse.DirectionSource {
@@ -49,10 +109,11 @@ func createBluezVirtualCardPorts(ports pulse.CardPortInfos) pulse.CardPortInfos 
 				virtualPorts = append(virtualPorts, headsetPort)
 				logger.Debug("create virtual bluez port headset")
 			}
-		} else {
-			// 这里的顺序不能改，默认a2dp优先
+		} else if getBluezConfig(cardName) == bluezModeA2dp {
+			// 这里的顺序不能改
 			// 在优先级模块中，默认后接入的端口优先
 			// 因此a2dp放在后面
+			logger.Debugf("bluez mode a2dp %s", cardName)
 			if port.Profiles.Exists("headset_head_unit") {
 				headsetPort := port
 				headsetPort.Name += "(headset_head_unit)"
@@ -68,7 +129,25 @@ func createBluezVirtualCardPorts(ports pulse.CardPortInfos) pulse.CardPortInfos 
 				virtualPorts = append(virtualPorts, a2dpPort)
 				logger.Debug("create virtual bluez port a2dp")
 			}
+		} else if getBluezConfig(cardName) == bluezModeHeadset {
+			// 这里的顺序不能改,原因同上
+			// 因此headset放在后面
+			logger.Debugf("bluez mode headset %s", cardName)
+			if port.Profiles.Exists("a2dp_sink") {
+				a2dpPort := port
+				a2dpPort.Name += "(a2dp_sink)"
+				a2dpPort.Description += "(A2DP)"
+				virtualPorts = append(virtualPorts, a2dpPort)
+				logger.Debug("create virtual bluez port a2dp")
+			}
 
+			if port.Profiles.Exists("headset_head_unit") {
+				headsetPort := port
+				headsetPort.Name += "(headset_head_unit)"
+				headsetPort.Description += "(Headset)"
+				virtualPorts = append(virtualPorts, headsetPort)
+				logger.Debug("create virtual bluez port headset")
+			}
 		}
 	}
 
