@@ -369,6 +369,32 @@ void DockUnitTest::dock_appDockUndock_check()
     QCOMPARE(dockInter.IsDocked(desktopFile), true);
 }
 
+/**
+ * @brief DockUnitTest::checkDockStateAfterSwitchMode
+ * 检查智能模式时，切换任务栏显示模式，任务栏状态
+ * 可以检测桌面无窗口，切换为智能隐藏模式后任务栏隐藏问题 41907
+ */
+void DockUnitTest::dock_switchModeState_check()
+{
+    QProcess process;
+    process.start("/usr/lib/deepin-daemon/desktop-toggle");
+    bool ret = process.waitForFinished(2000);
+    if (!ret) {
+        qDebug() << "show desktop failed, check stop";
+        return;
+    }
+
+    m_daemonDockInter->setSync(true);
+    m_daemonDockInter->setHideMode(Dock::HideMode::SmartHide);
+    m_daemonDockInter->setDisplayMode(Dock::DisplayMode::Fashion);
+    m_daemonDockInter->setDisplayMode(Dock::DisplayMode::Efficient);
+
+    QThread::sleep(2);
+    int state = m_daemonDockInter->hideState();
+
+    QCOMPARE(state, Dock::HideState::Show);
+}
+
 QTEST_APPLESS_MAIN(DockUnitTest)
 
 #include "dock_unit_test.moc"

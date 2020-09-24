@@ -41,22 +41,23 @@ private:
     DBusDock *m_daemonDockInter;
 
 private:
-    const DockRect dockGeometry();              // 获取任务栏实际位置
-    const DockRect frontendWindowRect();        // 后端记录的任务栏前端界面位置(和实际位置不一定对应)
+    const DockRect dockGeometry();                               // 获取任务栏实际位置
+    const DockRect frontendWindowRect();                         // 后端记录的任务栏前端界面位置(和实际位置不一定对应)
     void setPosition(Dock::Position pos);
 
 private slots:
-    void dock_defaultGsettings_check();                         // 默认配置项检查
-    void dock_geometry_check();         // 显示区域
-    void dock_position_check();         // 位置检查
-    void dock_displayMode_check();      // 显示模式检查
-    void dock_appItemCount_check();     // 应用显示数量检查
+    void dock_defaultGsettings_check();                          // 默认配置项检查
+    void dock_geometry_check();                                  // 显示区域
+    void dock_position_check();                                  // 位置检查
+    void dock_displayMode_check();                               // 显示模式检查
+    void dock_appItemCount_check();                              // 应用显示数量检查
     void dock_defaultVolume_Check(float defaultVolume = 50.0f);  // 设备默认音量检查
-    void dock_frontWindowRect_check();  // 检查FrontendWindowRect接口数据是否正确
-    void dock_multi_process(); // 检查是否正常启动
-    void dock_coreDump_check();     // dock是否一直崩溃
-    void dock_appIconSize_check();                              // 图标大小检查
-    void dock_appDockUndock_check(); // 任务栏上的应用移除和加载检测
+    void dock_frontWindowRect_check();                           // 检查FrontendWindowRect接口数据是否正确
+    void dock_multi_process();                                   // 检查是否正常启动
+    void dock_coreDump_check();                                  // dock是否一直崩溃
+    void dock_appIconSize_check();                               // 图标大小检查
+    void dock_appDockUndock_check();                             // 任务栏上的应用移除和加载检测
+    void dock_switchModeState_check();                           // 显示桌面智能隐藏时切换任务栏模式，检查任务栏状态
 };
 
 #endif // DOCK_UNIT_TEST_H
