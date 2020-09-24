@@ -117,10 +117,6 @@ func (a *obexAgent) unregisterAgent() {
 
 // AuthorizePush 用于请求用户接收文件
 func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.Error) {
-	if !a.b.Transportable {
-		return "", dbusutil.ToError(errors.New("declined"))
-	}
-
 	transfer, err := obex.NewTransfer(a.service.Conn(), transferPath)
 	if err != nil {
 		logger.Error("failed to new transfer:", err)
@@ -145,8 +141,6 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 		logger.Warning("failed to get transfer session:", err)
 		return "", dbusutil.ToError(err)
 	}
-
-	a.b.setPropTransportable(false)
 
 	deviceAddress, err := session.Destination().Get(0)
 	if err != nil {
@@ -174,6 +168,8 @@ func (a *obexAgent) AuthorizePush(transferPath dbus.ObjectPath) (string, *dbus.E
 	if !accepted {
 		return "", dbusutil.ToError(errors.New("declined"))
 	}
+	//设置未文件不能传输状态
+	a.b.setPropTransportable(false)
 
 	return filename, nil
 }
@@ -184,6 +180,10 @@ func (a *obexAgent) isSessionAccepted(sessionPath dbus.ObjectPath, deviceName, f
 
 	_, accepted := a.acceptedSessions[sessionPath]
 	if !accepted {
+		//多个文件传输时只第一次判断可传输状态
+		if !a.b.Transportable {
+			return false, errors.New("declined")
+		}
 		var err error
 		accepted, err = a.requestReceive(deviceName, filename)
 		if err != nil {
