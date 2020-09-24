@@ -84,7 +84,7 @@ void RegisterDdeSession()
 bool IsSaveMode()
 {
     QSettings settings(cfgPath, QSettings::IniFormat);
-    settings.beginGroup("dde-dock");
+    settings.beginGroup(qApp->applicationName());
     int collapseNum = settings.value("collapse").toInt();
 
     // 自动进入安全模式

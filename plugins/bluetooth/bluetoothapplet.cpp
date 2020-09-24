@@ -236,7 +236,6 @@ void BluetoothApplet::updateView()
 {
     int contentHeight = 0;
     int itemCount = 0;
-    bool isAdapterConnected = true;
     bool isPowered = false;
     for (AdapterItem *adapterItem : m_adapterItems) {
         if (adapterItem) {
@@ -244,9 +243,6 @@ void BluetoothApplet::updateView()
             if (adapterItem->isPowered()) {
                 isPowered = true;
                 itemCount += adapterItem->deviceCount();
-            }
-            if (adapterItem->connectedDevsName().size()) {
-                isAdapterConnected = false;
             }
         }
     }

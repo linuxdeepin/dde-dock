@@ -384,9 +384,10 @@ void MainWindow::resetDragWindow()
     dockSize = qBound(MAINWINDOW_MIN_SIZE, dockSize, MAINWINDOW_MAX_SIZE);
 
     // 通知窗管和后端更新数据
-    m_multiScreenWorker->updateDaemonDockSize(dockSize);                              // 1.先更新任务栏高度
+    m_multiScreenWorker->updateDaemonDockSize(dockSize);                                // 1.先更新任务栏高度
     m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
+    m_multiScreenWorker->requestUpdateRegionMonitor();                                  // 界面发生变化，应更新监控区域
 
     if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {
         m_dragWidget->setCursor(Qt::SizeVerCursor);
