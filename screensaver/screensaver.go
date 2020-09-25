@@ -239,10 +239,18 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 	// query screensaver ext version
 	ssVersion, err := screensaver.QueryVersion(s.xConn, screensaver.MajorVersion, screensaver.MinorVersion).Reply(s.xConn)
 	if err != nil {
-		return nil, err
+		logger.Warning("failed to get screensaver ext version:", err)
+	} else {
+		logger.Debugf("screensaver ext version %d.%d", ssVersion.ServerMajorVersion,
+			ssVersion.ServerMinorVersion)
+		root := s.xConn.GetDefaultScreen().Root
+		err = screensaver.SelectInputChecked(s.xConn, x.Drawable(root), screensaver.EventNotifyMask|
+			screensaver.EventCycleMask).Check(s.xConn)
+		if err != nil {
+			logger.Warning(err)
+		}
+		go s.loop()
 	}
-	logger.Debugf("screensaver ext version %d.%d", ssVersion.ServerMajorVersion,
-		ssVersion.ServerMinorVersion)
 
 	// query dpms ext version
 	dpmsVersion, err := dpms.GetVersion(s.xConn, 1, 1).Reply(s.xConn)
@@ -253,16 +261,8 @@ func newScreenSaver(service *dbusutil.Service) (*ScreenSaver, error) {
 			dpmsVersion.ServerMinorVersion)
 	}
 
-	root := s.xConn.GetDefaultScreen().Root
-	err = screensaver.SelectInputChecked(s.xConn, x.Drawable(root), screensaver.EventNotifyMask|
-		screensaver.EventCycleMask).Check(s.xConn)
-	if err != nil {
-		logger.Warning(err)
-	}
-
 	s.listenDBusNameOwnerChanged()
 	s.sigLoop.Start()
-	go s.loop()
 	return s, nil
 }
 
