@@ -196,20 +196,10 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     if (menuId == "power")
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
     else if (menuId == "Lock") {
-        if (QFile::exists(ICBC_CONF_FILE)) {
-            QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
-            QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus","unix:path=/run/user/1000/bus");
-            QDBusMessage reply = conn.call(send);
-#ifdef QT_DEBUG
-            qInfo()<<"----------"<<reply;
-#endif
-
-        } else {
-            QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                    << "--dest=com.deepin.dde.lockFront"
-                                    << "/com/deepin/dde/lockFront"
-                                    << QString("com.deepin.dde.lockFront.Show"));
-        }
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                << "--dest=com.deepin.dde.lockFront"
+                                << "/com/deepin/dde/lockFront"
+                                << QString("com.deepin.dde.lockFront.Show"));
     }
     else
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
