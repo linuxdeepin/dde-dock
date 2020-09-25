@@ -352,7 +352,6 @@ bool MainWindow::appIsOnDock(const QString &appDesktop)
 
 void MainWindow::resetDragWindow()
 {
-    int dockSize = 0;
     switch (m_multiScreenWorker->position()) {
     case Dock::Top:
         m_dragWidget->setGeometry(0, height() - DRAG_AREA_SIZE, width(), DRAG_AREA_SIZE);
@@ -368,11 +367,18 @@ void MainWindow::resetDragWindow()
         break;
     }
 
+    QRect rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
+                                             , m_multiScreenWorker->position()
+                                             , HideMode::KeepShowing,
+                                             m_multiScreenWorker->displayMode());
+
+    // 这个时候屏幕有可能是隐藏的，不能直接使用this->width()这种去设置任务栏的高度，而应该保证原值
+    int dockSize = 0;
     if (m_multiScreenWorker->position() == Position::Left
             || m_multiScreenWorker->position() == Position::Right) {
-        dockSize = this->width();
+        dockSize = this->width() == 0 ? rect.width() : this->width();
     } else {
-        dockSize = this->height();
+        dockSize = this->height() == 0 ? rect.height() : this->height();
     }
 
     /** FIX ME
