@@ -121,6 +121,7 @@ public:
     ~MainWindow() override;
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
+    void setGeometry(const QRect &rect);
 
     friend class MainPanel;
     friend class MainPanelControl;
