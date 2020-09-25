@@ -548,9 +548,9 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     }
 
     const static int flags = Motion | Button | Key;
-    const static int monitorHeight = 15;
+    const static int monitorHeight = static_cast<int>(15 * qApp->devicePixelRatio());
     // 后端认为的任务栏大小(无缩放因素影响)
-    const int realDockSize = int(m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10/*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient());
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10 /*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient()) * qApp->devicePixelRatio());
 
     // 任务栏唤起区域
     m_monitorRectList.clear();
