@@ -1121,4 +1121,15 @@ void MainWindow::updateRegionMonitorWatch()
     }
 }
 
+void MainWindow::setGeometry(const QRect &rect)
+{
+    static QRect lastRect;
+    if (lastRect == rect) {
+        return;
+    }
+    lastRect = rect;
+    DBlurEffectWidget::setGeometry(rect);
+    emit panelGeometryChanged();
+}
+
 #include "mainwindow.moc"
