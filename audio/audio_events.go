@@ -694,6 +694,11 @@ func (a *Audio) listenGSettingVolumeIncreaseChanged() {
 func (a *Audio) listenGSettingReduceNoiseChanged() {
 	gsettings.ConnectChanged(gsSchemaAudio, gsKeyReduceNoise, func(val string) {
 		reduce := a.ReduceNoise.Get()
+		if reduce && isBluezAudio(a.defaultSource.Name) {
+			logger.Debug("bluetooth audio device cannot open reduce-noise")
+			a.ReduceNoise.Set(false)
+			return
+		}
 		err := a.setReduceNoise(reduce)
 		if err != nil {
 			logger.Warning("set Reduce Noise failed: ", err)
