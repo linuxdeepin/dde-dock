@@ -117,10 +117,29 @@ func saveConfig(info *config) error {
 	return nil
 }
 
-func removeConfig() error {
+func removeConfig() {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
-	return os.Remove(configFile)
+
+	err := os.Remove(configFile)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Warning(err)
+	}
+
+	err = os.Remove(configKeeperFile)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Warning(err)
+	}
+
+	err = os.Remove(globalPrioritiesFilePath)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Warning(err)
+	}
+
+	err = os.Remove(bluezAudioConfigFilePath)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Warning(err)
+	}
 }
 
 func mapStrStrEqual(a, b map[string]string) bool {

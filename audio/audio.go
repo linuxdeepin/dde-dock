@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 	"sync"
@@ -348,23 +347,17 @@ func (a *Audio) init() error {
 	firstRun := a.settings.GetBoolean(gsKeyFirstRun)
 	if firstRun {
 		logger.Info("first run, Will remove old audio config")
-		err := removeConfig()
-		if err != nil && !os.IsNotExist(err) {
-			logger.Warning("Failed to remove audio config:", err)
-		}
-		a.resetSinksVolume()
-		a.resetSourceVolume()
-		a.trySelectBestPort()
+		removeConfig()
 		a.settings.SetBoolean(gsKeyFirstRun, false)
-	} else {
-		err := configKeeper.Load(configKeeperFile)
-		if err != nil {
-			logger.Warningf("load %q failed : %s", configKeeperFile, err)
-		}
-		a.resumeSinkConfig(a.defaultSink)
-		a.resumeSourceConfig(a.defaultSource, true)
-		a.autoSwitchPort()
 	}
+
+	err = configKeeper.Load(configKeeperFile)
+	if err != nil {
+		logger.Warningf("load %q failed : %s", configKeeperFile, err)
+	}
+	a.resumeSinkConfig(a.defaultSink)
+	a.resumeSourceConfig(a.defaultSource, true)
+	a.autoSwitchPort()
 
 	a.fixActivePortNotAvailable()
 	a.moveSinkInputsToDefaultSink()
