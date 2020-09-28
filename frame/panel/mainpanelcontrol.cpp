@@ -233,7 +233,6 @@ void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
         wdg->setMaximumSize(width(),width());
     }
     m_fixedAreaLayout->insertWidget(index, wdg);
-    resizeDockIcon();
 }
 
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
@@ -244,14 +243,12 @@ void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
         wdg->setMaximumSize(width(),width());
     }
     m_appAreaSonLayout->insertWidget(index, wdg);
-    resizeDockIcon();
 }
 
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_tray = static_cast<TrayPluginItem *>(wdg);
     m_trayAreaLayout->insertWidget(index, wdg);
-    resizeDockIcon();
 }
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
@@ -261,8 +258,6 @@ void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
     QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
     m_pluginLayout->insertLayout(index, boxLayout, 0);
-    resizeDockIcon();;
-    m_pluginAreaWidget->adjustSize();
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -351,6 +346,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     default:
         break;
     }
+    resizeDockIcon();
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -373,6 +369,7 @@ void MainPanelControl::removeItem(DockItem *item)
     default:
         break;
     }
+    resizeDockIcon();
 }
 
 MainPanelDelegate *MainPanelControl::delegate() const
