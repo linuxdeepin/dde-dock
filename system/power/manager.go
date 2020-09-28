@@ -497,6 +497,10 @@ func (m *Manager) doSetMode(mode string) error {
 		err = dbusutil.MakeErrorf(m, "PowerMode", "%q mode is not supported", mode)
 	}
 
+	if err == nil {
+		m.setPropMode(mode)
+	}
+
 	return err
 }
 

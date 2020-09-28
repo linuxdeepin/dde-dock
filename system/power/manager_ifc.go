@@ -20,6 +20,8 @@
 package power
 
 import (
+	"errors"
+
 	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
 )
@@ -106,11 +108,16 @@ func (m *Manager) SetCpuGovernor(governor string) *dbus.Error {
 }
 
 func (m *Manager) SetMode(mode string) *dbus.Error {
+	if m.Mode == mode {
+		return dbusutil.ToError(errors.New("Repeat switch"))
+	}
 	err := m.doSetMode(mode)
 	if err == nil {
-		m.setPropMode(mode)
 		err = m.saveConfig()
 	}
+
+	m.setPropPowerSavingModeAutoWhenBatteryLow(false)
+	m.setPropPowerSavingModeAuto(false)
 
 	logger.Warning(err)
 	return dbusutil.ToError(err)
