@@ -1165,6 +1165,8 @@ void NetworkItem::refreshTips()
     case Connected: {
         QString strTips;
         QStringList textList;
+        int wirelessIndex = 1;
+        int wireIndex = 1;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
@@ -1173,7 +1175,11 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     break;
-                strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                if (m_connectedWirelessDevice.size() == 1) {
+                    strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                } else {
+                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                }
                 strTips.chop(1);
                 textList << strTips;
             }
@@ -1186,7 +1192,11 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     break;
-                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                if (m_connectedWiredDevice.size() == 1) {
+                    strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                } else {
+                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                }
                 strTips.chop(1);
                 textList << strTips;
             }
@@ -1196,6 +1206,8 @@ void NetworkItem::refreshTips()
     break;
     case Aconnected: {
         QString strTips;
+        int wirelessIndex=1;
+        QStringList textList;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
@@ -1204,15 +1216,22 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     break;
-                strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                if (m_connectedWiredDevice.size() == 1) {
+                    strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                } else {
+                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                }
+                strTips.chop(1);
+                textList << strTips;
             }
         }
-        strTips.chop(1);
-        m_tipsWidget->setText(strTips);
+        m_tipsWidget->setTextList(textList);
     }
     break;
     case Bconnected: {
         QString strTips;
+        QStringList textList;
+        int wireIndex = 1;
         for (auto wiredItem : m_connectedWiredDevice) {
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
@@ -1221,11 +1240,16 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     break;
-                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                if (m_connectedWiredDevice.size() == 1) {
+                    strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                } else {
+                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                }
+                strTips.chop(1);
+                textList << strTips;
             }
         }
-        strTips.chop(1);
-        m_tipsWidget->setText(strTips);
+        m_tipsWidget->setTextList(textList);
     }
     break;
     case Disconnected:
