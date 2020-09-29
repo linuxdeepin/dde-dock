@@ -198,6 +198,11 @@ public:
         Key    = 1 << 2
     };
 
+    enum AniAction {
+        Show = 0,
+        Hide
+    };
+
     MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
     ~MultiScreenWorker();
 
@@ -279,6 +284,9 @@ signals:
     void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
     void requestDelayShowDock(const QString &screenName);       //　延时唤醒任务栏
 
+    void requestStopShowAni();
+    void requestStopHideAni();
+
 public slots:
     void onAutoHideChanged(bool autoHide);
     /**
@@ -358,29 +366,16 @@ private:
      * 重新初始化任务栏的所有必要信息,并更新其位置
      */
     void reInitDisplayData();
-    /**
-     * @brief showAni   任务栏显示动画
-     * @param screen    显示到目标屏幕上
-     */
-    void showAni(const QString &screen);
+
+    void displayAnimation(const QString &screen, const Position &pos, AniAction act);
+
+    void displayAnimation(const QString &screen, AniAction act);
     /**
      * @brief tryToShowDock 根据xEvent监控区域信号的x，y坐标处理任务栏唤醒显示
      * @param eventX        监控信号x坐标
      * @param eventY        监控信号y坐标
      */
     void tryToShowDock(int eventX, int eventY);
-    /**
-     * @brief hideAni   任务栏隐藏动画
-     * @param screen    从目标屏幕上隐藏,使用当前的位置和显示模式
-     */
-    void hideAni(const QString &screen);
-    /**
-     * @brief hideAni   任务栏隐藏动画
-     * @param screen    屏幕名
-     * @param pos       位置
-     * @param displayMode   显示模式
-     */
-    void hideAni(const QString &screen, const Position &pos, const DisplayMode &displayMode);
     /**
      * @brief changeDockPosition    做一个动画操作
      * @param lastScreen            上次任务栏所在的屏幕
@@ -459,10 +454,6 @@ private:
 
     QGSettings *m_monitorSetting;       // 多屏配置控制
 
-    // animation
-    QVariantAnimation *m_showAni;
-    QVariantAnimation *m_hideAni;
-
     // 屏幕名称信息
     DockScreen m_ds;
     // 显示器信息
@@ -481,6 +472,8 @@ private:
     QString m_registerKey;
     QString m_extralRegisterKey;
     QString m_touchRegisterKey;                 // 触控屏唤起任务栏监控区域key
+    bool m_showAniStart;                        // 动画显示过程正在执行标志
+    bool m_hideAniStart;                        // 动画隐藏过程正在执行标志
     bool m_aniStart;                            // changeDockPosition是否正在运行中
     bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
