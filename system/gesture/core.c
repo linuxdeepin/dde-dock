@@ -370,17 +370,15 @@ handle_touch_events(struct libinput_event *ev, int ty)
 		start_touch_timer();
 		touch_timer.fingers = 1;
 		touch_timer.sent = 0;
-		touch_timer.width = SCREEN_WIDTH;
-		touch_timer.height = SCREEN_HEIGHT;
-		double w, h;
-		libinput_device_get_size(dev, &w, &h);
+		//w和h需要赋初值，防止libinput_device_get_size函数异常返回后，w和h的随机值>1而导致获取的坐标异常
+		double w=0.0, h=0.0;
+		int iret = libinput_device_get_size(dev, &w, &h);
 		// TODO(jouyouyun): save device size to cache
-		if (w > 1) {
-			touch_timer.width = w;
-		}
-		if (h >1) {
-			touch_timer.height = h;
-		}
+		//libinput_device_get_size会因为abs.is_resolution而直接返回-1
+		//如果get size异常，使用SCREEN_WIDTH和SCREEN_HEIGHT来获取坐标
+		touch_timer.width = (iret == 0 && w >1) ? w : SCREEN_WIDTH;
+		touch_timer.height = (iret == 0 && h >1) ? h : SCREEN_HEIGHT;
+		
 		touch_timer.x = libinput_event_touch_get_x_transformed(touch, touch_timer.width);
 		touch_timer.y = libinput_event_touch_get_y_transformed(touch, touch_timer.height);
 		g_debug("\t[Transformed] X: %lf, Y: %lf", touch_timer.x, touch_timer.y);
