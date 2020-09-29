@@ -435,6 +435,7 @@ void AppItem::dropEvent(QDropEvent *e)
 void AppItem::leaveEvent(QEvent *e)
 {
     DockItem::leaveEvent(e);
+    qDebug() << "preview: AppItem leaveEvent";
 
     if (m_appPreviewTips) {
         if (m_appPreviewTips->isVisible()) {

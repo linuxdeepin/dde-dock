@@ -112,9 +112,13 @@ void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
 void PreviewContainer::checkMouseLeave()
 {
     const bool hover = underMouse();
+    WId id = m_floatingPreview ? m_floatingPreview->trackedWid() : 0;
+    qDebug() << "preview: checkMouseLeave" <<  id;
 
     if (hover)
         return;
+
+    qDebug() << "preview: not hover preview container" << id;
 
     m_floatingPreview->setVisible(false);
 
@@ -133,6 +137,8 @@ void PreviewContainer::checkMouseLeave()
 void PreviewContainer::prepareHide()
 {
     m_mouseLeaveTimer->start();
+    WId id = m_floatingPreview ? m_floatingPreview->trackedWid() : 0;
+    qDebug() << "preview: prepareHide, start timer" << id;
 }
 
 void PreviewContainer::adjustSize()
@@ -211,6 +217,7 @@ void PreviewContainer::enterEvent(QEvent *e)
 
     m_needActivate = false;
     m_mouseLeaveTimer->stop();
+    qDebug() << "preview: enter, stop check timer";
 
     if (m_wmHelper->hasComposite()) {
         m_waitForShowPreviewTimer->start();
@@ -221,6 +228,7 @@ void PreviewContainer::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
+    qDebug() << "preview: PreviewContainer, leaveEvent, start timer";
     m_mouseLeaveTimer->start();
     m_waitForShowPreviewTimer->stop();
 }
@@ -246,11 +254,10 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 
 void PreviewContainer::onSnapshotClicked(const WId wid)
 {
-    if (!m_wmHelper->hasComposite()) {
-        emit requestActivateWindow(wid);
-    }
+    qDebug() << "preview: onSnapshotClicked" << wid;
+    emit requestActivateWindow(wid);
 
-    m_needActivate = true;
+    m_needActivate = false;
     // the leaveEvent of this widget will be called after this signal
     Q_EMIT requestHidePopup();
 }

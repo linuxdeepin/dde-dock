@@ -68,6 +68,10 @@ FloatingPreview::FloatingPreview(QWidget *parent)
 WId FloatingPreview::trackedWid() const
 {
     Q_ASSERT(!m_tracked.isNull());
+    if (m_tracked.isNull()) {
+        qWarning() << "FloatingPreview::trackedWid is Null";
+        return 0;
+    }
 
     return m_tracked->wid();
 }
