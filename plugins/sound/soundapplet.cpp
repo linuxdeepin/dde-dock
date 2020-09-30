@@ -49,6 +49,7 @@ Q_DECLARE_METATYPE(const Port *)
 Port::Port(QObject *parent)
     : QObject(parent)
     , m_isActive(false)
+    , m_direction(Out)
 {
 
 }
