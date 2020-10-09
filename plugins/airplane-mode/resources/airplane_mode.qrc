@@ -1,1 +1,8 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/">
+        <file>airplane-on.svg</file>
+        <file>airplane-off.svg</file>
+        <file>airplane-off-dark.svg</file>
+        <file>airplane-on-dark.svg</file>
+    </qresource>
+</RCC>

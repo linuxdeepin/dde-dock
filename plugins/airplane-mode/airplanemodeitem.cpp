@@ -121,18 +121,16 @@ void AirplaneModeItem::refreshIcon()
 
     qDebug() << "ariplane enable:" << m_airplaneModeInter->enabled();
     if (m_airplaneModeInter->enabled())
-        iconString = "3";
+        iconString = "airplane-on";
     else
-        iconString = "4";
+        iconString = "airplane-off";
 
 
     const auto ratio = devicePixelRatioF();
     int iconSize = PLUGIN_ICON_MAX_SIZE;
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
-
     m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-
     update();
 }
 
