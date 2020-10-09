@@ -179,9 +179,8 @@ func (a *Audio) autoSwitchPort() {
 	if a.needAutoSwitchInputPort() {
 		cardName, portName := priorities.GetFirstInputSkip(func(cardName, portName string) bool {
 			// 当输出使用a2dp时，输入跳过headset
-			logger.Debugf("outputCard %s ", outputCard.core.Name)
-			return err == nil &&
-				cardName == outputCardName &&
+			logger.Debugf("check %s %s ", cardName, portName)
+			return cardName == outputCardName &&
 				strings.Contains(outputPortName, "a2dp") &&
 				strings.Contains(portName, "headset")
 		})
