@@ -2,35 +2,105 @@
 <context>
     <name>AbstractPluginsController</name>
     <message>
+        <location filename="../frame/util/abstractpluginscontroller.cpp" line="187"/>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation>قىستۇرما %1 بىلەن سىستېما نەشرى ماسلاشمايدۇ</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeapplet.cpp" line="18"/>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeitem.cpp" line="49"/>
+        <source>Airplane mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeitem.cpp" line="81"/>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeitem.cpp" line="83"/>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeitem.cpp" line="89"/>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <location filename="../plugins/airplane-mode/airplanemodeplugin.cpp" line="40"/>
+        <source>Airplane Mode</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>BluetoothApplet</name>
     <message>
+        <location filename="../plugins/bluetooth/bluetoothapplet.cpp" line="74"/>
         <source>Bluetooth</source>
         <translation>كۆكچىش</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothapplet.cpp" line="79"/>
+        <source>Bluetooth settings</source>
+        <translation>كۆكچىش تەڭشىكى</translation>
     </message>
 </context>
 <context>
     <name>BluetoothItem</name>
     <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="87"/>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>كۆكچىشنى تاقاش</translation>
     </message>
     <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="89"/>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>كۆكچىشنى ئېچىش</translation>
     </message>
     <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="95"/>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>كۆكچىش تەڭشىكى</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="173"/>
+        <source>%1 connected</source>
+        <translation>%1 ئۇلاندى</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="179"/>
+        <source>Connecting...</source>
+        <translation>ئۇلىنىۋاتىدۇ...</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="183"/>
+        <source>Bluetooth</source>
+        <translation>كۆكچىش</translation>
+    </message>
+    <message>
+        <location filename="../plugins/bluetooth/bluetoothitem.cpp" line="188"/>
+        <source>Turned off</source>
+        <translation>كۆكچىشنى تاقاش</translation>
     </message>
 </context>
 <context>
     <name>BluetoothPlugin</name>
     <message>
+        <location filename="../plugins/bluetooth/bluetoothplugin.cpp" line="40"/>
         <source>Bluetooth</source>
         <translation>كۆكچىش</translation>
     </message>
@@ -38,6 +108,7 @@
 <context>
     <name>DBusAdaptors</name>
     <message>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="195"/>
         <source>Add keyboard layout</source>
         <translation>كۇنۇپكا تاختىسى ئورۇنلاشتۇرۇلۇشى قوشۇش</translation>
     </message>
@@ -45,45 +116,40 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="50"/>
         <source>Datetime</source>
         <translation>چېسىلا ۋە ۋاقىت</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation type="vanished">12 سائەتلىك</translation>
-    </message>
-    <message>
-        <source>24 Hour Time</source>
-        <translation type="vanished">24 سائەتلىك</translation>
-    </message>
-    <message>
-        <source>Time Settings</source>
-        <translation type="vanished">ۋاقىت تەڭشىكى</translation>
-    </message>
-    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="156"/>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12 سائەتلىك</translation>
     </message>
     <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="158"/>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24 سائەتلىك</translation>
     </message>
     <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="164"/>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>ۋاقىت تەڭشىكى</translation>
     </message>
 </context>
 <context>
     <name>DeviceItem</name>
     <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="60"/>
         <source>Enable network</source>
         <translation>تورنى قوزغىتىش </translation>
     </message>
     <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="62"/>
         <source>Disable network</source>
         <translation>تورنى تاقاش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="68"/>
         <source>Network settings</source>
         <translation>تور تەڭشىكى </translation>
     </message>
@@ -91,44 +157,53 @@
 <context>
     <name>DialogManager</name>
     <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>راستلا ئەخلەت ساندۇقىدىكى %1 تۈرلۈك مەزمۇننى تازىلامسىز؟</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
         <translation>بىكار قىلىش</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
         <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
-        <translation type="unfinished"/>
+        <translation>بۇ مەشغۇلاتنى ئەسلىگە قايتۇرغىلى بولمايدۇ</translation>
     </message>
 </context>
 <context>
     <name>DiskControlItem</name>
     <message>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>نامەلۇم ئۈسكۈنە</translation>
     </message>
     <message>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>سىغىمى نامەلۇم</translation>
     </message>
 </context>
 <context>
     <name>DiskMountPlugin</name>
     <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
         <source>Disk</source>
         <translation>دېسكا</translation>
     </message>
     <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
         <source>Open</source>
-        <translation>ئېچىش</translation>
+        <translation>ئوچۇق</translation>
     </message>
     <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
         <source>Unmount all</source>
         <translation>ھەممىنى ئۆچۈرۈش </translation>
     </message>
@@ -136,157 +211,208 @@
 <context>
     <name>DockSettings</name>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="74"/>
         <source>Fashion Mode</source>
-        <translation type="unfinished"/>
+        <translation>مودا ھالەت</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="75"/>
         <source>Efficient Mode</source>
-        <translation type="unfinished"/>
+        <translation>يۇقىرى ئۈنۈملۈك ھالەت</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="76"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>ئۈستى</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="77"/>
         <source>Bottom</source>
         <translation>ئاستى تەرەپ</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="78"/>
         <source>Left</source>
         <translation>سول تەرەپ</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="79"/>
         <source>Right</source>
         <translation>ئوڭ تەرەپ</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="80"/>
         <source>Keep Shown</source>
         <translation>كۆرسىتىش</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="81"/>
         <source>Keep Hidden</source>
         <translation>يوشۇرۇش</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="82"/>
         <source>Smart Hide</source>
         <translation>ئەقلىي يوشۇرۇش</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Mode</source>
         <translation>ھالىتى</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="127"/>
         <source>Location</source>
         <translation>ئورنى</translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="135"/>
         <source>Status</source>
         <translation>ھالىتى </translation>
     </message>
     <message>
+        <location filename="../frame/util/docksettings.cpp" line="140"/>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>قىستۇرما</translation>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
+        <location filename="../frame/item/launcheritem.cpp" line="126"/>
         <source>Launcher</source>
-        <translation>ئۈستەليۈزى</translation>
+        <translation>ئۈستەليۈزى قوزغاتقۇچ</translation>
     </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
     <message>
+        <location filename="../plugins/multitasking/multitaskingplugin.cpp" line="44"/>
+        <location filename="../plugins/multitasking/multitaskingplugin.cpp" line="103"/>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>كۆپ ۋەزىپە كۆرۈنۈشى</translation>
     </message>
     <message>
+        <location filename="../plugins/multitasking/multitaskingplugin.cpp" line="109"/>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>تۇرغۇنلارنى چىقىرىۋېتىش</translation>
     </message>
 </context>
 <context>
     <name>NetworkItem</name>
     <message>
-        <source>Wireless connection</source>
-        <translation type="unfinished"/>
+        <location filename="../plugins/network/networkitem.cpp" line="59"/>
+        <source>Wireless Network</source>
+        <translation>سىمسىز تور</translation>
     </message>
     <message>
-        <source>Wired connection</source>
-        <translation type="unfinished"/>
+        <location filename="../plugins/network/networkitem.cpp" line="97"/>
+        <source>Wired Network</source>
+        <translation>سىملىق تور</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="231"/>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>سىملىق تورنى تاقاش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="233"/>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>سىملىق تورنى ئېچىش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="240"/>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تورنى تاقاش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="242"/>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تورنى ئېچىش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="250"/>
         <source>Disable network</source>
-        <translation type="unfinished"/>
+        <translation>تورنى تاقاش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="252"/>
         <source>Enable network</source>
-        <translation type="unfinished"/>
+        <translation>تورنى قوزغىتىش </translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="259"/>
         <source>Network settings</source>
-        <translation type="unfinished"/>
+        <translation>تور تەڭشىكى </translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1150"/>
         <source>Device disabled</source>
-        <translation type="unfinished"/>
+        <translation>ئۈسكىنە چەكلەش</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1163"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1194"/>
         <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تور:  %1</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1176"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>سىملىق تور:  %1</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
         <source>Not connected</source>
-        <translation type="unfinished"/>
+        <translation>ئۇلانمىدى</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1226"/>
         <source>Connecting</source>
-        <translation type="unfinished"/>
+        <translation>ئۇلىنىۋاتىدۇ</translation>
     </message>
     <message>
-        <source>Connected but not Internet access</source>
-        <translation type="unfinished"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1232"/>
+        <source>Connected but no Internet access</source>
+        <translation>ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
     </message>
     <message>
+        <location filename="../plugins/network/networkitem.cpp" line="1235"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1239"/>
         <source>Network cable unplugged</source>
-        <translation type="unfinished"/>
+        <translation>تور سىمى ئۇلانمىغان </translation>
     </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
     <message>
+        <location filename="../plugins/network/networkplugin.cpp" line="49"/>
         <source>Network</source>
         <translation>تور</translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/networkplugin.cpp" line="191"/>
+        <source>Wired Network</source>
+        <translation>سىملىق تور</translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/networkplugin.cpp" line="193"/>
+        <source>Wired Network %1</source>
+        <translation>سىملىق تور%1</translation>
     </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="36"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="38"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="48"/>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>ئېكران كۇنۇپكىسى</translation>
     </message>
     <message>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="99"/>
         <source>Settings</source>
         <translation>تەڭشەك</translation>
     </message>
@@ -294,107 +420,141 @@
 <context>
     <name>PowerPlugin</name>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="58"/>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>قۇۋۋەت</translation>
     </message>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="124"/>
         <source>Power settings</source>
         <translation>باتارىيە تەڭشىكى</translation>
     </message>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="252"/>
+        <source>Capacity %1 </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="258"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="302"/>
+        <source>Capacity %1 ...</source>
+        <translation>توك%1...</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="271"/>
+        <source>Charged</source>
+        <translation>توشتى</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="275"/>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>توك %1 قالدى، %2 مىنۇت يېتىدۇ</translation>
     </message>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="277"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="284"/>
+        <source>Capacity %1</source>
+        <translation>توك%1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="282"/>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>توك %1 قالدى، %2 سائەت %3 مىنۇت يېتىدۇ</translation>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="290"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>توك%1، توشتى</translation>
     </message>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="305"/>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>زەرەتلىنىۋاتىدۇ%1، يەنە %2 مىنۇتتا توشىدۇ</translation>
     </message>
     <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="307"/>
+        <location filename="../plugins/power/powerplugin.cpp" line="313"/>
+        <source>Charging %1</source>
+        <translation>زەرەتلەۋاتىدۇ%1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/power/powerplugin.cpp" line="311"/>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1 charged</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Capacity %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>زەرەتلىنىۋاتىدۇ%1، يەنە %2 سائەت %3 مىنۇتتا توشىدۇ</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
+        <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="43"/>
+        <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="102"/>
         <source>Show Desktop</source>
         <translation>ئۈستەل يۈزىنى كۆرۈش</translation>
     </message>
     <message>
+        <location filename="../plugins/show-desktop/showdesktopplugin.cpp" line="108"/>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>تۇرغۇنلارنى چىقىرىۋېتىش</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="49"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="65"/>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>قۇۋۋەت</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="111"/>
         <source>Shut down</source>
-        <translation>ئۈسكۈنىنى تاقاش</translation>
+        <translation>تاقاش</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="vanished">قايتا قوزغىتىش</translation>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
+        <source>Reboot</source>
+        <translation>قايتا قوزغىتىش</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>ئېسىپ قويۇش</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Hibernate</source>
-        <translation type="unfinished"/>
+        <translation>ئۇخلاش ھالىتى</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Lock</source>
         <translation>قۇلۇپلاش</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Log out</source>
         <translation>تىزىمدىن چېكىنىش</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Switch account</source>
-        <translation type="unfinished"/>
+        <translation>ئاكونت ئالمىشىش</translation>
     </message>
     <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Power settings</source>
         <translation>باتارىيە تەڭشىكى</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>قايتا قوزغىتىش</translation>
     </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
+        <location filename="../plugins/sound/soundapplet.cpp" line="67"/>
         <source>Device</source>
-        <translation type="unfinished"/>
+        <translation>ئۈسكۈنە</translation>
     </message>
     <message>
+        <location filename="../plugins/sound/soundapplet.cpp" line="94"/>
         <source>Application</source>
         <translation>ئەپلەر </translation>
     </message>
@@ -402,33 +562,30 @@
 <context>
     <name>SoundItem</name>
     <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Unmute</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋازلىق</translation>
     </message>
     <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="88"/>
         <source>Mute</source>
         <translation>ئاۋازسىز</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation type="vanished">ئاۋاز تەڭشىكى</translation>
-    </message>
-    <message>
-        <source>Current Volume %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="94"/>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋاز تەڭشىكى</translation>
     </message>
     <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>ئاۋاز%1</translation>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
+        <location filename="../plugins/sound/soundplugin.cpp" line="44"/>
         <source>Sound</source>
         <translation>ئاۋاز</translation>
     </message>
@@ -436,75 +593,53 @@
 <context>
     <name>TrashPlugin</name>
     <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="50"/>
         <source>Trash</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="92"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى-%1ھۆججەت</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="94"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقى - %1ھۆججەت</translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="64"/>
         <source>Open</source>
-        <translation>ئېچىش</translation>
+        <translation>ئوچۇق</translation>
     </message>
     <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="71"/>
         <source>Empty</source>
-        <translation type="unfinished"/>
+        <translation>قۇرۇق</translation>
     </message>
 </context>
 <context>
     <name>TrayPlugin</name>
     <message>
+        <location filename="../plugins/tray/trayplugin.cpp" line="102"/>
         <source>System Tray</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished">نامەلۇم</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation type="vanished">تور يوق </translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation type="vanished">ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
+        <translation>سىستېما يۈكلەنگەن دىسكا</translation>
     </message>
 </context>
 <context>
     <name>WirelessList</name>
     <message>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="162"/>
         <source>Wireless Network</source>
         <translation>سىمسىز تور</translation>
     </message>
     <message>
+        <location filename="../plugins/network/item/applet/wirelesslist.cpp" line="164"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تور%1</translation>
     </message>
 </context>
 </TS>

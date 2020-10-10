@@ -108,7 +108,7 @@
 <context>
     <name>DBusAdaptors</name>
     <message>
-        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="141"/>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="195"/>
         <source>Add keyboard layout</source>
         <translation>Dodaj raspored tipkovnice</translation>
     </message>
@@ -157,22 +157,22 @@
 <context>
     <name>DialogManager</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="89"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
         <translation>Jeste li sigurni da želite isprazniti %1 stavki?</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
         <translation>Otkaži</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
         <translation>Obriši</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="114"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
         <translation>Ova se radnja ne može obnoviti</translation>
     </message>
@@ -256,22 +256,22 @@
         <translation>Pametno skrivanje</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="117"/>
+        <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Mode</source>
         <translation>Način</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="127"/>
         <source>Location</source>
         <translation>Lokacija</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="134"/>
+        <location filename="../frame/util/docksettings.cpp" line="135"/>
         <source>Status</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="139"/>
+        <location filename="../frame/util/docksettings.cpp" line="140"/>
         <source>Plugins</source>
         <translation>Priključci</translation>
     </message>
@@ -301,85 +301,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="58"/>
+        <location filename="../plugins/network/networkitem.cpp" line="59"/>
         <source>Wireless Network</source>
         <translation>Bežična mreža</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="96"/>
+        <location filename="../plugins/network/networkitem.cpp" line="97"/>
         <source>Wired Network</source>
         <translation>Žična mreža</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="231"/>
         <source>Disable wired connection</source>
         <translation>Onemogući žično povezivanje</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="227"/>
+        <location filename="../plugins/network/networkitem.cpp" line="233"/>
         <source>Enable wired connection</source>
         <translation>Omogući žično povezivanje</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="234"/>
+        <location filename="../plugins/network/networkitem.cpp" line="240"/>
         <source>Disable wireless connection</source>
         <translation>Onemogući bežično povezivaqnje</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="236"/>
+        <location filename="../plugins/network/networkitem.cpp" line="242"/>
         <source>Enable wireless connection</source>
         <translation>Omogući bežično povezivanje</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="244"/>
+        <location filename="../plugins/network/networkitem.cpp" line="250"/>
         <source>Disable network</source>
         <translation>Onemogući mrežu</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="246"/>
+        <location filename="../plugins/network/networkitem.cpp" line="252"/>
         <source>Enable network</source>
         <translation>Omogući mrežu</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="253"/>
+        <location filename="../plugins/network/networkitem.cpp" line="259"/>
         <source>Network settings</source>
         <translation>Mrežne postavke</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1136"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1150"/>
         <source>Device disabled</source>
         <translation>Uređaj je onemogućen</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1149"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1180"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1163"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1194"/>
         <source>Wireless connection: %1</source>
         <translation>Bežična veza: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1197"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1176"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Wired connection: %1</source>
         <translation>Žična  veza: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1207"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
         <source>Not connected</source>
         <translation>Nije spojeno</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1226"/>
         <source>Connecting</source>
         <translation>Povezujem se</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1218"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1232"/>
         <source>Connected but no Internet access</source>
         <translation>Spojen ali nema pristupa internetu</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1235"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1239"/>
         <source>Network cable unplugged</source>
         <translation>Mrežni kabel je isključen</translation>
     </message>
@@ -406,12 +406,13 @@
     <name>OnboardPlugin</name>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="36"/>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="47"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="38"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="48"/>
         <source>Onboard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="98"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="99"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
@@ -462,8 +463,8 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="290"/>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Kapacitet %1, potpuno napunjen</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="305"/>
@@ -499,48 +500,48 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="49"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="65"/>
         <source>Power</source>
         <translation>Energija</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="111"/>
         <source>Shut down</source>
         <translation>Isključi</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Reboot</source>
         <translation>Ponovno podigni sustav</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>Suspendiraj</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Hibernate</source>
         <translation>Hiberniraj</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Lock</source>
         <translation>Zaključaj</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="156"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Log out</source>
         <translation>Odjava</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="163"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Switch account</source>
         <translation>Promijeni račun</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="171"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Power settings</source>
         <translation>Energetske postavke</translation>
     </message>
@@ -561,22 +562,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="85"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Unmute</source>
         <translation>Uključi zvuk</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="88"/>
         <source>Mute</source>
         <translation>Utišaj</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="93"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="94"/>
         <source>Sound settings</source>
         <translation>Postavke zvuka</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="222"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Volume %1</source>
         <translation>Glasnoća %1</translation>
     </message>
@@ -584,7 +585,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="44"/>
         <source>Sound</source>
         <translation>Zvuk</translation>
     </message>

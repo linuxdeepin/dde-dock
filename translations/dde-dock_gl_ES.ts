@@ -108,7 +108,7 @@
 <context>
     <name>DBusAdaptors</name>
     <message>
-        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="141"/>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="195"/>
         <source>Add keyboard layout</source>
         <translation>Engadir disposición do teclado</translation>
     </message>
@@ -157,22 +157,22 @@
 <context>
     <name>DialogManager</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="89"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
         <translation>Está seguro que que quere vaciar %1 elementos?</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="114"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
         <translation>Esta acción non se pode desfacer</translation>
     </message>
@@ -256,22 +256,22 @@
         <translation>Ocultar automaticamente</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="117"/>
+        <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="127"/>
         <source>Location</source>
         <translation>Localización</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="134"/>
+        <location filename="../frame/util/docksettings.cpp" line="135"/>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="139"/>
+        <location filename="../frame/util/docksettings.cpp" line="140"/>
         <source>Plugins</source>
         <translation>Complementos</translation>
     </message>
@@ -301,85 +301,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="58"/>
+        <location filename="../plugins/network/networkitem.cpp" line="59"/>
         <source>Wireless Network</source>
         <translation>Rede sen fíos</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="96"/>
+        <location filename="../plugins/network/networkitem.cpp" line="97"/>
         <source>Wired Network</source>
         <translation>Rede con fíos</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="231"/>
         <source>Disable wired connection</source>
         <translation>Desactivar a conexión por cable</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="227"/>
+        <location filename="../plugins/network/networkitem.cpp" line="233"/>
         <source>Enable wired connection</source>
         <translation>Activa a conexión por fíos</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="234"/>
+        <location filename="../plugins/network/networkitem.cpp" line="240"/>
         <source>Disable wireless connection</source>
         <translation>Desactivar a conexión sen fíos</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="236"/>
+        <location filename="../plugins/network/networkitem.cpp" line="242"/>
         <source>Enable wireless connection</source>
         <translation>Activar a conexión sen fíos</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="244"/>
+        <location filename="../plugins/network/networkitem.cpp" line="250"/>
         <source>Disable network</source>
         <translation>Desactivar a rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="246"/>
+        <location filename="../plugins/network/networkitem.cpp" line="252"/>
         <source>Enable network</source>
         <translation>Activar a rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="253"/>
+        <location filename="../plugins/network/networkitem.cpp" line="259"/>
         <source>Network settings</source>
         <translation>Axustes da rede</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1136"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1150"/>
         <source>Device disabled</source>
         <translation>Despositivo desactivado</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1149"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1180"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1163"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1194"/>
         <source>Wireless connection: %1</source>
         <translation>Conexión sen fíos:% 1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1197"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1176"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Wired connection: %1</source>
         <translation>Conexión con fíos: %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1207"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
         <source>Not connected</source>
         <translation>Sen conexión</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1226"/>
         <source>Connecting</source>
         <translation>Conectando</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1218"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1232"/>
         <source>Connected but no Internet access</source>
         <translation>Conectado pero sen acceso a internet</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1235"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1239"/>
         <source>Network cable unplugged</source>
         <translation>Cable de rede desconectado</translation>
     </message>
@@ -406,12 +406,13 @@
     <name>OnboardPlugin</name>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="36"/>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="47"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="38"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="48"/>
         <source>Onboard</source>
         <translation>A bordo</translation>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="98"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="99"/>
         <source>Settings</source>
         <translation>Axustes</translation>
     </message>
@@ -462,8 +463,8 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="290"/>
-        <source>Capacity 1%, fully charged</source>
-        <translation type="unfinished"/>
+        <source>Capacity %1, fully charged</source>
+        <translation>Capacidade% 1, totalmente cargada</translation>
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="305"/>
@@ -499,48 +500,48 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="49"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="65"/>
         <source>Power</source>
         <translation>Enerxía</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="111"/>
         <source>Shut down</source>
         <translation>Apagar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>Suspender</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Hibernate</source>
         <translation>Hibernar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Lock</source>
         <translation>Bloquear</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="156"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Log out</source>
         <translation>Pechar a sesión</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="163"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Switch account</source>
         <translation>Mudar de conta</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="171"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Power settings</source>
         <translation>Axustes de enerxía</translation>
     </message>
@@ -561,22 +562,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="85"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Unmute</source>
         <translation>Desactivar silencio</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="88"/>
         <source>Mute</source>
         <translation>Silenciar</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="93"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="94"/>
         <source>Sound settings</source>
         <translation>Configuración do son</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="222"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Volume %1</source>
         <translation>Volume %1</translation>
     </message>
@@ -584,7 +585,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="44"/>
         <source>Sound</source>
         <translation>Son</translation>
     </message>

@@ -108,7 +108,7 @@
 <context>
     <name>DBusAdaptors</name>
     <message>
-        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="141"/>
+        <location filename="../plugins/keyboard-layout/dbusadaptors.cpp" line="195"/>
         <source>Add keyboard layout</source>
         <translation>कुंजीपटल अभिन्यास जोड़ें</translation>
     </message>
@@ -157,22 +157,22 @@
 <context>
     <name>DialogManager</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="89"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
         <source>Are you sure you want to empty %1 items?</source>
         <translation>क्या आप निश्चित ही %1 वस्तुएँ हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="94"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
         <source>Delete</source>
         <translation>हटाएँ</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="114"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="113"/>
         <source>This action cannot be restored</source>
         <translation>इस कार्रवाई को पुनः स्थापित नहीं किया जा सकता है</translation>
     </message>
@@ -256,22 +256,22 @@
         <translation>उपयोग के अनुरूप छिपाएँ</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="117"/>
+        <location filename="../frame/util/docksettings.cpp" line="118"/>
         <source>Mode</source>
         <translation>मोड </translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="126"/>
+        <location filename="../frame/util/docksettings.cpp" line="127"/>
         <source>Location</source>
         <translation>स्थान</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="134"/>
+        <location filename="../frame/util/docksettings.cpp" line="135"/>
         <source>Status</source>
         <translation>स्थिति</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="139"/>
+        <location filename="../frame/util/docksettings.cpp" line="140"/>
         <source>Plugins</source>
         <translation>प्लगिन</translation>
     </message>
@@ -301,85 +301,85 @@
 <context>
     <name>NetworkItem</name>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="58"/>
+        <location filename="../plugins/network/networkitem.cpp" line="59"/>
         <source>Wireless Network</source>
         <translation>बेतार नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="96"/>
+        <location filename="../plugins/network/networkitem.cpp" line="97"/>
         <source>Wired Network</source>
         <translation>तार वाला नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="231"/>
         <source>Disable wired connection</source>
         <translation>केबल कनेक्शन निष्क्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="227"/>
+        <location filename="../plugins/network/networkitem.cpp" line="233"/>
         <source>Enable wired connection</source>
         <translation>केबल कनेक्शन सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="234"/>
+        <location filename="../plugins/network/networkitem.cpp" line="240"/>
         <source>Disable wireless connection</source>
         <translation>केबल रहित कनेक्शन निष्क्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="236"/>
+        <location filename="../plugins/network/networkitem.cpp" line="242"/>
         <source>Enable wireless connection</source>
         <translation>केबल रहित कनेक्शन सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="244"/>
+        <location filename="../plugins/network/networkitem.cpp" line="250"/>
         <source>Disable network</source>
         <translation>नेटवर्क निष्क्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="246"/>
+        <location filename="../plugins/network/networkitem.cpp" line="252"/>
         <source>Enable network</source>
         <translation>नेटवर्क सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="253"/>
+        <location filename="../plugins/network/networkitem.cpp" line="259"/>
         <source>Network settings</source>
         <translation>नेटवर्क सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1136"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1150"/>
         <source>Device disabled</source>
         <translation>उपकरण निष्क्रिय है</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1149"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1180"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1163"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1194"/>
         <source>Wireless connection: %1</source>
         <translation>केबल रहित कनेक्शन : %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1162"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1197"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1176"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1211"/>
         <source>Wired connection: %1</source>
         <translation>केबल कनेक्शन : %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1207"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
         <source>Not connected</source>
         <translation>कनेक्ट नहीं है</translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1212"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1226"/>
         <source>Connecting</source>
         <translation>कनेक्ट हो रहा है </translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1218"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1232"/>
         <source>Connected but no Internet access</source>
         <translation>कनेक्ट है परंतु नेटवर्क हेतु अभिगम नहीं है </translation>
     </message>
     <message>
-        <location filename="../plugins/network/networkitem.cpp" line="1221"/>
-        <location filename="../plugins/network/networkitem.cpp" line="1225"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1235"/>
+        <location filename="../plugins/network/networkitem.cpp" line="1239"/>
         <source>Network cable unplugged</source>
         <translation>नेटवर्क केबल हटी हुई है</translation>
     </message>
@@ -406,12 +406,13 @@
     <name>OnboardPlugin</name>
     <message>
         <location filename="../plugins/onboard/onboardplugin.cpp" line="36"/>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="47"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="38"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="48"/>
         <source>Onboard</source>
         <translation>ऑनबोर्ड</translation>
     </message>
     <message>
-        <location filename="../plugins/onboard/onboardplugin.cpp" line="98"/>
+        <location filename="../plugins/onboard/onboardplugin.cpp" line="99"/>
         <source>Settings</source>
         <translation>सेटिंग्स</translation>
     </message>
@@ -462,7 +463,7 @@
     </message>
     <message>
         <location filename="../plugins/power/powerplugin.cpp" line="290"/>
-        <source>Capacity 1%, fully charged</source>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -499,48 +500,48 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="49"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="65"/>
         <source>Power</source>
         <translation>पॉवर</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="111"/>
         <source>Shut down</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="117"/>
         <source>Reboot</source>
         <translation>पुनः आरंभ करें</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
         <source>Suspend</source>
         <translation>स्थगित करें</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="141"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="142"/>
         <source>Hibernate</source>
         <translation>हाइबरनेट</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="150"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="151"/>
         <source>Lock</source>
         <translation>लॉक स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="156"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="157"/>
         <source>Log out</source>
         <translation>लॉग आउट</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="163"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="164"/>
         <source>Switch account</source>
         <translation>खाता बदलें</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="171"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
         <source>Power settings</source>
         <translation>पॉवर सेटिंग्स</translation>
     </message>
@@ -561,22 +562,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="85"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="86"/>
         <source>Unmute</source>
         <translation>ध्वनि चालू करें</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="88"/>
         <source>Mute</source>
         <translation>ध्वनि बंद करें</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="93"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="94"/>
         <source>Sound settings</source>
         <translation>ध्वनि सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="222"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="223"/>
         <source>Volume %1</source>
         <translation>ध्वनि %1</translation>
     </message>
@@ -584,7 +585,7 @@
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="40"/>
+        <location filename="../plugins/sound/soundplugin.cpp" line="44"/>
         <source>Sound</source>
         <translation>ध्वनि</translation>
     </message>
