@@ -1073,6 +1073,43 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
     if (!m_autoHide || m_draging || m_aniStart || m_hideAniStart || m_showAniStart)
         return;
 
+    QRect mainwindowRect = parent()->geometry();
+    QRect dockShowRect = getDockShowGeometry(screen, pos, m_displayMode);
+    QRect dockHideRect = getDockHideGeometry(screen, pos, m_displayMode);
+
+    /** FIXME
+     * 在高分屏2.75倍缩放的情况下，parent()->geometry()返回的任务栏高度有问题（实际是40,返回是39）
+     * 在这里增加判断，当返回值在范围（38，42）开区间内，均认为任务栏显示位置正确，直接返回，不执行动画
+     * 也就是在实际值基础上下浮动1像素的误差范围
+     * 正常屏幕情况下是没有这个问题的
+     */
+    switch (act) {
+    case AniAction::Show:
+        if (pos == Position::Top || pos == Position::Bottom) {
+            if (dockShowRect.height() > mainwindowRect.height() - 2
+                && dockShowRect.height() < mainwindowRect.height() + 2) {
+                emit requestNotifyWindowManager();
+                return;
+            }
+        } else if (pos == Position::Left || pos == Position::Right) {
+            if (dockShowRect.width() > mainwindowRect.width() - 2
+                && dockShowRect.width() < mainwindowRect.width() + 2) {
+                emit requestNotifyWindowManager();
+                return;
+            }
+        }
+        break;
+    case AniAction::Hide:
+        if (dockHideRect == mainwindowRect) {
+            emit requestNotifyWindowManager();
+            return;
+        }
+        break;
+    default:
+        Q_UNREACHABLE();
+        break;
+    }
+
     QVariantAnimation *ani = new QVariantAnimation(this);
     ani->setEasingCurve(QEasingCurve::InOutCubic);
 
@@ -1084,25 +1121,17 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
 #endif
     ani->setDuration(duration);
 
-    ani->setStartValue(getDockHideGeometry(screen, pos, m_displayMode));
-    ani->setEndValue(getDockShowGeometry(screen, pos, m_displayMode));
+    ani->setStartValue(dockHideRect);
+    ani->setEndValue(dockShowRect);
 
     switch (act) {
     case AniAction::Show:
-        if (getDockShowGeometry(screen, pos, m_displayMode) == parent()->geometry()) {
-            emit requestNotifyWindowManager();
-            return;
-        }
         ani->setDirection(QAbstractAnimation::Forward);
         connect(ani, &QVariantAnimation::finished, this, &MultiScreenWorker::showAniFinished);
         connect(this, &MultiScreenWorker::requestStopShowAni, ani, &QVariantAnimation::stop);
         break;
 
     case AniAction::Hide:
-        if (getDockHideGeometry(screen, pos, m_displayMode) == parent()->geometry()) {
-            emit requestNotifyWindowManager();
-            return;
-        }
         ani->setDirection(QAbstractAnimation::Backward); // 隐藏时动画反向走
         connect(ani, &QVariantAnimation::finished, this, &MultiScreenWorker::hideAniFinished);
         connect(this, &MultiScreenWorker::requestStopHideAni, ani, &QVariantAnimation::stop);
