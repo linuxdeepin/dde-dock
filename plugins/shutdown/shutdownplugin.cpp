@@ -193,6 +193,11 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
+    // 使得下面逻辑代码延迟200ms执行，保证线程不阻塞
+    QTime dieTime = QTime::currentTime().addMSecs(200);
+    while( QTime::currentTime() < dieTime )
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 200);
+
     if (menuId == "power")
         QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
     else if (menuId == "Lock") {
