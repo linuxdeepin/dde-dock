@@ -22,10 +22,10 @@
 #ifndef VOLUMESLIDER_H
 #define VOLUMESLIDER_H
 
-#include <QSlider>
+#include <DSlider>
 #include <QTimer>
 
-class VolumeSlider : public QSlider
+class VolumeSlider : public DTK_WIDGET_NAMESPACE::DSlider
 {
     Q_OBJECT
 

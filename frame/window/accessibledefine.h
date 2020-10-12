@@ -167,8 +167,9 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     return QVariant(m_w->minimum());\
     }\
 
+//  DSlider控件特有功能函数
 #define FUNC_FUNC_MINIMUMSTEPSIZE(classname) QVariant Accessible##classname::minimumStepSize() const{\
-    return QVariant(m_w->singleStep());\
+    return QVariant(m_w->pageStep());\
     }\
 
 #define SET_FORM_ACCESSIBLE_WITH_DESCRIPTION(classname,accessiblename,accessdescription)  class Accessible##classname : public QAccessibleWidget\

@@ -26,13 +26,11 @@
 #include <QTimer>
 
 VolumeSlider::VolumeSlider(QWidget *parent)
-    : QSlider(Qt::Horizontal, parent),
+    : DSlider(Qt::Horizontal, parent),
       m_pressed(false),
       m_timer(new QTimer(this))
 {
-    setTickInterval(50);
     setPageStep(50);
-    setTickPosition(QSlider::NoTicks);
     m_timer->setInterval(100);
 
     connect(m_timer, &QTimer::timeout, this, &VolumeSlider::onTimeout);
@@ -44,7 +42,7 @@ void VolumeSlider::setValue(const int value)
         return;
 
     blockSignals(true);
-    QSlider::setValue(value);
+    DSlider::setValue(value);
     blockSignals(false);
 }
 
@@ -55,7 +53,7 @@ void VolumeSlider::mousePressEvent(QMouseEvent *e)
         if (!rect().contains(e->pos()))
             return;
         m_pressed = true;
-        QSlider::setValue(maximum() * e->x() / rect().width());
+        DSlider::setValue(maximum() * e->x() / rect().width());
     }
 }
 
@@ -64,7 +62,7 @@ void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
     const int value = minimum() + (double((maximum()) - minimum()) * e->x() / rect().width());
     const int normalized = std::max(std::min(maximum(), value), 0);
 
-    QSlider::setValue(normalized);
+    DSlider::setValue(normalized);
 
     blockSignals(true);
     emit valueChanged(normalized);
@@ -86,7 +84,7 @@ void VolumeSlider::wheelEvent(QWheelEvent *e)
 
     m_timer->start();
 
-    QSlider::setValue(value() + (e->delta() > 0 ? 10 : -10));
+    DSlider::setValue(value() + (e->delta() > 0 ? 10 : -10));
 }
 
 void VolumeSlider::onTimeout()
