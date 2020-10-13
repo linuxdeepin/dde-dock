@@ -22,8 +22,6 @@ package keybinding
 import (
 	"bytes"
 	"errors"
-	x "github.com/linuxdeepin/go-x11-client"
-	"github.com/linuxdeepin/go-x11-client/ext/dpms"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -31,12 +29,15 @@ import (
 	"strconv"
 	"strings"
 
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/dpms"
+
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"pkg.deepin.io/dde/daemon/keybinding/util"
 	"pkg.deepin.io/lib/strv"
 
 	"pkg.deepin.io/gir/gio-2.0"
-	"pkg.deepin.io/lib/dbus1"
+	dbus "pkg.deepin.io/lib/dbus1"
 )
 
 func getPowerButtonPressedExec() string {
@@ -98,9 +99,23 @@ func showOSD(signal string) {
 const sessionManagerDest = "com.deepin.SessionManager"
 const sessionManagerObjPath = "/com/deepin/SessionManager"
 
-func systemSuspend() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
+func (m *Manager) systemSuspend() {
+	can, err := m.sessionManager.CanSuspend(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not suspend")
+		return
+	}
+
+	logger.Debug("suspend")
+	err = m.sessionManager.RequestSuspend(0)
+	if err != nil {
+		logger.Warning("failed to suspend:", err)
+	}
 }
 
 func (m *Manager) systemHibernate() {
@@ -173,14 +188,30 @@ func (m *Manager) systemTurnOffScreen() {
 	}
 }
 
-func systemLogout() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLogout", 0)
+func (m *Manager) systemLogout() {
+	can, err := m.sessionManager.CanLogout(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not logout")
+		return
+	}
+
+	logger.Debug("logout")
+	err = m.sessionManager.RequestLogout(0)
+	if err != nil {
+		logger.Warning("failed to logout:", err)
+	}
 }
 
-func systemAway() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLock", 0)
+func (m *Manager) systemAway() {
+	err := m.sessionManager.RequestLock(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func queryCommandByMime(mime string) string {
