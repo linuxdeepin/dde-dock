@@ -300,7 +300,7 @@ func (a *obexAgent) receiveProgress(device string, sessionPath dbus.ObjectPath, 
 		}
 
 		newProgress := value * 100 / fileSize
-		if progress == newProgress {
+		if progress == newProgress || value == fileSize {
 			return
 		}
 
