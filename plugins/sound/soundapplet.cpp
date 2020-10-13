@@ -273,6 +273,8 @@ void SoundApplet::onVolumeChanged()
 void SoundApplet::volumeSliderValueChanged()
 {
     m_defSinkInter->SetVolume(m_volumeSlider->value() / 100.0f, true);
+    if (m_defSinkInter->mute())
+        m_defSinkInter->SetMuteQueued(false);
 }
 
 void SoundApplet::sinkInputsChanged()
