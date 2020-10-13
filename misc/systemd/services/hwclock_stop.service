@@ -3,6 +3,7 @@ Description=sync RTC from system time
 Before=shutdown.target
 
 [Service]
+ExecStart=hwclock -s
 ExecStop=hwclock -w
 RemainAfterExit=yes
 
