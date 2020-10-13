@@ -105,8 +105,8 @@ type Manager struct {
 		SetCpuGovernor func() `in:"governor"`
 		SetCpuBoost    func() `in:"enabled"`
 		SetMode        func() `in:"mode"`
+		LockCpuFreq    func() `in:"governor, lockTime"`
 	}
-
 	// nolint
 	signals *struct {
 		BatteryDisplayUpdate struct {

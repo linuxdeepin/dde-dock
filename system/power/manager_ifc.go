@@ -21,6 +21,7 @@ package power
 
 import (
 	"errors"
+	"time"
 
 	dbus "github.com/godbus/dbus"
 	"pkg.deepin.io/lib/dbusutil"
@@ -121,4 +122,32 @@ func (m *Manager) SetMode(mode string) *dbus.Error {
 
 	logger.Warning(err)
 	return dbusutil.ToError(err)
+}
+
+func (m *Manager) LockCpuFreq(governor string, lockTime int32) *dbus.Error {
+	if !m.isCpuGovernorSupported(governor) {
+		logger.Warningf("cpu can not support this governor:%s", governor)
+	}
+
+	currentGovernor, err := m.cpus.GetGovernor()
+	if err != nil {
+		return dbusutil.ToError(err)
+	}
+
+	// change cpu governor
+	if governor != currentGovernor {
+		err = m.cpus.SetGovernor(governor)
+		if err != nil {
+			return dbusutil.ToError(err)
+		}
+
+		time.AfterFunc(time.Second*time.Duration(lockTime), func() {
+			err := m.cpus.SetGovernor(currentGovernor)
+			if err != nil {
+				logger.Warningf("rewrite cpu scaling_governor file failed:%v", err)
+			}
+		})
+	}
+
+	return nil
 }
