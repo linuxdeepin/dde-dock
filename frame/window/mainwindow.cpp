@@ -128,11 +128,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::launch()
 {
+    if (!qApp->property("CANSHOW").toBool())
+        return;
+
     m_launched = true;
     qApp->processEvents();
     setVisible(true);
     m_multiScreenWorker->initShow();
     m_shadowMaskOptimizeTimer->start();
+}
+
+void MainWindow::callShow()
+{
+    static bool flag = false;
+    if (flag) {
+        return;
+    }
+    flag = true;
+
+    qApp->setProperty("CANSHOW", true);
+
+    launch();
 }
 
 void MainWindow::showEvent(QShowEvent *e)
@@ -280,7 +296,7 @@ void MainWindow::initConnections()
 
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
-    connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, [ this ](){
+    connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, [ this ]() {
         static QPoint lastPos;
         QPoint curPos = QCursor::pos();
         if (lastPos == curPos) {
@@ -368,9 +384,9 @@ void MainWindow::resetDragWindow()
     }
 
     QRect rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
-                                             , m_multiScreenWorker->position()
-                                             , HideMode::KeepShowing,
-                                             m_multiScreenWorker->displayMode());
+                                               , m_multiScreenWorker->position()
+                                               , HideMode::KeepShowing
+                                               , m_multiScreenWorker->displayMode());
 
     // 这个时候屏幕有可能是隐藏的，不能直接使用this->width()这种去设置任务栏的高度，而应该保证原值
     int dockSize = 0;
@@ -421,7 +437,7 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         newRect.setX(rect.x());
         newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
         newRect.setWidth(rect.width());
-        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE ));
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
     }
     break;
     case Left: {
@@ -466,9 +482,9 @@ void MainWindow::touchRequestResizeDock()
 {
     const QPoint touchPos(QCursor::pos());
     QRect dockRect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
-                                                          , m_multiScreenWorker->position()
-                                                          , HideMode::KeepShowing
-                                                          , m_multiScreenWorker->displayMode());
+                                                   , m_multiScreenWorker->position()
+                                                   , HideMode::KeepShowing
+                                                   , m_multiScreenWorker->displayMode());
 
     // 隐藏状态返回
     if (width() == 0 || height() == 0) {

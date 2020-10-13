@@ -130,6 +130,7 @@ public:
 
 public slots:
     void launch();
+    void callShow();
 
 private:
     using QWidget::show;

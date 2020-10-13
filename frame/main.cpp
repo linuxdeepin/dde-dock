@@ -229,11 +229,13 @@ int main(int argc, char *argv[])
     DLogManager::registerFileAppender();
 
     QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
+    QCommandLineOption runOption(QStringList() << "r" << "run-by-stardde", "run by startdde.");
     QCommandLineParser parser;
     parser.setApplicationDescription("DDE Dock");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(disablePlugOption);
+    parser.addOption(runOption);
     parser.process(app);
 
     DGuiApplicationHelper::setSingleInstanceInterval(-1);
@@ -253,6 +255,8 @@ int main(int argc, char *argv[])
     DBusDockAdaptors adaptor(&mw);
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
+
+    qApp->setProperty("CANSHOW", !parser.isSet(runOption));
 
     mw.launch();
 

@@ -40,6 +40,11 @@ MainWindow *DBusDockAdaptors::parent() const
     return static_cast<MainWindow *>(QObject::parent());
 }
 
+void DBusDockAdaptors::callShow()
+{
+    return parent()->callShow();
+}
+
 QRect DBusDockAdaptors::geometry() const
 {
     return parent()->geometry();

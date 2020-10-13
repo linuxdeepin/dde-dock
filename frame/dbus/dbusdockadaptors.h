@@ -36,6 +36,7 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Introspection", ""
                                        "  <interface name=\"com.deepin.dde.Dock\">\n"
                                        "    <property access=\"read\" type=\"(iiii)\" name=\"geometry\"/>\n"
+                                       "    <method name=\"callShow\"/>"
                                        "    <signal name=\"geometryChanged\">"
                                                 "<arg name=\"geometry\" type=\"(iiii)\"/>"
                                             "</signal>"
@@ -47,6 +48,9 @@ public:
     virtual ~DBusDockAdaptors();
 
     MainWindow *parent() const;
+
+public Q_SLOTS: // METHODS
+    void callShow();
 
 public: // PROPERTIES
     Q_PROPERTY(QRect geometry READ geometry NOTIFY geometryChanged)
