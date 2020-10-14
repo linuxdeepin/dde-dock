@@ -31,6 +31,7 @@ import (
 	dbus "github.com/godbus/dbus"
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	"github.com/linuxdeepin/go-x11-client/ext/dpms"
+
 	"pkg.deepin.io/dde/daemon/keybinding/util"
 	gio "pkg.deepin.io/gir/gio-2.0"
 	"pkg.deepin.io/lib/strv"
@@ -64,7 +65,7 @@ func resetKWin(wmObj *wm.Wm) error {
 		return err
 	}
 	for _, accel := range accels {
-		//logger.Debug("resetKwin each accel:", accel.Id, accel.Keystrokes, accel.DefaultKeystrokes)
+		// logger.Debug("resetKwin each accel:", accel.Id, accel.Keystrokes, accel.DefaultKeystrokes)
 		if !strv.Strv(accel.Keystrokes).Equal(accel.DefaultKeystrokes) &&
 			len(accel.DefaultKeystrokes) > 0 && accel.DefaultKeystrokes[0] != "" {
 			accelJson, err := util.MarshalJSON(&util.KWinAccel{
@@ -109,13 +110,19 @@ func systemLock() {
 	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLock", 0)
 }
 
-func systemSuspend() {
-	sessionDBus, _ := dbus.SessionBus()
-	go func() {
-		doPrepareSuspend()
-		sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestSuspend", 0)
-		undoPrepareSuspend()
-	}()
+func (m *Manager) systemSuspend() {
+	can, err := m.sessionManager.CanSuspend(0)
+
+	if !can {
+		logger.Info("can not suspend")
+		return
+	}
+
+	logger.Debug("suspend")
+	err = m.sessionManager.RequestSuspend(0)
+	if err != nil {
+		logger.Warning("failed to suspend:", err)
+	}
 }
 
 func (m *Manager) systemHibernate() {
@@ -186,14 +193,30 @@ func (m *Manager) systemTurnOffScreen() {
 	undoPrepareSuspend()
 }
 
-func systemLogout() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLogout", 0)
+func (m *Manager) systemLogout() {
+	can, err := m.sessionManager.CanLogout(0)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	if !can {
+		logger.Info("can not logout")
+		return
+	}
+
+	logger.Debug("logout")
+	err = m.sessionManager.RequestLogout(0)
+	if err != nil {
+		logger.Warning("failed to logout:", err)
+	}
 }
 
-func systemAway() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".RequestLock", 0)
+func (m *Manager) systemAway() {
+	err := m.sessionManager.RequestLock(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func queryCommandByMime(mime string) string {
@@ -245,7 +268,6 @@ func readTinyFile(file string) ([]byte, error) {
 	defer f.Close()
 	buf := make([]byte, 8)
 	n, err := f.Read(buf)
-
 	if err != nil {
 		return nil, err
 	}

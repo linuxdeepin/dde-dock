@@ -203,7 +203,7 @@ func (m *Manager) initHandlers() {
 			if sleepLock {
 				systemLock()
 			}
-			systemSuspend()
+			m.systemSuspend()
 		case powerActionHibernate:
 			m.systemHibernate()
 		case powerActionTurnOffScreen:
@@ -230,15 +230,15 @@ func (m *Manager) initHandlers() {
 	}
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {
-		systemSuspend()
+		m.systemSuspend()
 	}
 
 	m.handlers[ActionTypeSystemLogOff] = func(ev *KeyEvent) {
-		systemLogout()
+		m.systemLogout()
 	}
 
 	m.handlers[ActionTypeSystemAway] = func(ev *KeyEvent) {
-		systemAway()
+		m.systemAway()
 	}
 
 	// handle Switch Kbd Layout
