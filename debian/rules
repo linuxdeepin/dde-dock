@@ -2,13 +2,6 @@
 # -*- makefile -*-
 export QT_SELECT=5
 
-DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
-ifeq ($(DEB_BUILD_ARCH), mips64el)
-        export CC = /usr/bin/clang
-        export CXX = /usr/bin/clang++
-endif
-
-
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
