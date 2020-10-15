@@ -28,6 +28,8 @@
 
 #include <DStyle>
 #include <DPlatformWindowHandle>
+#include <DSysInfo>
+#include <DPlatformTheme>
 
 #include <QDebug>
 #include <QEvent>
@@ -326,7 +328,12 @@ void MainWindow::adjustShadowMask()
     const bool isFasion = m_multiScreenWorker->displayMode() == Fashion;
 
     DStyleHelper dstyle(style());
-    const int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+    int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+
+    if (Dtk::Core::DSysInfo::isCommunityEdition()) {
+        auto theme = DGuiApplicationHelper::instance()->systemTheme();
+        radius = theme->windowRadius();
+    }
 
     int newRadius = composite && isFasion ? radius : 0;
     m_platformWindowHandle.setWindowRadius(newRadius);
@@ -335,6 +342,10 @@ void MainWindow::adjustShadowMask()
     clipPath.addRect(QRect(QPoint(0, 0), this->geometry().size()));
 
     m_platformWindowHandle.setClipPath(newRadius != 0 ? QPainterPath() : clipPath);
+
+    // 临时解决方案: 在控制中心修改圆角之后, 会过几秒才会刷新显示 ???
+    if (Dtk::Core::DSysInfo::isCommunityEdition())
+        update();
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
