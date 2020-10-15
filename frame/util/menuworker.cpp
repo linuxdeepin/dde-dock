@@ -118,7 +118,7 @@ void MenuWorker::initUI()
 
     m_settingsMenu->addAction(modeSubMenuAct);
     m_settingsMenu->addAction(locationSubMenuAct);
-    m_settingsMenu->addAction(statusSubMenuAct);
+//    m_settingsMenu->addAction(statusSubMenuAct);
     m_settingsMenu->addAction(hideSubMenuAct);
     m_settingsMenu->setTitle("Settings Menu");
 }
