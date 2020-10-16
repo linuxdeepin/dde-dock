@@ -102,6 +102,11 @@ func (h *LidSwitchHandler) onLidOpened() {
 	if err := h.stopAskUser(); err != nil {
 		logger.Warning("stopAskUser error:", err)
 	}
+
+	err := m.helper.ScreenSaver.SimulateUserActivity(0)
+	if err != nil {
+		logger.Warning(err)
+	}
 }
 
 func (h *LidSwitchHandler) stopAskUser() error {
