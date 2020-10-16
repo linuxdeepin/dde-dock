@@ -110,11 +110,13 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
     , m_separator(new HorizontalSeparator)
+    , m_deviceLabel(nullptr)
     , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
     , m_deviceInfo("")
+    , m_lastPort(nullptr)
 
 {
     initUi();
@@ -143,12 +145,12 @@ void SoundApplet::initUi()
 
     m_soundShow->setText(QString("%1%").arg(0));
 
-    TipsWidget *deviceLabel = new TipsWidget;
-    deviceLabel->setText(tr("Device"));
+    m_deviceLabel = new TipsWidget;
+    m_deviceLabel->setText(tr("Device"));
 
     QHBoxLayout *deviceLayout = new QHBoxLayout;
     deviceLayout->addSpacing(2);
-    deviceLayout->addWidget(deviceLabel, 0, Qt::AlignLeft);
+    deviceLayout->addWidget(m_deviceLabel, 0, Qt::AlignLeft);
     deviceLayout->addWidget(m_soundShow, 0, Qt::AlignRight);
     deviceLayout->setSpacing(0);
     deviceLayout->setMargin(0);
@@ -202,12 +204,18 @@ void SoundApplet::initUi()
     connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(m_audioInter, &DBusAudio::IncreaseVolumeChanged, this, &SoundApplet::increaseVolumeChanged);
+    connect(m_audioInter, &DBusAudio::PortEnabledChanged, [this](uint cardId, QString portId) {
+            portEnableChange(cardId, portId);
+    });;
     connect(this, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
     connect(m_listView, &DListView::clicked, this, [this](const QModelIndex & idx) {
         const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();
         if (port) {
             m_audioInter->SetPort(port->cardId(), port->id(), int(port->direction()));
+            //手动勾选时启用设备
+            m_audioInter->SetPortEnabled(port->cardId(), port->id(), true);
         }
+
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundApplet::refreshIcon);
     connect(qApp, &DApplication::iconThemeChanged, this, &SoundApplet::refreshIcon);
@@ -218,7 +226,7 @@ void SoundApplet::initUi()
 
     refreshIcon();
 
-    getCradsInfo();
+    updateCradsInfo();
 }
 
 int SoundApplet::volumeValue() const
@@ -254,6 +262,10 @@ void SoundApplet::defaultSinkChanged()
 
     QString portId = m_defSinkInter->activePort().name;
     uint cardId = m_defSinkInter->card();
+    //最后一个设备会被移除，但是当在控制中心选中此设备后需要添加，并勾选
+    if (m_lastPort && m_lastPort->cardId() == cardId && m_lastPort->id() == portId) {
+        startAddPort(m_lastPort);
+    }
     activePort(portId,cardId);
 
     emit defaultSinkChanged(m_defSinkInter);
@@ -327,16 +339,24 @@ void SoundApplet::cardsChanged(const QString &cards)
                 port->setCardId(cardId);
                 port->setCardName(cardName);
 
-                if (!include) { startAddPort(port); }
+                if (!include) {
+                    startAddPort(port);
+                }
 
                 tmpPorts << portId;
             }
         }
         tmpCardIds.insert(cardId, tmpPorts);
     }
+
     defaultSinkChanged();//重新获取切换的设备信息
+    enableDevice(true);
 
     for (Port *port : m_ports) {
+        //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
+        if (!m_audioInter->IsPortEnabled(port->cardId(), port->id())) {
+            removeDisabledDevice(port->id(), port->cardId());
+        }
         //判断端口是否在最新的设备列表中
         if (tmpCardIds.contains(port->cardId())) {
             if (!tmpCardIds[port->cardId()].contains(port->id())) {
@@ -347,7 +367,8 @@ void SoundApplet::cardsChanged(const QString &cards)
             startRemovePort(port->id(), port->cardId());
         }
     }
-
+    //当只有一个设备剩余时，该设备也需要移除
+    removeLastDevice();
     updateListHeight();
 }
 void SoundApplet::toggleMute()
@@ -506,6 +527,7 @@ void SoundApplet::activePort(const QString &portId, const uint &cardId)
     for (Port *it : m_ports) {
         if (it->id() == portId && it->cardId() == cardId) {
             it->setIsActive(true);
+            enableDevice(true);
         }
         else {
             it->setIsActive(false);
@@ -513,7 +535,7 @@ void SoundApplet::activePort(const QString &portId, const uint &cardId)
     }
 }
 
-void SoundApplet::getCradsInfo()
+void SoundApplet::updateCradsInfo()
 {
     QDBusInterface inter("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio","com.deepin.daemon.Audio",QDBusConnection::sessionBus(), this);
     QString info = inter.property("CardsWithoutUnavailable").toString();
@@ -523,11 +545,60 @@ void SoundApplet::getCradsInfo()
     }
 }
 
+void SoundApplet::enableDevice(bool flag)
+{
+    m_volumeSlider->setEnabled(flag);
+    m_volumeBtn->setEnabled(flag);
+    m_soundShow->setEnabled(flag);
+    m_volumeIconMax->setEnabled(flag);
+    m_deviceLabel->setEnabled(flag);
+}
+
+void SoundApplet::disableAllDevice()
+{
+    for (Port *port : m_ports) {
+        port->setIsActive(false);
+    }
+}
+
+/**
+ * @brief SoundApplet::removeLastDevice
+ * 移除最后一个设备
+ */
+void SoundApplet::removeLastDevice()
+{
+    if (m_ports.count() == 1 && m_ports.at(0)) {
+        m_lastPort = new Port(m_model);
+        m_lastPort->setId(m_ports.at(0)->id());
+        m_lastPort->setName(m_ports.at(0)->name());
+        m_lastPort->setDirection(m_ports.at(0)->direction());
+        m_lastPort->setCardId(m_ports.at(0)->cardId());
+        m_lastPort->setCardName(m_ports.at(0)->cardName());
+        startRemovePort(m_ports.at(0)->id(), m_ports.at(0)->cardId());
+        qDebug() << "remove last output device";
+    }
+}
+
+/**
+ * @brief SoundApplet::removeDisabledDevice 移除禁用设备
+ * @param portId
+ * @param cardId
+ */
+void SoundApplet::removeDisabledDevice(QString portId, unsigned int cardId)
+{
+    startRemovePort(portId, cardId);
+    if (m_defSinkInter->activePort().name == portId && m_defSinkInter->card() == cardId) {
+        enableDevice(false);
+        disableAllDevice();
+    }
+    qDebug() << "remove disabled output device";
+}
+
 void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
 {
     Q_UNUSED(msg)
 
-    getCradsInfo();
+    updateCradsInfo();
 }
 
 void SoundApplet::updateListHeight()
@@ -558,5 +629,14 @@ void SoundApplet::updateListHeight()
     m_centralWidget->setFixedHeight(totalHeight);
     update();
 }
+
+void SoundApplet::portEnableChange(unsigned int cardId, QString portId)
+{
+    Q_UNUSED(cardId)
+    Q_UNUSED(portId)
+    m_deviceInfo = "";
+    updateCradsInfo();
+}
+
 
 

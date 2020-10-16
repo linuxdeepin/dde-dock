@@ -127,10 +127,15 @@ private slots:
     void activePort(const QString &portId,const uint &cardId);
     void haldleDbusSignal(const QDBusMessage &msg);
     void updateListHeight();
+    void portEnableChange(unsigned int cardId, QString portId);
 
 private:
     void refreshIcon();
-    void getCradsInfo();
+    void updateCradsInfo();
+    void enableDevice(bool flag);
+    void disableAllDevice();//禁用所有设备
+    void removeLastDevice();//移除最后一个设备
+    void removeDisabledDevice(QString portId, unsigned int cardId);
 
 private:
     QWidget *m_centralWidget;
@@ -140,6 +145,7 @@ private:
     Dock::TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
     HorizontalSeparator *m_separator;
+    Dock::TipsWidget *m_deviceLabel;
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;
@@ -147,6 +153,7 @@ private:
     QStandardItemModel *m_model;
     QList<Port *> m_ports;
     QString m_deviceInfo;
+    Port *m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
 };
 
 #endif // SOUNDAPPLET_H
