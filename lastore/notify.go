@@ -124,5 +124,5 @@ func (l *Lastore) notifyAutoClean() {
 
 func (l *Lastore) notifyUpdateSource(actions []NotifyAction) {
 	msg := gettext.Tr("New system edition available")
-	l.sendNotify("dde-control-center", msg, actions, notifyExpireTimeoutDefault, "dde-control-center")
+	l.sendNotify("preferences-system", msg, actions, notifyExpireTimeoutDefault, "dde-control-center")
 }
