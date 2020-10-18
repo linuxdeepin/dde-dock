@@ -1,0 +1,5 @@
+# get the username
+auth	optional	pam_debug.so
+auth	[success=1 ignore=1 default=bad]	pam_deepin_auth.so
+auth	requisite	pam_deny.so
+auth	required	pam_permit.so

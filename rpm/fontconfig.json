@@ -1,0 +1,26 @@
+{
+    "zh_CN":{
+        "Standard":"Noto Sans CJK SC",
+        "Mono":"Noto Sans Mono"
+    },
+    "zh_TW":{
+        "Standard":"Noto Sans CJK TC",
+        "Mono":"Noto Sans Mono"
+    },
+    "zh_HK":{
+        "Standard":"Noto Sans CJK TC",
+        "Mono":"Noto Sans Mono"
+    },
+    "ja":{
+        "Standard":"Noto Sans CJK JP",
+        "Mono":"Noto Sans Mono"
+    },
+    "ko":{
+        "Standard":"Noto Sans CJK KR",
+        "Mono":"Noto Sans Mono"
+    },
+    "en_US":{
+        "Standard":"Noto Sans",
+        "Mono":"Noto Sans Mono"
+    }
+}
