@@ -53,6 +53,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_delayTimer(new QTimer(this))
     , m_monitorSetting(nullptr)
     , m_ds(m_displayInter->primary())
+    , m_monitorRotation(1)
     , m_showAniStart(false)
     , m_hideAniStart(false)
     , m_aniStart(false)
@@ -759,6 +760,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
         strut = m_screenRawHeight - p.y();
+        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
+        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
+            strut = m_screenRawWidth - p.y();
+        }
         strutStart = p.x();
         strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
         break;
@@ -771,6 +776,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
         strut = m_screenRawWidth - p.x();
+        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
+        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
+            strut = m_screenRawHeight - p.x();
+        }
         strutStart = p.y();
         strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
         break;
@@ -806,6 +815,8 @@ void MultiScreenWorker::onRequestUpdateMonitorInfo()
 
 void MultiScreenWorker::updateMonitorDockedInfo()
 {
+    updatePrimaryDisplayRotation();
+
     QList<Monitor *>screens = m_mtrInfo.validMonitor();
 
     if (screens.size() == 1) {
@@ -864,6 +875,19 @@ void MultiScreenWorker::updateMonitorDockedInfo()
             && (s1->topLeft() == s2->bottomLeft() || s1->topRight() == s2->bottomRight())) {
         s1->dockPosition().topDock = false;
         s2->dockPosition().bottomDock = false;
+    }
+}
+
+void MultiScreenWorker::updatePrimaryDisplayRotation()
+{
+    Monitor * primaryMonitor = monitorByName(m_mtrInfo.validMonitor(), m_displayInter->primary());
+    if(primaryMonitor) {
+        MonitorInter *inter = new MonitorInter("com.deepin.daemon.Display", primaryMonitor->path(), QDBusConnection::sessionBus(), this);
+        m_monitorRotation = inter->rotation();
+        //保存屏幕允许那些方向
+        foreach (quint16 var, inter->rotations()) {
+                m_rotations.append(var);
+            }
     }
 }
 

@@ -342,6 +342,11 @@ private slots:
     void onRequestDelayShowDock(const QString &screenName);
 
     void updateMonitorDockedInfo();
+    /**
+     * @brief updatePrimaryDisplayRotation
+     * 更新主屏幕的方向
+     */
+    void updatePrimaryDisplayRotation();
 
     void onTouchPress(int type, int x, int y, const QString &key);
     void onTouchRelease(int type, int x, int y, const QString &key);
@@ -465,6 +470,11 @@ private:
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
+
+    //当前屏幕的方向
+    int m_monitorRotation;
+    //当前屏幕的所有方向
+    RotationList m_rotations;
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;
