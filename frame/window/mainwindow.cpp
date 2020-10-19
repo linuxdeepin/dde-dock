@@ -299,14 +299,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_panelShowAni, &QVariantAnimation::finished, [ this ]() {
         const QRect windowRect = m_settings->windowRect(m_curDockPos, false);
 
-
-
-        QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
+        QWidget::move(windowRect.left(), windowRect.top());
 
+        //显示dock同时，也显示MainPanelControl控制和插件管理框
+        m_mainPanel->show();
         m_mainPanel->move(QPoint(0, 0));
-        setMaskAlpha(m_settings->Opacity());//显示时，恢复dock透明度
 
+        setMaskAlpha(m_settings->Opacity());//显示时，恢复dock透明度
         resizeMainPanelWindow();
 
         qDebug() << "Show animation finished:" << frameGeometry();
@@ -318,11 +318,13 @@ MainWindow::MainWindow(QWidget *parent)
         m_curDockPos = m_newDockPos;
         const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
 
-        QWidget::move(windowRect.left(), windowRect.top());
         QWidget::setFixedSize(windowRect.size());
+        QWidget::move(windowRect.left(), windowRect.top());
 
+        //隐藏dock同时，也隐藏MainPanelControl控制和插件管理框
+        m_mainPanel->hide();
         m_mainPanel->move(QPoint(0, 0));
-        setMaskAlpha(0); //隐藏时（窗口高度为一个像素，显示为一条白线）设置dock透明度为0
+        setMaskAlpha(0); //隐藏时（窗口高度为2个像素，显示为一条白线）设置dock透明度为0
 
         qDebug() << "Hide animation finished" << frameGeometry();
         qDebug() << "Hide animation finished not frame:" << geometry();
@@ -471,7 +473,6 @@ void MainWindow::leaveEvent(QEvent *e)
         default:
             break;
         }
-
     }
 
     m_expandDelayTimer->stop();
@@ -894,8 +895,8 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-    int startValue = (m_curDockPos == Top || m_curDockPos == Bottom) ? height() : width();
-    int endValue = 1;
+    int startValue = (prevPos == Top || prevPos == Bottom) ? height() : width();
+    int endValue = 2;
 
     m_panelShowAni->stop();
     m_panelHideAni->setStartValue(startValue);
@@ -1034,14 +1035,15 @@ void MainWindow::resizeMainWindow()
     const Position position = m_curDockPos;
     QSize size = m_settings->windowSize();
     const QRect windowRect = m_settings->windowRect(position, false);
-    internalMove(windowRect.topLeft());
     resizeMainPanelWindow();
     QWidget::setFixedSize(size);
+    internalMove(windowRect.topLeft());
 }
 
 void MainWindow::resizeMainPanelWindow()
 {
     m_mainPanel->setFixedSize(m_settings->m_mainWindowSize);
+    m_mainPanel->move(0,0);
 
     switch (m_curDockPos) {
     case Dock::Top:
