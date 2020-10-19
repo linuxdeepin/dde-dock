@@ -736,13 +736,14 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     }
 
     // 除了"一直显示"模式,其他的都不要设置任务栏区域
-    if (m_hideMode != Dock::KeepShowing)
+    if (m_hideMode != Dock::KeepShowing) {
         return;
+    }
 
     const auto ratio = qApp->devicePixelRatio();
 
     const QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
-    qDebug() << "wm dock area:" << rect;
+
     const QPoint &p = rawXPosition(rect.topLeft());
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
@@ -785,7 +786,6 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     }
 
-    qDebug() << strut << strutStart << strutEnd;
     XcbMisc::instance()->set_strut_partial(parent()->winId(), orientation, strut + WINDOWMARGIN * ratio, strutStart, strutEnd);
 }
 
@@ -1860,7 +1860,6 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     } else {
         // 任务栏隐藏状态，但需要显示
         if (hideMode() == HideMode::KeepShowing) {
-            qDebug() << "showing";
             parent()->setFixedSize(dockRect(m_ds.current()).size());
             parent()->setGeometry(dockRect(m_ds.current()));
             return;
