@@ -32,6 +32,7 @@
 #include <QStandardPaths>
 #include <QDateTime>
 #include <QGSettings>
+#include <QDir>
 
 #include <DApplication>
 #include <DLog>
@@ -55,8 +56,7 @@ DUTIL_USE_NAMESPACE
 #endif
 
 const int MAX_STACK_FRAMES = 128;
-const QString strPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-collapse.log";
-const QString cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
+const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
 
 using namespace std;
 
@@ -83,7 +83,7 @@ void RegisterDdeSession()
 
 bool IsSaveMode()
 {
-    QSettings settings(cfgPath, QSettings::IniFormat);
+    QSettings settings(g_cfgPath, QSettings::IniFormat);
     settings.beginGroup(qApp->applicationName());
     int collapseNum = settings.value("collapse").toInt();
 
@@ -98,19 +98,23 @@ bool IsSaveMode()
     return false;
 }
 
-void sig_crash(int sig)
+[[noreturn]] void sig_crash(int sig)
 {
-    QFile *file = new QFile(strPath);
+    QDir dir(QStandardPaths::standardLocations(QStandardPaths::CacheLocation)[0]);
+    dir.cdUp();
+    QString filePath = dir.path() + "/dde-collapse.log";
+
+    QFile *file = new QFile(filePath);
 
     // 创建默认配置文件,记录段时间内的崩溃次数
-    if (!QFile::exists(cfgPath)) {
-        QFile file(cfgPath);
+    if (!QFile::exists(g_cfgPath)) {
+        QFile file(g_cfgPath);
         if (!file.open(QIODevice::WriteOnly))
             exit(0);
         file.close();
     }
 
-    QSettings settings(cfgPath, QSettings::IniFormat);
+    QSettings settings(g_cfgPath, QSettings::IniFormat);
     settings.beginGroup("dde-dock");
 
     QDateTime lastDate = QDateTime::fromString(settings.value("lastDate").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
@@ -182,6 +186,8 @@ void sig_crash(int sig)
         //
     }
     file->close();
+    delete file;
+    file = nullptr;
     exit(0);
 }
 
