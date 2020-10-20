@@ -398,7 +398,7 @@ void SoundApplet::refreshIcon()
     if (mute) {
         volumeString = "muted";
     } else {
-        volumeString = "low";
+        volumeString = "off";
     }
 
     QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
