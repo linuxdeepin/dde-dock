@@ -24,11 +24,14 @@
 #include "../frame/util/utils.h"
 #include "../widgets/tipswidget.h"
 
+#include <DSysInfo>
+
 #include <QIcon>
 #include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
 
+DCORE_USE_NAMESPACE
 using namespace Dock;
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
@@ -163,7 +166,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(logout);
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
-        if (DBusAccount().userList().count() > 1) {
+        if (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer) {
             QMap<QString, QVariant> switchUser;
             switchUser["itemId"] = "SwitchUser";
             switchUser["itemText"] = tr("Switch account");
