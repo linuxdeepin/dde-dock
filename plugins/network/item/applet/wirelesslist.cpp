@@ -42,9 +42,10 @@ extern const int ItemWidth = 250;
 extern const int ItemMargin = 10;
 extern const int ItemHeight;
 
-WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
+WirelessList::WirelessList(WirelessDevice *deviceIter, NetworkModel *model, QWidget *parent)
     : QScrollArea(parent)
     , m_device(deviceIter)
+    , m_model(model)
     , m_activeAP()
     , m_updateAPTimer(new QTimer(this))
     , m_centralLayout(new QVBoxLayout)
@@ -52,8 +53,26 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     , m_controlPanel(new DeviceControlWidget)
     , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
-    setFixedHeight(ItemHeight);
+    initUI();
+    initConnect();
+//    connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
 
+//    connect(m_device, &WirelessDevice::activeWirelessConnectionInfoChanged, this, &WirelessList::onActiveConnectionInfoChanged);
+//    connect(m_device, static_cast<void (WirelessDevice::*)(NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+
+    QMetaObject::invokeMethod(this, "loadAPList", Qt::QueuedConnection);
+}
+
+WirelessList::~WirelessList()
+{
+
+}
+
+void WirelessList::initUI()
+{
+    //设置固定高度
+    setFixedHeight(ItemHeight);
+    //刷新wifi数据
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
 
@@ -75,23 +94,25 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_loadingStat->setVisible(false);
     isHotposActive = false;
+}
 
+void WirelessList::initConnect()
+{
+    //开关wifi
+    connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
+    //刷新wifi列表
+    connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
+    //刷新wifi列表，DeviceControlWidget在wayland架构下收不到鼠标点击事件，所以这个槽在klu上实际上是没有用的
+    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, m_model, &NetworkModel::updateApList);
+    //修改wifi数据的信号
     connect(m_device, &WirelessDevice::apAdded, this, &WirelessList::APAdded);
     connect(m_device, &WirelessDevice::apRemoved, this, &WirelessList::APRemoved);
     connect(m_device, &WirelessDevice::apInfoChanged, this, &WirelessList::APPropertiesChanged);
-    connect(m_device, &WirelessDevice::enableChanged, this, &WirelessList::onDeviceEnableChanged);
+    //当wifi连接时，需要先去后端验证是否是企业wifi再做处理，所以要关联该信号
     connect(m_device, &WirelessDevice::activateAccessPointFailed, this, &WirelessList::onActivateApFailed);
-    connect(m_device, &WirelessDevice::hotspotEnabledChanged, this, &WirelessList::onHotspotEnabledChanged);
-
-    connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
-    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, this, &WirelessList::requestWirelessScan);
-
-    connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
-
-    connect(m_device, &WirelessDevice::activeWirelessConnectionInfoChanged, this, &WirelessList::onActiveConnectionInfoChanged);
-    connect(m_device, static_cast<void (WirelessDevice::*)(NetworkDevice::DeviceStatus stat) const>(&WirelessDevice::statusChanged), m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    //活动的wifi进行处理
     connect(m_device, &WirelessDevice::activeConnectionsChanged, this, &WirelessList::updateIndicatorPos, Qt::QueuedConnection);
-
+    //滚动条事件
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [ = ] {
         auto apw = accessPointWidgetByAp(m_activatingAP);
         if (!apw)
@@ -101,11 +122,10 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
         m_loadingStat->move(apw->mapTo(this, apw->rect().topRight()) - QPoint(23, h));
     });
 
-    QMetaObject::invokeMethod(this, "loadAPList", Qt::QueuedConnection);
-}
 
-WirelessList::~WirelessList()
-{
+
+    //热点
+    connect(m_device, &WirelessDevice::hotspotEnabledChanged, this, &WirelessList::onHotspotEnabledChanged);
 }
 
 QWidget *WirelessList::controlPanel()
@@ -222,16 +242,18 @@ void WirelessList::updateAPList()
         if (m_apList.size() > m_apwList.size()) {
             int i = m_apList.size() - m_apwList.size();
             for (int index = 0; index != i; index++) {
+                //每个wifi热点的视图
                 AccessPointWidget *apw = new AccessPointWidget;
                 apw->setFixedHeight(ItemHeight);
                 m_apwList << apw;
                 m_centralLayout->addWidget(apw);
-
-                connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
-                connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
-                connect(apw, &AccessPointWidget::requestActiveAP, this, [ = ] {
-                    m_clickedAPW = apw;
-                }, Qt::UniqueConnection);
+                //连接wifi
+                connect(apw, &AccessPointWidget::requestConnectAP,
+                        m_model, [ = ](
+                            const QString &apPath, const QString &uuid){Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);
+                             m_clickedAPW = apw;});
+                //断开wifi
+                connect(apw, &AccessPointWidget::requestDisconnectAP, m_model, [ = ]() {Q_EMIT m_model->requestDisconnectAp(m_device->path());});
             }
         } else if (m_apList.size() < m_apwList.size()) {
             if (!m_apwList.isEmpty()) {
@@ -299,8 +321,8 @@ void WirelessList::onEnableButtonToggle(const bool enable)
     if (m_device.isNull()) {
         return;
     }
-
-    Q_EMIT requestSetDeviceEnable(m_device->path(), enable);
+    //直接调用dde::network::networkModel中的接口，防止数据出现延迟之类的问题
+    Q_EMIT m_model->requestDeviceEnable(m_device->path(), enable);
     m_updateAPTimer->start();
 }
 
@@ -411,7 +433,7 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
     if (clickedAP.path() == apPath) {
         qDebug() << "wireless connect failed and may require more configuration,"
                  << "path:" << clickedAP.path() << "ssid" << clickedAP.ssid()
-                 << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength();
+                 << "secret:" << clickedAP.secured() << "strength" << clickedAP.strength() ;
         m_updateAPTimer->start();
 
         DDBusSender()

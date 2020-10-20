@@ -30,6 +30,7 @@
 #include <QPointer>
 
 #include <WirelessDevice>
+#include <NetworkModel>
 
 #include <DSpinner>
 
@@ -48,11 +49,17 @@ class WirelessList : public QScrollArea
     Q_OBJECT
 
 public:
-    explicit WirelessList(dde::network::WirelessDevice *deviceIter, QWidget *parent = 0);
+    explicit WirelessList(dde::network::WirelessDevice *deviceIter, dde::network::NetworkModel *model, QWidget *parent = 0);
     ~WirelessList();
 
     QWidget *controlPanel();
     int APcount();
+    /**
+     * @def setModel
+     * @brief 设置model
+     * @param model
+     */
+    void setModel(dde::network::NetworkModel *model);
 
 public Q_SLOTS:
     void setDeviceInfo(const int index);
@@ -62,8 +69,19 @@ signals:
     void requestSetDeviceEnable(const QString &path, const bool enable) const;
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
-    void requestWirelessScan();
     void requestUpdatePopup();
+
+private:
+    /**
+     * @def initUI
+     * @brief 初始化ui界面
+     */
+    void initUI();
+    /**
+     * @def initConnect
+     * @brief 初始化信号和槽
+     */
+    void initConnect();
 
 private slots:
     void loadAPList();
@@ -85,6 +103,7 @@ private:
 
 private:
     QPointer<dde::network::WirelessDevice> m_device;
+    dde::network::NetworkModel *m_model;
 
     AccessPoint m_activeAP;
     AccessPoint m_activatingAP;
@@ -97,6 +116,7 @@ private:
 
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;
+    //无线网顶部 --（名称  刷新  开关）在这个里面
     DeviceControlWidget *m_controlPanel;
 
     AccessPointWidget *m_clickedAPW;

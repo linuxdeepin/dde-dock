@@ -68,8 +68,19 @@ public:
     void setActiveState(const dde::network::NetworkDevice::DeviceStatus state);
 
 signals:
-    void requestActiveAP(const QString &apPath, const QString &ssid) const;
-    void requestDeactiveAP(const AccessPoint &ap) const;
+    /**
+     * @def requestConnectAP
+     * @brief 连接wifi
+     * @param apPath
+     * @param ssid
+     */
+    void requestConnectAP(const QString &apPath, const QString &uuid) const;
+    /**
+     * @def requestDisconnectAP
+     * @brief 断开连接
+     * @param apPath
+     */
+    void requestDisconnectAP() const;
     void clicked() const;
 
 private:

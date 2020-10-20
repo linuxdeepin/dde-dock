@@ -65,6 +65,10 @@ private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
 
 private:
+    /**
+     * @def loadPlugin
+     * @brief 加载插件
+     */
     void loadPlugin();
     void refreshPluginItemsVisible();
 

@@ -35,8 +35,9 @@
 using namespace dde::network;
 DGUI_USE_NAMESPACE
 
-WirelessItem::WirelessItem(WirelessDevice *device)
+WirelessItem::WirelessItem(WirelessDevice *device, NetworkModel *model)
     : DeviceItem(device),
+      m_model(model),
       m_refreshTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
       m_APList(nullptr)
@@ -45,6 +46,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     m_refreshTimer->setInterval(0);
 
     m_wirelessApplet->setVisible(false);
+    initConnect();
 
     connect(m_refreshTimer, &QTimer::timeout, [&] {
         if (m_device.isNull())
@@ -59,13 +61,25 @@ WirelessItem::WirelessItem(WirelessDevice *device)
             return;
         }
     });
-    connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+
+
+
+//    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeWirelessConnectionInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
 
+
+    init();
+}
+
+void WirelessItem::initConnect()
+{
+    //获取状态提示语
+    connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
+    //获取网络当前连接状态
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeConnectionsChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    //获取wifi的连接，获取wifi的信号强度
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ](QJsonObject info) {
         const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
         if (activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
@@ -74,7 +88,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
         update();
     });
 
-    init();
+
 }
 
 WirelessItem::~WirelessItem()
@@ -226,19 +240,19 @@ void WirelessItem::setDeviceInfo(const int index)
     m_index = index;
 }
 
-bool WirelessItem::eventFilter(QObject *o, QEvent *e)
-{
-    if (o == m_APList && e->type() == QEvent::Resize)
-        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection,Q_ARG(bool, m_APList->controlPanel()->isVisible()));
-    if (o == m_APList && e->type() == QEvent::Show)
-        Q_EMIT requestWirelessScan();
+//bool WirelessItem::eventFilter(QObject *o, QEvent *e)
+//{
+//    if (o == m_APList && e->type() == QEvent::Resize)
+//        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection,Q_ARG(bool, m_APList->controlPanel()->isVisible()));
+//    if (o == m_APList && e->type() == QEvent::Show)
+//        Q_EMIT requestWirelessScan();
 
-    return false;
-}
+//    return false;
+//}
 
 void WirelessItem::init()
 {
-    m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device.data()));
+    m_APList = new WirelessList(static_cast<WirelessDevice *>(m_device.data()), m_model);
     m_APList->installEventFilter(this);
     m_APList->setObjectName("wireless-" + m_device->path());
 
@@ -249,10 +263,9 @@ void WirelessItem::init()
     vLayout->setSpacing(0);
     m_wirelessApplet->setLayout(vLayout);
 
-    connect(m_APList, &WirelessList::requestSetDeviceEnable, this, &WirelessItem::requestSetDeviceEnable);
-    connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
+    //connect(m_APList, &WirelessList::requestSetDeviceEnable, this, &WirelessItem::requestSetDeviceEnable);
+    //connect(m_APList, &WirelessList::requestActiveAP, this, &WirelessItem::requestActiveAP);
     connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
-    connect(m_APList, &WirelessList::requestWirelessScan, this, &WirelessItem::requestWirelessScan);
     connect(m_APList, &WirelessList::requestUpdatePopup, this, &WirelessItem::deviceStateChanged);
 
     QTimer::singleShot(0, this, [ = ]() {
