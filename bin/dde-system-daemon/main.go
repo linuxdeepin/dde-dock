@@ -96,6 +96,10 @@ func main() {
 		}
 	}
 
+	// 系统级服务，无需设置LANG和LANGUAGE，保证翻译不受到影响
+	_ = os.Setenv("LANG","")
+	_ = os.Setenv("LANGUAGE","")
+
 	InitI18n()
 	Textdomain("dde-daemon")
 
