@@ -172,7 +172,7 @@ func (infos UserInfos) filterUserInfos() UserInfos {
 
 func (info UserInfo) isHumanUser(configLoginDefs string) bool {
 	if info.Name == "root" {
-		return false
+		return true
 	}
 
 	if CanNoPasswdLogin(info.Name) {
