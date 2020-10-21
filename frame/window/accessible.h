@@ -4,6 +4,7 @@
 #include "../panel/mainpanelcontrol.h"
 #include "../../widgets/tipswidget.h"
 #include "../util/dockpopupwindow.h"
+#include "util/statebutton.h"
 
 #include "../item/launcheritem.h"
 #include "../item/appitem.h"
@@ -28,8 +29,6 @@
 #include "../plugins/tray/fashiontray/containers/normalcontainer.h"
 #include "../plugins/tray/fashiontray/containers/spliteranimated.h"
 
-#include "../plugins/show-desktop/showdesktopwidget.h"
-
 // 这部分由sound插件单独维护,这样做是因为在标记volumeslider这个类时,需要用到其setValue的实现,
 // 但插件的源文件dock这边并没有包含,不想引入复杂的包含关系,其实最好的做法就是像sound插件这样,谁维护谁的
 //#include "../plugins/sound/sounditem.h"
@@ -38,6 +37,10 @@
 //#include "../plugins/sound/componments/volumeslider.h"
 //#include "../plugins/sound/componments/horizontalseparator.h"
 
+#include "../plugins/show-desktop/showdesktopwidget.h"
+#include "../plugins/bluetooth/componments/deviceitem.h"
+#include "../plugins/network/networkitem.h"
+#include "../plugins/network/item/applet/devicecontrolwidget.h"
 #include "../plugins/datetime/datetimewidget.h"
 #include "../plugins/onboard/onboarditem.h"
 #include "../plugins/trash/trashwidget.h"
@@ -49,6 +52,12 @@
 #include <DIconButton>
 #include <DSwitchButton>
 #include <DPushButton>
+#include <DListView>
+#include <DSwitchButton>
+#include <DSpinner>
+#include <dloadingindicator.h>
+
+#include <QScrollBar>
 
 DWIDGET_USE_NAMESPACE
 using namespace Dock;
@@ -67,11 +76,11 @@ SET_BUTTON_ACCESSIBLE(PlaceholderItem, "placeholderitem")
 SET_BUTTON_ACCESSIBLE(AppDragWidget, "appdragwidget")
 SET_BUTTON_ACCESSIBLE(AppSnapshot, "appsnapshot")
 SET_BUTTON_ACCESSIBLE(FloatingPreview, "floatingpreview")
-SET_BUTTON_ACCESSIBLE(XEmbedTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
-SET_BUTTON_ACCESSIBLE(IndicatorTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
-SET_BUTTON_ACCESSIBLE(SNITrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
-SET_BUTTON_ACCESSIBLE(AbstractTrayWidget, m_w->itemKeyForConfig().replace("sni:",""))
-SET_BUTTON_ACCESSIBLE(SystemTrayItem, m_w->itemKeyForConfig().replace("sni:",""))
+SET_BUTTON_ACCESSIBLE(XEmbedTrayWidget, m_w->itemKeyForConfig().replace("sni:", ""))
+SET_BUTTON_ACCESSIBLE(IndicatorTrayWidget, m_w->itemKeyForConfig().replace("sni:", ""))
+SET_BUTTON_ACCESSIBLE(SNITrayWidget, m_w->itemKeyForConfig().replace("sni:", ""))
+SET_BUTTON_ACCESSIBLE(AbstractTrayWidget, m_w->itemKeyForConfig().replace("sni:", ""))
+SET_BUTTON_ACCESSIBLE(SystemTrayItem, m_w->itemKeyForConfig().replace("sni:", ""))
 SET_FORM_ACCESSIBLE(FashionTrayItem, "fashiontrayitem")
 SET_FORM_ACCESSIBLE(FashionTrayWidgetWrapper, "fashiontraywrapper")
 SET_BUTTON_ACCESSIBLE(FashionTrayControlWidget, "fashiontraycontrolwidget")
@@ -97,8 +106,30 @@ SET_LABEL_ACCESSIBLE(QLabel, m_w->objectName() == "notifications" ? m_w->objectN
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");
+// 几个没什么用的标记，但为了提醒大家不要遗漏标记控件，还是不要去掉
+SET_FORM_ACCESSIBLE(DBlurEffectWidget, "DBlurEffectWidget")
+SET_FORM_ACCESSIBLE(DListView, "DListView")
+SET_FORM_ACCESSIBLE(DLoadingIndicator, "DLoadingIndicator")
+SET_FORM_ACCESSIBLE(DSpinner, "DSpinner")
+SET_FORM_ACCESSIBLE(QMenu, "QMenu")
+SET_FORM_ACCESSIBLE(QPushButton, "QPushButton")
+SET_FORM_ACCESSIBLE(QSlider, "QSlider")
+SET_FORM_ACCESSIBLE(QScrollBar, "QScrollBar")
+SET_FORM_ACCESSIBLE(QScrollArea, "QScrollArea")
+SET_FORM_ACCESSIBLE(QFrame, "QFrame")
+SET_FORM_ACCESSIBLE(QGraphicsView, "QGraphicsView")
+SET_FORM_ACCESSIBLE(DragWidget, "DragWidget")
+SET_FORM_ACCESSIBLE(MenueItem, "MenueItem")
+SET_FORM_ACCESSIBLE(NetworkItem, "NetworkItem")
+SET_FORM_ACCESSIBLE(DeviceItem, "DeviceItem")
+SET_FORM_ACCESSIBLE(StateButton, "StateButton")
+SET_FORM_ACCESSIBLE(DeviceControlWidget, "DeviceControlWidget")
+
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
+    // 自动化标记确定不需要的控件，方可加入忽略列表
+    const static QStringList ignoreLst = {"WirelessItem", "WiredItem", "SsidButton", "WirelessList", "AccessPointWidget"};
+
     QAccessibleInterface *interface = nullptr;
 
     USE_ACCESSIBLE(classname, MainWindow);
@@ -126,11 +157,11 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, SpliterAnimated);
     USE_ACCESSIBLE(classname, IndicatorTrayWidget);
     USE_ACCESSIBLE(classname, XEmbedTrayWidget);
-//    USE_ACCESSIBLE(classname, SoundItem);
-//    USE_ACCESSIBLE(classname, SoundApplet);
-//    USE_ACCESSIBLE(classname, SinkInputWidget);
-//    USE_ACCESSIBLE(classname, VolumeSlider);
-//    USE_ACCESSIBLE(classname, HorizontalSeparator);
+    //    USE_ACCESSIBLE(classname, SoundItem);
+    //    USE_ACCESSIBLE(classname, SoundApplet);
+    //    USE_ACCESSIBLE(classname, SinkInputWidget);
+    //    USE_ACCESSIBLE(classname, VolumeSlider);
+    //    USE_ACCESSIBLE(classname, HorizontalSeparator);
     USE_ACCESSIBLE(classname, DesktopWidget);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, OnboardItem);
@@ -148,6 +179,32 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-2d");
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-3d");
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBlurEffectWidget);
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DListView);
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DLoadingIndicator);
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSpinner);
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton);
+    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DIconButton);
+    USE_ACCESSIBLE(classname, QMenu);
+    USE_ACCESSIBLE(classname, QPushButton);
+    USE_ACCESSIBLE(classname, QSlider);
+    USE_ACCESSIBLE(classname, QScrollBar);
+    USE_ACCESSIBLE(classname, QScrollArea);
+    USE_ACCESSIBLE(classname, QFrame);
+    USE_ACCESSIBLE(classname, QGraphicsView);
+    USE_ACCESSIBLE(classname, DragWidget);
+    USE_ACCESSIBLE(classname, MenueItem);
+    USE_ACCESSIBLE(classname, NetworkItem);
+    USE_ACCESSIBLE(classname, DeviceItem);
+    USE_ACCESSIBLE(classname, StateButton);
+    USE_ACCESSIBLE(classname, DeviceControlWidget);
+
+    if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
+        QWidget *w = static_cast<QWidget *>(object);
+        // 如果你崩溃到这里，说明你修改的代码未兼顾到accessible功能，请修改通过后再提交
+        if (w->accessibleName().isEmpty())
+            Q_ASSERT_X(!w || !w->accessibleName().isEmpty(), "accessibleFactory()", QString("Class: " + classname + " cannot access").toLatin1().data());
+    }
 
     return interface;
 }
