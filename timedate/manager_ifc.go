@@ -46,7 +46,14 @@ func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) *dbus.Er
 
 	// microseconds since 1 Jan 1970 UTC
 	us := (t.Unix() * 1000000) + int64(t.Nanosecond()/1000)
-	return m.SetTime(us, false)
+	err1 := m.SetTime(us, false)
+	if err1 == nil {
+		err = m.service.Emit(m,"TimeUpdate")
+		if err != nil {
+			logger.Debug("emit TimeUpdate failed:",err)
+		}
+	}
+	return err1
 }
 
 // Set the system clock to the specified.

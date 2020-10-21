@@ -45,6 +45,8 @@ import (
 	wm "github.com/linuxdeepin/go-dbus-factory/com.deepin.wm"
 	login1 "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.login1"
 	timedate "github.com/linuxdeepin/go-dbus-factory/org.freedesktop.timedate1"
+	sessiontimedate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.timedate"
+	"pkg.deepin.io/lib/log"
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/randr"
 	"pkg.deepin.io/dde/api/theme_thumb"
@@ -58,7 +60,6 @@ import (
 	"pkg.deepin.io/lib/dbusutil"
 	"pkg.deepin.io/lib/dbusutil/gsprop"
 	"pkg.deepin.io/lib/dbusutil/proxy"
-	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
@@ -146,6 +147,7 @@ type Manager struct {
 	userObj             *accounts.User
 	imageBlur           *accounts.ImageBlur
 	timeDate            *timedate.Timedate
+	sessionTimeDate     *sessiontimedate.Timedate
 	imageEffect         *imageeffect.ImageEffect
 	xSettings           *sessionmanager.XSettings
 	login1Manager       *login1.Manager
@@ -495,6 +497,10 @@ func (m *Manager) init() error {
 
 	m.timeDate = timedate.NewTimedate(systemBus)
 	m.timeDate.InitSignalExt(m.sysSigLoop, true)
+
+	m.sessionTimeDate = sessiontimedate.NewTimedate(sessionBus)
+	m.sessionTimeDate.InitSignalExt(m.sessionSigLoop,true)
+
 	zone, err := m.timeDate.Timezone().Get(0)
 	if err != nil {
 		logger.Warning("Get Timezone Failed:", err)
@@ -533,6 +539,20 @@ func (m *Manager) init() error {
 	err = m.loadDefaultFontConfig(defaultFontConfigFile)
 	if err != nil {
 		logger.Warning("load default font config failed:", err)
+	}
+
+	//修改时间后通过信号通知自动改变主题
+	_, err = m.sessionTimeDate.ConnectTimeUpdate(func() {
+		time.AfterFunc(2*time.Second, m.handleSysClockChanged)
+	})
+	if err != nil {
+		logger.Warning("connect signal TimeUpdate failed:", err)
+	}
+	err = m.timeDate.NTP().ConnectChanged(func(hasValue bool, value bool) {
+		time.AfterFunc(2*time.Second, m.handleSysClockChanged)
+	})
+	if err != nil {
+		logger.Warning("connect NTP failed:", err)
 	}
 
 	// set gtk theme
@@ -1252,7 +1272,6 @@ func (m *Manager) updateWSPolicy(policy string) {
 }
 
 func (m *Manager) enableDetectSysClock(enabled bool) {
-	logger.Debug("enableDetectSysClock:", enabled)
 	nSec := 60 // 1 min
 	if logger.GetLogLevel() == log.LevelDebug {
 		// debug mode: 10 s

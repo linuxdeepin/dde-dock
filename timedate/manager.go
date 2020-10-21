@@ -112,6 +112,11 @@ type Manager struct {
 		GetZoneInfo         func() `in:"zone" out:"zone_info"`
 		GetZoneList         func() `out:"zone_list"`
 	}
+	//nolint
+	signals *struct {
+		TimeUpdate struct{
+		}
+	}
 }
 
 // Create Manager, if create freedesktop timedate1 failed return error
