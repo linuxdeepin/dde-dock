@@ -332,7 +332,7 @@ void MainWindow::adjustShadowMask()
 
     if (Dtk::Core::DSysInfo::isCommunityEdition()) {
         auto theme = DGuiApplicationHelper::instance()->systemTheme();
-        radius = theme->windowRadius();
+        radius = theme->windowRadius(radius);
     }
 
     int newRadius = composite && isFasion ? radius : 0;
