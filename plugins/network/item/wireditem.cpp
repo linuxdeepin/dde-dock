@@ -285,8 +285,11 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 
 void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
 {
-    if (connInfo.isEmpty())
+    if (connInfo.isEmpty()) {
         m_stateButton->setVisible(false);
+    } else {
+        m_stateButton->setVisible(true);
+    }
 
     auto strTitle = connInfo.value("ConnectionName").toString();
     m_connectedName->setText(strTitle);
