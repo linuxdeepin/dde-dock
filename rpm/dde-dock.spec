@@ -1,18 +1,31 @@
 %global sname deepin-dock
+%global repo dde-dock
+%global __provides_exclude_from ^%{_libdir}/%{repo}/.*\\.so$
 
-Name:           dde-dock
-Version:        5.1.0.13
-Release:        1
+%if 0%{?fedora}
+%global start_logo start-here
+Name:           %{sname}
+%else
+Name:           %{repo}
+%endif
+Version:        5.3.0.49
+Release:        1%{?fedora:%dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
+%if 0%{?fedora}
+URL:            https://github.com/linuxdeepin/dde-dock
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+%else
 URL:            http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/RERFNS4wLjAuNjU3NQ/pool/main/d/dde-dock/
-Source0:        %{name}_%{version}.orig.tar.xz	
+Source0:        %{name}_%{version}.orig.tar.xz
+%endif
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(dbusmenu-qt5)
 BuildRequires:  pkgconfig(dde-network-utils)
 BuildRequires:  dtkwidget-devel >= 5.1
+BuildRequires:  dtkgui-devel >= 5.2.2.16
 BuildRequires:  dtkcore-devel >= 5.1
 BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(gsettings-qt)
@@ -31,11 +44,16 @@ BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  qt5-linguist
 Requires:       dbusmenu-qt5
+%if 0%{?fedora}
+BuildRequires:  qt5-qtbase-private-devel
+Requires:       deepin-network-utils
+Requires:       deepin-qt-dbus-factory
+%else
 Requires:       dde-network-utils
 Requires:       dde-qt-dbus-factory
+%endif
 Requires:       xcb-util-wm
 Requires:       xcb-util-image
-Requires:       libxcb
 
 %description
 Deepin desktop-environment - Dock module.
@@ -55,45 +73,58 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 deepin desktop-environment - dock plugin.
 
 %prep
-%setup -q -n %{name}-%{version}
+%autosetup -p1 -n %{repo}-%{version}
 sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt \
                                  plugins/plugin-guide/plugins-developer-guide.md
-
-sed -i -E '30,39d' CMakeLists.txt
 
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginscontroller.cpp \
                           frame/panel/mainpanelcontrol.cpp \
                           plugins/tray/system-trays/systemtrayscontroller.cpp
 
 
-sed -i 's|/lib|/libexec|g' plugins/show-desktop/showdesktopplugin.cpp
+sed -i 's|/lib|/libexec|g' plugins/show-desktop/showdesktopplugin.cpp \
+                           frame/panel/mainpanelcontrol.cpp
+
+sed -i 's:libdir.*:libdir=%{_libdir}:' dde-dock.pc.in
 
 sed -i 's|/usr/lib/dde-dock/plugins|%{_libdir}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
 sed -i 's|local/lib/dde-dock/plugins|local/%{_lib}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
 
+%if 0%{?fedora}
+# set icon to Fedora logo
+sed -i 's|deepin-launcher|%{start_logo}|' frame/item/launcheritem.cpp
+%endif
+
 %build
 export PATH=%{_qt5_bindir}:$PATH
+%if 0%{?fedora}
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DARCHITECTURE=%{_arch}
+%cmake_build
+%else
 %cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DARCHITECTURE=%{_arch} .
 %make_build
+%endif
 
 %install
+%if 0%{?fedora}
+%cmake_install
+%else
 %make_install INSTALL_ROOT=%{buildroot}
-
-%ldconfig_scriptlets
+%endif
 
 %files
 %license LICENSE
-%{_sysconfdir}/%{name}/indicator/keybord_layout.json
-%{_bindir}/%{name}
-%{_libdir}/%{name}/
-%{_datadir}/%{name}/
-%{_datadir}/dbus-1/services/*.service
+%{_sysconfdir}/%{repo}/
+%{_bindir}/%{repo}
+%{_libdir}/%{repo}/
+%{_datadir}/%{repo}/
 %{_datarootdir}/glib-2.0/schemas/com.deepin.dde.dock.module.gschema.xml
 %{_datarootdir}/polkit-1/actions/com.deepin.dde.dock.overlay.policy
 
 %files devel
-%{_includedir}/%{name}/
-%{_libdir}/pkgconfig/%{name}.pc
+%doc plugins/plugin-guide
+%{_includedir}/%{repo}/
+%{_libdir}/pkgconfig/%{repo}.pc
 %{_libdir}/cmake/DdeDock/DdeDockConfig.cmake
 
 %files onboard-plugin
