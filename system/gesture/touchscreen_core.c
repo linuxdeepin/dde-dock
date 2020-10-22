@@ -38,7 +38,6 @@
 #include <wordexp.h>
 #include <sys/stat.h>
 #include <stdarg.h>
-#include <sys/timeb.h>
 
 #include "utils.h"
 #include "touchscreen_core.h"

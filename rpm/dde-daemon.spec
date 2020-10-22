@@ -107,7 +107,7 @@ Recommends:     google-noto-sans-mono-fonts
 Daemon handling the DDE session settings
 
 %prep
-%autosetup -n %{repo}-%{version}
+%autosetup -p1 -n %{repo}-%{version}
 patch langselector/locale.go < rpm/locale.go.patch
 install -m 644 %{SOURCE2} misc/etc/pam.d/deepin-auth
 
