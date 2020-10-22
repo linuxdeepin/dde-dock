@@ -1,0 +1,19 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+specfile_path: rpm/deepin-dock.spec
+
+# add or remove files that should be synced
+synced_files:
+    - rpm/deepin-dock.spec
+    - .packit.yaml
+
+upstream_package_name: dde-dock
+# downstream (Fedora) RPM package name
+downstream_package_name: deepin-dock
+
+actions:
+  fix-spec-file: |
+    bash -c "sed -i -r \"s/Version:(\s*)\S*/Version:\1${PACKIT_PROJECT_VERSION}/\" rpm/deepin-dock.spec"
+  post-upstream-clone: |
+    cp rpm/dde-dock.spec rpm/deepin-dock.spec
