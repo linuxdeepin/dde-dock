@@ -519,6 +519,8 @@ void NetworkItem::getPluginState()
             state |= temp;
             if ((temp & WirelessItem::Connected) >> 18) {
                 m_connectedWirelessDevice.insert(iwireless.key(), wirelessItem);
+            } else {
+                m_connectedWirelessDevice.remove(iwireless.key());
             }
         }
     }
@@ -564,6 +566,8 @@ void NetworkItem::getPluginState()
             state |= temp;
             if ((temp & WiredItem::Connected) >> 2) {
                 m_connectedWiredDevice.insert(iwired.key(), wiredItem);
+            } else {
+                m_connectedWiredDevice.remove(iwired.key());
             }
         }
     }
@@ -1171,10 +1175,10 @@ void NetworkItem::refreshTips()
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWirelessDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1188,10 +1192,10 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1212,10 +1216,10 @@ void NetworkItem::refreshTips()
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1236,10 +1240,10 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
