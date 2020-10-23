@@ -39,7 +39,7 @@ const (
 	apSecPsk
 	apSecEap
 )
-const scanWifiDelayTime = 5 * time.Second
+const scanWifiDelayTime = 10 * time.Second
 const channelAutoChangeThreshold = 65
 
 //frequency range
@@ -506,6 +506,7 @@ func (m *Manager) checkAPStrength() {
 				logger.Debug("do not need change if connection not be activated")
 				continue
 			}
+
 			if band == "" {
 				//当前信号比较好，无需切换
 				if strength > channelAutoChangeThreshold && frequency >= frequency5GLowerlimit &&
@@ -525,6 +526,10 @@ func (m *Manager) checkAPStrength() {
 			}
 			logger.Debug("changeAPChanel, apPath:", apPath)
 			if band == "" {
+				// 信号强度改变小于1格，不发生切换
+				if apNow.Strength < strength + 20 {
+					continue
+				}
 				if apNow.Frequency >= frequency5GLowerlimit &&
 					apNow.Frequency <= frequency5GUpperlimit {
 					band = "a"
