@@ -630,46 +630,12 @@ void MainPanelControl::startDrag(DockItem *item)
     item->update();
 
     QDrag *drag = nullptr;
-    if (item->itemType() == DockItem::App) {
-        AppDrag *appDrag = new AppDrag(item);
-
-        m_appDragWidget = appDrag->appDragWidget();
-
-        connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
-            m_appDragWidget = nullptr;
-        });
-
-        appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
-        appDrag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
-
-        if (DWindowManagerHelper::instance()->hasComposite()) {
-            appDrag->setPixmap(pixmap);
-            m_appDragWidget->show();
-
-            static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
-        } else {
-            const QPixmap &dragPix = qobject_cast<AppItem *>(item)->appIcon();
-
-            appDrag->QDrag::setPixmap(dragPix);
-            appDrag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
-        }
-
-        drag = appDrag;
-    } else {
-        drag = new QDrag(item);
-        drag->setPixmap(pixmap);
-    }
+    drag = new QDrag(item);
+    drag->setPixmap(pixmap);
     drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
-    // app关闭特效情况下移除
-    if (item->itemType() == DockItem::App && !DWindowManagerHelper::instance()->hasComposite()) {
-        if (m_appDragWidget->isRemoveAble())
-            qobject_cast<AppItem *>(item)->undock();
-    }
-
-    m_appDragWidget = nullptr;
     item->setDraging(false);
     item->update();
 }
