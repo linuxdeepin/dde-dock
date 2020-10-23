@@ -464,7 +464,6 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == m_loadingIndicator) {
         if (event->type() == QEvent::MouseButtonPress) {
-            qDebug() << Q_FUNC_INFO;
             wirelessItemsRequireScan();
         }
     }
@@ -1168,15 +1167,15 @@ void NetworkItem::refreshTips()
         }
         for (auto wiredItem : m_connectedWiredDevice) {
             if (wiredItem) {
-                //auto info = wiredItem->getActiveWiredConnectionInfo();
-//                if (!info.contains("Ip4"))
-//                    break;
-//                const QJsonObject ipv4 = info.value("Ip4").toObject();
-//                if (!ipv4.contains("Address"))
-//                    break;
-//                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
-//                strTips.chop(1);
-//                textList << strTips;
+                auto info = wiredItem->getActiveWiredConnectionInfo();
+                if (!info.contains("Ip4"))
+                    break;
+                const QJsonObject ipv4 = info.value("Ip4").toObject();
+                if (!ipv4.contains("Address"))
+                    break;
+                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
             }
         }
         m_tipsWidget->setTextList(textList);
@@ -1203,13 +1202,13 @@ void NetworkItem::refreshTips()
         QString strTips;
         for (auto wiredItem : m_connectedWiredDevice) {
             if (wiredItem) {
-//                auto info = wiredItem->getActiveWiredConnectionInfo();
-//                if (!info.contains("Ip4"))
-//                    break;
-//                const QJsonObject ipv4 = info.value("Ip4").toObject();
-//                if (!ipv4.contains("Address"))
-//                    break;
-//                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                auto info = wiredItem->getActiveWiredConnectionInfo();
+                if (!info.contains("Ip4"))
+                    break;
+                const QJsonObject ipv4 = info.value("Ip4").toObject();
+                if (!ipv4.contains("Address"))
+                    break;
+                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
             }
         }
         strTips.chop(1);

@@ -196,11 +196,11 @@ void AccessPointWidget::ssidClicked()
         return;
 
     setActiveState(NetworkDevice::Prepare);
-    emit requestConnectAP(m_ap.path(), m_ap.uuid());
+    emit requestActiveAP(m_ap.path(), m_ap.ssid());
 }
 
 void AccessPointWidget::disconnectBtnClicked()
 {
     setActiveState(NetworkDevice::Unknow);
-    emit requestDisconnectAP();
+    emit requestDeactiveAP(m_ap);
 }

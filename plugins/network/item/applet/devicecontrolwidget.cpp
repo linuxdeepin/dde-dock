@@ -52,7 +52,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
-    m_loadingIndicator = new DLoadingIndicator(this);
+    m_loadingIndicator = new DLoadingIndicator;
     m_loadingIndicator->setLoading(false);
     m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
@@ -103,7 +103,6 @@ void DeviceControlWidget::setDeviceEnabled(const bool enable)
 
 bool DeviceControlWidget::eventFilter(QObject *watched, QEvent *event)
 {
-    //eventFilter事件在wayland架构上无法被捕获到，所以这一段在klu上并没有什么用
     if (watched == m_loadingIndicator) {
         if (event->type() == QEvent::MouseButtonPress) {
             if (!m_loadingIndicator->loading()) {
@@ -117,7 +116,6 @@ bool DeviceControlWidget::eventFilter(QObject *watched, QEvent *event)
 
 void DeviceControlWidget::refreshNetwork()
 {
-    qDebug() << Q_FUNC_INFO;
     emit requestRefresh();
 
     m_loadingIndicator->setLoading(true);
@@ -137,4 +135,3 @@ void DeviceControlWidget::refreshIcon()
 
     m_loadingIndicator->setImageSource(pixmap);
 }
-

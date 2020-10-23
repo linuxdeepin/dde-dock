@@ -40,7 +40,6 @@ public:
 
     const QString ssid() const;
     const QString path() const;
-    const QString uuid() const;
     int strength() const;
     bool secured() const;
 
@@ -55,7 +54,6 @@ private:
     bool m_securedInEap;
     QString m_path;
     QString m_ssid;
-    QString m_uuid;
 };
 
 #endif // ACCESSPOINT_H

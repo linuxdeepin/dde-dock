@@ -30,7 +30,6 @@
 #include <QLabel>
 
 #include <WirelessDevice>
-#include <NetworkModel>
 
 class TipsWidget;
 class WirelessItem : public DeviceItem
@@ -54,7 +53,7 @@ public:
     Q_ENUM(WirelessStatus)
 
 public:
-    explicit WirelessItem(dde::network::WirelessDevice *device, dde::network::NetworkModel *model);
+    explicit WirelessItem(dde::network::WirelessDevice *device);
     ~WirelessItem();
 
     QWidget *itemApplet();
@@ -66,14 +65,6 @@ public:
     QJsonObject getActiveWirelessConnectionInfo();
     inline int deviceInfo() { return m_index; }
     void setControlPanelVisible(bool visible);
-
-private:
-    /**
-     * @def initConnect
-     * @brief 初始化信号槽
-     */
-    void initConnect();
-
 
 public Q_SLOTS:
     // set the device name displayed
@@ -91,8 +82,8 @@ Q_SIGNALS:
     void queryConnectionSession(const QString &devPath, const QString &uuid);
     void deviceStateChanged();
 
-//protected:
-//    bool eventFilter(QObject *o, QEvent *e);
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
     void init();
@@ -105,7 +96,6 @@ private:
 
     WirelessList *m_APList;
     QJsonObject m_activeApInfo;
-    dde::network::NetworkModel *m_model;
 };
 
 #endif // WIRELESSITEM_H

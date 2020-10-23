@@ -128,7 +128,6 @@ QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
     return nullptr;
 }
 
-//这个方法在点击弹出窗口的时候会调用三次
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
     if (itemKey == NETWORK_KEY && m_hasDevice && !m_networkItem->isShowControlCenter()) {
@@ -203,40 +202,40 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem, &NetworkItem::updateSelf);
             break;
         case NetworkDevice::Wireless:
-            item = new WirelessItem(static_cast<WirelessDevice *>(device), m_networkModel);
+            item = new WirelessItem(static_cast<WirelessDevice *>(device));
             static_cast<WirelessItem *>(item)->setDeviceInfo(wirelessDeviceCnt == 1 ? -1 : ++wirelessNum);
             wirelessItems.insert(path, static_cast<WirelessItem *>(item));
 
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
-//                    m_networkWorker, &NetworkWorker::queryActiveConnInfo);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
-//                    m_networkWorker, &NetworkWorker::activateAccessPoint);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
-//                    m_networkWorker, &NetworkWorker::disconnectDevice);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
-//                    m_networkWorker, &NetworkWorker::feedSecret);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
-//                    m_networkWorker, &NetworkWorker::cancelSecret);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
-//                    m_networkWorker, &NetworkWorker::requestWirelessScan);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
-//                    m_networkWorker, &NetworkWorker::createApConfig);
-//            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
-//                    m_networkWorker, &NetworkWorker::queryConnectionSession);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
+                    m_networkWorker, &NetworkWorker::queryActiveConnInfo);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
+                    m_networkWorker, &NetworkWorker::activateAccessPoint);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
+                    m_networkWorker, &NetworkWorker::disconnectDevice);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
+                    m_networkWorker, &NetworkWorker::feedSecret);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
+                    m_networkWorker, &NetworkWorker::cancelSecret);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
+                    m_networkWorker, &NetworkWorker::requestWirelessScan);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
+                    m_networkWorker, &NetworkWorker::createApConfig);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
+                    m_networkWorker, &NetworkWorker::queryConnectionSession);
 
             connect(static_cast<WirelessItem *>(item), &WirelessItem::deviceStateChanged,
                     m_networkItem, &NetworkItem::updateSelf);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
-                    m_networkModel, &NetworkModel::updateApList);
+                    m_networkItem, &NetworkItem::wirelessScan);
 
-//            m_networkWorker->queryAccessPoints(path);
-            //点击的时候更新一下wifi数据
-            Q_EMIT m_networkModel->updateApList();
+            m_networkWorker->queryAccessPoints(path);
+            m_networkWorker->requestWirelessScan();
             break;
         default:
             Q_UNREACHABLE();
         }
-        //网络是否是正常连通的
+
+        connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
         connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
     }
@@ -249,12 +248,12 @@ void NetworkPlugin::loadPlugin()
 {
     m_networkModel = new NetworkModel;
     m_networkWorker = new NetworkWorker(m_networkModel);
-    //获取device是否存在
+
     connect(m_networkModel, &NetworkModel::deviceListChanged, this, &NetworkPlugin::onDeviceListChanged);
 
     m_networkModel->moveToThread(qApp->thread());
     m_networkWorker->moveToThread(qApp->thread());
-    //初始化适配器 这里顺带将开关状态也设置了
+
     onDeviceListChanged(m_networkModel->devices());
 
     m_proxyInter->itemAdded(this, NETWORK_KEY);

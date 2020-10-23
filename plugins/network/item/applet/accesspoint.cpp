@@ -68,7 +68,6 @@ AccessPoint &AccessPoint::operator=(const AccessPoint &ap)
     m_securedInEap = ap.m_securedInEap;
     m_path = ap.m_path;
     m_ssid = ap.m_ssid;
-    m_uuid = ap.m_uuid;
 
     return *this;
 }
@@ -81,10 +80,6 @@ const QString AccessPoint::ssid() const
 const QString AccessPoint::path() const
 {
     return m_path;
-}
-const QString AccessPoint::uuid() const
-{
-    return m_uuid;
 }
 
 int AccessPoint::strength() const
@@ -109,5 +104,4 @@ void AccessPoint::loadApInfo(const QJsonObject &apInfo)
     m_securedInEap = apInfo.value("SecuredInEap").toBool();
     m_path = apInfo.value("Path").toString();
     m_ssid = apInfo.value("Ssid").toString();
-    m_uuid = apInfo.value("Uuid").toString();
 }

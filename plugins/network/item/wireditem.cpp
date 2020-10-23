@@ -84,11 +84,11 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     connect(m_freshWiredIcon, &QTimer::timeout, this, &WiredItem::setWiredStateIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(const bool) const>(&NetworkDevice::enableChanged),
             this, &WiredItem::enableChanged);
-    connect(m_device, static_cast<void (NetworkDevice::*)(bool) const>(&NetworkDevice::enableChanged),
-            this, &WiredItem::setWiredStateIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::deviceStateChanged);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
+            this, &WiredItem::setWiredStateIcon);
+    connect(m_device, static_cast<void (NetworkDevice::*)(bool) const>(&NetworkDevice::enableChanged),
             this, &WiredItem::setWiredStateIcon);
 
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
@@ -151,10 +151,10 @@ WiredItem::WiredStatus WiredItem::getDeviceState()
     Q_UNREACHABLE();
 }
 
-//QJsonObject WiredItem::getActiveWiredConnectionInfo()
-//{
-//    return static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
-//}
+QJsonObject WiredItem::getActiveWiredConnectionInfo()
+{
+    return static_cast<WiredDevice *>(m_device.data())->activeWiredConnectionInfo();
+}
 
 void WiredItem::setThemeType(DGuiApplicationHelper::ColorType themeType)
 {

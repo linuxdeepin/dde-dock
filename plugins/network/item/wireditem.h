@@ -95,7 +95,7 @@ public:
     bool deviceEabled();
     void setDeviceEnabled(bool enabled);
     WiredStatus getDeviceState();
-//    QJsonObject getActiveWiredConnectionInfo();
+    QJsonObject getActiveWiredConnectionInfo();
     inline QString &deviceName() { return m_deviceName; }
     void setThemeType(DGuiApplicationHelper::ColorType themeType);
     void setWiredStateIcon();
