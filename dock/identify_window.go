@@ -36,6 +36,7 @@ type _IdentifyWindowFunc func(*Manager, *WindowInfo) (string, *AppInfo)
 
 func (m *Manager) registerIdentifyWindowFuncs() {
 	m.registerIdentifyWindowFunc("PidEnv", identifyWindowByPidEnv)
+	m.registerIdentifyWindowFunc("CmdlineTurboBooster", identifyWindowByCmdlineTurboBooster)
 	m.registerIdentifyWindowFunc("Cmdline-XWalk", identifyWindowByCmdlineXWalk)
 	m.registerIdentifyWindowFunc("FlatpakAppID", identifyWindowByFlatpakAppID)
 	m.registerIdentifyWindowFunc("CrxId", identifyWindowByCrxId)
@@ -217,6 +218,40 @@ func identifyWindowByCrxId(m *Manager, winInfo *WindowInfo) (string, *AppInfo) {
 			}
 		}
 	}
+	// fail
+	return "", nil
+}
+
+func identifyWindowByCmdlineTurboBooster(m *Manager, winInfo *WindowInfo) (string, *AppInfo) {
+	pid := winInfo.pid
+	process := winInfo.process
+	if process != nil && pid != 0 {
+		if len(process.cmdline) >= 0 {
+			var desktopFile string
+			if strings.HasSuffix(process.cmdline[0], desktopExt) {
+				desktopFile = process.cmdline[0]
+			} else if strings.Contains(process.cmdline[0], "/applications/") {
+				matches, err := filepath.Glob(process.cmdline[0] + "*")
+				if err != nil {
+					logger.Warning("filepath.Glob err:", err)
+					return "", nil
+				}
+				if len(matches) > 0 && strings.HasSuffix(matches[0], desktopExt) {
+					desktopFile = matches[0]
+				}
+			}
+
+			if desktopFile != "" {
+				logger.Debugf("identifyWindowByCmdlineTurboBooster: desktopFile: %s", desktopFile)
+				appInfo := NewAppInfoFromFile(desktopFile)
+				if appInfo != nil {
+					// success
+					return appInfo.innerId, appInfo
+				}
+			}
+		}
+	}
+
 	// fail
 	return "", nil
 }
