@@ -485,6 +485,27 @@ func (m *Manager) checkAPStrength() {
 			frequency, _ := nmAp.Frequency().Get(0)
 			strength, _ := nmAp.Strength().Get(0)
 			ssid, _ := nmAp.Ssid().Get(0)
+
+			aPath, err := dev.nmDev.ActiveConnection().Get(0)
+			if err != nil || !isObjPathValid(aPath) {
+				continue
+			}
+			aConn, err := nmNewActiveConnection(aPath)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+
+			state, err := aConn.State().Get(0)
+			if err != nil {
+				logger.Error(err)
+				continue
+			}
+			//当热点还没有连接成功时,不需要切换
+			if  state != nm.NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+				logger.Debug("do not need change if connection not be activated")
+				continue
+			}
 			if band == "" {
 				//当前信号比较好，无需切换
 				if strength > channelAutoChangeThreshold && frequency >= frequency5GLowerlimit &&
@@ -516,15 +537,6 @@ func (m *Manager) checkAPStrength() {
 				continue
 			}
 
-			aPath, err := dev.nmDev.ActiveConnection().Get(0)
-			if err != nil || !isObjPathValid(aPath) {
-				continue
-			}
-			aConn, err := nmNewActiveConnection(aPath)
-			if err != nil {
-				logger.Error(err)
-				continue
-			}
 			connPath, err := aConn.Connection().Get(0)
 			if err != nil {
 				logger.Error(err)
