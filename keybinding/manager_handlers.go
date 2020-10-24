@@ -212,7 +212,7 @@ func (m *Manager) initHandlers() {
 			}
 			m.systemTurnOffScreen()
 		case powerActionShowUI:
-			cmd := "dde-shutdown"
+			cmd := "dde-shutdown -s"
 			go func() {
 				locked, err := m.sessionManager.Locked().Get(0)
 				if err != nil {
