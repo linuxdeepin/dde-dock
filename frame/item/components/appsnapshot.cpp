@@ -108,6 +108,8 @@ void AppSnapshot::closeWindow() const
     e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
     e.xclient.data.l[1] = CurrentTime;
 
+    Q_EMIT requestCloseAppSnapshot();
+
     XSendEvent(display, m_wid, false, NoEventMask, &e);
     XFlush(display);
 }
