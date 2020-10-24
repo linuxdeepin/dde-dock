@@ -120,6 +120,7 @@ void PreviewContainer::checkMouseLeave()
             m_needActivate = false;
             emit requestActivateWindow(m_floatingPreview->trackedWid());
         } else {
+            Q_EMIT requestHidePopup();
             emit requestCancelPreviewWindow();
         }
     }
@@ -170,6 +171,15 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, [this](){
+        if (!m_wmHelper->hasComposite())
+            return ;
+
+        if (m_currentWId != m_snapshots.lastKey()) {
+            Q_EMIT requestHidePopup();
+            Q_EMIT requestCancelPreviewWindow();
+        }
+    });
 
     m_windowListLayout->addWidget(snap);
 
