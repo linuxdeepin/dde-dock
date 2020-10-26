@@ -54,7 +54,7 @@ func (*testWrapper) TestUserInfoValid(c *C.C) {
 	}{
 		{
 			UserInfo{Name: "root", Uid: "0", Gid: "0"},
-			false,
+			true,
 		},
 		{
 			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},

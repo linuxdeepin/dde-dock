@@ -20,6 +20,7 @@
 package network
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -41,6 +42,7 @@ type device struct {
 
 	Path          dbus.ObjectPath
 	State         uint32
+	Enable        bool
 	Interface     string
 	ClonedAddress string
 	HwAddress     string
@@ -403,6 +405,22 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 	dev.State, _ = nmDev.State().Get(0)
 	dev.Interface, _ = nmDev.Interface().Get(0)
+	// get device enable state from system network
+	dev.Enable, _ = m.sysNetwork.IsDeviceEnabled(0, dev.Interface)
+	// adjust device enable state
+	// due to script in pre-up and pre-down, device will be always set as true or false,
+	// in this situation, the config kept in local file is not exact, config need be adjusted
+	if dev.State > nm.NM_DEVICE_STATE_DISCONNECTED && !dev.Enable {
+		_, err = m.sysNetwork.EnableDevice(0, dev.Interface, true)
+		if err != nil {
+			logger.Warningf("set device enable failed, err: %v", err)
+		}
+	} else if dev.State <= nm.NM_DEVICE_STATE_DISCONNECTED && dev.Enable {
+		_, err = m.sysNetwork.EnableDevice(0, dev.Interface, false)
+		if err != nil {
+			logger.Warningf("set device enable failed, err: %v", err)
+		}
+	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 
 	// TODO: NetworkManager 升级 1.22 后，直接使用 NetworkManager 的 InterfaceFlags 属性
@@ -535,8 +553,11 @@ func (m *Manager) getDeviceIndex(devPath dbus.ObjectPath) (devType string, index
 }
 
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (bool, *dbus.Error) {
-	b, err := m.sysNetwork.IsDeviceEnabled(0, string(devPath))
-	return b, dbusutil.ToError(err)
+	dev := m.getDevice(devPath)
+	if dev == nil {
+		return false, dbusutil.ToError(errors.New("device is not exist"))
+	}
+	return dev.Enable, nil
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) *dbus.Error {
