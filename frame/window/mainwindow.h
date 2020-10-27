@@ -182,7 +182,6 @@ private:
     bool m_launched;
     QString m_registerKey;
     QStringList m_registerKeys;
-    QEventLoop m_callShowEventLoop;
 };
 
 #endif // MAINWINDOW_H
