@@ -209,14 +209,14 @@ func (m *Manager) init() {
 	}()
 
 	// initialize device and connection handlers
-
+	m.sysNetwork = sysNetwork.NewNetwork(systemBus)
 	m.initConnectionManage()
 	m.initDeviceManage()
 	m.initActiveConnectionManage()
 	m.initNMObjManager(systemBus)
+	m.stateHandler = newStateHandler(m.sysSigLoop, m)
 	m.initSysNetwork(systemBus)
 
-	m.stateHandler = newStateHandler(m.sysSigLoop, m)
 
 	// update property "State"
 	err = nmManager.State().ConnectChanged(func(hasValue bool, value uint32) {
@@ -320,7 +320,6 @@ func watchNetworkManagerRestart(m *Manager) {
 }
 
 func (m *Manager) initSysNetwork(sysBus *dbus.Conn) {
-	m.sysNetwork = sysNetwork.NewNetwork(sysBus)
 	m.sysNetwork.InitSignalExt(m.sysSigLoop, true)
 	err := common.ActivateSysDaemonService(m.sysNetwork.ServiceName_())
 	if err != nil {
