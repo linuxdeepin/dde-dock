@@ -97,6 +97,7 @@ type Manager struct {
 	WirelessAccessPoints string `prop:"access:r"` //用于读取AP
 	debugChangeAPBand    string //调用接口切换ap频段
 	checkAPStrengthTimer *time.Timer
+	protalAuthBrowserOpened    bool  // PORTAL认证中状态
 
 	//nolint
 	signals *struct {
@@ -402,7 +403,8 @@ func (m *Manager) doPortalAuthentication() {
 	}
 
 	sincePortalDetection := time.Since(m.portalLastDetectionTime)
-	if sincePortalDetection < checkRepeatTime {
+	// 处于认证中状态无需再次打开认证窗口
+	if sincePortalDetection < checkRepeatTime || m.protalAuthBrowserOpened {
 		return
 	}
 	err = exec.Command(`xdg-open`, `https://www.uniontech.com`).Start()
@@ -410,4 +412,5 @@ func (m *Manager) doPortalAuthentication() {
 		logger.Warning(err)
 	}
 	m.portalLastDetectionTime = time.Now()
+	m.protalAuthBrowserOpened = true
 }

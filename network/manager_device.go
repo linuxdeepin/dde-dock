@@ -363,6 +363,11 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			return
 		}
 
+		if newState == nm.NM_DEVICE_STATE_ACTIVATED {
+			// 网络链接状态更改  重置Portal认证状态
+			m.protalAuthBrowserOpened = false
+		}
+
 		dev.State = newState
 		m.devicesLock.Lock()
 		m.updatePropDevices()
