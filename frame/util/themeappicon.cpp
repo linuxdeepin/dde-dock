@@ -134,9 +134,14 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
 
         icon = QIcon::fromTheme(iconName);
         if (icon.isNull()) {
-            icon = QIcon::fromTheme("deepinwine-" + iconName);
-        } else {
-            icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+            //手动更新图标缓存
+            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
+
+            icon = QIcon::fromTheme(iconName);
+        }
+
+        if(icon.isNull()) {
+            icon = QIcon::fromTheme("application-x-desktop");
         }
 
         // load pixmap from Icon-Theme
