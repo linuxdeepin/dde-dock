@@ -31,8 +31,8 @@ import (
 	"sync"
 
 	"github.com/godbus/dbus"
-	"github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
-	"github.com/linuxdeepin/go-x11-client"
+	accounts "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.accounts"
+	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/api/dxinput"
@@ -588,6 +588,10 @@ func getValueFromLine(line, delim string) string {
 }
 
 func applyXmodmapConfig() error {
+	err := doAction("xmodmap -e 'keycode 247 = XF86Away NoSymbol NoSymbol'")
+	if err != nil {
+		return err
+	}
 	config := os.Getenv("HOME") + "/.Xmodmap"
 	if !dutils.IsFileExist(config) {
 		return nil
