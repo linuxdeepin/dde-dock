@@ -91,6 +91,9 @@ MainWindow::MainWindow(QWidget *parent)
     setAccessibleName("mainwindow");
     m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_X11DoNotAcceptFocus);
+    setWindowFlags(Qt::WindowDoesNotAcceptFocus);
+
     setMouseTracking(true);
     setAcceptDrops(true);
 
