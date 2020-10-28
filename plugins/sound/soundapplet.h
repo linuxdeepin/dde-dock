@@ -115,7 +115,7 @@ signals:
 
 private slots:
     void defaultSinkChanged();
-    void onVolumeChanged();
+    void onVolumeChanged(double volume);
     void volumeSliderValueChanged();
     void sinkInputsChanged();
     void toggleMute();

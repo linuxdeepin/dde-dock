@@ -207,7 +207,6 @@ void SoundApplet::initUi()
     connect(m_audioInter, &DBusAudio::PortEnabledChanged, [this](uint cardId, QString portId) {
             portEnableChange(cardId, portId);
     });;
-    connect(this, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
     connect(m_listView, &DListView::clicked, this, [this](const QModelIndex & idx) {
         const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();
         if (port) {
@@ -271,13 +270,12 @@ void SoundApplet::defaultSinkChanged()
     activePort(portId,cardId);
 
     emit defaultSinkChanged(m_defSinkInter);
+    onVolumeChanged(m_defSinkInter->volume());
 }
 
-void SoundApplet::onVolumeChanged()
+void SoundApplet::onVolumeChanged(double volume)
 {
-    const float volume = m_defSinkInter->volume();
-
-    m_volumeSlider->setValue(std::min(150.0f, volume * 100.0f));
+    m_volumeSlider->setValue(static_cast<int>(std::min(150.0, volume * 100.0)));
 
     m_soundShow->setText(QString::number(volume * 100) + '%');
     emit volumeChanged(m_volumeSlider->value());
