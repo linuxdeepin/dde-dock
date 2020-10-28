@@ -22,7 +22,6 @@
 #include "docksettings.h"
 #include "item/appitem.h"
 #include "util/utils.h"
-#include "util/imageutil.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -66,7 +65,6 @@ static QGSettings *GSettingsAiAssistant()
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
-    , m_appearInter(new DBusAppearance("com.deepin.daemon.Appearance","/com/deepin/daemon/Appearance",QDBusConnection::sessionBus(), this))
     , m_menuVisible(true)
     , m_autoHide(true)
     , m_opacity(0.4)
@@ -145,27 +143,6 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu->addAction(statusSubMenuAct);
     m_settingsMenu->addAction(hideSubMenuAct);
     m_settingsMenu->setAccessibleName("Menu_settingsmenu");
-
-    //DockSetting初始右键菜单页面的光标同步系统QCursor(临时解决方案)
-    ImageUtil::loadQCursorForUpdateMenu(modeSubMenu);
-    ImageUtil::loadQCursorForUpdateMenu(locationSubMenu);
-    ImageUtil::loadQCursorForUpdateMenu(statusSubMenu);
-    ImageUtil::loadQCursorForUpdateMenu(m_hideSubMenu);
-    ImageUtil::loadQCursorForUpdateMenu(m_settingsMenu);
-    ImageUtil::loadQCursorForUpdateMenu(m_settingsMenu->parentWidget());
-    connect(m_appearInter,&DBusAppearance::CursorThemeChanged,this,[=](const QString & value)
-    {
-        QTimer::singleShot(100,this,[=](){
-            qDebug() << "Dde-Control-Center Update Cursor Theme->update docksetting menu cursor" << value;
-            ImageUtil::loadQCursorForUpdateMenu(modeSubMenu);
-            ImageUtil::loadQCursorForUpdateMenu(locationSubMenu);
-            ImageUtil::loadQCursorForUpdateMenu(statusSubMenu);
-            ImageUtil::loadQCursorForUpdateMenu(m_hideSubMenu);
-            ImageUtil::loadQCursorForUpdateMenu(m_settingsMenu);
-            ImageUtil::loadQCursorForUpdateMenu(m_settingsMenu->parentWidget());
-        });
-
-    });
 
     connect(m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(GSettingsByMenu(), &QGSettings::changed, this, &DockSettings::onGSettingsChanged);

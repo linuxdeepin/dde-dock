@@ -33,10 +33,6 @@
 
 #include <memory>
 
-#include <com_deepin_daemon_appearance.h>
-
-using DBusAppearance = com::deepin::daemon::Appearance;
-
 using namespace Dock;
 
 class DockItem : public QWidget
@@ -115,7 +111,6 @@ protected:
     bool m_tapAndHold;
     bool m_draging;
     QMenu *m_contextMenu;
-    DBusAppearance *m_appearInter;
 
     QPointer<QWidget> m_lastPopupWidget;
     QPointer<HoverHighlightEffect> m_hoverEffect;

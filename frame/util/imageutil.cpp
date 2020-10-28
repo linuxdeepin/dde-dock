@@ -72,30 +72,6 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
     return cursor;
 }
 
-void ImageUtil::loadQCursorForUpdateMenu(QWidget *menu_win)
-{
-    static QCursor *lastArrowCursor = nullptr;
-    static QString  lastCursorTheme;
-    int lastCursorSize = 0;
-    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
-    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
-    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
-    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
-    {
-        qDebug() << QString("Menu Update Cursor (theme=%1,%2 ; size=%3,%4)...").arg(lastCursorTheme).arg(theme).arg(lastCursorSize).arg(cursorSize);
-        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
-        lastCursorTheme = theme;
-        lastCursorSize = cursorSize;
-        if(menu_win)
-            menu_win->setCursor(*cursor);
-        if (lastArrowCursor != nullptr)
-            delete lastArrowCursor;
-
-        lastArrowCursor = cursor;
-    }
-}
-
-
 const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, const qreal ratio)
 {
     QIcon icon = QIcon::fromTheme(iconName);

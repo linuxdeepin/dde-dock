@@ -28,7 +28,6 @@
 #include "controller/dockitemmanager.h"
 
 #include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_daemon_appearance.h>
 
 #include <QAction>
 #include <QMenu>
@@ -42,7 +41,6 @@ DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
 using DBusDock = com::deepin::dde::daemon::Dock;
-using DBusAppearance = com::deepin::daemon::Appearance;
 
 class DockSettings : public QObject
 {
@@ -77,7 +75,6 @@ public:
     
     QSize m_mainWindowSize;
     DBusDock *m_dockInter;
-    DBusAppearance *m_appearInter;
     bool m_menuVisible;
 
 signals:
