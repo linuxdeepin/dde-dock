@@ -151,17 +151,11 @@ void MainWindow::callShow()
     qApp->setProperty("CANSHOW", true);
 
     launch();
-
-    m_callShowEventLoop.exec();
 }
 
 void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
-
-    if (m_callShowEventLoop.isRunning()) {
-        m_callShowEventLoop.quit();
-    }
 
     //    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
     //    windowHandle(), [this](QScreen * new_screen) {
