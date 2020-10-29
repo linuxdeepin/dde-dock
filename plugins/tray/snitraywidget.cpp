@@ -656,19 +656,15 @@ const QPoint SNITrayWidget::popupMarkPoint() const
     switch (DockPosition) {
     case Dock::Position::Top:
         p += QPoint(r.width() / 2, r.height() + (wr.height() - r.height()) / 2);
-        p += QPoint(0,-20);// FIX:wayland上面DockItem莫名少了20像素,等找到原因后再删除这里
         break;
     case Dock::Position::Bottom:
         p += QPoint(r.width() / 2, 0 - (wr.height() - r.height()) / 2);
-        p += QPoint(0,20);// FIX:same as above
         break;
     case Dock::Position::Left:
         p += QPoint(r.width() + (wr.width() - r.width()) / 2, r.height() / 2);
-        p += QPoint(-20,0);// FIX:same as above
         break;
     case Dock::Position::Right:
         p += QPoint(0 - (wr.width() - r.width()) / 2, r.height() / 2);
-        p += QPoint(20,0);// FIX:same as above
         break;
     }
 

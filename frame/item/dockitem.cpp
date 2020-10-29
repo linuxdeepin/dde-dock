@@ -385,7 +385,6 @@ const QPoint DockItem::popupMarkPoint()
         } else {
             p += QPoint(r.width() / 2, r.height());
         }
-        p += QPoint(0,-20);// FIX:wayland上面DockItem莫名少了20像素,等找到原因后再删除这里
         break;
     }
     case Bottom: {
@@ -394,7 +393,6 @@ const QPoint DockItem::popupMarkPoint()
         } else {
             p += QPoint(r.width() / 2, 0);
         }
-        p += QPoint(0,20);// FIX:same as above
         break;
     }
     case Left: {
@@ -403,7 +401,6 @@ const QPoint DockItem::popupMarkPoint()
         } else {
             p += QPoint(r.width(), r.height() / 2);
         }
-        p += QPoint(-20,0);// FIX:same as above
         break;
     }
     case Right: {
@@ -412,7 +409,6 @@ const QPoint DockItem::popupMarkPoint()
         } else {
             p += QPoint(0, r.height() / 2);
         }
-        p += QPoint(20,0);// FIX:same as above
         break;
         }
     }
