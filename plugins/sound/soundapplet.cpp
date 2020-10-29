@@ -263,7 +263,7 @@ void SoundApplet::defaultSinkChanged()
     QString portId = m_defSinkInter->activePort().name;
     uint cardId = m_defSinkInter->card();
     //最后一个设备会被移除，但是当在控制中心选中此设备后需要添加，并勾选
-    if (m_lastPort && m_lastPort->cardId() == cardId && m_lastPort->id() == portId) {
+    if (!m_lastPort.isNull() && m_lastPort->cardId() == cardId && m_lastPort->id() == portId) {
         startAddPort(m_lastPort);
     }
     activePort(portId,cardId);
