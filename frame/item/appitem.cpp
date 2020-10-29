@@ -116,6 +116,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refershIcon, Qt::QueuedConnection);
 
+    connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
+
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refershIcon();
 

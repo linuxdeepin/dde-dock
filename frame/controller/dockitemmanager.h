@@ -54,6 +54,8 @@ signals:
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
 
+    void requestUpdateDockItem() const;
+
 public slots:
     void refershItemsIcon();
     void sortPluginItems();

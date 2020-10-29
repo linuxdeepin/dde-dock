@@ -287,6 +287,8 @@ signals:
     void requestStopShowAni();
     void requestStopHideAni();
 
+    void requestUpdateDockEntry();
+
 public slots:
     void onAutoHideChanged(bool autoHide);
     /**
