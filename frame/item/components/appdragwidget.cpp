@@ -74,8 +74,9 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     m_scene->addItem(m_object);
     setScene(m_scene);
 
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Window);
     setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_NativeWindow);
     viewport()->setAutoFillBackground(false);
     setFrameShape(QFrame::NoFrame);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -86,7 +87,8 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
 
     initAnimations();
 
-    m_followMouseTimer->setSingleShot(false);
+    //更新一次坐标，防止窗口显示位置错误
+    m_followMouseTimer->setSingleShot(true);
     m_followMouseTimer->setInterval(1);
     connect(m_followMouseTimer, &QTimer::timeout, [this] {
                 QPoint destPos = QCursor::pos();
@@ -130,7 +132,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
 
     if (isRemoveAble()) {
         showRemoveAnimation();
-        AppItem *appItem = static_cast<AppItem *>(event->source());
+        AppItem *appItem = static_cast<AppItem *>(m_item);
         appItem->undock();
     } else {
         showGoBackAnimation();;
@@ -140,6 +142,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
 void AppDragWidget::hideEvent(QHideEvent *event)
 {
     deleteLater();
+    QGraphicsView::hideEvent(event);
 }
 
 void AppDragWidget::setAppPixmap(const QPixmap &pix)
@@ -160,6 +163,17 @@ void AppDragWidget::setDockInfo(Dock::Position dockPosition, const QRect &dockGe
 void AppDragWidget::setOriginPos(const QPoint position)
 {
     m_originPoint = position;
+}
+
+void AppDragWidget::setPixmapOpacity(qreal opacity)
+{
+    if (isRemoveAble()) {
+        m_object->setOpacity(opacity);
+        m_animOpacity->setStartValue(opacity);
+    } else {
+        m_object->setOpacity(1.0);
+        m_animOpacity->setStartValue(1.0);
+    }
 }
 
 void AppDragWidget::initAnimations()
@@ -230,6 +244,36 @@ bool AppDragWidget::isRemoveAble()
             break;
         case Dock::Position::Bottom:
             if ((m_dockGeometry.topLeft().y() - p.y()) > (m_dockGeometry.height() * 3)) {
+                return true;
+            }
+            break;
+        default:
+            break;
+    }
+    return false;
+}
+
+bool AppDragWidget::isRemoveable(const Position &dockPos, const QRect &doctRect)
+{
+    const QPoint &p = QCursor::pos();
+    switch (dockPos) {
+        case Dock::Position::Left:
+            if ((p.x() - doctRect.topRight().x()) > (doctRect.width() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Top:
+            if ((p.y() - doctRect.bottomLeft().y()) > (doctRect.height() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Right:
+            if ((doctRect.topLeft().x() - p.x()) > (doctRect.width() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Bottom:
+            if ((doctRect.topLeft().y() - p.y()) > (doctRect.height() * 3)) {
                 return true;
             }
             break;

@@ -132,7 +132,7 @@ private:
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;
     QString m_draggingMimeKey;
-    AppDragWidget *m_appDragWidget;
+//    AppDragWidget *m_appDragWidget;
     DisplayMode m_dislayMode;
     QLabel *m_fixedSpliter;
     QLabel *m_appSpliter;

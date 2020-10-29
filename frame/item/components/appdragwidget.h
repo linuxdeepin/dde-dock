@@ -33,6 +33,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <qwidget.h>
+#include <item/dockitem.h>
 
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
@@ -44,7 +45,10 @@ public:
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
     void setOriginPos(const QPoint position);
+    void setPixmapOpacity(qreal opacity);
     bool isRemoveAble();
+    void setItem(DockItem *item) { m_item = item; }
+    static bool isRemoveable(const Dock::Position &dockPos, const QRect &doctRect);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -53,7 +57,7 @@ protected:
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
-private:
+public:
     void initAnimations();
     void showRemoveAnimation();
     void showGoBackAnimation();
@@ -73,6 +77,8 @@ private:
     Dock::Position m_dockPosition;
     QRect m_dockGeometry;
     QPoint m_originPoint;
+
+    DockItem *m_item;
 };
 
 #endif /* APPDRAGWIDGET_H */

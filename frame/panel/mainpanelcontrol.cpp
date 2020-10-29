@@ -37,6 +37,16 @@
 #include <QApplication>
 #include <QGSettings>
 #include <QPointer>
+#include <QPixmap>
+#include <QtConcurrent/QtConcurrentRun>
+#include <qpa/qplatformnativeinterface.h>
+#include <qpa/qplatformintegration.h>
+#define protected public
+#include <QtGui/private/qsimpledrag_p.h>
+#undef protected
+#include <QtGui/private/qshapedpixmapdndwindow_p.h>
+#include <QtGui/private/qguiapplication_p.h>
+
 
 #include <DGuiApplicationHelper>
 #include <DWindowManagerHelper>
@@ -70,7 +80,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appAreaSonLayout(new QBoxLayout(QBoxLayout::LeftToRight))
     , m_position(Position::Bottom)
     , m_placeholderItem(nullptr)
-    , m_appDragWidget(nullptr)
+//    , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
     , m_fixedSpliter(new QLabel(this))
     , m_appSpliter(new QLabel(this))
@@ -464,17 +474,7 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
     DockItem *targetItem = nullptr;
 
-    if (isFilter) {
-        // appItem调整顺序或者移除驻留
-        targetItem = dropTargetItem(sourceItem, mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
-
-        if (targetItem) {
-            m_appDragWidget->setOriginPos((m_appAreaSonWidget->mapToGlobal(targetItem->pos())));
-        } else {
-            targetItem = sourceItem;
-        }
-
-    } else {
+    if (!isFilter) {
         // other dockItem调整顺序
         targetItem = dropTargetItem(sourceItem, e->pos());
     }
@@ -499,13 +499,20 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
     if (sourceItem) {
         handleDragMove(e, false);
         return;
+    } else {
+        qDebug()<<"source is null";
     }
 
+    /*TODO: 当前wayland拖拽在这个功能上未实现先屏蔽，后面修改
     // 拖app到dock上
     const char *RequestDockKey = "RequestDock";
     const char *RequestDockKeyFallback = "text/plain";
     const char *DesktopMimeType = "application/x-desktop";
     auto DragmineData = e->mimeData();
+
+    if (!DragmineData) {
+        return;
+    }
 
     m_draggingMimeKey = DragmineData->formats().contains(RequestDockKey) ? RequestDockKey : RequestDockKeyFallback;
 
@@ -513,7 +520,6 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
     if (QMimeDatabase().mimeTypeForFile(DragmineData->data(m_draggingMimeKey)).name() != DesktopMimeType) {
         m_draggingMimeKey.clear();
         e->setAccepted(false);
-        qDebug() << "dragging item is NOT a desktop file";
         return;
     }
 
@@ -535,7 +541,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         return;
     }
 
-    handleDragMove(e, false);
+    handleDragMove(e, false);*/
 }
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
@@ -569,21 +575,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
         if (event->type() == QEvent::Move)
             moveAppSonWidget();
-    }
-
-    if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
-        QDropEvent *e = static_cast<QDropEvent *>(event);
-        bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
-        if (isContains) {
-            if (event->type() == QEvent::DragMove) {
-                handleDragMove(static_cast<QDragMoveEvent *>(event), true);
-            } else if (event->type() == QEvent::Drop) {
-                m_appDragWidget->hide();
-                return true;
-            }
-        }
-
-        return false;
     }
 
     if (event->type() != QEvent::MouseMove)
@@ -624,20 +615,90 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
 
 void MainPanelControl::startDrag(DockItem *item)
 {
-    const QPixmap pixmap = item->grab();
+    QPixmap pixmap = item->grab();
+
+    /*TODO: pixmap半透明处理
+    QPixmap pixmap1;
+    {
+        QPixmap temp(pixmap.size());
+        temp.fill(Qt::transparent);
+
+        QPainter p1(&temp);
+        p1.setCompositionMode(QPainter::CompositionMode_Source);
+        p1.drawPixmap(0, 0, pixmap);
+        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+
+        //根据QColor中第四个参数设置透明度，0～255
+        p1.fillRect(temp.rect(), QColor(0, 0, 0, 125));
+        p1.end();
+
+        pixmap1 = temp;
+    }*/
 
     item->setDraging(true);
     item->update();
 
-    QDrag *drag = nullptr;
-    drag = new QDrag(item);
+    QDrag *drag = new QDrag(item);
     drag->setPixmap(pixmap);
+
     drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
+
+    /*TODO: 开启线程，在移动中设置图片是否为半透明, 当前接口调用QShapedPixmapWindow找不到动态库的实现
+    bool isRun = true;
+    QtConcurrent::run([&isRun, &pixmap, &pixmap1, this]{
+        while (isRun) {
+            QPlatformDrag *platformDrag = QGuiApplicationPrivate::platformIntegration()->drag();
+            QShapedPixmapWindow *dragIconWindow = nullptr;
+            if (platformDrag)
+                dragIconWindow = static_cast<QSimpleDrag *>(platformDrag)->shapedPixmapWindow();
+
+            if (!dragIconWindow)
+                continue;
+
+            if (AppDragWidget::isRemoveable(m_position, QRect(mapToGlobal(pos()), size()))) {
+                //                dragIconWindow->setPixmap(pixmap1);
+            } else {
+                //                dragIconWindow->setPixmap(pixmap);
+            }
+
+        }
+    });*/
+
     drag->exec(Qt::MoveAction);
 
-    item->setDraging(false);
-    item->update();
+    //isRun = false;
+
+    if (drag->target() == this) {
+        item->setDraging(false);
+        item->update();
+        return;
+    }
+
+    //开启动画效果
+    auto m_appDragWidget = new AppDragWidget();
+    m_appDragWidget->setAppPixmap(pixmap);
+    m_appDragWidget->setItem(item);
+    m_appDragWidget->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
+    m_appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
+    m_appDragWidget->setPixmapOpacity(0.5);
+    m_appDragWidget->show();
+    QGuiApplication::platformNativeInterface()->setWindowProperty(m_appDragWidget->windowHandle()->handle(),
+                                                                  "_d_dwayland_window-type" , "menu");
+
+    QTimer::singleShot(10, [item, m_appDragWidget]{
+        if (m_appDragWidget->isRemoveAble()) {
+            m_appDragWidget->showRemoveAnimation();
+            AppItem *appItem = static_cast<AppItem *>(item);
+            appItem->undock();
+            item->setDraging(false);
+            item->update();
+        } else {
+            m_appDragWidget->showGoBackAnimation();
+            item->setDraging(false);
+            item->update();
+        }
+    });
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
