@@ -153,7 +153,7 @@ private:
     QStandardItemModel *m_model;
     QList<Port *> m_ports;
     QString m_deviceInfo;
-    Port *m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
+    QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
 };
 
 #endif // SOUNDAPPLET_H
