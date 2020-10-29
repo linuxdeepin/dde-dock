@@ -327,6 +327,8 @@ void MainWindow::initConnections()
     connect(m_multiScreenWorker, &MultiScreenWorker::opacityChanged, this, &MainWindow::setMaskAlpha, Qt::QueuedConnection);
     connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanegd, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
+    connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDockEntry, DockItemManager::instance(), &DockItemManager::requestUpdateDockItem);
+
     //　更新拖拽区域
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDragArea, this, &MainWindow::resetDragWindow);
 
