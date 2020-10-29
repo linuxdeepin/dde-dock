@@ -37,6 +37,7 @@ const (
 	userNameMinLength = 3
 
 	passwdFile = "/etc/passwd"
+	groupFile = "/etc/group"
 )
 
 type ErrorCode int32
@@ -100,6 +101,12 @@ func CheckUsernameValid(name string) *ErrorInfo {
 		}
 	}
 
+	// in euler version, linux kernel is 4.19.90
+	// do not allow create user already token by group
+	if Username(name).isNameInGroup() {
+		return ErrCodeSystemUsed.Error()
+	}
+
 	if !Username(name).isFirstCharValid() {
 		return ErrCodeFirstCharInvalid.Error()
 	}
@@ -125,6 +132,17 @@ func (name Username) isNameExist() bool {
 		return false
 	}
 
+	return true
+}
+
+func (name Username) isNameInGroup() bool {
+	names, err := getAllUsername(groupFile)
+	if err != nil {
+		return false
+	}
+	if !isStrInArray(string(name), names) {
+		return false
+	}
 	return true
 }
 
