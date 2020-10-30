@@ -932,9 +932,6 @@ void MultiScreenWorker::initMembers()
     m_delayTimer->setInterval(2000);
     m_delayTimer->setSingleShot(true);
 
-    //　设置应用角色为任务栏
-    XcbMisc::instance()->set_window_type(xcb_window_t(parent()->winId()), XcbMisc::Dock);
-
     // init check
     checkDaemonDockService();
     checkDaemonDisplayService();
