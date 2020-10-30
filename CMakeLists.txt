@@ -69,9 +69,5 @@ install(FILES "dde-dock.pc"
 install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
-## services files
-install(FILES frame/com.deepin.dde.Dock.service
-        DESTINATION /usr/share/dbus-1/services)
-
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
         DESTINATION share/glib-2.0/schemas)
