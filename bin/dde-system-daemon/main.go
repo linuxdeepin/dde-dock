@@ -31,6 +31,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/system/gesture"
 	_ "pkg.deepin.io/dde/daemon/system/network"
 	_ "pkg.deepin.io/dde/daemon/system/power"
+	_ "pkg.deepin.io/dde/daemon/system/power_manager"
 	_ "pkg.deepin.io/dde/daemon/system/swapsched"
 	_ "pkg.deepin.io/dde/daemon/system/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/system/timedated"
@@ -97,8 +98,8 @@ func main() {
 	}
 
 	// 系统级服务，无需设置LANG和LANGUAGE，保证翻译不受到影响
-	_ = os.Setenv("LANG","")
-	_ = os.Setenv("LANGUAGE","")
+	_ = os.Setenv("LANG", "")
+	_ = os.Setenv("LANGUAGE", "")
 
 	InitI18n()
 	Textdomain("dde-daemon")
