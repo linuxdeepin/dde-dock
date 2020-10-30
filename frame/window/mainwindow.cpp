@@ -92,7 +92,10 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_X11DoNotAcceptFocus);
+
+    // 确保下面两行代码的先后顺序，否则会导致任务栏界面不再置顶
     setWindowFlags(Qt::WindowDoesNotAcceptFocus);
+    XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
 
     setMouseTracking(true);
     setAcceptDrops(true);
