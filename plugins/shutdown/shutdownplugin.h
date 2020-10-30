@@ -24,7 +24,7 @@
 
 #include "pluginsiteminterface.h"
 #include "shutdownwidget.h"
-#include "./dbus/dbuslogin1manager.h"
+#include "./dbus/dbuspowermanager.h"
 
 #include <QLabel>
 
@@ -111,7 +111,7 @@ private:
 
     ShutdownWidget *m_shutdownWidget;
     Dock::TipsWidget *m_tipsLabel;
-    DBusLogin1Manager* m_login1Inter;
+    DBusPowerManager* m_powerManagerInter;
 };
 
 #endif // SHUTDOWNPLUGIN_H
