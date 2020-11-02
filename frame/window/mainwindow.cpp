@@ -30,6 +30,7 @@
 #include <DPlatformWindowHandle>
 #include <DSysInfo>
 #include <DPlatformTheme>
+#include <DDBusSender>
 
 #include <QDebug>
 #include <QEvent>
@@ -73,6 +74,27 @@ const QPoint scaledPos(const QPoint &rawXPos)
            ? screen->geometry().topLeft() +
            (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
            : rawXPos;
+}
+
+// let startdde know that we've already started.
+void RegisterDdeSession()
+{
+    QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
+
+    QByteArray cookie = qgetenv(envName.toUtf8().data());
+    qunsetenv(envName.toUtf8().data());
+
+    if (!cookie.isEmpty()) {
+        QDBusPendingReply<bool> r = DDBusSender()
+                .interface("com.deepin.SessionManager")
+                .path("/com/deepin/SessionManager")
+                .service("com.deepin.SessionManager")
+                .method("Register")
+                .arg(QString(cookie))
+                .call();
+
+        qDebug() << Q_FUNC_INFO << r.value();
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -157,6 +179,12 @@ void MainWindow::callShow()
     qApp->setProperty("CANSHOW", true);
 
     launch();
+
+    // 预留200ms提供给窗口初始化再通知startdde，不影响启动速度
+    QTimer::singleShot(200, this, []{
+        qDebug() << "\n\ndde-dock startup RegisterDdeSession";
+        RegisterDdeSession();
+    });
 }
 
 void MainWindow::showEvent(QShowEvent *e)

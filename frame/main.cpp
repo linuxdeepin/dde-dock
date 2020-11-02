@@ -36,7 +36,6 @@
 
 #include <DApplication>
 #include <DLog>
-#include <DDBusSender>
 #include <DGuiApplicationHelper>
 
 #include <unistd.h>
@@ -59,27 +58,6 @@ const int MAX_STACK_FRAMES = 128;
 const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
 
 using namespace std;
-
-// let startdde know that we've already started.
-void RegisterDdeSession()
-{
-    QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
-
-    QByteArray cookie = qgetenv(envName.toUtf8().data());
-    qunsetenv(envName.toUtf8().data());
-
-    if (!cookie.isEmpty()) {
-        QDBusPendingReply<bool> r = DDBusSender()
-                .interface("com.deepin.SessionManager")
-                .path("/com/deepin/SessionManager")
-                .service("com.deepin.SessionManager")
-                .method("Register")
-                .arg(QString(cookie))
-                .call();
-
-        qDebug() << Q_FUNC_INFO << r.value();
-    }
-}
 
 bool IsSaveMode()
 {
@@ -249,9 +227,6 @@ int main(int argc, char *argv[])
         qDebug() << "set single instance failed!";
         return -1;
     }
-
-    qDebug() << "\n\ndde-dock startup";
-    RegisterDdeSession();
 
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());

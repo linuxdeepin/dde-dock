@@ -234,7 +234,7 @@ protected:
     /// \brief m_proxyInter
     /// NEVER delete this object.
     ///
-    PluginProxyInterface *m_proxyInter;
+    PluginProxyInterface *m_proxyInter = nullptr;
 };
 
 QT_BEGIN_NAMESPACE
