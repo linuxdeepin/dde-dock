@@ -257,7 +257,9 @@ void SoundApplet::defaultSinkChanged()
     m_defSinkInter = new DBusSink("com.deepin.daemon.Audio", defSinkPath.path(), QDBusConnection::sessionBus(), this);
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
-    connect(m_defSinkInter, &DBusSink::MuteChanged, this, &SoundApplet::onVolumeChanged);
+    connect(m_defSinkInter, &DBusSink::MuteChanged, this, [ = ] {
+        onVolumeChanged(m_defSinkInter->volume());
+    });
 
     QString portId = m_defSinkInter->activePort().name;
     uint cardId = m_defSinkInter->card();

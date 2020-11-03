@@ -49,6 +49,7 @@ public:
     void invokeMenuItem(const QString menuId, const bool checked);
 
     void refreshIcon();
+    void refreshTips(const int volume, const bool force = false);
 
 signals:
     void requestContextMenu() const;
@@ -59,8 +60,8 @@ protected:
     void paintEvent(QPaintEvent *e);
 
 private slots:
-    void refreshTips(const bool force = false);
     void sinkChanged(DBusSink *sink);
+    void refresh(const int volume);
 
 private:
     Dock::TipsWidget *m_tipsLabel;

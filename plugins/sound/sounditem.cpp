@@ -56,7 +56,7 @@ SoundItem::SoundItem(QWidget *parent)
     m_applet->setVisible(false);
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
-    connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refreshTips, Qt::QueuedConnection);
+    connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refresh, Qt::QueuedConnection);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshIcon();
@@ -65,7 +65,7 @@ SoundItem::SoundItem(QWidget *parent)
 
 QWidget *SoundItem::tipsWidget()
 {
-    refreshTips(true);
+    refreshTips(m_applet->volumeValue(), true);
 
     m_tipsLabel->resize(m_tipsLabel->sizeHint().width() + 10,
                         m_tipsLabel->sizeHint().height());
@@ -163,6 +163,12 @@ void SoundItem::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
 }
 
+void SoundItem::refresh(const int volume)
+{
+    refreshIcon();
+    refreshTips(volume, false);
+}
+
 void SoundItem::refreshIcon()
 {
     if (!m_sinkInter)
@@ -211,31 +217,21 @@ void SoundItem::refreshIcon()
     update();
 }
 
-void SoundItem::refreshTips(const bool force)
+void SoundItem::refreshTips(const int volume, const bool force)
 {
     if (!force && !m_tipsLabel->isVisible())
-        return;
-
-    if (!m_sinkInter)
         return;
 
     QString value;
     if (m_sinkInter->mute()) {
         m_tipsLabel->setText(QString(tr("Mute")));
     } else {
-        if (m_sinkInter->volume() * 1000 < m_applet->volumeValue())
-            value = QString::number(m_applet->volumeValue() / 10) + '%';
-        else
-            value = QString::number(m_sinkInter->volume() * 100) + '%';
-        m_tipsLabel->setText(QString(tr("Volume %1").arg(value)));
+        m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
     }
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
 {
     m_sinkInter = sink;
-
-    connect(m_sinkInter, &DBusSink::MuteChanged, this, &SoundItem::refreshIcon);
-    connect(m_sinkInter, &DBusSink::VolumeChanged, this, &SoundItem::refreshIcon);
-    refreshIcon();
+    refresh(m_applet->volumeValue());
 }
