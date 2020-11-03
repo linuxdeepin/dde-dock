@@ -63,6 +63,8 @@ signals:
     void requestCancelPreview() const;
     void dragReady(QWidget *dragWidget);
 
+    void requestUpdateEntryGeometries() const;
+
 private:
     void moveEvent(QMoveEvent *e) override;
     void paintEvent(QPaintEvent *e) override;

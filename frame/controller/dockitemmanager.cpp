@@ -48,6 +48,8 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
+        connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
+
         m_itemList.append(it);
     }
 

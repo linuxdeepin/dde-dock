@@ -722,6 +722,7 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 #endif
 
     m_dockInter->SetFrontendWindowRect(int(rect.x()), int(rect.y()), uint(rect.width()), uint(rect.height()));
+    emit requestUpdateDockEntry();
 }
 
 void MultiScreenWorker::onRequestNotifyWindowManager()
