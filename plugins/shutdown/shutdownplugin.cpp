@@ -277,6 +277,26 @@ bool ShutdownPlugin::checkSwap()
     if (!valueByQSettings<bool>("Power", "hibernate", false))
         return false;
 
+    //临时方案，判断swap_file与image_size大小
+    //https://pms.uniontech.com/zentao/task-view-43465.html
+    //-rw------- 1 root root 8589934592 11\xE6\x9C\x88  2 03:49 /swap_file\n
+    bool hasSwap = false;
+    QProcess process;
+    process.start("ls -l /swap_file");
+    process.waitForFinished();
+    QString cmdinfo = QString(process.readAllStandardOutput());
+    qDebug() << "cmd-result :" << cmdinfo;
+    QStringList strList = cmdinfo.split(" ");
+    if (strList.size() < 5) {
+        return false;
+    }
+    qint64 swap_size = strList.at(4).toLongLong();
+    qint64 image_size{ get_power_image_size() };
+    hasSwap = image_size < swap_size;
+    qDebug() << "image_size=" << image_size << ":swap_size=" << swap_size;
+
+    return hasSwap;
+/*
     bool hasSwap = false;
     QFile file("/proc/swaps");
     if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
@@ -303,6 +323,7 @@ bool ShutdownPlugin::checkSwap()
     }
 
     return hasSwap;
+*/
 }
 
 void ShutdownPlugin::refreshPluginItemsVisible()
