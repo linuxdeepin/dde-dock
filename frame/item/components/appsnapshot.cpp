@@ -207,7 +207,7 @@ void AppSnapshot::fetchSnapshot()
     const auto ratio = devicePixelRatioF();
     size = m_snapshotSrcRect.size().scaled(size * ratio, Qt::KeepAspectRatio);
     qreal scale = qreal(size.width()) / m_snapshotSrcRect.width();
-    m_snapshot = m_snapshot.scaled(qRound(m_snapshot.width() * scale), qRound(m_snapshot.height() * scale),
+    m_snapshot = m_snapshot.scaled(qRound(m_snapshot.width() * scale * ratio), qRound(m_snapshot.height() * scale * ratio),
                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_snapshotSrcRect.moveTop(m_snapshotSrcRect.top() * scale + 0.5);
     m_snapshotSrcRect.moveLeft(m_snapshotSrcRect.left() * scale + 0.5);
