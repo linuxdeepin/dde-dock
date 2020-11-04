@@ -99,6 +99,11 @@ QString PluginsItem::pluginName() const
     return m_pluginInter->pluginName();
 }
 
+PluginsItemInterface::PluginSizePolicy PluginsItem::pluginSizePolicy() const
+{
+    return m_pluginInter->pluginSizePolicy();
+}
+
 DockItem::ItemType PluginsItem::itemType() const
 {
     if (m_pluginInter->type() == PluginsItemInterface::Normal) {

@@ -43,6 +43,7 @@ public:
     explicit DatetimePlugin(QObject *parent = nullptr);
 
     const QString pluginName() const override;
+    PluginSizePolicy pluginSizePolicy() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
 

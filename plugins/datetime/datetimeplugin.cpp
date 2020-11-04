@@ -47,6 +47,11 @@ const QString DatetimePlugin::pluginName() const
     return "datetime";
 }
 
+PluginsItemInterface::PluginSizePolicy DatetimePlugin::pluginSizePolicy() const
+{
+    return PluginsItemInterface::Custom;
+}
+
 const QString DatetimePlugin::pluginDisplayName() const
 {
     return tr("Datetime");
