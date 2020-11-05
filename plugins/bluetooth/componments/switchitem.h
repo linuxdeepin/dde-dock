@@ -26,6 +26,8 @@
 #include <DSwitchButton>
 #include <dloadingindicator.h>
 #include <DGuiApplicationHelper>
+#include <DSpinner>
+#include <QTimer>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -45,6 +47,9 @@ public:
     inline bool isdefault() { return m_default; }
     inline void setDefault(bool def) { m_default = def; }
 
+public slots:
+    void loadStatusChange(bool isLoad);
+
 signals:
     void checkedChanged(bool checked);
     void justUpdateView(bool checked);
@@ -56,9 +61,11 @@ protected:
 private:
     QLabel *m_title;
     DSwitchButton *m_switchBtn;
+    DSpinner *m_spinner;
     bool m_default;
     bool m_checkState;
     DLoadingIndicator *m_loadingIndicator;
+    QTimer *m_timer;
 };
 
 #endif // SWITCHITEM_H

@@ -97,6 +97,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     connect(adapter, &Adapter::nameChanged, m_switchItem, &SwitchItem::setTitle);
     connect(adapter, &Adapter::deviceAdded, this, &AdapterItem::addDeviceItem);
     connect(adapter, &Adapter::deviceRemoved, this, &AdapterItem::removeDeviceItem);
+    connect(m_adaptersManager, &AdaptersManager::adapterPoweredChange, m_switchItem, &SwitchItem::loadStatusChange);
     connect(adapter, &Adapter::poweredChanged, m_switchItem, [=](const bool powered){
         m_switchItem->setChecked(powered, false);
     });

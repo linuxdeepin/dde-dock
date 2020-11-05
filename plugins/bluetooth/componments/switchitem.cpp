@@ -37,11 +37,18 @@ SwitchItem::SwitchItem(QWidget *parent)
     : QWidget(parent)
     , m_title(new QLabel(this))
     , m_switchBtn(new DSwitchButton(this))
+    , m_spinner(new DSpinner (this))
     , m_default(false)
+    , m_timer (new QTimer (this))
 {
     initFontColor(m_title);
+    m_timer->setSingleShot(true);
+    m_timer->setInterval(1000);
 
     m_switchBtn->setFixedWidth(SWITCHBUTTONWIDTH);
+    m_spinner->setFixedSize(24, 24);
+    m_spinner->start();
+    m_spinner->setVisible(false);
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
 
@@ -71,12 +78,18 @@ SwitchItem::SwitchItem(QWidget *parent)
     switchLayout->addWidget(m_loadingIndicator);
     switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_switchBtn);
+    switchLayout->addWidget(m_spinner);
     switchLayout->addSpacing(MARGIN);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {
         m_checkState = change;
         emit checkedChanged(change);
+        m_switchBtn->setEnabled(false);
+        m_timer->start();
+    });
+    connect(m_timer, &QTimer::timeout, [&] (){
+       m_switchBtn->setEnabled(true);
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, themeChanged);
 }
@@ -125,6 +138,17 @@ void SwitchItem::setLoadIndicatorIcon()
         filePath = ":/wireless/resources/wireless/refresh_dark.svg";
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(filePath);
     m_loadingIndicator->setImageSource(pixmap);
+}
+
+void SwitchItem::loadStatusChange(bool isLoad)
+{
+    if (isLoad) {
+        m_switchBtn->hide();
+        m_spinner->show();
+    } else {
+        m_spinner->hide();
+        m_switchBtn->show();
+    }
 }
 
 //void SwitchItem::mousePressEvent(QMouseEvent *event)

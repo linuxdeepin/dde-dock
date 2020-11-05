@@ -48,6 +48,7 @@ public:
 signals:
     void adapterIncreased(Adapter *adapter);
     void adapterDecreased(Adapter *adapter);
+    void adapterPoweredChange(bool isLoad);
 
 private slots:
     void onAdapterPropertiesChanged(const QString &json);
