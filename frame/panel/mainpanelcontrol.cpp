@@ -503,7 +503,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         qDebug()<<"source is null";
     }
 
-    /*TODO: 当前wayland拖拽在这个功能上未实现先屏蔽，后面修改
+    //当前功能已修复，先开启测试
     // 拖app到dock上
     const char *RequestDockKey = "RequestDock";
     const char *RequestDockKeyFallback = "text/plain";
@@ -541,7 +541,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         return;
     }
 
-    handleDragMove(e, false);*/
+    handleDragMove(e, false);
 }
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
@@ -669,16 +669,26 @@ void MainPanelControl::startDrag(DockItem *item)
 
     //isRun = false;
 
-    if (drag->target() == this) {
+    //如果item不是app类型，不需要开启动画效果
+    if (drag->target() == this || item->itemType() != DockItem::App) {
         item->setDraging(false);
         item->update();
         return;
     }
 
-    //开启动画效果
-    auto m_appDragWidget = new AppDragWidget();
+    //初始化动画窗口
+    if (m_appDragWidget) {
+        delete m_appDragWidget;
+        m_appDragWidget = nullptr;
+    }
+
+    m_appDragWidget = new AppDragWidget();
+
+    connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ & ] {
+        m_appDragWidget = nullptr;
+    });
+
     m_appDragWidget->setAppPixmap(pixmap);
-    m_appDragWidget->setItem(item);
     m_appDragWidget->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
     m_appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
     m_appDragWidget->setPixmapOpacity(0.5);
@@ -686,19 +696,18 @@ void MainPanelControl::startDrag(DockItem *item)
     QGuiApplication::platformNativeInterface()->setWindowProperty(m_appDragWidget->windowHandle()->handle(),
                                                                   "_d_dwayland_window-type" , "menu");
 
-    QTimer::singleShot(10, [item, m_appDragWidget]{
-        if (m_appDragWidget->isRemoveAble()) {
-            m_appDragWidget->showRemoveAnimation();
-            AppItem *appItem = static_cast<AppItem *>(item);
-            appItem->undock();
-            item->setDraging(false);
-            item->update();
-        } else {
-            m_appDragWidget->showGoBackAnimation();
-            item->setDraging(false);
-            item->update();
-        }
-    });
+    //开启动画效果
+    if (m_appDragWidget->isRemoveAble()) {
+        m_appDragWidget->showRemoveAnimation();
+        AppItem *appItem = static_cast<AppItem *>(item);
+        appItem->undock();
+        item->setDraging(false);
+        item->update();
+    } else {
+        m_appDragWidget->showGoBackAnimation();
+        item->setDraging(false);
+        item->update();
+    }
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)

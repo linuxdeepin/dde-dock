@@ -47,14 +47,9 @@ public:
     void setOriginPos(const QPoint position);
     void setPixmapOpacity(qreal opacity);
     bool isRemoveAble();
-    void setItem(DockItem *item) { m_item = item; }
     static bool isRemoveable(const Dock::Position &dockPos, const QRect &doctRect);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 public:
@@ -77,8 +72,6 @@ private:
     Dock::Position m_dockPosition;
     QRect m_dockGeometry;
     QPoint m_originPoint;
-
-    DockItem *m_item;
 };
 
 #endif /* APPDRAGWIDGET_H */

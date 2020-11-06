@@ -83,8 +83,6 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setMouseTracking(true);
 
-    setAcceptDrops(true);
-
     initAnimations();
 
     //更新一次坐标，防止窗口显示位置错误
@@ -95,48 +93,14 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
                 move(destPos.x() - width() / 2, destPos.y() - height() / 2);
             });
     m_followMouseTimer->start();
+
+    /*TODO: 现在拖拽的图标位置显示不再鼠标中间，等后面修复此问题再改回来
+    QPoint destPos = QCursor::pos();
+    move(destPos.x() - width() / 2, destPos.y() - height() / 2);*/
+    move(QCursor::pos());
 }
 
 AppDragWidget::~AppDragWidget() {
-}
-
-void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    QGraphicsView::mouseMoveEvent(event);
-    // hide widget when receiving mouseMoveEvent because this means drag-and-drop has been finished
-    if (m_goBackAnim->state() != QPropertyAnimation::State::Running
-            && m_animGroup->state() != QParallelAnimationGroup::Running) {
-        hide();
-    }
-}
-
-void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-    event->accept();
-}
-
-void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (isRemoveAble()) {
-        m_object->setOpacity(0.5);
-        m_animOpacity->setStartValue(0.5);
-    } else {
-        m_object->setOpacity(1.0);
-        m_animOpacity->setStartValue(1.0);
-    }
-}
-
-void AppDragWidget::dropEvent(QDropEvent *event)
-{
-    m_followMouseTimer->stop();
-
-    if (isRemoveAble()) {
-        showRemoveAnimation();
-        AppItem *appItem = static_cast<AppItem *>(m_item);
-        appItem->undock();
-    } else {
-        showGoBackAnimation();;
-    }
 }
 
 void AppDragWidget::hideEvent(QHideEvent *event)
@@ -211,7 +175,7 @@ void AppDragWidget::showRemoveAnimation()
 void AppDragWidget::showGoBackAnimation()
 {
     m_goBackAnim->setDuration(300);
-    m_goBackAnim->setStartValue(pos());
+    m_goBackAnim->setStartValue(QCursor::pos());
     m_goBackAnim->setEndValue(m_originPoint);
     m_goBackAnim->start();
 }

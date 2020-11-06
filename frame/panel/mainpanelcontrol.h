@@ -128,6 +128,7 @@ private:
     QBoxLayout *m_pluginLayout;
     QWidget *m_appAreaSonWidget;
     QBoxLayout *m_appAreaSonLayout;
+    AppDragWidget *m_appDragWidget = nullptr;
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     MainPanelDelegate *m_delegate;
