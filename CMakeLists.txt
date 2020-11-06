@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.7)
 
 set(VERSION 4.0)
 
+configure_file(dde-dock.pc.in dde-dock.pc @ONLY)
+
 project(dde-dock)
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -63,7 +65,7 @@ install(FILES ${QM_FILES}
 install(FILES ${INTERFACES}
         DESTINATION include/dde-dock)
 
-install(FILES "dde-dock.pc"
+install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
