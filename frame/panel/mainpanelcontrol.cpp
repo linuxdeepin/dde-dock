@@ -1057,11 +1057,15 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
+                if (pItem) {
                     if (pItem->pluginName() == "datetime") {
                         pItem->setFixedSize(pItem->sizeHint().width(), h);
-                    } else {
+                        //排除官方插件
+                    }else if(pItem->pluginName() == "trash" || pItem->pluginName() == "shutdown" || pItem->pluginName() == "onboard" || pItem->pluginName() == "notifications"){
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else {
+                        //对第三方插件size不做限制
+                        pItem->setFixedSize(pItem->sizeHint().width(), h);
                     }
                 }
             }
@@ -1075,8 +1079,12 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
                 if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
                     if (pItem->pluginName() == "datetime") {
                         pItem->setFixedSize(w, pItem->sizeHint().height());
-                    } else {
+                        //排除官方插件
+                    }else if(pItem->pluginName() == "trash" || pItem->pluginName() == "shutdown" || pItem->pluginName() == "onboard" || pItem->pluginName() == "notifications"){
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else {
+                        //对第三方插件size不做限制
+                        pItem->setFixedSize(w, pItem->sizeHint().height());
                     }
                 }
             }
@@ -1101,18 +1109,19 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
     m_trayAreaLayout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
 
+    //去除这个，因为我不知道到底想给那些官方插件设置边距，而且去除以后dock无影响
     //因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
     //而不对日期时间插件设置边距
-    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-        if (layout) {
-            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+//    for (int i = 0; i < m_pluginLayout->count(); ++ i) {
+//        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+//        if (layout) {
+//            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
 
-            if (pItem && pItem->pluginName() != "datetime") {
-                layout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
-            }
-        }
-    }
+//            if (pItem && pItem->pluginName() != "datetime") {
+//                layout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
+//            }
+//        }
+//    }
 }
 
 void MainPanelControl::getTrayVisableItemCount()
