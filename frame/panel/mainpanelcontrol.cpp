@@ -1058,13 +1058,10 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
+                    if (pItem->pluginName() == "datetime") {
                         pItem->setFixedSize(pItem->sizeHint().width(), h);
-                        break;
+                    } else {
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
                     }
                 }
             }
@@ -1076,13 +1073,10 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
+                    if (pItem->pluginName() == "datetime") {
                         pItem->setFixedSize(w, pItem->sizeHint().height());
-                        break;
+                    } else {
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
                     }
                 }
             }

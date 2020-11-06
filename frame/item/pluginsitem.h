@@ -41,7 +41,6 @@ public:
     void setInContainer(const bool container);
 
     QString pluginName() const;
-    PluginsItemInterface::PluginSizePolicy pluginSizePolicy() const;
 
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
