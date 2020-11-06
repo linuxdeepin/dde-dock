@@ -31,7 +31,7 @@ class PluginsItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent = nullptr);
     ~PluginsItem() override;
 
     int itemSortKey() const;
@@ -41,6 +41,7 @@ public:
     void setInContainer(const bool container);
 
     QString pluginName() const;
+    PluginsItemInterface::PluginSizePolicy pluginSizePolicy() const;
 
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
@@ -80,6 +81,7 @@ private:
     PluginsItemInterface *const m_pluginInter;
     QWidget *m_centralWidget;
 
+    const QString m_pluginApi;
     const QString m_itemKey;
     bool m_dragging;
 

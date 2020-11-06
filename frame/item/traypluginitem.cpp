@@ -24,8 +24,8 @@
 #include <QEvent>
 #include <QGSettings>
 
-TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
-    : PluginsItem(pluginInter, itemKey, parent)
+TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, const QString &pluginApi, QWidget *parent)
+    : PluginsItem(pluginInter, itemKey, pluginApi, parent)
 {
     centralWidget()->installEventFilter(this);
 }

@@ -23,6 +23,7 @@
 #include "pluginsitem.h"
 #include "pluginsiteminterface.h"
 
+#include "util/utils.h"
 #include "util/imagefactory.h"
 
 #include <QPainter>
@@ -36,10 +37,11 @@
 
 QPoint PluginsItem::MousePressPoint = QPoint();
 
-PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
+PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_pluginApi(plginApi)
     , m_itemKey(itemKey)
     , m_dragging(false)
     , m_gsettings(nullptr)
@@ -97,6 +99,16 @@ void PluginsItem::detachPluginWidget()
 QString PluginsItem::pluginName() const
 {
     return m_pluginInter->pluginName();
+}
+
+PluginsItemInterface::PluginSizePolicy PluginsItem::pluginSizePolicy() const
+{
+    // 插件版本大于 1.2.2 才能使用 PluginsItemInterface::pluginSizePolicy 函数
+    if (Utils::comparePluginApi(m_pluginApi, "1.2.2") > 0) {
+        return m_pluginInter->pluginSizePolicy();
+    } else {
+        return PluginsItemInterface::System;
+    }
 }
 
 DockItem::ItemType PluginsItem::itemType() const
