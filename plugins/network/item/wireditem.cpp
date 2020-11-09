@@ -84,14 +84,14 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     connect(m_freshWiredIcon, &QTimer::timeout, this, &WiredItem::setWiredStateIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(const bool) const>(&NetworkDevice::enableChanged),
             this, &WiredItem::enableChanged);
+    connect(m_device, static_cast<void (NetworkDevice::*)(bool) const>(&NetworkDevice::enableChanged),
+            this, &WiredItem::setWiredStateIcon);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::deviceStateChanged);
     connect(m_device, static_cast<void (NetworkDevice::*)(NetworkDevice::DeviceStatus) const>(&NetworkDevice::statusChanged),
             this, &WiredItem::setWiredStateIcon);
-    connect(m_device, static_cast<void (NetworkDevice::*)(bool) const>(&NetworkDevice::enableChanged),
-            this, &WiredItem::setWiredStateIcon);
 
-    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
+    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeConnectionsChanged,
             this, &WiredItem::changedActiveWiredConnectionInfo);
 
     connect(m_stateButton, &StateButton::click, this, [&] {
@@ -117,6 +117,7 @@ bool WiredItem::deviceEabled()
 
 void WiredItem::setDeviceEnabled(bool enabled)
 {
+    qDebug() << Q_FUNC_INFO << enabled;
     emit requestSetDeviceEnable(path(), enabled);
 }
 
@@ -134,7 +135,7 @@ WiredItem::WiredStatus WiredItem::getDeviceState()
     }
 
     switch (m_device->status()) {
-        case NetworkDevice::Unknow:        return Unknow;
+        case NetworkDevice::Unknown:        return Unknow;
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable:   return Nocable;
         case NetworkDevice::Disconnected:  return Disconnected;
@@ -175,7 +176,7 @@ void WiredItem::setWiredStateIcon()
     auto ratio =  devicePixelRatioF();
 
     switch (m_deviceState) {
-        case NetworkDevice::Unknow:
+        case NetworkDevice::Unknown:
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable: {
             stateString = "error";
@@ -247,7 +248,7 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
     m_deviceState = state;
     switch (state) {
-        case NetworkDevice::Unknow:
+        case NetworkDevice::Unknown:
         case NetworkDevice::Unmanaged:
         case NetworkDevice::Unavailable:
         case NetworkDevice::Disconnected:
@@ -288,8 +289,8 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
 {
     if (connInfo.isEmpty())
         m_stateButton->setVisible(false);
-
-    auto strTitle = connInfo.value("ConnectionName").toString();
+    qDebug() << connInfo;
+    auto strTitle = connInfo.value("Id").toString();
     m_connectedName->setText(strTitle);
     QFontMetrics fontMetrics(m_connectedName->font());
     if (fontMetrics.width(strTitle) > m_connectedName->width()) {

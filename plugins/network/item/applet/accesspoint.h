@@ -30,30 +30,33 @@ class AccessPoint : public QObject
     Q_OBJECT
 
 public:
-    explicit AccessPoint(const QJsonObject &apInfo);
-    explicit AccessPoint(const QString &info);
     explicit AccessPoint();
+    explicit AccessPoint(const QJsonObject &apInfo);
     AccessPoint(const AccessPoint &ap);
     bool operator==(const AccessPoint &ap) const;
     bool operator>(const AccessPoint &ap) const;
     AccessPoint &operator=(const AccessPoint &ap);
-
     const QString ssid() const;
     const QString path() const;
+    const QString uuid() const;
     int strength() const;
     bool secured() const;
 
     bool isEmpty() const;
+    void updateApInfo(const QJsonObject &apInfo);
 
 private:
-    void loadApInfo(const QJsonObject &apInfo);
-
-private:
+    //信号强度
     int m_strength;
+    //是否需要密码
     bool m_secured;
     bool m_securedInEap;
+    //apPath
     QString m_path;
+    //apSsid
     QString m_ssid;
+    //apUuid
+    QString m_uuid;
 };
 
 #endif // ACCESSPOINT_H

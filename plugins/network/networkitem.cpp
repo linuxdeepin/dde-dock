@@ -42,12 +42,12 @@ NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsWidget(new Dock::TipsWidget(this))
     , m_applet(new QScrollArea(this))
-    , m_switchWire(true)
-    , m_timer(new QTimer(this))
-    , m_switchWireTimer(new QTimer(this))
+    , m_isWireless(true)
+    , m_connectingTimer(new QTimer(this))
     , m_airplaneInter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
-    m_timer->setInterval(100);
+    m_connectingTimer->setInterval(200);
+    m_connectingTimer->setSingleShot(false);
 
     m_tipsWidget->setVisible(false);
 
@@ -134,10 +134,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_applet->viewport()->setAutoFillBackground(false);
     m_applet->setVisible(false);
 
-    connect(m_switchWireTimer, &QTimer::timeout, [ = ] {
-        m_switchWire = !m_switchWire;
-    });
-    connect(m_timer, &QTimer::timeout, this, &NetworkItem::refreshIcon);
+    connect(m_connectingTimer, &QTimer::timeout, this, &NetworkItem::onConnecting);
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
@@ -215,7 +212,7 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
             delete wiredItem;
         }
     }
-
+    //正常的刷新流程
     updateSelf();
 }
 
@@ -304,9 +301,7 @@ void NetworkItem::refreshIcon()
     const auto ratio = devicePixelRatioF();
     int iconSize = PLUGIN_ICON_MAX_SIZE;
     int strength = 0;
-
     switch (m_pluginState) {
-    case Disabled:
     case Adisabled:
         stateString = "disabled";
         iconString = QString("wireless-%1-symbolic").arg(stateString);
@@ -318,14 +313,18 @@ void NetworkItem::refreshIcon()
     case Connected:
     case Aconnected:
         strength = getStrongestAp();
-        if (strength < 0)
-            strength = 100;
-        if (strength == 100) {
+        qDebug() << "strength:" << strength;
+        //这个区间是需求文档中规定的
+        if (strength > 65) {
             stateString = "80";
-        } else if (strength < 20) {
-            stateString = "0";
+        } else if (strength > 55) {
+            stateString = "60";
+        } else if (strength > 30) {
+            stateString = "40";
+        } else if (strength > 5) {
+            stateString = "20";
         } else {
-            stateString = QString::number(strength / 10 & ~0x1) + "0";
+            stateString = "0";
         }
         iconString = QString("wireless-%1-symbolic").arg(stateString);
         break;
@@ -333,7 +332,6 @@ void NetworkItem::refreshIcon()
         stateString = "online";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
-    case Disconnected:
     case Adisconnected:
         stateString = "0";
         iconString = QString("wireless-%1-symbolic").arg(stateString);
@@ -342,67 +340,16 @@ void NetworkItem::refreshIcon()
         stateString = "none";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
-    case Connecting: {
-        m_timer->start();
-        if (m_switchWire) {
-            strength = QTime::currentTime().msec() / 10 % 100;
-            if (strength == 100) {
-                stateString = "80";
-            } else if (strength < 20) {
-                stateString = "0";
-            } else {
-                stateString = QString::number(strength / 10 & ~0x1) + "0";
-            }
-            iconString = QString("wireless-%1-symbolic").arg(stateString);
-            if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
-                    && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-                iconString.append(PLUGIN_MIN_ICON_NAME);
-            m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-            update();
-            return;
-        } else {
-            const quint64 index = QTime::currentTime().msec() / 10 % 100;
-            const int num = (index % 5) + 1;
-            iconString = QString("network-wired-symbolic-connecting%1.svg").arg(num);
-            if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
-                    && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-                iconString.append(PLUGIN_MIN_ICON_NAME);
-            m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-            update();
-            return;
-        }
-    }
     case Aconnecting: {
-        m_timer->start();
-        strength = QTime::currentTime().msec() / 10 % 100;
-        if (strength == 100) {
-            stateString = "80";
-        } else if (strength < 20) {
-            stateString = "0";
-        } else {
-            stateString = QString::number(strength / 10 & ~0x1) + "0";
-        }
-        iconString = QString("wireless-%1-symbolic").arg(stateString);
-        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
-                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-            iconString.append(PLUGIN_MIN_ICON_NAME);
-        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-        update();
+        m_isWireless = true;
+        m_connectingTimer->start();
         return;
     }
     case Bconnecting: {
-        m_timer->start(200);
-        const int index = QTime::currentTime().msec() / 200 % 10;
-        const int num = index + 1;
-        iconString = QString("network-wired-symbolic-connecting%1").arg(num);
-        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
-                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-            iconString.append(PLUGIN_MIN_ICON_NAME);
-        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-        update();
+        m_isWireless = false;
+        m_connectingTimer->start();
         return;
     }
-    case ConnectNoInternet:
     case AconnectNoInternet:
         stateString = "offline";
         iconString = QString("network-wireless-%1-symbolic").arg(stateString);
@@ -422,7 +369,7 @@ void NetworkItem::refreshIcon()
         break;
     }
 
-    m_timer->stop();
+    m_connectingTimer->stop();
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -464,6 +411,7 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == m_loadingIndicator) {
         if (event->type() == QEvent::MouseButtonPress) {
+            qDebug() << Q_FUNC_INFO;
             wirelessItemsRequireScan();
         }
     }
@@ -509,13 +457,15 @@ void NetworkItem::getPluginState()
     int temp = 0;
     // 所有设备状态叠加
     QMapIterator<QString, WirelessItem *> iwireless(m_wirelessItems);
+    //无线网状态获取
     while (iwireless.hasNext()) {
         iwireless.next();
         auto wirelessItem = iwireless.value();
         if (wirelessItem) {
             temp = wirelessItem->getDeviceState();
             state |= temp;
-            if ((temp & WirelessItem::Connected) >> 18) {
+            //如果该网卡处于连接成功状态，则加入到列表中
+            if (temp == WirelessItem::Connected) {
                 m_connectedWirelessDevice.insert(iwireless.key(), wirelessItem);
             }
         }
@@ -523,24 +473,21 @@ void NetworkItem::getPluginState()
     // 按如下顺序得到当前无线设备状态
     temp = state;
     if (!temp)
-        wirelessState = WirelessItem::Unknow;
-    temp = state;
-    if ((temp & WirelessItem::Disabled) >> 17)
+        wirelessState = WirelessItem::Unknown;
+    if (temp & WirelessItem::Disabled)
         wirelessState = WirelessItem::Disabled;
-    temp = state;
-    if ((temp & WirelessItem::Disconnected) >> 19)
+    if (temp & WirelessItem::Disconnected)
         wirelessState = WirelessItem::Disconnected;
-    temp = state;
-    if ((temp & WirelessItem::Connecting) >> 20)
+    //获取ip和验证的时候则代表还在连接过程中
+    if (temp & WirelessItem::Connecting ||
+            temp & WirelessItem::Authenticating || temp & WirelessItem::ObtainingIP)
         wirelessState = WirelessItem::Connecting;
-    temp = state;
-    if ((temp & WirelessItem::ConnectNoInternet) >> 24)
+    if (temp & WirelessItem::ConnectNoInternet)
         wirelessState = WirelessItem::ConnectNoInternet;
-    temp = state;
-    if ((temp & WirelessItem::Connected) >> 18) {
+    if (temp & WirelessItem::Connected) {
         wirelessState = WirelessItem::Connected;
     }
-
+    //有线网状态获取
     state = 0;
     temp = 0;
     QMapIterator<QString, WiredItem *> iwired(m_wiredItems);
@@ -550,7 +497,7 @@ void NetworkItem::getPluginState()
         if (wiredItem) {
             temp = wiredItem->getDeviceState();
             state |= temp;
-            if ((temp & WiredItem::Connected) >> 2) {
+            if (temp == WiredItem::Connected) {
                 m_connectedWiredDevice.insert(iwired.key(), wiredItem);
             }
         }
@@ -558,450 +505,54 @@ void NetworkItem::getPluginState()
     temp = state;
     if (!temp)
         wiredState = WiredItem::Unknow;
-    temp = state;
-    if ((temp & WiredItem::Nocable) >> 9)
+    if (temp & WiredItem::Nocable)
         wiredState = WiredItem::Nocable;
-    temp = state;
-    if ((temp & WiredItem::Disabled) >> 1)
+    if (temp & WiredItem::Disabled)
         wiredState = WiredItem::Disabled;
-    temp = state;
-    if ((temp & WiredItem::Disconnected) >> 3)
+    if (temp & WiredItem::Disconnected)
         wiredState = WiredItem::Disconnected;
-    temp = state;
-    if ((temp & WiredItem::Connecting) >> 4)
+    if (temp & WiredItem::Connecting ||
+            temp & WiredItem::Authenticating || temp & WiredItem::ObtainingIP)
         wiredState = WiredItem::Connecting;
-    temp = state;
-    if ((temp & WiredItem::ConnectNoInternet) >> 8)
+    if (temp & WiredItem::ConnectNoInternet)
         wiredState = WiredItem::ConnectNoInternet;
-    temp = state;
-    if ((temp & WiredItem::Connected) >> 2) {
+    if (temp & WiredItem::Connected) {
         wiredState = WiredItem::Connected;
     }
-
-    switch (wirelessState | wiredState) {
-    case 0:
-        m_pluginState = Unknow;
-        break;
-    case 0x00000001:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00000002:
-        m_pluginState = Bdisabled;
-        break;
-    case 0x00000004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00000008:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00000010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00000080:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00000100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00000200:
-        m_pluginState = Nocable;
-        break;
-    case 0x00000400:
-        m_pluginState = Bfailed;
-        break;
-    case 0x00010000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020000:
-        m_pluginState = Adisabled;
-        break;
-    case 0x00040000:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100000:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200000:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400000:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000000:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00020001:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040001:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000001:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020002:
-        m_pluginState = Disabled;
-        break;
-    case 0x00040002:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000002:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00020004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00040004:
-        m_pluginState = Connected;
-        break;
-    case 0x00080004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00100004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00200004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00400004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00800004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x01000004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x02000004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00010008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00020008:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040008:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000008:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040010:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100010:
-        m_pluginState = Connecting;
-        break;
-    case 0x00200010:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400010:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040020:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00200020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040040:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00200040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00020080:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040080:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000080:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00020100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00040100:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00100100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x01000100:
-        m_pluginState = ConnectNoInternet;
-        break;
-    case 0x02000100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00010200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020200:
-        m_pluginState = Nocable;
-        break;
-    case 0x00040200:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000200:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020400:
-        m_pluginState = Bfailed;
-        break;
-    case 0x00040400:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000400:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000400:
-        m_pluginState = Bfailed;
-        break;
+    qDebug() << "wirelessState = " << wirelessState << "wiredState =" << wiredState;
+    switch (wirelessState) {
+        case WirelessItem::Disabled: {
+            if (wiredState < WiredItem::Disconnected)
+                m_pluginState = Adisabled;
+            else
+                m_pluginState = PluginState(wiredState);
+            break;
+        }
+        case WirelessItem::Disconnected:
+            if (wiredState < WiredItem::Disconnected)
+                m_pluginState = Adisconnected;
+            else
+                m_pluginState = PluginState(wiredState);
+            break;
+       case WirelessItem::Connecting:
+            m_pluginState = Aconnecting;
+            break;
+       case WirelessItem::ConnectNoInternet:
+            if (wiredState == WiredItem::Connected || wiredState == WiredItem::Connecting)
+                m_pluginState = PluginState(wiredState);
+            else
+                m_pluginState = AconnectNoInternet;
+            break;
+       case WirelessItem::Connected:
+            if (wiredState == WiredItem::Connected)
+                m_pluginState = Connected;
+            else
+                m_pluginState = Aconnected;
+            break;
+       default:
+            m_pluginState = PluginState(wiredState);
     }
 
-    switch (m_pluginState) {
-    case Unknow:
-    case Disabled:
-    case Connected:
-    case Disconnected:
-    case ConnectNoInternet:
-    case Adisabled:
-    case Bdisabled:
-    case Aconnected:
-    case Bconnected:
-    case Adisconnected:
-    case Bdisconnected:
-    case Aconnecting:
-    case Bconnecting:
-    case AconnectNoInternet:
-    case BconnectNoInternet:
-    case Bfailed:
-    case Nocable:
-        m_switchWireTimer->stop();
-        break;
-    case Connecting:
-        // 启动2s切换计时
-        m_switchWireTimer->start(2000);
-        break;
-    }
 }
 
 void NetworkItem::updateView()
@@ -1041,10 +592,6 @@ void NetworkItem::updateView()
 
     itemCount += wiredDeviceCnt;
 
-    // 分割线 都有设备时才有
-//    auto hasDevice = wirelessDeviceCnt && wiredDeviceCnt;
-//    m_line->setVisible(hasDevice);
-
     auto centralWidget = m_applet->widget();
     if (itemCount <= constDisplayItemCnt) {
         contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
@@ -1069,6 +616,42 @@ void NetworkItem::updateSelf()
     updateView();
 }
 
+void NetworkItem::onConnecting()
+{
+    QString stateString;
+    QString iconString;
+    int strength = 0;
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
+    const auto ratio = devicePixelRatioF();
+    if (m_isWireless)
+    {
+        strength = QTime::currentTime().msec() / 10 % 100;
+        if (strength == 100) {
+            stateString = "80";
+        } else if (strength < 20) {
+            stateString = "0";
+        } else {
+            stateString = QString::number(strength / 10 & ~0x1) + "0";
+        }
+        iconString = QString("wireless-%1-symbolic").arg(stateString);
+        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
+                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            iconString.append(PLUGIN_MIN_ICON_NAME);
+        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+    } else {
+        const int index = QTime::currentTime().msec() / 200 % 10;
+        const int num = index + 1;
+        iconString = QString("network-wired-symbolic-connecting%1").arg(num);
+        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
+                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            iconString.append(PLUGIN_MIN_ICON_NAME);
+        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+    }
+    update();
+    return;
+}
+
+
 int NetworkItem::getStrongestAp()
 {
     int retStrength = -1;
@@ -1077,20 +660,18 @@ int NetworkItem::getStrongestAp()
         if (apInfo.isEmpty())
             continue;
         auto strength = apInfo.value("Strength").toInt();
+        qDebug() << "strength" << strength;
         if (retStrength < strength)
             retStrength = strength;
     }
     return retStrength;
 }
 
-/**
- * @brief NetworkItem::wirelessItemsRequireScan
- */
 void NetworkItem::wirelessItemsRequireScan()
 {
     for (auto wirelessItem : m_wirelessItems) {
         if (wirelessItem) {
-            wirelessItem->requestWirelessScan();
+            Q_EMIT wirelessItem->requestWirelessScan();
         }
     }
     wirelessScan();
@@ -1144,43 +725,10 @@ void NetworkItem::updateMasterControlSwitch()
 void NetworkItem::refreshTips()
 {
     switch (m_pluginState) {
-    case Disabled:
     case Adisabled:
     case Bdisabled:
         m_tipsWidget->setText(tr("Device disabled"));
         break;
-    case Connected: {
-        QString strTips;
-        QStringList textList;
-        for (auto wirelessItem : m_connectedWirelessDevice) {
-            if (wirelessItem) {
-                auto info = wirelessItem->getActiveWirelessConnectionInfo();
-                if (!info.contains("Ip4"))
-                    break;
-                const QJsonObject ipv4 = info.value("Ip4").toObject();
-                if (!ipv4.contains("Address"))
-                    break;
-                strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
-                strTips.chop(1);
-                textList << strTips;
-            }
-        }
-        for (auto wiredItem : m_connectedWiredDevice) {
-            if (wiredItem) {
-                auto info = wiredItem->getActiveWiredConnectionInfo();
-                if (!info.contains("Ip4"))
-                    break;
-                const QJsonObject ipv4 = info.value("Ip4").toObject();
-                if (!ipv4.contains("Address"))
-                    break;
-                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
-                strTips.chop(1);
-                textList << strTips;
-            }
-        }
-        m_tipsWidget->setTextList(textList);
-    }
-    break;
     case Aconnected: {
         QString strTips;
         for (auto wirelessItem : m_connectedWirelessDevice) {
@@ -1215,18 +763,15 @@ void NetworkItem::refreshTips()
         m_tipsWidget->setText(strTips);
     }
     break;
-    case Disconnected:
     case Adisconnected:
     case Bdisconnected:
         m_tipsWidget->setText(tr("Not connected"));
         break;
-    case Connecting:
     case Aconnecting:
     case Bconnecting: {
         m_tipsWidget->setText(tr("Connecting"));
         return;
     }
-    case ConnectNoInternet:
     case AconnectNoInternet:
     case BconnectNoInternet:
         m_tipsWidget->setText(tr("Connected but no Internet access"));
@@ -1238,6 +783,38 @@ void NetworkItem::refreshTips()
     case Nocable:
         m_tipsWidget->setText(tr("Network cable unplugged"));
         break;
+    case Connected: {
+        QString strTips;
+        QStringList textList;
+        for (auto wirelessItem : m_connectedWirelessDevice) {
+            if (wirelessItem) {
+                auto info = wirelessItem->getActiveWirelessConnectionInfo();
+                if (!info.contains("Ip4"))
+                    break;
+                const QJsonObject ipv4 = info.value("Ip4").toObject();
+                if (!ipv4.contains("Address"))
+                    break;
+                strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
+            }
+        }
+        for (auto wiredItem : m_connectedWiredDevice) {
+            if (wiredItem) {
+                auto info = wiredItem->getActiveWiredConnectionInfo();
+                if (!info.contains("Ip4"))
+                    break;
+                const QJsonObject ipv4 = info.value("Ip4").toObject();
+                if (!ipv4.contains("Address"))
+                    break;
+                strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
+                strTips.chop(1);
+                textList << strTips;
+            }
+        }
+        m_tipsWidget->setTextList(textList);
+    }
+    break;
     }
 }
 
@@ -1268,9 +845,6 @@ bool NetworkItem::isShowControlCenter()
         case Unknow:
         case Nocable:
         case Bfailed:
-        case ConnectNoInternet:
-        case Disconnected:
-        case Disabled:
             return true;
         default:
             break;

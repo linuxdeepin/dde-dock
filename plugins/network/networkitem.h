@@ -32,27 +32,22 @@ class NetworkItem : public QWidget
     {
         Unknow              = 0,
         // A 无线 B 有线
-        Disabled,
+        Nocable             = 1,
+        Bdisabled           = 2,
+        Bdisconnected       = 8,
+        Bconnected          = 16,
+        Bconnecting         = 32,
+        BconnectNoInternet  = 512,
+        Bfailed             = 1024,
+
+        //有线无线同时处于连接状态
         Connected,
-        Disconnected,
-        Connecting,
-//        Failed,
-        ConnectNoInternet,
-//        Aenabled,
-//        Benabled,
+        //无线网状态
         Adisabled,
-        Bdisabled,
         Aconnected,
-        Bconnected,
         Adisconnected,
-        Bdisconnected,
         Aconnecting,
-        Bconnecting,
-        AconnectNoInternet,
-        BconnectNoInternet,
-//        Afailed,
-        Bfailed,
-        Nocable
+        AconnectNoInternet
     };
 public:
     explicit NetworkItem(QWidget *parent = nullptr);
@@ -71,6 +66,11 @@ public slots:
     void updateSelf();
     void refreshIcon();
     void wirelessScan();
+    /**
+     * @def onConnected
+     * @brief 连接中wifi动图
+     */
+    void onConnecting();
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
@@ -87,6 +87,10 @@ private:
     void updateMasterControlSwitch();
     void updateView();
     int getStrongestAp();
+    /**
+     * @def wirelessItemsRequireScan
+     * @brief 刷新wifi数据
+     **/
     void wirelessItemsRequireScan();
 
 private:
@@ -105,8 +109,11 @@ private:
     QVBoxLayout *m_wirelessLayout;
     QWidget *m_wirelessControlPanel;
     bool m_switchWirelessBtnState;
-
-    bool m_switchWire;
+    /**
+     * @brief m_isWireless
+     * @remark 这个参数是用来判断是否为wifi需要使用正在连接的状态
+     */
+    bool m_isWireless;
 
     QMap<QString, WiredItem *> m_wiredItems;
     QMap<QString, WirelessItem *> m_wirelessItems;
@@ -115,9 +122,17 @@ private:
 
     QPixmap m_iconPixmap;
     PluginState m_pluginState;
-    QTimer *m_timer;
-    QTimer *m_switchWireTimer;
+    /**
+     * @brief m_timer
+     * @brief 做刷新操作的QTimer
+     */
+    QTimer *m_connectingTimer;
+    /**
+     * @def m_airplaneInter
+     * @brief 飞行模式的后端接口
+     */
     AirplanInter *m_airplaneInter;
+
 };
 
 #endif // NETWORKITEM_H

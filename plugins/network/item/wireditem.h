@@ -75,17 +75,17 @@ class WiredItem : public DeviceItem
 public:
     enum WiredStatus {
         Unknow              = 0,
-        Enabled             = 0x00000001,
-        Disabled            = 0x00000002,
-        Connected           = 0x00000004,
-        Disconnected        = 0x00000008,
-        Connecting          = 0x00000010,
-        Authenticating      = 0x00000020,
-        ObtainingIP         = 0x00000040,
-        ObtainIpFailed      = 0x00000080,
-        ConnectNoInternet   = 0x00000100,
-        Nocable             = 0x00000200,
-        Failed              = 0x00000400,
+        Nocable             = 1,
+        Enabled             = 2,
+        Disabled            = 4,
+        Disconnected        = 8,
+        Connected           = 16,
+        Connecting          = 32,
+        Authenticating      = 64,
+        ObtainingIP         = 128,
+        ObtainIpFailed      = 256,
+        ConnectNoInternet   = 512,
+        Failed              = 1024,
     };
     Q_ENUM(WiredStatus)
 

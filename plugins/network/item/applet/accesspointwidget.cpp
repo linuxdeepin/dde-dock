@@ -23,7 +23,6 @@
 #include "horizontalseperator.h"
 #include "util/utils.h"
 #include "../frame/util/imageutil.h"
-#include "../wireditem.h"
 #include "constants.h"
 #include "util/statebutton.h"
 
@@ -45,13 +44,29 @@ extern const QString DarkType;
 extern const QString LightType;
 extern void initFontColor(QWidget *widget);
 
-AccessPointWidget::AccessPointWidget()
+AccessPointWidget::AccessPointWidget(const QJsonObject &apInfo)
     : QFrame(nullptr)
-    , m_activeState(NetworkDevice::Unknow)
+    , m_activeState(AccessPointWidget::ApState::Unknown)
     , m_ssidBtn(new SsidButton(this))
     , m_securityLabel(new QLabel)
     , m_strengthLabel(new QLabel)
+    , m_ap(AccessPoint(apInfo))
     , m_stateButton(new StateButton(this))
+    , m_loadingStat(new DSpinner(this))
+
+{
+    initUI();
+    initConnect();
+    //初始化数据
+    updateApInfo(apInfo);
+}
+
+AccessPointWidget::~AccessPointWidget()
+{
+    Q_EMIT apChange();
+}
+
+void AccessPointWidget::initUI()
 {
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -63,6 +78,11 @@ AccessPointWidget::AccessPointWidget()
     m_stateButton->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
     m_stateButton->setType(StateButton::Check);
     m_stateButton->setVisible(false);
+
+    m_loadingStat->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
+    m_loadingStat->setVisible(false);
+    m_loadingStat->start();
+    m_loadingStat->move(QPoint(200,5));
 
     auto pixpath = QString(":/wireless/resources/wireless/security");
     pixpath = isLight ? pixpath + DarkType : pixpath + LightType;
@@ -90,62 +110,71 @@ AccessPointWidget::AccessPointWidget()
 
     setLayout(centralLayout);
 
-    connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::clicked);
+    setStrengthIcon(m_ap.strength());
+}
+
+void AccessPointWidget::initConnect()
+{
+    //连接wifi
     connect(m_ssidBtn, &SsidButton::clicked, this, &AccessPointWidget::ssidClicked);
+    //断开连接
+    connect(m_stateButton, &StateButton::click, this, &AccessPointWidget::disconnectBtnClicked);
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         setStrengthIcon(m_ap.strength());
     });
-
     connect(qApp, &DApplication::iconThemeChanged, this, [ = ] {
         setStrengthIcon(m_ap.strength());
     });
 
-    connect(m_stateButton, &StateButton::click, this, &AccessPointWidget::disconnectBtnClicked);
-
-    setStrengthIcon(m_ap.strength());
 }
 
-void AccessPointWidget::updateAP(const AccessPoint &ap)
+void AccessPointWidget::updateApInfo(const QJsonObject &apInfo)
 {
-    m_ap = ap;
-
-    QString strSsid = ap.ssid();
-    m_ssidBtn->setText(strSsid);
-
+    //刷新网络数据
+    m_ap.updateApInfo(apInfo);
+    //设置SSID  对长度太长的Ssid进行截断
+    QString strSsid = ssid();
     QFontMetrics fontMetrics(m_ssidBtn->font());
     if(fontMetrics.width(strSsid) > m_ssidBtn->width())
     {
         strSsid = QFontMetrics(m_ssidBtn->font()).elidedText(strSsid, Qt::ElideRight, m_ssidBtn->width());
     }
     m_ssidBtn->setText(strSsid);
+    //设置信号强度
+    setStrengthIcon(strength());
 
-    setStrengthIcon(ap.strength());
-
-    if (!ap.secured()) {
+    //设置是否是密码状态
+    if (!secured()) {
         m_securityLabel->clear();
     } else if(!m_securityLabel->pixmap()) {
         m_securityLabel->setPixmap(m_securityPixmap);
     }
-
-    // reset state
-    setActiveState(NetworkDevice::Unknow);
+    Q_EMIT apChange();
 }
 
-bool AccessPointWidget::active() const
-{
-    return m_activeState == NetworkDevice::Activated;
-}
-
-void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
+void AccessPointWidget::setActiveState(ApState state)
 {
     if (m_activeState == state)
         return;
 
     m_activeState = state;
+    if (state == ApState::Activating) {
+        m_loadingStat->show();
+        m_stateButton->hide();
+    } else if (state == ApState::Activated) {
+        m_loadingStat->hide();
+        m_stateButton->show();
+    } else {
+        m_loadingStat->hide();
+        m_stateButton->hide();
+    }
+    Q_EMIT apChange();
+}
 
-    const bool isActive = active();
-
-    m_stateButton->setVisible(isActive);
+bool AccessPointWidget::operator==(const AccessPointWidget *ap) const
+{
+    return this->ssid() == ap->ssid();
 }
 
 void AccessPointWidget::enterEvent(QEvent *e)
@@ -162,6 +191,7 @@ void AccessPointWidget::setStrengthIcon(const int strength)
     const QSize s = QSize(16, 16);
 
     QString type;
+    //这个区间是需求文档中规定的
     if (strength > 65)
         type = "80";
     else if (strength > 55)
@@ -192,15 +222,13 @@ void AccessPointWidget::setStrengthIcon(const int strength)
 
 void AccessPointWidget::ssidClicked()
 {
-    if (m_activeState == NetworkDevice::Activated)
+    if (m_activeState == ApState::Activated)
         return;
-
-    setActiveState(NetworkDevice::Prepare);
-    emit requestActiveAP(m_ap.path(), m_ap.ssid());
+    emit requestConnectAP(m_ap.path(), m_ap.uuid());
 }
 
 void AccessPointWidget::disconnectBtnClicked()
 {
-    setActiveState(NetworkDevice::Unknow);
-    emit requestDeactiveAP(m_ap);
+    setActiveState(ApState::Unknown);
+    emit requestDisconnectAP();
 }

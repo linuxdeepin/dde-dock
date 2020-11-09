@@ -23,6 +23,7 @@
 #define ACCESSPOINTWIDGET_H
 
 #include "accesspoint.h"
+#include "../wireditem.h"
 
 #include <DImageButton>
 
@@ -56,39 +57,79 @@ protected:
 class AccessPointWidget : public QFrame
 {
     Q_OBJECT
-    Q_PROPERTY(bool active READ active DESIGNABLE true)
-
 public:
-    explicit AccessPointWidget();
 
-    const AccessPoint ap() const { return m_ap; }
-    void updateAP(const AccessPoint &ap);
+    enum ApState{
+        Unknown = 0,
+        Activating = 1,
+        Activated  = 2
+    };
 
-    bool active() const;
-    void setActiveState(const dde::network::NetworkDevice::DeviceStatus state);
+    explicit AccessPointWidget(const QJsonObject &apInfo);
+    ~AccessPointWidget();
+
+   //const AccessPoint ap() const { return m_ap; }
+//    void updateAP(const AccessPoint &ap);
+
+    int strength() const {return m_ap.strength();}
+    const QString ssid() const {return m_ap.ssid();}
+    const QString path() const {return m_ap.path();}
+    const QString uuid() const {return m_ap.uuid();}
+    bool secured() const {return m_ap.secured();}
+    void updateApInfo(const QJsonObject &apInfo);
+    void setActiveState(ApState state);
 
 signals:
-    void requestActiveAP(const QString &apPath, const QString &ssid) const;
-    void requestDeactiveAP(const AccessPoint &ap) const;
-    void clicked() const;
+    /**
+     * @def requestConnectAP
+     * @brief 连接wifi
+     * @param apPath
+     * @param ssid
+     */
+    void requestConnectAP(const QString &apPath, const QString &uuid) const;
+    /**
+     * @def requestDisconnectAP
+     * @brief 断开连接
+     * @param apPath
+     */
+    void requestDisconnectAP() const;
+    /**
+     * @def apChange
+     * @brief 数据改变
+     */
+    void apChange();
+
 
 private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    bool operator==(const AccessPointWidget *ap) const;
     void setStrengthIcon(const int strength);
+    void initUI();
+    void initConnect();
 
 private slots:
     void ssidClicked();
     void disconnectBtnClicked();
 
 private:
-    dde::network::NetworkDevice::DeviceStatus m_activeState;
+    ApState m_activeState;
 
     AccessPoint m_ap;
+    //Ssid显示
     SsidButton *m_ssidBtn;
     QLabel *m_securityLabel;
     QLabel *m_strengthLabel;
+    /**
+     * @def 连接成功的图标
+     * @brief m_stateButton
+     */
     StateButton *m_stateButton;
+    /**
+     * @def m_loadingStat
+     * @brief 连接中图标
+     */
+    DSpinner *m_loadingStat;
 
     QPixmap m_securityPixmap;
     QSize m_securityIconSize;

@@ -24,31 +24,21 @@
 #include <QDebug>
 #include <QJsonDocument>
 
+AccessPoint::AccessPoint()
+    : QObject(nullptr)
+{
+}
+
 AccessPoint::AccessPoint(const QJsonObject &apInfo)
     : QObject(nullptr)
 {
-    loadApInfo(apInfo);
+    updateApInfo(apInfo);
 }
 
 AccessPoint::AccessPoint(const AccessPoint &ap)
     : QObject(nullptr)
 {
     *this = ap;
-}
-
-AccessPoint::AccessPoint(const QString &info)
-{
-    const QJsonDocument doc = QJsonDocument::fromJson(info.toUtf8());
-    Q_ASSERT(doc.isObject());
-    loadApInfo(doc.object());
-}
-
-AccessPoint::AccessPoint()
-    : QObject(nullptr),
-      m_strength(0),
-      m_secured(false),
-      m_securedInEap(false)
-{
 }
 
 bool AccessPoint::operator==(const AccessPoint &ap) const
@@ -68,6 +58,7 @@ AccessPoint &AccessPoint::operator=(const AccessPoint &ap)
     m_securedInEap = ap.m_securedInEap;
     m_path = ap.m_path;
     m_ssid = ap.m_ssid;
+    m_uuid = ap.m_uuid;
 
     return *this;
 }
@@ -80,6 +71,10 @@ const QString AccessPoint::ssid() const
 const QString AccessPoint::path() const
 {
     return m_path;
+}
+const QString AccessPoint::uuid() const
+{
+    return m_uuid;
 }
 
 int AccessPoint::strength() const
@@ -97,11 +92,12 @@ bool AccessPoint::isEmpty() const
     return m_path.isEmpty();
 }
 
-void AccessPoint::loadApInfo(const QJsonObject &apInfo)
+void AccessPoint::updateApInfo(const QJsonObject &apInfo)
 {
     m_strength = apInfo.value("Strength").toInt();
     m_secured = apInfo.value("Secured").toBool();
     m_securedInEap = apInfo.value("SecuredInEap").toBool();
     m_path = apInfo.value("Path").toString();
     m_ssid = apInfo.value("Ssid").toString();
+    m_uuid = apInfo.value("Uuid").toString();
 }

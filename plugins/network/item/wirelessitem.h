@@ -30,6 +30,7 @@
 #include <QLabel>
 
 #include <WirelessDevice>
+#include <NetworkModel>
 
 class TipsWidget;
 class WirelessItem : public DeviceItem
@@ -38,22 +39,21 @@ class WirelessItem : public DeviceItem
 
 public:
     enum WirelessStatus {
-        Unknow              = 0,
-        Enabled             = 0x00010000,
-        Disabled            = 0x00020000,
-        Connected           = 0x00040000,
-        Disconnected        = 0x00080000,
-        Connecting          = 0x00100000,
-        Authenticating      = 0x00200000,
-        ObtainingIP         = 0x00400000,
-        ObtainIpFailed      = 0x00800000,
-        ConnectNoInternet   = 0x01000000,
-        Failed              = 0x02000000,
-    };
+        Unknown              = 0,
+        Enabled              = 1,
+        Disabled             = 2,
+        Connected            = 4,
+        Disconnected         = 8,
+        Connecting           = 16,
+        Authenticating       = 32,
+        ObtainingIP          = 64,
+        ObtainIpFailed       = 128,
+        ConnectNoInternet    = 256,
+        Failed               = 512};
     Q_ENUM(WirelessStatus)
 
 public:
-    explicit WirelessItem(dde::network::WirelessDevice *device);
+    explicit WirelessItem(dde::network::WirelessDevice *device, dde::network::NetworkModel *model);
     ~WirelessItem();
 
     QWidget *itemApplet();
@@ -66,6 +66,14 @@ public:
     inline int deviceInfo() { return m_index; }
     void setControlPanelVisible(bool visible);
 
+private:
+    /**
+     * @def initConnect
+     * @brief 初始化信号槽
+     */
+    void initConnect();
+
+
 public Q_SLOTS:
     // set the device name displayed
     // in the top-left corner of the applet
@@ -74,16 +82,11 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
-    void feedSecret(const QString &connectionPath, const QString &settingName, const QString &password, const bool autoConnect);
-    void cancelSecret(const QString &connectionPath, const QString &settingName);
-    void queryActiveConnInfo();
     void requestWirelessScan();
-    void createApConfig(const QString &devPath, const QString &apPath);
-    void queryConnectionSession(const QString &devPath, const QString &uuid);
     void deviceStateChanged();
 
-protected:
-    bool eventFilter(QObject *o, QEvent *e);
+//protected:
+//    bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
     void init();
@@ -91,11 +94,11 @@ private slots:
 
 private:
     int m_index;
-    QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
 
     WirelessList *m_APList;
     QJsonObject m_activeApInfo;
+    dde::network::NetworkModel *m_model;
 };
 
 #endif // WIRELESSITEM_H
