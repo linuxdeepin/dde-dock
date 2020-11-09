@@ -41,17 +41,18 @@ Conflicts:
 Replaces:
  dde-dock-applets,
  dde-trash-plugin
-Description: deepin desktop-environment - dock module
- Deepin desktop environment - dock module.
+Description: this dde-dock deepin desktop-environment-dde-dock
+ Dock module development files of deepin desktop-environment
 
 Package: dde-dock-dev
-Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: deepin desktop-environment - dock module development files
+Architecture: any
+Depends: dde-dock (= ${binary:Version}), ${misc:Depends}
+Description: this dde-dock-dev deepin desktop-environment - dock module development files
  Deepin desktop environment - dock module development files.
 
 Package: dde-dock-onboard-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin
- Deepin desktop environment - dock plugin for onboard
+ this dde-dock-onbard-plugin Deepin desktop environment - dock plugin for onboard
+
