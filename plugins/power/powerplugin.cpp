@@ -267,10 +267,13 @@ void PowerPlugin::refreshTipsData()
         uint hour = time.toString("hh").toUInt();
         uint min = time.toString("mm").toUInt();
         if (hour == 0) {
-            if (min == 0)
-                tips = tr("Charged");
-            else
-            {
+            if (min == 0) {
+                if (timeToEmpty == 0) {
+                    tips = tr("Capacity %1 ...").arg(value);
+                } else {
+                    tips = tr("Charged");
+                }
+            } else {
                 if(m_showTimeToFull)
                     tips = tr("Capacity %1, %2 min remaining").arg(value).arg(min);
                 else {
