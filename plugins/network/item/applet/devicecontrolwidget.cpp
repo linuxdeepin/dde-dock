@@ -42,13 +42,12 @@ extern void initFontColor(QWidget *widget);
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
-    , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     m_deviceName = new QLabel(this);
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     initFontColor(m_deviceName);
 
-    m_switchBtn = new DSwitchButton;
+    m_switchBtn = new DSwitchButton(this);
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 

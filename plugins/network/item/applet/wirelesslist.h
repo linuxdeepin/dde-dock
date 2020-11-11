@@ -34,10 +34,6 @@
 
 #include <DSpinner>
 
-#include <com_deepin_daemon_airplanemode.h>
-
-using AirplanInter = com::deepin::daemon::AirplaneMode;
-
 
 DWIDGET_USE_NAMESPACE
 
@@ -116,8 +112,6 @@ private:
     QWidget *m_centralWidget;
     //无线网顶部 --（名称  刷新  开关）在这个里面
     DeviceControlWidget *m_controlPanel;
-
-    AirplanInter *m_airplaninter;
 
 public:
     bool isHotposActive;

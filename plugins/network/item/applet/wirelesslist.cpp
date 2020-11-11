@@ -52,13 +52,13 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, NetworkModel *model, QWid
     , m_centralWidget(new QWidget(this))
     , m_controlPanel(new DeviceControlWidget(this))
     , m_updateTimer(new QTimer(this))
-    , m_airplaninter(new AirplanInter("com.deepin.daemon.AirplaneMode","/com/deepin/daemon/AirplaneMode",QDBusConnection::systemBus(),this))
 {
     initUI();
     initConnect();
     //由于信号和槽函数会在连接之前将数据发过来，则刚启动的时候可能已经更新完成数据了，所以导致页面上没有数据
     m_device->initWirelessData();
-    qDebug() << Q_FUNC_INFO;
+    //更新开关状态
+    Q_EMIT m_model->initDeviceEnable(m_device->path());
     m_updateTimer->setInterval(0);
     m_updateTimer->setSingleShot(true);
 }
@@ -93,10 +93,11 @@ void WirelessList::initConnect()
 {
     //后端开关wifi
     connect(m_model, &NetworkModel::deviceEnableChanged, this,
-            [ = ](){onDeviceEnableChanged(m_device->enabled());
-                    if (m_device->enabled())
-                        //这里会在页面创建的时候去初始化一次，所以无需在构造函数中再调用
-                        m_device->initWirelessData();});
+            [ = ](){    qDebug() << "Device change signal from daemon, state:" << m_device->enabled();
+                        onDeviceEnableChanged(m_device->enabled());
+                        if (m_device->enabled())
+                            //这里会在页面创建的时候去初始化一次，所以无需在构造函数中再调用
+                            m_device->initWirelessData();});
     //开关wifi
     connect(m_controlPanel, &DeviceControlWidget::enableButtonToggled, this, &WirelessList::onEnableButtonToggle);
     //刷新wifi按钮
@@ -207,8 +208,8 @@ void WirelessList::setDeviceInfo(const int index)
     }
 
     // set device enable state
-    m_controlPanel->setDeviceEnabled(m_device->enabled() && m_airplaninter->wifiEnabled());
-    
+//    m_controlPanel->setDeviceEnabled(m_device->enabled() && m_airplaninter->wifiEnabled());
+    m_controlPanel->setDeviceEnabled(m_device->enabled());
     // set device name
     if (index == -1)
         m_controlPanel->setDeviceName(tr("Wireless Network"));
@@ -216,10 +217,9 @@ void WirelessList::setDeviceInfo(const int index)
         m_controlPanel->setDeviceName(tr("Wireless Network %1").arg(index));
 }
 
-//这个函数没有重构，但是这个函数很蠢
 void WirelessList::updateView()
 {
-    //当来自的刷新信号不是QTimer发送直接退出
+    //代码调试的时候防止直接调用刷新
     Q_ASSERT(sender() == m_updateTimer);
     //当适配器消失，则直接退出
     if (m_device.isNull()) {
@@ -268,6 +268,8 @@ void WirelessList::onEnableButtonToggle(const bool enable)
     if (m_device.isNull()) {
         return;
     }
+    qDebug() <<"click enable , set Enable =" << enable;
+    onDeviceEnableChanged(enable);
     //直接调用dde::network::networkModel中的接口，防止数据出现延迟之类的问题
     Q_EMIT m_model->requestDeviceEnable(m_device->path(), enable);
 }
@@ -276,10 +278,12 @@ void WirelessList::onDeviceEnableChanged(const bool enable)
 {
     m_controlPanel->setDeviceEnabled(enable);
     m_centralLayout->setEnabled(enable);
+    m_updateTimer->start();
 }
 
 void WirelessList::ActiveConnectChange(const QJsonObject &activeAp)
 {
+    if (activeAp.isEmpty()) return;
     //ps: 这里的activeAp可能是空的，所以不要在判断m_activeAp为空之前使用
     // 0:Unknow, 1:Activating, 2:Activated, 3:Deactivating, 4:Deactivated
     QString activeSsid = activeAp["Id"].toString();
