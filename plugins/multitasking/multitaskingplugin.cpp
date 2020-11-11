@@ -39,7 +39,7 @@ MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
     m_tipsLabel->setObjectName("multitasking");
 
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, [ = ] {
-        if (!m_proxyInter)
+        if (!m_proxyInter || !m_pluginLoaded)
             return;
 
         if (DWindowManagerHelper::instance()->hasComposite()) {
