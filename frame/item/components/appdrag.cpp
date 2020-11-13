@@ -90,6 +90,6 @@ void AppDrag::setDragMoveCursor()
 
     QImage img((const uchar*)images->images[0]->pixels, imgW, imgH, QImage::Format_ARGB32);
     QPixmap pixmap = QPixmap::fromImage(img);
-    delete images;
+    XcursorImagesDestroy(images);
     setDragCursor(pixmap, Qt::MoveAction);
 }

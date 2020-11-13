@@ -23,6 +23,7 @@
 #include "device.h"
 
 #include <QDateTime>
+#include <QDebug>
 
 QMap<QString,QString> Device::deviceType2Icon = {
     {"unknow","other"},

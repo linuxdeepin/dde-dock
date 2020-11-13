@@ -318,7 +318,7 @@ void AdapterItem::showDevices(bool powered)
     deviceItems << m_sortConnected << m_sortUnConnect;
 
     // 在蓝牙关闭的时候，会出现不在connected和Unconnect列表中的设备（连接/关闭中的状态），关闭的时候使用总表参数
-    qDebug() << m_sortConnected.size() << m_sortUnConnect.size() << m_deviceItems.size();
+    //qDebug() << m_sortConnected.size() << m_sortUnConnect.size() << m_deviceItems.size();
     if (powered) {
         for (DeviceItem *deviceItem : deviceItems) {
             if (deviceItem) {

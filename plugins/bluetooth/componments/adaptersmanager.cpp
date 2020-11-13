@@ -290,6 +290,10 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
 
     QString id = adapter->id();
     if (!id.isEmpty()) {
+        Adapter *lastSameAdpater = const_cast<Adapter*>(m_adapters[id]);
+        if (lastSameAdpater != nullptr) {
+            lastSameAdpater->deleteLater();
+        }
         m_adapters[id] = adapter;
     }
 }

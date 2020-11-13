@@ -38,6 +38,19 @@ Adapter::Adapter(QObject *parent)
 {
 }
 
+Adapter::~Adapter() {
+   QMapIterator<QString, const Device *> iterator(m_devices);
+   while (iterator.hasNext()) {
+       iterator.next();
+       auto device = const_cast<Device *>(iterator.value());
+       if (device) {
+           m_devices.remove(device->id());
+           m_paredDev.remove(device->id());
+           device->deleteLater();
+       }
+   }
+}
+
 void Adapter::setName(const QString &name)
 {
     if (name != m_name) {

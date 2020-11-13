@@ -96,7 +96,7 @@ void sig_crash(int sig)
     }
 
     if (nullptr == fd) {
-        exit(0);
+        _exit(0);
     }
     //捕获异常，打印崩溃日志到配置文件中
     try {
@@ -151,7 +151,7 @@ void sig_crash(int sig)
     fflush(fd);
     fclose(fd);
     fd = nullptr;
-    exit(0);
+    _exit(0);
 }
 
 

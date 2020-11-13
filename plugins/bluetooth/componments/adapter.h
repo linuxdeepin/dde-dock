@@ -32,6 +32,7 @@ class Adapter : public QObject
     Q_OBJECT
 public:
     explicit Adapter(QObject *parent = nullptr);
+    ~Adapter();
 
     inline QString name() const { return m_name; }
     void setName(const QString &name);

@@ -42,7 +42,7 @@ QCursor* DBusAdaptors::kbtLoadQCursorFromX11Cursor(const char* theme, const char
     QImage img((const uchar*)images->images[0]->pixels, imgW, imgH, QImage::Format_ARGB32);
     QPixmap pixmap = QPixmap::fromImage(img);
     QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
-    delete images;
+    XcursorImagesDestroy(images);
     return cursor;
 }
 
