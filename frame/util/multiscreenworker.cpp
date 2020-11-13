@@ -727,23 +727,33 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
+    static QRect lastRect = QRect();
+
+    const auto ratio = qApp->devicePixelRatio();
+    const QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
+
+    // 已经设置过了，避免重复设置
+    if (rect == lastRect)
+        return;
+    lastRect = rect;
+
     // 先清除原先的窗管任务栏区域
     XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
 
     // 在副屏时,且为一直显示时,不要挤占应用,这是sp3的新需求
     if (m_ds.current() != m_ds.primary() && m_hideMode == HideMode::KeepShowing) {
+        lastRect = QRect();
         qDebug() << "don`t set dock area";
         return;
     }
 
     // 除了"一直显示"模式,其他的都不要设置任务栏区域
     if (m_hideMode != Dock::KeepShowing) {
+        lastRect = QRect();
         return;
     }
 
-    const auto ratio = qApp->devicePixelRatio();
-
-    const QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
+    qDebug() <<"Update Window WorkArea:" << rect;
 
     const QPoint &p = rawXPosition(rect.topLeft());
 
