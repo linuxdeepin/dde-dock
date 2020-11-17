@@ -215,6 +215,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         default:
             Q_UNREACHABLE();
         }
+        Q_EMIT m_networkModel->initDeviceEnable(device->path());
         //网络是否是正常连通的
         connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
