@@ -35,16 +35,20 @@
 #define SLEEP1 QThread::sleep(1);
 
 DockUnitTest::DockUnitTest()
-    : m_dockInter(new QDBusInterface("com.deepin.dde.Dock", "/com/deepin/dde/Dock", "org.freedesktop.DBus.Properties"))
-    , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
     qDBusRegisterMetaType<ScreenRect>();
 }
 
 DockUnitTest::~DockUnitTest()
 {
-    delete m_dockInter;
-    delete m_daemonDockInter;
+}
+
+void DockUnitTest::SetUp()
+{
+}
+
+void DockUnitTest::TearDown()
+{
 }
 
 const DockRect DockUnitTest::dockGeometry()
@@ -72,7 +76,8 @@ const DockRect DockUnitTest::frontendWindowRect()
 
 void DockUnitTest::setPosition(Dock::Position pos)
 {
-    m_daemonDockInter->setPosition(pos);
+    DBusDock daemonDockInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    daemonDockInter.setPosition(pos);
 }
 
 /**
@@ -83,31 +88,31 @@ void DockUnitTest::setPosition(Dock::Position pos)
  * 2.任务栏默认显示状态。
  * 3.任务栏默认位置。
  */
-void DockUnitTest::dock_defaultGsettings_check()
+TEST_F(DockUnitTest, dock_defaultGsettings_check)
 {
     QGSettings setting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
     if (setting.keys().contains("displayMode")) {
         QString currentDisplayMode = setting.get("display-mode").toString();
         QString defaultDisplayMode = "efficient";
-        QCOMPARE(currentDisplayMode, defaultDisplayMode);
+        ASSERT_EQ(currentDisplayMode, defaultDisplayMode);
     }
     if (setting.keys().contains("hideMode")) {
         QString currentHideMode = setting.get("hide-mode").toString();
         QString defaultHideMode = "keep-showing";
-        QCOMPARE(currentHideMode, defaultHideMode);
+        ASSERT_EQ(currentHideMode, defaultHideMode);
     }
     if (setting.keys().contains("position")) {
         QString currentPosition = setting.get("position").toString();
         QString defaultPosition = "bottom";
-        QCOMPARE(currentPosition, defaultPosition);
+        ASSERT_EQ(currentPosition, defaultPosition);
     }
 }
 
 /**
  * @brief DockUnitTest::dock_geometry_test   比较任务栏自身的位置和通知给后端的位置是否吻合
  */
-void DockUnitTest::dock_geometry_check()
+TEST_F(DockUnitTest, dock_geometry_check)
 {
     ScreenRect daemonDockRect, dockRect;
 
@@ -141,12 +146,12 @@ void DockUnitTest::dock_geometry_check()
         qDebug() << dockRect;
     }
 
-    QCOMPARE(daemonDockRect, dockRect);
+    ASSERT_EQ(daemonDockRect, dockRect);
 }
 /**
  * @brief DockUnitTest::dock_position_check   比较Dbus和QGSettings获取的坐标信息是否一致
  */
-void DockUnitTest::dock_position_check()
+TEST_F(DockUnitTest, dock_position_check)
 {
     DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
     int nPos = dockInter->position();
@@ -173,13 +178,13 @@ void DockUnitTest::dock_position_check()
     QGSettings *setting = new QGSettings("com.deepin.dde.dock");
     if (setting->keys().contains("position")) {
         qDebug() << setting->get("position");
-        QCOMPARE(postion,setting->get("position").toString());
+        ASSERT_EQ(postion, setting->get("position").toString());
     }
 }
 /**
  * @brief DockUnitTest::dock_displayMode_check   比较Dbus和QGSettings获取的显示模式是否一致
  */
-void DockUnitTest::dock_displayMode_check()
+TEST_F(DockUnitTest, dock_displayMode_check)
 {
     DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
     int nMode = dockInter->displayMode();
@@ -203,11 +208,11 @@ void DockUnitTest::dock_displayMode_check()
     QGSettings *setting = new QGSettings("com.deepin.dde.dock");
     if (setting->keys().contains("displayMode")) {
         qDebug() << setting->get("displayMode");
-        QCOMPARE(displayMode,setting->get("displayMode").toString());
+        ASSERT_EQ(displayMode, setting->get("displayMode").toString());
     }
 }
 
-void DockUnitTest::dock_appItemCount_check()
+TEST_F(DockUnitTest, dock_appItemCount_check)
 {
     DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
     qDebug() << dockInter->entries().size();
@@ -224,36 +229,36 @@ void DockUnitTest::dock_appItemCount_check()
  * 可测出问题：任务栏在5.3.0.2版本时，开启缩放后，启动器打开时位置和任务栏有重叠，5.3.0.5版本修复了这个问题
  * 对应Bug: https://pms.uniontech.com/zentao/bug-view-42095.html
  */
-void DockUnitTest::dock_frontWindowRect_check()
+TEST_F(DockUnitTest, dock_frontWindowRect_check)
 {
     setPosition(Dock::Position::Top);
     SLEEP1;
-    QVERIFY(dockGeometry() == frontendWindowRect());
+    ASSERT_EQ(dockGeometry(), frontendWindowRect());
 
     setPosition(Dock::Position::Right);
     SLEEP1;
-    QVERIFY(dockGeometry() == frontendWindowRect());
+    ASSERT_EQ(dockGeometry(), frontendWindowRect());
 
     setPosition(Dock::Position::Bottom);
     SLEEP1;
-    QVERIFY(dockGeometry() == frontendWindowRect());
+    ASSERT_EQ(dockGeometry(), frontendWindowRect());
 
     setPosition(Dock::Position::Left);
     SLEEP1;
-    QVERIFY(dockGeometry() == frontendWindowRect());
+    ASSERT_EQ(dockGeometry(), frontendWindowRect());
 }
 
 /**
  * @brief DockUnitTest::dock_multi_process
  * 检查dde-dock是否在没进程存在时能否正常启动，在已有dde-dock进程存在时能否正常退出
  */
-void DockUnitTest::dock_multi_process()
+TEST_F(DockUnitTest, dock_multi_process)
 {
     QProcess *dockProc = new QProcess();
     dockProc->start("dde-dock");
     connect(dockProc, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, [=](int exitCode, QProcess::ExitStatus exitStatus) {
-        QCOMPARE(exitCode, 255);
-        QCOMPARE(exitStatus, QProcess::ExitStatus::NormalExit);
+        ASSERT_EQ(exitCode, 255);
+        ASSERT_EQ(exitStatus, QProcess::ExitStatus::NormalExit);
     });
     connect(dockProc, &QProcess::errorOccurred, this, [=](QProcess::ProcessError error) {
         qDebug() << "dde-dock error occurred: " << error;
@@ -270,7 +275,7 @@ void DockUnitTest::dock_multi_process()
  * 运行此用例时需满足用户未手动修改过声音值这一条件，才能保证得到的是默认值，测试才能通过
  * 所以最好在新创建的用户，或者是新装的系统时进行测试
  */
-void DockUnitTest::dock_defaultVolume_Check(float defaultVolume)
+TEST_F(DockUnitTest, dock_defaultVolume_Check)
 {
     float volume = 0;
     QDBusInterface audioInterface("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", "com.deepin.daemon.Audio", QDBusConnection::sessionBus(), this);
@@ -282,14 +287,14 @@ void DockUnitTest::dock_defaultVolume_Check(float defaultVolume)
          QDBusInterface sinkInterface("com.deepin.daemon.Audio", defaultPath.path(), "com.deepin.daemon.Audio.Sink", QDBusConnection::sessionBus(), this);
          volume = sinkInterface.property("Volume").toFloat() * 100.0f;
     }
-    QCOMPARE(volume, defaultVolume);
+    ASSERT_EQ(volume, 50.0f);
 }
 /**
  * @brief DockUnitTest::dock_coreDump_check
  *  间隔一段时间判断dock是不是同一个pid,判断是否一直在崩溃
  *
  */
-void DockUnitTest::dock_coreDump_check()
+TEST_F(DockUnitTest, dock_coreDump_check)
 {
     auto process = new QProcess();
     process->start("pidof -s  dde-dock");
@@ -304,7 +309,7 @@ void DockUnitTest::dock_coreDump_check()
     QByteArray pid2 = process->readAllStandardOutput();
     process->close();
 
-    QCOMPARE(pid,pid2);
+    ASSERT_EQ(pid, pid2);
 
     delete process;
 }
@@ -313,20 +318,20 @@ void DockUnitTest::dock_coreDump_check()
  * @brief DockUnitTest::dock_appIconSize_check
  * 判断dbus和gsettings获取的任务栏图标大小是否一致
  */
-void DockUnitTest::dock_appIconSize_check()
+TEST_F(DockUnitTest, dock_appIconSize_check)
 {
     DBusDock *dockInter = new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
     QGSettings *setting = new QGSettings("com.deepin.dde.dock");
     unsigned int iconSize = dockInter->iconSize();
     qDebug() << "Please check the size of icons:" << iconSize;
-    QCOMPARE(iconSize, setting->get("icon-size").toUInt());
+    ASSERT_EQ(iconSize, setting->get("icon-size").toUInt());
 }
 
 /**
  * @brief dock_appDockUndock_check
  * 取靠近启动器的应用区域的第一个应用,先 undock ,然后 dock 进行检测
  */
-void DockUnitTest::dock_appDockUndock_check()
+TEST_F(DockUnitTest, dock_appDockUndock_check)
 {
     const QString service_name = "com.deepin.dde.daemon.Dock";
     const QString dock_path = "/com/deepin/dde/daemon/Dock";
@@ -346,8 +351,8 @@ void DockUnitTest::dock_appDockUndock_check()
     const QString appDockPath = appEntries[appIndex].path();
 
     // get DesktopFile
-    QDBusInterface appPropertyInter(service_name,appDockPath, "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), this);
-    QDBusInterface appSlotInter(service_name,appDockPath, "com.deepin.dde.daemon.Dock.Entry", QDBusConnection::sessionBus(), this);
+    QDBusInterface appPropertyInter(service_name, appDockPath, "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), this);
+    QDBusInterface appSlotInter(service_name, appDockPath, "com.deepin.dde.daemon.Dock.Entry", QDBusConnection::sessionBus(), this);
 
     QDBusReply<QVariant> replyDesktopFile = appPropertyInter.call("Get", "com.deepin.dde.daemon.Dock.Entry", "DesktopFile");
     QString desktopFile = QVariant(replyDesktopFile).toString(); // desktopFile
@@ -361,14 +366,14 @@ void DockUnitTest::dock_appDockUndock_check()
 
     // check if app still dock
     appDesktopFiles=dockInter.GetDockedAppsDesktopFiles();
-    QCOMPARE(appDesktopFiles.contains(desktopFile), false);
+    ASSERT_EQ(appDesktopFiles.contains(desktopFile), false);
 
     // dock app
     dockInter.RequestDock(desktopFile, appIndex);
     QThread::msleep(100); // must
 
     // check if app is docked
-    QCOMPARE(dockInter.IsDocked(desktopFile), true);
+    ASSERT_EQ(dockInter.IsDocked(desktopFile), true);
 }
 
 /**
@@ -376,7 +381,7 @@ void DockUnitTest::dock_appDockUndock_check()
  * 检查智能模式时，切换任务栏显示模式，任务栏状态
  * 可以检测桌面无窗口，切换为智能隐藏模式后任务栏隐藏问题 41907
  */
-void DockUnitTest::dock_switchModeState_check()
+TEST_F(DockUnitTest, dock_switchModeState_check)
 {
     QProcess process;
     process.start("/usr/lib/deepin-daemon/desktop-toggle");
@@ -386,17 +391,14 @@ void DockUnitTest::dock_switchModeState_check()
         return;
     }
 
-    m_daemonDockInter->setSync(true);
-    m_daemonDockInter->setHideMode(Dock::HideMode::SmartHide);
-    m_daemonDockInter->setDisplayMode(Dock::DisplayMode::Fashion);
-    m_daemonDockInter->setDisplayMode(Dock::DisplayMode::Efficient);
+    DBusDock daemonDockInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+    daemonDockInter.setSync(true);
+    daemonDockInter.setHideMode(Dock::HideMode::SmartHide);
+    daemonDockInter.setDisplayMode(Dock::DisplayMode::Fashion);
+    daemonDockInter.setDisplayMode(Dock::DisplayMode::Efficient);
 
     QThread::sleep(2);
-    int state = m_daemonDockInter->hideState();
+    int state = daemonDockInter.hideState();
 
-    QCOMPARE(state, Dock::HideState::Show);
+    ASSERT_EQ(state, Dock::HideState::Show);
 }
-
-QTEST_APPLESS_MAIN(DockUnitTest)
-
-#include "dock_unit_test.moc"
