@@ -230,5 +230,5 @@ void AccessPointWidget::ssidClicked()
 void AccessPointWidget::disconnectBtnClicked()
 {
     setActiveState(ApState::Unknown);
-    emit requestDisconnectAP();
+    emit requestDisconnectAP(uuid());
 }

@@ -164,8 +164,7 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
                 Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);
                 m_activeAp = apw;});
     //关联断开连接信号
-    connect(apw, &AccessPointWidget::requestDisconnectAP, m_model, [ = ](){
-        Q_EMIT m_model->requestDisconnectAp(m_device->path());});
+    connect(apw, &AccessPointWidget::requestDisconnectAP, m_model, &NetworkModel::requestDisconnctAP);
 }
 
 void WirelessList::ApInfoChange(const QJsonObject &apInfo)

@@ -92,7 +92,7 @@ signals:
      * @brief 断开连接
      * @param apPath
      */
-    void requestDisconnectAP() const;
+    void requestDisconnectAP(const QString &apUuid) const;
     /**
      * @def apChange
      * @brief 数据改变
