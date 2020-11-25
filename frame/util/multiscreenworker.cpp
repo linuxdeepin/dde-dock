@@ -730,7 +730,12 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     static QRect lastRect = QRect();
 
     const auto ratio = qApp->devicePixelRatio();
-    const QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
+    QRect rect;
+    if (m_hideMode == HideMode::KeepShowing) {
+        rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
+    } else {
+        rect = getDockHideGeometry(m_ds.current(), m_position, m_displayMode);
+    }
 
     // 已经设置过了，避免重复设置
     if (rect == lastRect)
@@ -749,11 +754,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
 
     // 除了"一直显示"模式,其他的都不要设置任务栏区域
     if (m_hideMode != Dock::KeepShowing) {
-        lastRect = QRect();
         return;
     }
 
-    qDebug() <<"Update Window WorkArea:" << rect;
+    qDebug() << "Update Window WorkArea:" << rect;
 
     const QPoint &p = rawXPosition(rect.topLeft());
 
