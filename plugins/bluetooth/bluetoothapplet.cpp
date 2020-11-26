@@ -67,6 +67,8 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_adaptersManager(new AdaptersManager(this))
 {
     m_line->setVisible(false);
+    m_adapterLayout->setContentsMargins(0, 0, 0, 0);
+    m_adapterLayout->setSpacing(20);
 
     QFont defaultFont = font();
     auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
@@ -104,6 +106,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 
     setFixedWidth(POPUPWIDTH);
     setWidget(m_centralWidget);
+    setContentsMargins(0, 0, 0, 0);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
