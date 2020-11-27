@@ -4,6 +4,7 @@
 #define POPUPWIDTH (200)
 #define ITEMHEIGHT (30)
 #define CONTROLHEIGHT (35)
+#define CONTROLTITLEHEIGHT (45)
 #define LIGHTSUFFIX ("_dark.svg")
 #define DARKSUFFIX (".svg")
 #define MARGIN (12)

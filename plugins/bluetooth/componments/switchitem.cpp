@@ -63,7 +63,7 @@ SwitchItem::SwitchItem(QWidget *parent)
     };
     themeChanged(DApplicationHelper::instance()->themeType());
 
-    setFixedHeight(CONTROLHEIGHT);
+    setFixedHeight(CONTROLTITLEHEIGHT);
     auto switchLayout = new QHBoxLayout;
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
@@ -73,7 +73,7 @@ SwitchItem::SwitchItem(QWidget *parent)
     switchLayout->addWidget(m_loadingIndicator);
     switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->addSpacing(2);
+    switchLayout->addSpacing(5);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {

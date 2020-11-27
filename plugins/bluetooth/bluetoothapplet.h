@@ -72,6 +72,7 @@ private:
     QVBoxLayout *m_adapterLayout;
     QHBoxLayout *m_menueLayout;
     MenueItem *m_openControlCenter;
+    QVBoxLayout *m_textLayout;
 
     AdaptersManager *m_adaptersManager;
 

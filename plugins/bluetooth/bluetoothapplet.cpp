@@ -64,11 +64,11 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_adapterLayout(new QVBoxLayout)
     , m_menueLayout(new QHBoxLayout)
     , m_openControlCenter(new MenueItem(this))
+    , m_textLayout(new QVBoxLayout)
     , m_adaptersManager(new AdaptersManager(this))
 {
     m_line->setVisible(false);
     m_adapterLayout->setContentsMargins(0, 0, 0, 0);
-    m_adapterLayout->setSpacing(20);
 
     QFont defaultFont = font();
     auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
@@ -79,6 +79,8 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_appletName->setVisible(false);
 
     m_openControlCenter->setText(tr("Bluetooth settings"));
+    m_textLayout->addWidget(m_openControlCenter);
+    m_textLayout->setContentsMargins(10, 0, 0, 0);
     initFontColor(m_openControlCenter);
     m_openControlCenter->setFixedHeight(ITEMHEIGHT);
     m_openControlCenter->setVisible(false);
@@ -99,7 +101,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     m_centrealLayout->addLayout(appletNameLayout);
     m_centrealLayout->addWidget(m_line);
     m_centrealLayout->addLayout(m_adapterLayout);
-    m_centrealLayout->addWidget(m_openControlCenter);
+    m_centrealLayout->addLayout(m_textLayout);
     m_centralWidget->setLayout(m_centrealLayout);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
