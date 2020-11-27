@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTimer>
+#include <QScrollBar>
 
 #include <com_deepin_daemon_airplanemode.h>
 

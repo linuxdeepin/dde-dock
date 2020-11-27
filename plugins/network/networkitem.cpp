@@ -133,6 +133,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     centralWidget->setAutoFillBackground(false);
     m_applet->viewport()->setAutoFillBackground(false);
     m_applet->setVisible(false);
+    m_applet->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     connect(m_connectingTimer, &QTimer::timeout, this, &NetworkItem::onConnecting);
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);

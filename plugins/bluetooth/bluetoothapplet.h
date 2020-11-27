@@ -26,6 +26,7 @@
 #include "componments/device.h"
 
 #include <QScrollArea>
+#include <QScrollBar>
 
 class QLabel;
 class QVBoxLayout;

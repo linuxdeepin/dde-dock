@@ -109,6 +109,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
+    verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     connect(m_adaptersManager, &AdaptersManager::adapterIncreased, this, &BluetoothApplet::addAdapter);
     connect(m_adaptersManager, &AdaptersManager::adapterDecreased, this, &BluetoothApplet::removeAdapter);
