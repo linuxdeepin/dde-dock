@@ -104,8 +104,9 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
         device->setName(name);
         device->setPaired(paired);
         device->setRssi(rssi);
-        device->setState(state);
+        //setState放后面，是因为用到了connectState,fix bug 55245
         device->setConnectState(connectState);
+        device->setState(state);
         device->setDeviceType(bluetoothDeviceType);
     }
 }
