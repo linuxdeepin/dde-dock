@@ -117,7 +117,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refershIcon, Qt::QueuedConnection);
 
-    updateWindowInfos(m_itemEntryInter->windowInfos());
+    auto window_entry_infos = m_itemEntryInter->windowInfos();
+    updateWindowInfos(window_entry_infos);
+    qDebug() << "+++++>New App Entry:1:" << m_itemEntryInter->name() << ":" << m_itemEntryInter->icon() << ":" << m_itemEntryInter->path();
+    qDebug() << "+++++>New App Entry:2:" << window_entry_infos;
     refershIcon();
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);

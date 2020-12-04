@@ -33,6 +33,9 @@
 
 #include "../frame/util/imageutil.h"
 
+#define APPICONPATH1 "/usr/share/icons/hicolor/"
+#define APPICONPATH2 "/usr/share/icons/"
+
 QMap<QString, QIcon> ThemeAppIcon::m_iconCache;
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
@@ -43,6 +46,64 @@ ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 ThemeAppIcon::~ThemeAppIcon()
 {
 
+}
+
+QIcon ThemeAppIcon::_getIconFromDir(QString dirName, QString subdirName, QString iconName, int fakeSize)
+{
+    QIcon icon;
+    QString filename;
+    int sizelist[] = {24,32,48,64,96,128,256,512};
+    int sl = 8;
+    for (int i = 0; i < sl; i++) {
+        if (fakeSize <= sizelist[i]) {
+            filename.clear();
+            filename = dirName;
+            if (!subdirName.isEmpty()) {
+                filename.append(QString::number(sizelist[i]) + 'x' + QString::number(sizelist[i]));
+                filename.append(subdirName);
+            }
+            filename.append(iconName);
+            if (!QFile::exists(filename)) {
+                continue;
+            } else {
+                icon.addFile(filename,QSize(sizelist[i],sizelist[i]));
+                break;
+            }
+        }
+    }
+    return icon;
+}
+
+//手动查找第三方应用的图标
+QPixmap ThemeAppIcon::manualGetAppIcon(QString iconName,int fakeSize)
+{
+    QIcon icon;
+    QPixmap pixmap;
+
+    if (iconName.isEmpty()) {
+        qDebug() << "-->Get Icon is Empty";
+        return pixmap;
+    }
+    iconName.append(".png");
+
+    //例在/usr/share/icons/hicolor/48x48/apps/目录下查找图片
+    //例在/usr/share/icons/hicolor/48x48/mimetypes/目录下查找图片
+    //例在/usr/share/icons/目录下查找图片
+    icon = _getIconFromDir(APPICONPATH1,"/apps/",iconName,fakeSize);
+    if (icon.isNull()) {
+        icon = _getIconFromDir(APPICONPATH1,"/mimetypes/",iconName,fakeSize);
+        if (icon.isNull()) {
+            icon = _getIconFromDir(APPICONPATH2,"",iconName,fakeSize);
+        }
+    }
+
+    if (icon.isNull()) {
+        qDebug() << "-->Cannot find:"<< iconName << ", used default icon :application-x-desktop";
+    } else {
+        qDebug() << "-->Find:"<< iconName << ", and setSize=" << fakeSize;
+        pixmap = icon.pixmap(QSize(fakeSize,fakeSize));
+    }
+    return pixmap;
 }
 
 const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, const qreal ratio)
@@ -141,10 +202,18 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
             icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
         }
 
-        const int fakeSize = std::max(48, s); // cannot use 16x16, cause 16x16 is label icon
-        pixmap = icon.pixmap(QSize(fakeSize, fakeSize));
-        if (!pixmap.isNull())
-            break;
+        const int fakeSize = std::max(48, s);
+        if (icon.isNull()) {
+            qDebug() << "-->Qt Function Cannot Find Icon:" << iconName;
+            pixmap = manualGetAppIcon(iconName, fakeSize);
+            if (!pixmap.isNull())
+                break;
+        } else {
+            // cannot use 16x16, cause 16x16 is label icon
+            pixmap = icon.pixmap(QSize(fakeSize, fakeSize));
+            if (!pixmap.isNull())
+                break;
+        }
 
         // fallback to a Default pixmap
         pixmap = QPixmap(":/icons/resources/application-x-desktop.svg");

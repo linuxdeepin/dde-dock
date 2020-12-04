@@ -43,6 +43,10 @@ public:
 
     static const QPixmap getIcon(const QString iconName, const int size, const qreal ratio);
 
+private slots:
+    static QIcon _getIconFromDir(QString dirName, QString subdirName, QString iconName, int fakeSize = 48);
+    static QPixmap manualGetAppIcon(QString iconName, int fakeSize = 48);
+
 private:
     static QMap<QString, QIcon> m_iconCache;
 };
