@@ -518,38 +518,40 @@ void NetworkItem::getPluginState()
     }
     qDebug() << "wirelessState = " << wirelessState << "wiredState =" << wiredState;
     switch (wirelessState) {
-        case WirelessItem::Disabled: {
+        //连接过程中断开第一个连接会发送该状态，导致前端闪一秒有线断开的图标，所以直接对该状态进行连接中处理
+        case WirelessItem::Unknown:
+            m_pluginState = Aconnecting;
+            break;
+        case WirelessItem::Disabled:
             if (wiredState < WiredItem::Disconnected)
                 m_pluginState = Adisabled;
             else
                 m_pluginState = PluginState(wiredState);
             break;
-        }
+        case WirelessItem::Connected:
+             if (wiredState == WiredItem::Connected)
+                 m_pluginState = Connected;
+             else
+                 m_pluginState = Aconnected;
+             break;
         case WirelessItem::Disconnected:
             if (wiredState < WiredItem::Disconnected)
                 m_pluginState = Adisconnected;
             else
                 m_pluginState = PluginState(wiredState);
             break;
-       case WirelessItem::Connecting:
+        case WirelessItem::Connecting:
             m_pluginState = Aconnecting;
             break;
-       case WirelessItem::ConnectNoInternet:
+        case WirelessItem::ConnectNoInternet:
             if (wiredState == WiredItem::Connected || wiredState == WiredItem::Connecting)
                 m_pluginState = PluginState(wiredState);
             else
                 m_pluginState = AconnectNoInternet;
             break;
-       case WirelessItem::Connected:
-            if (wiredState == WiredItem::Connected)
-                m_pluginState = Connected;
-            else
-                m_pluginState = Aconnected;
-            break;
-       default:
+        default:
             m_pluginState = PluginState(wiredState);
     }
-
 }
 
 void NetworkItem::updateView()
