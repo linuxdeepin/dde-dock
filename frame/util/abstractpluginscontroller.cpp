@@ -32,6 +32,7 @@ static const QStringList CompatiblePluginApiList {
     "1.1.1",
     "1.2",
     "1.2.1",
+    "1.2.2",
     DOCK_PLUGIN_API_VERSION
 };
 
@@ -194,7 +195,10 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
             return;
     }
 
-    m_pluginsMap.insert(interface, QMap<QString, QObject *>());
+    // 保存 PluginLoader 对象指针
+    QMap<QString, QObject *> interfaceData;
+    interfaceData["pluginloader"] = pluginLoader;
+    m_pluginsMap.insert(interface, interfaceData);
 
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
     if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {

@@ -25,6 +25,7 @@
 
 #include <DHiDPIHelper>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 
 #include <QHBoxLayout>
 #include <QFontMetrics>
@@ -41,6 +42,7 @@ SwitchItem::SwitchItem(QWidget *parent)
 {
     initFontColor(m_title);
 
+    DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T4, QFont::Medium);
     m_switchBtn->setFixedWidth(SWITCHBUTTONWIDTH);
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh_dark.svg");
@@ -61,7 +63,7 @@ SwitchItem::SwitchItem(QWidget *parent)
     };
     themeChanged(DApplicationHelper::instance()->themeType());
 
-    setFixedHeight(CONTROLHEIGHT);
+    setFixedHeight(CONTROLTITLEHEIGHT);
     auto switchLayout = new QHBoxLayout;
     switchLayout->setSpacing(0);
     switchLayout->setMargin(0);
@@ -71,7 +73,7 @@ SwitchItem::SwitchItem(QWidget *parent)
     switchLayout->addWidget(m_loadingIndicator);
     switchLayout->addSpacing(MARGIN);
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->addSpacing(MARGIN);
+    switchLayout->addSpacing(5);
     setLayout(switchLayout);
 
     connect(m_switchBtn, &DSwitchButton::toggled, [&](bool change) {

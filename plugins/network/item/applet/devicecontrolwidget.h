@@ -29,7 +29,6 @@
 #include <dswitchbutton.h>
 
 DWIDGET_USE_NAMESPACE
-class TipsWidget;
 class QLabel;
 class DeviceControlWidget : public QWidget
 {

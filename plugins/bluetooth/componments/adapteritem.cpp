@@ -50,7 +50,7 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_switchItem->setChecked(adapter->powered(),false);
     m_switchItem->setLoading(adapter->discover());
 
-    m_deviceLayout->addWidget(m_switchItem);
+    m_deviceLayout->addWidget(m_switchItem, Qt::AlignCenter);
     m_deviceLayout->addWidget(m_line);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);

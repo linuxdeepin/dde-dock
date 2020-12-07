@@ -42,6 +42,11 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
 
+PluginsItemInterface::PluginSizePolicy DatetimePlugin::pluginSizePolicy() const
+{
+    return PluginsItemInterface::Custom;
+}
+
 const QString DatetimePlugin::pluginName() const
 {
     return "datetime";

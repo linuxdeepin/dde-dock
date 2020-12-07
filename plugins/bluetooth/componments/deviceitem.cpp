@@ -80,14 +80,10 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
     m_title->setText(nameDecorated(m_device->name()));
     initFontColor(m_title);
 
-    m_line->setVisible(true);
+    m_line->setVisible(false);
     m_loadingStat->setFixedSize(20, 20);
     m_loadingStat->setVisible(false);
 
-    auto deviceLayout = new QVBoxLayout;
-    deviceLayout->setMargin(0);
-    deviceLayout->setSpacing(0);
-    deviceLayout->addWidget(m_line);
     auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
@@ -99,8 +95,7 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
     itemLayout->addWidget(m_state);
     itemLayout->addWidget(m_loadingStat);
     itemLayout->addSpacing(MARGIN);
-    deviceLayout->addLayout(itemLayout);
-    setLayout(deviceLayout);
+    setLayout(itemLayout);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, themeChanged);
 
@@ -122,6 +117,18 @@ void DeviceItem::mousePressEvent(QMouseEvent *event)
     m_device->updateDeviceTime();
     emit clicked(m_device);
     QWidget::mousePressEvent(event);
+}
+
+void DeviceItem::paintEvent(QPaintEvent *e)
+{
+    if (LightType == DApplicationHelper::instance()->themeType()) {
+        QPainter painter(this);
+        QRect rc = rect();
+        rc.moveTop(1);
+        painter.fillRect(rc, QColor(255, 255, 255, 51));
+
+        QWidget::paintEvent(e);
+    }
 }
 
 void DeviceItem::changeState(const Device::State state)
@@ -159,7 +166,7 @@ QString DeviceItem::nameDecorated(const QString &name)
 HorizontalSeparator::HorizontalSeparator(QWidget *parent)
     : QWidget(parent)
 {
-    setFixedHeight(1);
+    setFixedHeight(2);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
@@ -168,7 +175,11 @@ void HorizontalSeparator::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.fillRect(rect(), QColor(0, 0, 0, 0));
+    if (LightType == DApplicationHelper::instance()->themeType()) {
+        painter.fillRect(rect(), QColor(0, 0, 0, 10));
+    } else if (DarkType == DApplicationHelper::instance()->themeType()) {
+        painter.fillRect(rect(), QColor(255, 255, 255, 13));
+    }
 }
 
 MenueItem::MenueItem(QWidget *parent)

@@ -32,6 +32,7 @@
 #include <QScrollBar>
 #include <DApplication>
 #include <DStandardItem>
+#include <DFontSizeManager>
 
 #define WIDTH       260
 #define MAX_HEIGHT  300
@@ -147,6 +148,7 @@ void SoundApplet::initUi()
 
     m_deviceLabel = new TipsWidget;
     m_deviceLabel->setText(tr("Device"));
+    DFontSizeManager::instance()->bind(m_deviceLabel, DFontSizeManager::T4, QFont::Medium);
 
     QHBoxLayout *deviceLayout = new QHBoxLayout;
     deviceLayout->addSpacing(2);

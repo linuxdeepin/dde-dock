@@ -42,16 +42,21 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
         if (mPluginsMap[itemInter].contains(itemKey))
             return;
 
+    // 取 plugin api
+    QPluginLoader *pluginLoader = qobject_cast<QPluginLoader*>(mPluginsMap[itemInter].value("pluginloader"));
+    const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
+    const QString &pluginApi = meta.value("api").toString();
+
     PluginsItem *item = nullptr;
     if (itemInter->pluginName() == "tray") {
-        item = new TrayPluginItem(itemInter, itemKey);
+        item = new TrayPluginItem(itemInter, itemKey, pluginApi);
         if (item->graphicsEffect()) {
             item->graphicsEffect()->setEnabled(false);
         }
         connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::trayVisableCountChanged,
                 this, &DockPluginsController::trayVisableCountChanged, Qt::UniqueConnection);
     } else {
-        item = new PluginsItem(itemInter, itemKey);
+        item = new PluginsItem(itemInter, itemKey, pluginApi);
     }
 
     mPluginsMap[itemInter][itemKey] = item;

@@ -40,6 +40,14 @@ public:
         Fixed
     };
 
+    /**
+    * @brief Plugin size policy
+    */
+    enum PluginSizePolicy {
+        System = 1 << 0, // Follow the system
+        Custom = 1 << 1  // The custom
+    };
+
     ///
     /// \brief ~PluginsItemInterface
     /// DON'T try to delete m_proxyInter.
@@ -228,6 +236,12 @@ public:
     /// default plugin add dock right,fixed plugin add to dock fixed area
     ///
     virtual PluginType type() { return Normal; }
+
+    ///
+    /// \brief plugin size policy
+    /// default plugin size policy
+    ///
+    virtual PluginSizePolicy pluginSizePolicy() const { return System; }
 
 protected:
     ///

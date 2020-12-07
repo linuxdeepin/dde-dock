@@ -58,27 +58,27 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     : QWidget(parent)
     , m_mainPanelLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_fixedAreaWidget(new QWidget(this))
-    , m_appAreaWidget(new QWidget(this))
-    , m_trayAreaWidget(new QWidget(this))
-    , m_pluginAreaWidget(new QWidget(this))
-    , m_desktopWidget(new DesktopWidget(this))
     , m_fixedAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
-    , m_trayAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
-    , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    , m_fixedSpliter(new QLabel(this))
+    , m_appAreaWidget(new QWidget(this))
     , m_appAreaSonWidget(new QWidget(this))
     , m_appAreaSonLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    , m_appSpliter(new QLabel(this))
+    , m_trayAreaWidget(new QWidget(this))
+    , m_trayAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    , m_traySpliter(new QLabel(this))
+    , m_pluginAreaWidget(new QWidget(this))
+    , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    , m_desktopWidget(new DesktopWidget(this))
     , m_position(Position::Bottom)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
-    , m_fixedSpliter(new QLabel(this))
-    , m_appSpliter(new QLabel(this))
-    , m_traySpliter(new QLabel(this))
     , m_isHover(false)
     , m_needRecoveryWin(false)
     , m_isEnableLaunch(true)
 {
-    init();
+    initUi();
     updateMainPanelLayout();
     setAcceptDrops(true);
     setMouseTracking(true);
@@ -101,59 +101,53 @@ MainPanelControl::~MainPanelControl()
 {
 }
 
-void MainPanelControl::init()
+void MainPanelControl::initUi()
 {
-    // 主窗口
-    m_fixedSpliter->setObjectName("spliter_fix");
-    m_appSpliter->setObjectName("spliter_app");
-    m_traySpliter->setObjectName("spliter_tray");
-
-    m_appAreaWidget->setAccessibleName("AppFullArea");
-
+    /* 固定区域 */
+    m_fixedAreaWidget->setObjectName("fixedarea");
+    m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
+    m_fixedAreaLayout->setSpacing(0);
+    m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
-    m_mainPanelLayout->addWidget(m_fixedSpliter);
+
+    m_fixedSpliter->setObjectName("spliter_fix");
+    m_mainPanelLayout->addWidget(m_fixedSpliter, Qt::AlignCenter);
+
+    /* 应用程序区域 */
+    m_appAreaWidget->setAccessibleName("AppFullArea");
     m_mainPanelLayout->addWidget(m_appAreaWidget);
-    m_mainPanelLayout->addWidget(m_appSpliter);
+    m_appAreaSonLayout->setSpacing(0);
+    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
+    m_appAreaSonWidget->setObjectName("apparea");
+    m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
+    m_appAreaSonLayout->setSpacing(0);
+    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_appSpliter->setObjectName("spliter_app");
+    m_mainPanelLayout->addWidget(m_appSpliter, Qt::AlignCenter);
+
+    /* 托盘区域 */
+    m_trayAreaWidget->setObjectName("trayarea");
+    m_trayAreaWidget->setLayout(m_trayAreaLayout);
+    m_trayAreaLayout->setSpacing(0);
+    m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
-    m_mainPanelLayout->addWidget(m_traySpliter);
+
+    m_traySpliter->setObjectName("spliter_tray");
+    m_mainPanelLayout->addWidget(m_traySpliter, Qt::AlignCenter);
+
+    /* 插件区域 */
+    m_pluginAreaWidget->setObjectName("pluginarea");
+    m_pluginAreaWidget->setLayout(m_pluginLayout);
+    m_pluginLayout->setSpacing(10);
+    m_pluginLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->addWidget(m_pluginAreaWidget);
 
-    m_mainPanelLayout->setMargin(0);
-    m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainPanelLayout->setSpacing(0);
-    m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
-    m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
-    m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
-
-    // 固定区域
-    m_fixedAreaWidget->setLayout(m_fixedAreaLayout);
-    m_fixedAreaWidget->setObjectName("fixedarea");
-    m_fixedAreaLayout->setMargin(0);
-    m_fixedAreaLayout->setContentsMargins(0, 0, 0, 0);
-    m_fixedAreaLayout->setSpacing(0);
-
-    // 应用程序
-    m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
-    m_appAreaSonWidget->setObjectName("apparea");
-    m_appAreaSonLayout->setMargin(0);
-    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
-    m_appAreaSonLayout->setSpacing(0);
-
-    // 托盘
-    m_trayAreaWidget->setLayout(m_trayAreaLayout);
-    m_trayAreaWidget->setObjectName("trayarea");
-    m_trayAreaLayout->setMargin(0);
-    m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
-    m_trayAreaLayout->setSpacing(0);
-
-    // 插件
-    m_pluginAreaWidget->setLayout(m_pluginLayout);
-    m_pluginAreaWidget->setObjectName("pluginarea");
-    m_pluginLayout->setMargin(0);
-    m_pluginLayout->setSpacing(10);
-
-    //桌面
+    /* 桌面预览 */
     m_mainPanelLayout->addWidget(m_desktopWidget);
+
+    m_mainPanelLayout->setSpacing(0);
+    m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
 
     connect(GSettingsByLaunch(), &QGSettings::changed, this, &MainPanelControl::onGSettingsChanged);
 }
@@ -180,11 +174,11 @@ void MainPanelControl::onGSettingsChanged(const QString &key)
     }
 }
 
-void MainPanelControl::setDisplayMode(DisplayMode mode)
+void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
 {
-    if (mode == m_dislayMode)
+    if (dislayMode == m_dislayMode)
         return;
-    m_dislayMode = mode;
+    m_dislayMode = dislayMode;
     updateDisplayMode();
 }
 
@@ -1064,10 +1058,17 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    if (pItem->pluginName() == "datetime") {
-                        pItem->setFixedSize(pItem->sizeHint().width(), h);
-                    } else {
+                    // 根据大小策略控制插件大小
+                    switch (pItem->pluginSizePolicy()) {
+                    case PluginsItemInterface::System:
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                        break;
+                    case PluginsItemInterface::Custom:
+                        pItem->setFixedSize(pItem->sizeHint().width(), h);
+                        break;
+                    default:
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                        break;
                     }
                 }
             }
@@ -1079,10 +1080,17 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    if (pItem->pluginName() == "datetime") {
-                        pItem->setFixedSize(w, pItem->sizeHint().height());
-                    } else {
+                    // 根据大小策略控制插件大小
+                    switch (pItem->pluginSizePolicy()) {
+                    case PluginsItemInterface::System:
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                        break;
+                    case PluginsItemInterface::Custom:
+                        pItem->setFixedSize(w, pItem->sizeHint().height());
+                        break;
+                    default:
+                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                        break;
                     }
                 }
             }

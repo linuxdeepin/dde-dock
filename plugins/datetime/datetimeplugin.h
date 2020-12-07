@@ -42,6 +42,8 @@ class DatetimePlugin : public QObject, PluginsItemInterface
 public:
     explicit DatetimePlugin(QObject *parent = nullptr);
 
+    PluginSizePolicy pluginSizePolicy() const override;
+
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;

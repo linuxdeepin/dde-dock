@@ -247,6 +247,10 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
 
     QString id = adapter->id();
     if (!id.isEmpty()) {
+        // in case memory leaks
+        if (m_adapters.contains(id)) {
+            return;
+        }
         m_adapters[id] = adapter;
     }
 }

@@ -35,6 +35,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
       m_acceptDelayTimer(new QTimer(this)),
       m_regionInter(new DRegionMonitor(this))
 {
+    setMargin(0);
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
 

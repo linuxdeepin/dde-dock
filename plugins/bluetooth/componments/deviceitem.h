@@ -31,6 +31,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+enum ColorType {
+    UnknownType,
+    LightType,
+    DarkType
+};
+
 class StateButton;
 class HorizontalSeparator;
 class DeviceItem : public QWidget
@@ -48,6 +54,7 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *e) override;
 
 signals:
     void clicked(Device *);

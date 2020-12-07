@@ -21,7 +21,7 @@
 
 // 为了方便使用,把相关定义独立出来,如有需要,直接包含这个头文件,然后使用SET_*的宏去设置,USE_*宏开启即可
 // 注意：对项目中出现的所有的QWidget的派生类都要再启用一次accessiblity，包括qt的原生控件[qt未限制其标记名称为空的情况]
-// 注意：使用USE_ACCESSIBLE_BY_OBJECTNAME开启accessiblity的时候，一定要再最这个类用一下USE_ACCESSIBLE，否则标记可能会遗漏
+// 注意：使用USE_ACCESSIBLE_BY_OBJECTNAME开启accessiblity的时候，一定要再对这个类用一下USE_ACCESSIBLE，否则标记可能会遗漏
 
 #ifndef ACCESSIBLEINTERFACE_H
 #define ACCESSIBLEINTERFACE_H
@@ -314,7 +314,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     public:\
     FUNC_CREATE(classname,QAccessible::EditableText,accessdescription)\
     QString text(QAccessible::Text t) const override;\
-    QAccessibleInterface *child(int index) const override { return nullptr; }\
+    QAccessibleInterface *child(int index) const override { Q_UNUSED(index); return nullptr; }\
     void *interface_cast(QAccessible::InterfaceType t) override{\
     switch (t) {\
     case QAccessible::ActionInterface:\
@@ -338,7 +338,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     Q_UNUSED(startOffset)\
     Q_UNUSED(endOffset)\
     }\
-    void removeSelection(int selectionIndex) override {}\
+    void removeSelection(int selectionIndex) override { Q_UNUSED(selectionIndex);}\
     void setSelection(int selectionIndex, int startOffset, int endOffset) override {\
     Q_UNUSED(selectionIndex)\
     Q_UNUSED(startOffset)\
@@ -371,7 +371,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     void deleteText(int startOffset, int endOffset) override {\
     Q_UNUSED(startOffset)\
     Q_UNUSED(endOffset)\
-    };\
+    }\
     void replaceText(int startOffset, int endOffset, const QString &text) override {\
     Q_UNUSED(startOffset)\
     Q_UNUSED(endOffset)\

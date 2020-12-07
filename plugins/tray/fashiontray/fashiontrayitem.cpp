@@ -107,6 +107,7 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
         }
     } while (false);
 
+    onExpandChanged(m_controlWidget->expanded());
     requestResize();
 }
 

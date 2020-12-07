@@ -11,7 +11,6 @@ Build-Depends: debhelper (>= 8.0.0),
  libqt5x11extras5-dev,
  libxcb-damage0-dev,
  libqt5svg5-dev,
- libxcb-icccm4-dev,
  libxtst-dev,
  libdtkwidget-dev,
  libdtkcore-dev,
@@ -24,13 +23,17 @@ Build-Depends: debhelper (>= 8.0.0),
  cmake,
  libdde-network-utils-dev,
  libdbusmenu-qt5-dev,
- libdtkgui-dev
+ libdtkgui-dev,
+ libgtest-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-dock
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ deepin-desktop-schemas (>=5.8.0.34),
+ libdframeworkdbus2 (>=5.3.0.24),
+ libdde-network-utils (>=5.3.0.5)
 Recommends: dde-disk-mount-plugin, dde-dock-onboard-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),
@@ -40,16 +43,16 @@ Replaces:
  dde-dock-applets,
  dde-trash-plugin
 Description: deepin desktop-environment - dock module
- Deepin desktop environment - dock module.
+ Dock module of deepin desktop-environment
 
 Package: dde-dock-dev
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin desktop-environment - dock module development files
- Deepin desktop environment - dock module development files.
+ Dock module development files of deepin desktop-environment
 
 Package: dde-dock-onboard-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
-Description: deepin desktop-environment - dock plugin
- Deepin desktop environment - dock plugin for onboard
+Description: deepin desktop-environment - dock plugin for onboard
+ Dock plugin for onboard of deepin desktop-environment

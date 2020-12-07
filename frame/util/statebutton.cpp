@@ -28,7 +28,7 @@ void StateButton::paintEvent(QPaintEvent *event)
     painter.setBrush(palette().color(QPalette::Highlight));
     painter.drawPie(rect(), 0, 360 * 16);
 
-    QPen pen(palette().color(QPalette::Text), radius / 100.0 * 6.20, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+    QPen pen(Qt::white, radius / 100.0 * 6.20, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
     switch (m_type) {
     case Check: drawCheck(painter, pen, radius);    break;
     case Fork:  drawFork(painter, pen, radius);     break;
