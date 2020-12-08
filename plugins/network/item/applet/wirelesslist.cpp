@@ -208,7 +208,6 @@ void WirelessList::setDeviceInfo(const int index)
     }
 
     // set device enable state
-//    m_controlPanel->setDeviceEnabled(m_device->enabled() && m_airplaninter->wifiEnabled());
     m_controlPanel->setDeviceEnabled(m_device->enabled());
     // set device name
     if (index == -1)

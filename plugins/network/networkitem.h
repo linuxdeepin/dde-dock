@@ -11,10 +11,6 @@
 #include <QTimer>
 #include <QScrollBar>
 
-#include <com_deepin_daemon_airplanemode.h>
-
-using AirplanInter = com::deepin::daemon::AirplaneMode;
-
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -128,12 +124,6 @@ private:
      * @brief 做刷新操作的QTimer
      */
     QTimer *m_connectingTimer;
-    /**
-     * @def m_airplaneInter
-     * @brief 飞行模式的后端接口
-     */
-    AirplanInter *m_airplaneInter;
-
 };
 
 #endif // NETWORKITEM_H
