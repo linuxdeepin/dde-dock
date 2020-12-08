@@ -900,14 +900,16 @@ void MultiScreenWorker::updateMonitorDockedInfo()
 
 void MultiScreenWorker::updatePrimaryDisplayRotation()
 {
+    //多次调用后,会append多次,造成重复项,因此先清空当前保存的旋转方向
+    m_rotations.clear();
     Monitor * primaryMonitor = monitorByName(m_mtrInfo.validMonitor(), m_displayInter->primary());
     if(primaryMonitor) {
         MonitorInter *inter = new MonitorInter("com.deepin.daemon.Display", primaryMonitor->path(), QDBusConnection::sessionBus(), this);
         m_monitorRotation = inter->rotation();
         //保存屏幕允许那些方向
         foreach (quint16 var, inter->rotations()) {
-                m_rotations.append(var);
-            }
+            m_rotations.append(var);
+        }
     }
 }
 
