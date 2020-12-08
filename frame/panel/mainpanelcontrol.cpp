@@ -111,20 +111,18 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
 
     m_fixedSpliter->setObjectName("spliter_fix");
-    m_mainPanelLayout->addWidget(m_fixedSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_fixedSpliter);
 
     /* 应用程序区域 */
     m_appAreaWidget->setAccessibleName("AppFullArea");
     m_mainPanelLayout->addWidget(m_appAreaWidget);
-    m_appAreaSonLayout->setSpacing(0);
-    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonWidget->setObjectName("apparea");
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
     m_appAreaSonLayout->setSpacing(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
 
     m_appSpliter->setObjectName("spliter_app");
-    m_mainPanelLayout->addWidget(m_appSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_appSpliter);
 
     /* 托盘区域 */
     m_trayAreaWidget->setObjectName("trayarea");
@@ -134,7 +132,7 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
 
     m_traySpliter->setObjectName("spliter_tray");
-    m_mainPanelLayout->addWidget(m_traySpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_traySpliter);
 
     /* 插件区域 */
     m_pluginAreaWidget->setObjectName("pluginarea");
@@ -148,6 +146,9 @@ void MainPanelControl::initUi()
 
     m_mainPanelLayout->setSpacing(0);
     m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
 
     connect(GSettingsByLaunch(), &QGSettings::changed, this, &MainPanelControl::onGSettingsChanged);
 }
