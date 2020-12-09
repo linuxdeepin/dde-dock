@@ -622,7 +622,8 @@ void SoundApplet::updateListHeight()
     //显示声音设备列表高度 = 设备的高度 + 间隔 + 边距
     int viewHeight = visualHeight + m_listView->spacing() * count * 2 + listMargin;
     // 设备信息高度 = 设备标签 + 分隔线 + 滚动条 + 间隔
-    int infoHeight = m_soundShow->height() + m_separator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
+    int labelHeight = m_deviceLabel->height() > m_soundShow->height() ? m_deviceLabel->height() : m_soundShow->height();
+    int infoHeight = labelHeight + m_separator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
     int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;
