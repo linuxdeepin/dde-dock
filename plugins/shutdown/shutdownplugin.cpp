@@ -25,6 +25,7 @@
 #include "../widgets/tipswidget.h"
 
 #include <DSysInfo>
+#include <DDBusSender>
 
 #include <QIcon>
 #include <QSettings>
@@ -200,8 +201,15 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 200);
 
-    if (menuId == "power")
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+    if (menuId == "power") {
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("power"))
+        .call();
+    }
     else if (menuId == "Lock") {
         if (QFile::exists(ICBC_CONF_FILE)) {
             QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
@@ -212,17 +220,21 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 #endif
 
         } else {
-            QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                    << "--dest=com.deepin.dde.lockFront"
-                                    << "/com/deepin/dde/lockFront"
-                                    << QString("com.deepin.dde.lockFront.Show"));
+            DDBusSender()
+            .service("com.deepin.dde.lockFront")
+            .interface("com.deepin.dde.lockFront")
+            .path("/com/deepin/dde/lockFront")
+            .method(QString("Show"))
+            .call();
         }
     }
     else
-        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
-                                << "--dest=com.deepin.dde.shutdownFront"
-                                << "/com/deepin/dde/shutdownFront"
-                                << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
+        DDBusSender()
+        .service("com.deepin.dde.shutdownFront")
+        .interface("com.deepin.dde.shutdownFront")
+        .path("/com/deepin/dde/shutdownFront")
+        .method(QString(menuId))
+        .call();
 }
 
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)

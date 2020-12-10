@@ -23,6 +23,7 @@
 #include "../widgets/tipswidget.h"
 
 #include <DWindowManagerHelper>
+#include <DDBusSender>
 
 #include <QIcon>
 
@@ -140,7 +141,13 @@ void MultitaskingPlugin::invokedMenuItem(const QString &itemKey, const QString &
     Q_UNUSED(checked)
 
     if (menuId == "multitasking") {
-        QProcess::startDetached("dbus-send --session --dest=com.deepin.wm --print-reply /com/deepin/wm com.deepin.wm.PerformAction int32:1");
+        DDBusSender()
+        .service("com.deepin.wm")
+        .interface("com.deepin.wm")
+        .path("/com/deepin/wm")
+        .method(QString("PerformAction"))
+        .arg(1)
+        .call();
     } else if (menuId == "remove") {
         pluginStateSwitched();
     }

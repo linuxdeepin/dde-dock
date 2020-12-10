@@ -27,6 +27,8 @@
 #include <QIcon>
 #include <QGSettings>
 
+#include <DDBusSender>
+
 #define PLUGIN_STATE_KEY    "enable"
 #define DELAYTIME           (20 * 1000)
 
@@ -143,8 +145,15 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId == "power")
-        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+    if (menuId == "power") {
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowModule"))
+        .arg(QString("power"))
+        .call();
+     }
 }
 
 void PowerPlugin::refreshIcon(const QString &itemKey)
