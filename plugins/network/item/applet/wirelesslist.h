@@ -103,6 +103,7 @@ private:
     AccessPointWidget *m_clickAp;
     AccessPoint m_activeHotspotAP;
     QList<AccessPointWidget *> m_apwList;
+    QTimer *m_clickIntervalTimer;
 
 
     //刷新操作的函数

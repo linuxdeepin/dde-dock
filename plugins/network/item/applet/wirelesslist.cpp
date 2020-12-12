@@ -52,6 +52,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, NetworkModel *model, QWid
     , m_centralWidget(new QWidget(this))
     , m_controlPanel(new DeviceControlWidget(this))
     , m_updateTimer(new QTimer(this))
+    , m_clickIntervalTimer(new QTimer(this))
 {
     initUI();
     initConnect();
@@ -61,6 +62,8 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, NetworkModel *model, QWid
     Q_EMIT m_model->initDeviceEnable(m_device->path());
     m_updateTimer->setInterval(0);
     m_updateTimer->setSingleShot(true);
+    m_clickIntervalTimer->setInterval(500);
+    m_clickIntervalTimer->setSingleShot(true);
 }
 
 WirelessList::~WirelessList()
@@ -160,7 +163,8 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
     //关联点击连接信号
     connect(apw, &AccessPointWidget::requestConnectAP, m_model,
             [ = ](const QString &apPath, const QString &uuid) {
-                if (m_activeAp == apw) return;
+                if (m_clickIntervalTimer->isActive()) return;
+                m_clickIntervalTimer->start();
                 Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);
                 m_activeAp = apw;});
     //关联断开连接信号
