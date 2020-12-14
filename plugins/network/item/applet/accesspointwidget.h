@@ -62,7 +62,9 @@ public:
     enum ApState{
         Unknown = 0,
         Activating = 1,
-        Activated  = 2
+        Activated  = 2,
+        Deactivating = 3,
+        Deactivated = 4
     };
 
     explicit AccessPointWidget(const QJsonObject &apInfo);

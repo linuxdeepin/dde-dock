@@ -77,7 +77,6 @@ void WirelessList::initUI()
 
     m_centralWidget->setFixedWidth(ItemWidth - 2 * ItemMargin);
     m_centralWidget->setLayout(m_centralLayout);
-
     m_centralLayout->addWidget(m_controlPanel);
     m_centralLayout->setSpacing(0);
     m_centralLayout->setMargin(0);
@@ -202,6 +201,8 @@ void WirelessList::ApRemoved(const QJsonObject &apInfo)
     m_centralLayout->removeWidget(apw);
     m_apwList.removeAt(mIndex);
     apw->deleteLater();
+    //防止在析构函数中发送信号，导致偶现的删除不刷新
+    m_updateTimer->start();
 }
 
 void WirelessList::setDeviceInfo(const int index)
@@ -290,14 +291,24 @@ void WirelessList::ActiveConnectChange(const QJsonObject &activeAp)
     // 0:Unknow, 1:Activating, 2:Activated, 3:Deactivating, 4:Deactivated
     QString activeSsid = activeAp["Id"].toString();
     const int state = activeAp["State"].toInt(0);
-    m_activeAp = accessPointWidgetBySsid(activeSsid);
+    if (state == AccessPointWidget::ApState::Deactivated) {
+        //这里防止出现网络热点消失，然而dock上的网络图标并没有重置的问题
+        if (m_activeAp)
+            m_activeAp->setActiveState(AccessPointWidget::ApState(state));
+
+        m_activeAp = nullptr;
+    } else {
+        m_activeAp = accessPointWidgetBySsid(activeSsid);
+    }
+
     if (!m_activeAp) {
+        m_updateTimer->start();
         qDebug() << "The network in the current connection cannot be found in the list.";
         qDebug() << "Ssid = " << activeSsid;
         return;
     }
-    m_activeAp->setActiveState(AccessPointWidget::ApState(state));
 
+    m_activeAp->setActiveState(AccessPointWidget::ApState(state));
 }
 
 void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid)

@@ -63,7 +63,6 @@ AccessPointWidget::AccessPointWidget(const QJsonObject &apInfo)
 
 AccessPointWidget::~AccessPointWidget()
 {
-    Q_EMIT apChange();
 }
 
 void AccessPointWidget::initUI()
