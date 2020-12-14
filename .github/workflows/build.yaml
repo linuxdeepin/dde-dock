@@ -20,7 +20,7 @@ jobs:
       - name: Refresh pacman repository
         run: pacman -Syy
       - name: Install build dependencies
-        run: pacman -S --noconfirm base-devel cmake ninja qt5-tools deepin-qt-dbus-factory dtkwidget deepin-network-utils libdbusmenu-qt5 libxcb libxext libxtst
+        run: pacman -S --noconfirm base-devel cmake ninja qt5-tools deepin-qt-dbus-factory dtkwidget deepin-network-utils libdbusmenu-qt5 libxcb libxext libxtst gtest
       - name: CMake & Make
         run: |
           mkdir build
