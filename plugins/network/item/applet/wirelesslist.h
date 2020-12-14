@@ -100,6 +100,9 @@ private:
 
     //表示连接中和连接成功的wifi
     AccessPointWidget *m_activeAp;
+    //这里使用一个click值保存，由于企业wifi在被连接时，
+    //并不会立即将其变成活动中的wifi，而会ActivateAccessPoint在这个接口中表现出来
+    //所以不能直接用m_activeAp保存状态，这样是不对的4
     AccessPointWidget *m_clickAp;
     AccessPoint m_activeHotspotAP;
     QList<AccessPointWidget *> m_apwList;

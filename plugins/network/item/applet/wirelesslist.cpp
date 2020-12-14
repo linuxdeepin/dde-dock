@@ -166,7 +166,7 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
                 if (m_clickIntervalTimer->isActive()) return;
                 m_clickIntervalTimer->start();
                 Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);
-                m_activeAp = apw;});
+                m_clickAp = apw;});
     //关联断开连接信号
     connect(apw, &AccessPointWidget::requestDisconnectAP, m_model, &NetworkModel::requestDisconnctAP);
 }
@@ -302,14 +302,14 @@ void WirelessList::ActiveConnectChange(const QJsonObject &activeAp)
 
 void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid)
 {
-    if (m_device.isNull() && !m_activeAp) {
+    if (m_device.isNull() && !m_clickAp) {
         return;
     }
-    if (m_activeAp->path() == apPath) {
+    if (m_clickAp->path() == apPath) {
         qDebug() << "wireless connect failed and may require more configuration,"
-                 << "path:" << m_activeAp->path() << "ssid" << m_activeAp->ssid() << "devicePath:" << m_device->path()
-                 << "secret:" << m_activeAp->secured() << "strength:" << m_activeAp->strength() << "uuid:" << uuid;
-        m_activeAp = nullptr;
+                 << "path:" << m_clickAp->path() << "ssid" << m_clickAp->ssid() << "devicePath:" << m_device->path()
+                 << "secret:" << m_clickAp->secured() << "strength:" << m_clickAp->strength() << "uuid:" << uuid;
+        m_clickAp = nullptr;
         //打开网络相关的无线网页面
         DDBusSender()
         .service("com.deepin.dde.ControlCenter")
