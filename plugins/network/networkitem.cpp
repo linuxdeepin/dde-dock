@@ -359,7 +359,7 @@ void NetworkItem::refreshIcon()
         stateString = "none";
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
-    case Unknow:
+    case Unknown:
     case Nocable:
         stateString = "error";//待图标 暂用错误图标
         iconString = QString("network-%1-symbolic").arg(stateString);
@@ -520,7 +520,11 @@ void NetworkItem::getPluginState()
     switch (wirelessState) {
         //连接过程中断开第一个连接会发送该状态，导致前端闪一秒有线断开的图标，所以直接对该状态进行连接中处理
         case WirelessItem::Unknown:
-            m_pluginState = Aconnecting;
+            if(m_connectedWirelessDevice.isEmpty())
+                m_pluginState = PluginState(wiredState);
+            else
+                m_pluginState = Aconnecting;
+
             break;
         case WirelessItem::Disabled:
             if (wiredState < WiredItem::Disconnected)
@@ -778,7 +782,7 @@ void NetworkItem::refreshTips()
     case Bfailed:
         m_tipsWidget->setText(tr("Network cable unplugged"));
         break;
-    case Unknow:
+    case Unknown:
     case Nocable:
         m_tipsWidget->setText(tr("Network cable unplugged"));
         break;
@@ -826,7 +830,7 @@ bool NetworkItem::isShowControlCenter()
 
     if (onlyOneTypeDevice) {
         switch (m_pluginState) {
-        case Unknow:
+        case Unknown:
         case Nocable:
         case Bfailed:
         case AconnectNoInternet:
@@ -841,7 +845,7 @@ bool NetworkItem::isShowControlCenter()
         }
     } else {
         switch (m_pluginState) {
-        case Unknow:
+        case Unknown:
         case Nocable:
         case Bfailed:
             return true;
