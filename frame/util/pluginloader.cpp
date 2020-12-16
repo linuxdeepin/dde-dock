@@ -37,7 +37,7 @@ PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     process.waitForFinished();
     QString pcType = process.readAllStandardOutput();
     process.close();
-    if (pcType.contains("panguV"))
+    if (pcType.contains("PGUV"))
         m_isPanguV = true;
 }
 
