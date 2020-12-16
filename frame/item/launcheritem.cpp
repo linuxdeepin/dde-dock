@@ -20,8 +20,8 @@
  */
 
 #include "launcheritem.h"
-#include "util/themeappicon.h"
-#include "util/imagefactory.h"
+#include "themeappicon.h"
+#include "imagefactory.h"
 
 #include <QPainter>
 #include <QProcess>

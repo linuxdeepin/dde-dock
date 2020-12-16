@@ -21,12 +21,12 @@
 
 #ifndef MULTISCREENWORKER_H
 #define MULTISCREENWORKER_H
+
 #include "constants.h"
 #include "monitor.h"
 #include "utils.h"
-#include "item/dockitem.h"
-
-#include "xcb/xcb_misc.h"
+#include "dockitem.h"
+#include "xcb_misc.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_daemon_display.h>

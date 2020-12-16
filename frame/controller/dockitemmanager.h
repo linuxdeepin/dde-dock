@@ -24,9 +24,9 @@
 
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "item/dockitem.h"
-#include "item/appitem.h"
-#include "item/placeholderitem.h"
+#include "dockitem.h"
+#include "appitem.h"
+#include "placeholderitem.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 

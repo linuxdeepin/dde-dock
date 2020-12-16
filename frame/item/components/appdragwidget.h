@@ -34,7 +34,7 @@
 #include <QParallelAnimationGroup>
 #include <qwidget.h>
 #include "../widgets/tipswidget.h"
-#include "util/dockpopupwindow.h"
+#include "dockpopupwindow.h"
 
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView

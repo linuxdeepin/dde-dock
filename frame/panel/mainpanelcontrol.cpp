@@ -20,14 +20,14 @@
  */
 
 #include "mainpanelcontrol.h"
-#include "../item/dockitem.h"
-#include "../item/placeholderitem.h"
-#include "../item/components/appdrag.h"
-#include "../item/appitem.h"
-#include "../item/pluginsitem.h"
-#include "../item/traypluginitem.h"
-#include "../controller/dockitemmanager.h"
-#include "util/touchsignalmanager.h"
+#include "dockitem.h"
+#include "placeholderitem.h"
+#include "components/appdrag.h"
+#include "appitem.h"
+#include "pluginsitem.h"
+#include "traypluginitem.h"
+#include "dockitemmanager.h"
+#include "touchsignalmanager.h"
 
 #include <QDrag>
 #include <QTimer>

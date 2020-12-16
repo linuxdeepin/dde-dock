@@ -23,11 +23,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "xcb/xcb_misc.h"
-#include "dbus/sni/statusnotifierwatcher_interface.h"
-#include "panel/mainpanelcontrol.h"
-#include "util/multiscreenworker.h"
-#include "util/touchsignalmanager.h"
+#include "xcb_misc.h"
+#include "statusnotifierwatcher_interface.h"
+#include "mainpanelcontrol.h"
+#include "multiscreenworker.h"
+#include "touchsignalmanager.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>

@@ -20,10 +20,10 @@
  */
 
 #include "dockitemmanager.h"
-#include "item/appitem.h"
-#include "item/launcheritem.h"
-#include "item/pluginsitem.h"
-#include "item/traypluginitem.h"
+#include "appitem.h"
+#include "launcheritem.h"
+#include "pluginsitem.h"
+#include "traypluginitem.h"
 
 #include <QDebug>
 #include <QGSettings>

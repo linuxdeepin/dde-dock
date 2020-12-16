@@ -21,12 +21,11 @@
  */
 
 #include "appitem.h"
-
-#include "util/themeappicon.h"
-#include "util/imagefactory.h"
-#include "xcb/xcb_misc.h"
-#include "components/appswingeffectbuilder.h"
-#include "components/appspreviewprovider.h"
+#include "themeappicon.h"
+#include "imagefactory.h"
+#include "xcb_misc.h"
+#include "appswingeffectbuilder.h"
+#include "appspreviewprovider.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>

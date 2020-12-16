@@ -24,9 +24,9 @@
 #define APPITEM_H
 
 #include "dockitem.h"
-#include "components/previewcontainer.h"
-#include "components/appdrag.h"
-#include "dbus/dbusclientmanager.h"
+#include "previewcontainer.h"
+#include "appdrag.h"
+#include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
 
 #include <QGraphicsView>

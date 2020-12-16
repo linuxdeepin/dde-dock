@@ -20,7 +20,7 @@
  */
 
 #include "hoverhighlighteffect.h"
-#include "util/imagefactory.h"
+#include "imagefactory.h"
 
 #include <QPainter>
 #include <QDebug>

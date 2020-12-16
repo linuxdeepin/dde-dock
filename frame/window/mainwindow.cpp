@@ -21,10 +21,10 @@
  */
 
 #include "mainwindow.h"
-#include "panel/mainpanelcontrol.h"
-#include "controller/dockitemmanager.h"
-#include "util/utils.h"
-#include "util/menuworker.h"
+#include "mainpanelcontrol.h"
+#include "dockitemmanager.h"
+#include "utils.h"
+#include "menuworker.h"
 
 #include <DStyle>
 #include <DPlatformWindowHandle>

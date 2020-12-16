@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "menuworker.h"
-#include "controller/dockitemmanager.h"
+#include "dockitemmanager.h"
 
 #include <QAction>
 #include <QMenu>

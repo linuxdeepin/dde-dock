@@ -47,6 +47,47 @@ endif()
 
 file(GLOB INTERFACES "interfaces/*.h")
 
+#因为单元测试需要直接测试源代码，而主程序代码中include的单元使用了相对路径
+#单元测试的CMakeLists和主程序的CMakeLists路径不同，编译单元测试时会提示找不到文件
+#因此设置搜索路径
+include_directories(
+    frame/controller
+    frame/dbus
+    frame/dbus/sni
+    frame/item
+    frame/item/components
+    frame/item/resources
+    frame/panel
+    frame/qss
+    frame/util
+    frame/window
+    frame/xcb
+)
+
+aux_source_directory(frame/controller CONTROLLER)
+aux_source_directory(frame/dbus DBUS)
+aux_source_directory(frame/dbus/sni SNI)
+aux_source_directory(frame/item ITEM)
+aux_source_directory(frame/item/components COMPONENTS)
+aux_source_directory(frame/item/resources RESOURCES)
+aux_source_directory(frame/panel PANEL)
+aux_source_directory(frame/qss QSSPATH)
+aux_source_directory(frame/util UTIL)
+aux_source_directory(frame/window WINDOW)
+aux_source_directory(frame/xcb XCB)
+
+file(GLOB SRC_PATH
+    ${CONTROLLER}
+    ${DBUS}
+    ${SNI}
+    ${ITEM}
+    ${COMPONENTS}
+    ${PANEL}
+    ${UTIL}
+    ${WINDOW}
+    ${XCB}
+)
+
 add_subdirectory("frame")
 add_subdirectory("plugins")
 add_subdirectory("unittest")

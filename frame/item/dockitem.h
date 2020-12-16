@@ -23,8 +23,8 @@
 #define DOCKITEM_H
 
 #include "constants.h"
-#include "util/dockpopupwindow.h"
-#include "components/hoverhighlighteffect.h"
+#include "dockpopupwindow.h"
+#include "hoverhighlighteffect.h"
 
 #include <QFrame>
 #include <QPointer>

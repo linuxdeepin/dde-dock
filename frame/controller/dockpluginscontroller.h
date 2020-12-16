@@ -22,9 +22,9 @@
 #ifndef DOCKPLUGINSCONTROLLER_H
 #define DOCKPLUGINSCONTROLLER_H
 
-#include "item/pluginsitem.h"
+#include "pluginsitem.h"
 #include "pluginproxyinterface.h"
-#include "util/abstractpluginscontroller.h"
+#include "abstractpluginscontroller.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 
@@ -42,7 +42,7 @@ class DockPluginsController : public AbstractPluginsController
     friend class DockItemManager;
 
 public:
-    explicit DockPluginsController(QObject *parent = 0);
+    explicit DockPluginsController(QObject *parent = nullptr);
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;

@@ -23,8 +23,8 @@
 #include "pluginsitem.h"
 #include "pluginsiteminterface.h"
 
-#include "util/utils.h"
-#include "util/imagefactory.h"
+#include "utils.h"
+#include "imagefactory.h"
 
 #include <QPainter>
 #include <QBoxLayout>

@@ -20,7 +20,7 @@
  */
 
 #include "multiscreenworker.h"
-#include "window/mainwindow.h"
+#include "mainwindow.h"
 
 #include <QWidget>
 #include <QScreen>

@@ -23,12 +23,11 @@
 #define DBUSDOCKADAPTORS_H
 
 #include <QtDBus/QtDBus>
-#include "window/mainwindow.h"
-class MainWindow;
+#include "mainwindow.h"
+
 /*
  * Adaptor class for interface com.deepin.dde.Dock
  */
-
 class DBusDockAdaptors: public QDBusAbstractAdaptor
 {
     Q_OBJECT
