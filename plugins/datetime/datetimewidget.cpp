@@ -135,7 +135,7 @@ QSize DatetimeWidget::curTimeSize() const
                 dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width());
             }
         }
-        return QSize(std::max(timeSize.width(), dateSize.width()) + 2, height());
+        return QSize(std::max(timeSize.width(), dateSize.width()), timeSize.height() + dateSize.height());
     } else {
         while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width()) > (width() - 4)) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
@@ -150,7 +150,7 @@ QSize DatetimeWidget::curTimeSize() const
             }
         }
         m_timeOffset = (timeSize.height() - dateSize.height()) / 2 ;
-        return QSize(width(), timeSize.height() + dateSize.height());
+        return QSize(std::max(timeSize.width(), dateSize.width()), timeSize.height() + dateSize.height());
     }
 }
 
