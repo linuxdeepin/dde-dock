@@ -164,8 +164,8 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
             [ = ](const QString &apPath, const QString &uuid) {
                 if (m_clickIntervalTimer->isActive()) return;
                 m_clickIntervalTimer->start();
-                Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);
-                m_clickAp = apw;});
+                m_clickAp = apw;
+                Q_EMIT m_model->requestConnectAp(m_device->path(), apPath, uuid);});
     //关联断开连接信号
     connect(apw, &AccessPointWidget::requestDisconnectAP, m_model, &NetworkModel::requestDisconnctAP);
 }
@@ -200,8 +200,8 @@ void WirelessList::ApRemoved(const QJsonObject &apInfo)
     const int mIndex = m_apwList.indexOf(apw);
     m_centralLayout->removeWidget(apw);
     m_apwList.removeAt(mIndex);
-    apw->deleteLater();
-    //防止在析构函数中发送信号，导致偶现的删除不刷新
+    delete apw;
+    apw = nullptr;
     m_updateTimer->start();
 }
 
@@ -244,12 +244,12 @@ void WirelessList::updateView()
         });
         for (AccessPointWidget *apw: m_apwList) {
             m_centralLayout->removeWidget(apw);
-            m_centralLayout->addWidget(apw);
+            m_centralLayout->addWidget(apw);    
         }
 
     }
-    int ApListSize = m_apwList.size();
-    const int contentHeight = ApListSize * ItemHeight;
+
+    const int contentHeight = APcount() * ItemHeight;
     m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(contentHeight);
     emit requestUpdatePopup();
@@ -320,7 +320,6 @@ void WirelessList::onActivateApFailed(const QString &apPath, const QString &uuid
         qDebug() << "wireless connect failed and may require more configuration,"
                  << "path:" << m_clickAp->path() << "ssid" << m_clickAp->ssid() << "devicePath:" << m_device->path()
                  << "secret:" << m_clickAp->secured() << "strength:" << m_clickAp->strength() << "uuid:" << uuid;
-        m_clickAp = nullptr;
         //打开网络相关的无线网页面
         DDBusSender()
         .service("com.deepin.dde.ControlCenter")
