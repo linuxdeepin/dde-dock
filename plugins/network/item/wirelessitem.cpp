@@ -35,29 +35,50 @@
 using namespace dde::network;
 DGUI_USE_NAMESPACE
 
+#define REFRESH_LIMIT 5
+#define REFRESH_TRY_TIME_SECOND 600000
+
 WirelessItem::WirelessItem(WirelessDevice *device)
-    : DeviceItem(device),
-      m_refreshTimer(new QTimer(this)),
-      m_wirelessApplet(new QWidget),
-      m_APList(nullptr)
+    : DeviceItem(device)
+    , m_refreshLimit(0)
+    , m_refreshLimitTimer(new QTimer(this))
+    , m_refreshTimer(new QTimer(this))
+    , m_wirelessApplet(new QWidget)
+    , m_APList(nullptr)
 {
     m_refreshTimer->setSingleShot(true);
-    m_refreshTimer->setInterval(100);
+    m_refreshTimer->setInterval(10000);
 
     m_wirelessApplet->setVisible(false);
 
+    m_refreshLimitTimer->setSingleShot(true);
+    m_refreshLimitTimer->setInterval(REFRESH_TRY_TIME_SECOND);
+
     connect(m_refreshTimer, &QTimer::timeout, [&] {
-        if (m_device.isNull())
-        {
+        if (m_device.isNull() || m_refreshLimitTimer->isActive()) {
             return;
         }
+
+        // NOTE(lxz): limit when 5 of failed, sleep 60s
+        // If the network data always has problems, it can
+        // alleviate repeated refresh. Failure should not
+        // be triggered under normal circumstances
+        if (m_refreshLimit == REFRESH_LIMIT) {
+            m_refreshLimitTimer->start();
+            m_refreshLimit = 0;
+            return;
+        }
+
         WirelessDevice *dev = static_cast<WirelessDevice *>(m_device.data());
         // the status is Activated and activeApInfo is empty if the hotspot status of this wireless device is enabled
         if (m_device->status() == NetworkDevice::Activated && dev->activeApInfo().isEmpty() && !dev->hotspotEnabled())
         {
             Q_EMIT queryActiveConnInfo();
+            ++m_refreshLimit;
             return;
         }
+
+        m_refreshLimit = 0;
     });
     connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
@@ -73,6 +94,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
         }
         update();
     });
+    connect(m_refreshLimitTimer, &QTimer::timeout, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     init();
 }

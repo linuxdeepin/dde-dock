@@ -90,7 +90,9 @@ private slots:
     void adjustHeight(bool visibel);
 
 private:
+    int m_refreshLimit;
     int m_index;
+    QTimer *m_refreshLimitTimer;
     QTimer *m_refreshTimer;
     QWidget *m_wirelessApplet;
     WirelessList *m_APList;
