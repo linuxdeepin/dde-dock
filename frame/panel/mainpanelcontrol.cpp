@@ -1041,15 +1041,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
     }
 
-    if (shutdownPlugin)
-        shutdownPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (keyboardPlugin)
-        keyboardPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (notificationPlugin)
-        notificationPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (trashPlugin)
-        trashPlugin->setFixedSize(tray_item_size, tray_item_size);
-
     //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
     //因此需要通过多一层布局来获取各插件
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
@@ -1058,18 +1049,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    // 根据大小策略控制插件大小
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
+                if (pItem) {
+                    if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
-                        pItem->setFixedSize(pItem->sizeHint().width(), h);
-                        break;
-                    default:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
                     }
                 }
             }
@@ -1080,18 +1062,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             QLayout *layout =  m_pluginLayout->itemAt(i)->layout();
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    // 根据大小策略控制插件大小
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
+                if (pItem) {
+                    if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
-                        pItem->setFixedSize(w, pItem->sizeHint().height());
-                        break;
-                    default:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
                     }
                 }
             }
