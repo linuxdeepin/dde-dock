@@ -66,11 +66,8 @@ WirelessItem::WirelessItem(WirelessDevice *device)
         update();
     });
 
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ](QJsonObject info) {
-        const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-        if (activeApInfo.value("Ssid").toString() == info.value("Ssid").toString()) {
-            m_activeApInfo = info;
-        }
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, this, [ = ](QJsonObject activeApInfo) {
+        m_activeApInfo = activeApInfo;
         update();
     });
 
