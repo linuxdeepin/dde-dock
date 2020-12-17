@@ -45,9 +45,12 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
+    , m_devState(Device::State::StateUnavailable)
+    , m_adapterPowered(m_applet->poweredInitState())
 {
     m_applet->setVisible(false);
-    m_adapterPowered = m_applet->poweredInitState();
+    m_tipsLabel->setVisible(false);
+    refreshIcon();
 
     connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
         m_adapterPowered = powered;
