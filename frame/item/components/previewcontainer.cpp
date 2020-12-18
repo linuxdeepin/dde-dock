@@ -64,6 +64,9 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
     // check removed window
     for (auto it(m_snapshots.begin()); it != m_snapshots.end();)
     {
+        //初始化预览界面边距
+        it.value()->setContentsMargins(0, 0, 0, 0);
+
         if (!infos.contains(it.key()))
         {
             m_windowListLayout->removeWidget(it.value());
