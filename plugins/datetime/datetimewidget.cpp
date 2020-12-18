@@ -86,6 +86,10 @@ void DatetimeWidget::setShortDateFormat(int type)
     default: m_shortDateFormat = "yyyy-MM-dd"; break;
     }
     update();
+    adjustSize();
+    if (isVisible()) {
+        emit requestUpdateGeometry();
+    }
 }
 
 /**
@@ -100,6 +104,10 @@ void DatetimeWidget::setShortTimeFormat(int type)
     default: m_shortTimeFormat = "hh:mm"; break;
     }
     update();
+    adjustSize();
+    if (isVisible()) {
+        emit requestUpdateGeometry();
+    }
 }
 
 QSize DatetimeWidget::curTimeSize() const
