@@ -254,7 +254,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
     Q_EMIT panelGeometryChanged();
 
-    adjustShadowMask();
+    m_shadowMaskOptimizeTimer->start();
 
     return DBlurEffectWidget::resizeEvent(event);
 }
@@ -301,8 +301,9 @@ void MainWindow::initConnections()
 {
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(&m_platformWindowHandle, &DPlatformWindowHandle::windowRadiusChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 
@@ -378,10 +379,6 @@ void MainWindow::adjustShadowMask()
     clipPath.addRect(QRect(QPoint(0, 0), this->geometry().size()));
 
     m_platformWindowHandle.setClipPath(newRadius != 0 ? QPainterPath() : clipPath);
-
-    // 临时解决方案: 在控制中心修改圆角之后, 会过几秒才会刷新显示 ???
-    if (Dtk::Core::DSysInfo::isCommunityEdition())
-        update();
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
