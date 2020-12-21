@@ -157,20 +157,6 @@ void AdapterItem::deviceItemPaired(const bool paired)
     }
 }
 
-void AdapterItem::deviceRssiChanged()
-{
-    auto device = qobject_cast<Device *>(sender());
-    if (device) {
-        DeviceItem *deviceItem = m_deviceItems.value(device->id());
-        Device::State state = device->state();
-        if (deviceItem && Device::StateConnected == state)
-            qSort(m_sortConnected);
-        else
-            qSort(m_sortUnConnect);
-        moveDeviceItem(state, deviceItem);
-    }
-}
-
 void AdapterItem::removeDeviceItem(const Device *device)
 {
     if (!device)
@@ -213,7 +199,6 @@ void AdapterItem::deviceChangeState(const Device::State state)
         if (index < 0) {
             m_sortConnected.removeOne(deviceItem);
             m_sortUnConnect << deviceItem;
-            qSort(m_sortUnConnect);
             moveDeviceItem(state, deviceItem);
         }
     };
@@ -241,7 +226,6 @@ void AdapterItem::deviceChangeState(const Device::State state)
                     if (index < 0) {
                         m_sortUnConnect.removeOne(deviceItem);
                         m_sortConnected << deviceItem;
-                        qSort(m_sortConnected);
                         moveDeviceItem(state, deviceItem);
                     }
                 }
@@ -298,7 +282,6 @@ void AdapterItem::createDeviceItem(Device *device)
     connect(device, &Device::nameChanged, deviceItem, &DeviceItem::setTitle);
     connect(device, &Device::stateChanged, deviceItem, &DeviceItem::changeState);
     connect(device, &Device::stateChanged, this, &AdapterItem::deviceChangeState);
-    connect(device, &Device::rssiChanged, this, &AdapterItem::deviceRssiChanged);
     connect(deviceItem, &DeviceItem::clicked, m_adaptersManager, [this, deviceItem](Device *device) {
         m_adaptersManager->connectDevice(device, m_adapter);
         m_deviceLayout->removeWidget(deviceItem);
@@ -317,13 +300,13 @@ void AdapterItem::updateView()
 
 void AdapterItem::showDevices(bool powered)
 {
-    if (m_sortConnected.size())
-        qSort(m_sortConnected);
-    if (m_sortUnConnect.size())
-        qSort(m_sortUnConnect);
-
     QList<DeviceItem *> deviceItems;
-    deviceItems << m_sortConnected << m_sortUnConnect;
+    for (DeviceItem *deviceItem : m_sortConnected) {
+        deviceItems.push_front(deviceItem); // 已连接设备倒序放进list里
+    }
+    for (DeviceItem *deviceItem : m_sortUnConnect) {
+        deviceItems.push_front(deviceItem); // 未连接设备倒序放进list里
+    }
 
     // 在蓝牙关闭的时候，会出现不在connected和Unconnect列表中的设备（连接/关闭中的状态），关闭的时候使用总表参数
     qDebug() << m_sortConnected.size() << m_sortUnConnect.size() << m_deviceItems.size();

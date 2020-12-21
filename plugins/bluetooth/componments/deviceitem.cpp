@@ -102,11 +102,6 @@ DeviceItem::DeviceItem(Device *d, QWidget *parent)
     changeState(m_device->state());
 }
 
-bool DeviceItem::operator <(const DeviceItem &item)
-{
-    return  this->device()->deviceTime() < item.device()->deviceTime();
-}
-
 void DeviceItem::setTitle(const QString &name)
 {
     m_title->setText(nameDecorated(name));

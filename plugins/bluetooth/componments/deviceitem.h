@@ -44,7 +44,6 @@ class DeviceItem : public QWidget
     Q_OBJECT
 public:
     explicit DeviceItem(Device *d, QWidget *parent = nullptr);
-    bool operator <(const DeviceItem &item);
 
     void setTitle(const QString &name);
     inline QString title() { return m_title->text(); }

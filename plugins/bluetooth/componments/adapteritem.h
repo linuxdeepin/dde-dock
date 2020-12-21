@@ -54,7 +54,6 @@ signals:
 
 private slots:
     void deviceItemPaired(const bool paired);
-    void deviceRssiChanged();
     void removeDeviceItem(const Device *device);
     void showAndConnect(bool change);
     void addDeviceItem(const Device *constDevice);
