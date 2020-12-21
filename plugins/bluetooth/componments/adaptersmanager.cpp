@@ -150,6 +150,10 @@ void AdaptersManager::onAdapterPropertiesChanged(const QString &json)
     const QString id = obj["Path"].toString();
     QDBusObjectPath dPath(id);
 
+    if (!m_adapters.contains(id)) {
+        return;
+    }
+
     Adapter *adapter = const_cast<Adapter *>(m_adapters[id]);
     if (adapter) {
         inflateAdapter(adapter, obj);
@@ -180,6 +184,10 @@ void AdaptersManager::removeAdapter(const QString &json)
     QJsonObject obj = doc.object();
     const QString id = obj["Path"].toString();
 
+    if (!m_adapters.contains(id)) {
+        return;
+    }
+
     const Adapter *result = m_adapters[id];
     Adapter *adapter = const_cast<Adapter *>(result);
     if (adapter) {
@@ -195,6 +203,10 @@ void AdaptersManager::addDevice(const QString &json)
     const QJsonObject obj = doc.object();
     const QString adapterId = obj["AdapterPath"].toString();
     const QString deviceId = obj["Path"].toString();
+
+    if (!m_adapters.contains(adapterId)) {
+        return;
+    }
 
     const Adapter *result = m_adapters[adapterId];
     Adapter *adapter = const_cast<Adapter *>(result);
@@ -213,6 +225,10 @@ void AdaptersManager::removeDevice(const QString &json)
     QJsonObject obj = doc.object();
     const QString adapterId = obj["AdapterPath"].toString();
     const QString deviceId = obj["Path"].toString();
+
+    if (!m_adapters.contains(adapterId)) {
+        return;
+    }
 
     const Adapter *result = m_adapters[adapterId];
     Adapter *adapter = const_cast<Adapter *>(result);
@@ -247,11 +263,11 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
 
     QString id = adapter->id();
     if (!id.isEmpty()) {
-        // in case memory leaks
-        if (m_adapters.contains(id)) {
-            return;
+        if (!m_adapters.contains(id)) {
+            m_adapters[id] = adapter;
+        } else if (m_adapters[id] == nullptr) {
+            m_adapters[id] = adapter;
         }
-        m_adapters[id] = adapter;
     }
 }
 
