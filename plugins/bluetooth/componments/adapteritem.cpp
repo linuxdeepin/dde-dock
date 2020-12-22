@@ -301,11 +301,11 @@ void AdapterItem::updateView()
 void AdapterItem::showDevices(bool powered)
 {
     QList<DeviceItem *> deviceItems;
-    for (DeviceItem *deviceItem : m_sortConnected) {
-        deviceItems.push_front(deviceItem); // 已连接设备倒序放进list里
-    }
     for (DeviceItem *deviceItem : m_sortUnConnect) {
         deviceItems.push_front(deviceItem); // 未连接设备倒序放进list里
+    }
+    for (DeviceItem *deviceItem : m_sortConnected) {
+        deviceItems.push_front(deviceItem); // 已连接设备倒序放进list里
     }
 
     // 在蓝牙关闭的时候，会出现不在connected和Unconnect列表中的设备（连接/关闭中的状态），关闭的时候使用总表参数
@@ -342,4 +342,3 @@ void AdapterItem::refresh()
         return;
     m_adaptersManager->adapterRefresh(m_adapter);
 }
-
