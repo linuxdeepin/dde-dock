@@ -111,7 +111,6 @@ private:
 
     //刷新操作的函数
     QTimer *m_updateTimer;
-
     QVBoxLayout *m_centralLayout;
     QWidget *m_centralWidget;
     //无线网顶部 --（名称  刷新  开关）在这个里面

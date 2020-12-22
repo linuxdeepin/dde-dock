@@ -94,9 +94,10 @@ void WirelessList::initUI()
 void WirelessList::initConnect()
 {
     //后端开关wifi
-    connect(m_model, &NetworkModel::deviceEnableChanged, this,
+    connect(m_device, &WirelessDevice::enableChanged, this,
             [ = ](){    qDebug() << "Device change signal from daemon, state:" << m_device->enabled();
                         onDeviceEnableChanged(m_device->enabled());
+
                         if (m_device->enabled())
                             //这里会在页面创建的时候去初始化一次，所以无需在构造函数中再调用
                             m_device->initWirelessData();});
@@ -272,16 +273,15 @@ void WirelessList::onEnableButtonToggle(const bool enable)
         return;
     }
     qDebug() <<"click enable , set Enable =" << enable;
-    onDeviceEnableChanged(enable);
     //直接调用dde::network::networkModel中的接口，防止数据出现延迟之类的问题
-    Q_EMIT m_model->requestDeviceEnable(m_device->path(), enable);
+    m_model->onDeviceEnable(m_device->path(), enable);
+    onDeviceEnableChanged(enable);
 }
 
 void WirelessList::onDeviceEnableChanged(const bool enable)
 {
     m_controlPanel->setDeviceEnabled(enable);
     m_centralLayout->setEnabled(enable);
-    m_updateTimer->start();
 }
 
 void WirelessList::ActiveConnectChange(const QJsonObject &activeAp)
