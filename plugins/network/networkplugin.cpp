@@ -219,6 +219,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         //网络是否是正常连通的
         connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
+        connect(m_networkModel, &NetworkModel::connectionListChanged, m_networkItem, &NetworkItem::updateSelf);
     }
 
     m_hasDevice = wiredItems.size() || wirelessItems.size();

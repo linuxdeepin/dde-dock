@@ -51,17 +51,20 @@ void WirelessItem::initConnect()
     //获取状态提示语
     connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     //获取wifi的连接，获取wifi的信号强度
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ](QJsonObject info) {
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ]() {
         const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-        if (activeApInfo.value("Id").toString() == info.value("Ssid").toString()) {
-            m_activeApInfo = info;
+        if (activeApInfo != m_activeApInfo) {
+            m_activeApInfo = activeApInfo;
         }
+        update();
+    });
+    connect(m_model, &NetworkModel::activeConnInfoChanged, this , [ = ]() {
+        m_activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
         update();
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
-
 
 }
 
@@ -179,6 +182,7 @@ void WirelessItem::init()
     vLayout->setMargin(0);
     vLayout->setSpacing(0);
     m_wirelessApplet->setLayout(vLayout);
+
 //    connect(m_APList, &WirelessList::requestDeactiveAP, this, &WirelessItem::requestDeactiveAP);
     connect(m_APList, &WirelessList::requestUpdatePopup, this, &WirelessItem::deviceStateChanged);
 }
