@@ -85,6 +85,11 @@ QSize DatetimeWidget::curTimeSize() const
 
     if (position == Dock::Bottom || position == Dock::Top) {
         while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() + QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height() > height()) {
+            // 增加对setPixelSize的参数的合法性的判断，防止出现Font的pixelSize值异常时进入死循环打印日志 QFont::setPixelSize: Pixel size <= 0 (0) 占满磁盘空间
+            if (((m_timeFont.pixelSize() - 1) <= 0) || ((m_dateFont.pixelSize() - 1) <= 0)) {
+                qDebug() << "Invalid pixel size value:  timeFont = " << m_timeFont.pixelSize() <<"  dateFont = " << m_dateFont.pixelSize();
+                break;
+            }
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             timeSize.setWidth(QFontMetrics(m_timeFont).boundingRect(timeString).size().width());
             if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1){
@@ -95,6 +100,11 @@ QSize DatetimeWidget::curTimeSize() const
         return QSize(std::max(timeSize.width(), dateSize.width()) + 2, height());
     } else {
         while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width()) > (width() - 4)) {
+            // 增加对setPixelSize的参数的合法性的判断，防止出现Font的pixelSize值异常时进入死循环打印日志 QFont::setPixelSize: Pixel size <= 0 (0) 占满磁盘空间
+            if (((m_timeFont.pixelSize() - 1) <= 0) || ((m_dateFont.pixelSize() - 1) <= 0)) {
+                qDebug() << "Invalid pixel size value:  timeFont = " << m_timeFont.pixelSize() <<"   dateFont = " << m_dateFont.pixelSize();
+                break;
+            }
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             if (m_24HourFormat) {
                 timeSize.setHeight(QFontMetrics(m_timeFont).boundingRect(timeString).size().height());
