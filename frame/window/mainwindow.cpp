@@ -40,6 +40,7 @@
 #include <X11/X.h>
 #include <X11/Xutil.h>
 #include <X11/Xcursor/Xcursor.h>
+#include <qpa/qplatformnativeinterface.h>
 
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
@@ -439,6 +440,11 @@ void MainWindow::mouseMoveEvent(QMouseEvent *e)
     //重写mouseMoveEvent 解决bug12866  leaveEvent事件失效
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    setStrutPartial();
+}
+
 void MainWindow::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
@@ -667,16 +673,10 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
 {
     m_newDockPos = nextPos;
     // paly hide animation and disable other animation
-    clearStrutPartial();
     narrow(prevPos);
 
     connect(m_panelHideAni, &QVariantAnimation::finished, [&]() {
         m_mainPanel->setPositonValue(m_newDockPos);
-    });
-
-    // set strut
-    QTimer::singleShot(400, this, [&] {
-        setStrutPartial();
     });
 
     // reset to right environment when animation finished
@@ -705,8 +705,6 @@ void MainWindow::updatePosition()
     // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
-    //clearStrutPartial();
-    setStrutPartial();
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     m_mainPanel->setPositonValue(m_curDockPos);
 
@@ -728,8 +726,6 @@ void MainWindow::updateGeometry()
     if(m_settings->primaryRect().width() ==0 || m_settings->primaryRect().height() == 0){
         return;
     }
-
-    setStrutPartial();
 
     m_mainPanel->setDisplayMode(m_settings->displayMode());
     m_mainPanel->setPositonValue(m_curDockPos);
@@ -753,96 +749,77 @@ void MainWindow::getTrayVisableItemCount()
     m_mainPanel->getTrayVisableItemCount();
 }
 
-void MainWindow::clearStrutPartial()
-{
-    //m_xcbMisc->clear_strut_partial(winId());
-}
-
 void MainWindow::setStrutPartial()
 {
-    // first, clear old strut partial
-    clearStrutPartial();
+    /*
+     * 给窗管设置dock的区域，窗管的数据结构体如下：
+       struct deepinKwinStrut
+       {
+           int left;
+           int right;
+           int top;
+           int bottom;
+           int left_start_y;
+           int left_end_y;
+           int right_start_y;
+           int right_end_y;
+           int top_start_x;
+           int top_end_x;
+           int bottom_start_x;
+           int bottom_end_x;
+       }
+       数据一共有4组，分别表示上，下，左，右，每一次只需要传递3个值即可，比如dock在下方传递数据为：
+       bottom ，bottom_start_x ，bottom_end_x
+   */
 
-    // reset env
-    //resetPanelEnvironment(true);
+    //varList 第一个元素代表dock方位，其值0代表左,1代表上，2代表右，3代表下，第二个元素和第三个元素分别对应结构体中的start和end值。
+    QList<QVariant> varList;
+    varList.append(0);//dock位置
+    varList.append(0);//dock高度/宽度
+    varList.append(0);//start值
+    varList.append(0);//end值
 
-    if (m_settings->hideMode() != Dock::KeepShowing)
+    if (m_settings->hideMode() != Dock::KeepShowing) {
+        if (windowHandle()->handle()) {
+                QGuiApplication::platformNativeInterface()->setWindowProperty(windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
+        }
+
         return;
-
-    const auto ratio = devicePixelRatioF();
-    const int maxScreenHeight = m_settings->screenRawHeight();
-    const int maxScreenWidth = m_settings->screenRawWidth();
-    const Position side = m_curDockPos;
-    const QPoint &p = rawXPosition(m_settings->windowRect(m_curDockPos).topLeft());
-    const QSize &s = m_settings->windowSize();
-    const QRect &primaryRawRect = m_settings->primaryRawRect();
-
-    XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
-    uint strut = 0;
-    uint strutStart = 0;
-    uint strutEnd = 0;
-
-    QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
-    switch (side) {
-    case Position::Top:
-        orientation = XcbMisc::OrientationTop;
-        strut = p.y() + s.height() * ratio;
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
-        strutArea.setLeft(strutStart);
-        strutArea.setRight(strutEnd);
-        strutArea.setBottom(strut);
-        break;
-    case Position::Bottom:
-        orientation = XcbMisc::OrientationBottom;
-        strut = maxScreenHeight - p.y();
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
-        strutArea.setLeft(strutStart);
-        strutArea.setRight(strutEnd);
-        strutArea.setTop(p.y());
-        break;
-    case Position::Left:
-        orientation = XcbMisc::OrientationLeft;
-        strut = p.x() + s.width() * ratio;
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
-        strutArea.setTop(strutStart);
-        strutArea.setBottom(strutEnd);
-        strutArea.setRight(strut);
-        break;
-    case Position::Right:
-        orientation = XcbMisc::OrientationRight;
-        strut = maxScreenWidth - p.x();
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
-        strutArea.setTop(strutStart);
-        strutArea.setBottom(strutEnd);
-        strutArea.setLeft(p.x());
-        break;
-    default:
-        Q_ASSERT(false);
     }
 
-    // pass if strut area is intersect with other screen
-    //优化了文件管理的代码 会导致bug 15351 需要注释一下代码
-//    int count = 0;
-//    const QRect pr = m_settings->primaryRect();
-//    for (auto *screen : qApp->screens()) {
-//        const QRect sr = screen->geometry();
-//        if (sr == pr)
-//            continue;
+    const auto ratio = devicePixelRatioF();
+    switch (m_curDockPos) {
+    case Position::Top:
+        varList[0] = 1;
+        varList[1] = (height() + m_settings->dockMargin() * 2) * ratio;
+        varList[2] = (geometry().topLeft().x() - m_settings->dockMargin()) * ratio;
+        varList[3] = (width() + m_settings->dockMargin() * 2) * ratio;
+        break;
+    case Position::Bottom:
+        varList[0] = 3;
+        varList[1] = (height() + m_settings->dockMargin() * 2) * ratio;
+        varList[2] = (geometry().topLeft().x() - m_settings->dockMargin()) * ratio;
+        varList[3] = (width() + m_settings->dockMargin() * 2) * ratio;
+        break;
+    case Position::Left:
+        varList[0] = 0;
+        varList[1] = (width() + m_settings->dockMargin() * 2) * ratio;
+        varList[2] = (geometry().topLeft().x() - m_settings->dockMargin()) * ratio;
+        varList[3] = (height() + m_settings->dockMargin() * 2) * ratio;
+        break;
+    case Position::Right:
+        varList[0] = 2;
+        varList[1] = (width() + m_settings->dockMargin() * 2) * ratio;
+        varList[2] = (geometry().topLeft().x() - m_settings->dockMargin()) * ratio;
+        varList[3] = (height() + m_settings->dockMargin() * 2) * ratio;
+        break;
+    default:
+        break;
+    }
 
-//        if (sr.intersects(strutArea))
-//            ++count;
-//    }
-//    if (count > 0) {
-//        qWarning() << "strutArea is intersects with another screen.";
-//        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
-//        return;
-//    }
-
-//    m_xcbMisc->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
+    if (windowHandle()->handle()) {
+            QGuiApplication::platformNativeInterface()->setWindowProperty(windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
+    }
 }
 
 void MainWindow::expand()
@@ -911,10 +888,6 @@ void MainWindow::resetPanelEnvironment(const bool visible, const bool resetPosit
 
     resizeMainPanelWindow();
     updateRegionMonitorWatch();
-    if (m_size != m_settings->m_mainWindowSize) {
-        m_size = m_settings->m_mainWindowSize;
-        setStrutPartial();
-    }
 }
 
 void MainWindow::updatePanelVisible()
@@ -1065,7 +1038,6 @@ void MainWindow::resizeMainPanelWindow()
 void MainWindow::updateDisplayMode()
 {
     m_mainPanel->setDisplayMode(m_settings->displayMode());
-    setStrutPartial();
     adjustShadowMask();
     updateRegionMonitorWatch();
 }
@@ -1114,9 +1086,6 @@ void MainWindow::onDragFinished()
             m_settings->m_dockInter->setWindowSize(m_settings->m_mainWindowSize.width());
         }
     }
-
-
-    setStrutPartial();
 }
 
 void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)

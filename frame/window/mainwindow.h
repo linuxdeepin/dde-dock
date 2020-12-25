@@ -72,6 +72,7 @@ private:
     void leaveEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+    void resizeEvent(QResizeEvent *event);
 
     void initSNIHost();
     void initComponents();
@@ -94,7 +95,6 @@ private slots:
     void positionChanged(const Position prevPos, const Position nextPos);
     void updatePosition();
     void updateGeometry();
-    void clearStrutPartial();
     void setStrutPartial();
     void compositeChanged();
     void internalMove(const QPoint &p);
