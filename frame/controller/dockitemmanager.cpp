@@ -32,7 +32,6 @@ DockItemManager *DockItemManager::INSTANCE = nullptr;
 
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
-    , m_updatePluginsOrderTimer(new QTimer(this))
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
 {
@@ -55,11 +54,6 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 托盘区域和插件区域 由DockPluginsController获取
 
-    // 更新插件顺序
-    m_updatePluginsOrderTimer->setSingleShot(true);
-    m_updatePluginsOrderTimer->setInterval(1000);
-    connect(m_updatePluginsOrderTimer, &QTimer::timeout, this, &DockItemManager::updatePluginsItemOrderKey);
-
     // 应用信号
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemManager::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
@@ -73,9 +67,6 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
-
-    // 启动的时候把插件名写入配置(自动化测试需要)
-    m_updatePluginsOrderTimer->start();
 }
 
 DockItemManager *DockItemManager::instance(QObject *parent)
@@ -116,10 +107,12 @@ void DockItemManager::refershItemsIcon()
     }
 }
 
+/**
+ * @brief 将插件的参数(Order, Visible, etc)写入gsettings
+ * 自动化测试需要通过dbus(GetPluginSettings)获取这些参数
+ */
 void DockItemManager::updatePluginsItemOrderKey()
 {
-    Q_ASSERT(sender() == m_updatePluginsOrderTimer);
-
     int index = 0;
     for (auto item : m_itemList) {
         if (item.isNull() || item->itemType() != DockItem::Plugins)
@@ -161,9 +154,10 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
 
     // update plugins sort key if order changed
     if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins
-            || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin
-            || moveType == DockItem::FixedPlugin || replaceType == DockItem::FixedPlugin)
-        m_updatePluginsOrderTimer->start();
+        || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin
+        || moveType == DockItem::FixedPlugin || replaceType == DockItem::FixedPlugin) {
+        updatePluginsItemOrderKey();
+    }
 
     // for app move, index 0 is launcher item, need to pass it.
     if (moveType == DockItem::App && replaceType == DockItem::App)
@@ -297,6 +291,7 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
         insertIndex ++;
     }
 
+    updatePluginsItemOrderKey();
     emit itemInserted(insertIndex - firstPluginPosition, item);
 }
 
@@ -307,6 +302,8 @@ void DockItemManager::pluginItemRemoved(PluginsItem *item)
     emit itemRemoved(item);
 
     m_itemList.removeOne(item);
+
+    updatePluginsItemOrderKey();
 }
 
 void DockItemManager::reloadAppItems()
