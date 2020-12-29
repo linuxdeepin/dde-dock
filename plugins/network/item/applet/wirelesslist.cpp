@@ -282,6 +282,7 @@ void WirelessList::onDeviceEnableChanged(const bool enable)
 {
     m_controlPanel->setDeviceEnabled(enable);
     m_centralLayout->setEnabled(enable);
+    m_updateTimer->start();
 }
 
 void WirelessList::ActiveConnectChange(const QJsonObject &activeAp)
