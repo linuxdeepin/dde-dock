@@ -50,6 +50,7 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     m_tipsLabel->setVisible(false);
     m_applet->setVisible(false);
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AirplaneModeItem::refreshIcon);
     connect(m_applet, &AirplaneModeApplet::enableChanged, m_airplaneModeInter, &DBusAirplaneMode::Enable);
     connect(m_airplaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enable) {
         m_applet->setEnabled(enable);
