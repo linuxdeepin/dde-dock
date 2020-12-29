@@ -355,30 +355,20 @@ void MainWindow::getTrayVisableItemCount()
 
 void MainWindow::adjustShadowMask()
 {
-    if (!m_launched)
+    if (!m_launched || m_shadowMaskOptimizeTimer->isActive())
         return;
-
-    if (m_shadowMaskOptimizeTimer->isActive())
-        return;
-
-    const bool composite = m_wmHelper->hasComposite();
-    const bool isFasion = m_multiScreenWorker->displayMode() == Fashion;
 
     DStyleHelper dstyle(style());
-    int radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
-
-    if (Dtk::Core::DSysInfo::isCommunityEdition()) {
-        auto theme = DGuiApplicationHelper::instance()->systemTheme();
-        radius = theme->windowRadius(radius);
+    int radius = 0;
+    if (m_wmHelper->hasComposite() && m_multiScreenWorker->displayMode() == DisplayMode::Fashion) {
+        if (Dtk::Core::DSysInfo::isCommunityEdition()) { // 社区版圆角与专业版不同
+            DPlatformTheme *theme = DGuiApplicationHelper::instance()->systemTheme();
+            radius = theme->windowRadius(radius);
+        } else {
+            radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+        }
     }
-
-    int newRadius = composite && isFasion ? radius : 0;
-    m_platformWindowHandle.setWindowRadius(newRadius);
-
-    QPainterPath clipPath;
-    clipPath.addRect(QRect(QPoint(0, 0), this->geometry().size()));
-
-    m_platformWindowHandle.setClipPath(newRadius != 0 ? QPainterPath() : clipPath);
+    m_platformWindowHandle.setWindowRadius(radius);
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
