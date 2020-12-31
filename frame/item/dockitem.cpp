@@ -277,11 +277,6 @@ void DockItem::showHoverTips()
     if (PopupWindow->model())
         return;
 
-    // if not in geometry area
-    const QRect r(topleftPoint(), size());
-    if (!r.contains(QCursor::pos()))
-        return;
-
     QWidget *const content = popupTips();
     if (!content)
         return;
@@ -376,61 +371,47 @@ bool DockItem::checkAndResetTapHoldGestureState()
 const QPoint DockItem::popupMarkPoint()
 {
     QPoint p(topleftPoint());
-    int margin = PLUGIN_MARGIN;
-    if (itemType() == Plugins){
-        PluginsItem *pluginItem = dynamic_cast<PluginsItem*>(this);
-        if (nullptr != pluginItem){
-            if (pluginItem->pluginName() == "datetime")
-                margin = 0;
-        }
-    }
     const QRect r = rect();
     switch (DockPosition) {
-    case Top: {
-        if (itemType() == Plugins) {
-            p += QPoint(r.width() / 2, r.height() + margin);
-        } else {
-            p += QPoint(r.width() / 2, r.height());
-        }
+    case Top:
+        p += QPoint(r.width() / 2, r.height());
         break;
-    }
-    case Bottom: {
-        if (itemType() == Plugins) {
-            p += QPoint(r.width() / 2, 0 - margin);
-        } else {
-            p += QPoint(r.width() / 2, 0);
-        }
+    case Bottom:
+        p += QPoint(r.width() / 2, 0);
         break;
-    }
-    case Left: {
-        if (itemType() == Plugins) {
-            p += QPoint(r.width() + margin, r.height() / 2);
-        } else {
-            p += QPoint(r.width(), r.height() / 2);
-        }
+    case Left:
+        p += QPoint(r.width(), r.height() / 2);
         break;
-    }
-    case Right: {
-        if (itemType() == Plugins) {
-            p += QPoint(0 - margin, r.height() / 2);
-        } else {
-            p += QPoint(0, r.height() / 2);
-        }
+    case Right:
+        p += QPoint(0, r.height() / 2);
         break;
-        }
     }
     return p;
 }
 
 const QPoint DockItem::topleftPoint() const
 {
-    QPoint p;
-    const QWidget *w = this;
-    do {
+    QPoint p = this->pos();
+    /* 由于点击范围的问题，在图标的外面加了一层布局，这个布局的边距需要考虑 */
+    switch (DockPosition) {
+    case Top:
+        p.setY(p.y() * 2);
+        break;
+    case Bottom:
+        p.setY(0);
+        break;
+    case Left:
+        p.setX(p.x() * 2);
+        break;
+    case Right:
+        p.setX(0);
+        break;
+    }
+    const QWidget *w = qobject_cast<QWidget *>(this->parent());
+    while (w) {
         p += w->pos();
         w = qobject_cast<QWidget *>(w->parent());
-    } while (w);
-
+    }
     return p;
 }
 
@@ -461,4 +442,3 @@ bool DockItem::isDragging()
 {
     return m_draging;
 }
-
