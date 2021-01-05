@@ -30,7 +30,7 @@ class NetworkItem : public QWidget
         Unknown              = 0,
         // A 无线 B 有线
         Nocable             = 1,
-        Bdisabled           = 2,
+        Bdisabled           = 4,
         Bdisconnected       = 8,
         Bconnected          = 16,
         Bconnecting         = 32,
