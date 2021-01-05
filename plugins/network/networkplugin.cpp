@@ -199,7 +199,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem, &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
                     m_networkItem, &NetworkItem::updateSelf);
-            connect(static_cast<WiredItem *>(item), &WiredItem::requestSetDeviceEnable, m_networkModel, &NetworkModel::requestDeviceEnable);
+            connect(static_cast<WiredItem *>(item), &WiredItem::requestSetDeviceEnable, m_networkModel, &NetworkModel::onDeviceEnable);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device), m_networkModel);
@@ -217,9 +217,9 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         }
         Q_EMIT m_networkModel->initDeviceEnable(device->path());
         //网络是否是正常连通的
-        connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
         connect(m_networkModel, &NetworkModel::connectionListChanged, m_networkItem, &NetworkItem::updateSelf);
+        connect(m_networkModel, &NetworkModel::deviceEnableChanged, m_networkItem, &NetworkItem::updateSelf);
     }
 
     m_hasDevice = wiredItems.size() || wirelessItems.size();
