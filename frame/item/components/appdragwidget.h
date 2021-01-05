@@ -49,6 +49,10 @@ public:
     void setOriginPos(const QPoint position);
     bool isRemoveAble();
 
+signals:
+    void requestRemoveItem();
+    void animationFinished();
+
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -68,6 +72,7 @@ private:
     const QPoint popupMarkPoint(Dock::Position pos);
     const QPoint topleftPoint() const;
     void showRemoveTips();
+    bool isRemoveItem();
 
 private:
     AppGraphicsObject *m_object;
@@ -90,6 +95,8 @@ private:
      * dock栏上应用区驻留应用被拖拽远离dock的距离除以dock的宽或者高（更小的一个）的比值
      */
     double m_distanceMultiple;
+
+    bool m_bDragDrop = false; // 图标是否被拖拽
 };
 
 #endif /* APPDRAGWIDGET_H */

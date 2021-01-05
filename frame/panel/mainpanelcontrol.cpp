@@ -402,6 +402,9 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
     removeItem(sourceItem);
 
     // insert new position
+    if (sourceItem->isDragging()) {
+        m_dragIndex = idx;
+    }
     insertItem(idx, sourceItem);
 }
 
@@ -510,8 +513,10 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
     e->accept();
 
-    if (targetItem == sourceItem)
+    if (targetItem == sourceItem) {
+        m_dragIndex = -1;
         return;
+    }
 
     moveItem(sourceItem, targetItem);
     emit itemMoved(sourceItem, targetItem);
@@ -686,6 +691,25 @@ void MainPanelControl::startDrag(DockItem *item)
             m_appDragWidget = nullptr;
         });
 
+        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
+            if (-1 != m_appAreaSonLayout->indexOf(item)) {
+                m_dragIndex = m_appAreaSonLayout->indexOf(item);
+                removeItem(item);
+            }
+        });
+
+        connect(m_appDragWidget, &AppDragWidget::animationFinished, this, [ = ] {
+            m_appDragWidget = nullptr;
+            if (qobject_cast<AppItem *>(item)->isValid()) {
+                if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
+                    insertItem(m_dragIndex, item);
+                    m_dragIndex = -1;
+                }
+                item->setDraging(false);
+                item->update();
+            }
+        });
+
         appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
         appDrag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
         const QPixmap &dragPix = qobject_cast<AppItem *>(item)->appIcon();
@@ -709,15 +733,11 @@ void MainPanelControl::startDrag(DockItem *item)
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
-    // app关闭特效情况下移除
-    if (item->itemType() == DockItem::App && !DWindowManagerHelper::instance()->hasComposite()) {
-        if (m_appDragWidget->isRemoveAble())
-            qobject_cast<AppItem *>(item)->undock();
+    if (item->itemType() != DockItem::App || m_dragIndex == -1) {
+        m_appDragWidget = nullptr;
+        item->setDraging(false);
+        item->update();
     }
-
-    m_appDragWidget = nullptr;
-    item->setDraging(false);
-    item->update();
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
