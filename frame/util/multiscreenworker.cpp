@@ -751,6 +751,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     if (rect == lastRect)
         return;
     lastRect = rect;
+    qDebug() << "dock geometry:" << rect;
 
     // 先清除原先的窗管任务栏区域
     XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
@@ -768,9 +769,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         return;
     }
 
-    qInfo() <<"Update Window WorkArea:" << rect;
-
     const QPoint &p = rawXPosition(rect.topLeft());
+    qDebug() << "dock topLeft position:" << p;
+
+    QScreen const *currentScreen = Utils::screenAtByScaled(rect.topLeft());
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -786,11 +788,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
-        strut = m_screenRawHeight - p.y();
-        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
-        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
-            strut = m_screenRawWidth - p.y();
-        }
+        strut = currentScreen->geometry().height() * ratio - p.y();
         strutStart = p.x();
         strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
         break;
@@ -802,16 +800,12 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = m_screenRawWidth - p.x();
-        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
-        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
-            strut = m_screenRawHeight - p.x();
-        }
+        strut = currentScreen->geometry().width() * ratio - p.x();
         strutStart = p.y();
         strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
         break;
     }
-
+    qDebug() << "set dock geometry to xcb:" << strut << strutStart << strutEnd;
     XcbMisc::instance()->set_strut_partial(parent()->winId(), orientation, strut + WINDOWMARGIN * ratio, strutStart, strutEnd);
 }
 
