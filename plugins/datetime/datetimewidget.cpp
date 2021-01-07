@@ -61,7 +61,6 @@ void DatetimeWidget::set24HourFormat(const bool value)
     m_24HourFormat = value;
     update();
 
-    adjustSize();
     if (isVisible()) {
         emit requestUpdateGeometry();
     }
@@ -86,7 +85,7 @@ void DatetimeWidget::setShortDateFormat(int type)
     default: m_shortDateFormat = "yyyy-MM-dd"; break;
     }
     update();
-    adjustSize();
+
     if (isVisible()) {
         emit requestUpdateGeometry();
     }
@@ -104,7 +103,7 @@ void DatetimeWidget::setShortTimeFormat(int type)
     default: m_shortTimeFormat = "hh:mm"; break;
     }
     update();
-    adjustSize();
+
     if (isVisible()) {
         emit requestUpdateGeometry();
     }

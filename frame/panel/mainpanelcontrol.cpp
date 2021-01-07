@@ -342,6 +342,9 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         break;
     }
     resizeDockIcon();
+    QTimer::singleShot(0, [ = ] {
+        updatePluginsLayout();
+    });
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -869,9 +872,22 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
+void MainPanelControl::updatePluginsLayout()
+{
+    for (int i = 0; i < m_pluginLayout->count(); ++i) {
+        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+        if (layout) {
+            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+            if (pItem && pItem->sizeHint().width() != -1) {
+                pItem->updateGeometry();
+            }
+        }
+    }
+}
+
 void MainPanelControl::itemUpdated(DockItem *item)
 {
-    item->parentWidget()->adjustSize();
+    item->updateGeometry();
     resizeDockIcon();
 }
 

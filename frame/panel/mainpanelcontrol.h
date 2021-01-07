@@ -65,6 +65,7 @@ public:
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);
     void getTrayVisableItemCount();
+    void updatePluginsLayout();
 
     MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);
