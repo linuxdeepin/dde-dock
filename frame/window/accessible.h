@@ -38,7 +38,6 @@
 //#include "../plugins/sound/componments/horizontalseparator.h"
 
 #include "../plugins/show-desktop/showdesktopwidget.h"
-#include "../plugins/bluetooth/componments/deviceitem.h"
 #include "../plugins/network/networkitem.h"
 #include "../plugins/network/item/applet/devicecontrolwidget.h"
 #include "../plugins/datetime/datetimewidget.h"
@@ -88,11 +87,6 @@ SET_FORM_ACCESSIBLE(AttentionContainer, "attentioncontainer")
 SET_FORM_ACCESSIBLE(HoldContainer, "holdcontainer")
 SET_FORM_ACCESSIBLE(NormalContainer, "normalcontainer")
 SET_FORM_ACCESSIBLE(SpliterAnimated, "spliteranimated")
-//SET_BUTTON_ACCESSIBLE(SoundItem, "plugin-sounditem")
-//SET_FORM_ACCESSIBLE(SoundApplet, "soundapplet")
-//SET_FORM_ACCESSIBLE(SinkInputWidget, "sinkinputwidget")
-//SET_SLIDER_ACCESSIBLE(VolumeSlider, QAccessible::Slider, "volumeslider")
-//SET_FORM_ACCESSIBLE(HorizontalSeparator, "horizontalseparator")
 SET_FORM_ACCESSIBLE(DatetimeWidget, "plugin-datetime")
 SET_FORM_ACCESSIBLE(OnboardItem, "plugin-onboard")
 SET_FORM_ACCESSIBLE(TrashWidget, "plugin-trash")
@@ -119,9 +113,7 @@ SET_FORM_ACCESSIBLE(QScrollArea, "QScrollArea")
 SET_FORM_ACCESSIBLE(QFrame, "QFrame")
 SET_FORM_ACCESSIBLE(QGraphicsView, "QGraphicsView")
 SET_FORM_ACCESSIBLE(DragWidget, "DragWidget")
-SET_FORM_ACCESSIBLE(MenueItem, "MenueItem")
 SET_FORM_ACCESSIBLE(NetworkItem, "NetworkItem")
-SET_FORM_ACCESSIBLE(DeviceItem, "DeviceItem")
 SET_FORM_ACCESSIBLE(StateButton, "StateButton")
 SET_FORM_ACCESSIBLE(DeviceControlWidget, "DeviceControlWidget")
 
@@ -157,11 +149,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, SpliterAnimated);
     USE_ACCESSIBLE(classname, IndicatorTrayWidget);
     USE_ACCESSIBLE(classname, XEmbedTrayWidget);
-    //    USE_ACCESSIBLE(classname, SoundItem);
-    //    USE_ACCESSIBLE(classname, SoundApplet);
-    //    USE_ACCESSIBLE(classname, SinkInputWidget);
-    //    USE_ACCESSIBLE(classname, VolumeSlider);
-    //    USE_ACCESSIBLE(classname, HorizontalSeparator);
     USE_ACCESSIBLE(classname, DesktopWidget);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, OnboardItem);
@@ -193,9 +180,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, QFrame);
     USE_ACCESSIBLE(classname, QGraphicsView);
     USE_ACCESSIBLE(classname, DragWidget);
-    USE_ACCESSIBLE(classname, MenueItem);
     USE_ACCESSIBLE(classname, NetworkItem);
-    USE_ACCESSIBLE(classname, DeviceItem);
     USE_ACCESSIBLE(classname, StateButton);
     USE_ACCESSIBLE(classname, DeviceControlWidget);
 

@@ -37,11 +37,11 @@ AdaptersManager::AdaptersManager(QObject *parent)
                                          this))
     , m_defaultAdapterState(false)
 {
-    connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::addAdapter);
-    connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::removeAdapter);
+    connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::onAddAdapter);
+    connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::onRemoveAdapter);
     connect(m_bluetoothInter, &DBusBluetooth::AdapterPropertiesChanged, this, &AdaptersManager::onAdapterPropertiesChanged);
-    connect(m_bluetoothInter, &DBusBluetooth::DeviceAdded, this, &AdaptersManager::addDevice);
-    connect(m_bluetoothInter, &DBusBluetooth::DeviceRemoved, this, &AdaptersManager::removeDevice);
+    connect(m_bluetoothInter, &DBusBluetooth::DeviceAdded, this, &AdaptersManager::onAddDevice);
+    connect(m_bluetoothInter, &DBusBluetooth::DeviceRemoved, this, &AdaptersManager::onRemoveDevice);
     connect(m_bluetoothInter, &DBusBluetooth::DevicePropertiesChanged, this, &AdaptersManager::onDevicePropertiesChanged);
 
 #ifdef QT_DEBUG
@@ -112,7 +112,7 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
     }
 }
 
-void AdaptersManager::connectDevice(Device *device, Adapter *adapter)
+void AdaptersManager::connectDevice(const Device *device, Adapter *adapter)
 {
     if (device) {
         QDBusObjectPath path(device->id());
@@ -171,14 +171,14 @@ void AdaptersManager::onDevicePropertiesChanged(const QString &json)
     }
 }
 
-void AdaptersManager::addAdapter(const QString &json)
+void AdaptersManager::onAddAdapter(const QString &json)
 {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     auto adapter = new Adapter(this);
     adapterAdd(adapter, doc.object());
 }
 
-void AdaptersManager::removeAdapter(const QString &json)
+void AdaptersManager::onRemoveAdapter(const QString &json)
 {
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     QJsonObject obj = doc.object();
@@ -197,7 +197,7 @@ void AdaptersManager::removeAdapter(const QString &json)
     }
 }
 
-void AdaptersManager::addDevice(const QString &json)
+void AdaptersManager::onAddDevice(const QString &json)
 {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     const QJsonObject obj = doc.object();
@@ -219,7 +219,7 @@ void AdaptersManager::addDevice(const QString &json)
     }
 }
 
-void AdaptersManager::removeDevice(const QString &json)
+void AdaptersManager::onRemoveDevice(const QString &json)
 {
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     QJsonObject obj = doc.object();
