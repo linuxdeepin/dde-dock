@@ -160,7 +160,10 @@ void AppDragWidget::initAnimations()
 
     connect(m_animGroup, &QParallelAnimationGroup::stateChanged,
             this, &AppDragWidget::onRemoveAnimationStateChanged);
-    connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
+    connect(m_goBackAnim, &QPropertyAnimation::finished, this, [=] {
+        this->hide();
+        this->releaseMouse();
+    });
 }
 
 void AppDragWidget::showRemoveAnimation()
@@ -178,6 +181,7 @@ void AppDragWidget::showGoBackAnimation()
     m_goBackAnim->setStartValue(QCursor::pos());
     m_goBackAnim->setEndValue(m_originPoint);
     m_goBackAnim->start();
+    grabMouse();
 }
 
 void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newState,

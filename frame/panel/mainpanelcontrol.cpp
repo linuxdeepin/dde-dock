@@ -693,8 +693,6 @@ void MainPanelControl::startDrag(DockItem *item)
     m_appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
     m_appDragWidget->setPixmapOpacity(0.5);
     m_appDragWidget->show();
-    QGuiApplication::platformNativeInterface()->setWindowProperty(m_appDragWidget->windowHandle()->handle(),
-                                                                  "_d_dwayland_window-type" , "menu");
 
     //开启动画效果
     if (m_appDragWidget->isRemoveAble()) {
