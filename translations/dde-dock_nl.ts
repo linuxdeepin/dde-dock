@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Bluetooth-instellingen</translation>
     </message>
@@ -214,7 +210,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Multitaskingoverzicht</translation>
+        <translation>Venster- en werkbladoverzicht</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Verbinding mislukt</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Apparaat</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Programma</translation>
     </message>
 </context>
 <context>

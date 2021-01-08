@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Zásuvný modul %1 není kompatibilní se systémem.</translation>
+        <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
     </message>
 </context>
 <context>
@@ -15,10 +15,6 @@
 </context>
 <context>
     <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
     <message>
         <source>Bluetooth settings</source>
         <translation>Nastavení Bluetooth</translation>
@@ -44,7 +40,7 @@
     </message>
     <message>
         <source>Connecting...</source>
-        <translation>Připojování…</translation>
+        <translation>Připojuje se...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -111,7 +107,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Připojení se nezdařilo</translation>
     </message>
 </context>
 <context>
@@ -311,7 +307,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Na základní desce</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Zařízení</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplikace</translation>
     </message>
 </context>
 <context>

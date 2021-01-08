@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>ब्लूटूथ</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>ब्लूएटूथ सेवाएं</translation>
     </message>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>डिवाइस</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>अनुप्रयोग</translation>
     </message>
 </context>
 <context>

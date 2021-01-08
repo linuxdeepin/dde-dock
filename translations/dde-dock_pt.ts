@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Definições bluetooth</translation>
     </message>
@@ -36,7 +32,7 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Definições bluetooth</translation>
+        <translation>Definições Bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
@@ -214,7 +210,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Vista de tarefas</translation>
+        <translation>Vista de Tarefas</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Falha na ligação</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispositivo</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicação</translation>
     </message>
 </context>
 <context>

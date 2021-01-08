@@ -16,35 +16,31 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Bluetooth</translation>
     </message>
 </context>
 <context>
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Oprește</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Pornește</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 conectat</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Conectare...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -52,7 +48,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Oprit</translation>
     </message>
 </context>
 <context>
@@ -346,11 +342,11 @@
     </message>
     <message>
         <source>Charged</source>
-        <translation type="unfinished"/>
+        <translation>Încărcat</translation>
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Capactitate %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -358,11 +354,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Capactitate %1 ....</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Capacitate %1, complet încărcat</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispozitiv</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicație</translation>
     </message>
 </context>
 <context>

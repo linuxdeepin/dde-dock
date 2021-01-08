@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>البلوتوث</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>إعدادات البلوتوث</translation>
     </message>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>الجهاز</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>تطبيق</translation>
     </message>
 </context>
 <context>

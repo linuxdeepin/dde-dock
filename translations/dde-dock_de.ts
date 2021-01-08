@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Bluetooth-Einstellungen</translation>
     </message>
@@ -52,7 +48,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Ausgeschaltet</translation>
     </message>
 </context>
 <context>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Verbindung fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -362,7 +358,7 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Kapazität %1, voll aufgeladen</translation>
     </message>
 </context>
 <context>
@@ -421,10 +417,6 @@
         <source>Device</source>
         <translation>Gerät</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>Anwendung</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
@@ -442,7 +434,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Lautstärke: %1</translation>
+        <translation>Lautstärke %1</translation>
     </message>
 </context>
 <context>

@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>L&apos;extension %1 n&apos;est pas compatible avec le système</translation>
+        <translation>Le plugin %1 n&apos;est pas compatible avec le système.</translation>
     </message>
 </context>
 <context>
@@ -15,10 +15,6 @@
 </context>
 <context>
     <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
     <message>
         <source>Bluetooth settings</source>
         <translation>Paramètres Bluetooth</translation>
@@ -107,7 +103,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Êtes-vous sûr de vouloir vider %1 éléments ?</translation>
+        <translation>Êtes-vous sûr de vouloir supprimer %1 éléments ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>La connexion a échoué</translation>
     </message>
 </context>
 <context>
@@ -330,11 +326,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacité: %1, %2 minutes restantes</translation>
+        <translation>Capacité  %1, %2 minutes restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacité: %1, %2 heures et %3 minutes restantes</translation>
+        <translation>Capacité %1, %2 heures et %3 minutes restantes</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Périphérique</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Applications</translation>
     </message>
 </context>
 <context>

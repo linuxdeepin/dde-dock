@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Ajustes de Bluetooth</translation>
     </message>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispositivo</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicación</translation>
     </message>
 </context>
 <context>

@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>藍牙設定</translation>
     </message>
@@ -28,11 +24,11 @@
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation>關閉藍牙</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation>開啟藍牙</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>裝置</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>應用程式</translation>
     </message>
 </context>
 <context>

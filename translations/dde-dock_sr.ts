@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Блутут</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Блутут подешавања</translation>
     </message>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Неуспешно повезивање</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Уређај</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Програм</translation>
     </message>
 </context>
 <context>

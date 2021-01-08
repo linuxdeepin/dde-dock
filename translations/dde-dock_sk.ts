@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation type="unfinished"/>
     </message>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Zariadenie</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplikácia</translation>
     </message>
 </context>
 <context>

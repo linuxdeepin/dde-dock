@@ -7,6 +7,58 @@
     </message>
 </context>
 <context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth設定</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>オフにする</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>オンにする</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth設定</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1が接続されました</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>接続試行中...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>オフにしました</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -21,15 +73,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12時間表示</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24時間表示</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>時間設定</translation>
     </message>
 </context>
 <context>
@@ -89,11 +141,18 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>すべてアンマウント</translation>
+        <translation>すべてマウント解除</translation>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>ランチャー</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>ファッションモード</translation>
@@ -148,13 +207,6 @@
     </message>
 </context>
 <context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>ランチャー</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -162,7 +214,78 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>ドックから削除</translation>
+        <translation>ドックから外す</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>有線接続を無効にする</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>有線接続を有効にする</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>無線接続を無効にする</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>無線接続を有効にする</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>ネットワークを無効にする</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>ネットワークを有効にする</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>ネットワーク設定</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>デバイスが無効</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>無線接続: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>有線接続: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>未接続</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>接続試行中</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>接続済み、インターネットアクセスなし</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>ネットワークケーブル未接続</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>無線ネットワーク</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>有線ネットワーク</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -170,6 +293,14 @@
     <message>
         <source>Network</source>
         <translation>ネットワーク</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>有線ネットワーク</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>有線ネットワーク %1</translation>
     </message>
 </context>
 <context>
@@ -195,11 +326,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>残量 %1、残り %2 分</translation>
+        <translation>バッテリー残量 %1、残り %2 分</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>残量 %1、残り %2 時間 %3 分</translation>
+        <translation>バッテリー残量 %1、残り %2 時間 %3 分</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -211,11 +342,11 @@
     </message>
     <message>
         <source>Charged</source>
-        <translation type="unfinished"/>
+        <translation>充電完了</translation>
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>バッテリー残量 %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -223,11 +354,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>バッテリー残量 %1...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>バッテリー残量 %1、フル充電済み</translation>
     </message>
 </context>
 <context>
@@ -238,7 +369,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>ドックから削除</translation>
+        <translation>ドックから外す</translation>
     </message>
 </context>
 <context>
@@ -286,16 +417,12 @@
         <source>Device</source>
         <translation>デバイス</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>アプリケーション</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>消音解除</translation>
+        <translation>消音を解除</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -303,11 +430,11 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>サウンドの設定</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>音量 %1</translation>
     </message>
 </context>
 <context>
@@ -348,32 +475,6 @@
     <message>
         <source>System Tray</source>
         <translation>システムトレイ</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>不明</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>有線接続: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>ネットワークなし</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>接続済み、インターネットアクセスなし</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>

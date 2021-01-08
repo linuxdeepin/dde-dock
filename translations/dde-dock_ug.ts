@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>كۆكچىش</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>كۆكچىش تەڭشىكى</translation>
     </message>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>ئۇلىنىش مەغلۇپ بولدى</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>ئۈسكۈنە</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>ئەپلەر </translation>
     </message>
 </context>
 <context>

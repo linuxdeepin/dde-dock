@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Rregullime Bluetooth-i</translation>
     </message>
@@ -163,11 +159,11 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Mënyrë Efikase</translation>
+        <translation>Mënyra Efikase</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>Sipër</translation>
+        <translation>Në Krye</translation>
     </message>
     <message>
         <source>Bottom</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Lidhja dështoi</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Pajisje</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplikacion</translation>
     </message>
 </context>
 <context>

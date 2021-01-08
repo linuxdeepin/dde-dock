@@ -16,12 +16,8 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
-        <translation>Configurações de Bluetooth</translation>
+        <translation>Configurações do Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>A conexão falhou</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispositivo</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicativo</translation>
     </message>
 </context>
 <context>
