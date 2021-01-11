@@ -1,18 +1,10 @@
 #ifndef BLUETOOTHCONSTANTS_H
 #define BLUETOOTHCONSTANTS_H
 
-#define POPUPWIDTH (200)
-#define ITEMHEIGHT (30)
-#define CONTROLHEIGHT (35)
-#define CONTROLTITLEHEIGHT (45)
-#define LIGHTSUFFIX ("_dark.svg")
-#define DARKSUFFIX (".svg")
-#define MARGIN (12)
-#define SWITCHBUTTONWIDTH (50)
-
-#define LIGHTICON   "light/buletooth_"
-#define DARKICON    "dark/buletooth_"
-#define LIGHTICONSUFFIX   "_light.svg"
-#define DARKICONSUFFIX    "_dark.svg"
+const int DeviceItemHeight = 36;
+const int ItemWidth = 300;
+const int TitleHeight = 46;
+const int TitleSpace = 2;
+const int MaxDeviceCount = 8;
 
 #endif // BLUETOOTHCONSTANTS_H

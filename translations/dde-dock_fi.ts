@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Bluetooth asetukset</translation>
     </message>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Yhteys epäonnistui</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Laite</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Sovellus</translation>
     </message>
 </context>
 <context>

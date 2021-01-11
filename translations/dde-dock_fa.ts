@@ -7,6 +7,58 @@
     </message>
 </context>
 <context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>تنظیمات بلوتوث</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>خاموش کردن</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>روشن کردن</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>تنظیمات بلوتوث</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>بلوتوث</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>بلوتوث</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -21,15 +73,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>زمان 12-ساعته</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>زمان 24-ساعته</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات زمان</translation>
     </message>
 </context>
 <context>
@@ -93,7 +145,14 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>لانچر</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>حالت فشن</translation>
@@ -148,13 +207,6 @@
     </message>
 </context>
 <context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>لانچر</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -166,10 +218,89 @@
     </message>
 </context>
 <context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>غیر فعال کردن شبکه</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>فعال کردن شبکه</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>تنظیمات شبکه</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>دستگاه غیرفعال است</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>اتصال سیمی %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>متصل نیست</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>در حال اتصال</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>کابل شبکه وصل نشده است</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>شبکه بیسیم</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>شبکه کابلی</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>NetworkPlugin</name>
     <message>
         <source>Network</source>
         <translation>شبکه</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>شبکه کابلی</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>شبکه سیمی %1</translation>
     </message>
 </context>
 <context>
@@ -286,10 +417,6 @@
         <source>Device</source>
         <translation>دستگاه</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>برنامه</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
@@ -303,7 +430,7 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>تنظیمات صدا</translation>
     </message>
     <message>
         <source>Volume %1</source>
@@ -348,32 +475,6 @@
     <message>
         <source>System Tray</source>
         <translation>سینی سیستم</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>ناشناخته</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>اتصال سیمی %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>بدون شبکه</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>

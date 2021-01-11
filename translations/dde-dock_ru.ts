@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Настройки Bluetooth</translation>
     </message>
@@ -421,10 +417,6 @@
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>Приложение</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
@@ -442,7 +434,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Том %1</translation>
+        <translation>Громкость %1</translation>
     </message>
 </context>
 <context>

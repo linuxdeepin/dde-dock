@@ -3,33 +3,85 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation>Vtičnik %1 ni združljiv s sistemom.</translation>
+    </message>
+</context>
+<context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth nastavitve</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Izklopi</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Vklopi</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Bluetooth nastavitve</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 je povezan</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Povezovanje...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Izklopljen</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Dodaj razpored</translation>
+        <translation>Dodaj razpored tipk</translation>
     </message>
 </context>
 <context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
-        <translation>Datumčas</translation>
+        <translation>Datum in čas</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>12-urni čas</translation>
+        <source>12-hour time</source>
+        <translation>12 urni čas</translation>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>24-urni čas</translation>
+        <source>24-hour time</source>
+        <translation>24 urni čas</translation>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Nastavitev časa</translation>
+        <source>Time settings</source>
+        <translation>Nastavitve časa</translation>
     </message>
 </context>
 <context>
@@ -51,7 +103,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation type="unfinished"/>
+        <translation>Želite počisiti %1 predmetov?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -89,11 +141,18 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Izvrzi vse</translation>
+        <translation>Odklopi vse</translation>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Zaganjalnik</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Modni način</translation>
@@ -148,20 +207,84 @@
     </message>
 </context>
 <context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Zaganjalnik</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Prikaz večopravilnosti</translation>
     </message>
     <message>
         <source>Undock</source>
+        <translation>Odveži</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkItem</name>
+    <message>
+        <source>Disable wired connection</source>
+        <translation>Onemogoči žično povezavo</translation>
+    </message>
+    <message>
+        <source>Enable wired connection</source>
+        <translation>Omogoči žično povezavo</translation>
+    </message>
+    <message>
+        <source>Disable wireless connection</source>
+        <translation>Onemogoči brezžično povezavo</translation>
+    </message>
+    <message>
+        <source>Enable wireless connection</source>
+        <translation>Omogoči brezžično povezavo</translation>
+    </message>
+    <message>
+        <source>Disable network</source>
+        <translation>Onemogoči omrežje</translation>
+    </message>
+    <message>
+        <source>Enable network</source>
+        <translation>Omogoči omrežje</translation>
+    </message>
+    <message>
+        <source>Network settings</source>
+        <translation>Nastavitve omrežja</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Naprava onemogočena</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Brezžična povezava: %1</translation>
+    </message>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Žična povezava: %1</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Brez povezave</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Povezovanje</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Povezano, brez dostopa do spleta</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Omrežni kabel je izklopljen</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Brezžično omrežje</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Žično omrežje</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -171,12 +294,20 @@
         <source>Network</source>
         <translation>Omrežje</translation>
     </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Žično omrežje</translation>
+    </message>
+    <message>
+        <source>Wired Network %1</source>
+        <translation>Žično omrežje %1</translation>
+    </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
+        <translation>Na plošči</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -195,31 +326,39 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation type="unfinished"/>
+        <translation>Zmogljivost %1 za %2 min</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Napolnjeno %1</translation>
+        <translation>Zmogljivost %1 za %2 ur in %3 min</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation type="unfinished"/>
+        <translation>Polnjenje %1 bo končano čez %2 min</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Charging %1 ....</source>
-        <translation type="unfinished"/>
+        <translation>Polnjenje %1 bo končano čez %2 ur in %3 min</translation>
     </message>
     <message>
         <source>Charged</source>
         <translation>Napolnjen</translation>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation>Zmogljivost %1</translation>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation>Polnim %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation>Zmogljvost %1 ..</translation>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation>Zmogljivost %1 - polno</translation>
     </message>
 </context>
 <context>
@@ -230,7 +369,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Odveži</translation>
     </message>
 </context>
 <context>
@@ -244,16 +383,12 @@
         <translation>Zaustavitev sistema</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation>Vnovični zagon</translation>
-    </message>
-    <message>
         <source>Suspend</source>
-        <translation>V način mirovanja</translation>
+        <translation>Mirovanje</translation>
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Mirovanje</translation>
+        <translation>Spanje</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -271,16 +406,16 @@
         <source>Power settings</source>
         <translation>Nastavitve energijske porabe</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Ponovni zagon</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>Naprava</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Program</translation>
     </message>
 </context>
 <context>
@@ -294,12 +429,12 @@
         <translation>Utišaj</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Zvočne nastavitve</translation>
+        <source>Sound settings</source>
+        <translation>Nastavitve zvoka</translation>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Trenutna glasnost %1</translation>
+        <source>Volume %1</source>
+        <translation>Glasnost %1</translation>
     </message>
 </context>
 <context>
@@ -340,32 +475,6 @@
     <message>
         <source>System Tray</source>
         <translation>Sistemski pladenj</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Neznano</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Žična povezava: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Ni omrežij</translation>
-    </message>
-    <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Brezžična povezava: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Povezano brez dostopa do interneta</translation>
     </message>
 </context>
 <context>

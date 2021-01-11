@@ -52,16 +52,35 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
 {
     // is it necessary?
 //    refreshPluginSettings();
+    int fixedPluginCount(0); // FixPlugin Counts
 
     // save to local cache
     QJsonObject localObject = m_pluginSettingsObject.value(itemInter->pluginName()).toObject();
     localObject.insert(key, QJsonValue::fromVariant(value)); //Note: QVariant::toJsonValue() not work in Qt 5.7
-    m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
 
     // save to daemon
     QJsonObject remoteObject, remoteObjectInter;
     remoteObjectInter.insert(key, QJsonValue::fromVariant(value)); //Note: QVariant::toJsonValue() not work in Qt 5.7
     remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
+
+    if (itemInter->type() == PluginsItemInterface::Fixed && key == "enable" && !value.toBool()) {
+        // 遍历FixPlugin插件个数
+        for (auto it(m_pluginsMap.begin()); it != m_pluginsMap.end();) {
+            if (it.key()->type() == PluginsItemInterface::Fixed) {
+                fixedPluginCount++;
+            }
+            ++it;
+        }
+        // 修改插件的order值，位置为队尾
+        QString name = localObject.keys().last();
+        localObject.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
+
+        // daemon中同样修改
+        remoteObjectInter.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
+        remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
+    }
+
+    m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
     m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 

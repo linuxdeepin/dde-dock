@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>藍牙</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>藍牙設置</translation>
     </message>
@@ -28,11 +24,11 @@
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation>關閉藍牙</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation>開啟藍牙</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
@@ -141,7 +137,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>開啟</translation>
+        <translation>打開</translation>
     </message>
     <message>
         <source>Unmount all</source>
@@ -400,7 +396,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>登出</translation>
+        <translation>註銷</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>裝置</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>應用</translation>
     </message>
 </context>
 <context>
@@ -471,7 +463,7 @@
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>開啟</translation>
+        <translation>打開</translation>
     </message>
     <message>
         <source>Empty</source>

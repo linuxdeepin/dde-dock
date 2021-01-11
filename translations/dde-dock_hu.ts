@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>%1 bővítmény nem kompatibilis a rendszerrel.</translation>
+        <translation>A %1 bővítmény nem kompatibilis a rendszerrel.</translation>
     </message>
 </context>
 <context>
@@ -15,10 +15,6 @@
 </context>
 <context>
     <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
     <message>
         <source>Bluetooth settings</source>
         <translation>Bluetooth beállítások</translation>
@@ -66,7 +62,7 @@
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Billentyűzet kiosztás megadása</translation>
+        <translation>Billentyűzetkiosztás megadása</translation>
     </message>
 </context>
 <context>
@@ -77,15 +73,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>12 órás formátum</translation>
+        <translation>12 órás időformátum</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>24 órás formátum</translation>
+        <translation>24 órás időformátum</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation>Idő beállítások</translation>
+        <translation>Idő beállításai</translation>
     </message>
 </context>
 <context>
@@ -107,7 +103,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Biztosan törölni akarsz %1 elemet?</translation>
+        <translation>Biztosan törölni akarja a %1 elemet?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -145,7 +141,7 @@
     </message>
     <message>
         <source>Unmount all</source>
-        <translation>Minden külső partíció leválasztása</translation>
+        <translation>Összes lecsatolása</translation>
     </message>
 </context>
 <context>
@@ -159,7 +155,7 @@
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Stílus mód</translation>
+        <translation>Stílusos mód</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -214,7 +210,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Multitasking nézet</translation>
+        <translation>Többfeladatos nézet</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -233,11 +229,11 @@
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation>Vezeték-nélküli kapcsolat megszüntetése</translation>
+        <translation>Vezeték nélküli kapcsolat megszüntetése</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation>Vezeték-nélküli kapcsolat engedélyezése</translation>
+        <translation>Vezeték nélküli kapcsolat engedélyezése</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -257,7 +253,7 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Vezeték-nélküli kapcsolat: %1</translation>
+        <translation>Vezeték nélküli kapcsolat: %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
@@ -273,7 +269,7 @@
     </message>
     <message>
         <source>Connected but no Internet access</source>
-        <translation>Csatlakozva helyi hálózathoz</translation>
+        <translation>Csatlakoztatva, de nincs internet hozzáférés</translation>
     </message>
     <message>
         <source>Network cable unplugged</source>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>A kapcsolódás sikertelen</translation>
     </message>
 </context>
 <context>
@@ -322,7 +318,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Kikapcsolás</translation>
+        <translation>Energiaellátás</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -330,11 +326,11 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Akkukapacitás %1, %2 perc van még hátra</translation>
+        <translation>Akkumulátor töltöttsége %1, %2 perc van még hátra a feltöltésig</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Akkukapacitás %1, %2 óra %3 perc van még hátra</translation>
+        <translation>Akkumulátor töltöttsége %1, %2 óra %3 perc van még hátra a feltöltésig</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -350,7 +346,7 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation>Kapacitás %1</translation>
+        <translation>Akkumulátor töltöttsége %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -358,11 +354,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation>Kapacitás %1...</translation>
+        <translation>Akkumulátor töltöttsége %1 ...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Kapacitás %1, teljesen feltöltve</translation>
+        <translation>Akkumulátor töltöttsége %1, teljesen feltöltve</translation>
     </message>
 </context>
 <context>
@@ -380,7 +376,7 @@
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Kikapcsolás</translation>
+        <translation>Energiaellátás</translation>
     </message>
     <message>
         <source>Shut down</source>
@@ -388,7 +384,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Felfüggesztés</translation>
+        <translation>Alvó állapot</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -421,10 +417,6 @@
         <source>Device</source>
         <translation>Eszköz</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>Alkalmazás</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
@@ -442,7 +434,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Hangerő: %1%</translation>
+        <translation>Hangerő: %1</translation>
     </message>
 </context>
 <context>
@@ -475,7 +467,7 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>Üres</translation>
+        <translation>Ürítés</translation>
     </message>
 </context>
 <context>
@@ -493,7 +485,7 @@
     </message>
     <message>
         <source>Wireless Network %1</source>
-        <translation>Vezeték nélküli Hálózat %1 </translation>
+        <translation>Vezeték nélküli hálózat %1 </translation>
     </message>
 </context>
 </TS>

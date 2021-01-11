@@ -111,20 +111,18 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->addWidget(m_fixedAreaWidget);
 
     m_fixedSpliter->setObjectName("spliter_fix");
-    m_mainPanelLayout->addWidget(m_fixedSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_fixedSpliter);
 
     /* 应用程序区域 */
     m_appAreaWidget->setAccessibleName("AppFullArea");
     m_mainPanelLayout->addWidget(m_appAreaWidget);
-    m_appAreaSonLayout->setSpacing(0);
-    m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
     m_appAreaSonWidget->setObjectName("apparea");
     m_appAreaSonWidget->setLayout(m_appAreaSonLayout);
     m_appAreaSonLayout->setSpacing(0);
     m_appAreaSonLayout->setContentsMargins(0, 0, 0, 0);
 
     m_appSpliter->setObjectName("spliter_app");
-    m_mainPanelLayout->addWidget(m_appSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_appSpliter);
 
     /* 托盘区域 */
     m_trayAreaWidget->setObjectName("trayarea");
@@ -134,7 +132,7 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
 
     m_traySpliter->setObjectName("spliter_tray");
-    m_mainPanelLayout->addWidget(m_traySpliter, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_traySpliter);
 
     /* 插件区域 */
     m_pluginAreaWidget->setObjectName("pluginarea");
@@ -148,6 +146,9 @@ void MainPanelControl::initUi()
 
     m_mainPanelLayout->setSpacing(0);
     m_mainPanelLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
 
     connect(GSettingsByLaunch(), &QGSettings::changed, this, &MainPanelControl::onGSettingsChanged);
 }
@@ -341,6 +342,9 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         break;
     }
     resizeDockIcon();
+    QTimer::singleShot(0, [ = ] {
+        updatePluginsLayout();
+    });
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -401,6 +405,9 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
     removeItem(sourceItem);
 
     // insert new position
+    if (sourceItem->isDragging()) {
+        m_dragIndex = idx;
+    }
     insertItem(idx, sourceItem);
 }
 
@@ -509,8 +516,10 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
     e->accept();
 
-    if (targetItem == sourceItem)
+    if (targetItem == sourceItem) {
+        m_dragIndex = -1;
         return;
+    }
 
     moveItem(sourceItem, targetItem);
     emit itemMoved(sourceItem, targetItem);
@@ -685,6 +694,25 @@ void MainPanelControl::startDrag(DockItem *item)
             m_appDragWidget = nullptr;
         });
 
+        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
+            if (-1 != m_appAreaSonLayout->indexOf(item)) {
+                m_dragIndex = m_appAreaSonLayout->indexOf(item);
+                removeItem(item);
+            }
+        });
+
+        connect(m_appDragWidget, &AppDragWidget::animationFinished, this, [ = ] {
+            m_appDragWidget = nullptr;
+            if (qobject_cast<AppItem *>(item)->isValid()) {
+                if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
+                    insertItem(m_dragIndex, item);
+                    m_dragIndex = -1;
+                }
+                item->setDraging(false);
+                item->update();
+            }
+        });
+
         appDrag->appDragWidget()->setOriginPos((m_appAreaSonWidget->mapToGlobal(item->pos())));
         appDrag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
         const QPixmap &dragPix = qobject_cast<AppItem *>(item)->appIcon();
@@ -708,15 +736,11 @@ void MainPanelControl::startDrag(DockItem *item)
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
-    // app关闭特效情况下移除
-    if (item->itemType() == DockItem::App && !DWindowManagerHelper::instance()->hasComposite()) {
-        if (m_appDragWidget->isRemoveAble())
-            qobject_cast<AppItem *>(item)->undock();
+    if (item->itemType() != DockItem::App || m_dragIndex == -1) {
+        m_appDragWidget = nullptr;
+        item->setDraging(false);
+        item->update();
     }
-
-    m_appDragWidget = nullptr;
-    item->setDraging(false);
-    item->update();
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
@@ -848,9 +872,22 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
+void MainPanelControl::updatePluginsLayout()
+{
+    for (int i = 0; i < m_pluginLayout->count(); ++i) {
+        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+        if (layout) {
+            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+            if (pItem && pItem->sizeHint().width() != -1) {
+                pItem->updateGeometry();
+            }
+        }
+    }
+}
+
 void MainPanelControl::itemUpdated(DockItem *item)
 {
-    item->parentWidget()->adjustSize();
+    item->updateGeometry();
     resizeDockIcon();
 }
 
@@ -1040,15 +1077,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
     }
 
-    if (shutdownPlugin)
-        shutdownPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (keyboardPlugin)
-        keyboardPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (notificationPlugin)
-        notificationPlugin->setFixedSize(tray_item_size, tray_item_size);
-    if (trashPlugin)
-        trashPlugin->setFixedSize(tray_item_size, tray_item_size);
-
     //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
     //因此需要通过多一层布局来获取各插件
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
@@ -1057,18 +1085,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    // 根据大小策略控制插件大小
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
+                if (pItem) {
+                    if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
-                        pItem->setFixedSize(pItem->sizeHint().width(), h);
-                        break;
-                    default:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
                     }
                 }
             }
@@ -1079,18 +1098,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             QLayout *layout =  m_pluginLayout->itemAt(i)->layout();
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem && pItem != trashPlugin && pItem != shutdownPlugin && pItem != keyboardPlugin && pItem !=notificationPlugin) {
-                    // 根据大小策略控制插件大小
-                    switch (pItem->pluginSizePolicy()) {
-                    case PluginsItemInterface::System:
+                if (pItem) {
+                    if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
-                    case PluginsItemInterface::Custom:
-                        pItem->setFixedSize(w, pItem->sizeHint().height());
-                        break;
-                    default:
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
-                        break;
                     }
                 }
             }

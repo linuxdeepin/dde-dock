@@ -143,7 +143,18 @@ void PreviewContainer::adjustSize()
     if (!composite)
     {
         const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
-        setFixedSize(SNAP_WIDTH, h);
+
+        //根据appitem title 设置自适应宽度
+        auto appSnapshot = static_cast<AppSnapshot*>(this->layout()->itemAt(0)->widget());
+        auto font = appSnapshot->layout()->itemAt(0)->widget()->font();
+        QFontMetrics fontMetrics(font);
+        const int fontSize = fontMetrics.boundingRect(appSnapshot->title()).width();
+        //预留字体到边缘的间距,边缘距离10px,关闭按钮24px
+        if (fontSize < SNAP_WIDTH - 44)
+            setFixedSize(fontSize + 44, h);
+        else
+            setFixedSize(SNAP_WIDTH, h);
+
         return;
     }
 

@@ -183,19 +183,29 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
         return;
     // 返回的数据中,这一部分对应的是数据发送方的interfacename,可判断是否是自己需要的服务
     QString interfaceName = msg.arguments().at(0).toString();
-    if (interfaceName != "com.deepin.dde.daemon.Dock")
-        return;
-    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    QStringList keys = changedProps.keys();
-    foreach (const QString &prop, keys) {
-        if (prop == "Position") {
-            onPositionChanged();
-        } else if (prop == "DisplayMode") {
-            onDisplayModeChanged();
-        } else if (prop == "HideMode") {
-            onHideModeChanged();
-        } else if (prop == "HideState") {
-            onHideStateChanged();
+    if (interfaceName == "com.deepin.dde.daemon.Dock") {
+        QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
+        QStringList keys = changedProps.keys();
+        foreach (const QString &prop, keys) {
+            if (prop == "Position") {
+                onPositionChanged();
+            } else if (prop == "DisplayMode") {
+                onDisplayModeChanged();
+            } else if (prop == "HideMode") {
+                onHideModeChanged();
+            } else if (prop == "HideState") {
+                onHideStateChanged();
+            }
+        }
+    } else if (interfaceName == "com.deepin.daemon.Display") {
+        QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
+        QStringList keys = changedProps.keys();
+        foreach (const QString &prop, keys) {
+            if (prop == "ScreenHeight") {
+                m_screenRawHeight = m_displayInter->screenHeight();
+            } else if (prop == "ScreenWidth") {
+                m_screenRawWidth = m_displayInter->screenWidth();
+            }
         }
     }
 }
@@ -741,6 +751,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     if (rect == lastRect)
         return;
     lastRect = rect;
+    qDebug() << "dock geometry:" << rect;
 
     // 先清除原先的窗管任务栏区域
     XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
@@ -754,12 +765,14 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
 
     // 除了"一直显示"模式,其他的都不要设置任务栏区域
     if (m_hideMode != Dock::KeepShowing) {
+        lastRect = QRect();
         return;
     }
 
-    qInfo() <<"Update Window WorkArea:" << rect;
-
     const QPoint &p = rawXPosition(rect.topLeft());
+    qDebug() << "dock topLeft position:" << p;
+
+    QScreen const *currentScreen = Utils::screenAtByScaled(rect.topLeft());
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -775,11 +788,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
-        strut = m_screenRawHeight - p.y();
-        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
-        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
-            strut = m_screenRawWidth - p.y();
-        }
+        strut = currentScreen->geometry().height() * ratio - p.y();
         strutStart = p.x();
         strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
         break;
@@ -791,16 +800,12 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = m_screenRawWidth - p.x();
-        //m_rotations 这里面是保存当前屏幕旋转那个方向正常情况分别依次向下，向右，向上，向左
-        if(m_rotations.size() >= 4 && (m_monitorRotation == m_rotations[1] || m_monitorRotation == m_rotations[3])) {
-            strut = m_screenRawHeight - p.x();
-        }
+        strut = currentScreen->geometry().width() * ratio - p.x();
         strutStart = p.y();
         strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
         break;
     }
-
+    qDebug() << "set dock geometry to xcb:" << strut << strutStart << strutEnd;
     XcbMisc::instance()->set_strut_partial(parent()->winId(), orientation, strut + WINDOWMARGIN * ratio, strutStart, strutEnd);
 }
 
@@ -943,7 +948,7 @@ void MultiScreenWorker::onRequestDelayShowDock(const QString &screenName)
 
 void MultiScreenWorker::initMembers()
 {
-    m_monitorUpdateTimer->setInterval(10);
+    m_monitorUpdateTimer->setInterval(100);
     m_monitorUpdateTimer->setSingleShot(true);
 
     m_delayTimer->setInterval(2000);
@@ -977,7 +982,14 @@ void MultiScreenWorker::initGSettingConfig()
 
 void MultiScreenWorker::initConnection()
 {
-    //FIX: 这里关联信号有时候收不到,未查明原因,handleDbusSignal处理
+    /** FIXME
+     * 这里关联的信号有时候收不到是因为 qt-dbus-factory 中的 changed 的信号有时候会发不出来，
+     * qt-dbus-factory 中的 DBusExtendedAbstractInterface::internalPropGet 在同步调用情况下，会将缓存中的数据写入属性中，
+     * 导致后面 onPropertyChanged 中的判断认为属性值没变，就没有发出 changed 信号。
+     * 建议：前端仅在初始化时主动获取一次 dbus 中的值存储在成员变量中，并建立 changed 信号连接，后面所有用到那个值的地方，均获取成员变量;
+     * 或去修改 qt-dbus-factory，取消 DBusExtendedAbstractInterface::internalPropGet 中将数据写入属性值，
+     * 但是 qt-dbus-factory 修改涉及面较广，需要大量测试确认没有问题，再合入。
+     */
 #if 0
     //    connect(m_dockInter, &DBusDock::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
     //    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
@@ -986,6 +998,12 @@ void MultiScreenWorker::initConnection()
 #else
     QDBusConnection::sessionBus().connect("com.deepin.dde.daemon.Dock",
                                           "/com/deepin/dde/daemon/Dock",
+                                          "org.freedesktop.DBus.Properties",
+                                          "PropertiesChanged",
+                                          "sa{sv}as",
+                                          this, SLOT(handleDbusSignal(QDBusMessage)));
+    QDBusConnection::sessionBus().connect("com.deepin.daemon.Display",
+                                          "/com/deepin/daemon/Display",
                                           "org.freedesktop.DBus.Properties",
                                           "PropertiesChanged",
                                           "sa{sv}as",
@@ -1451,9 +1469,7 @@ void MultiScreenWorker::checkDaemonDockService()
 
 void MultiScreenWorker::checkDaemonDisplayService()
 {
-    auto connectionInit = [ = ](DisplayInter * displayInter) {
-        connect(displayInter, &DisplayInter::ScreenWidthChanged, this, [ = ](ushort  value) {m_screenRawWidth = value;});
-        connect(displayInter, &DisplayInter::ScreenHeightChanged, this, [ = ](ushort  value) {m_screenRawHeight = value;});
+    auto connectionInit = [ = ](DisplayInter *displayInter) {
         connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::onMonitorListChanged);
         connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::requestUpdateRegionMonitor);
         connect(displayInter, &DisplayInter::PrimaryRectChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);

@@ -137,12 +137,16 @@ void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
 void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
+    m_bDragDrop = true;
 }
 
 void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
     Q_UNUSED(event);
     showRemoveTips();
+    if (isRemoveItem() && m_bDragDrop) {
+        emit requestRemoveItem();
+    }
 }
 
 const QPoint AppDragWidget::topleftPoint() const
@@ -191,6 +195,7 @@ const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
 void AppDragWidget::dropEvent(QDropEvent *event)
 {
     m_followMouseTimer->stop();
+    m_bDragDrop = false;
 
     if (isRemoveAble()) {
         if (DWindowManagerHelper::instance()->hasComposite()) {
@@ -198,6 +203,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         } else {
             hide();
         }
+        emit animationFinished();
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
         m_popupWindow->setVisible(false);
@@ -261,6 +267,7 @@ void AppDragWidget::initAnimations()
     connect(m_animGroup, &QParallelAnimationGroup::stateChanged,
             this, &AppDragWidget::onRemoveAnimationStateChanged);
     connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
+    connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::animationFinished);
 }
 
 void AppDragWidget::initConfigurations()
@@ -304,6 +311,13 @@ void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newS
         hide();
     }
 }
+
+/**
+ * @brief 判断图标拖到一定高度后是否可以移除
+ *
+ * @return true
+ * @return false
+ */
 bool AppDragWidget::isRemoveAble()
 {
     const QPoint &p = QCursor::pos();
@@ -334,6 +348,40 @@ bool AppDragWidget::isRemoveAble()
     return false;
 }
 
+/**
+ * @brief 判断应用区域图标是否拖出任务栏
+ *
+ * @return true
+ * @return false
+ */
+bool AppDragWidget::isRemoveItem()
+{
+    const QPoint &p = QCursor::pos();
+    switch (m_dockPosition) {
+    case Dock::Position::Left:
+        if ((p.x() > m_dockGeometry.topRight().x())) {
+            return true;
+        }
+        break;
+    case Dock::Position::Top:
+        if ((p.y() > m_dockGeometry.bottomLeft().y())) {
+            return true;
+        }
+        break;
+    case Dock::Position::Right:
+        if ((m_dockGeometry.topLeft().x() > p.x())) {
+            return true;
+        }
+        break;
+    case Dock::Position::Bottom:
+        if ((m_dockGeometry.topLeft().y() > p.y())) {
+            return true;
+        }
+        break;
+    }
+    return false;
+}
+
 void AppDragWidget::enterEvent(QEvent *event)
 {
     if (m_goBackAnim->state() != QPropertyAnimation::State::Running
@@ -344,7 +392,7 @@ void AppDragWidget::enterEvent(QEvent *event)
 
 void AppDragWidget::showRemoveTips()
 {
-   bool model = true;
+    bool model = true;
     Dock::Position pos = Dock::Position::Bottom;
 
     DockPopupWindow *popup = m_popupWindow;

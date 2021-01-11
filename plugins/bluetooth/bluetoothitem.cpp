@@ -24,7 +24,7 @@
 #include "constants.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
-#include "bluetoothapplet.h"
+#include "componments/bluetoothapplet.h"
 
 #include <DApplication>
 #include <DDBusSender>
@@ -45,21 +45,26 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
+    , m_devState(Device::State::StateUnavailable)
+    , m_adapterPowered(m_applet->poweredInitState())
 {
+    setAccessibleName("BluetoothPluginItem");
     m_applet->setVisible(false);
-    m_adapterPowered = m_applet->poweredInitState();
+    m_tipsLabel->setVisible(false);
+    refreshIcon();
 
-    connect(m_applet, &BluetoothApplet::powerChanged, [&](bool powered) {
+    connect(m_applet, &BluetoothApplet::powerChanged, [ & ] (bool powered) {
         m_adapterPowered = powered;
         refreshIcon();
     });
-    connect(m_applet, &BluetoothApplet::deviceStateChanged, [&](const Device::State state) {
-        m_devState = state;
+    connect(m_applet, &BluetoothApplet::deviceStateChanged, [ & ] (const Device* device) {
+        m_devState = device->state();
         refreshIcon();
+        refreshTips();
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
-    connect(m_applet,&BluetoothApplet::noAdapter,this,&BluetoothItem::noAdapter);
-    connect(m_applet,&BluetoothApplet::justHasAdapter,this,&BluetoothItem::justHasAdapter);
+    connect(m_applet, &BluetoothApplet::noAdapter, this, &BluetoothItem::noAdapter);
+    connect(m_applet, &BluetoothApplet::justHasAdapter, this, &BluetoothItem::justHasAdapter);
 }
 
 QWidget *BluetoothItem::tipsWidget()
@@ -124,9 +129,6 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
 
 void BluetoothItem::refreshIcon()
 {
-    if (!m_applet)
-        return;
-
     QString stateString;
     QString iconString;
 
@@ -160,16 +162,13 @@ void BluetoothItem::refreshIcon()
 
 void BluetoothItem::refreshTips()
 {
-    if (!m_applet)
-        return;
-
     QString tipsText;
 
     if (m_adapterPowered) {
         switch (m_devState) {
         case Device::StateConnected: {
             QStringList textList;
-            for (QString devName : m_applet->connectedDevsName()) {
+            for (QString devName : m_applet->connectedDevicesName()) {
                 textList << tr("%1 connected").arg(devName);
             }
             m_tipsLabel->setTextList(textList);
@@ -223,4 +222,3 @@ void BluetoothItem::paintEvent(QPaintEvent *event)
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
 }
-

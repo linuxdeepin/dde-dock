@@ -59,7 +59,6 @@ signals:
 public slots:
     void refershItemsIcon();
     void sortPluginItems();
-    void updatePluginsItemOrderKey();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 
@@ -70,11 +69,11 @@ private:
     void appItemRemoved(AppItem *appItem);
     void pluginItemInserted(PluginsItem *item);
     void pluginItemRemoved(PluginsItem *item);
+    void updatePluginsItemOrderKey();
     void reloadAppItems();
     void manageItem(DockItem *item);
 
 private:
-    QTimer *m_updatePluginsOrderTimer;
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
 

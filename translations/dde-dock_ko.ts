@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>블루투스</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>블루투스 설정</translation>
     </message>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>장치</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>응용프로그램</translation>
     </message>
 </context>
 <context>

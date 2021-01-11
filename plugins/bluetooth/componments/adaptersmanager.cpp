@@ -37,11 +37,11 @@ AdaptersManager::AdaptersManager(QObject *parent)
                                          this))
     , m_defaultAdapterState(false)
 {
-    connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::addAdapter);
-    connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::removeAdapter);
+    connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::onAddAdapter);
+    connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::onRemoveAdapter);
     connect(m_bluetoothInter, &DBusBluetooth::AdapterPropertiesChanged, this, &AdaptersManager::onAdapterPropertiesChanged);
-    connect(m_bluetoothInter, &DBusBluetooth::DeviceAdded, this, &AdaptersManager::addDevice);
-    connect(m_bluetoothInter, &DBusBluetooth::DeviceRemoved, this, &AdaptersManager::removeDevice);
+    connect(m_bluetoothInter, &DBusBluetooth::DeviceAdded, this, &AdaptersManager::onAddDevice);
+    connect(m_bluetoothInter, &DBusBluetooth::DeviceRemoved, this, &AdaptersManager::onRemoveDevice);
     connect(m_bluetoothInter, &DBusBluetooth::DevicePropertiesChanged, this, &AdaptersManager::onDevicePropertiesChanged);
 
 #ifdef QT_DEBUG
@@ -112,7 +112,7 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
     }
 }
 
-void AdaptersManager::connectDevice(Device *device, Adapter *adapter)
+void AdaptersManager::connectDevice(const Device *device, Adapter *adapter)
 {
     if (device) {
         QDBusObjectPath path(device->id());
@@ -150,6 +150,10 @@ void AdaptersManager::onAdapterPropertiesChanged(const QString &json)
     const QString id = obj["Path"].toString();
     QDBusObjectPath dPath(id);
 
+    if (!m_adapters.contains(id)) {
+        return;
+    }
+
     Adapter *adapter = const_cast<Adapter *>(m_adapters[id]);
     if (adapter) {
         inflateAdapter(adapter, obj);
@@ -167,18 +171,22 @@ void AdaptersManager::onDevicePropertiesChanged(const QString &json)
     }
 }
 
-void AdaptersManager::addAdapter(const QString &json)
+void AdaptersManager::onAddAdapter(const QString &json)
 {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     auto adapter = new Adapter(this);
     adapterAdd(adapter, doc.object());
 }
 
-void AdaptersManager::removeAdapter(const QString &json)
+void AdaptersManager::onRemoveAdapter(const QString &json)
 {
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     QJsonObject obj = doc.object();
     const QString id = obj["Path"].toString();
+
+    if (!m_adapters.contains(id)) {
+        return;
+    }
 
     const Adapter *result = m_adapters[id];
     Adapter *adapter = const_cast<Adapter *>(result);
@@ -189,12 +197,16 @@ void AdaptersManager::removeAdapter(const QString &json)
     }
 }
 
-void AdaptersManager::addDevice(const QString &json)
+void AdaptersManager::onAddDevice(const QString &json)
 {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     const QJsonObject obj = doc.object();
     const QString adapterId = obj["AdapterPath"].toString();
     const QString deviceId = obj["Path"].toString();
+
+    if (!m_adapters.contains(adapterId)) {
+        return;
+    }
 
     const Adapter *result = m_adapters[adapterId];
     Adapter *adapter = const_cast<Adapter *>(result);
@@ -207,12 +219,16 @@ void AdaptersManager::addDevice(const QString &json)
     }
 }
 
-void AdaptersManager::removeDevice(const QString &json)
+void AdaptersManager::onRemoveDevice(const QString &json)
 {
     QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     QJsonObject obj = doc.object();
     const QString adapterId = obj["AdapterPath"].toString();
     const QString deviceId = obj["Path"].toString();
+
+    if (!m_adapters.contains(adapterId)) {
+        return;
+    }
 
     const Adapter *result = m_adapters[adapterId];
     Adapter *adapter = const_cast<Adapter *>(result);
@@ -247,11 +263,11 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
 
     QString id = adapter->id();
     if (!id.isEmpty()) {
-        // in case memory leaks
-        if (m_adapters.contains(id)) {
-            return;
+        if (!m_adapters.contains(id)) {
+            m_adapters[id] = adapter;
+        } else if (m_adapters[id] == nullptr) {
+            m_adapters[id] = adapter;
         }
-        m_adapters[id] = adapter;
     }
 }
 

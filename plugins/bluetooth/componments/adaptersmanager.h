@@ -35,7 +35,7 @@ public:
     explicit AdaptersManager(QObject *parent = nullptr);
 
     void setAdapterPowered(const Adapter *adapter, const bool &powered);
-    void connectDevice(Device *device, Adapter *adapter);
+    void connectDevice(const Device *device, Adapter *adapter);
     bool defaultAdapterInitPowerState();
     int adaptersCount();
     void adapterRefresh(const Adapter *adapter);
@@ -49,11 +49,11 @@ private slots:
     void onAdapterPropertiesChanged(const QString &json);
     void onDevicePropertiesChanged(const QString &json);
 
-    void addAdapter(const QString &json);
-    void removeAdapter(const QString &json);
+    void onAddAdapter(const QString &json);
+    void onRemoveAdapter(const QString &json);
 
-    void addDevice(const QString &json);
-    void removeDevice(const QString &json);
+    void onAddDevice(const QString &json);
+    void onRemoveDevice(const QString &json);
 
 private:
     void adapterAdd(Adapter *adapter, const QJsonObject &adpterObj);
@@ -62,7 +62,6 @@ private:
 private:
     DBusBluetooth *m_bluetoothInter;
     QMap<QString, const Adapter *> m_adapters;
-
     bool m_defaultAdapterState;
 };
 

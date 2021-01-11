@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Tetapan Bluetooth</translation>
     </message>
@@ -40,11 +36,11 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 bersambung</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Menyambung...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -52,7 +48,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Dimatikan</translation>
     </message>
 </context>
 <context>
@@ -218,26 +214,26 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Nyahlabuh</translation>
+        <translation>Tanggal</translation>
     </message>
 </context>
 <context>
     <name>NetworkItem</name>
     <message>
         <source>Disable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>Lumpuhkan sambungan berwayar</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation type="unfinished"/>
+        <translation>Benarkan sambungan berwayar</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>Lumpuhkan sambungan tanpa wayar</translation>
     </message>
     <message>
         <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
+        <translation>Benarkan sambungan tanpa wayar</translation>
     </message>
     <message>
         <source>Disable network</source>
@@ -350,7 +346,7 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Kapasiti %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -358,22 +354,22 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Kapasiti %1 ...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Kapasiti %1, sepenuhnya dicas</translation>
     </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation>Tunjuk Desktop</translation>
+        <translation>Tunjuk Atas Meja</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Nyahlabuh</translation>
+        <translation>Tanggal</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Peranti</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplikasi</translation>
     </message>
 </context>
 <context>

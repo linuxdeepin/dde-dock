@@ -16,10 +16,6 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
         <translation>Configuració del Bluetooth</translation>
     </message>
@@ -289,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Ha fallat la connexió.</translation>
     </message>
 </context>
 <context>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispositiu</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicació</translation>
     </message>
 </context>
 <context>

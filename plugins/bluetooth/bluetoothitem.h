@@ -30,6 +30,7 @@
 #define BLUETOOTH_KEY "bluetooth-item-key"
 
 class BluetoothApplet;
+
 namespace Dock {
 class TipsWidget;
 }
@@ -63,8 +64,8 @@ signals:
 private:
     Dock::TipsWidget *m_tipsLabel;
     BluetoothApplet *m_applet;
-    QPixmap m_iconPixmap;
 
+    QPixmap m_iconPixmap;
     Device::State m_devState;
     bool m_adapterPowered;
 };

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -17,10 +15,6 @@
 </context>
 <context>
     <name>BluetoothApplet</name>
-    <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
     <message>
         <source>Bluetooth settings</source>
         <translation>Bluetooth settings</translation>
@@ -291,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Connection failed</translation>
     </message>
 </context>
 <context>
@@ -422,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Device</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Application</translation>
     </message>
 </context>
 <context>

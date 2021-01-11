@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>O complemento% 1 non é compatible co sistema.</translation>
+        <translation>O complemento %1 non é compatible co sistema.</translation>
     </message>
 </context>
 <context>
@@ -16,12 +16,8 @@
 <context>
     <name>BluetoothApplet</name>
     <message>
-        <source>Bluetooth</source>
-        <translation>Bluetooth</translation>
-    </message>
-    <message>
         <source>Bluetooth settings</source>
-        <translation>Configuración de Bluetooth</translation>
+        <translation>Axustes do Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -36,7 +32,7 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Configuración de Bluetooth</translation>
+        <translation>Axustes do Bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
@@ -52,7 +48,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation>Apagado</translation>
+        <translation>Desactivado</translation>
     </message>
 </context>
 <context>
@@ -77,15 +73,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>12 horas de tempo</translation>
+        <translation>formato 12 horas</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>24 horas de tempo</translation>
+        <translation>formato 24 horas</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation>Configuración do tempo</translation>
+        <translation>Axustes da hora</translation>
     </message>
 </context>
 <context>
@@ -107,7 +103,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Está seguro que que quere vaciar %1 elementos?</translation>
+        <translation>Está certo/a de querer baleirar %1 elementos?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -225,11 +221,11 @@
     <name>NetworkItem</name>
     <message>
         <source>Disable wired connection</source>
-        <translation>Desactivar a conexión por cable</translation>
+        <translation>Desactivar a conexión con fíos</translation>
     </message>
     <message>
         <source>Enable wired connection</source>
-        <translation>Activa a conexión por fíos</translation>
+        <translation>Activa a conexión con fíos</translation>
     </message>
     <message>
         <source>Disable wireless connection</source>
@@ -253,7 +249,7 @@
     </message>
     <message>
         <source>Device disabled</source>
-        <translation>Despositivo desactivado</translation>
+        <translation>Dispositivo desactivado</translation>
     </message>
     <message>
         <source>Wireless connection: %1</source>
@@ -277,7 +273,7 @@
     </message>
     <message>
         <source>Network cable unplugged</source>
-        <translation>Cable de rede desconectado</translation>
+        <translation>Cabo de rede desconectado</translation>
     </message>
     <message>
         <source>Wireless Network</source>
@@ -330,19 +326,19 @@
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Capacidade% 1,% 2 minutos restantes</translation>
+        <translation>Capacidade %1,  %2 minutos restantes</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Capacidade% 1,% 2 h% 3 minutos restantes</translation>
+        <translation>Capacidade %1,%2h %3m restantes</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
-        <translation>Cargando% 1,% 2 min ata o completo</translation>
+        <translation>Cargando %1, %2m até completar</translation>
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Cargando% 1,% 2 h% 3 min ata completar</translation>
+        <translation>Cargando %1, %2h %3m até completar</translation>
     </message>
     <message>
         <source>Charged</source>
@@ -362,7 +358,7 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Capacidade% 1, totalmente cargada</translation>
+        <translation>Capacidade %1, totalmente cargada</translation>
     </message>
 </context>
 <context>
@@ -400,7 +396,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Pechar a sesión</translation>
+        <translation>Pechar sesión</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -420,10 +416,6 @@
     <message>
         <source>Device</source>
         <translation>Dispositivo</translation>
-    </message>
-    <message>
-        <source>Application</source>
-        <translation>Aplicación</translation>
     </message>
 </context>
 <context>

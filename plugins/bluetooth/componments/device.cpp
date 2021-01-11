@@ -57,7 +57,6 @@ Device::Device(QObject *parent)
 
 Device::~Device()
 {
-    emit stateChanged(StateUnavailable);
 }
 
 void Device::updateDeviceTime()
