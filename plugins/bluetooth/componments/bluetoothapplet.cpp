@@ -50,12 +50,13 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     m_layout->setMargin(0);
     m_layout->addSpacing(20);
     m_layout->addWidget(m_label, 0, Qt::AlignLeft | Qt::AlignHCenter);
+    m_layout->addStretch();
 }
 
-void SettingLabel::addSwichButton(DSwitchButton *button)
+void SettingLabel::addButton(QWidget *button, int space)
 {
     m_layout->addWidget(button, 0, Qt::AlignRight | Qt::AlignHCenter);
-    m_layout->addSpacing(10);
+    m_layout->addSpacing(space);
 }
 
 void SettingLabel::mousePressEvent(QMouseEvent *ev)
@@ -153,6 +154,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
     connect(adapterItem, &BluetoothAdapterItem::deviceCountChanged, this, &BluetoothApplet::updateSize);
     connect(adapterItem, &BluetoothAdapterItem::adapterPowerChanged, this, &BluetoothApplet::updateBluetoothPowerState);
     connect(adapterItem, &BluetoothAdapterItem::deviceStateChanged, this, &BluetoothApplet::deviceStateChanged);
+    connect(adapterItem, &BluetoothAdapterItem::requestRefreshAdapter, m_adaptersManager, &AdaptersManager::adapterRefresh);
 
     m_adapterItems.insert(adapter->id(), adapterItem);
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);

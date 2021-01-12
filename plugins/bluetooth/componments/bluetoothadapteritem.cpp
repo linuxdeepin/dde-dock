@@ -24,6 +24,7 @@
 #include "componments/adapter.h"
 #include "bluetoothapplet.h"
 #include "bluetoothconstants.h"
+#include "refreshbutton.h"
 
 #include <QBoxLayout>
 #include <QStandardItemModel>
@@ -121,6 +122,7 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_adapterStateBtn(new DSwitchButton(this))
     , m_deviceListview(new DListView(this))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
+    , m_refreshBtn(new RefreshButton(this))
 {
     initData();
     initUi();
@@ -160,6 +162,15 @@ void BluetoothAdapterItem::onTopDeviceItem(DStandardItem *item)
 void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
 {
     m_adapterLabel->label()->setText(name);
+}
+
+void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
+{
+    if (type == DGuiApplicationHelper::LightType) {
+        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+    } else {
+        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+    }
 }
 
 int BluetoothAdapterItem::currentDeviceCount()
@@ -222,10 +233,14 @@ void BluetoothAdapterItem::onDeviceRemoved(const Device *device)
 
 void BluetoothAdapterItem::initUi()
 {
+    m_refreshBtn->setFixedSize(24, 24);
+    m_refreshBtn->setVisible(m_adapter->powered());
+
     setAccessibleName(m_adapter->name());
     setContentsMargins(0, 0, 0, 0);
     m_adapterLabel->setFixedSize(ItemWidth, TitleHeight);
-    m_adapterLabel->addSwichButton(m_adapterStateBtn);
+    m_adapterLabel->addButton(m_refreshBtn, 0);
+    m_adapterLabel->addButton(m_adapterStateBtn, 10);
     DFontSizeManager::instance()->bind(m_adapterLabel->label(), DFontSizeManager::T4);
 
     m_adapterStateBtn->setChecked(m_adapter->powered());
@@ -250,14 +265,32 @@ void BluetoothAdapterItem::initUi()
     mainLayout->addWidget(m_adapterLabel);
     mainLayout->addSpacing(2);
     mainLayout->addWidget(m_deviceListview);
+
+    updateIconTheme(DGuiApplicationHelper::instance()->themeType());
+    if (m_adapter->discover()) {
+        m_refreshBtn->startRotate();
+    }
 }
 
 void BluetoothAdapterItem::initConnect()
 {
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothAdapterItem::updateIconTheme);
     connect(m_adapter, &Adapter::deviceAdded, this, &BluetoothAdapterItem::onDeviceAdded);
     connect(m_adapter, &Adapter::deviceRemoved, this, &BluetoothAdapterItem::onDeviceRemoved);
     connect(m_adapter, &Adapter::nameChanged, this, &BluetoothAdapterItem::onAdapterNameChanged);
     connect(m_deviceListview, &DListView::clicked, this, &BluetoothAdapterItem::onConnectDevice);
+    connect(m_adapter, &Adapter::discoveringChanged, this, [ = ] (bool state) {
+        if (state) {
+            m_refreshBtn->startRotate();
+        } else {
+            m_refreshBtn->stopRotate();
+        }
+    });
+
+    connect(m_refreshBtn, &RefreshButton::clicked, this, [ = ] {
+        emit requestRefreshAdapter(m_adapter);
+    });
+
     connect(m_adapter, &Adapter::poweredChanged, this, [ = ] (bool state) {
         initData();
         m_deviceListview->setVisible(state);
@@ -271,6 +304,7 @@ void BluetoothAdapterItem::initConnect()
         m_deviceModel->clear();
         m_deviceListview->setVisible(false);
         m_adapterStateBtn->setEnabled(false);
+        m_refreshBtn->setVisible(state);
         emit requestSetAdapterPower(m_adapter, state);
     });
 }

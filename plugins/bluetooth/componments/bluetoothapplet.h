@@ -49,7 +49,7 @@ class SettingLabel : public QWidget
     Q_OBJECT
 public:
     explicit SettingLabel(QString text, QWidget *parent = nullptr);
-    void addSwichButton(DSwitchButton *button);
+    void addButton(QWidget *button, int space);
     DLabel *label() { return m_label; }
 signals:
     void clicked();
