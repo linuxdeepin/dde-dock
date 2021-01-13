@@ -50,8 +50,6 @@ AdapterItem::AdapterItem(AdaptersManager *adapterManager, Adapter *adapter, QWid
     m_switchItem->setChecked(adapter->powered(),false);
     m_switchItem->setLoading(adapter->discover());
 
-    m_adaptersManager->setAdapterPowered(m_adapter, adapter->powered());
-
     m_deviceLayout->addWidget(m_switchItem);
     m_deviceLayout->addWidget(m_line);
     m_centralWidget->setFixedWidth(POPUPWIDTH);
@@ -352,4 +350,3 @@ void AdapterItem::refresh()
 
     m_adaptersManager->adapterRefresh(m_adapter);
 }
-
