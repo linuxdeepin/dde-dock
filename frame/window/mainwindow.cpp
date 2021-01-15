@@ -370,6 +370,7 @@ void MainWindow::adjustShadowMask()
         }
     }
     m_platformWindowHandle.setWindowRadius(radius);
+    m_mainPanel->updatePluginsLayout();
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
