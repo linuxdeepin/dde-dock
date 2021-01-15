@@ -476,7 +476,7 @@ private:
     //当前屏幕的方向
     int m_monitorRotation;
     //当前屏幕的所有方向
-    RotationList m_rotations;
+    RotationList m_rotations; // 逆时针旋转（向下，向右，向上，向左）
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;

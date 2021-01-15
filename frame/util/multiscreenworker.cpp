@@ -735,6 +735,10 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
     emit requestUpdateDockEntry();
 }
 
+/**
+ * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
+ * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
+ */
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
     static QRect lastRect = QRect();
@@ -772,12 +776,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     const QPoint &p = rawXPosition(rect.topLeft());
     qDebug() << "dock topLeft position:" << p;
 
-    QScreen const *currentScreen = Utils::screenAtByScaled(rect.topLeft());
-
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
-    uint strut = 0;
-    uint strutStart = 0;
-    uint strutEnd = 0;
+    double strut = 0;
+    double strutStart = 0;
+    double strutEnd = 0;
 
     switch (m_position) {
     case Position::Top:
@@ -788,7 +790,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
-        strut = currentScreen->geometry().height() * ratio - p.y();
+        strut = m_screenRawHeight - p.y();
         strutStart = p.x();
         strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
         break;
@@ -800,13 +802,17 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = currentScreen->geometry().width() * ratio - p.x();
+        strut = m_screenRawWidth - p.x();
         strutStart = p.y();
         strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
         break;
     }
-    qDebug() << "set dock geometry to xcb:" << strut << strutStart << strutEnd;
-    XcbMisc::instance()->set_strut_partial(parent()->winId(), orientation, strut + WINDOWMARGIN * ratio, strutStart, strutEnd);
+
+    qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
+    XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
+                                           static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
+                                           static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
+                                           static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
 }
 
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
