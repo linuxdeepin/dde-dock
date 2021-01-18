@@ -203,7 +203,6 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         } else {
             hide();
         }
-        emit animationFinished();
         AppItem *appItem = static_cast<AppItem *>(event->source());
         appItem->undock();
         m_popupWindow->setVisible(false);
@@ -267,7 +266,6 @@ void AppDragWidget::initAnimations()
     connect(m_animGroup, &QParallelAnimationGroup::stateChanged,
             this, &AppDragWidget::onRemoveAnimationStateChanged);
     connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
-    connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::animationFinished);
 }
 
 void AppDragWidget::initConfigurations()

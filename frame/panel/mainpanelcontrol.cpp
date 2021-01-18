@@ -692,17 +692,6 @@ void MainPanelControl::startDrag(DockItem *item)
 
         connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
             m_appDragWidget = nullptr;
-        });
-
-        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
-            if (-1 != m_appAreaSonLayout->indexOf(item)) {
-                m_dragIndex = m_appAreaSonLayout->indexOf(item);
-                removeItem(item);
-            }
-        });
-
-        connect(m_appDragWidget, &AppDragWidget::animationFinished, this, [ = ] {
-            m_appDragWidget = nullptr;
             if (qobject_cast<AppItem *>(item)->isValid()) {
                 if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
                     insertItem(m_dragIndex, item);
@@ -710,6 +699,13 @@ void MainPanelControl::startDrag(DockItem *item)
                 }
                 item->setDraging(false);
                 item->update();
+            }
+        });
+
+        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
+            if (-1 != m_appAreaSonLayout->indexOf(item)) {
+                m_dragIndex = m_appAreaSonLayout->indexOf(item);
+                removeItem(item);
             }
         });
 
