@@ -736,22 +736,6 @@ void MainPanelControl::startDrag(DockItem *item)
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
-    /**
-     * 在关闭窗口特效模式下，拖动任务栏图标到外面时，存在 dropEvent 被其它窗口捕获的情况，
-     * 导致 AppDragWidget 中的 dropEvent 无法触发，故这里特殊处理
-     */
-    if (item->itemType() == DockItem::App && !DWindowManagerHelper::instance()->hasComposite()) {
-        m_appDragWidget = nullptr;
-        if (qobject_cast<AppItem *>(item)->isValid()) {
-            if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
-                insertItem(m_dragIndex, item);
-                m_dragIndex = -1;
-            }
-            item->setDraging(false);
-            item->update();
-        }
-    }
-
     if (item->itemType() != DockItem::App || m_dragIndex == -1) {
         m_appDragWidget = nullptr;
         item->setDraging(false);
