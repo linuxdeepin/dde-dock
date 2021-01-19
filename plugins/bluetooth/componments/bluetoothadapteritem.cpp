@@ -293,6 +293,7 @@ void BluetoothAdapterItem::initConnect()
 
     connect(m_adapter, &Adapter::poweredChanged, this, [ = ] (bool state) {
         initData();
+        m_refreshBtn->setVisible(state);
         m_deviceListview->setVisible(state);
         m_adapterStateBtn->setChecked(state);
         m_adapterStateBtn->setEnabled(true);
