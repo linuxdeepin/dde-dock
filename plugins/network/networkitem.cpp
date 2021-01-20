@@ -477,9 +477,9 @@ void NetworkItem::wiredsEnable(bool enable)
     for (auto wiredItem : m_wiredItems) {
         if (wiredItem) {
             wiredItem->setDeviceEnabled(enable);
+            wiredItem->setVisible(enable);
         }
     }
-//    updateSelf();
 }
 
 void NetworkItem::wirelessEnable(bool enable)
