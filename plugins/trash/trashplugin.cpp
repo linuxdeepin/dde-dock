@@ -28,6 +28,7 @@
 #include "../../widgets/tipswidget.h"
 
 #include <DApplication>
+#include <DDesktopServices>
 
 #define PLUGIN_STATE_KEY    "enable"
 
@@ -110,9 +111,10 @@ QWidget *TrashPlugin::itemPopupApplet(const QString &itemKey)
 const QString TrashPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
+    DDesktopServices::showFolder(QUrl("trash:///"));
 
-//    return QString();
-    return "gio open trash:///";
+    return QString();
+    // return "gio open trash:///";
 }
 
 const QString TrashPlugin::itemContextMenu(const QString &itemKey)
