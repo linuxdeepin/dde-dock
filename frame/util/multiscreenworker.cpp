@@ -1562,7 +1562,7 @@ MainWindow *MultiScreenWorker::parent()
  * @param screenName    当前屏幕名字
  * @param pos           任务栏位置
  * @param displaymode   任务栏显示模式
- * @param withoutScale  是否不考虑缩放（true:不考虑缩放; false:考虑缩放(默认)）
+ * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
  * @return QRect        任务栏参数
  */
 QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
@@ -1570,7 +1570,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     QRect rect;
     const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
     const int margin = (displaymode == DisplayMode::Fashion) ? 10 : 0;
-    const int dockSize = static_cast<int>((displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * (withoutScale ? ratio : 1));
+    const int dockSize = static_cast<int>((displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * (withoutScale ? qApp->devicePixelRatio() : 1));
     for (Monitor *monitor : m_mtrInfo.validMonitor()) {
         if (monitor->name() == screenName) {
             switch (pos) {
@@ -1610,7 +1610,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
  * @param screenName    当前屏幕名字
  * @param pos           任务栏位置
  * @param displaymode   任务栏显示模式
- * @param withoutScale  是否不考虑缩放（true:不考虑缩放; false:考虑缩放(默认)）
+ * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
  * @return QRect        任务栏参数
  */
 QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
