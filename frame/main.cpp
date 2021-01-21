@@ -64,15 +64,14 @@ bool IsSaveMode()
     QSettings settings(g_cfgPath, QSettings::IniFormat);
     settings.beginGroup(qApp->applicationName());
     int collapseNum = settings.value("collapse").toInt();
-
-    // 自动进入安全模式
+    /* 崩溃次数达到3次，进入安全模式（不加载插件） */
     if (collapseNum >= 3) {
+        settings.remove(""); // 删除记录的数据
         settings.setValue("collapse", 0);
         settings.endGroup();
         settings.sync();
         return true;
     }
-
     return false;
 }
 
@@ -95,16 +94,38 @@ bool IsSaveMode()
     QSettings settings(g_cfgPath, QSettings::IniFormat);
     settings.beginGroup("dde-dock");
 
-    QDateTime lastDate = QDateTime::fromString(settings.value("lastDate").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
     int collapseNum = settings.value("collapse").toInt();
-
-    // 10秒以内发生崩溃则累加,记录到文件中
-    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 10) {
-        settings.setValue("collapse", collapseNum + 1);
-    } else {
-        settings.setValue("collapse", 0);
+    /* 第一次崩溃或进入安全模式后的第一次崩溃，将时间重置 */
+    if (collapseNum == 0) {
+        settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
     }
-    settings.setValue("lastDate", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+    QDateTime lastDate = QDateTime::fromString(settings.value("first_time").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
+    /* 将当前崩溃时间与第一次崩溃时间比较，小于9分钟，记录一次崩溃；大于9分钟，覆盖之前的崩溃时间 */
+    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 9 * 60) {
+        settings.setValue("collapse", collapseNum + 1);
+        switch (collapseNum) {
+        case 0:
+            settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+            break;
+        case 1:
+            settings.setValue("second_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+            break;
+        case 2:
+            settings.setValue("third_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+            break;
+        default:
+            qDebug() << "Error, the collapse is wrong!";
+            break;
+        }
+    } else {
+        if (collapseNum == 2){
+            settings.setValue("first_time", settings.value("second_time").toString());
+            settings.setValue("second_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+        } else {
+            settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+        }
+    }
+
     settings.endGroup();
     settings.sync();
 
@@ -243,6 +264,9 @@ int main(int argc, char *argv[])
 
     if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
         DockItemManager::instance()->startLoadPlugins();
+        qApp->setProperty("PLUGINSLOADED", true);
+    } else {
+        mw.sendNotifications();
     }
 
     return app.exec();

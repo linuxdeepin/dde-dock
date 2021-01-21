@@ -122,6 +122,7 @@ public:
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
     void setGeometry(const QRect &rect);
+    void sendNotifications();
 
     friend class MainPanel;
     friend class MainPanelControl;
@@ -131,6 +132,7 @@ public:
 public slots:
     void launch();
     void callShow();
+    void relaodPlugins();
 
 private:
     using QWidget::show;
