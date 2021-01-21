@@ -133,16 +133,10 @@ void BluetoothItem::refreshIcon()
     QString iconString;
 
     if (m_adapterPowered) {
-        switch (m_devState) {
-            case Device::StateConnected:
-                stateString = "active";
-                break;
-            case Device::StateAvailable: {
-                return ;
-            }
-            case Device::StateUnavailable: {
-                stateString = "disable";
-            }      break;
+        if (m_applet->connectedDevicesName().isEmpty()) {
+            stateString = "disable";
+        } else {
+            stateString = "active";
         }
     } else {
         stateString = "disable";
@@ -165,8 +159,7 @@ void BluetoothItem::refreshTips()
     QString tipsText;
 
     if (m_adapterPowered) {
-        switch (m_devState) {
-        case Device::StateConnected: {
+        if (!m_applet->connectedDevicesName().isEmpty() && m_devState != Device::StateAvailable) {
             QStringList textList;
             for (QString devName : m_applet->connectedDevicesName()) {
                 textList << tr("%1 connected").arg(devName);
@@ -174,14 +167,10 @@ void BluetoothItem::refreshTips()
             m_tipsLabel->setTextList(textList);
             return;
         }
-        case Device::StateAvailable: {
+        if (m_devState == Device::StateAvailable) {
             tipsText = tr("Connecting...");
-        }
-            break ;
-        case Device::StateUnavailable: {
+        } else {
             tipsText = tr("Bluetooth");
-        }
-            break;
         }
     } else {
         tipsText = tr("Turned off");
