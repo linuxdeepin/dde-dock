@@ -21,7 +21,7 @@ void TipsWidget::setText(const QString &text)
     // 同时去掉两边的空白信息，例如qBittorrent的提示
     m_text = document.toPlainText().simplified();
 
-    setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
+    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().height());
 
     update();
 
@@ -42,7 +42,7 @@ void TipsWidget::setTextList(const QStringList &textList)
     int k = fontMetrics().height() * m_textList.size();
     setFixedHeight(k);
     for (QString text : m_textList) {
-        int fontLength = fontMetrics().width(text) + 6;
+        int fontLength = fontMetrics().width(text) + 20;
         maxLength = maxLength > fontLength ? maxLength : fontLength;
     }
     m_width = maxLength;
