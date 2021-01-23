@@ -40,8 +40,11 @@
 #include <QX11Info>
 #include <QGSettings>
 #include <DGuiApplicationHelper>
+#include <DSysInfo>
 
 #define APP_DRAG_THRESHOLD      20
+
+DCORE_USE_NAMESPACE
 
 QPoint AppItem::MousePressPos;
 
@@ -480,9 +483,38 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_itemEntryInter->HandleMenuItem(QX11Info::getTimestamp(), itemId);
 }
 
+void AppItem::invokedMenuItem(const QString &group, const QString &itemId, const bool checked)
+{
+    if (group == "windows") {
+        m_itemEntryInter->Activate(itemId.toUInt());
+        return;
+    }
+
+    return invokedMenuItem(itemId, checked);
+}
+
 const QString AppItem::contextMenu() const
 {
-    return m_itemEntryInter->menu();
+    // NOTE(lxz): If there are already open windows, add a new menu.
+    // itemid needs to be a negative number
+    // because itemid needs to be passed to the backend
+    if (m_windowInfos.isEmpty() || !DSysInfo::isCommunityEdition()) {
+        return m_itemEntryInter->menu();
+    }
+
+    QJsonObject obj = QJsonDocument::fromJson(m_itemEntryInter->menu().toUtf8()).object();
+    QJsonArray windows;
+
+    for (auto it = m_windowInfos.cbegin(); it != m_windowInfos.cend(); ++it) {
+        windows << QJsonObject{
+            {"winid", QString::number(it.key())},
+            {"title", it.value().title}
+        };
+    }
+
+    obj["windows"] = windows;
+
+    return QJsonDocument(obj).toJson(QJsonDocument::Compact);
 }
 
 QWidget *AppItem::popupTips()
