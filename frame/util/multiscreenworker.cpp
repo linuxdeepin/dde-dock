@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2018 ~ 2028 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
@@ -746,40 +746,24 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     static int lastScreenWith = 0;
     static int lastScreenHeight = 0;
 
-    const auto ratio = qApp->devicePixelRatio();
-    QRect rect;
-    if (m_hideMode == HideMode::KeepShowing) {
-        rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
-    } else {
-        rect = getDockHideGeometry(m_ds.current(), m_position, m_displayMode);
+    /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
+    if (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing) {
+        lastRect = QRect();
+        XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
+        return;
     }
 
-    // 已经设置过了，避免重复设置
-    if (rect == lastRect && lastScreenWith == m_screenRawWidth && lastScreenHeight == m_screenRawHeight)
+    QRect dockGeometry = getDockShowGeometry(m_ds.current(), m_position, m_displayMode, true);
+    if (lastRect == dockGeometry && lastScreenWith == m_screenRawWidth && lastScreenHeight == m_screenRawHeight) {
         return;
-    lastRect = rect;
+    }
+    lastRect = dockGeometry;
     lastScreenWith = m_screenRawWidth;
     lastScreenHeight = m_screenRawHeight;
-    qDebug() << "dock geometry:" << rect;
+    qDebug() << "dock real geometry:" << dockGeometry;
+    qDebug() << "screen width:" << m_screenRawWidth << ", height:" << m_screenRawHeight;
 
-    // 先清除原先的窗管任务栏区域
-    XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
-
-    // 在副屏时,且为一直显示时,不要挤占应用,这是sp3的新需求
-    if (m_ds.current() != m_ds.primary() && m_hideMode == HideMode::KeepShowing) {
-        lastRect = QRect();
-        qDebug() << "don`t set dock area";
-        return;
-    }
-
-    // 除了"一直显示"模式,其他的都不要设置任务栏区域
-    if (m_hideMode != Dock::KeepShowing) {
-        lastRect = QRect();
-        return;
-    }
-
-    const QPoint &p = rawXPosition(rect.topLeft());
-    qDebug() << "dock topLeft position:" << p;
+    const qreal ratio = qApp->devicePixelRatio();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     double strut = 0;
@@ -789,27 +773,27 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     switch (m_position) {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
-        strut = p.y() + rect.height() * ratio;
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
+        strut = dockGeometry.y() + dockGeometry.height();
+        strutStart = dockGeometry.x();
+        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
-        strut = m_screenRawHeight - p.y();
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
+        strut = m_screenRawHeight - dockGeometry.y();
+        strutStart = dockGeometry.x();
+        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
         break;
     case Position::Left:
         orientation = XcbMisc::OrientationLeft;
-        strut = p.x() + rect.width() * ratio;
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
+        strut = dockGeometry.x() + dockGeometry.width();
+        strutStart = dockGeometry.y();
+        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = m_screenRawWidth - p.x();
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
+        strut = m_screenRawWidth - dockGeometry.x();
+        strutStart = dockGeometry.y();
+        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
         break;
     }
 
@@ -1575,34 +1559,34 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 {
     QRect rect;
     const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = (displaymode == DisplayMode::Fashion) ? 10 : 0;
+    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
     const int dockSize = static_cast<int>((displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * (withoutScale ? qApp->devicePixelRatio() : 1));
     for (Monitor *monitor : m_mtrInfo.validMonitor()) {
         if (monitor->name() == screenName) {
             switch (pos) {
             case Position::Top:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
-                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
                 rect.setHeight(dockSize);
                 break;
             case Position::Bottom:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin * ratio - dockSize));
-                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin - dockSize));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
                 rect.setHeight(dockSize);
                 break;
             case Position::Left:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
                 rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin * ratio));
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
             case Position::Right:
-                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin * ratio - dockSize));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin - dockSize));
+                rect.setY(static_cast<int>(monitor->y() + margin));
                 rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin * ratio));
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
             }
         }
@@ -1623,33 +1607,33 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
 {
     QRect rect;
     const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = (displaymode == DisplayMode::Fashion) ? 10 : 0;
+    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
     for (Monitor *monitor : m_mtrInfo.validMonitor()) {
         if (monitor->name() == screenName) {
             switch (pos) {
             case Position::Top:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
-                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
                 rect.setHeight(0);
                 break;
             case Position::Bottom:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin * ratio));
-                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
                 rect.setHeight(0);
                 break;
             case Position::Left:
-                rect.setX(static_cast<int>(monitor->x() + margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
                 rect.setWidth(0);
-                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin * ratio));
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
             case Position::Right:
-                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin * ratio));
-                rect.setY(static_cast<int>(monitor->y() + margin * ratio));
+                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
                 rect.setWidth(0);
-                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin * ratio));
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
             }
         }
