@@ -35,6 +35,9 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  libdframeworkdbus2 (>=5.3.0.24),
  libdde-network-utils (>=5.3.0.5),
  dde-qt5xcb-plugin,
+ dde-daemon (>=5.12.0.31),
+ startdde (>=5.6.0.34),
+ lastore-daemon (>=5.1.0.21)
 Recommends: dde-disk-mount-plugin, dde-dock-onboard-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),
