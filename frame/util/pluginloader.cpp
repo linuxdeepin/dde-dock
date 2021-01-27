@@ -35,11 +35,14 @@ PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
 void PluginLoader::run()
 {
     QDir pluginsDir(m_pluginDirPath);
-    const QStringList plugins = pluginsDir.entryList(QDir::Files);
+    const QStringList files = pluginsDir.entryList(QDir::Files);
     static const QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
     static const auto disable_plugins_list = gsetting.get("disable-plugins-list").toStringList();
 
-    for (QString file : plugins)
+    QStringList plugins;
+
+    // 查找可用插件
+    for (QString file : files)
     {
         if (!QLibrary::isLibrary(file))
             continue;
@@ -52,8 +55,11 @@ void PluginLoader::run()
             qDebug() << "disable loading plugin:" << file;
             continue;
         }
+        plugins << file;
+    }
 
-        emit pluginFounded(pluginsDir.absoluteFilePath(file));
+    for (auto plugin : plugins) {
+        emit pluginFounded(pluginsDir.absoluteFilePath(plugin), plugins.last() == plugin);
     }
 
     emit finished();

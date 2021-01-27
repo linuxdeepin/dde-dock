@@ -47,6 +47,9 @@ public:
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
     void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
 
+signals:
+    void pluginLoaderFinished();
+
 protected:
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
     QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
@@ -59,7 +62,7 @@ protected Q_SLOTS:
 private slots:
     void displayModeChanged();
     void positionChanged();
-    void loadPlugin(const QString &pluginFile);
+    void loadPlugin(const QString &pluginFile, bool lastone);
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
 

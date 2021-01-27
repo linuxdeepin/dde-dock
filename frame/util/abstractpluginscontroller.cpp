@@ -178,7 +178,7 @@ void AbstractPluginsController::positionChanged()
         inter->positionChanged(position);
 }
 
-void AbstractPluginsController::loadPlugin(const QString &pluginFile)
+void AbstractPluginsController::loadPlugin(const QString &pluginFile, bool lastone)
 {
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
@@ -238,8 +238,11 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     // NOTE(justforlxz): 插件的所有初始化工作都在init函数中进行，
     // loadPlugin函数是按队列执行的，initPlugin函数会有可能导致
     // 函数执行被阻塞。
-    QTimer::singleShot(1, this, [ = ] {
+    QTimer::singleShot(1, this, [ = ] { 
         initPlugin(interface);
+        if (lastone) {
+            emit pluginLoaderFinished();
+        }
     });
 }
 

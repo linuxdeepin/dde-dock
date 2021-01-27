@@ -33,7 +33,7 @@ public:
 
 signals:
     void finished() const;
-    void pluginFounded(const QString &pluginFile) const;
+    void pluginFounded(const QString &pluginFile, bool lastone) const;
 
 protected:
     void run();

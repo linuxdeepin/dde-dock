@@ -64,6 +64,7 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemManager::pluginItemRemoved, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemManager::itemUpdated, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::updatePluginsItemOrderKey, Qt::QueuedConnection);
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
@@ -291,7 +292,6 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
         insertIndex ++;
     }
 
-    updatePluginsItemOrderKey();
     emit itemInserted(insertIndex - firstPluginPosition, item);
 }
 
