@@ -17,7 +17,7 @@
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Definições bluetooth</translation>
+        <translation>Definições Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -149,6 +149,21 @@
     <message>
         <source>Launcher</source>
         <translation>Lançador</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

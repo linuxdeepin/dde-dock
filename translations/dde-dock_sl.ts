@@ -10,7 +10,7 @@
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Odstrani</translation>
     </message>
 </context>
 <context>
@@ -152,6 +152,21 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
@@ -285,7 +300,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Povezava ni uspela</translation>
     </message>
 </context>
 <context>

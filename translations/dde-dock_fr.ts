@@ -152,6 +152,21 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
@@ -253,11 +268,11 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
+        <translation>Connexion sans fil : %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
+        <translation>Connexion filaire : %1</translation>
     </message>
     <message>
         <source>Not connected</source>
