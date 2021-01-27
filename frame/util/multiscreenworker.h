@@ -433,6 +433,7 @@ private:
     bool contains(const MonitRect &rect, const QPoint &pos);
     bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
+    void updateScreenSize();
 
 private:
     QWidget *m_parent;

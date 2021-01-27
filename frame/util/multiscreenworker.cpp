@@ -207,6 +207,7 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
                 m_screenRawWidth = m_displayInter->screenWidth();
             }
         }
+        updateScreenSize();
     }
 }
 
@@ -742,6 +743,8 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
     static QRect lastRect = QRect();
+    static int lastScreenWith = 0;
+    static int lastScreenHeight = 0;
 
     const auto ratio = qApp->devicePixelRatio();
     QRect rect;
@@ -752,9 +755,11 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     }
 
     // 已经设置过了，避免重复设置
-    if (rect == lastRect)
+    if (rect == lastRect && lastScreenWith == m_screenRawWidth && lastScreenHeight == m_screenRawHeight)
         return;
     lastRect = rect;
+    lastScreenWith = m_screenRawWidth;
+    lastScreenHeight = m_screenRawHeight;
     qDebug() << "dock geometry:" << rect;
 
     // 先清除原先的窗管任务栏区域
@@ -1098,6 +1103,7 @@ void MultiScreenWorker::initDBus()
         m_screenRawWidth = m_displayInter->screenWidth();
         m_ds = DockScreen(m_displayInter->primary());
         m_mtrInfo.setPrimary(m_displayInter->primary());
+        updateScreenSize();
     }
 }
 
@@ -1728,6 +1734,32 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
            (scaledPos - screen->geometry().topLeft()) *
            screen->devicePixelRatio()
            : scaledPos;
+}
+
+/**
+ * @brief 通过 xcb 获取屏幕的宽高。
+ * display 服务中获取的屏幕宽高在旋转屏幕的特殊场景下会出错（宽高写反了），故通过这个方法修正，
+ * 后续 display 服务的数据正常后，这个方法可以用于异常处理时的备选方案。
+ */
+void MultiScreenWorker::updateScreenSize()
+{
+    /* Open the connection to the X server. Use the DISPLAY environment variable */
+    int screenNum;
+    xcb_connection_t *connection = xcb_connect(NULL, &screenNum);
+
+    /* Get the screen whose number is screenNum */
+    const xcb_setup_t *setup = xcb_get_setup(connection);
+    xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
+
+    /* we want the screen at index screenNum of the iterator */
+    for (int i = 0; i < screenNum; ++i) {
+        xcb_screen_next(&iter);
+    }
+
+    xcb_screen_t *screen = iter.data;
+
+    m_screenRawWidth = screen->width_in_pixels;
+    m_screenRawHeight = screen->height_in_pixels;
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)
