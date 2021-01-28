@@ -54,7 +54,6 @@ DCORE_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #endif
 
-const int MAX_STACK_FRAMES = 128;
 const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
 
 using namespace std;
@@ -149,38 +148,6 @@ bool IsSaveMode()
                 + QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss:zzz]")
                 + "[crash signal number:" + QString::number(sig) + "]\n";
         file->write(head.toUtf8());
-
-#ifdef Q_OS_LINUX
-        void *array[MAX_STACK_FRAMES];
-        size_t size = 0;
-        char **strings = nullptr;
-        size_t i;
-        signal(sig, SIG_DFL);
-        size = static_cast<size_t>(backtrace(array, MAX_STACK_FRAMES));
-        strings = backtrace_symbols(array, int(size));
-        for (i = 0; i < size; ++i) {
-            QString line = QString::number(i) + " " + QString::fromStdString(strings[i]) + "\n";
-            file->write(line.toUtf8());
-
-            std::string symbol(strings[i]);
-            QString strSymbol = QString::fromStdString(symbol);
-            int pos1 = strSymbol.indexOf("[");
-            int pos2 = strSymbol.lastIndexOf("]");
-            QString address = strSymbol.mid(pos1 + 1,pos2 - pos1 - 1);
-
-            // 按照内存地址找到对应代码的行号
-            QString cmd = "addr2line -C -f -e " + qApp->applicationName() + " " + address;
-            QProcess *p = new QProcess;
-            p->setReadChannel(QProcess::StandardOutput);
-            p->start(cmd);
-            p->waitForFinished();
-            p->waitForReadyRead();
-            file->write(p->readAllStandardOutput());
-            delete p;
-            p = nullptr;
-        }
-        free(strings);
-#endif // __linux
     } catch (...) {
         //
     }
@@ -201,7 +168,6 @@ int main(int argc, char *argv[])
     DockApplication app(argc, argv);
 
     //崩溃信号
-    signal(SIGTERM, sig_crash);
     signal(SIGSEGV, sig_crash);
     signal(SIGILL,  sig_crash);
     signal(SIGINT,  sig_crash);
