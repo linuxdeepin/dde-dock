@@ -166,6 +166,9 @@ void MenuWorker::showDockSettingsMenu()
             continue;
         }
 
+        if (name == "deepin-screen-recorder-plugin") {
+            continue;
+        }
         QAction *act = new QAction(display, this);
         act->setCheckable(true);
         act->setChecked(enable);
