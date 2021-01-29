@@ -1747,6 +1747,12 @@ void MultiScreenWorker::updateScreenSize()
     int screenNum;
     xcb_connection_t *connection = xcb_connect(NULL, &screenNum);
 
+    /* Check for failure */
+    if (xcb_connection_has_error(connection)) {
+        xcb_disconnect(connection);
+        return;
+    }
+
     /* Get the screen whose number is screenNum */
     const xcb_setup_t *setup = xcb_get_setup(connection);
     xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
@@ -1760,6 +1766,8 @@ void MultiScreenWorker::updateScreenSize()
 
     m_screenRawWidth = screen->width_in_pixels;
     m_screenRawHeight = screen->height_in_pixels;
+
+    xcb_disconnect(connection);
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)
