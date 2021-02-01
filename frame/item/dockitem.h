@@ -67,6 +67,7 @@ public slots:
     void showPopupApplet(QWidget *const applet);
     void hidePopup();
     virtual void setDraging(bool bDrag);
+    virtual void checkEntry() {}
 
     bool isDragging();
 signals:

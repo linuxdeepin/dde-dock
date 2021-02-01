@@ -141,6 +141,11 @@ AppItem::~AppItem()
     m_appNameTips->deleteLater();
 }
 
+void AppItem::checkEntry()
+{
+    m_itemEntryInter->Check();
+}
+
 const QString AppItem::appId() const
 {
     return m_id;

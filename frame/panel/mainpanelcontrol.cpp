@@ -345,6 +345,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     QTimer::singleShot(0, [ = ] {
         updatePluginsLayout();
     });
+    item->checkEntry();
 }
 
 void MainPanelControl::removeItem(DockItem *item)
