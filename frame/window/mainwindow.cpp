@@ -591,14 +591,14 @@ void MainWindow::sendNotifications()
             .path("/com/deepin/dde/Notification")
             .interface("com.deepin.dde.Notification")
             .method(QString("Notify"))
-            .arg(QCoreApplication::applicationName())                             // appname
-            .arg(static_cast<uint>(0))                                            // id
-            .arg(QString("preferences-system"))                                   // icon
-            .arg(QString(tr("Dock - Safe Mode")))                                 // summary
-            .arg(tr("The Dock is in safe mode, please exit to show it properly")) // content
-            .arg(actionButton)                                                    // actions
-            .arg(hints)                                                           // hints
-            .arg(15000)                                                           // timeout
+            .arg(QString("dde-control-center"))                                            // appname
+            .arg(static_cast<uint>(0))                                                     // id
+            .arg(QString("preferences-system"))                                            // icon
+            .arg(QString(tr("Dock - Safe Mode")))                                          // summary
+            .arg(QString(tr("The Dock is in safe mode, please exit to show it properly"))) // content
+            .arg(actionButton)                                                             // actions
+            .arg(hints)                                                                    // hints
+            .arg(15000)                                                                    // timeout
             .call();
     });
 }
