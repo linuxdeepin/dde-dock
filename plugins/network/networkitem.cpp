@@ -1235,7 +1235,7 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     continue;
-                if (m_connectedWiredDevice.size() == 1) {
+                if (m_connectedWirelessDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
                     strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
