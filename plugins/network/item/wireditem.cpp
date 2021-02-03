@@ -218,7 +218,6 @@ void WiredItem::setWiredStateIcon()
         }
             break;
     }
-
     m_freshWiredIcon->stop();
 
     if (m_deviceState == NetworkDevice::Activated && NetworkModel::connectivity() != Connectivity::Full) {
@@ -301,6 +300,5 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
         m_connectedName->setText(m_deviceName);
     else
         m_connectedName->setText(strTitle);
-
     emit activeConnectionChanged();
 }
