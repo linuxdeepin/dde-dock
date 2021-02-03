@@ -54,6 +54,12 @@ static QGSettings *GSettingsByLaunch()
     return &settings;
 }
 
+static QGSettings *GSettingsByApp()
+{
+    static QGSettings settings("com.deepin.dde.dock.module.app");
+    return &settings;
+}
+
 MainPanelControl::MainPanelControl(QWidget *parent)
     : QWidget(parent)
     , m_mainPanelLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
@@ -652,7 +658,8 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
-    startDrag(item);
+    if (!GSettingsByApp()->keys().contains("removeable") || GSettingsByApp()->get("removeable").toBool())
+        startDrag(item);
 
     return QWidget::eventFilter(watched, event);
 }
@@ -724,7 +731,7 @@ void MainPanelControl::startDrag(DockItem *item)
             static_cast<QGraphicsView *>(m_appDragWidget)->viewport()->installEventFilter(this);
         } else {
             appDrag->QDrag::setPixmap(dragPix);
-       }
+        }
 
         drag = appDrag;
         drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());

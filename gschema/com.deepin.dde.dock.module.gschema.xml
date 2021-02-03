@@ -15,6 +15,13 @@
             Control Module Enable
       </description>
     </key>
+	<key type="b" name="removeable">
+      <default>true</default>
+      <summary>App Removeable</summary>
+      <description>
+          Control App Removeable
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/disableplugins/" id="com.deepin.dde.dock.disableplugins" gettext-domain="DDE">
      <key name='disable-plugins-list' type='as'>
