@@ -122,6 +122,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
     connect(GSettingsByDockApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(GSettingsByActiveApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
     connect(m_refershIconTimer, &QTimer::timeout, this, [ = ]() {
@@ -304,6 +306,11 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     m_lastclickTimes = curTimestamp;
+
+    // 鼠标在图标外边松开时，没必要响应点击操作
+    const QRect rect { QPoint(0, 0), size()};
+    if (!rect.contains(mapFromGlobal(QCursor::pos())))
+        return;
 
     if (e->button() == Qt::MiddleButton) {
         m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
