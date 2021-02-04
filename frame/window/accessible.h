@@ -186,9 +186,9 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);
-        // 如果你崩溃到这里，说明你修改的代码未兼顾到accessible功能，请修改通过后再提交
+        // 如果你看到这里的输出，说明代码中仍有控件未兼顾到accessible功能，请帮忙添加
         if (w->accessibleName().isEmpty())
-            Q_ASSERT_X(!w || !w->accessibleName().isEmpty(), "accessibleFactory()", QString("Class: " + classname + " cannot access").toLatin1().data());
+            qWarning() << "accessibleFactory()" + QString("Class: " + classname + " cannot access");
     }
 
     return interface;
