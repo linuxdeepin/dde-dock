@@ -31,8 +31,6 @@ extern void initFontColor(QWidget *widget)
         widget->setPalette(defaultPalette);
     };
 
-    fontChange(widget);
-
     QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [ = ] {
         fontChange(widget);
     });
