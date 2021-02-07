@@ -38,7 +38,7 @@ PreviewContainer::PreviewContainer(QWidget *parent)
       m_mouseLeaveTimer(new QTimer(this)),
       m_wmHelper(DWindowManagerHelper::instance())
 {
-    m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
     m_windowListLayout->setSpacing(SPACING);
     m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
@@ -52,7 +52,6 @@ PreviewContainer::PreviewContainer(QWidget *parent)
     m_waitForShowPreviewTimer->setInterval(200);
 
     setAcceptDrops(true);
-    setLayout(m_windowListLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
@@ -62,13 +61,11 @@ PreviewContainer::PreviewContainer(QWidget *parent)
 void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose)
 {
     // check removed window
-    for (auto it(m_snapshots.begin()); it != m_snapshots.end();)
-    {
+    for (auto it(m_snapshots.begin()); it != m_snapshots.end();) {
         //初始化预览界面边距
         it.value()->setContentsMargins(0, 0, 0, 0);
 
-        if (!infos.contains(it.key()))
-        {
+        if (!infos.contains(it.key())) {
             m_windowListLayout->removeWidget(it.value());
             it.value()->deleteLater();
             it = m_snapshots.erase(it);
@@ -77,8 +74,7 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
         }
     }
 
-    for (auto it(infos.cbegin()); it != infos.cend(); ++it)
-    {
+    for (auto it(infos.cbegin()); it != infos.cend(); ++it) {
         const WId key = it.key();
         if (!m_snapshots.contains(key))
             appendSnapWidget(key);
@@ -86,9 +82,10 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
         m_snapshots[key]->setCloseAble(allowClose.contains(key));
     }
 
-    if (m_snapshots.isEmpty())
+    if (m_snapshots.isEmpty()) {
         emit requestCancelPreviewWindow();
         emit requestHidePopup();
+    }
 
     adjustSize();
 }
@@ -140,41 +137,43 @@ void PreviewContainer::adjustSize()
 {
     const int count = m_snapshots.size();
     const bool composite = m_wmHelper->hasComposite();
-    if (!composite)
-    {
+
+    if (composite) {
+        // 3D
+        const QRect r = qApp->primaryScreen()->geometry();
+        const int padding = 20;
+
+        const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
+        if (horizontal) {
+            const int h = SNAP_HEIGHT + MARGIN * 2;
+            const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
+
+            setFixedHeight(h);
+            setFixedWidth(std::min(w, r.width() - padding));
+        } else {
+            const int w = SNAP_WIDTH + MARGIN * 2;
+            const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);
+
+            setFixedWidth(w);
+            setFixedHeight(std::min(h, r.height() - padding));
+        }
+    } else if (m_windowListLayout->count()) {
+        // 2D
         const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
 
-        //根据appitem title 设置自适应宽度
-        auto appSnapshot = static_cast<AppSnapshot*>(this->layout()->itemAt(0)->widget());
+        // 根据appitem title 设置自适应宽度
+        auto appSnapshot = static_cast<AppSnapshot *>(m_windowListLayout->itemAt(0)->widget());
+
         auto font = appSnapshot->layout()->itemAt(0)->widget()->font();
         QFontMetrics fontMetrics(font);
-        const int fontSize = fontMetrics.boundingRect(appSnapshot->title()).width();
-        //预留字体到边缘的间距,边缘距离10px,关闭按钮24px
-        if (fontSize < SNAP_WIDTH - 44)
-            setFixedSize(fontSize + 44, h);
-        else
+        const int titleWidth = fontMetrics.boundingRect(appSnapshot->title()).width();
+        // 关闭按键的宽度和边缘间距的和，调整标题居中
+        const int closeBtnMargin = 2 * (SNAP_CLOSE_BTN_WIDTH + SNAP_CLOSE_BTN_MARGIN);
+        if (titleWidth < SNAP_WIDTH - closeBtnMargin) {
+            setFixedSize(titleWidth + closeBtnMargin, h);
+        } else {
             setFixedSize(SNAP_WIDTH, h);
-
-        return;
-    }
-
-    const QRect r = qApp->primaryScreen()->geometry();
-    const int padding = 20;
-
-    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
-    if (horizontal)
-    {
-        const int h = SNAP_HEIGHT + MARGIN * 2;
-        const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
-
-        setFixedHeight(h);
-        setFixedWidth(std::min(w, r.width() - padding));
-    } else {
-        const int w = SNAP_WIDTH + MARGIN * 2;
-        const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);
-
-        setFixedWidth(w);
-        setFixedHeight(std::min(h, r.height() - padding));
+        }
     }
 }
 
@@ -185,7 +184,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, [this](){
+    connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, [this]() {
         if (!m_wmHelper->hasComposite())
             return ;
 
@@ -281,7 +280,7 @@ void PreviewContainer::previewEntered(const WId wid)
 
 void PreviewContainer::previewFloating()
 {
-    if(!m_waitForShowPreviewTimer->isActive()){
+    if (!m_waitForShowPreviewTimer->isActive()) {
         m_floatingPreview->setVisible(true);
         m_floatingPreview->raise();
 
