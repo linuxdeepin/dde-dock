@@ -90,12 +90,26 @@ public:
         QMapIterator<Monitor *, MonitorInter *>it(m_monitorInfo);
         while (it.hasNext()) {
             it.next();
-            // 仅显示在主屏的情况下，可用屏幕信息只提供主屏幕
-            if ((!m_showInPrimary && it.key()->enable())
-                    || (m_showInPrimary && it.key()->name() == m_primary)) {
-                list << it.key();
+            // 仅显示在主屏的情况下，可用屏幕信息只提供主屏幕(m_primary有可能不是主屏幕的名字，数据还没来得及切换过来)
+            // 问题场景：连接双屏，设置任务栏仅显示在主屏（gsettings），然后拔掉主屏幕显示器，任务栏崩溃
+            if (it.key()->enable()) {
+                if (m_showInPrimary) {
+                    if (it.key()->name() == m_primary) {
+                        list.clear();
+                        list.append(it.key());
+                        return list;
+                    }
+
+                    if (!list.isEmpty()) {
+                        list.removeAt(0);
+                        list.push_front(it.key());
+                    } else
+                        list << it.key();
+                } else
+                    list << it.key();
             }
         }
+
         return list;
     }
     /**
