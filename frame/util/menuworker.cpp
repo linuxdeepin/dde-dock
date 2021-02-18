@@ -91,8 +91,8 @@ void MenuWorker::initUI()
     modeSubMenu->setAccessibleName("modesubmenu");
     modeSubMenu->addAction(m_fashionModeAct);
     modeSubMenu->addAction(m_efficientModeAct);
-    QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
-    modeSubMenuAct->setMenu(modeSubMenu);
+    m_modeSubMenuAct = new QAction(tr("Mode"), this);
+    m_modeSubMenuAct->setMenu(modeSubMenu);
 
     QMenu *locationSubMenu = new QMenu(m_settingsMenu);
     locationSubMenu->setAccessibleName("locationsubmenu");
@@ -100,26 +100,23 @@ void MenuWorker::initUI()
     locationSubMenu->addAction(m_bottomPosAct);
     locationSubMenu->addAction(m_leftPosAct);
     locationSubMenu->addAction(m_rightPosAct);
-    QAction *locationSubMenuAct = new QAction(tr("Location"), this);
-    locationSubMenuAct->setMenu(locationSubMenu);
+    m_locationSubMenuAct = new QAction(tr("Location"), this);
+    m_locationSubMenuAct->setMenu(locationSubMenu);
 
     QMenu *statusSubMenu = new QMenu(m_settingsMenu);
     statusSubMenu->setAccessibleName("statussubmenu");
     statusSubMenu->addAction(m_keepShownAct);
     statusSubMenu->addAction(m_keepHiddenAct);
     statusSubMenu->addAction(m_smartHideAct);
-    QAction *statusSubMenuAct = new QAction(tr("Status"), this);
-    statusSubMenuAct->setMenu(statusSubMenu);
+    m_statusSubMenuAct = new QAction(tr("Status"), this);
+    m_statusSubMenuAct->setMenu(statusSubMenu);
 
     m_hideSubMenu = new QMenu(m_settingsMenu);
     m_hideSubMenu->setAccessibleName("pluginsmenu");
-    QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
-    hideSubMenuAct->setMenu(m_hideSubMenu);
+    m_hideSubMenuAct = new QAction(tr("Plugins"), this);
+    m_hideSubMenuAct->setMenu(m_hideSubMenu);
 
-    m_settingsMenu->addAction(modeSubMenuAct);
-    m_settingsMenu->addAction(locationSubMenuAct);
-    m_settingsMenu->addAction(statusSubMenuAct);
-    m_settingsMenu->addAction(hideSubMenuAct);
+    setSettingsMenu();
     m_settingsMenu->setTitle("Settings Menu");
 }
 
@@ -138,6 +135,24 @@ void MenuWorker::initConnection()
     }
 }
 
+void MenuWorker::setSettingsMenu()
+{
+    for (auto act : m_settingsMenu->actions())
+        m_settingsMenu->removeAction(act);
+
+    if (GSettingsByMenu()->get("modeVisible").toBool())
+        m_settingsMenu->addAction(m_modeSubMenuAct);
+
+    if (GSettingsByMenu()->get("locationVisible").toBool())
+        m_settingsMenu->addAction(m_locationSubMenuAct);
+
+    if (GSettingsByMenu()->get("statusVisible").toBool())
+        m_settingsMenu->addAction(m_statusSubMenuAct);
+
+    if (GSettingsByMenu()->get("hideVisible").toBool())
+        m_settingsMenu->addAction(m_hideSubMenuAct);
+}
+
 void MenuWorker::showDockSettingsMenu()
 {
     QTimer::singleShot(0, this, [=] {
@@ -145,6 +160,7 @@ void MenuWorker::showDockSettingsMenu()
     });
 
     setAutoHide(false);
+    setSettingsMenu();
 
     bool hasComposite = DWindowManagerHelper::instance()->hasComposite();
 

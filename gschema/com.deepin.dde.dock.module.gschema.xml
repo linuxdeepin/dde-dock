@@ -271,7 +271,36 @@
       <description>
           Control Module Enable
       </description>
+      </key>
+    <key type="b" name="mode-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
     </key>
+    <key type="b" name="location-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+    <key type="b" name="status-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+    <key type="b" name="hide-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+
   </schema>
  <schema path="/com/deepin/dde/dock/module/AiAssistant/" id="com.deepin.dde.dock.module.AiAssistant" gettext-domain="DDE">
     <key type="b" name="control">

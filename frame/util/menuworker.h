@@ -53,6 +53,9 @@ public:
     // TODO 是否还有其他的插件未处理其gsettings配置,这里只是移植之前的代码
     void onTrashGSettingsChanged(const QString &key);
 
+private:
+    void setSettingsMenu();
+
 signals:
     void autoHideChanged(const bool autoHide) const;
     void trayCountChanged();
@@ -80,6 +83,10 @@ private:
     QAction *m_keepShownAct;
     QAction *m_keepHiddenAct;
     QAction *m_smartHideAct;
+    QAction *m_modeSubMenuAct;
+    QAction *m_locationSubMenuAct;
+    QAction *m_statusSubMenuAct;
+    QAction *m_hideSubMenuAct;
 
     bool m_menuEnable;
     bool m_autoHide;
