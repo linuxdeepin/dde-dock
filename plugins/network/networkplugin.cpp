@@ -221,6 +221,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
         connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
         connect(m_networkModel, &NetworkModel::connectionListChanged, m_networkItem, &NetworkItem::updateSelf);
         connect(m_networkModel, &NetworkModel::deviceEnableChanged, m_networkItem, &NetworkItem::updateSelf);
+        connect(m_networkModel, &NetworkModel::activeConnInfoChanged, m_networkItem, &NetworkItem::updateSelf);
     }
 
     m_hasDevice = wiredItems.size() || wirelessItems.size();
