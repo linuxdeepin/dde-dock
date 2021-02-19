@@ -27,18 +27,6 @@
 
 #include <DApplication>
 
-static QGSettings *GSettingsByMenu()
-{
-    static QGSettings settings("com.deepin.dde.dock.module.menu");
-    return &settings;
-}
-
-static QGSettings *GSettingsByTrash()
-{
-    static QGSettings settings("com.deepin.dde.dock.module.trash");
-    return &settings;
-}
-
 MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     : QObject (parent)
     , m_itemManager(DockItemManager::instance(this))
@@ -68,6 +56,15 @@ MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
 MenuWorker::~MenuWorker()
 {
     delete m_settingsMenu;
+
+    QList<QString> keys = m_settingsModuleMap.keys();
+    foreach (QString key, keys) {
+        QGSettings *settings = m_settingsModuleMap[key];
+        m_settingsModuleMap.remove(key);
+
+        delete settings;
+        settings = nullptr;
+    }
 }
 
 void MenuWorker::initMember()
@@ -124,8 +121,8 @@ void MenuWorker::initConnection()
 {
     connect(m_settingsMenu, &QMenu::triggered, this, &MenuWorker::menuActionClicked);
 
-    connect(GSettingsByMenu(), &QGSettings::changed, this, &MenuWorker::onGSettingsChanged);
-    connect(GSettingsByTrash(), &QGSettings::changed, this, &MenuWorker::onTrashGSettingsChanged);
+    connect(settingsModule("menu"), &QGSettings::changed, this, &MenuWorker::onGSettingsChanged);
+    connect(settingsModule("trash"), &QGSettings::changed, this, &MenuWorker::onTrashGSettingsChanged);
 
     connect(m_itemManager, &DockItemManager::trayVisableCountChanged, this, &MenuWorker::trayVisableCountChanged, Qt::QueuedConnection);
 
@@ -135,21 +132,29 @@ void MenuWorker::initConnection()
     }
 }
 
+const QGSettings *MenuWorker::settingsModule(const QString &module)
+{
+    if (!m_settingsModuleMap.contains(module))
+        m_settingsModuleMap.insert(module, new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8()));
+
+    return m_settingsModuleMap[module];
+}
+
 void MenuWorker::setSettingsMenu()
 {
     for (auto act : m_settingsMenu->actions())
         m_settingsMenu->removeAction(act);
 
-    if (GSettingsByMenu()->get("modeVisible").toBool())
+    if (settingsModule("menu")->get("modeVisible").toBool())
         m_settingsMenu->addAction(m_modeSubMenuAct);
 
-    if (GSettingsByMenu()->get("locationVisible").toBool())
+    if (settingsModule("menu")->get("locationVisible").toBool())
         m_settingsMenu->addAction(m_locationSubMenuAct);
 
-    if (GSettingsByMenu()->get("statusVisible").toBool())
+    if (settingsModule("menu")->get("statusVisible").toBool())
         m_settingsMenu->addAction(m_statusSubMenuAct);
 
-    if (GSettingsByMenu()->get("hideVisible").toBool())
+    if (settingsModule("menu")->get("hideVisible").toBool())
         m_settingsMenu->addAction(m_hideSubMenuAct);
 }
 
@@ -190,7 +195,8 @@ void MenuWorker::showDockSettingsMenu()
         act->setChecked(enable);
         act->setData(name);
 
-        actions << act;
+        if (!settingsModule(name)->keys().contains("visible") || settingsModule(name)->get("visible").toBool())
+            actions << act;
     }
 
     // sort by name
@@ -228,12 +234,8 @@ void MenuWorker::onGSettingsChanged(const QString &key)
         return;
     }
 
-    QGSettings *setting = GSettingsByMenu();
-
-    if (setting->keys().contains("enable")) {
-        const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuEnable=isEnable && setting->get("enable").toBool();
-    }
+    const QGSettings *setting = settingsModule("menu");
+    m_menuEnable = setting->keys().contains("enable") ? setting->get("enable").toBool() : m_menuEnable;
 }
 
 void MenuWorker::onTrashGSettingsChanged(const QString &key)
@@ -242,11 +244,8 @@ void MenuWorker::onTrashGSettingsChanged(const QString &key)
         return ;
     }
 
-    QGSettings *setting = GSettingsByTrash();
-
-    if (setting->keys().contains("enable")) {
-        m_trashPluginShow = GSettingsByTrash()->keys().contains("enable") && GSettingsByTrash()->get("enable").toBool();
-    }
+    const QGSettings *setting = settingsModule("trash");
+    m_trashPluginShow = setting->keys().contains("enable") ? setting->get("enable").toBool() : m_trashPluginShow;
 }
 
 void MenuWorker::menuActionClicked(QAction *action)

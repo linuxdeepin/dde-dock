@@ -30,6 +30,7 @@ using DBusDock = com::deepin::dde::daemon::Dock;
 class QMenu;
 class QAction;
 class DockItemManager;
+class QGSettings;
 /**
  * @brief The MenuWorker class  此类用于处理任务栏右键菜单的逻辑
  */
@@ -54,6 +55,7 @@ public:
     void onTrashGSettingsChanged(const QString &key);
 
 private:
+    const QGSettings *settingsModule(const QString &module);
     void setSettingsMenu();
 
 signals:
@@ -71,6 +73,7 @@ public slots:
 private:
     DockItemManager *m_itemManager;
     DBusDock *m_dockInter;
+    QMap<QString, QGSettings*> m_settingsModuleMap;
 
     QMenu *m_settingsMenu;
     QMenu *m_hideSubMenu;
