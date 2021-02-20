@@ -556,11 +556,9 @@ void MainWindow::touchRequestResizeDock()
 
 void MainWindow::setGeometry(const QRect &rect)
 {
-    static QRect lastRect;
-    if (lastRect == rect) {
+    if (rect == this->geometry()) {
         return;
     }
-    lastRect = rect;
     DBlurEffectWidget::setGeometry(rect);
     emit panelGeometryChanged();
 }
