@@ -417,6 +417,13 @@
     </key>
   </schema>
  <schema path="/com/deepin/dde/dock/module/multitasking/" id="com.deepin.dde.dock.module.multitasking" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
     <key type="b" name="menu-enable">
       <default>true</default>
       <summary>Menu Enable</summary>
@@ -433,6 +440,13 @@
     </key>
   </schema>
  <schema path="/com/deepin/dde/dock/module/show-desktop/" id="com.deepin.dde.dock.module.show-desktop" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
     <key type="b" name="menu-enable">
       <default>true</default>
       <summary>Menu Enable</summary>
