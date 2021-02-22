@@ -1084,8 +1084,10 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem) {
-                    if (pItem->sizeHint().width() == -1) {
+                    if (pItem->sizeHint().height() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else if (pItem->sizeHint().height() > height()) {
+                        pItem->resize(pItem->width(), height());
                     }
                 }
             }
@@ -1099,6 +1101,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
                 if (pItem) {
                     if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else if (pItem->sizeHint().width() > width()) {
+                        pItem->resize(width(), pItem->height());
                     }
                 }
             }
