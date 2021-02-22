@@ -40,7 +40,7 @@
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Wird verbunden ...</translation>
     </message>
     <message>
         <source>Bluetooth</source>

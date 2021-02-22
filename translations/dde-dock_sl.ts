@@ -10,7 +10,7 @@
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Odstrani</translation>
     </message>
 </context>
 <context>
@@ -285,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Povezava ni uspela</translation>
     </message>
 </context>
 <context>

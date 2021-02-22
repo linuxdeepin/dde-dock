@@ -285,7 +285,7 @@
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"/>
+        <translation>Conexión fallida</translation>
     </message>
 </context>
 <context>

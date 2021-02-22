@@ -17,7 +17,7 @@
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Definições bluetooth</translation>
+        <translation>Definições Bluetooth</translation>
     </message>
 </context>
 <context>

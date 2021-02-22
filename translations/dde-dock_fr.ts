@@ -253,11 +253,11 @@
     </message>
     <message>
         <source>Wireless connection: %1</source>
-        <translation>Connexion sans fil: %1</translation>
+        <translation>Connexion sans fil : %1</translation>
     </message>
     <message>
         <source>Wired connection: %1</source>
-        <translation>Connexion filaire: %1</translation>
+        <translation>Connexion filaire : %1</translation>
     </message>
     <message>
         <source>Not connected</source>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Shut down</source>
-        <translation>Éteindre</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -388,7 +388,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Mise en hibernation</translation>
+        <translation>Mise en veille prolongée</translation>
     </message>
     <message>
         <source>Lock</source>

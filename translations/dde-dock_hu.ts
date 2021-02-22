@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Eltávolítás a Dokkról</translation>
+        <translation>Eltávolítás a Dokkolóról</translation>
     </message>
 </context>
 <context>
@@ -318,7 +318,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energiaellátás</translation>
+        <translation>Kikapcsolás</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -369,14 +369,14 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Eltávolítás a Dokkról</translation>
+        <translation>Eltávolítás a Dokkolóról</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energiaellátás</translation>
+        <translation>Kikapcsolás</translation>
     </message>
     <message>
         <source>Shut down</source>
