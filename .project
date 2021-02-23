@@ -2,5 +2,6 @@
     "type": "homebrew" | "opensource",
     "3rdparty: ["*.xml"],
     "ignore": ["CHANGELOG.md", "./debian", "README.md", "./cmake", "technology-overview.md", "CMakeLists.txt", "CMakeLists.txt.user", "./plugins/plugin-guide", "./.tx", "*.qrc", "*.svg", "*.png", "*.qm", "*.ts"],
-    "license": ["LICENSE"]
+    "license": ["LICENSE"],
+    "importantFile": ["gschema/com.deepin.dde.dock.module.gschema.xml", "interfaces/constants.h", "interfaces/pluginproxyinterface.h", "interfaces/pluginsiteminterface.h"] 
 }
