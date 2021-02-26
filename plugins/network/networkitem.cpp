@@ -477,9 +477,9 @@ void NetworkItem::wiredsEnable(bool enable)
     for (auto wiredItem : m_wiredItems) {
         if (wiredItem) {
             wiredItem->setDeviceEnabled(enable);
+            wiredItem->setVisible(enable);
         }
     }
-//    updateSelf();
 }
 
 void NetworkItem::wirelessEnable(bool enable)
@@ -492,7 +492,6 @@ void NetworkItem::wirelessEnable(bool enable)
             wirelessItem->itemApplet()->setVisible(enable);
         }
     }
-    updateSelf();
 }
 
 void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
@@ -1113,49 +1112,65 @@ int NetworkItem::getStrongestAp()
     return retStrength;
 }
 
+/**
+ * @brief 更新有线（无线）适配器的开关状态，并根据开关状态显示设备列表。
+ */
 void NetworkItem::updateMasterControlSwitch()
 {
-    bool deviceState = false;
-    for (auto wirelessItem : m_wirelessItems) {
-        if (wirelessItem)
-            if (wirelessItem->deviceEanbled()) {
-                deviceState = true;
-                break;
-            }
-    }
-    m_switchWirelessBtn->blockSignals(true);
-    m_switchWirelessBtn->setChecked(deviceState);
-    m_loadingIndicator->setVisible(deviceState);
-    m_switchWirelessBtn->blockSignals(false);
-    if (deviceState) {
-        for (auto wirelessItem : m_wirelessItems) {
-            if (wirelessItem) {
-                m_wirelessLayout->addWidget(wirelessItem->itemApplet());
-                wirelessItem->itemApplet()->setVisible(true);
-            }
-        }
-    } else {
-        for (auto wirelessItem : m_wirelessItems) {
-            if (wirelessItem) {
-                m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
-                wirelessItem->itemApplet()->setVisible(false);
-            }
-        }
-    }
-    m_switchWirelessBtnState = deviceState;
+    m_switchWiredBtnState = false;
+    m_switchWirelessBtnState = false;
 
-    deviceState = false;
-    for (auto wiredItem : m_wiredItems) {
-        if (wiredItem)
-            if (wiredItem->deviceEabled()) {
-                deviceState = true;
-                break;
-            }
+    /* 获取有线适配器启用状态 */
+    for (WiredItem *wiredItem : m_wiredItems) {
+        if (wiredItem && wiredItem->deviceEabled()) {
+            m_switchWiredBtnState = wiredItem->deviceEabled();
+            break;
+        }
     }
+    /* 更新有线适配器总开关状态（阻塞信号是为了防止重复设置适配器启用状态）*/
     m_switchWiredBtn->blockSignals(true);
-    m_switchWiredBtn->setChecked(deviceState);
+    m_switchWiredBtn->setChecked(m_switchWiredBtnState);
     m_switchWiredBtn->blockSignals(false);
-    m_switchWiredBtnState = deviceState;
+    /* 根据有线适配器启用状态增/删布局中的组件 */
+    for (WiredItem *wiredItem : m_wiredItems) {
+        if (!wiredItem) {
+            continue;
+        }
+        if (m_switchWiredBtnState) {
+            m_wiredLayout->addWidget(wiredItem->itemApplet());
+        } else {
+            m_wiredLayout->removeWidget(wiredItem->itemApplet());
+        }
+        // wiredItem->itemApplet()->setVisible(m_switchWiredBtnState); // TODO
+        wiredItem->setVisible(m_switchWiredBtnState);
+    }
+
+    /* 获取无线适配器启用状态 */
+    for (auto wirelessItem : m_wirelessItems) {
+        if (wirelessItem && wirelessItem->deviceEanbled()) {
+            m_switchWirelessBtnState = wirelessItem->deviceEanbled();
+            break;
+        }
+    }
+    /* 更新无线适配器总开关状态（阻塞信号是为了防止重复设置适配器启用状态） */
+    m_switchWirelessBtn->blockSignals(true);
+    m_switchWirelessBtn->setChecked(m_switchWirelessBtnState);
+    m_switchWirelessBtn->blockSignals(false);
+    /* 根据无线适配器启用状态增/删布局中的组件 */
+    for (WirelessItem *wirelessItem : m_wirelessItems) {
+        if (!wirelessItem) {
+            continue;
+        }
+        if (m_switchWirelessBtnState) {
+            m_wirelessLayout->addWidget(wirelessItem->itemApplet());
+        } else {
+            m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
+        }
+        wirelessItem->itemApplet()->setVisible(m_switchWirelessBtnState);
+        wirelessItem->setVisible(m_switchWirelessBtnState);
+    }
+
+    m_loadingIndicator->setVisible(m_switchWirelessBtnState || m_switchWiredBtnState);
 }
 
 void NetworkItem::refreshTips()
@@ -1220,7 +1235,7 @@ void NetworkItem::refreshTips()
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
                     continue;
-                if (m_connectedWiredDevice.size() == 1) {
+                if (m_connectedWirelessDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
                     strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';

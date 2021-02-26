@@ -152,6 +152,21 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Вийти з безпечного режиму</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Док-станція — безпечний режим</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Док-станція перебуває у безпечному режимі — будь ласка, вийдіть з нього для належного показу</translation>
+    </message>
+</context>
+<context>
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>

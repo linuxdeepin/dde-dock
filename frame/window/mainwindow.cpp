@@ -187,6 +187,16 @@ void MainWindow::callShow()
     });
 }
 
+void MainWindow::relaodPlugins()
+{
+    if (qApp->property("PLUGINSLOADED").toBool()) {
+        return;
+    }
+
+    DockItemManager::instance()->startLoadPlugins();
+    qApp->setProperty("PLUGINSLOADED", true);
+}
+
 void MainWindow::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
@@ -371,6 +381,7 @@ void MainWindow::adjustShadowMask()
     }
 
     m_platformWindowHandle.setWindowRadius(radius);
+    m_mainPanel->updatePluginsLayout();
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
@@ -557,13 +568,38 @@ void MainWindow::touchRequestResizeDock()
 
 void MainWindow::setGeometry(const QRect &rect)
 {
-    static QRect lastRect;
-    if (lastRect == rect) {
+    if (rect == this->geometry()) {
         return;
     }
-    lastRect = rect;
     DBlurEffectWidget::setGeometry(rect);
     emit panelGeometryChanged();
+}
+
+/**
+ * @brief 当进入安全模式时，通过此方法发送通知告知用户
+ */
+void MainWindow::sendNotifications()
+{
+    QStringList actionButton;
+    actionButton << "reload" << tr("Exit Safe Mode");
+    QVariantMap hints;
+    hints["x-deepin-action-reload"] = QString("dbus-send,--session,--dest=com.deepin.dde.Dock,--print-reply,/com/deepin/dde/Dock,com.deepin.dde.Dock.ReloadPlugins");
+    QTimer::singleShot(0, this, [=] {
+        DDBusSender()
+            .service("com.deepin.dde.Notification")
+            .path("/com/deepin/dde/Notification")
+            .interface("com.deepin.dde.Notification")
+            .method(QString("Notify"))
+            .arg(QString("dde-control-center"))                                            // appname
+            .arg(static_cast<uint>(0))                                                     // id
+            .arg(QString("preferences-system"))                                            // icon
+            .arg(QString(tr("Dock - Safe Mode")))                                          // summary
+            .arg(QString(tr("The Dock is in safe mode, please exit to show it properly"))) // content
+            .arg(actionButton)                                                             // actions
+            .arg(hints)                                                                    // hints
+            .arg(15000)                                                                    // timeout
+            .call();
+    });
 }
 
 #include "mainwindow.moc"

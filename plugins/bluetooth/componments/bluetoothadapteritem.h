@@ -42,6 +42,7 @@ DWIDGET_END_NAMESPACE
 class Adapter;
 class SettingLabel;
 class QStandardItemModel;
+class RefreshButton;
 
 const QString LightString = QString(":/light/buletooth_%1_light.svg");
 const QString DarkString = QString(":/dark/buletooth_%1_dark.svg");
@@ -101,10 +102,12 @@ public slots:
     void onTopDeviceItem(DStandardItem* item);
     // 设置蓝牙适配器名称
     void onAdapterNameChanged(const QString name);
+    void updateIconTheme(DGuiApplicationHelper::ColorType type);
 
 signals:
     void adapterPowerChanged();
     void requestSetAdapterPower(Adapter *adapter, bool state);
+    void requestRefreshAdapter(Adapter *adapter);
     void connectDevice(const Device *device, Adapter *adapter);
     void deviceCountChanged();
     void deviceStateChanged(const Device* device);
@@ -119,6 +122,7 @@ private:
     DSwitchButton *m_adapterStateBtn = nullptr;
     DListView *m_deviceListview = nullptr;
     QStandardItemModel *m_deviceModel = nullptr;
+    RefreshButton *m_refreshBtn = nullptr;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
 };

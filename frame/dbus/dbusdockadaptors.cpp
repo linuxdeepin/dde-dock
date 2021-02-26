@@ -45,8 +45,12 @@ void DBusDockAdaptors::callShow()
     return parent()->callShow();
 }
 
+void DBusDockAdaptors::ReloadPlugins()
+{
+    return parent()->relaodPlugins();
+}
+
 QRect DBusDockAdaptors::geometry() const
 {
     return parent()->geometry();
 }
-

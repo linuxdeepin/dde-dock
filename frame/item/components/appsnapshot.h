@@ -38,6 +38,9 @@ DGUI_USE_NAMESPACE
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130
 
+#define SNAP_CLOSE_BTN_WIDTH     (24)
+#define SNAP_CLOSE_BTN_MARGIN    (5)
+
 struct SHMInfo;
 struct _XImage;
 typedef _XImage XImage;

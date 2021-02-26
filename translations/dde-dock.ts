@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -149,6 +151,21 @@
     <message>
         <source>Launcher</source>
         <translation>Launcher</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

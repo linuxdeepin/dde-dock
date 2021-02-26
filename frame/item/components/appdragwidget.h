@@ -51,7 +51,6 @@ public:
 
 signals:
     void requestRemoveItem();
-    void animationFinished();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;

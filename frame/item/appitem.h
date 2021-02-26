@@ -46,6 +46,7 @@ public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
+    void checkEntry() override;
     const QString appId() const;
     bool isValid() const;
     void updateWindowIconGeometries();

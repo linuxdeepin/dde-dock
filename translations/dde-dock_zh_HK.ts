@@ -152,6 +152,21 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>退出安全模式</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>任務欄安全模式</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>任務欄已進入安全模式，退出安全模式後即可正常顯示</translation>
+    </message>
+</context>
+<context>
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>

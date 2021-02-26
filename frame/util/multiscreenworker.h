@@ -436,14 +436,7 @@ private:
     void checkXEventMonitorService();
 
     MainWindow *parent();
-    /**
-     * @brief getDockShowGeometry       获取任务栏显示时的位置
-     * @param screenName                当前屏幕名
-     * @param pos                       任务栏位置
-     * @param displaymode               显示模式
-     * @param real                      接口是否计算算法,false为计算,true为不计算(与后端接口大小的形式保持一致.比如,后端给出的屏幕大小是不计算缩放的)
-     * @return
-     */
+
     QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
 
@@ -454,6 +447,7 @@ private:
     bool contains(const MonitRect &rect, const QPoint &pos);
     bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
+    void updateScreenSize();
 
 private:
     QWidget *m_parent;
@@ -490,7 +484,7 @@ private:
     //当前屏幕的方向
     int m_monitorRotation;
     //当前屏幕的所有方向
-    RotationList m_rotations;
+    RotationList m_rotations; // 逆时针旋转（向下，向右，向上，向左）
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;

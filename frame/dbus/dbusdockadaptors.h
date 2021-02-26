@@ -36,6 +36,7 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "  <interface name=\"com.deepin.dde.Dock\">\n"
                                        "    <property access=\"read\" type=\"(iiii)\" name=\"geometry\"/>\n"
                                        "    <method name=\"callShow\"/>"
+                                       "    <method name=\"ReloadPlugins\"/>"
                                        "    <signal name=\"geometryChanged\">"
                                                 "<arg name=\"geometry\" type=\"(iiii)\"/>"
                                             "</signal>"
@@ -50,6 +51,7 @@ public:
 
 public Q_SLOTS: // METHODS
     void callShow();
+    void ReloadPlugins();
 
 public: // PROPERTIES
     Q_PROPERTY(QRect geometry READ geometry NOTIFY geometryChanged)

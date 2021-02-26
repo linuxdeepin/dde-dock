@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2018 ~ 2028 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
@@ -207,6 +207,7 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
                 m_screenRawWidth = m_displayInter->screenWidth();
             }
         }
+        updateScreenSize();
     }
 }
 
@@ -735,78 +736,72 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
     emit requestUpdateDockEntry();
 }
 
+/**
+ * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
+ * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
+ */
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
     static QRect lastRect = QRect();
+    static int lastScreenWith = 0;
+    static int lastScreenHeight = 0;
 
-    const auto ratio = qApp->devicePixelRatio();
-    QRect rect;
-    if (m_hideMode == HideMode::KeepShowing) {
-        rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
-    } else {
-        rect = getDockHideGeometry(m_ds.current(), m_position, m_displayMode);
-    }
-
-    // 已经设置过了，避免重复设置
-    if (rect == lastRect)
-        return;
-    lastRect = rect;
-    qDebug() << "dock geometry:" << rect;
-
-    // 先清除原先的窗管任务栏区域
-    XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
-
-    // 在副屏时,且为一直显示时,不要挤占应用,这是sp3的新需求
-    if (m_ds.current() != m_ds.primary() && m_hideMode == HideMode::KeepShowing) {
+    /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
+    if (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing) {
         lastRect = QRect();
-        qDebug() << "don`t set dock area";
+        XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
         return;
     }
 
-    // 除了"一直显示"模式,其他的都不要设置任务栏区域
-    if (m_hideMode != Dock::KeepShowing) {
-        lastRect = QRect();
+    QRect dockGeometry = getDockShowGeometry(m_ds.current(), m_position, m_displayMode, true);
+    if (lastRect == dockGeometry && lastScreenWith == m_screenRawWidth && lastScreenHeight == m_screenRawHeight) {
         return;
     }
+    lastRect = dockGeometry;
+    lastScreenWith = m_screenRawWidth;
+    lastScreenHeight = m_screenRawHeight;
+    qDebug() << "dock real geometry:" << dockGeometry;
+    qDebug() << "screen width:" << m_screenRawWidth << ", height:" << m_screenRawHeight;
 
-    const QPoint &p = rawXPosition(rect.topLeft());
-    qDebug() << "dock topLeft position:" << p;
-
-    QScreen const *currentScreen = Utils::screenAtByScaled(rect.topLeft());
+    const qreal ratio = qApp->devicePixelRatio();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
-    uint strut = 0;
-    uint strutStart = 0;
-    uint strutEnd = 0;
+    double strut = 0;
+    double strutStart = 0;
+    double strutEnd = 0;
 
     switch (m_position) {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
-        strut = p.y() + rect.height() * ratio;
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
+        strut = dockGeometry.y() + dockGeometry.height();
+        strutStart = dockGeometry.x();
+        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
-        strut = currentScreen->geometry().height() * ratio - p.y();
-        strutStart = p.x();
-        strutEnd = qMin(qRound(p.x() + rect.width() * ratio), rect.right());
+        strut = m_screenRawHeight - dockGeometry.y();
+        strutStart = dockGeometry.x();
+        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
         break;
     case Position::Left:
         orientation = XcbMisc::OrientationLeft;
-        strut = p.x() + rect.width() * ratio;
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
+        strut = dockGeometry.x() + dockGeometry.width();
+        strutStart = dockGeometry.y();
+        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = currentScreen->geometry().width() * ratio - p.x();
-        strutStart = p.y();
-        strutEnd = qMin(qRound(p.y() + rect.height() * ratio), rect.bottom());
+        strut = m_screenRawWidth - dockGeometry.x();
+        strutStart = dockGeometry.y();
+        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
         break;
     }
-    qDebug() << "set dock geometry to xcb:" << strut << strutStart << strutEnd;
-    XcbMisc::instance()->set_strut_partial(parent()->winId(), orientation, strut + WINDOWMARGIN * ratio, strutStart, strutEnd);
+
+    qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
+    XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
+                                           static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
+                                           static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
+                                           static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
 }
 
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
@@ -1092,6 +1087,7 @@ void MultiScreenWorker::initDBus()
         m_screenRawWidth = m_displayInter->screenWidth();
         m_ds = DockScreen(m_displayInter->primary());
         m_mtrInfo.setPrimary(m_displayInter->primary());
+        updateScreenSize();
     }
 }
 
@@ -1550,82 +1546,47 @@ MainWindow *MultiScreenWorker::parent()
     return static_cast<MainWindow *>(m_parent);
 }
 
+/**
+ * @brief 获取任务栏显示时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
+ *
+ * @param screenName    当前屏幕名字
+ * @param pos           任务栏位置
+ * @param displaymode   任务栏显示模式
+ * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
+ * @return QRect        任务栏参数
+ */
 QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
 {
-    //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
-    const qreal scale = qApp->devicePixelRatio();
     QRect rect;
-    if (withoutScale) {//后端真实大小
-        foreach (Monitor *inter, m_mtrInfo.validMonitor()) {
-            if (inter->name() == screenName) {
-                // windowSizeFashion和windowSizeEfficient给出的值始终对应前端认为的界面高度或宽度（受缩放影响）
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * scale;
-                switch (static_cast<Position>(pos)) {
-                case Top: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
-                    rect.setHeight(dockSize);
-                }
+    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
+    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
+    const int dockSize = static_cast<int>((displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * (withoutScale ? qApp->devicePixelRatio() : 1));
+    for (Monitor *monitor : m_mtrInfo.validMonitor()) {
+        if (monitor->name() == screenName) {
+            switch (pos) {
+            case Position::Top:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
+                rect.setHeight(dockSize);
                 break;
-                case Bottom: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + inter->h() - WINDOWMARGIN - dockSize);
-                    rect.setWidth(inter->w() - 2 * WINDOWMARGIN);
-                    rect.setHeight(dockSize);
-                }
+            case Position::Bottom:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin - dockSize));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
+                rect.setHeight(dockSize);
                 break;
-                case Left: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(dockSize);
-                    rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
-                }
+            case Position::Left:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(dockSize);
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
-                case Right: {
-                    rect.setX(inter->x() + inter->w() - WINDOWMARGIN - dockSize);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(dockSize);
-                    rect.setHeight(inter->h() - 2 * WINDOWMARGIN);
-                }
-                }
-                break;
-            }
-        }
-    } else {//前端真实大小
-        foreach (Monitor *inter, m_mtrInfo.validMonitor()) {
-            if (inter->name() == screenName) {
-                // windowSizeFashion和windowSizeEfficient给出的值始终对应前端认为的界面高度或宽度（受缩放影响）
-                const int dockSize = int(displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient());
-                switch (static_cast<Position>(pos)) {
-                case Top: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
-                    rect.setHeight(dockSize);
-                }
-                break;
-                case Bottom: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + inter->h() / scale - WINDOWMARGIN - dockSize);
-                    rect.setWidth(inter->w() / scale - 2 * WINDOWMARGIN);
-                    rect.setHeight(dockSize);
-                }
-                break;
-                case Left: {
-                    rect.setX(inter->x() + WINDOWMARGIN);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(dockSize);
-                    rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
-                }
-                break;
-                case Right: {
-                    rect.setX(inter->x() + inter->w() / scale - WINDOWMARGIN - dockSize);
-                    rect.setY(inter->y() + WINDOWMARGIN);
-                    rect.setWidth(dockSize);
-                    rect.setHeight(inter->h() / scale - 2 * WINDOWMARGIN);
-                }
-                }
+            case Position::Right:
+                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin - dockSize));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(dockSize);
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
             }
         }
@@ -1633,83 +1594,47 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     return rect;
 }
 
+/**
+ * @brief 获取任务栏隐藏时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
+ *
+ * @param screenName    当前屏幕名字
+ * @param pos           任务栏位置
+ * @param displaymode   任务栏显示模式
+ * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
+ * @return QRect        任务栏参数
+ */
 QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
 {
-    //!!! 注意,目前双屏情况下缩放保持一致,不会出现两个屏幕的缩放不一致的情况,如果后面出现了,那么这里可能会有问题
-    const qreal scale = qApp->devicePixelRatio();
     QRect rect;
-    if (withoutScale) {//后端真实大小
-        foreach (Monitor *inter, m_mtrInfo.validMonitor()) {
-            if (inter->name() == screenName) {
-                const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
-
-                switch (static_cast<Position>(pos)) {
-                case Top: {
-                    rect.setX(inter->x() + margin);
-                    rect.setY(inter->y());
-                    rect.setWidth(inter->w() - 2 * margin);
-                    rect.setHeight(0);
-                }
+    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
+    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
+    for (Monitor *monitor : m_mtrInfo.validMonitor()) {
+        if (monitor->name() == screenName) {
+            switch (pos) {
+            case Position::Top:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
+                rect.setHeight(0);
                 break;
-                case Bottom: {
-                    rect.setX(inter->x() + margin);
-                    rect.setY(inter->y() + inter->h());
-                    rect.setWidth(inter->w() - 2 * margin);
-                    rect.setHeight(0);
-                }
+            case Position::Bottom:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + monitor->h() / ratio - margin));
+                rect.setWidth(static_cast<int>(monitor->w() / ratio - 2 * margin));
+                rect.setHeight(0);
                 break;
-                case Left: {
-                    rect.setX(inter->x());
-                    rect.setY(inter->y() + margin);
-                    rect.setWidth(0);
-                    rect.setHeight(inter->h() - 2 * margin);
-                }
+            case Position::Left:
+                rect.setX(static_cast<int>(monitor->x() + margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(0);
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
-                case Right: {
-                    rect.setX(inter->x() + inter->w());
-                    rect.setY(inter->y() + margin);
-                    rect.setWidth(0);
-                    rect.setHeight(inter->h() - 2 * margin);
-                }
+            case Position::Right:
+                rect.setX(static_cast<int>(monitor->x() + monitor->w() / ratio - margin));
+                rect.setY(static_cast<int>(monitor->y() + margin));
+                rect.setWidth(0);
+                rect.setHeight(static_cast<int>(monitor->h() / ratio - 2 * margin));
                 break;
-                }
-            }
-        }
-    } else {//前端真实大小
-        foreach (Monitor *inter, m_mtrInfo.validMonitor()) {
-            if (inter->name() == screenName) {
-                const int margin = (displaymode == DisplayMode::Fashion ? WINDOWMARGIN : 0);
-
-                switch (static_cast<Position>(pos)) {
-                case Top: {
-                    rect.setX(inter->x() + margin);
-                    rect.setY(inter->y());
-                    rect.setWidth(inter->w() / scale - 2 * margin);
-                    rect.setHeight(0);
-                }
-                break;
-                case Bottom: {
-                    rect.setX(inter->x() + margin);
-                    rect.setY(inter->y() + inter->h() / scale);
-                    rect.setWidth(inter->w() / scale - 2 * margin);
-                    rect.setHeight(0);
-                }
-                break;
-                case Left: {
-                    rect.setX(inter->x());
-                    rect.setY(inter->y() + margin);
-                    rect.setWidth(0);
-                    rect.setHeight(inter->h() / scale - 2 * margin);
-                }
-                break;
-                case Right: {
-                    rect.setX(inter->x() + inter->w() / scale);
-                    rect.setY(inter->y() + margin);
-                    rect.setWidth(0);
-                    rect.setHeight(inter->h() / scale - 2 * margin);
-                }
-                break;
-                }
             }
         }
     }
@@ -1793,6 +1718,40 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
            (scaledPos - screen->geometry().topLeft()) *
            screen->devicePixelRatio()
            : scaledPos;
+}
+
+/**
+ * @brief 通过 xcb 获取屏幕的宽高。
+ * display 服务中获取的屏幕宽高在旋转屏幕的特殊场景下会出错（宽高写反了），故通过这个方法修正，
+ * 后续 display 服务的数据正常后，这个方法可以用于异常处理时的备选方案。
+ */
+void MultiScreenWorker::updateScreenSize()
+{
+    /* Open the connection to the X server. Use the DISPLAY environment variable */
+    int screenNum;
+    xcb_connection_t *connection = xcb_connect(NULL, &screenNum);
+
+    /* Check for failure */
+    if (xcb_connection_has_error(connection)) {
+        xcb_disconnect(connection);
+        return;
+    }
+
+    /* Get the screen whose number is screenNum */
+    const xcb_setup_t *setup = xcb_get_setup(connection);
+    xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);
+
+    /* we want the screen at index screenNum of the iterator */
+    for (int i = 0; i < screenNum; ++i) {
+        xcb_screen_next(&iter);
+    }
+
+    xcb_screen_t *screen = iter.data;
+
+    m_screenRawWidth = screen->width_in_pixels;
+    m_screenRawHeight = screen->height_in_pixels;
+
+    xcb_disconnect(connection);
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)

@@ -152,6 +152,21 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་པ།</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>ལས་འགན་ཚན་བྱང་གི་བདེ་འཇགས་དཔེ་རྣམ།</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>ལས་འགན་ཚན་བྱང་བདེ་འཇགས་དཔེ་རྣམ་ནང་མཛུལ་ཟིན་པས། བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་རྗེས་རྒྱུན་ལྡན་ལྟར་ཤར་ཐུབ།</translation>
+    </message>
+</context>
+<context>
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>

@@ -34,6 +34,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  deepin-desktop-schemas (>=5.8.0.34),
  libdframeworkdbus2 (>=5.3.0.24),
  libdde-network-utils (>=5.3.0.5),
+ dde-qt5xcb-plugin (>=5.0.19),
  dde-daemon (>=5.12.0.31),
  startdde (>=5.6.0.34),
  lastore-daemon (>=5.1.0.21)

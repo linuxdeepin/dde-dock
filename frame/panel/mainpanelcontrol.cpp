@@ -351,6 +351,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     QTimer::singleShot(0, [ = ] {
         updatePluginsLayout();
     });
+    item->checkEntry();
 }
 
 void MainPanelControl::removeItem(DockItem *item)
@@ -684,8 +685,9 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
     QWidget::mousePressEvent(e);
 }
 
-void MainPanelControl::startDrag(DockItem *item)
+void MainPanelControl::startDrag(DockItem *dockItem)
 {
+    QPointer<DockItem> item = dockItem;
     const QPixmap pixmap = item->grab();
 
     item->setDraging(true);
@@ -699,24 +701,20 @@ void MainPanelControl::startDrag(DockItem *item)
 
         connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
             m_appDragWidget = nullptr;
-        });
-
-        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
-            if (-1 != m_appAreaSonLayout->indexOf(item)) {
-                m_dragIndex = m_appAreaSonLayout->indexOf(item);
-                removeItem(item);
-            }
-        });
-
-        connect(m_appDragWidget, &AppDragWidget::animationFinished, this, [ = ] {
-            m_appDragWidget = nullptr;
-            if (qobject_cast<AppItem *>(item)->isValid()) {
+            if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
                 if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
                     insertItem(m_dragIndex, item);
                     m_dragIndex = -1;
                 }
                 item->setDraging(false);
                 item->update();
+            }
+        });
+
+        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
+            if (-1 != m_appAreaSonLayout->indexOf(item)) {
+                m_dragIndex = m_appAreaSonLayout->indexOf(item);
+                removeItem(item);
             }
         });
 
@@ -1093,8 +1091,10 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
             if (layout) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem) {
-                    if (pItem->sizeHint().width() == -1) {
+                    if (pItem->sizeHint().height() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else if (pItem->sizeHint().height() > height()) {
+                        pItem->resize(pItem->width(), height());
                     }
                 }
             }
@@ -1108,6 +1108,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
                 if (pItem) {
                     if (pItem->sizeHint().width() == -1) {
                         pItem->setFixedSize(tray_item_size, tray_item_size);
+                    } else if (pItem->sizeHint().width() > width()) {
+                        pItem->resize(width(), pItem->height());
                     }
                 }
             }

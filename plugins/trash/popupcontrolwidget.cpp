@@ -80,7 +80,7 @@ QSize PopupControlWidget::sizeHint() const
 
 void PopupControlWidget::openTrashFloder()
 {
-    QProcess::startDetached("gio", QStringList() << "open" << "trash:///");
+    DDesktopServices::showFolder(QUrl("trash:///"));
 }
 
 void PopupControlWidget::clearTrashFloder()

@@ -58,14 +58,14 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
     , m_isWidowHidden(false)
-    , m_title(new TipsWidget)
+    , m_title(new TipsWidget(this))
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DIconButton(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
-    m_closeBtn2D->setFixedSize(24, 24);
-    m_closeBtn2D->setIconSize(QSize(24, 24));
+    m_closeBtn2D->setFixedSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH);
+    m_closeBtn2D->setIconSize(QSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH));
     m_closeBtn2D->setObjectName("closebutton-2d");
     m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
     m_closeBtn2D->setVisible(false);
@@ -210,7 +210,7 @@ void AppSnapshot::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 
     if (!m_wmHelper->hasComposite()) {
-        m_closeBtn2D->move(width() - m_closeBtn2D->width() - 5, (height() - m_closeBtn2D->height()) / 2);
+        m_closeBtn2D->move(width() - m_closeBtn2D->width() - SNAP_CLOSE_BTN_MARGIN, (height() - m_closeBtn2D->height()) / 2);
         m_closeBtn2D->setVisible(true);
     } else {
         emit entered(wid());
@@ -284,14 +284,12 @@ void AppSnapshot::mousePressEvent(QMouseEvent *e)
 
 bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
 {
-    if(watched == m_closeBtn2D) {
-        if(watched == m_closeBtn2D && (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverMove)) {
+    if (watched == m_closeBtn2D) {
+        if (watched == m_closeBtn2D && (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverMove)) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
-        }
-        else if (watched == m_closeBtn2D && e->type() == QEvent::HoverLeave) {
+        } else if (watched == m_closeBtn2D && e->type() == QEvent::HoverLeave) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
-        }
-        else if (watched == m_closeBtn2D && e->type() == QEvent::MouseButtonPress) {
+        } else if (watched == m_closeBtn2D && e->type() == QEvent::MouseButtonPress) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_press.svg"));
         }
     }
@@ -383,7 +381,7 @@ void AppSnapshot::getWindowState()
     }
 
     Atom *atoms = reinterpret_cast<Atom *>(properties);
-    for(i = 0; i < num_items; ++i) {
+    for (i = 0; i < num_items; ++i) {
         const char *atomName = XGetAtomName(display, atoms[i]);
 
         if (strcmp(atomName, "_NET_WM_STATE_HIDDEN") == 0) {
