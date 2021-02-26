@@ -239,7 +239,7 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::RightButton) {
         if (perfectIconRect().contains(event->pos(), true)) {
-            return showContextMenu();
+            return (m_gsettings && m_gsettings->get("menuEnable").toBool()) ? showContextMenu() : void();
         }
     }
 

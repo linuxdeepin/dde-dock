@@ -105,6 +105,20 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/network/" id="com.deepin.dde.dock.module.network" gettext-domain="DDE">
     <key type="b" name="control">
@@ -119,6 +133,13 @@
       <summary>Module Enable</summary>
       <description>
           Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
       </description>
     </key>
   </schema>
@@ -137,6 +158,20 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/bluetooth/" id="com.deepin.dde.dock.module.bluetooth" gettext-domain="DDE">
     <key type="b" name="control">
@@ -151,6 +186,13 @@
       <summary>Module Enable</summary>
       <description>
           Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
       </description>
     </key>
   </schema>
@@ -176,6 +218,13 @@
           Show TimeToFull
       </description>
     </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/shutdown/" id="com.deepin.dde.dock.module.shutdown" gettext-domain="DDE">
     <key type="b" name="control">
@@ -190,6 +239,20 @@
       <summary>Module Enable</summary>
       <description>
           Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
       </description>
     </key>
   </schema>
@@ -208,6 +271,13 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/trash/" id="com.deepin.dde.dock.module.trash" gettext-domain="DDE">
     <key type="b" name="control">
@@ -222,6 +292,20 @@
       <summary>Module Enable</summary>
       <description>
           Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
       </description>
     </key>
   </schema>
@@ -271,7 +355,36 @@
       <description>
           Control Module Enable
       </description>
+      </key>
+    <key type="b" name="mode-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
     </key>
+    <key type="b" name="location-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+    <key type="b" name="status-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+    <key type="b" name="hide-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+
   </schema>
  <schema path="/com/deepin/dde/dock/module/AiAssistant/" id="com.deepin.dde.dock.module.AiAssistant" gettext-domain="DDE">
     <key type="b" name="control">
@@ -286,6 +399,66 @@
       <summary>Module Enable</summary>
       <description>
           Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
+      </description>
+    </key>
+  </schema>
+ <schema path="/com/deepin/dde/dock/module/multitasking/" id="com.deepin.dde.dock.module.multitasking" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
+      </description>
+    </key>
+  </schema>
+ <schema path="/com/deepin/dde/dock/module/show-desktop/" id="com.deepin.dde.dock.module.show-desktop" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
       </description>
     </key>
   </schema>

@@ -161,8 +161,18 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
 
-    // context menu will handle in DockItem
-    DockItem::mousePressEvent(e);
+    //handle context menu
+    m_popupTipsDelayTimer->stop();
+    hideNonModel();
+
+    if (e->button() == Qt::RightButton) {
+        if (perfectIconRect().contains(e->pos())) {
+            return (m_gsettings && m_gsettings->get("menuEnable").toBool()) ? showContextMenu() : void();
+        }
+    }
+
+    // same as e->ignore above
+    QWidget::mousePressEvent(e);
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)
