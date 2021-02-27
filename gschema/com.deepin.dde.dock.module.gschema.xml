@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+  <enum id="com.deepin.dde.dock.module.StatusMode">
+        <value value="0" nick="Enabled" />
+        <value value="1" nick="Disabled" />
+        <value value="2" nick="Hiden" />
+    </enum>
   <schema path="/com/deepin/dde/dock/module/app/" id="com.deepin.dde.dock.module.app" gettext-domain="DDE">
     <key type="b" name="control">
       <default>false</default>
@@ -255,6 +260,22 @@
           Control Menu pluginsettings visible
       </description>
     </key>
+    <key name="show-suspend" type="b">
+        <default>true</default>
+        <summary>The suspend options show or not</summary>
+    </key>
+    <key name="show-hibernate" type="b">
+        <default>true</default>
+        <summary>The hibernate options show or not</summary>
+    </key>
+    <key name="show-shutdown" type="b">
+        <default>true</default>
+        <summary>The shutdown options show or not</summary>
+    </key>
+    <key name="show-lock" type="b">
+        <default>true</default>
+        <summary>The lock options show or not</summary>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/sound/" id="com.deepin.dde.dock.module.sound" gettext-domain="DDE">
     <key type="b" name="control">
@@ -277,6 +298,11 @@
       <description>
           Control Menu Enable
       </description>
+    </key>
+    <key enum="com.deepin.dde.dock.module.StatusMode" name="sound-output-slider">
+      <default>'Enabled'</default>
+      <summary>change sound output slider status</summary>
+      <description>default is Enabled</description>
     </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/trash/" id="com.deepin.dde.dock.module.trash" gettext-domain="DDE">

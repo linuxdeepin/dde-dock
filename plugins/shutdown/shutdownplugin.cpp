@@ -30,17 +30,21 @@
 #include <QIcon>
 #include <QSettings>
 
-#define PLUGIN_STATE_KEY    "enable"
+#define PLUGIN_STATE_KEY "enable"
+#define GSETTING_SHOW_SUSPEND "showSuspend"
+#define GSETTING_SHOW_HIBERNATE "showHibernate"
+#define GSETTING_SHOW_SHUTDOWN "showShutdown"
+#define GSETTING_SHOW_LOCK "showLock"
 
 DCORE_USE_NAMESPACE
 using namespace Dock;
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
-    : QObject(parent),
-
-      m_pluginLoaded(false),
-      m_tipsLabel(new TipsWidget),
-      m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
+    : QObject(parent)
+    , m_pluginLoaded(false)
+    , m_tipsLabel(new TipsWidget)
+    , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
+    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.shutdown", QByteArray(), this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setAccessibleName("shutdown");
@@ -114,10 +118,12 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.reserve(6);
 
     QMap<QString, QVariant> shutdown;
-    shutdown["itemId"] = "Shutdown";
-    shutdown["itemText"] = tr("Shut down");
-    shutdown["isActive"] = true;
-    items.push_back(shutdown);
+    if (m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool()) {
+        shutdown["itemId"] = "Shutdown";
+        shutdown["itemText"] = tr("Shut down");
+        shutdown["isActive"] = true;
+        items.push_back(shutdown);
+    }
 
     QMap<QString, QVariant> reboot;
     reboot["itemId"] = "Restart";
@@ -134,10 +140,12 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     ;
     if (can_sleep) {
         QMap<QString, QVariant> suspend;
-        suspend["itemId"] = "Suspend";
-        suspend["itemText"] = tr("Suspend");
-        suspend["isActive"] = true;
-        items.push_back(suspend);
+        if (m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool()) {
+            suspend["itemId"] = "Suspend";
+            suspend["itemText"] = tr("Suspend");
+            suspend["isActive"] = true;
+            items.push_back(suspend);
+        }
     }
 
     bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
@@ -145,19 +153,23 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
-        hibernate["itemId"] = "Hibernate";
-        hibernate["itemText"] = tr("Hibernate");
-        hibernate["isActive"] = true;
-        items.push_back(hibernate);
+        if (m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool()) {
+            hibernate["itemId"] = "Hibernate";
+            hibernate["itemText"] = tr("Hibernate");
+            hibernate["isActive"] = true;
+            items.push_back(hibernate);
+        }
     }
 
 #endif
 
     QMap<QString, QVariant> lock;
-    lock["itemId"] = "Lock";
-    lock["itemText"] = tr("Lock");
-    lock["isActive"] = true;
-    items.push_back(lock);
+    if (m_gsettings->get(GSETTING_SHOW_LOCK).toBool()) {
+        lock["itemId"] = "Lock";
+        lock["itemText"] = tr("Lock");
+        lock["isActive"] = true;
+        items.push_back(lock);
+    }
 
     QMap<QString, QVariant> logout;
     logout["itemId"] = "Logout";

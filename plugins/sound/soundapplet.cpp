@@ -40,6 +40,8 @@
 #define ITEM_HEIGHT 24
 #define ITEM_SPACING 5
 #define DEVICE_SPACING 10
+#define SLIDER_HIGHT 32
+#define GSETTING_SOUND_OUTPUT_SLIDER "soundOutputSlider"
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -118,6 +120,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_model(new QStandardItemModel(m_listView))
     , m_deviceInfo("")
     , m_lastPort(nullptr)
+    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.sound", QByteArray(), this))
 
 {
     initUi();
@@ -176,8 +179,16 @@ void SoundApplet::initUi()
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_volumeBtn->setFlat(true);
+
+    m_volumeSlider->setFixedHeight(SLIDER_HIGHT);
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
+    updateVolumeSliderStatus(m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString());
+    connect(m_gsettings, &QGSettings::changed, [ = ] (const QString &key) {
+        if (key == GSETTING_SOUND_OUTPUT_SLIDER) {
+            updateVolumeSliderStatus(m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString());
+        }
+    });
 
     m_centralLayout = new QVBoxLayout;
     m_centralLayout->addLayout(deviceLineLayout);
@@ -187,7 +198,6 @@ void SoundApplet::initUi()
 
     m_listView->setModel(m_model);
     m_centralLayout->addWidget(m_listView);
-
     m_centralWidget->setLayout(m_centralLayout);
     m_centralWidget->setFixedWidth(WIDTH);
     m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -549,7 +559,12 @@ void SoundApplet::updateCradsInfo()
 
 void SoundApplet::enableDevice(bool flag)
 {
-    m_volumeSlider->setEnabled(flag);
+    QString status = m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString();
+    if ("Disabled" == status ) {
+        m_volumeSlider->setEnabled(false);
+    } else if ("Enabled" == status) {
+        m_volumeSlider->setEnabled(flag);
+    }
     m_volumeBtn->setEnabled(flag);
     m_soundShow->setEnabled(flag);
     m_volumeIconMax->setEnabled(flag);
@@ -596,6 +611,24 @@ void SoundApplet::removeDisabledDevice(QString portId, unsigned int cardId)
     qDebug() << "remove disabled output device";
 }
 
+void SoundApplet::updateVolumeSliderStatus(const QString &status)
+{
+    bool flag = true;
+    if ("Enabled" == status) {
+        flag = true;
+    } else if ("Disabled" == status) {
+        flag = false;
+    }
+    m_volumeSlider->setEnabled(flag);
+    m_volumeBtn->setEnabled(flag);
+    m_volumeIconMax->setEnabled(flag);
+
+    flag = "Hiden" != status;
+    m_volumeSlider->setVisible(flag);
+    m_volumeBtn->setVisible(flag);
+    m_volumeIconMax->setVisible(flag);
+}
+
 void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
 {
     Q_UNUSED(msg)
@@ -640,6 +673,3 @@ void SoundApplet::portEnableChange(unsigned int cardId, QString portId)
     m_deviceInfo = "";
     updateCradsInfo();
 }
-
-
-

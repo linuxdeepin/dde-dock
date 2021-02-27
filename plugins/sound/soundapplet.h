@@ -41,6 +41,7 @@ using DBusAudio = com::deepin::daemon::Audio;
 using DBusSink = com::deepin::daemon::audio::Sink;
 
 class HorizontalSeparator;
+class QGSettings;
 
 namespace Dock{
 class TipsWidget;
@@ -136,6 +137,7 @@ private:
     void disableAllDevice();//禁用所有设备
     void removeLastDevice();//移除最后一个设备
     void removeDisabledDevice(QString portId, unsigned int cardId);
+    void updateVolumeSliderStatus(const QString &status);
 
 private:
     QWidget *m_centralWidget;
@@ -154,6 +156,7 @@ private:
     QList<Port *> m_ports;
     QString m_deviceInfo;
     QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
+    QGSettings *m_gsettings;
 };
 
 #endif // SOUNDAPPLET_H
