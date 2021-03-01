@@ -49,7 +49,8 @@ void Adapter::setName(const QString &name)
 void Adapter::addDevice(const QJsonObject &deviceObj)
 {
     const QString id = deviceObj["Path"].toString();
-    const QString name = deviceObj["Alias"].toString();
+    const QString name = deviceObj["Name"].toString();
+    const QString alias = deviceObj["Alias"].toString();
     const bool paired = deviceObj["Paired"].toBool();
     const int rssi = deviceObj["RSSI"].toInt();
     const Device::State state = Device::State(deviceObj["State"].toInt());
@@ -62,6 +63,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
 
     device->setId(id);
     device->setName(name);
+    device->setAlias(alias);
     device->setPaired(paired);
     device->setState(state);
     device->setConnectState(connectState);
@@ -90,7 +92,8 @@ void Adapter::removeDevice(const QString &deviceId)
 void Adapter::updateDevice(const QJsonObject &dviceJson)
 {
     const QString id = dviceJson["Path"].toString();
-    const QString name = dviceJson["Alias"].toString();
+    const QString name = dviceJson["Name"].toString();
+    const QString alias = dviceJson["Alias"].toString();
     const bool paired = dviceJson["Paired"].toBool();
     const int rssi = dviceJson["RSSI"].toInt();
     const Device::State state = Device::State(dviceJson["State"].toInt());
@@ -102,6 +105,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
     if (device) {
         device->setId(id);
         device->setName(name);
+        device->setAlias(alias);
         device->setPaired(paired);
         device->setRssi(rssi);
         //setState放后面，是因为用到了connectState,fix bug 55245
@@ -157,7 +161,8 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         QJsonObject deviceObj = val.toObject();
         const QString adapterId = deviceObj["AdapterPath"].toString();
         const QString id = deviceObj["Path"].toString();
-        const QString name = deviceObj["Alias"].toString();
+        const QString name = deviceObj["Name"].toString();
+        const QString alias = deviceObj["Alias"].toString();
         const bool paired = deviceObj["Paired"].toBool();
         const int rssi = deviceObj["RSSI"].toInt();
         const Device::State state = Device::State(deviceObj["State"].toInt());
@@ -167,6 +172,7 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         auto device = new Device(this);
         device->setId(id);
         device->setName(name);
+        device->setAlias(alias);
         device->setPaired(paired);
         device->setState(state);
         device->setConnectState(connectState);

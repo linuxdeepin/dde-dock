@@ -62,11 +62,11 @@ void BluetoothDeviceItem::initActionList()
     m_loading->setFixedSize(QSize(24, 24));
     m_stateAction->setWidget(m_loading);
 
-    m_standarditem->setAccessibleText(m_device->name());
+    m_standarditem->setAccessibleText(m_device->alias());
     m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
     m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
 
-    m_labelAction->setText(m_device->name());
+    m_labelAction->setText(m_device->alias());
     updateDeviceState(m_device->state());
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
 }
@@ -97,7 +97,7 @@ void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
 {
-    m_labelAction->setText(m_device->name());
+    m_labelAction->setText(m_device->alias());
     if (state == Device::StateAvailable) {
         m_loading->start();
         m_stateAction->setVisible(true);
@@ -123,6 +123,11 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_deviceListview(new DListView(this))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
     , m_refreshBtn(new RefreshButton(this))
+    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth",
+                                         "/com/deepin/daemon/Bluetooth",
+                                         QDBusConnection::sessionBus(),
+                                         this))
+    , m_showUnnamedDevices(false)
 {
     initData();
     initUi();
@@ -183,7 +188,7 @@ QStringList BluetoothAdapterItem::connectedDevicesName()
     QStringList devsName;
     for (BluetoothDeviceItem *devItem : m_deviceItems) {
         if (devItem && devItem->device()->state() == Device::StateConnected) {
-            devsName << devItem->device()->name();
+            devsName << devItem->device()->alias();
         }
     }
 
@@ -192,6 +197,7 @@ QStringList BluetoothAdapterItem::connectedDevicesName()
 
 void BluetoothAdapterItem::initData()
 {
+    m_showUnnamedDevices = m_bluetoothInter->displaySwitch();
     if (!m_adapter->powered())
         return;
 
@@ -199,6 +205,7 @@ void BluetoothAdapterItem::initData()
         if (!m_deviceItems.contains(device->id()))
             onDeviceAdded(device);
     }
+    setUnnamedDevicesVisible(m_showUnnamedDevices);
     emit deviceCountChanged();
 }
 
@@ -216,6 +223,9 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
     connect(item, &BluetoothDeviceItem::deviceStateChanged, this, &BluetoothAdapterItem::deviceStateChanged);
 
     m_deviceItems.insert(device->id(), item);
+    if (!m_showUnnamedDevices && device->name().isEmpty() && Device::StateConnected != device->state())
+        return;
+
     m_deviceModel->insertRow(insertRow, item->standardItem());
     emit deviceCountChanged();
 }
@@ -308,4 +318,55 @@ void BluetoothAdapterItem::initConnect()
         m_refreshBtn->setVisible(state);
         emit requestSetAdapterPower(m_adapter, state);
     });
+    connect(m_bluetoothInter, &DBusBluetooth::DisplaySwitchChanged, this, [ = ](bool value) {
+        m_showUnnamedDevices = value;
+        setUnnamedDevicesVisible(value);
+    });
+}
+
+void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
+{
+    QMap<QString, BluetoothDeviceItem *>::iterator i;
+
+    if (isShow) {
+        // 计算已连接蓝牙设备数
+        int connectCount = 0;
+        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+            BluetoothDeviceItem *deviceItem = i.value();
+
+            if (deviceItem && deviceItem->device() && deviceItem->device()->paired()
+                    && (Device::StateConnected == deviceItem->device()->state() || deviceItem->device()->connecting()))
+                connectCount++;
+        }
+
+        // 显示所有蓝牙设备
+        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+            BluetoothDeviceItem *deviceItem = i.value();
+
+            if (deviceItem && deviceItem->device() && deviceItem->device()->name().isEmpty()) {
+                DStandardItem *dListItem = deviceItem->standardItem();
+                QModelIndex index = m_deviceModel->indexFromItem(dListItem);
+                if (!index.isValid()) {
+                    m_deviceModel->insertRow(((connectCount > -1 && connectCount < m_deviceItems.count()) ? connectCount : 0), dListItem);
+                }
+            }
+        }
+
+        return;
+    }
+
+
+    for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+        BluetoothDeviceItem *deviceItem = i.value();
+
+        // 将名称为空的蓝牙设备过滤,如果蓝牙正在连接或者已连接不过滤
+        if (deviceItem && deviceItem->device() && deviceItem->device()->name().isEmpty()
+                && (Device::StateConnected != deviceItem->device()->state() || !deviceItem->device()->connecting())) {
+            DStandardItem *dListItem = deviceItem->standardItem();
+            QModelIndex index = m_deviceModel->indexFromItem(dListItem);
+            if (index.isValid()) {
+                m_deviceModel->takeRow(index.row());
+            }
+        }
+    }
 }

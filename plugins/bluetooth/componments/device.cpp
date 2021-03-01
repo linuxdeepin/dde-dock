@@ -77,6 +77,14 @@ void Device::setName(const QString &name)
     }
 }
 
+void Device::setAlias(const QString &alias)
+{
+    if (alias != m_alias) {
+        m_alias = alias;
+        Q_EMIT aliasChanged(alias);
+    }
+}
+
 void Device::setPaired(bool paired)
 {
     if (paired != m_paired) {

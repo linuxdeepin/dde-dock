@@ -30,6 +30,10 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
+#include <com_deepin_daemon_bluetooth.h>
+
+using  DBusBluetooth = com::deepin::daemon::Bluetooth;
+
 DWIDGET_USE_NAMESPACE
 
 DWIDGET_BEGIN_NAMESPACE
@@ -116,6 +120,7 @@ private:
     void initData();
     void initUi();
     void initConnect();
+    void setUnnamedDevicesVisible(bool isShow);
 
     Adapter *m_adapter = nullptr;
     SettingLabel *m_adapterLabel = nullptr;
@@ -123,6 +128,8 @@ private:
     DListView *m_deviceListview = nullptr;
     QStandardItemModel *m_deviceModel = nullptr;
     RefreshButton *m_refreshBtn = nullptr;
+    DBusBluetooth *m_bluetoothInter;
+    bool m_showUnnamedDevices;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
 };

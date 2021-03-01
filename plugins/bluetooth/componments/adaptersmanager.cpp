@@ -119,14 +119,14 @@ void AdaptersManager::connectDevice(const Device *device, Adapter *adapter)
         switch (device->state()) {
             case Device::StateUnavailable: {
                 m_bluetoothInter->ConnectDevice(path, QDBusObjectPath(adapter->id()));
-                qDebug() << "connect to device: " << device->name();
+                qDebug() << "connect to device: " << device->alias();
             }
                 break;
             case Device::StateAvailable:
                 break;
             case Device::StateConnected: {
                 m_bluetoothInter->DisconnectDevice(path);
-                qDebug() << "disconnect device: " << device->name();
+                qDebug() << "disconnect device: " << device->alias();
             }
                 break;
         }
