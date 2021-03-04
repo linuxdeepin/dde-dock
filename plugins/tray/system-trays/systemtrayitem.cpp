@@ -237,10 +237,9 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
     m_popupTipsDelayTimer->stop();
     hideNonModel();
 
-    if (event->button() == Qt::RightButton) {
-        if (perfectIconRect().contains(event->pos(), true)) {
-            return (m_gsettings && m_gsettings->get("menuEnable").toBool()) ? showContextMenu() : void();
-        }
+    if (event->button() == Qt::RightButton
+            && perfectIconRect().contains(event->pos(), true)) {
+        return (m_gsettings && (!m_gsettings->keys().contains("menuEnable") || m_gsettings->get("menuEnable").toBool())) ? showContextMenu() : void();
     }
 
     AbstractTrayWidget::mousePressEvent(event);
