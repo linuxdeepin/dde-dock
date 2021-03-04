@@ -100,6 +100,10 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
     const bool connectState = dviceJson["ConnectState"].toBool();
     const QString bluetoothDeviceType = dviceJson["Icon"].toString();
 
+    // FIXME: Solve the problem that the device name in the Bluetooth list is blank
+    if (name.isEmpty() && alias.isEmpty())
+        return ;
+
     const Device *constdevice = m_devices.value(id);
     auto device = const_cast<Device *>(constdevice);
     if (device) {
@@ -112,6 +116,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
         device->setConnectState(connectState);
         device->setState(state);
         device->setDeviceType(bluetoothDeviceType);
+        emit deviceNameUpdated(device);
     }
 }
 

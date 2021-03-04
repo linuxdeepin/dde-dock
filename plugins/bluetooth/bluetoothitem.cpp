@@ -53,11 +53,11 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     m_tipsLabel->setVisible(false);
     refreshIcon();
 
-    connect(m_applet, &BluetoothApplet::powerChanged, [ & ] (bool powered) {
+    connect(m_applet, &BluetoothApplet::powerChanged, [ & ](bool powered) {
         m_adapterPowered = powered;
         refreshIcon();
     });
-    connect(m_applet, &BluetoothApplet::deviceStateChanged, [ & ] (const Device* device) {
+    connect(m_applet, &BluetoothApplet::deviceStateChanged, [ & ](const Device *device) {
         m_devState = device->state();
         refreshIcon();
         refreshTips();
@@ -116,8 +116,7 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
 
     if (menuId == SHIFT) {
         m_applet->setAdapterPowered(!m_adapterPowered);
-    }
-    else if (menuId == SETTINGS)
+    } else if (menuId == SETTINGS) {
         DDBusSender()
         .service("com.deepin.dde.ControlCenter")
         .interface("com.deepin.dde.ControlCenter")
@@ -125,6 +124,7 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
         .method(QString("ShowModule"))
         .arg(QString("bluetooth"))
         .call();
+    }
 }
 
 void BluetoothItem::refreshIcon()

@@ -97,7 +97,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 
 bool BluetoothApplet::poweredInitState()
 {
-    foreach(const auto adapter, m_adapterItems) {
+    foreach (const auto adapter, m_adapterItems) {
         if (adapter->adapter()->powered()) {
             return true;
         }
@@ -182,7 +182,7 @@ void BluetoothApplet::onSetAdapterPower(Adapter *adapter, bool state)
 
 void BluetoothApplet::updateBluetoothPowerState()
 {
-    foreach(const auto item, m_adapterItems) {
+    foreach (const auto item, m_adapterItems) {
         if (item->adapter()->powered()) {
             emit powerChanged(true);
             return;
@@ -243,7 +243,7 @@ void BluetoothApplet::updateSize()
 {
     int hetght = 0;
     int count = 0;
-    foreach(const auto item, m_adapterItems) {
+    foreach (const auto item, m_adapterItems) {
         hetght += TitleHeight + TitleSpace;
         if (item->adapter()->powered()) {
             count += item->currentDeviceCount();

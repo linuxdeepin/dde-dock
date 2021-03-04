@@ -49,11 +49,11 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
 
     m_bluetoothItem = new BluetoothItem;
 
-    connect(m_bluetoothItem, &BluetoothItem::justHasAdapter, [&]{
+    connect(m_bluetoothItem, &BluetoothItem::justHasAdapter, [&] {
         m_enableState = true;
         refreshPluginItemsVisible();
     });
-    connect(m_bluetoothItem, &BluetoothItem::noAdapter, [&]{
+    connect(m_bluetoothItem, &BluetoothItem::noAdapter, [&] {
         m_enableState = false;
         refreshPluginItemsVisible();
     });

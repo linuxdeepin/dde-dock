@@ -69,7 +69,7 @@ public slots:
 
 signals:
     void requestTopDeviceItem(DStandardItem *item);
-    void deviceStateChanged(const Device* device);
+    void deviceStateChanged(const Device *device);
 
 private:
     void initActionList();
@@ -100,10 +100,12 @@ public slots:
     void onDeviceAdded(const Device *device);
     // 移除蓝牙设备
     void onDeviceRemoved(const Device *device);
+    // 蓝牙设备名称更新
+    void onDeviceNameUpdated(const Device *device);
     // 连接蓝牙设备
     void onConnectDevice(const QModelIndex &index);
     // 将已连接的蓝牙设备放到列表第一个
-    void onTopDeviceItem(DStandardItem* item);
+    void onTopDeviceItem(DStandardItem *item);
     // 设置蓝牙适配器名称
     void onAdapterNameChanged(const QString name);
     void updateIconTheme(DGuiApplicationHelper::ColorType type);
@@ -114,7 +116,7 @@ signals:
     void requestRefreshAdapter(Adapter *adapter);
     void connectDevice(const Device *device, Adapter *adapter);
     void deviceCountChanged();
-    void deviceStateChanged(const Device* device);
+    void deviceStateChanged(const Device *device);
 
 private:
     void initData();

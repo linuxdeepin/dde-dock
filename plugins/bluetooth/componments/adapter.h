@@ -63,6 +63,7 @@ Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void deviceAdded(const Device *device) const;
     void deviceRemoved(const Device *device) const;
+    void deviceNameUpdated(const Device *device) const;
     void poweredChanged(const bool powered) const;
     void discoveringChanged(const bool discover) const;
 

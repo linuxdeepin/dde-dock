@@ -102,7 +102,7 @@ void BluetoothDeviceItem::updateDeviceState(Device::State state)
         m_loading->start();
         m_stateAction->setVisible(true);
         m_standarditem->setCheckState(Qt::Unchecked);
-    } else if (state == Device::StateConnected){
+    } else if (state == Device::StateConnected) {
         m_loading->stop();
         m_stateAction->setVisible(false);
         m_standarditem->setCheckState(Qt::Checked);
@@ -146,7 +146,7 @@ void BluetoothAdapterItem::onConnectDevice(const QModelIndex &index)
         return;
     DStandardItem *deviceitem = dynamic_cast<DStandardItem *>(deviceModel->item(index.row()));
 
-    foreach(const auto item, m_deviceItems) {
+    foreach (const auto item, m_deviceItems) {
         if (item->standardItem() == deviceitem) {
             emit connectDevice(item->device(), m_adapter);
         }
@@ -201,7 +201,7 @@ void BluetoothAdapterItem::initData()
     if (!m_adapter->powered())
         return;
 
-    foreach(const auto device, m_adapter->devices()) {
+    foreach (const auto device, m_adapter->devices()) {
         if (!m_deviceItems.contains(device->id()))
             onDeviceAdded(device);
     }
@@ -212,7 +212,7 @@ void BluetoothAdapterItem::initData()
 void BluetoothAdapterItem::onDeviceAdded(const Device *device)
 {
     int insertRow = 0;
-    foreach(const auto item, m_deviceItems) {
+    foreach (const auto item, m_deviceItems) {
         if (item->device()->connectState()) {
             insertRow++;
         }
@@ -232,13 +232,27 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
 
 void BluetoothAdapterItem::onDeviceRemoved(const Device *device)
 {
-    if(m_deviceItems.isEmpty())
+    if (m_deviceItems.isEmpty())
         return;
 
     m_deviceModel->removeRow(m_deviceItems.value(device->id())->standardItem()->row());
     m_deviceItems.value(device->id())->deleteLater();
     m_deviceItems.remove(device->id());
     emit deviceCountChanged();
+}
+
+void BluetoothAdapterItem::onDeviceNameUpdated(const Device *device)
+{
+    if (m_deviceItems.isEmpty())
+        return;
+
+    // 修复蓝牙设备列表中，设备名称更新后未实时刷新的问题
+    if (m_deviceItems.contains(device->id())) {
+        BluetoothDeviceItem *item = m_deviceItems[device->id()];
+        if (item && !item->device()->alias().isEmpty()) {
+            item->updateDeviceState(item->device()->state());
+        }
+    }
 }
 
 void BluetoothAdapterItem::initUi()
@@ -287,9 +301,10 @@ void BluetoothAdapterItem::initConnect()
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothAdapterItem::updateIconTheme);
     connect(m_adapter, &Adapter::deviceAdded, this, &BluetoothAdapterItem::onDeviceAdded);
     connect(m_adapter, &Adapter::deviceRemoved, this, &BluetoothAdapterItem::onDeviceRemoved);
+    connect(m_adapter, &Adapter::deviceNameUpdated, this, &BluetoothAdapterItem::onDeviceNameUpdated);
     connect(m_adapter, &Adapter::nameChanged, this, &BluetoothAdapterItem::onAdapterNameChanged);
     connect(m_deviceListview, &DListView::clicked, this, &BluetoothAdapterItem::onConnectDevice);
-    connect(m_adapter, &Adapter::discoveringChanged, this, [ = ] (bool state) {
+    connect(m_adapter, &Adapter::discoveringChanged, this, [ = ](bool state) {
         if (state) {
             m_refreshBtn->startRotate();
         } else {
@@ -301,7 +316,7 @@ void BluetoothAdapterItem::initConnect()
         emit requestRefreshAdapter(m_adapter);
     });
 
-    connect(m_adapter, &Adapter::poweredChanged, this, [ = ] (bool state) {
+    connect(m_adapter, &Adapter::poweredChanged, this, [ = ](bool state) {
         initData();
         m_refreshBtn->setVisible(state);
         m_deviceListview->setVisible(state);
@@ -309,7 +324,7 @@ void BluetoothAdapterItem::initConnect()
         m_adapterStateBtn->setEnabled(true);
         emit adapterPowerChanged();
     });
-    connect(m_adapterStateBtn, &DSwitchButton::clicked, this, [ = ] (bool state){
+    connect(m_adapterStateBtn, &DSwitchButton::clicked, this, [ = ](bool state) {
         qDeleteAll(m_deviceItems);
         m_deviceItems.clear();
         m_deviceModel->clear();

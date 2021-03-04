@@ -82,7 +82,7 @@ signals:
     void noAdapter();
     void justHasAdapter();
     void powerChanged(bool state);
-    void deviceStateChanged(const Device* device);
+    void deviceStateChanged(const Device *device);
 
 public slots:
     // 蓝牙适配器增加
