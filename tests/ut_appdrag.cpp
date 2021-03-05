@@ -20,50 +20,41 @@
  */
 
 #include <QObject>
-#include <QApplication>
-#include <QMouseEvent>
+#include <QThread>
 
 #include <gtest/gtest.h>
 
-#include "statebutton.h"
+#include "appdrag.h"
+#include "qgsettingsinterfacemock.h"
 
-class Test_StateButton : public QObject, public ::testing::Test
+class Test_AppDrag : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    StateButton *stateButton = nullptr;
+    AppDrag *drag = nullptr;
 };
 
-void Test_StateButton::SetUp()
+void Test_AppDrag::SetUp()
 {
-    stateButton = new StateButton();
+    QWidget *w = new QWidget;
+    drag = new AppDrag(new QGSettingsInterfaceMock("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/"),w);
 }
 
-void Test_StateButton::TearDown()
+void Test_AppDrag::TearDown()
 {
-    delete stateButton;
-    stateButton = nullptr;
+    delete drag;
+    drag = nullptr;
 }
 
-TEST_F(Test_StateButton, statebutton_test)
+TEST_F(Test_AppDrag, drag_test)
 {
-    ASSERT_NE(stateButton, nullptr);
-}
+    QPixmap pix(":/res/all_settings_on.png");
+    drag->setPixmap(pix);
 
-TEST_F(Test_StateButton, statebutton_clicked_test)
-{
-    bool clicked = false;
+    ASSERT_TRUE(drag->appDragWidget());
 
-    connect(stateButton, &StateButton::click, this, [ = ]() mutable {
-        clicked = true;
-    });
-
-    Qt::MouseButton button = Qt::LeftButton;
-    QMouseEvent mouseEvent(QEvent::MouseButtonPress, stateButton->rect().center(), button, Qt::NoButton, Qt::NoModifier);
-    bool ret = QApplication::sendEvent(stateButton, &mouseEvent);
-
-    ASSERT_NE(ret, clicked);
+    drag->exec();
 }

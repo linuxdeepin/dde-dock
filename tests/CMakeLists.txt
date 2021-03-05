@@ -27,7 +27,7 @@ pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 
 # 添加执行文件信息
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} ${SRC_PATH} ../frame/item/item.qrc ../frame/frame.qrc)
+add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} ${SRC_PATH} ../frame/item/item.qrc ../frame/frame.qrc ut_res.qrc)
 
 # 包含路径
 target_include_directories(${BIN_NAME} PUBLIC
@@ -37,6 +37,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${QGSettings_INCLUDE_DIRS}
     ../interfaces
+    fakedbus
 )
 
 # 链接库

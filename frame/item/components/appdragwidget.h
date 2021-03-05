@@ -32,16 +32,18 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
-#include <qwidget.h>
+#include <QWidget>
+
 #include "../widgets/tipswidget.h"
 #include "dockpopupwindow.h"
 
+class QGSettingsInterface;
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
+    explicit AppDragWidget(QGSettingsInterface *interface, QWidget *parent = Q_NULLPTR);
     virtual ~AppDragWidget() override;
 
     void setAppPixmap(const QPixmap &pix);
@@ -63,7 +65,6 @@ protected:
 
 private:
     void initAnimations();
-    void initConfigurations();
     void showRemoveAnimation();
     void showGoBackAnimation();
     void onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
@@ -74,6 +75,7 @@ private:
     bool isRemoveItem();
 
 private:
+    QGSettingsInterface *qgInterface;
     AppGraphicsObject *m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;

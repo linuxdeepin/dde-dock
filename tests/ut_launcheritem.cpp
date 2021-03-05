@@ -21,12 +21,14 @@
 
 #include <QObject>
 #include <QThread>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
+#define private public
 #include "launcheritem.h"
+#undef private
 #include "qgsettingsinterfacemock.h"
-
 class Test_LauncherItem : public ::testing::Test
 {
 public:
@@ -48,7 +50,18 @@ void Test_LauncherItem::TearDown()
     launcherItem = nullptr;
 }
 
-TEST_F(Test_LauncherItem, dockitem_test)
+TEST_F(Test_LauncherItem, launcher_test)
 {
-    ASSERT_NE(launcherItem, nullptr);
+    ASSERT_EQ(launcherItem->itemType(), LauncherItem::Launcher);
+    launcherItem->refreshIcon();
+    launcherItem->show();
+    launcherItem->update();
+    QThread::msleep(10);
+    launcherItem->hide();
+    launcherItem->update();
+    QThread::msleep(10);
+    launcherItem->resize(100,100);
+    ASSERT_TRUE(launcherItem->popupTips());
+
+    QTest::mouseClick(launcherItem, Qt::LeftButton, Qt::NoModifier, launcherItem->geometry().center());
 }

@@ -20,50 +20,34 @@
  */
 
 #include <QObject>
-#include <QApplication>
-#include <QMouseEvent>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
-#include "statebutton.h"
+#include "placeholderitem.h"
 
-class Test_StateButton : public QObject, public ::testing::Test
+class Test_PlaceholderItem : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    StateButton *stateButton = nullptr;
+    PlaceholderItem *placeholderitem = nullptr;
 };
 
-void Test_StateButton::SetUp()
+void Test_PlaceholderItem::SetUp()
 {
-    stateButton = new StateButton();
+    placeholderitem = new PlaceholderItem();
 }
 
-void Test_StateButton::TearDown()
+void Test_PlaceholderItem::TearDown()
 {
-    delete stateButton;
-    stateButton = nullptr;
+    delete placeholderitem;
+    placeholderitem = nullptr;
 }
 
-TEST_F(Test_StateButton, statebutton_test)
+TEST_F(Test_PlaceholderItem, launcher_test)
 {
-    ASSERT_NE(stateButton, nullptr);
-}
-
-TEST_F(Test_StateButton, statebutton_clicked_test)
-{
-    bool clicked = false;
-
-    connect(stateButton, &StateButton::click, this, [ = ]() mutable {
-        clicked = true;
-    });
-
-    Qt::MouseButton button = Qt::LeftButton;
-    QMouseEvent mouseEvent(QEvent::MouseButtonPress, stateButton->rect().center(), button, Qt::NoButton, Qt::NoModifier);
-    bool ret = QApplication::sendEvent(stateButton, &mouseEvent);
-
-    ASSERT_NE(ret, clicked);
+    QCOMPARE(placeholderitem->itemType(), PlaceholderItem::Placeholder);
 }

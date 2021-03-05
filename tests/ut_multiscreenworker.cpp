@@ -20,50 +20,39 @@
  */
 
 #include <QObject>
-#include <QApplication>
-#include <QMouseEvent>
+
+#include <DWindowManagerHelper>
 
 #include <gtest/gtest.h>
 
-#include "statebutton.h"
+#include "mainwindow.h"
+#include "multiscreenworker.h"
 
-class Test_StateButton : public QObject, public ::testing::Test
+class Test_MultiScreenWorker : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    StateButton *stateButton = nullptr;
+    MainWindow *mainwindow;
+    MultiScreenWorker *worker = nullptr;
 };
 
-void Test_StateButton::SetUp()
+void Test_MultiScreenWorker::SetUp()
 {
-    stateButton = new StateButton();
+//    mainwindow = new MainWindow();
+//    worker = new MultiScreenWorker(mainwindow, DWindowManagerHelper::instance());
 }
 
-void Test_StateButton::TearDown()
+void Test_MultiScreenWorker::TearDown()
 {
-    delete stateButton;
-    stateButton = nullptr;
+//    delete worker;
+//    worker = nullptr;
 }
 
-TEST_F(Test_StateButton, statebutton_test)
+TEST_F(Test_MultiScreenWorker, dockInter_test)
 {
-    ASSERT_NE(stateButton, nullptr);
+//    ASSERT_TRUE(worker->dockInter());
 }
 
-TEST_F(Test_StateButton, statebutton_clicked_test)
-{
-    bool clicked = false;
-
-    connect(stateButton, &StateButton::click, this, [ = ]() mutable {
-        clicked = true;
-    });
-
-    Qt::MouseButton button = Qt::LeftButton;
-    QMouseEvent mouseEvent(QEvent::MouseButtonPress, stateButton->rect().center(), button, Qt::NoButton, Qt::NoModifier);
-    bool ret = QApplication::sendEvent(stateButton, &mouseEvent);
-
-    ASSERT_NE(ret, clicked);
-}

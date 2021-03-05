@@ -20,50 +20,55 @@
  */
 
 #include <QObject>
-#include <QApplication>
-#include <QMouseEvent>
+#include <QDebug>
+
+#include <DWindowManagerHelper>
 
 #include <gtest/gtest.h>
 
-#include "statebutton.h"
+#define private public
+#include "dockitemmanager.h"
+#include "dockitem.h"
+#undef private
 
-class Test_StateButton : public QObject, public ::testing::Test
+class Test_DockItemManager : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    StateButton *stateButton = nullptr;
+    DockItemManager *manager = nullptr;
 };
 
-void Test_StateButton::SetUp()
+void Test_DockItemManager::SetUp()
 {
-    stateButton = new StateButton();
+//    manager = DockItemManager::instance();
 }
 
-void Test_StateButton::TearDown()
+void Test_DockItemManager::TearDown()
 {
-    delete stateButton;
-    stateButton = nullptr;
 }
 
-TEST_F(Test_StateButton, statebutton_test)
+TEST_F(Test_DockItemManager, appIsOnDock_test)
 {
-    ASSERT_NE(stateButton, nullptr);
+//    ASSERT_TRUE(manager->appIsOnDock("test"));
+
+//    manager->startLoadPlugins();
 }
 
-TEST_F(Test_StateButton, statebutton_clicked_test)
+TEST_F(Test_DockItemManager, get_method_test)
 {
-    bool clicked = false;
+//    manager->itemList();
+//    manager->pluginList();
 
-    connect(stateButton, &StateButton::click, this, [ = ]() mutable {
-        clicked = true;
-    });
+//    qDebug() << manager->m_itemList.size();
+//    for (auto item: manager->m_itemList)
+//        qDebug() << item->itemType();
+}
 
-    Qt::MouseButton button = Qt::LeftButton;
-    QMouseEvent mouseEvent(QEvent::MouseButtonPress, stateButton->rect().center(), button, Qt::NoButton, Qt::NoModifier);
-    bool ret = QApplication::sendEvent(stateButton, &mouseEvent);
-
-    ASSERT_NE(ret, clicked);
+TEST_F(Test_DockItemManager, refershItemsIcon_test)
+{
+//    manager->refershItemsIcon();
+//    manager->sortPluginItems();
 }

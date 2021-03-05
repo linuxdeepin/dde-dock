@@ -256,7 +256,6 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
 void AbstractPluginsController::refreshPluginSettings()
 {
     const QString &pluginSettings = m_dockDaemonInter->GetPluginSettings().value();
-    qDebug() << pluginSettings;
     if (pluginSettings.isEmpty()) {
         qDebug() << "Error! get plugin settings from dbus failed!";
         return;

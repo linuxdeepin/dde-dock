@@ -21,7 +21,7 @@
 
 #include "../appitem.h"
 #include "appdragwidget.h"
-#include <QGSettings>
+#include "qgsettingsinterface.h"
 
 class AppGraphicsObject : public QGraphicsObject
 {
@@ -59,18 +59,20 @@ private:
     QPixmap m_appPixmap;
 };
 
-AppDragWidget::AppDragWidget(QWidget *parent) :
-    QGraphicsView(parent),
-    m_object(new AppGraphicsObject),
-    m_scene(new QGraphicsScene(this)),
-    m_followMouseTimer(new QTimer(this)),
-    m_animScale(new QPropertyAnimation(m_object, "scale", this)),
-    m_animRotation(new QPropertyAnimation(m_object, "rotation", this)),
-    m_animOpacity(new QPropertyAnimation(m_object, "opacity", this)),
-    m_animGroup(new QParallelAnimationGroup(this)),
-    m_goBackAnim(new QPropertyAnimation(this, "pos", this)),
-    m_removeTips(new TipsWidget(this)),
-    m_popupWindow(nullptr)
+AppDragWidget::AppDragWidget(QGSettingsInterface *interface, QWidget *parent)
+    : QGraphicsView(parent)
+    , qgInterface(interface)
+    , m_object(new AppGraphicsObject)
+    , m_scene(new QGraphicsScene(this))
+    , m_followMouseTimer(new QTimer(this))
+    , m_animScale(new QPropertyAnimation(m_object, "scale", this))
+    , m_animRotation(new QPropertyAnimation(m_object, "rotation", this))
+    , m_animOpacity(new QPropertyAnimation(m_object, "opacity", this))
+    , m_animGroup(new QParallelAnimationGroup(this))
+    , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
+    , m_removeTips(new TipsWidget(this))
+    , m_popupWindow(nullptr)
+    , m_distanceMultiple(interface->get("distance-multiple").toDouble())
 {
     m_removeTips->setText(tr("Remove"));
     m_removeTips->setObjectName("AppRemoveTips");
@@ -101,7 +103,6 @@ AppDragWidget::AppDragWidget(QWidget *parent) :
     setAcceptDrops(true);
 
     initAnimations();
-    initConfigurations();
 
     m_followMouseTimer->setSingleShot(false);
     m_followMouseTimer->setInterval(1);
@@ -122,6 +123,9 @@ AppDragWidget::~AppDragWidget()
         delete m_popupWindow;
         m_popupWindow=nullptr;
     }
+
+    delete qgInterface;
+    qgInterface = nullptr;
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
@@ -268,16 +272,6 @@ void AppDragWidget::initAnimations()
     connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
 }
 
-void AppDragWidget::initConfigurations()
-{
-    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.distancemultiple")) {
-        QGSettings gsetting("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/");
-        m_distanceMultiple = gsetting.get("distance-multiple").toDouble();
-    } else {
-        m_distanceMultiple = 1.5;
-    }
-}
-
 void AppDragWidget::showRemoveAnimation()
 {
     if (m_animGroup->state() == QParallelAnimationGroup::Running) {
@@ -376,7 +370,7 @@ bool AppDragWidget::isRemoveItem()
 void AppDragWidget::enterEvent(QEvent *event)
 {
     if (m_goBackAnim->state() != QPropertyAnimation::State::Running
-        && m_animGroup->state() != QParallelAnimationGroup::Running) {
+            && m_animGroup->state() != QParallelAnimationGroup::Running) {
         hide();
     }
 }

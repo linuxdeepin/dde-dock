@@ -28,6 +28,7 @@
 #include "traypluginitem.h"
 #include "dockitemmanager.h"
 #include "touchsignalmanager.h"
+#include "qgsettingsinterfaceimpl.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -695,7 +696,7 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
     QDrag *drag = nullptr;
     if (item->itemType() == DockItem::App) {
-        AppDrag *appDrag = new AppDrag(item);
+        AppDrag *appDrag = new AppDrag(new QGSettingsInterfaceImpl("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/"),item);
 
         m_appDragWidget = appDrag->appDragWidget();
 
