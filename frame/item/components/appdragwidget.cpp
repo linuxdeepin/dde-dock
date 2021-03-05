@@ -197,7 +197,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
     m_followMouseTimer->stop();
     m_bDragDrop = false;
 
-    if (isRemoveAble()) {
+    if (isRemoveAble(QCursor::pos())) {
         if (DWindowManagerHelper::instance()->hasComposite()) {
             showRemoveAnimation();
         } else {
@@ -270,19 +270,12 @@ void AppDragWidget::initAnimations()
 
 void AppDragWidget::initConfigurations()
 {
-    const QString &cschema = "com.deepin.dde.dock.distancemultiple";
-    const QString &cpath = "/com/deepin/dde/dock/distancemultiple/";
-
-    const QByteArray &schema_id {
-        cschema.toUtf8()
-    };
-
-    const QByteArray &path_id {
-        cpath.toUtf8()
-    };
-
-    QGSettings gsetting(schema_id, path_id);
-    m_distanceMultiple = gsetting.get("distance-multiple").toDouble();
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.distancemultiple")) {
+        QGSettings gsetting("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/");
+        m_distanceMultiple = gsetting.get("distance-multiple").toDouble();
+    } else {
+        m_distanceMultiple = 1.5;
+    }
 }
 
 void AppDragWidget::showRemoveAnimation()
@@ -312,13 +305,13 @@ void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newS
 
 /**
  * @brief 判断图标拖到一定高度后是否可以移除
- *
+ * @param curPos 当前鼠标所在位置
  * @return true
  * @return false
  */
-bool AppDragWidget::isRemoveAble()
+bool AppDragWidget::isRemoveAble(const QPoint &curPos)
 {
-    const QPoint &p = QCursor::pos();
+    const QPoint &p = curPos;
     switch (m_dockPosition) {
     case Dock::Position::Left:
         if ((p.x() - m_dockGeometry.topRight().x()) > (m_dockGeometry.width() * m_distanceMultiple)) {
@@ -394,7 +387,7 @@ void AppDragWidget::showRemoveTips()
     Dock::Position pos = Dock::Position::Bottom;
 
     DockPopupWindow *popup = m_popupWindow;
-    if (isRemoveAble()) {
+    if (isRemoveAble(QCursor::pos())) {
         QWidget *lastContent = popup->getContent();
         if (lastContent)
             lastContent->setVisible(false);

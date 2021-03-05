@@ -47,7 +47,7 @@ public:
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
     void setOriginPos(const QPoint position);
-    bool isRemoveAble();
+    bool isRemoveAble(const QPoint &curPos);
 
 signals:
     void requestRemoveItem();

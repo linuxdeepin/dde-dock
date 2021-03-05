@@ -95,6 +95,11 @@ bool DockItemManager::appIsOnDock(const QString &appDesktop) const
 
 void DockItemManager::startLoadPlugins() const
 {
+    if (!QGSettings::isSchemaInstalled("com.deepin.dde.dock")) {
+        qWarning("com.deepin.dde.dock is not installed");
+        return;
+    }
+
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
     QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(), m_pluginsInter, &DockPluginsController::startLoader);
