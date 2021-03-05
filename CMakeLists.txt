@@ -90,7 +90,7 @@ file(GLOB SRC_PATH
 
 add_subdirectory("frame")
 add_subdirectory("plugins")
-add_subdirectory("unittest")
+add_subdirectory("tests")
 
 # Install settings
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
