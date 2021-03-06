@@ -91,7 +91,7 @@ private:
 
 private slots:
     void updateWindowInfos(const WindowInfoMap &info);
-    void refershIcon() override;
+    void refreshIcon() override;
     void activeChanged();
     void showPreview();
     void playSwingEffect();

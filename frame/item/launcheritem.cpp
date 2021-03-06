@@ -53,7 +53,13 @@ LauncherItem::LauncherItem(QGSettingsInterface *interface, QWidget *parent)
     }
 }
 
-void LauncherItem::refershIcon()
+LauncherItem::~LauncherItem()
+{
+    delete m_gsettings;
+    m_gsettings = nullptr;
+}
+
+void LauncherItem::refreshIcon()
 {
     const int iconSize = qMin(width(), height());
     if (DockDisplayMode == Efficient)
@@ -94,7 +100,7 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    refershIcon();
+    refreshIcon();
 }
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)

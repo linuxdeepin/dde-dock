@@ -37,10 +37,11 @@ class LauncherItem : public DockItem
 
 public:
     explicit LauncherItem(QGSettingsInterface *interface, QWidget *parent = nullptr);
+    ~ LauncherItem() override;
 
     inline ItemType itemType() const override {return Launcher;}
 
-    void refershIcon() override;
+    void refreshIcon() override;
 
 protected:
     void showEvent(QShowEvent* event) override;

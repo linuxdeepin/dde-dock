@@ -54,7 +54,7 @@ public:
     virtual void setDraging(bool bDrag) override;
 
 public slots:
-    void refershIcon() override;
+    void refreshIcon() override;
     void onGSettingsChanged(const QString &key);
 
 protected:

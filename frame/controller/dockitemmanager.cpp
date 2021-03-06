@@ -109,7 +109,7 @@ void DockItemManager::startLoadPlugins() const
 void DockItemManager::refershItemsIcon()
 {
     for (auto item : m_itemList) {
-        item->refershIcon();
+        item->refreshIcon();
         item->update();
     }
 }

@@ -125,7 +125,7 @@ QSize PluginsItem::sizeHint() const
     return m_centralWidget->sizeHint();
 }
 
-void PluginsItem::refershIcon()
+void PluginsItem::refreshIcon()
 {
     m_pluginInter->refreshIcon(m_itemKey);
 }

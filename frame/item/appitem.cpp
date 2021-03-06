@@ -110,15 +110,15 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
-    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refershIcon);
+    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
-    connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refershIcon, Qt::QueuedConnection);
+    connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
 
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
-    refershIcon();
+    refreshIcon();
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
     connect(GSettingsByDockApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
@@ -130,7 +130,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
         m_curDate = QDate::currentDate();
         if (m_curDate.day() != m_lastShowDay) {
             m_lastShowDay = m_curDate.day();
-            refershIcon();
+            refreshIcon();
         }
     });
 }
@@ -395,7 +395,7 @@ void AppItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    refershIcon();
+    refreshIcon();
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *e)
@@ -463,7 +463,7 @@ void AppItem::showEvent(QShowEvent *e)
         onGSettingsChanged("enable");
     });
 
-    refershIcon();
+    refreshIcon();
 }
 
 void AppItem::showHoverTips()
@@ -597,7 +597,7 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
     update();
 }
 
-void AppItem::refershIcon()
+void AppItem::refreshIcon()
 {
     if (!isVisible())
         return;

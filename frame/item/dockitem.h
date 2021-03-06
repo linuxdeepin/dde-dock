@@ -62,7 +62,7 @@ public:
     virtual QString accessibleName();
 
 public slots:
-    virtual void refershIcon() {}
+    virtual void refreshIcon() {}
 
     void showPopupApplet(QWidget *const applet);
     void hidePopup();
