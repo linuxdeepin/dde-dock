@@ -8,7 +8,7 @@ Name:           %{sname}
 %else
 Name:           %{repo}
 %endif
-Version:        5.3.0.49
+Version:        5.4.4
 Release:        1%{?fedora:%dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -43,6 +43,7 @@ BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  qt5-linguist
+BuildRequires:  gtest-devel
 Requires:       dbusmenu-qt5
 %if 0%{?fedora}
 BuildRequires:  qt5-qtbase-private-devel
