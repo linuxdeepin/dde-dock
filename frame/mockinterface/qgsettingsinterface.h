@@ -30,8 +30,8 @@ class QGSettingsInterface
 {
 public:
     enum Type {
-        REAL,   // 持有真正的QGSettings指针
-        FAKE    // Mock类
+        ImplType,   // 持有真正的QGSettings指针
+        MockType    // Mock类
     };
 
     virtual ~QGSettingsInterface() {}

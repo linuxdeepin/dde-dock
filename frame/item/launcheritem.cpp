@@ -45,7 +45,7 @@ LauncherItem::LauncherItem(QGSettingsInterface *interface, QWidget *parent)
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
 
-    if (m_gsettings->type() == QGSettingsInterface::REAL) {
+    if (m_gsettings->type() == QGSettingsInterface::ImplType) {
         QGSettingsInterfaceImpl *impl = dynamic_cast<QGSettingsInterfaceImpl *>(m_gsettings);
         if (!impl)
             qWarning("Error!");

@@ -28,6 +28,7 @@
 #include "appdrag.h"
 #include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
+#include "qgsettingsinterface.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -43,7 +44,7 @@ class AppItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(const QDBusObjectPath &entry, QGSettingsInterface::Type type, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
@@ -102,6 +103,9 @@ private slots:
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
+    QGSettingsInterface *m_qgAppInterface;
+    QGSettingsInterface *m_qgActiveAppInterface;
+    QGSettingsInterface *m_qgDockedAppInterface;
     TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;

@@ -41,7 +41,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(entry);
+        AppItem *it = new AppItem(entry, QGSettingsInterface::Type::ImplType);
         manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
@@ -190,7 +190,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(path);
+    AppItem *item = new AppItem(path, QGSettingsInterface::Type::ImplType);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;

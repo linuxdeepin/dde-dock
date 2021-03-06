@@ -35,7 +35,7 @@ QGSettingsInterfaceMock::~QGSettingsInterfaceMock()
 
 QGSettingsInterface::Type QGSettingsInterfaceMock::type()
 {
-    return Type::FAKE;
+    return Type::MockType;
 }
 
 QGSettings *QGSettingsInterfaceMock::gsettings()

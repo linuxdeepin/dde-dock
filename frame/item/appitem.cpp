@@ -26,6 +26,8 @@
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "appspreviewprovider.h"
+#include "qgsettingsinterfaceimpl.h"
+#include "qgsettingsinterfacemock.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -45,26 +47,65 @@
 
 QPoint AppItem::MousePressPos;
 
-static QGSettings *GSettingsByApp()
+static QGSettingsInterface *GSettingsByApp(QGSettingsInterface::Type type)
 {
-    static QGSettings settings("com.deepin.dde.dock.module.app");
-    return &settings;
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.app");
+        return &settings;
+    }
+    case QGSettingsInterface::Type::MockType:
+    {
+        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.app");
+        return &settings;
+    }
+    default:
+        return nullptr;
+    }
 }
 
-static QGSettings *GSettingsByActiveApp()
+static QGSettingsInterface *GSettingsByActiveApp(QGSettingsInterface::Type type)
 {
-    static QGSettings settings("com.deepin.dde.dock.module.activeapp");
-    return &settings;
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.activeapp");
+        return &settings;
+    }
+    case QGSettingsInterface::Type::MockType:
+    {
+        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.activeapp");
+        return &settings;
+    }
+    default:
+        return nullptr;
+    }
 }
 
-static QGSettings *GSettingsByDockApp()
+static QGSettingsInterface *GSettingsByDockApp(QGSettingsInterface::Type type)
 {
-    static QGSettings settings("com.deepin.dde.dock.module.dockapp");
-    return &settings;
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.dockapp");
+        return &settings;
+    }
+    case QGSettingsInterface::Type::MockType:
+    {
+        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.dockapp");
+        return &settings;
+    }
+    default:
+        return nullptr;
+    }
 }
 
-AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(const QDBusObjectPath &entry, QGSettingsInterface::Type type, QWidget *parent)
     : DockItem(parent)
+    , m_qgAppInterface(GSettingsByApp(type))
+    , m_qgActiveAppInterface(GSettingsByActiveApp(type))
+    , m_qgDockedAppInterface(GSettingsByDockApp(type))
     , m_appNameTips(new TipsWidget(this))
     , m_appPreviewTips(nullptr)
     , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
@@ -120,9 +161,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refreshIcon();
 
-    connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    connect(GSettingsByDockApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    connect(GSettingsByActiveApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(m_qgAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(m_qgDockedAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(m_qgActiveAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
@@ -140,6 +181,13 @@ AppItem::~AppItem()
     stopSwingEffect();
 
     m_appNameTips->deleteLater();
+
+    delete m_qgAppInterface;
+    m_qgAppInterface = nullptr;
+    delete m_qgActiveAppInterface;
+    m_qgActiveAppInterface = nullptr;
+    delete m_qgDockedAppInterface;
+    m_qgDockedAppInterface = nullptr;
 }
 
 void AppItem::checkEntry()
@@ -665,7 +713,7 @@ void AppItem::playSwingEffect()
     stopSwingEffect();
 
     QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
-                                                                 this, m_appIcon, rect(), devicePixelRatioF());
+                this, m_appIcon, rect(), devicePixelRatioF());
 
     m_swingEffectView = pair.first;
     m_itemAnimation = pair.second;
@@ -711,24 +759,24 @@ void AppItem::onGSettingsChanged(const QString &key)
         return;
     }
 
-    QGSettings *setting = m_itemEntryInter->isDocked()
-                          ? GSettingsByDockApp()
-                          : GSettingsByActiveApp();
+    QGSettingsInterface *setting = m_itemEntryInter->isDocked()
+            ? m_qgDockedAppInterface
+            : m_qgActiveAppInterface;
 
     if (setting->keys().contains("enable")) {
-        const bool isEnable = GSettingsByApp()->keys().contains("enable") && GSettingsByApp()->get("enable").toBool();
+        const bool isEnable = m_qgAppInterface->keys().contains("enable") && m_qgAppInterface->get("enable").toBool();
         setVisible(isEnable && setting->get("enable").toBool());
     }
 }
 
 bool AppItem::checkGSettingsControl() const
 {
-    QGSettings *setting = m_itemEntryInter->isDocked()
-                          ? GSettingsByDockApp()
-                          : GSettingsByActiveApp();
+    QGSettingsInterface *setting = m_itemEntryInter->isDocked()
+            ? m_qgDockedAppInterface
+            : m_qgActiveAppInterface;
 
     return (setting->keys().contains("control") && setting->get("control").toBool()) ||
-           (GSettingsByApp()->keys().contains("control") && GSettingsByApp()->get("control").toBool());
+            (m_qgAppInterface->keys().contains("control") && m_qgAppInterface->get("control").toBool());
 }
 
 void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)

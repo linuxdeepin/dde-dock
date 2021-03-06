@@ -36,7 +36,7 @@ QGSettingsInterfaceImpl::~QGSettingsInterfaceImpl()
 
 QGSettingsInterface::Type QGSettingsInterfaceImpl::type()
 {
-     return Type::REAL;
+     return Type::ImplType;
 }
 
 QGSettings *QGSettingsInterfaceImpl::gsettings()
