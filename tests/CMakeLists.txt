@@ -30,7 +30,6 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} ${SRC_PATH} ../frame/item/item.qrc ../frame/frame.qrc)
 
 # 包含路径
-
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
     ${XCB_EWMH_INCLUDE_DIRS}

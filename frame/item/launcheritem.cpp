@@ -22,6 +22,8 @@
 #include "launcheritem.h"
 #include "themeappicon.h"
 #include "imagefactory.h"
+#include "qgsettingsinterface.h"
+#include "qgsettingsinterfaceimpl.h"
 
 #include <QPainter>
 #include <QProcess>
@@ -32,18 +34,23 @@
 
 DCORE_USE_NAMESPACE
 
-LauncherItem::LauncherItem(QWidget *parent)
+LauncherItem::LauncherItem(QGSettingsInterface *interface, QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
-    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.launcher"))
+    , m_gsettings(interface)
 {
     m_launcherInter->setSync(true, false);
 
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
 
-    connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
+    if (m_gsettings->type() == QGSettingsInterface::REAL) {
+        QGSettingsInterfaceImpl *impl = dynamic_cast<QGSettingsInterfaceImpl *>(m_gsettings);
+        if (!impl)
+            qWarning("Error!");
+        connect(impl->gsettings(), &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
+    }
 }
 
 void LauncherItem::refershIcon()

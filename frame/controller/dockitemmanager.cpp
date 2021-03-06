@@ -24,6 +24,7 @@
 #include "launcheritem.h"
 #include "pluginsitem.h"
 #include "traypluginitem.h"
+#include "qgsettingsinterfaceimpl.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -36,7 +37,7 @@ DockItemManager::DockItemManager(QObject *parent)
     , m_pluginsInter(new DockPluginsController(this))
 {
     //固定区域：启动器
-    m_itemList.append(new LauncherItem);
+    m_itemList.append(new LauncherItem(new QGSettingsInterfaceImpl("com.deepin.dde.dock.module.launcher")));
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {

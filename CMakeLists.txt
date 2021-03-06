@@ -62,6 +62,7 @@ include_directories(
     frame/util
     frame/window
     frame/xcb
+    frame/mockinterface
 )
 
 aux_source_directory(frame/controller CONTROLLER)
@@ -75,6 +76,7 @@ aux_source_directory(frame/qss QSSPATH)
 aux_source_directory(frame/util UTIL)
 aux_source_directory(frame/window WINDOW)
 aux_source_directory(frame/xcb XCB)
+aux_source_directory(frame/mockinterface MOCKINTERFACE)
 
 file(GLOB SRC_PATH
     ${CONTROLLER}
@@ -86,6 +88,7 @@ file(GLOB SRC_PATH
     ${UTIL}
     ${WINDOW}
     ${XCB}
+    ${MOCKINTERFACE}
 )
 
 add_subdirectory("frame")
