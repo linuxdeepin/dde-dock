@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     chenjun <chenjun@uniontech.com>
+ * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *
- * Maintainer: chenjun <chenjun@uniontech.com>
+ * Maintainer: fanpengcheng <fanpengcheng@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <QObject>
 #include <QDebug>
 
