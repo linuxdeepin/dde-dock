@@ -182,13 +182,6 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
-    if (Utils::isSettingConfigured("com.deepin.dde.dock.icbc", "/com/deepin/dde/dock/icbc/", "already-clear")) {
-        QGSettings clear_setting("com.deepin.dde.dock.icbc", "/com/deepin/dde/dock/icbc/");
-        clear_setting.set("already-clear", false);
-        QGSettings apps_setting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
-        apps_setting.set("docked-apps", QStringList());
-        system("killall dde-session-daemon");
-    }
     QAccessible::installFactory(accessibleFactory);
 
     // load dde-network-utils translator
