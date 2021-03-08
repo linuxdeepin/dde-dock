@@ -63,7 +63,7 @@ void Test_Monitor::TearDown()
     monitor = nullptr;
 }
 
-TEST_F(Test_Monitor, dockitem_test)
+TEST_F(Test_Monitor, monitor_test)
 {
     ASSERT_NE(monitor, nullptr);
 
@@ -74,15 +74,24 @@ TEST_F(Test_Monitor, dockitem_test)
 
     monitor->setX(x);
     ASSERT_EQ(monitor->x(), x);
+    monitor->setX(x);
 
     monitor->setY(y);
     ASSERT_EQ(monitor->y(), y);
+    monitor->setY(y);
 
     monitor->setW(w);
     ASSERT_EQ(monitor->w(), w);
+    monitor->setW(w);
 
     monitor->setH(h);
     ASSERT_EQ(monitor->h(), h);
+    monitor->setH(h);
+
+    ASSERT_EQ(monitor->left(), x);
+    ASSERT_EQ(monitor->right(), x + w);
+    ASSERT_EQ(monitor->top(), y);
+    ASSERT_EQ(monitor->bottom(), y + h);
 
     ASSERT_EQ(monitor->topLeft(), QPoint(x, y));
     ASSERT_EQ(monitor->topRight(), QPoint(x + w, y));
@@ -101,6 +110,7 @@ TEST_F(Test_Monitor, dockitem_test)
     bool monitorEnable = true;
     monitor->setMonitorEnable(monitorEnable);
     ASSERT_EQ(monitor->enable(), monitorEnable);
+    monitor->setMonitorEnable(monitorEnable);
 
     Monitor::DockPosition dockPosition;
     dockPosition.leftDock = true;
@@ -109,4 +119,19 @@ TEST_F(Test_Monitor, dockitem_test)
     dockPosition.bottomDock = true;
     monitor->setDockPosition(dockPosition);
     ASSERT_EQ(monitor->dockPosition(), dockPosition);
+}
+
+TEST_F(Test_Monitor, dockPosition_test)
+{
+    monitor->setDockPosition(Monitor::DockPosition(false, false, false, false));
+    ASSERT_FALSE(monitor->dockPosition().docked(Position::Top));
+    ASSERT_FALSE(monitor->dockPosition().docked(Position::Bottom));
+    ASSERT_FALSE(monitor->dockPosition().docked(Position::Left));
+    ASSERT_FALSE(monitor->dockPosition().docked(Position::Right));
+
+    monitor->dockPosition().reset();
+    ASSERT_TRUE(monitor->dockPosition().docked(Position::Top));
+    ASSERT_TRUE(monitor->dockPosition().docked(Position::Bottom));
+    ASSERT_TRUE(monitor->dockPosition().docked(Position::Left));
+    ASSERT_TRUE(monitor->dockPosition().docked(Position::Right));
 }
