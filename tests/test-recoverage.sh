@@ -16,7 +16,7 @@ lcov -c -i -d ./ -o init.info
 ./dde_dock_unit_test
 lcov -c -d ./ -o cover.info
 lcov -a init.info -a cover.info -o total.info
-lcov -r total.info "*/tests/*" "*/usr/include*" "*build/src*" -o final.info
+lcov -r total.info "*/tests/*" "*/usr/include*" "*build/src*" "*/dbus/*" "*/interfaces/*" "*/xcb/*" -o final.info
 
 rm -rf ../../tests/$REPORT_DIR
 mkdir -p ../../tests/$REPORT_DIR
