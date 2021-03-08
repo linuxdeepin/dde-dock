@@ -49,12 +49,12 @@ void Test_DockItemManager::TearDown()
 {
 }
 
-TEST_F(Test_DockItemManager, appIsOnDock_test)
-{
+//TEST_F(Test_DockItemManager, appIsOnDock_test)
+//{
 //    ASSERT_TRUE(manager->appIsOnDock("test"));
 
 //    manager->startLoadPlugins();
-}
+//}
 
 TEST_F(Test_DockItemManager, get_method_test)
 {

@@ -181,13 +181,6 @@ AppItem::~AppItem()
     stopSwingEffect();
 
     m_appNameTips->deleteLater();
-
-    delete m_qgAppInterface;
-    m_qgAppInterface = nullptr;
-    delete m_qgActiveAppInterface;
-    m_qgActiveAppInterface = nullptr;
-    delete m_qgDockedAppInterface;
-    m_qgDockedAppInterface = nullptr;
 }
 
 void AppItem::checkEntry()

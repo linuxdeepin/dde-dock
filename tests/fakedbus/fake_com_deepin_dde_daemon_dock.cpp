@@ -17,6 +17,16 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
+static QStringList dockedlist = {"/usr/share/applications/dde-file-manager.desktop",
+                           "/usr/share/applications/deepin-album.desktop",
+                           "/usr/share/applications/deepin-music.desktop",
+                           "/usr/share/applications/deepin-contacts.desktop",
+                           "/usr/share/applications/dde-calendar.desktop",
+                           "/usr/share/applications/dde-control-center.desktop",
+                           "/usr/share/applications/google-chrome.desktop",
+                           "/usr/share/applications/org.qt-project.qtcreator.desktop",
+                           "/usr/share/applications/com.syntevo.smartgit.desktop"};
+
 /*
  * Implementation of adaptor class FakeDaemonDock
  */
@@ -53,43 +63,59 @@ QStringList FakeDaemonDock::dockedApps() const
 QList<QDBusObjectPath> FakeDaemonDock::entries() const
 {
     // get the value of property Entries
-    return qvariant_cast< QList<QDBusObjectPath> >(parent()->property("Entries"));
+    static QList<QDBusObjectPath> pathList = {QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e1T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e2T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e3T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e4T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e5T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e6T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e7T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e8T6045b766")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e17T6045ba37")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e20T6045bdd4")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e22T6045bede")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e33T6045c648")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e43T6045cea2")
+                                              , QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e44T6045d157")
+                                             };
+
+    return pathList;
 }
 
 DockRect FakeDaemonDock::frontendWindowRect() const
 {
     // get the value of property FrontendWindowRect
+
     return qvariant_cast< DockRect >(parent()->property("FrontendWindowRect"));
 }
 
 int FakeDaemonDock::hideMode() const
 {
     // get the value of property HideMode
-    return qvariant_cast< int >(parent()->property("HideMode"));
+    return m_hideMode;
 }
 
 void FakeDaemonDock::setHideMode(int value)
 {
     // set the value of property HideMode
-    parent()->setProperty("HideMode", QVariant::fromValue(value));
+    m_hideMode = value;
 }
 
 int FakeDaemonDock::hideState() const
 {
     // get the value of property HideState
-    return qvariant_cast< int >(parent()->property("HideState"));
+    return m_hideState;
 }
 
 uint FakeDaemonDock::hideTimeout() const
 {
-    // get the value of property HideTimeout
-    return qvariant_cast< uint >(parent()->property("HideTimeout"));
+    return m_hideTimeout;
 }
 
 void FakeDaemonDock::setHideTimeout(uint value)
 {
-    // set the value of property HideTimeout
-    parent()->setProperty("HideTimeout", QVariant::fromValue(value));
+    m_hideTimeout = value;
 }
 
 uint FakeDaemonDock::iconSize() const
@@ -106,26 +132,22 @@ void FakeDaemonDock::setIconSize(uint value)
 
 double FakeDaemonDock::opacity() const
 {
-    // get the value of property Opacity
-    return qvariant_cast< double >(parent()->property("Opacity"));
+    return m_opacity;
 }
 
 void FakeDaemonDock::setOpacity(double value)
 {
-    // set the value of property Opacity
-    parent()->setProperty("Opacity", QVariant::fromValue(value));
+    m_opacity = value;
 }
 
 int FakeDaemonDock::position() const
 {
-    // get the value of property Position
-    return qvariant_cast< int >(parent()->property("Position"));
+    return m_position;
 }
 
 void FakeDaemonDock::setPosition(int value)
 {
-    // set the value of property Position
-    parent()->setProperty("Position", QVariant::fromValue(value));
+    m_position = value;
 }
 
 uint FakeDaemonDock::showTimeout() const
@@ -142,38 +164,32 @@ void FakeDaemonDock::setShowTimeout(uint value)
 
 uint FakeDaemonDock::windowSize() const
 {
-    // get the value of property WindowSize
-    return qvariant_cast< uint >(parent()->property("WindowSize"));
+    return 40;
 }
 
 void FakeDaemonDock::setWindowSize(uint value)
 {
-    // set the value of property WindowSize
-    parent()->setProperty("WindowSize", QVariant::fromValue(value));
+    //TODO
 }
 
 uint FakeDaemonDock::windowSizeEfficient() const
 {
-    // get the value of property WindowSizeEfficient
-    return qvariant_cast< uint >(parent()->property("WindowSizeEfficient"));
+    return 40;
 }
 
 void FakeDaemonDock::setWindowSizeEfficient(uint value)
 {
-    // set the value of property WindowSizeEfficient
-    parent()->setProperty("WindowSizeEfficient", QVariant::fromValue(value));
+    //TODO
 }
 
 uint FakeDaemonDock::windowSizeFashion() const
 {
-    // get the value of property WindowSizeFashion
-    return qvariant_cast< uint >(parent()->property("WindowSizeFashion"));
+    return 40;
 }
 
 void FakeDaemonDock::setWindowSizeFashion(uint value)
 {
-    // set the value of property WindowSizeFashion
-    parent()->setProperty("WindowSizeFashion", QVariant::fromValue(value));
+    //TODO
 }
 
 void FakeDaemonDock::ActivateWindow(uint in0)
@@ -196,42 +212,44 @@ void FakeDaemonDock::CloseWindow(uint in0)
 
 QStringList FakeDaemonDock::GetDockedAppsDesktopFiles()
 {
-    // handle method call com.deepin.dde.daemon.Dock.GetDockedAppsDesktopFiles
-    QStringList out0;
-    QMetaObject::invokeMethod(parent(), "GetDockedAppsDesktopFiles", Q_RETURN_ARG(QStringList, out0));
-    return out0;
+    return dockedlist;
 }
 
 QStringList FakeDaemonDock::GetEntryIDs()
 {
-    // handle method call com.deepin.dde.daemon.Dock.GetEntryIDs
-    QStringList out0;
-    QMetaObject::invokeMethod(parent(), "GetEntryIDs", Q_RETURN_ARG(QStringList, out0));
-    return out0;
+    static QStringList list = {"dde-file-manager",
+                               "deepin-album",
+                               "deepin-music",
+                               "deepin-contacts",
+                               "dde-calendar",
+                               "dde-control-center",
+                               "google-chrome",
+                               "org.qt-project.qtcreator",
+                               "com.syntevo.smartgit",
+                               "deepin-terminal",
+                               "org.gnome.dfeet",
+                               "wps-office-et",
+                               "org.gnome.Terminal",
+                               "code",
+                               "ca.desrt.dconf-editor",
+                               "deepin-editor"};
+    return list;
 }
 
 QString FakeDaemonDock::GetPluginSettings()
 {
-    // handle method call com.deepin.dde.daemon.Dock.GetPluginSettings
-    QString out0;
-    QMetaObject::invokeMethod(parent(), "GetPluginSettings", Q_RETURN_ARG(QString, out0));
-    return out0;
+    static QString str = "'{\"AiAssistant\":{\"pos_1\":1},\"datetime\":{\"Use24HourFormat\":true,\"pos_datetime_1\":3},\"disk-mount\":{\"holded_mount-item-key\":false},\"multitasking\":{\"pos_multitasking_1\":2},\"network\":{\"holded_network-item-key\":false},\"notifications\":{\"pos_notifications_1\":5},\"show-desktop\":{\"pos_show-desktop_1\":1},\"shutdown\":{\"pos_shutdown_1\":2},\"sound\":{\"holded_sound-item-key\":false},\"trash\":{\"pos_trash_1\":4},\"tray\":{\"fashion-tray-expanded\":true,\"holded_sni:fcitx-qimpanel\":false,\"holded_window:Deepin-WXWork\":false,\"holded_window:Deepin-WeChat\":false}}'";
+    return str;
 }
 
 bool FakeDaemonDock::IsDocked(const QString &in0)
 {
-    // handle method call com.deepin.dde.daemon.Dock.IsDocked
-    bool out0;
-    QMetaObject::invokeMethod(parent(), "IsDocked", Q_RETURN_ARG(bool, out0), Q_ARG(QString, in0));
-    return out0;
+    return dockedlist.contains(in0);
 }
 
 bool FakeDaemonDock::IsOnDock(const QString &in0)
 {
-    // handle method call com.deepin.dde.daemon.Dock.IsOnDock
-    bool out0;
-    QMetaObject::invokeMethod(parent(), "IsOnDock", Q_RETURN_ARG(bool, out0), Q_ARG(QString, in0));
-    return out0;
+   return dockedlist.contains(in0);
 }
 
 void FakeDaemonDock::MakeWindowAbove(uint in0)

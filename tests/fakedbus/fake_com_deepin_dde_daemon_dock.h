@@ -222,7 +222,12 @@ Q_SIGNALS: // SIGNALS
     void ServiceRestarted();
 
 private:
+    int m_position = 2;
     int m_displayMode = 1;
+    int m_hideMode = 0;
+    int m_hideState = 0;
+    int m_hideTimeout = 0;
+    double m_opacity = 0.4;
 };
 
 #endif
