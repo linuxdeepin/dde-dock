@@ -550,9 +550,9 @@ QWidget *AppItem::popupTips()
     if (!m_windowInfos.isEmpty()) {
         const quint32 currentWindow = m_itemEntryInter->currentWindow();
         Q_ASSERT(m_windowInfos.contains(currentWindow));
-        m_appNameTips->setText(m_windowInfos[currentWindow].title);
+        m_appNameTips->setText(m_windowInfos[currentWindow].title.simplified());
     } else {
-        m_appNameTips->setText(m_itemEntryInter->name());
+        m_appNameTips->setText(m_itemEntryInter->name().simplified());
     }
 
     return m_appNameTips;
