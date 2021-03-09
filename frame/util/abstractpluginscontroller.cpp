@@ -152,7 +152,14 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
+    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile){
+        QPair<QString, PluginsItemInterface *> pair;
+        pair.first = pluginFile;
+        pair.second = nullptr;
+        m_pluginLoadMap.insert(pair, false);
+    });
     connect(loader, &PluginLoader::pluginFounded, this, &AbstractPluginsController::loadPlugin, Qt::QueuedConnection);
+
 
     QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
 
@@ -178,7 +185,7 @@ void AbstractPluginsController::positionChanged()
         inter->positionChanged(position);
 }
 
-void AbstractPluginsController::loadPlugin(const QString &pluginFile, bool lastone)
+void AbstractPluginsController::loadPlugin(const QString &pluginFile)
 {
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
@@ -219,6 +226,18 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile, bool lasto
     interfaceData["pluginloader"] = pluginLoader;
     m_pluginsMap.insert(interface, interfaceData);
 
+    for (auto &pair: m_pluginLoadMap.keys()) {
+        if (pair.first == pluginFile) {
+            m_pluginLoadMap.remove(pair);
+
+            QPair<QString, PluginsItemInterface *> newPair;
+            newPair.first = pluginFile;
+            newPair.second = interface;
+            m_pluginLoadMap.insert(newPair, false);
+            break;
+        }
+    }
+
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
     if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
         qDebug() << objectName() << dbusService << "daemon has not started, waiting for signal";
@@ -238,11 +257,8 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile, bool lasto
     // NOTE(justforlxz): 插件的所有初始化工作都在init函数中进行，
     // loadPlugin函数是按队列执行的，initPlugin函数会有可能导致
     // 函数执行被阻塞。
-    QTimer::singleShot(1, this, [ = ] { 
+    QTimer::singleShot(1, this, [ = ] {
         initPlugin(interface);
-        if (lastone) {
-            emit pluginLoaderFinished();
-        }
     });
 }
 
@@ -250,6 +266,21 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
 {
     qDebug() << objectName() << "init plugin: " << interface->pluginName();
     interface->init(this);
+    for (const auto &pair : m_pluginLoadMap.keys()) {
+        if (pair.second == interface)
+            m_pluginLoadMap.insert(pair, true);
+    }
+
+    bool loaded = true;
+    for (int i = 0; i < m_pluginLoadMap.keys().size(); ++i) {
+        if (!m_pluginLoadMap.values()[i]) {
+            loaded = false;
+            break;
+        }
+    }
+    if (loaded) {
+        emit pluginLoaderFinished();
+    }
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();
 }
 

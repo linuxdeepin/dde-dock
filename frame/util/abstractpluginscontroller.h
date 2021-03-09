@@ -62,7 +62,7 @@ protected Q_SLOTS:
 private slots:
     void displayModeChanged();
     void positionChanged();
-    void loadPlugin(const QString &pluginFile, bool lastone);
+    void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
 
@@ -74,6 +74,9 @@ private:
     DockDaemonInter *m_dockDaemonInter;
 
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;
+
+    // filepath, interface, loaded
+    QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
 
     QJsonObject m_pluginSettingsObject;
 };
