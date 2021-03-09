@@ -79,6 +79,9 @@ AppSnapshot *FloatingPreview::trackedWindow()
 
 void FloatingPreview::trackWindow(AppSnapshot *const snap)
 {
+    if (!snap)
+        return;
+
     if (!m_tracked.isNull())
         m_tracked->removeEventFilter(this);
 

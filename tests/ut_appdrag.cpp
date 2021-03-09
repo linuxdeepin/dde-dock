@@ -20,7 +20,6 @@
  */
 
 #include <QObject>
-#include <QThread>
 
 #include <gtest/gtest.h>
 

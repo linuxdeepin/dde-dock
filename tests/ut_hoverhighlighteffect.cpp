@@ -50,3 +50,11 @@ void Test_HoverHighlightEffect::TearDown()
     delete effect;
     effect = nullptr;
 }
+
+TEST_F(Test_HoverHighlightEffect, test)
+{
+    effect->setHighlighting(true);
+    ASSERT_EQ(effect->m_highlighting, true) ;
+    effect->setHighlighting(false);
+    ASSERT_EQ(effect->m_highlighting, false) ;
+}
