@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
@@ -28,6 +29,9 @@
 #include "appitem.h"
 #include "qgsettingsinterface.h"
 #undef private
+#include "mock/QGsettingsMock.h"
+
+using namespace ::testing;
 
 class Test_AppItem : public ::testing::Test
 {
@@ -40,42 +44,52 @@ public:
 };
 
 void Test_AppItem::SetUp()
-{
-    appItem = new AppItem(QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"), QGSettingsInterface::Type::MockType);
+{ 
 }
 
 void Test_AppItem::TearDown()
 {
-    delete appItem;
-    appItem = nullptr;
 }
 
 TEST_F(Test_AppItem, coverage_test)
 {
+    QGSettingsMock mock;
+
+    ON_CALL(mock, type()).WillByDefault(Return(QGSettingsMock::Type::MockType));
+    ON_CALL(mock, keys()).WillByDefault(Return(QStringList() << "enable" << "control"));
+    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){return true; }));
+
+    appItem = new AppItem(&mock, &mock, &mock, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
+
     appItem->checkEntry();
-//    ASSERT_FALSE(appItem->isValid());
+    //    ASSERT_FALSE(appItem->isValid());
 
     ASSERT_TRUE(appItem->itemType() == AppItem::App);
 
     appItem->setDockInfo(Dock::Position::Top, QRect(QPoint(0,0), QPoint(1920, 40)));
 
     ASSERT_TRUE(appItem->accessibleName() == appItem->m_itemEntryInter->name());
-}
 
-TEST_F(Test_AppItem, AppItem_show_test)
-{
     appItem->show();
 
     QThread::msleep(450);
 
     ASSERT_TRUE(appItem->isVisible());
-}
 
-TEST_F(Test_AppItem, AppItem_hide_test)
-{
     appItem->hide();
 
     QThread::msleep(450);
 
     ASSERT_TRUE(!appItem->isVisible());
+
+    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier);
+    QTest::qWait(10);
+    QTest::mouseClick(appItem, Qt::MiddleButton, Qt::NoModifier);
+    QTest::qWait(10);
+    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier, QPoint(-1, -1));
+    QTest::qWait(10);
+    QTest::mouseMove(appItem, appItem->geometry().center());
+
+    delete appItem;
+    appItem = nullptr;
 }

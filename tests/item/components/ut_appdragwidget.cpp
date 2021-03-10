@@ -45,10 +45,10 @@ void Test_AppDragWidget::TearDown()
 
 TEST_F(Test_AppDragWidget, cuntion_test)
 {
-    QGSettingsMock mock;
-    ON_CALL(mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){return 1.5; }));
+    QGSettingsMock *mock = new QGSettingsMock;
+    ON_CALL(*mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){Q_UNUSED(key); return 1.5; }));
 
-    AppDragWidget *dragWidget = new AppDragWidget(&mock);
+    AppDragWidget *dragWidget = new AppDragWidget(mock);
 
     QPixmap pix(":/res/all_settings_on.png");
     dragWidget->setAppPixmap(pix);

@@ -31,6 +31,55 @@
 
 DockItemManager *DockItemManager::INSTANCE = nullptr;
 
+static QGSettingsInterface *GSettingsByApp(QGSettingsInterface::Type type)
+{
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.app");
+        return &settings;
+    }
+    default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
+        return nullptr;
+    }
+    }
+}
+
+static QGSettingsInterface *GSettingsByActiveApp(QGSettingsInterface::Type type)
+{
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.activeapp");
+        return &settings;
+    }
+    default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
+        return nullptr;
+    }
+    }
+}
+
+static QGSettingsInterface *GSettingsByDockApp(QGSettingsInterface::Type type)
+{
+    switch (type) {
+    case QGSettingsInterface::Type::ImplType:
+    {
+        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.dockapp");
+        return &settings;
+    }
+    default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
+        return nullptr;
+    }
+    }
+}
+
+
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
@@ -41,7 +90,10 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(entry, QGSettingsInterface::Type::ImplType);
+        AppItem *it = new AppItem(GSettingsByApp(QGSettingsInterface::ImplType)
+                                  , GSettingsByActiveApp(QGSettingsInterface::ImplType)
+                                  , GSettingsByDockApp(QGSettingsInterface::ImplType)
+                                  , entry);
         manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
@@ -190,7 +242,10 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(path, QGSettingsInterface::Type::ImplType);
+    AppItem *item = new AppItem(GSettingsByApp(QGSettingsInterface::ImplType)
+                              , GSettingsByActiveApp(QGSettingsInterface::ImplType)
+                              , GSettingsByDockApp(QGSettingsInterface::ImplType)
+                              , path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;

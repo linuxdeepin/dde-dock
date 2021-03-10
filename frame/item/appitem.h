@@ -44,7 +44,7 @@ class AppItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit AppItem(const QDBusObjectPath &entry, QGSettingsInterface::Type type, QWidget *parent = nullptr);
+    explicit AppItem(QGSettingsInterface *appSettings, QGSettingsInterface *activeAppSettings, QGSettingsInterface *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;

@@ -46,59 +46,11 @@
 
 QPoint AppItem::MousePressPos;
 
-static QGSettingsInterface *GSettingsByApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.app");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
-static QGSettingsInterface *GSettingsByActiveApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.activeapp");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
-static QGSettingsInterface *GSettingsByDockApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.dockapp");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
-AppItem::AppItem(const QDBusObjectPath &entry, QGSettingsInterface::Type type, QWidget *parent)
+AppItem::AppItem(QGSettingsInterface *appSettings, QGSettingsInterface *activeAppSettings, QGSettingsInterface *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
-    , m_qgAppInterface(GSettingsByApp(type))
-    , m_qgActiveAppInterface(GSettingsByActiveApp(type))
-    , m_qgDockedAppInterface(GSettingsByDockApp(type))
+    , m_qgAppInterface(appSettings)
+    , m_qgActiveAppInterface(activeAppSettings)
+    , m_qgDockedAppInterface(dockedAppSettings)
     , m_appNameTips(new TipsWidget(this))
     , m_appPreviewTips(nullptr)
     , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))

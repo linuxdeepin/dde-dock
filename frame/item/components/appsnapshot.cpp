@@ -301,6 +301,11 @@ SHMInfo *AppSnapshot::getImageDSHM()
 {
     const auto display = QX11Info::display();
 
+    if (!display) {
+        qWarning("QX11Info::display() is 0x0");
+        return nullptr;
+    }
+
     Atom atom_prop = XInternAtom(display, "_DEEPIN_DXCB_SHM_INFO", true);
     if (!atom_prop) {
         return nullptr;
@@ -324,6 +329,11 @@ SHMInfo *AppSnapshot::getImageDSHM()
 XImage *AppSnapshot::getImageXlib()
 {
     const auto display = QX11Info::display();
+    if (!display) {
+        qWarning("QX11Info::display() is 0x0");
+        return nullptr;
+    }
+
     Window unused_window;
     int unused_int;
     unsigned unused_uint, w, h;
