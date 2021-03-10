@@ -27,7 +27,6 @@
 #include "appswingeffectbuilder.h"
 #include "appspreviewprovider.h"
 #include "qgsettingsinterfaceimpl.h"
-#include "qgsettingsinterfacemock.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -55,13 +54,11 @@ static QGSettingsInterface *GSettingsByApp(QGSettingsInterface::Type type)
         static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.app");
         return &settings;
     }
-    case QGSettingsInterface::Type::MockType:
-    {
-        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.app");
-        return &settings;
-    }
     default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
         return nullptr;
+    }
     }
 }
 
@@ -73,13 +70,11 @@ static QGSettingsInterface *GSettingsByActiveApp(QGSettingsInterface::Type type)
         static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.activeapp");
         return &settings;
     }
-    case QGSettingsInterface::Type::MockType:
-    {
-        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.activeapp");
-        return &settings;
-    }
     default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
         return nullptr;
+    }
     }
 }
 
@@ -91,13 +86,11 @@ static QGSettingsInterface *GSettingsByDockApp(QGSettingsInterface::Type type)
         static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.dockapp");
         return &settings;
     }
-    case QGSettingsInterface::Type::MockType:
-    {
-        static QGSettingsInterfaceMock settings("com.deepin.dde.dock.module.dockapp");
-        return &settings;
-    }
     default:
+    {
+        qWarning("Unless you are doing unit testing, you should't see this message");
         return nullptr;
+    }
     }
 }
 
@@ -161,9 +154,12 @@ AppItem::AppItem(const QDBusObjectPath &entry, QGSettingsInterface::Type type, Q
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refreshIcon();
 
-    connect(m_qgAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    connect(m_qgDockedAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    connect(m_qgActiveAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_qgAppInterface && m_qgAppInterface->gsettings())
+        connect(m_qgAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_qgDockedAppInterface && m_qgDockedAppInterface->gsettings())
+        connect(m_qgDockedAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_qgActiveAppInterface && m_qgActiveAppInterface->gsettings())
+        connect(m_qgActiveAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 

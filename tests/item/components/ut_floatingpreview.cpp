@@ -71,7 +71,7 @@ TEST_F(Test_FloatingPreview, view_test)
 //    view->m_closeBtn3D->click();
 
     view->hide();
-    ASSERT_EQ(shot->contentsMargins(), QMargins(0, 0, 0, 0));
+    ASSERT_TRUE(shot->contentsMargins() == QMargins(0, 0, 0, 0));
 }
 
 TEST_F(Test_FloatingPreview, empty_test)

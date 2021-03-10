@@ -23,34 +23,43 @@
 #include <QTest>
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+using namespace ::testing;
 
 #define private public
 #include "launcheritem.h"
 #undef private
-#include "qgsettingsinterfacemock.h"
+
+#include "mock/QGsettingsMock.h"
+
 class Test_LauncherItem : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
-
-public:
-    LauncherItem *launcherItem = nullptr;
 };
 
 void Test_LauncherItem::SetUp()
 {
-    launcherItem = new LauncherItem(new QGSettingsInterfaceMock("com.deepin.dde.dock.module.launcher"));
 }
 
 void Test_LauncherItem::TearDown()
 {
-    delete launcherItem;
-    launcherItem = nullptr;
 }
 
 TEST_F(Test_LauncherItem, launcher_test)
 {
+    QGSettingsMock mock;
+//    EXPECT_CALL(mock, type()).WillRepeatedly(Return(QGSettingsMock::Type::MockType));
+//    EXPECT_CALL(mock, keys()).WillRepeatedly(Return(QStringList() << "enable" << "control"));
+
+    ON_CALL(mock, type()).WillByDefault(Return(QGSettingsMock::Type::MockType));
+    ON_CALL(mock, keys()).WillByDefault(Return(QStringList() << "enable" << "control"));
+    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){return true; }));
+
+    LauncherItem *launcherItem = new LauncherItem(&mock);
+
     ASSERT_EQ(launcherItem->itemType(), LauncherItem::Launcher);
     launcherItem->refreshIcon();
     launcherItem->show();
@@ -60,6 +69,8 @@ TEST_F(Test_LauncherItem, launcher_test)
     launcherItem->update();
     QThread::msleep(10);
     launcherItem->resize(100,100);
+    ASSERT_FALSE(launcherItem->popupTips());
+    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){ return false; }));
     ASSERT_TRUE(launcherItem->popupTips());
 
     QTest::mouseClick(launcherItem, Qt::LeftButton, Qt::NoModifier, launcherItem->geometry().center());

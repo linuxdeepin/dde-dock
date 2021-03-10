@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
  *
- * Author:     fanpengcheng <fanpengcheng@uniontech.com>
+ * Author:     chenjun <chenjun@uniontech.com>
  *
- * Maintainer: fanpengcheng <fanpengcheng@uniontech.com>
+ * Maintainer: chenjun <chenjun@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,34 +20,44 @@
  */
 
 #include <QObject>
-#include <QTest>
 
 #include <gtest/gtest.h>
 
-#include "placeholderitem.h"
+#include "appdrag.h"
+#include "mock/QGsettingsMock.h"
 
-class Test_PlaceholderItem : public ::testing::Test
+class Test_AppDrag : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    PlaceholderItem *placeholderitem = nullptr;
+    AppDrag *drag = nullptr;
 };
 
-void Test_PlaceholderItem::SetUp()
+void Test_AppDrag::SetUp()
 {
-    placeholderitem = new PlaceholderItem();
 }
 
-void Test_PlaceholderItem::TearDown()
+void Test_AppDrag::TearDown()
 {
-    delete placeholderitem;
-    placeholderitem = nullptr;
 }
 
-TEST_F(Test_PlaceholderItem, launcher_test)
+TEST_F(Test_AppDrag, drag_test)
 {
-    QCOMPARE(placeholderitem->itemType(), PlaceholderItem::Placeholder);
+    QWidget *w = new QWidget;
+    QGSettingsMock mock;
+    ON_CALL(mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){return 1.5; }));
+
+    drag = new AppDrag(&mock, w);
+    QPixmap pix(":/res/all_settings_on.png");
+    drag->setPixmap(pix);
+
+    ASSERT_TRUE(drag->appDragWidget());
+
+    drag->exec();
+
+    delete drag;
+    drag = nullptr;
 }

@@ -11,6 +11,9 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../widgets/*.h" "../widgets/*.cpp")
 # 用于测试覆盖率的编译条件
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
+# 查找gmock的cmake文件
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/tests/cmake/modules)
+
 # 查找依赖库
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -21,6 +24,7 @@ find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5 COMPONENTS Test REQUIRED)
 find_package(GTest REQUIRED)
+find_package(GMock REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -53,6 +57,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
     ${GTEST_LIBRARIES}
+    ${GMOCK_LIBRARIES}
     -lpthread
     -lm
 )

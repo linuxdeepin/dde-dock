@@ -26,7 +26,7 @@
 
 #define private public
 #include "appitem.h"
-#include "qgsettingsinterfacemock.h"
+#include "qgsettingsinterface.h"
 #undef private
 
 class Test_AppItem : public ::testing::Test
@@ -59,7 +59,7 @@ TEST_F(Test_AppItem, coverage_test)
 
     appItem->setDockInfo(Dock::Position::Top, QRect(QPoint(0,0), QPoint(1920, 40)));
 
-    ASSERT_EQ(appItem->accessibleName(), appItem->m_itemEntryInter->name());
+    ASSERT_TRUE(appItem->accessibleName() == appItem->m_itemEntryInter->name());
 }
 
 TEST_F(Test_AppItem, AppItem_show_test)
@@ -68,7 +68,7 @@ TEST_F(Test_AppItem, AppItem_show_test)
 
     QThread::msleep(450);
 
-    ASSERT_EQ(appItem->isVisible(), true);
+    ASSERT_TRUE(appItem->isVisible());
 }
 
 TEST_F(Test_AppItem, AppItem_hide_test)
@@ -77,5 +77,5 @@ TEST_F(Test_AppItem, AppItem_hide_test)
 
     QThread::msleep(450);
 
-    ASSERT_EQ(appItem->isVisible(), false);
+    ASSERT_TRUE(!appItem->isVisible());
 }

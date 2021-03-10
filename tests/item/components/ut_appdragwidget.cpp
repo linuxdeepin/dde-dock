@@ -25,7 +25,7 @@
 
 #define private public
 #include "appdragwidget.h"
-#include "qgsettingsinterfacemock.h"
+#include "mock/QGsettingsMock.h"
 #undef private
 
 class Test_AppDragWidget : public ::testing::Test
@@ -33,24 +33,23 @@ class Test_AppDragWidget : public ::testing::Test
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
-
-public:
-    AppDragWidget *dragWidget = nullptr;
 };
 
 void Test_AppDragWidget::SetUp()
-{
-    dragWidget = new AppDragWidget(new QGSettingsInterfaceMock("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/"));
+{ 
 }
 
 void Test_AppDragWidget::TearDown()
 {
-    delete dragWidget;
-    dragWidget = nullptr;
 }
 
 TEST_F(Test_AppDragWidget, cuntion_test)
 {
+    QGSettingsMock mock;
+    ON_CALL(mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){return 1.5; }));
+
+    AppDragWidget *dragWidget = new AppDragWidget(&mock);
+
     QPixmap pix(":/res/all_settings_on.png");
     dragWidget->setAppPixmap(pix);
     dragWidget->setOriginPos(QPoint(-1, -1));
@@ -62,18 +61,12 @@ TEST_F(Test_AppDragWidget, cuntion_test)
 
     dragWidget->showRemoveTips();
     dragWidget->showGoBackAnimation();
-}
 
-TEST_F(Test_AppDragWidget, event_test)
-{
     dragWidget->show();
     dragWidget->hide();
 
     QTest::mouseClick(dragWidget,Qt::LeftButton, Qt::NoModifier, QPoint(dragWidget->rect().center()));
-}
 
-TEST_F(Test_AppDragWidget, isRemoveAble_test)
-{
     // bottom
     const QRect &rect = QRect(QPoint(0, 1040), QPoint(1920, 1080));
     dragWidget->setDockInfo(Dock::Position::Bottom, rect);

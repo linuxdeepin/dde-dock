@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
@@ -73,43 +74,43 @@ TEST_F(Test_Monitor, monitor_test)
     int h = 100;
 
     monitor->setX(x);
-    ASSERT_EQ(monitor->x(), x);
+    QCOMPARE(monitor->x(), x);
     monitor->setX(x);
 
     monitor->setY(y);
-    ASSERT_EQ(monitor->y(), y);
+    QCOMPARE(monitor->y(), y);
     monitor->setY(y);
 
     monitor->setW(w);
-    ASSERT_EQ(monitor->w(), w);
+    QCOMPARE(monitor->w(), w);
     monitor->setW(w);
 
     monitor->setH(h);
-    ASSERT_EQ(monitor->h(), h);
+    QCOMPARE(monitor->h(), h);
     monitor->setH(h);
 
-    ASSERT_EQ(monitor->left(), x);
-    ASSERT_EQ(monitor->right(), x + w);
-    ASSERT_EQ(monitor->top(), y);
-    ASSERT_EQ(monitor->bottom(), y + h);
+    QCOMPARE(monitor->left(), x);
+    QCOMPARE(monitor->right(), x + w);
+    QCOMPARE(monitor->top(), y);
+    QCOMPARE(monitor->bottom(), y + h);
 
-    ASSERT_EQ(monitor->topLeft(), QPoint(x, y));
-    ASSERT_EQ(monitor->topRight(), QPoint(x + w, y));
-    ASSERT_EQ(monitor->bottomLeft(), QPoint(x, y + h));
-    ASSERT_EQ(monitor->bottomRight(), QPoint(x + w, y + h));
-    ASSERT_EQ(monitor->rect(), QRect(x, y, w, h));
+    QCOMPARE(monitor->topLeft(), QPoint(x, y));
+    QCOMPARE(monitor->topRight(), QPoint(x + w, y));
+    QCOMPARE(monitor->bottomLeft(), QPoint(x, y + h));
+    QCOMPARE(monitor->bottomRight(), QPoint(x + w, y + h));
+    QCOMPARE(monitor->rect(), QRect(x, y, w, h));
 
     QString name = "MonitorTestName";
     monitor->setName(name);
-    ASSERT_EQ(monitor->name(), name);
+    QCOMPARE(monitor->name(), name);
 
     QString path = "testPath";
     monitor->setPath(path);
-    ASSERT_EQ(monitor->path(), path);
+    QCOMPARE(monitor->path(), path);
 
     bool monitorEnable = true;
     monitor->setMonitorEnable(monitorEnable);
-    ASSERT_EQ(monitor->enable(), monitorEnable);
+    QCOMPARE(monitor->enable(), monitorEnable);
     monitor->setMonitorEnable(monitorEnable);
 
     Monitor::DockPosition dockPosition;
@@ -118,7 +119,7 @@ TEST_F(Test_Monitor, monitor_test)
     dockPosition.topDock = true;
     dockPosition.bottomDock = true;
     monitor->setDockPosition(dockPosition);
-    ASSERT_EQ(monitor->dockPosition(), dockPosition);
+    QCOMPARE(monitor->dockPosition(), dockPosition);
 }
 
 TEST_F(Test_Monitor, dockPosition_test)

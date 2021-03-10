@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     chenjun <chenjun@uniontech.com>
+ * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *
- * Maintainer: chenjun <chenjun@uniontech.com>
+ * Maintainer: fanpengcheng <fanpengcheng@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,40 +20,34 @@
  */
 
 #include <QObject>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
-#include "appdrag.h"
-#include "qgsettingsinterfacemock.h"
+#include "placeholderitem.h"
 
-class Test_AppDrag : public ::testing::Test
+class Test_PlaceholderItem : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 
 public:
-    AppDrag *drag = nullptr;
+    PlaceholderItem *placeholderitem = nullptr;
 };
 
-void Test_AppDrag::SetUp()
+void Test_PlaceholderItem::SetUp()
 {
-    QWidget *w = new QWidget;
-    drag = new AppDrag(new QGSettingsInterfaceMock("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/"),w);
+    placeholderitem = new PlaceholderItem();
 }
 
-void Test_AppDrag::TearDown()
+void Test_PlaceholderItem::TearDown()
 {
-    delete drag;
-    drag = nullptr;
+    delete placeholderitem;
+    placeholderitem = nullptr;
 }
 
-TEST_F(Test_AppDrag, drag_test)
+TEST_F(Test_PlaceholderItem, placeholder_test)
 {
-    QPixmap pix(":/res/all_settings_on.png");
-    drag->setPixmap(pix);
-
-    ASSERT_TRUE(drag->appDragWidget());
-
-    drag->exec();
+    QCOMPARE(placeholderitem->itemType(), PlaceholderItem::Placeholder);
 }

@@ -1,5 +1,7 @@
 #include "utils.h"
 
+#include <QTest>
+
 #include <gtest/gtest.h>
 
 class Ut_Utils : public ::testing::Test
@@ -23,11 +25,11 @@ TEST_F(Ut_Utils, comparePluginApi_test)
     QString v2("1.0.1");
     QString v3("1.0.0.0");
 
-    ASSERT_EQ(Utils::comparePluginApi(v1, v1), 0);
-    ASSERT_EQ(Utils::comparePluginApi(v1, v2), -1);
-    ASSERT_EQ(Utils::comparePluginApi(v2, v1), 1);
-    ASSERT_EQ(Utils::comparePluginApi(v1, v3), -1);
-    ASSERT_EQ(Utils::comparePluginApi(v3, v1), 1);
+    QCOMPARE(Utils::comparePluginApi(v1, v1), 0);
+    QCOMPARE(Utils::comparePluginApi(v1, v2), -1);
+    QCOMPARE(Utils::comparePluginApi(v2, v1), 1);
+    QCOMPARE(Utils::comparePluginApi(v1, v3), -1);
+    QCOMPARE(Utils::comparePluginApi(v3, v1), 1);
 }
 
 TEST_F(Ut_Utils, isSettingConfigured_test)
@@ -39,13 +41,13 @@ TEST_F(Ut_Utils, isSettingConfigured_test)
 TEST_F(Ut_Utils, screenAt_test)
 {
     Utils::screenAt(QPoint(0, 0));
-    ASSERT_EQ(Utils::screenAt(QPoint(-1, -1)), nullptr);
+    QCOMPARE(Utils::screenAt(QPoint(-1, -1)), nullptr);
 }
 
 TEST_F(Ut_Utils, screenAtByScaled_test)
 {
     Utils::screenAtByScaled(QPoint(0, 0));
-    ASSERT_EQ(Utils::screenAtByScaled(QPoint(-1, -1)), nullptr);
+    QCOMPARE(Utils::screenAtByScaled(QPoint(-1, -1)), nullptr);
 }
 
 TEST_F(Ut_Utils, renderSVG_test)
@@ -54,7 +56,7 @@ TEST_F(Ut_Utils, renderSVG_test)
     const QSize &size = pix.size();
 
     ASSERT_TRUE(Utils::renderSVG("", size, 1.0).isNull());
-    ASSERT_EQ(Utils::renderSVG(":/res/all_settings_on.png", size, 1.0).size(), size);
-    ASSERT_EQ(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 1.0).size(), QSize(50, 50));
-    ASSERT_EQ(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 0.5).size(), QSize(25, 25));
+    QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", size, 1.0).size(), size);
+    QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 1.0).size(), QSize(50, 50));
+    QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 0.5).size(), QSize(25, 25));
 }
