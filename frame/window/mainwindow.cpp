@@ -224,7 +224,7 @@ void MainWindow::showEvent(QShowEvent *e)
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
-    if (e->button() == Qt::RightButton && m_menuWorker->menuEnable()) {
+    if (e->button() == Qt::RightButton) {
         m_menuWorker->showDockSettingsMenu();
         return;
     }
@@ -321,6 +321,7 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::insertItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::removeItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemUpdated, m_mainPanel, &MainPanelControl::itemUpdated, Qt::DirectConnection);
+    connect(DockItemManager::instance(), &DockItemManager::trayVisableCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::QueuedConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_menuWorker, &MenuWorker::setAutoHide);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
@@ -333,7 +334,6 @@ void MainWindow::initConnections()
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
 
-    connect(m_menuWorker, &MenuWorker::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);
     connect(m_menuWorker, &MenuWorker::autoHideChanged, m_multiScreenWorker, &MultiScreenWorker::onAutoHideChanged);
 
     connect(m_multiScreenWorker, &MultiScreenWorker::opacityChanged, this, &MainWindow::setMaskAlpha, Qt::QueuedConnection);

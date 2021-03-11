@@ -29,270 +29,208 @@
 
 MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     : QObject (parent)
-    , m_itemManager(DockItemManager::instance(this))
     , m_dockInter(dockInter)
-    , m_settingsMenu(new QMenu)
-    , m_fashionModeAct(new QAction(tr("Fashion Mode"), this))
-    , m_efficientModeAct(new QAction(tr("Efficient Mode"), this))
-    , m_topPosAct(new QAction(tr("Top"), this))
-    , m_bottomPosAct(new QAction(tr("Bottom"), this))
-    , m_leftPosAct(new QAction(tr("Left"), this))
-    , m_rightPosAct(new QAction(tr("Right"), this))
-    , m_keepShownAct(new QAction(tr("Keep Shown"), this))
-    , m_keepHiddenAct(new QAction(tr("Keep Hidden"), this))
-    , m_smartHideAct(new QAction(tr("Smart Hide"), this))
-    , m_menuEnable(true)
     , m_autoHide(true)
-    , m_trashPluginShow(true)
-    , m_opacity(0.4)
 {
-    initMember();
-    initUI();
-    initConnection();
-
-    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
-}
-
-MenuWorker::~MenuWorker()
-{
-    delete m_settingsMenu;
-
-    QList<QString> keys = m_settingsModuleMap.keys();
-    foreach (QString key, keys) {
-        QGSettings *settings = m_settingsModuleMap[key];
-        m_settingsModuleMap.remove(key);
-
-        delete settings;
-        settings = nullptr;
-    }
-}
-
-void MenuWorker::initMember()
-{
-    m_settingsMenu->setAccessibleName("settingsmenu");
-
-    m_fashionModeAct->setCheckable(true);
-    m_efficientModeAct->setCheckable(true);
-    m_topPosAct->setCheckable(true);
-    m_bottomPosAct->setCheckable(true);
-    m_leftPosAct->setCheckable(true);
-    m_rightPosAct->setCheckable(true);
-    m_keepShownAct->setCheckable(true);
-    m_keepHiddenAct->setCheckable(true);
-    m_smartHideAct->setCheckable(true);
-}
-
-void MenuWorker::initUI()
-{
-    QMenu *modeSubMenu = new QMenu(m_settingsMenu);
-    modeSubMenu->setAccessibleName("modesubmenu");
-    modeSubMenu->addAction(m_fashionModeAct);
-    modeSubMenu->addAction(m_efficientModeAct);
-    m_modeSubMenuAct = new QAction(tr("Mode"), this);
-    m_modeSubMenuAct->setMenu(modeSubMenu);
-
-    QMenu *locationSubMenu = new QMenu(m_settingsMenu);
-    locationSubMenu->setAccessibleName("locationsubmenu");
-    locationSubMenu->addAction(m_topPosAct);
-    locationSubMenu->addAction(m_bottomPosAct);
-    locationSubMenu->addAction(m_leftPosAct);
-    locationSubMenu->addAction(m_rightPosAct);
-    m_locationSubMenuAct = new QAction(tr("Location"), this);
-    m_locationSubMenuAct->setMenu(locationSubMenu);
-
-    QMenu *statusSubMenu = new QMenu(m_settingsMenu);
-    statusSubMenu->setAccessibleName("statussubmenu");
-    statusSubMenu->addAction(m_keepShownAct);
-    statusSubMenu->addAction(m_keepHiddenAct);
-    statusSubMenu->addAction(m_smartHideAct);
-    m_statusSubMenuAct = new QAction(tr("Status"), this);
-    m_statusSubMenuAct->setMenu(statusSubMenu);
-
-    m_hideSubMenu = new QMenu(m_settingsMenu);
-    m_hideSubMenu->setAccessibleName("pluginsmenu");
-    m_hideSubMenuAct = new QAction(tr("Plugins"), this);
-    m_hideSubMenuAct->setMenu(m_hideSubMenu);
-
-    setSettingsMenu();
-    m_settingsMenu->setTitle("Settings Menu");
-}
-
-void MenuWorker::initConnection()
-{
-    connect(m_settingsMenu, &QMenu::triggered, this, &MenuWorker::menuActionClicked);
-
-    connect(settingsModule("menu"), &QGSettings::changed, this, &MenuWorker::onGSettingsChanged);
-    connect(settingsModule("trash"), &QGSettings::changed, this, &MenuWorker::onTrashGSettingsChanged);
-
-    connect(m_itemManager, &DockItemManager::trayVisableCountChanged, this, &MenuWorker::trayVisableCountChanged, Qt::QueuedConnection);
-
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
         connect(app, &DApplication::iconThemeChanged, this, &MenuWorker::gtkIconThemeChanged);
     }
 }
 
-const QGSettings *MenuWorker::settingsModule(const QString &module)
+MenuWorker::~MenuWorker()
 {
-    if (!m_settingsModuleMap.contains(module) && QGSettings::isSchemaInstalled(QString("com.deepin.dde.dock.module." + module).toUtf8())) {
-        m_settingsModuleMap.insert(module, new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8()));
-    }
-    return m_settingsModuleMap[module];
 }
 
-void MenuWorker::setSettingsMenu()
+const QGSettings *MenuWorker::SettingsPtr(const QString &module)
 {
-    for (auto act : m_settingsMenu->actions())
-        m_settingsMenu->removeAction(act);
-
-    if (settingsModule("menu") && settingsModule("menu")->get("modeVisible").toBool())
-        m_settingsMenu->addAction(m_modeSubMenuAct);
-
-    if (settingsModule("menu") && settingsModule("menu")->get("locationVisible").toBool())
-        m_settingsMenu->addAction(m_locationSubMenuAct);
-
-    if (settingsModule("menu") && settingsModule("menu")->get("statusVisible").toBool())
-        m_settingsMenu->addAction(m_statusSubMenuAct);
-
-    if (settingsModule("menu") && settingsModule("menu")->get("hideVisible").toBool())
-        m_settingsMenu->addAction(m_hideSubMenuAct);
+    return QGSettings::isSchemaInstalled(QString("com.deepin.dde.dock.module." + module).toUtf8())
+            ? new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8(), QByteArray(), this) // 自动销毁
+            : nullptr;
 }
 
 void MenuWorker::showDockSettingsMenu()
 {
-    QTimer::singleShot(0, this, [=] {
-        onGSettingsChanged("enable");
-    });
+    // 菜单功能被禁用
+    const QGSettings *setting = SettingsPtr("menu");
+    if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool())
+        return;
 
+    // 菜单将要被打开
     setAutoHide(false);
-    setSettingsMenu();
 
-    bool hasComposite = DWindowManagerHelper::instance()->hasComposite();
+    QMenu settingsMenu;
+    settingsMenu.setAccessibleName("settingsmenu");
 
-    // create actions
-    QList<QAction *> actions;
-    for (auto *p : m_itemManager->pluginList()) {
-        if (!p->pluginIsAllowDisable())
-            continue;
+    // 模式
+    if (SettingsPtr("menu") && SettingsPtr("menu")->get("modeVisible").toBool()) {
+        const DisplayMode displayMode = static_cast<DisplayMode>(m_dockInter->displayMode());
 
-        const bool enable = !p->pluginIsDisable();
-        const QString &name = p->pluginName();
-        const QString &display = p->pluginDisplayName();
+        QMenu *modeSubMenu = new QMenu(&settingsMenu);
+        modeSubMenu->setAccessibleName("modesubmenu");
 
-        if (!m_trashPluginShow && name == "trash") {
-            continue;
-        }
+        QAction *fashionModeAct = new QAction(tr("Fashion Mode"), this);
+        QAction *efficientModeAct = new QAction(tr("Efficient Mode"), this);
 
-        if (name == "multitasking" && !hasComposite) {
-            continue;
-        }
+        fashionModeAct->setCheckable(true);
+        efficientModeAct->setCheckable(true);
 
-        if (name == "deepin-screen-recorder-plugin") {
-            continue;
-        }
-        QAction *act = new QAction(display, this);
-        act->setCheckable(true);
-        act->setChecked(enable);
-        act->setData(name);
+        fashionModeAct->setChecked(displayMode == Fashion);
+        efficientModeAct->setChecked(displayMode == Efficient);
 
-        if (settingsModule(name) && (!settingsModule(name)->keys().contains("visible") || settingsModule(name)->get("visible").toBool()))
-            actions << act;
+        connect(fashionModeAct, &QAction::triggered, this, [ = ]{ m_dockInter->setDisplayMode(DisplayMode::Fashion); });
+        connect(efficientModeAct, &QAction::triggered, this, [ = ]{ m_dockInter->setDisplayMode(DisplayMode::Efficient); });
+
+        modeSubMenu->addAction(fashionModeAct);
+        modeSubMenu->addAction(efficientModeAct);
+
+        QAction *act = new QAction(tr("Mode"), this);
+        act->setMenu(modeSubMenu);
+
+        settingsMenu.addAction(act);
     }
 
-    // sort by name
-    std::sort(actions.begin(), actions.end(), [](QAction * a, QAction * b) -> bool {
-        return a->data().toString() > b->data().toString();
-    });
+    // 位置
+    if (SettingsPtr("menu") && SettingsPtr("menu")->get("locationVisible").toBool()) {
+        const Position position = static_cast<Position>(m_dockInter->position());
 
-    // add actions
-    qDeleteAll(m_hideSubMenu->actions());
-    for (auto act : actions)
-        m_hideSubMenu->addAction(act);
+        QMenu *locationSubMenu = new QMenu(&settingsMenu);
+        locationSubMenu->setAccessibleName("locationsubmenu");
 
-    const DisplayMode displayMode = static_cast<DisplayMode>(m_dockInter->displayMode());
-    const Position position = static_cast<Position>(m_dockInter->position());
-    const HideMode hideMode = static_cast<HideMode>(m_dockInter->hideMode());
+        QAction *topPosAct = new QAction(tr("Top"), this);
+        QAction *bottomPosAct = new QAction(tr("Bottom"), this);
+        QAction *leftPosAct = new QAction(tr("Left"), this);
+        QAction *rightPosAct = new QAction(tr("Right"), this);
 
-    m_fashionModeAct->setChecked(displayMode == Fashion);
-    m_efficientModeAct->setChecked(displayMode == Efficient);
-    m_topPosAct->setChecked(position == Top);
-    m_bottomPosAct->setChecked(position == Bottom);
-    m_leftPosAct->setChecked(position == Left);
-    m_rightPosAct->setChecked(position == Right);
-    m_keepShownAct->setChecked(hideMode == KeepShowing);
-    m_keepHiddenAct->setChecked(hideMode == KeepHidden);
-    m_smartHideAct->setChecked(hideMode == SmartHide);
+        topPosAct->setCheckable(true);
+        bottomPosAct->setCheckable(true);
+        leftPosAct->setCheckable(true);
+        rightPosAct->setCheckable(true);
 
-    m_settingsMenu->exec(QCursor::pos());
+        topPosAct->setChecked(position == Top);
+        bottomPosAct->setChecked(position == Bottom);
+        leftPosAct->setChecked(position == Left);
+        rightPosAct->setChecked(position == Right);
 
+        connect(topPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Top); });
+        connect(bottomPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Bottom); });
+        connect(leftPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Left); });
+        connect(rightPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Right); });
+
+        locationSubMenu->addAction(topPosAct);
+        locationSubMenu->addAction(bottomPosAct);
+        locationSubMenu->addAction(leftPosAct);
+        locationSubMenu->addAction(rightPosAct);
+
+        QAction *act = new QAction(tr("Location"), this);
+        act->setMenu(locationSubMenu);
+
+        settingsMenu.addAction(act);
+    }
+
+    // 状态
+    if (SettingsPtr("menu") && SettingsPtr("menu")->get("statusVisible").toBool()) {
+        const HideMode hideMode = static_cast<HideMode>(m_dockInter->hideMode());
+
+        QMenu *statusSubMenu = new QMenu(&settingsMenu);
+        statusSubMenu->setAccessibleName("statussubmenu");
+
+        QAction *keepShownAct = new QAction(tr("Keep Shown"), this);
+        QAction *keepHiddenAct = new QAction(tr("Keep Hidden"), this);
+        QAction *smartHideAct = new QAction(tr("Smart Hide"), this);
+
+        keepShownAct->setCheckable(true);
+        keepHiddenAct->setCheckable(true);
+        smartHideAct->setCheckable(true);
+
+        keepShownAct->setChecked(hideMode == KeepShowing);
+        keepHiddenAct->setChecked(hideMode == KeepHidden);
+        smartHideAct->setChecked(hideMode == SmartHide);
+
+        connect(keepShownAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepShowing); });
+        connect(keepHiddenAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepHidden); });
+        connect(smartHideAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(SmartHide); });
+
+        statusSubMenu->addAction(keepShownAct);
+        statusSubMenu->addAction(keepHiddenAct);
+        statusSubMenu->addAction(smartHideAct);
+
+        QAction *act = new QAction(tr("Status"), this);
+        act->setMenu(statusSubMenu);
+
+        settingsMenu.addAction(act);
+    }
+
+    // 插件
+    if (SettingsPtr("menu") && SettingsPtr("menu")->get("hideVisible").toBool()) {
+        QMenu *hideSubMenu = new QMenu(&settingsMenu);
+        hideSubMenu->setAccessibleName("pluginsmenu");
+
+        QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
+        hideSubMenuAct->setMenu(hideSubMenu);
+
+        // create actions
+        QList<QAction *> actions;
+        for (auto *p : DockItemManager::instance()->pluginList()) {
+            if (!p->pluginIsAllowDisable())
+                continue;
+
+            const bool enable = !p->pluginIsDisable();
+            const QString &name = p->pluginName();
+            const QString &display = p->pluginDisplayName();
+
+            // 模块和菜单均需要响应enable配置的变化
+            const QGSettings *setting = SettingsPtr(name);
+            if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
+                continue;
+            }
+
+            // 未开启窗口特效时，同样不显示多任务视图插件
+            if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite()) {
+                continue;
+            }
+
+            // TODO 记得让录屏那边加一个enable的配置项，默认值设置成false,就不用针对这个插件特殊处理了
+            if (name == "deepin-screen-recorder-plugin") {
+                continue;
+            }
+
+            QAction *act = new QAction(display, this);
+            act->setCheckable(true);
+            act->setChecked(enable);
+            act->setData(name);
+
+            connect(act, &QAction::triggered, this, [ p ]{p->pluginStateSwitched();});
+
+            // check plugin hide menu.
+            if (SettingsPtr(name) && (!SettingsPtr(name)->keys().contains("visible") || SettingsPtr(name)->get("visible").toBool()))
+                actions << act;
+        }
+
+        // sort by name
+        std::sort(actions.begin(), actions.end(), [](QAction * a, QAction * b) -> bool {
+            return a->data().toString() > b->data().toString();
+        });
+
+        // add plugins actions
+        qDeleteAll(hideSubMenu->actions());
+        for (auto act : actions)
+            hideSubMenu->addAction(act);
+
+        // add plugins menu
+        settingsMenu.addAction(hideSubMenuAct);
+    }
+
+    settingsMenu.setTitle("Settings Menu");
+    settingsMenu.exec(QCursor::pos());
+
+    // 菜单已经关闭
     setAutoHide(true);
-}
-
-void MenuWorker::onGSettingsChanged(const QString &key)
-{
-    if (key != "enable") {
-        return;
-    }
-
-    const QGSettings *setting = settingsModule("menu");
-    m_menuEnable = setting && setting->keys().contains("enable") ? setting->get("enable").toBool() : m_menuEnable;
-}
-
-void MenuWorker::onTrashGSettingsChanged(const QString &key)
-{
-    if (key != "enable") {
-        return ;
-    }
-
-    const QGSettings *setting = settingsModule("trash");
-    m_trashPluginShow = setting && setting->keys().contains("enable") ? setting->get("enable").toBool() : m_trashPluginShow;
-}
-
-void MenuWorker::menuActionClicked(QAction *action)
-{
-    Q_ASSERT(action);
-
-    if (action == m_fashionModeAct)
-        return m_dockInter->setDisplayMode(DisplayMode::Fashion);
-    if (action == m_efficientModeAct)
-        return m_dockInter->setDisplayMode(Efficient);
-
-    if (action == m_topPosAct)
-        return m_dockInter->setPosition(Top);
-    if (action == m_bottomPosAct)
-        return m_dockInter->setPosition(Bottom);
-    if (action == m_leftPosAct)
-        return m_dockInter->setPosition(Left);
-    if (action == m_rightPosAct)
-        return m_dockInter->setPosition(Right);
-
-    if (action == m_keepShownAct)
-        return m_dockInter->setHideMode(KeepShowing);
-    if (action == m_keepHiddenAct)
-        return m_dockInter->setHideMode(KeepHidden);
-    if (action == m_smartHideAct)
-        return m_dockInter->setHideMode(SmartHide);
-
-    // check plugin hide menu.
-    const QString &data = action->data().toString();
-    if (data.isEmpty())
-        return;
-    for (auto *p : m_itemManager->pluginList()) {
-        if (p->pluginName() == data)
-            return p->pluginStateSwitched();
-    }
-}
-
-void MenuWorker::trayVisableCountChanged(const int &count)
-{
-    Q_UNUSED(count);
-
-    emit trayCountChanged();
 }
 
 void MenuWorker::gtkIconThemeChanged()
 {
-    m_itemManager->refershItemsIcon();
+    DockItemManager::instance()->refershItemsIcon();
 }
 
 void MenuWorker::setAutoHide(const bool autoHide)

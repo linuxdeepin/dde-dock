@@ -27,9 +27,6 @@
 #include <com_deepin_dde_daemon_dock.h>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
-class QMenu;
-class QAction;
-class DockItemManager;
 class QGSettings;
 /**
  * @brief The MenuWorker class  此类用于处理任务栏右键菜单的逻辑
@@ -41,60 +38,23 @@ public:
     explicit MenuWorker(DBusDock *dockInter,QWidget *parent = nullptr);
     ~ MenuWorker();
 
-    void initMember();
-    void initUI();
-    void initConnection();
-
     void showDockSettingsMenu();
-
-    inline bool menuEnable() const { return m_menuEnable; }
-    inline quint8 Opacity() const { return quint8(m_opacity * 255); }
-
-    void onGSettingsChanged(const QString &key);
-    // TODO 是否还有其他的插件未处理其gsettings配置,这里只是移植之前的代码
-    void onTrashGSettingsChanged(const QString &key);
-
-private:
-    const QGSettings *settingsModule(const QString &module);
-    void setSettingsMenu();
 
 signals:
     void autoHideChanged(const bool autoHide) const;
-    void trayCountChanged();
-
-private slots:
-    void menuActionClicked(QAction *action);
-    void trayVisableCountChanged(const int &count);
-    void gtkIconThemeChanged();
 
 public slots:
     void setAutoHide(const bool autoHide);
 
+private slots:
+    void gtkIconThemeChanged();
+
 private:
-    DockItemManager *m_itemManager;
+    const QGSettings *SettingsPtr(const QString &module);   // 这样命名就是为了强调这是个指针类型
+
+private:
     DBusDock *m_dockInter;
-    QMap<QString, QGSettings*> m_settingsModuleMap;
-
-    QMenu *m_settingsMenu;
-    QMenu *m_hideSubMenu;
-    QAction *m_fashionModeAct;
-    QAction *m_efficientModeAct;
-    QAction *m_topPosAct;
-    QAction *m_bottomPosAct;
-    QAction *m_leftPosAct;
-    QAction *m_rightPosAct;
-    QAction *m_keepShownAct;
-    QAction *m_keepHiddenAct;
-    QAction *m_smartHideAct;
-    QAction *m_modeSubMenuAct;
-    QAction *m_locationSubMenuAct;
-    QAction *m_statusSubMenuAct;
-    QAction *m_hideSubMenuAct;
-
-    bool m_menuEnable;
     bool m_autoHide;
-    bool m_trashPluginShow;
-    double m_opacity;
 };
 
 #endif // MENUWORKER_H
