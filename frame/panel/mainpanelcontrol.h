@@ -75,14 +75,11 @@ public slots:
     void removeItem(DockItem *item);
     void itemUpdated(DockItem *item);
 
-    void onGSettingsChanged(const QString &key);
-
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 
 protected:
-    void showEvent(QShowEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
@@ -145,7 +142,6 @@ private:
     TrayPluginItem *m_tray = nullptr;
     bool m_isHover;         // 判断鼠标是否移到desktop区域
     bool m_needRecoveryWin; // 判断鼠标移出desktop区域是否恢复之前窗口
-    bool m_isEnableLaunch;  // 判断是否使能了com.deepin.dde.dock.module.launcher
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
 };
 

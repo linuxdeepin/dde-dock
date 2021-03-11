@@ -49,11 +49,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-static QGSettings *GSettingsByLaunch()
-{
-    static QGSettings settings("com.deepin.dde.dock.module.launcher");
-    return &settings;
-}
 
 static QGSettings *GSettingsByApp()
 {
@@ -83,7 +78,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_dislayMode(Efficient)
     , m_isHover(false)
     , m_needRecoveryWin(false)
-    , m_isEnableLaunch(true)
 {
     initUi();
     updateMainPanelLayout();
@@ -156,30 +150,6 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
-
-    connect(GSettingsByLaunch(), &QGSettings::changed, this, &MainPanelControl::onGSettingsChanged);
-}
-
-void MainPanelControl::onGSettingsChanged(const QString &key)
-{
-    if (key != "enable") {
-        return;
-    }
-
-    QGSettings *setting = GSettingsByLaunch();
-
-    if (setting->keys().contains("enable")) {
-        const bool isEnable = GSettingsByLaunch()->keys().contains("enable") && GSettingsByLaunch()->get("enable").toBool();
-        if (isEnable && setting->get("enable").toBool()) {
-            m_fixedAreaWidget->setVisible(true);
-            m_fixedSpliter->setVisible(true);
-            m_isEnableLaunch = true;
-        } else {
-            m_fixedAreaWidget->setVisible(false);
-            m_fixedSpliter->setVisible(false);
-            m_isEnableLaunch = false;
-        }
-    }
 }
 
 void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
@@ -897,15 +867,6 @@ void MainPanelControl::itemUpdated(DockItem *item)
     resizeDockIcon();
 }
 
-void MainPanelControl::showEvent(QShowEvent *event)
-{
-    QTimer::singleShot(0, this, [ = ] {
-        onGSettingsChanged("enable");
-    });
-
-    return QWidget::showEvent(event);
-}
-
 void MainPanelControl::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -920,8 +881,7 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
         painter.setOpacity(0.1);
     }
 
-    if (m_isEnableLaunch)
-        painter.fillRect(m_fixedSpliter->geometry(), color);
+    painter.fillRect(m_fixedSpliter->geometry(), color);
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
 
