@@ -396,13 +396,15 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
         return;
     }
 
-   //Todo: wayland will crash，therefore not show app name
-   //AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId, xcb_connection, m_display);
-   //if (trayWidget->isValid())
-   //    addTrayWidget(itemKey, trayWidget);
-   //else {
-   //    qDebug() << "-- invalid tray windowid" << winId;
-   //}
+   AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId, xcb_connection, m_display);
+   if (!trayWidget) {
+   	return;
+   }
+   if (trayWidget->isValid())
+       addTrayWidget(itemKey, trayWidget);
+   else {
+       qDebug() << "-- invalid tray windowid" << winId;
+   }
 }
 
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
