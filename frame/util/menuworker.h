@@ -27,6 +27,7 @@
 #include <com_deepin_dde_daemon_dock.h>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
+class QMenu;
 class QGSettings;
 /**
  * @brief The MenuWorker class  此类用于处理任务栏右键菜单的逻辑
@@ -50,7 +51,7 @@ private slots:
     void gtkIconThemeChanged();
 
 private:
-    const QGSettings *SettingsPtr(const QString &module);   // 这样命名就是为了强调这是个指针类型
+    QMenu *createMenu();
 
 private:
     DBusDock *m_dockInter;

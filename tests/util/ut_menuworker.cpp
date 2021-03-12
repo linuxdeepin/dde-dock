@@ -20,41 +20,42 @@
  */
 
 #include <QObject>
+#include <QTest>
+#include <QMenu>
 
 #include <gtest/gtest.h>
+#define private public
+#include "menuworker.h"
+#undef private
 
-#include "appdrag.h"
-#include "mock/qgsettingsmock.h"
-
-class Test_AppDrag : public ::testing::Test
+class Test_MenuWorker : public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
 };
 
-void Test_AppDrag::SetUp()
+void Test_MenuWorker::SetUp()
 {
 }
 
-void Test_AppDrag::TearDown()
+void Test_MenuWorker::TearDown()
 {
 }
 
-TEST_F(Test_AppDrag, drag_test)
+TEST_F(Test_MenuWorker, coverage_test)
 {
-    QWidget *w = new QWidget;
-    QGSettingsMock mock;
-    ON_CALL(mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){return 1.5; }));
+    MenuWorker *worker = new MenuWorker(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus()));
 
-    AppDrag *drag = new AppDrag(&mock, w);
-    QPixmap pix(":/res/all_settings_on.png");
-    drag->setPixmap(pix);
+    QMenu *menu = worker->createMenu();
+    ASSERT_FALSE(menu->isEmpty());
 
-    ASSERT_TRUE(drag->appDragWidget());
+    delete menu;
+    menu = nullptr;
 
-    drag->exec();
-
-    delete drag;
-    drag = nullptr;
+    ASSERT_TRUE(worker->m_autoHide);
+    worker->setAutoHide(false);
+    ASSERT_FALSE(worker->m_autoHide);
+    worker->setAutoHide(true);
+    ASSERT_TRUE(worker->m_autoHide);
 }

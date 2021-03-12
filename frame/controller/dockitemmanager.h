@@ -33,7 +33,6 @@
 #include <QObject>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
-
 class DockItemManager : public QObject
 {
     Q_OBJECT

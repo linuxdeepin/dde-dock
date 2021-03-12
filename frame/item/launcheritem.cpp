@@ -22,41 +22,32 @@
 #include "launcheritem.h"
 #include "themeappicon.h"
 #include "imagefactory.h"
-#include "qgsettingsinterface.h"
-#include "qgsettingsinterfaceimpl.h"
+#include "utils.h"
 
 #include <QPainter>
 #include <QProcess>
 #include <QMouseEvent>
-#include <DDBusSender>
 #include <QApplication>
 #include <QGSettings>
 
 DCORE_USE_NAMESPACE
 
-LauncherItem::LauncherItem(QGSettingsInterface *interface, QWidget *parent)
+#define SCHEMASPATH "com.deepin.dde.dock.module.launcher"
+
+LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
-    , m_gsettings(interface)
+    , m_gsettings(Utils::SettingsPtr(SCHEMASPATH, this))
 {
     m_launcherInter->setSync(true, false);
 
     m_tips->setVisible(false);
     m_tips->setObjectName("launcher");
 
-    if (m_gsettings->type() == QGSettingsInterface::ImplType) {
-        QGSettingsInterfaceImpl *impl = dynamic_cast<QGSettingsInterfaceImpl *>(m_gsettings);
-        if (!impl)
-            qWarning("Error!");
-        connect(impl->gsettings(), &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
+    if (m_gsettings) {
+        connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
     }
-}
-
-LauncherItem::~LauncherItem()
-{
-    delete m_gsettings;
-    m_gsettings = nullptr;
 }
 
 void LauncherItem::refreshIcon()
@@ -143,13 +134,13 @@ void LauncherItem::onGSettingsChanged(const QString& key) {
         return;
     }
 
-    if (m_gsettings->keys().contains("enable")) {
+    if (m_gsettings && m_gsettings->keys().contains("enable")) {
         setVisible(m_gsettings->get("enable").toBool());
     }
 }
 
 bool LauncherItem::checkGSettingsControl() const
 {
-    return m_gsettings->keys().contains("control")
-            && m_gsettings->get("control").toBool();
+    return !m_gsettings || !m_gsettings->keys().contains("control")
+            || m_gsettings->get("control").toBool();
 }

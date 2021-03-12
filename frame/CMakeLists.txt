@@ -35,6 +35,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${DtkGUI_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ../interfaces
+    util
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE

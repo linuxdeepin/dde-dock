@@ -27,9 +27,9 @@
 
 #define private public
 #include "appitem.h"
-#include "qgsettingsinterface.h"
 #undef private
-#include "mock/QGsettingsMock.h"
+
+#include "mock/qgsettingsmock.h"
 
 using namespace ::testing;
 
@@ -61,8 +61,21 @@ TEST_F(Test_AppItem, coverage_test)
 
     appItem = new AppItem(&mock, &mock, &mock, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
 
+    // 触发信号测试
+//    emit appItem->m_refershIconTimer->start(10);
+    QTest::qWait(20);
+
+    // FIXME: 测试不到？
     appItem->checkEntry();
-    //    ASSERT_FALSE(appItem->isValid());
+    appItem->undock();
+
+    appItem->setDockDisplayMode(Dock::Efficient);
+    appItem->update();
+    QTest::qWait(10);
+    appItem->setDockDisplayMode(Dock::Fashion);
+    appItem->update();
+    QTest::qWait(10);
+    //    appItem->updateWindowIconGeometries();
 
     ASSERT_TRUE(appItem->itemType() == AppItem::App);
 
@@ -72,23 +85,26 @@ TEST_F(Test_AppItem, coverage_test)
 
     appItem->show();
 
-    QThread::msleep(450);
+    appItem->resize(100, 100);
+
+    QTest::qWait(10);
 
     ASSERT_TRUE(appItem->isVisible());
 
     appItem->hide();
 
-    QThread::msleep(450);
+    QTest::qWait(10);
 
     ASSERT_TRUE(!appItem->isVisible());
 
-    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier);
-    QTest::qWait(10);
-    QTest::mouseClick(appItem, Qt::MiddleButton, Qt::NoModifier);
-    QTest::qWait(10);
-    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier, QPoint(-1, -1));
-    QTest::qWait(10);
-    QTest::mouseMove(appItem, appItem->geometry().center());
+    QTest::mousePress(appItem, Qt::LeftButton, Qt::NoModifier);
+    QTest::mouseRelease(appItem, Qt::LeftButton, Qt::NoModifier);
+    QTest::qWait(400);
+//    QTest::mouseClick(appItem, Qt::MiddleButton, Qt::NoModifier);
+//    QTest::qWait(400);
+//    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier, QPoint(-1, -1));
+//    QTest::qWait(400);
+//    QTest::mouseMove(appItem, appItem->geometry().center());
 
     delete appItem;
     appItem = nullptr;

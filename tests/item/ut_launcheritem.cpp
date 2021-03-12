@@ -31,7 +31,7 @@ using namespace ::testing;
 #include "launcheritem.h"
 #undef private
 
-#include "mock/QGsettingsMock.h"
+#include "mock/qgsettingsmock.h"
 
 class Test_LauncherItem : public ::testing::Test
 {
@@ -50,15 +50,7 @@ void Test_LauncherItem::TearDown()
 
 TEST_F(Test_LauncherItem, launcher_test)
 {
-    QGSettingsMock mock;
-//    EXPECT_CALL(mock, type()).WillRepeatedly(Return(QGSettingsMock::Type::MockType));
-//    EXPECT_CALL(mock, keys()).WillRepeatedly(Return(QStringList() << "enable" << "control"));
-
-    ON_CALL(mock, type()).WillByDefault(Return(QGSettingsMock::Type::MockType));
-    ON_CALL(mock, keys()).WillByDefault(Return(QStringList() << "enable" << "control"));
-    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){return true; }));
-
-    LauncherItem *launcherItem = new LauncherItem(&mock);
+    LauncherItem *launcherItem = new LauncherItem;
 
     ASSERT_EQ(launcherItem->itemType(), LauncherItem::Launcher);
     launcherItem->refreshIcon();
@@ -69,9 +61,7 @@ TEST_F(Test_LauncherItem, launcher_test)
     launcherItem->update();
     QThread::msleep(10);
     launcherItem->resize(100,100);
-    ASSERT_FALSE(launcherItem->popupTips());
-    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){ return false; }));
-    ASSERT_TRUE(launcherItem->popupTips());
+    launcherItem->popupTips();
 
     QTest::mouseClick(launcherItem, Qt::LeftButton, Qt::NoModifier, launcherItem->geometry().center());
 }

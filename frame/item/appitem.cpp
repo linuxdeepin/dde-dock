@@ -153,6 +153,11 @@ void AppItem::updateWindowIconGeometries()
 {
     const QRect r(mapToGlobal(QPoint(0, 0)),
                   mapToGlobal(QPoint(width(), height())));
+    if (!QX11Info::connection()) {
+        qWarning() << "QX11Info::connection() is 0x0";
+        return;
+    }
+
     auto *xcb_misc = XcbMisc::instance();
 
     for (auto it(m_windowInfos.cbegin()); it != m_windowInfos.cend(); ++it)
@@ -572,7 +577,8 @@ QPoint AppItem::appIconPosition() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
-    if (m_appPreviewTips) m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
+    if (m_appPreviewTips)
+        m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_updateIconGeometryTimer->start();
 
     // process attention effect

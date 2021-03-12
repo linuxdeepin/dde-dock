@@ -24,20 +24,17 @@
 
 #include "dockitem.h"
 #include "../widgets/tipswidget.h"
-#include "qgsettingsinterface.h"
 
 #include <com_deepin_dde_launcher.h>
 
 using LauncherInter = com::deepin::dde::Launcher;
-
-class QGSettingsInterface;
+class QGSettings;
 class LauncherItem : public DockItem
 {
     Q_OBJECT
 
 public:
-    explicit LauncherItem(QGSettingsInterface *interface, QWidget *parent = nullptr);
-    ~ LauncherItem() override;
+    explicit LauncherItem(QWidget *parent = nullptr);
 
     inline ItemType itemType() const override {return Launcher;}
 
@@ -62,7 +59,7 @@ private:
     QPixmap m_icon;
     LauncherInter *m_launcherInter;
     TipsWidget *m_tips;
-    QGSettingsInterface* m_gsettings;
+    const QGSettings *m_gsettings;
 };
 
 #endif // LAUNCHERITEM_H

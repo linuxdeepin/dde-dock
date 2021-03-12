@@ -97,6 +97,10 @@ void AppSnapshot::setWindowState()
 void AppSnapshot::closeWindow() const
 {
     const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+        return;
+    }
 
     XEvent e;
 
@@ -300,7 +304,6 @@ bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
 SHMInfo *AppSnapshot::getImageDSHM()
 {
     const auto display = QX11Info::display();
-
     if (!display) {
         qWarning("QX11Info::display() is 0x0");
         return nullptr;
@@ -330,7 +333,7 @@ XImage *AppSnapshot::getImageXlib()
 {
     const auto display = QX11Info::display();
     if (!display) {
-        qWarning("QX11Info::display() is 0x0");
+        qWarning() << "QX11Info::display() is " << display;
         return nullptr;
     }
 
@@ -344,6 +347,10 @@ XImage *AppSnapshot::getImageXlib()
 QRect AppSnapshot::rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk)
 {
     const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+        return QRect();
+    }
 
     const Atom gtk_frame_extents = XInternAtom(display, "_GTK_FRAME_EXTENTS", true);
     Atom actual_type_return_gtk;
@@ -379,6 +386,10 @@ void AppSnapshot::getWindowState()
     m_isWidowHidden = false;
 
     const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+        return;
+    }
     Atom atom_prop = XInternAtom(display, "_NET_WM_STATE", true);
     if (!atom_prop) {
         return;

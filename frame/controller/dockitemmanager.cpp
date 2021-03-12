@@ -86,7 +86,7 @@ DockItemManager::DockItemManager(QObject *parent)
     , m_pluginsInter(new DockPluginsController(this))
 {
     //固定区域：启动器
-    m_itemList.append(new LauncherItem(new QGSettingsInterfaceImpl("com.deepin.dde.dock.module.launcher")));
+    m_itemList.append(new LauncherItem);
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
@@ -213,8 +213,8 @@ void DockItemManager::itemMoved(DockItem *const sourceItem, DockItem *const targ
 
     // update plugins sort key if order changed
     if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins
-        || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin
-        || moveType == DockItem::FixedPlugin || replaceType == DockItem::FixedPlugin) {
+            || moveType == DockItem::TrayPlugin || replaceType == DockItem::TrayPlugin
+            || moveType == DockItem::FixedPlugin || replaceType == DockItem::FixedPlugin) {
         updatePluginsItemOrderKey();
     }
 
@@ -243,9 +243,9 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     }
 
     AppItem *item = new AppItem(GSettingsByApp(QGSettingsInterface::ImplType)
-                              , GSettingsByActiveApp(QGSettingsInterface::ImplType)
-                              , GSettingsByDockApp(QGSettingsInterface::ImplType)
-                              , path);
+                                , GSettingsByActiveApp(QGSettingsInterface::ImplType)
+                                , GSettingsByDockApp(QGSettingsInterface::ImplType)
+                                , path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;

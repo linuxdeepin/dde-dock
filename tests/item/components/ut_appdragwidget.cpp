@@ -25,7 +25,7 @@
 
 #define private public
 #include "appdragwidget.h"
-#include "mock/QGsettingsMock.h"
+#include "mock/qgsettingsmock.h"
 #undef private
 
 class Test_AppDragWidget : public ::testing::Test

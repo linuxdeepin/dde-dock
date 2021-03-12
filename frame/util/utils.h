@@ -30,6 +30,13 @@ namespace Utils {
 
 #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
 
+// 这样命名就是为了强调这是个指针类型
+inline const QGSettings *SettingsPtr(const QString &module, QObject *parent = nullptr) {
+    return QGSettings::isSchemaInstalled(QString("com.deepin.dde.dock.module." + module).toUtf8())
+            ? new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8(), QByteArray(), parent) // 自动销毁
+            : nullptr;
+}
+
 inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
     QImageReader reader;
     QPixmap pixmap;
@@ -70,7 +77,7 @@ inline QScreen * screenAtByScaled(const QPoint &point) {
 
     return nullptr;
 }
-    
+
 inline bool isSettingConfigured(const QString& id, const QString& path, const QString& keyName) {
     if (!QGSettings::isSchemaInstalled(id.toUtf8())) {
         return false;

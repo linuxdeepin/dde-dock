@@ -31,12 +31,11 @@
 #define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
 
 PreviewContainer::PreviewContainer(QWidget *parent)
-    : QWidget(parent),
-      m_needActivate(false),
-
-      m_floatingPreview(new FloatingPreview(this)),
-      m_mouseLeaveTimer(new QTimer(this)),
-      m_wmHelper(DWindowManagerHelper::instance())
+    : QWidget(parent)
+    , m_needActivate(false)
+    , m_floatingPreview(new FloatingPreview(this))
+    , m_mouseLeaveTimer(new QTimer(this))
+    , m_wmHelper(DWindowManagerHelper::instance())
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
     m_windowListLayout->setSpacing(SPACING);

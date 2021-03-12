@@ -26,7 +26,7 @@
 #include <gmock/gmock.h>
 
 #include "dockitem.h"
-#include "mock/QGsettingsMock.h"
+#include "mock/qgsettingsmock.h"
 
 class Test_DockItem : public ::testing::Test
 {

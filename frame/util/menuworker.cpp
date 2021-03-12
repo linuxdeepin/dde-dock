@@ -20,6 +20,7 @@
  */
 #include "menuworker.h"
 #include "dockitemmanager.h"
+#include "utils.h"
 
 #include <QAction>
 #include <QMenu>
@@ -42,31 +43,18 @@ MenuWorker::~MenuWorker()
 {
 }
 
-const QGSettings *MenuWorker::SettingsPtr(const QString &module)
+QMenu *MenuWorker::createMenu()
 {
-    return QGSettings::isSchemaInstalled(QString("com.deepin.dde.dock.module." + module).toUtf8())
-            ? new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8(), QByteArray(), this) // 自动销毁
-            : nullptr;
-}
-
-void MenuWorker::showDockSettingsMenu()
-{
-    // 菜单功能被禁用
-    const QGSettings *setting = SettingsPtr("menu");
-    if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool())
-        return;
-
-    // 菜单将要被打开
-    setAutoHide(false);
-
-    QMenu settingsMenu;
-    settingsMenu.setAccessibleName("settingsmenu");
+    QMenu *settingsMenu = new QMenu;
+    settingsMenu->setAccessibleName("settingsmenu");
+    settingsMenu->setTitle("Settings Menu");
 
     // 模式
-    if (SettingsPtr("menu") && SettingsPtr("menu")->get("modeVisible").toBool()) {
+    const QGSettings *menuSettings = Utils::SettingsPtr("menu");
+    if (!menuSettings || !menuSettings->keys().contains("modeVisible") || menuSettings->get("modeVisible").toBool()) {
         const DisplayMode displayMode = static_cast<DisplayMode>(m_dockInter->displayMode());
 
-        QMenu *modeSubMenu = new QMenu(&settingsMenu);
+        QMenu *modeSubMenu = new QMenu(settingsMenu);
         modeSubMenu->setAccessibleName("modesubmenu");
 
         QAction *fashionModeAct = new QAction(tr("Fashion Mode"), this);
@@ -87,14 +75,14 @@ void MenuWorker::showDockSettingsMenu()
         QAction *act = new QAction(tr("Mode"), this);
         act->setMenu(modeSubMenu);
 
-        settingsMenu.addAction(act);
+        settingsMenu->addAction(act);
     }
 
     // 位置
-    if (SettingsPtr("menu") && SettingsPtr("menu")->get("locationVisible").toBool()) {
+    if (!menuSettings || !menuSettings->keys().contains("locationVisible") || menuSettings->get("locationVisible").toBool()) {
         const Position position = static_cast<Position>(m_dockInter->position());
 
-        QMenu *locationSubMenu = new QMenu(&settingsMenu);
+        QMenu *locationSubMenu = new QMenu(settingsMenu);
         locationSubMenu->setAccessibleName("locationsubmenu");
 
         QAction *topPosAct = new QAction(tr("Top"), this);
@@ -125,14 +113,14 @@ void MenuWorker::showDockSettingsMenu()
         QAction *act = new QAction(tr("Location"), this);
         act->setMenu(locationSubMenu);
 
-        settingsMenu.addAction(act);
+        settingsMenu->addAction(act);
     }
 
     // 状态
-    if (SettingsPtr("menu") && SettingsPtr("menu")->get("statusVisible").toBool()) {
+    if (!menuSettings || !menuSettings->keys().contains("statusVisible") || menuSettings->get("statusVisible").toBool()) {
         const HideMode hideMode = static_cast<HideMode>(m_dockInter->hideMode());
 
-        QMenu *statusSubMenu = new QMenu(&settingsMenu);
+        QMenu *statusSubMenu = new QMenu(settingsMenu);
         statusSubMenu->setAccessibleName("statussubmenu");
 
         QAction *keepShownAct = new QAction(tr("Keep Shown"), this);
@@ -158,12 +146,12 @@ void MenuWorker::showDockSettingsMenu()
         QAction *act = new QAction(tr("Status"), this);
         act->setMenu(statusSubMenu);
 
-        settingsMenu.addAction(act);
+        settingsMenu->addAction(act);
     }
 
     // 插件
-    if (SettingsPtr("menu") && SettingsPtr("menu")->get("hideVisible").toBool()) {
-        QMenu *hideSubMenu = new QMenu(&settingsMenu);
+    if (!menuSettings || !menuSettings->keys().contains("hideVisible") || menuSettings->get("hideVisible").toBool()) {
+        QMenu *hideSubMenu = new QMenu(settingsMenu);
         hideSubMenu->setAccessibleName("pluginsmenu");
 
         QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
@@ -180,17 +168,18 @@ void MenuWorker::showDockSettingsMenu()
             const QString &display = p->pluginDisplayName();
 
             // 模块和菜单均需要响应enable配置的变化
-            const QGSettings *setting = SettingsPtr(name);
+            const QGSettings *setting = Utils::SettingsPtr(name);
             if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
                 continue;
             }
+            delete setting;
+            setting = nullptr;
 
             // 未开启窗口特效时，同样不显示多任务视图插件
             if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite()) {
                 continue;
             }
 
-            // TODO 记得让录屏那边加一个enable的配置项，默认值设置成false,就不用针对这个插件特殊处理了
             if (name == "deepin-screen-recorder-plugin") {
                 continue;
             }
@@ -203,7 +192,8 @@ void MenuWorker::showDockSettingsMenu()
             connect(act, &QAction::triggered, this, [ p ]{p->pluginStateSwitched();});
 
             // check plugin hide menu.
-            if (SettingsPtr(name) && (!SettingsPtr(name)->keys().contains("visible") || SettingsPtr(name)->get("visible").toBool()))
+            const QGSettings *pluginSettings = Utils::SettingsPtr(name);
+            if (pluginSettings && (!pluginSettings->keys().contains("visible") || pluginSettings->get("visible").toBool()))
                 actions << act;
         }
 
@@ -218,14 +208,35 @@ void MenuWorker::showDockSettingsMenu()
             hideSubMenu->addAction(act);
 
         // add plugins menu
-        settingsMenu.addAction(hideSubMenuAct);
+        settingsMenu->addAction(hideSubMenuAct);
     }
 
-    settingsMenu.setTitle("Settings Menu");
-    settingsMenu.exec(QCursor::pos());
+    delete menuSettings;
+    menuSettings = nullptr;
+
+    return settingsMenu;
+}
+
+void MenuWorker::showDockSettingsMenu()
+{
+    // 菜单功能被禁用
+    const QGSettings *setting = Utils::SettingsPtr("menu");
+    if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
+        delete setting;
+        setting = nullptr;
+        return;
+    }
+
+    // 菜单将要被打开
+    setAutoHide(false);
+
+    QMenu *menu = createMenu();
+    menu->exec(QCursor::pos());
 
     // 菜单已经关闭
     setAutoHide(true);
+    delete menu;
+    menu = nullptr;
 }
 
 void MenuWorker::gtkIconThemeChanged()
