@@ -47,6 +47,7 @@ BuildRequires:  gtest-devel
 Requires:       dbusmenu-qt5
 %if 0%{?fedora}
 BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  make
 Requires:       deepin-network-utils
 Requires:       deepin-qt-dbus-factory
 %else
