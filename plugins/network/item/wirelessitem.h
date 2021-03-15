@@ -84,6 +84,7 @@ Q_SIGNALS:
     void requestDeactiveAP(const QString &devPath) const;
     void requestWirelessScan();
     void deviceStateChanged();
+    void activeApInfoChanged();
 
 //protected:
 //    bool eventFilter(QObject *o, QEvent *e);

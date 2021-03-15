@@ -51,17 +51,12 @@ void WirelessItem::initConnect()
     //获取状态提示语
     connect(m_device, static_cast<void (NetworkDevice::*)(const QString &statStr) const>(&NetworkDevice::statusChanged), this, &WirelessItem::deviceStateChanged);
     //获取wifi的连接，获取wifi的信号强度
-    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::apInfoChanged, this, [ = ]() {
-        const auto &activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
-        if (activeApInfo != m_activeApInfo) {
-            m_activeApInfo = activeApInfo;
-        }
-        update();
-    });
-    connect(m_model, &NetworkModel::activeConnInfoChanged, this , [ = ]() {
+    connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, this, [ =] {
         m_activeApInfo = static_cast<WirelessDevice *>(m_device.data())->activeApInfo();
+        Q_EMIT activeApInfoChanged();
         update();
     });
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });

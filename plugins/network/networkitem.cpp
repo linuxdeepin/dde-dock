@@ -163,9 +163,11 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
             if (m_wirelessItems.contains(path)) {
                 m_wirelessItems.value(path)->setDeviceInfo(wirelessItem->deviceInfo());
                 tempWirelessItems.remove(path);
+                disconnect(wirelessItem, &WirelessItem::activeApInfoChanged, this, &NetworkItem::updateSelf);
                 delete wirelessItem;
             } else {
                 wirelessItem->setParent(this);
+                connect(wirelessItem, &WirelessItem::activeApInfoChanged, this, &NetworkItem::updateSelf);
                 m_wirelessItems.insert(path, wirelessItem);
             }
         }
