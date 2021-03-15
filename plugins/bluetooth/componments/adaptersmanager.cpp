@@ -95,7 +95,6 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
         connect(watcher, &QDBusPendingCallWatcher::finished, [this, call, adapter] {
             if (!call.isError()) {
                 QDBusObjectPath dPath(adapter->id());
-                m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
                 m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
                 m_bluetoothInter->RequestDiscovery(dPath);
             } else {
@@ -290,7 +289,6 @@ void AdaptersManager::inflateAdapter(Adapter *adapter, const QJsonObject &adapte
 void AdaptersManager::adapterRefresh(const Adapter *adapter)
 {
     QDBusObjectPath dPath(adapter->id());
-    m_bluetoothInter->SetAdapterDiscoverableTimeout(dPath, 60 * 5);
     m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
     m_bluetoothInter->RequestDiscovery(dPath);
 }
