@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>res/all_settings_on.png</file>
+        <file>res/dde-calendar.svg</file>
     </qresource>
 </RCC>

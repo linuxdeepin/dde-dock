@@ -18,23 +18,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <QObject>
+#include <QApplication>
+#include <QSignalSpy>
+#include <QTest>
+
 #include <gtest/gtest.h>
 
-#include "dockapplication.h"
+#include "imageutil.h"
 
-#include <QDebug>
-
-#include <DLog>
-
-int main(int argc, char **argv)
+class Test_ImageUtil : public QObject, public ::testing::Test
 {
-    // gerrit编译时没有显示器，需要指定环境变量
-    qputenv("QT_QPA_PLATFORM", "offscreen");
-    DockApplication app(argc, argv);
+public:
+    virtual void SetUp() override;
+    virtual void TearDown() override;
 
-    qApp->setProperty("CANSHOW", true);
+};
 
-    ::testing::InitGoogleTest(&argc, argv);
+void Test_ImageUtil::SetUp()
+{
+}
 
-    return RUN_ALL_TESTS();
+void Test_ImageUtil::TearDown()
+{
+}
+
+TEST_F(Test_ImageUtil, coverage_test)
+{
+    ASSERT_TRUE(ImageUtil::loadSvg("test", QSize(100, 100), 1.5).isNull());
+    ASSERT_EQ(ImageUtil::loadSvg("dde-printer", ":/res/dde-calendar.svg", 100, 1.25).size(), QSize(125, 125));
+    ASSERT_EQ(ImageUtil::loadSvg("123", "456", 100, 1.25).size(), QSize(125, 125));
 }

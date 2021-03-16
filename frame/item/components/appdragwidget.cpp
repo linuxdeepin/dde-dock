@@ -61,7 +61,7 @@ private:
 
 AppDragWidget::AppDragWidget(QGSettingsInterface *interface, QWidget *parent)
     : QGraphicsView(parent)
-    , qgInterface(interface)
+    , m_qgInterface(interface)
     , m_object(new AppGraphicsObject)
     , m_scene(new QGraphicsScene(this))
     , m_followMouseTimer(new QTimer(this))
@@ -124,8 +124,8 @@ AppDragWidget::~AppDragWidget()
         m_popupWindow=nullptr;
     }
 
-    delete qgInterface;
-    qgInterface = nullptr;
+    delete m_qgInterface;
+    m_qgInterface = nullptr;
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)

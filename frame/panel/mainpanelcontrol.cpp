@@ -29,13 +29,13 @@
 #include "dockitemmanager.h"
 #include "touchsignalmanager.h"
 #include "qgsettingsinterfaceimpl.h"
+#include "utils.h"
 
 #include <QDrag>
 #include <QTimer>
 #include <QStandardPaths>
 #include <QString>
 #include <QApplication>
-#include <QGSettings>
 #include <QPointer>
 
 #include <DGuiApplicationHelper>
@@ -48,13 +48,6 @@
 #define DESKTOP_SIZE  10
 
 DWIDGET_USE_NAMESPACE
-
-
-static QGSettings *GSettingsByApp()
-{
-    static QGSettings settings("com.deepin.dde.dock.module.app");
-    return &settings;
-}
 
 MainPanelControl::MainPanelControl(QWidget *parent)
     : QWidget(parent)
@@ -630,7 +623,8 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
-    if (!GSettingsByApp()->keys().contains("removeable") || GSettingsByApp()->get("removeable").toBool())
+    static const QGSettings *g_settings = Utils::SettingsPtr("app");
+    if (!g_settings || !g_settings->keys().contains("removeable") || g_settings->get("removeable").toBool())
         startDrag(item);
 
     return QWidget::eventFilter(watched, event);
@@ -967,6 +961,9 @@ void MainPanelControl::resizeDockIcon()
     }
     // icon个数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
+    if (iconCount <= 0)
+        return;
+
     // 余数
     int yu = (totalLength % iconCount);
     // icon宽度 = (总宽度-余数)/icon个数

@@ -18,23 +18,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QObject>
+#include <QApplication>
+#include <QSignalSpy>
+#include <QTest>
+
 #include <gtest/gtest.h>
 
-#include "dockapplication.h"
+#include "pluginloader.h"
 
-#include <QDebug>
-
-#include <DLog>
-
-int main(int argc, char **argv)
+class Test_PluginLoader : public QObject, public ::testing::Test
 {
-    // gerrit编译时没有显示器，需要指定环境变量
-    qputenv("QT_QPA_PLATFORM", "offscreen");
-    DockApplication app(argc, argv);
+public:
+    virtual void SetUp() override;
+    virtual void TearDown() override;
 
-    qApp->setProperty("CANSHOW", true);
+public:
+    PluginLoader *loader = nullptr;
+};
 
-    ::testing::InitGoogleTest(&argc, argv);
+void Test_PluginLoader::SetUp()
+{
+    loader = new PluginLoader("../", nullptr);
+    connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
+}
 
-    return RUN_ALL_TESTS();
+void Test_PluginLoader::TearDown()
+{
+}
+
+TEST_F(Test_PluginLoader, loader_test)
+{
+    loader->start();
 }

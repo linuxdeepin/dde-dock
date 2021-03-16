@@ -36,8 +36,16 @@ void PluginLoader::run()
 {
     QDir pluginsDir(m_pluginDirPath);
     const QStringList files = pluginsDir.entryList(QDir::Files);
-    static const QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
-    static const auto disable_plugins_list = gsetting.get("disable-plugins-list").toStringList();
+
+    auto getDisablePluginList = [ = ]{
+        if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.disableplugins")) {
+            QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
+            return gsetting.get("disable-plugins-list").toStringList();
+        }
+        return QStringList();
+    };
+
+    const QStringList disable_plugins_list = getDisablePluginList();
 
     QStringList plugins;
 

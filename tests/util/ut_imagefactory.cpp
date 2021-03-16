@@ -18,23 +18,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+#include <QObject>
+#include <QApplication>
+#include <QSignalSpy>
+#include <QTest>
+
 #include <gtest/gtest.h>
 
-#include "dockapplication.h"
+#include "imagefactory.h"
 
-#include <QDebug>
-
-#include <DLog>
-
-int main(int argc, char **argv)
+class Test_ImageFactory : public QObject, public ::testing::Test
 {
-    // gerrit编译时没有显示器，需要指定环境变量
-    qputenv("QT_QPA_PLATFORM", "offscreen");
-    DockApplication app(argc, argv);
+public:
+    virtual void SetUp() override;
+    virtual void TearDown() override;
 
-    qApp->setProperty("CANSHOW", true);
+public:
+    ImageFactory *factory = nullptr;
+};
 
-    ::testing::InitGoogleTest(&argc, argv);
+void Test_ImageFactory::SetUp()
+{
+    factory = new ImageFactory();
+}
 
-    return RUN_ALL_TESTS();
+void Test_ImageFactory::TearDown()
+{
+    delete factory;
+    factory = nullptr;
+}
+
+TEST_F(Test_ImageFactory, factory_test)
+{
+    QPixmap pix(":/res/all_settings_on.png");
+    // 以下是无效值，应该屏蔽才对
+    factory->lighterEffect(pix, -1);
+    factory->lighterEffect(pix, 256);
+
+    // 传入空的pixmap对象
+    QPixmap emptyPix;
+    factory->lighterEffect(emptyPix, 150);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *

@@ -87,4 +87,7 @@ TEST_F(Test_PreviewContainer, coverage_test)
 
 //    QDragLeaveEvent dragLeaveEvent;
 //    qApp->sendEvent(container, &dragLeaveEvent);
+
+    delete container;
+    container = nullptr;
 }

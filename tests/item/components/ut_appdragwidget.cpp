@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *
@@ -98,4 +98,7 @@ TEST_F(Test_AppDragWidget, cuntion_test)
     ASSERT_TRUE(dragWidget->isRemoveAble(QPoint(10, 1070)));
     ASSERT_FALSE(dragWidget->isRemoveAble(QPoint(1910, 10)));
     ASSERT_FALSE(dragWidget->isRemoveAble(QPoint(1910, 1070)));
+
+    delete dragWidget;
+    dragWidget = nullptr;
 }

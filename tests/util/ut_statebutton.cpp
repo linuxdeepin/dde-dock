@@ -22,6 +22,9 @@
 #include <QObject>
 #include <QApplication>
 #include <QMouseEvent>
+#include <QDebug>
+#include <QSignalSpy>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
@@ -48,22 +51,23 @@ void Test_StateButton::TearDown()
     stateButton = nullptr;
 }
 
-TEST_F(Test_StateButton, statebutton_test)
-{
-    ASSERT_NE(stateButton, nullptr);
-}
-
 TEST_F(Test_StateButton, statebutton_clicked_test)
 {
-    bool clicked = false;
+    QSignalSpy spy(stateButton, SIGNAL(click()));
+    QTest::mousePress(stateButton, Qt::LeftButton, Qt::NoModifier);
+    ASSERT_EQ(spy.count(), 1);
 
-    connect(stateButton, &StateButton::click, this, [ = ]() mutable {
-        clicked = true;
-    });
+    QEvent event(QEvent::Enter);
+    qApp->sendEvent(stateButton, &event);
 
-    Qt::MouseButton button = Qt::LeftButton;
-    QMouseEvent mouseEvent(QEvent::MouseButtonPress, stateButton->rect().center(), button, Qt::NoButton, Qt::NoModifier);
-    bool ret = QApplication::sendEvent(stateButton, &mouseEvent);
+    QEvent event2(QEvent::Leave);
+    qApp->sendEvent(stateButton, &event2);
 
-    ASSERT_NE(ret, clicked);
+    stateButton->show();
+
+    QTest::qWait(10);
+    stateButton->setType(StateButton::Fork);
+
+    QTest::qWait(10);
+    stateButton->setType(StateButton::Check);
 }

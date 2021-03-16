@@ -49,3 +49,8 @@ void Test_MainPanelControl::TearDown()
     delete mainPanel;
     mainPanel = nullptr;
 }
+
+TEST_F(Test_MainPanelControl, coverage_test)
+{
+    ASSERT_TRUE(mainPanel);
+}

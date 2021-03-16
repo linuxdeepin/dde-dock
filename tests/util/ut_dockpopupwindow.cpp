@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2028 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *
@@ -20,34 +20,47 @@
  */
 
 #include <QObject>
-#include <QThread>
-#include <QTest>
+#include <QApplication>
 #include <QSignalSpy>
-#include <QThread>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
-#define private public
-#include "appsnapshot.h"
-#undef private
+#include "dockpopupwindow.h"
 
-class Test_AppSnapshot : public ::testing::Test
+#include <DRegionMonitor>
+
+DWIDGET_USE_NAMESPACE
+
+class Test_DockPopupWindow : public QObject, public ::testing::Test
 {
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
-
-public:
-    AppSnapshot *shot = nullptr;
 };
 
-void Test_AppSnapshot::SetUp()
+void Test_DockPopupWindow::SetUp()
 {
-    shot = new AppSnapshot(1000000);
 }
 
-void Test_AppSnapshot::TearDown()
+void Test_DockPopupWindow::TearDown()
 {
-    delete shot;
-    shot = nullptr;
+}
+
+TEST_F(Test_DockPopupWindow, coverage_test)
+{
+    DockPopupWindow *window = new DockPopupWindow;
+    QWidget *w = new QWidget;
+    window->setContent(w);
+
+    window->show(QCursor::pos(), false);
+    ASSERT_FALSE(window->model());
+
+    window->hide();
+
+    window->show(QCursor::pos(), true);
+    ASSERT_TRUE(window->model());
+
+    delete window;
+    window = nullptr;
 }

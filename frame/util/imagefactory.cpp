@@ -32,6 +32,10 @@ ImageFactory::ImageFactory(QObject *parent)
 
 QPixmap ImageFactory::lighterEffect(const QPixmap pixmap, const int delta)
 {
+    if (pixmap.isNull()) {
+        return pixmap;
+    }
+
     QImage image = pixmap.toImage();
 
     const int width = image.width();

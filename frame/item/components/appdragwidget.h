@@ -75,7 +75,7 @@ private:
     bool isRemoveItem();
 
 private:
-    QGSettingsInterface *qgInterface;
+    QGSettingsInterface *m_qgInterface;
     AppGraphicsObject *m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;

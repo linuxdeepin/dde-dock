@@ -20,6 +20,10 @@
  */
 
 #include <QObject>
+#include <QDebug>
+#include <QApplication>
+#include <QTest>
+
 #include <gtest/gtest.h>
 
 #include "../widgets/tipswidget.h"
@@ -51,6 +55,13 @@ TEST_F(Test_TipsWidget, setText_test)
     const QString text = "hello dde dock";
     tipsWidget->setText(text);
     ASSERT_EQ(text, tipsWidget->text());
+
+    tipsWidget->show();
+    QTest::qWait(10);
+
+    QEvent event(QEvent::FontChange);
+    qApp->sendEvent(tipsWidget, &event);
+    QTest::qWait(10);
 }
 
 TEST_F(Test_TipsWidget, setTextList_test)
@@ -62,10 +73,12 @@ TEST_F(Test_TipsWidget, setTextList_test)
     };
     tipsWidget->setTextList(textList);
     ASSERT_EQ(textList, tipsWidget->textList());
-}
 
-TEST_F(Test_TipsWidget, event_Test)
-{
-    tipsWidget->update();
+    tipsWidget->show();
+    QTest::qWait(10);
+
+    QEvent event(QEvent::FontChange);
+    qApp->sendEvent(tipsWidget, &event);
+    QTest::qWait(10);
 }
 }

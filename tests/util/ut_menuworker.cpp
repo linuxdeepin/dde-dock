@@ -58,4 +58,7 @@ TEST_F(Test_MenuWorker, coverage_test)
     ASSERT_FALSE(worker->m_autoHide);
     worker->setAutoHide(true);
     ASSERT_TRUE(worker->m_autoHide);
+
+    delete worker;
+    worker = nullptr;
 }

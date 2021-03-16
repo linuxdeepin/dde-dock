@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng@uniontech.com>
  *
@@ -55,13 +55,16 @@ TEST_F(Test_LauncherItem, launcher_test)
     ASSERT_EQ(launcherItem->itemType(), LauncherItem::Launcher);
     launcherItem->refreshIcon();
     launcherItem->show();
-    launcherItem->update();
     QThread::msleep(10);
+
     launcherItem->hide();
-    launcherItem->update();
     QThread::msleep(10);
+
     launcherItem->resize(100,100);
     launcherItem->popupTips();
 
     QTest::mouseClick(launcherItem, Qt::LeftButton, Qt::NoModifier, launcherItem->geometry().center());
+
+    delete launcherItem;
+    launcherItem = nullptr;
 }
