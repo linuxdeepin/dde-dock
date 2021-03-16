@@ -32,13 +32,11 @@
 
 DCORE_USE_NAMESPACE
 
-#define SCHEMASPATH "com.deepin.dde.dock.module.launcher"
-
 LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
-    , m_gsettings(Utils::SettingsPtr(SCHEMASPATH, this))
+    , m_gsettings(Utils::SettingsPtr("launcher", this))
 {
     m_launcherInter->setSync(true, false);
 
@@ -141,6 +139,6 @@ void LauncherItem::onGSettingsChanged(const QString& key) {
 
 bool LauncherItem::checkGSettingsControl() const
 {
-    return !m_gsettings || !m_gsettings->keys().contains("control")
-            || m_gsettings->get("control").toBool();
+    return m_gsettings && m_gsettings->keys().contains("control")
+            && m_gsettings->get("control").toBool();
 }
