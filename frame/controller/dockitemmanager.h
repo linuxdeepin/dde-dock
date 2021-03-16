@@ -61,6 +61,9 @@ public slots:
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 
+private Q_SLOTS:
+    void onPluginLoadFinished();
+
 private:
     explicit DockItemManager(QObject *parent = nullptr);
     void appItemAdded(const QDBusObjectPath &path, const int index);
@@ -80,6 +83,8 @@ private:
 
     QList<QPointer<DockItem>> m_itemList;
     QList<QString> m_appIDist;
+
+    bool m_loadFinished; // 记录所有插件是否加载完成
 };
 
 #endif // DOCKITEMMANAGER_H

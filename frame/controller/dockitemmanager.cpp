@@ -84,6 +84,7 @@ DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
+    , m_loadFinished(false)
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
@@ -117,7 +118,7 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemManager::pluginItemRemoved, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemManager::itemUpdated, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::updatePluginsItemOrderKey, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
@@ -364,7 +365,9 @@ void DockItemManager::pluginItemRemoved(PluginsItem *item)
 
     m_itemList.removeOne(item);
 
-    updatePluginsItemOrderKey();
+    if (m_loadFinished) {
+        updatePluginsItemOrderKey();
+    }
 }
 
 void DockItemManager::reloadAppItems()
@@ -419,4 +422,10 @@ void DockItemManager::manageItem(DockItem *item)
 {
     connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
     connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
+}
+
+void DockItemManager::onPluginLoadFinished()
+{
+    updatePluginsItemOrderKey();
+    m_loadFinished = true;
 }
