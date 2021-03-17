@@ -191,8 +191,9 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .service("com.deepin.dde.ControlCenter")
         .interface("com.deepin.dde.ControlCenter")
         .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .method(QString("ShowPage"))
         .arg(QString("datetime"))
+        .arg(QString("Format Settings"))
         .call();
     } else {
         const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
