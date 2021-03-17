@@ -219,15 +219,9 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     tryToShowDock(x, y);
 }
 
-// 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
-void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString &key)
+void MultiScreenWorker::updateDockDisplay()
 {
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    if (m_extralRegisterKey != key)
-        return;
-
-    // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
+    // 鼠标或触屏移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
     m_delayTimer->stop();
 
     if (m_hideMode == HideMode::KeepShowing
@@ -1508,7 +1502,23 @@ void MultiScreenWorker::checkXEventMonitorService()
         connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
         connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
 
-        connect(extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
+        connect(extralEventInter, &XEventMonitor::CursorMove, this, [ = ](int x, int y, const QString &key) {
+            Q_UNUSED(x);
+            Q_UNUSED(y);
+            if (m_extralRegisterKey != key)
+                return;
+
+            updateDockDisplay();
+        });
+        connect(extralEventInter, &XEventMonitor::ButtonPress, this, [ = ](int button, int x, int y, const QString &key) {
+            Q_UNUSED(button);
+            Q_UNUSED(x);
+            Q_UNUSED(y);
+            if (m_extralRegisterKey != key)
+                return;
+
+            updateDockDisplay();
+        });
 
         // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
         connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {m_touchPress = false;});

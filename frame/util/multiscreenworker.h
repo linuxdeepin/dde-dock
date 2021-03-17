@@ -317,7 +317,6 @@ public slots:
 private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
-    void onExtralRegionMonitorChanged(int x, int y, const QString &key);
 
     // Display Monitor
     void onMonitorListChanged(const QList<QDBusObjectPath> &mons);
@@ -448,6 +447,7 @@ private:
     bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
     void updateScreenSize();
+    void updateDockDisplay();
 
 private:
     QWidget *m_parent;
