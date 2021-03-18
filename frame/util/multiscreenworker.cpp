@@ -28,7 +28,7 @@
 #include <QRegion>
 #include <QSequentialAnimationGroup>
 #include <QVariantAnimation>
-
+#include <QX11Info>
 #include <QDBusConnection>
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
@@ -231,7 +231,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
     m_delayTimer->stop();
 
     if (m_hideMode == HideMode::KeepShowing
-        || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
+            || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
         displayAnimation(m_ds.current(), AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
         displayAnimation(m_ds.current(), AniAction::Hide);
@@ -384,16 +384,16 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Positi
     case Position::Top: {
         parent()->panel()->move(0, rect.height() - panelSize);
     }
-    break;
+        break;
     case Position::Left: {
         parent()->panel()->move(rect.width() - panelSize, 0);
     }
-    break;
+        break;
     case Position::Bottom:
     case Position::Right: {
         parent()->panel()->move(0, 0);
     }
-    break;
+        break;
     }
 }
 
@@ -490,7 +490,7 @@ void MultiScreenWorker::onHideModeChanged()
     m_hideMode = hideMode;
 
     if (m_hideMode == HideMode::KeepShowing
-        || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
+            || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
         displayAnimation(m_ds.current(), AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
         displayAnimation(m_ds.current(), AniAction::Hide);
@@ -526,7 +526,7 @@ void MultiScreenWorker::onHideStateChanged()
     qInfo() << "hidestate change:" << m_hideMode << m_hideState;
 
     if (m_hideMode == HideMode::KeepShowing
-        || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
+            || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
         displayAnimation(m_ds.current(), AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
         displayAnimation(m_ds.current(), AniAction::Hide);
@@ -591,28 +591,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + monitorHeight;
         }
-        break;
+            break;
         case Bottom: {
             rect.x1 = inter->x();
             rect.y1 = inter->y() + inter->h() - monitorHeight;
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Left: {
             rect.x1 = inter->x();
             rect.y1 = inter->y();
             rect.x2 = inter->x() + monitorHeight;
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Right: {
             rect.x1 = inter->x() + inter->w() - monitorHeight;
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         }
 
         if (!m_monitorRectList.contains(rect)) {
@@ -637,28 +637,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Bottom: {
             rect.x1 = inter->x();
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h() - realDockSize;
         }
-        break;
+            break;
         case Left: {
             rect.x1 = inter->x() + realDockSize;
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w();
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Right: {
             rect.x1 = inter->x();
             rect.y1 = inter->y();
             rect.x2 = inter->x() + inter->w() - realDockSize;
             rect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         }
 
         if (!m_extralRectList.contains(rect)) {
@@ -686,28 +686,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             touchRect.x2 = inter->x() + inter->w();
             touchRect.y2 = inter->y() + monitHeight;
         }
-        break;
+            break;
         case Bottom: {
             touchRect.x1 = inter->x();
             touchRect.y1 = inter->y() + inter->h() - monitHeight;
             touchRect.x2 = inter->x() + inter->w();
             touchRect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Left: {
             touchRect.x1 = inter->x();
             touchRect.y1 = inter->y();
             touchRect.x2 = inter->x() + monitHeight;
             touchRect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         case Right: {
             touchRect.x1 = inter->x() + inter->w() - monitHeight;
             touchRect.y1 = inter->y();
             touchRect.x2 = inter->x() + inter->w();
             touchRect.y2 = inter->y() + inter->h();
         }
-        break;
+            break;
         }
 
         if (!m_touchRectList.contains(touchRect)) {
@@ -749,6 +749,13 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
     if (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing) {
         lastRect = QRect();
+
+        const auto display = QX11Info::display();
+        if (!display) {
+            qWarning() << "QX11Info::display() is " << display;
+            return;
+        }
+
         XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
         return;
     }
@@ -798,6 +805,13 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     }
 
     qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
+
+    const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+        return;
+    }
+
     XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
                                            static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
                                            static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
@@ -1139,13 +1153,13 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
     case AniAction::Show:
         if (pos == Position::Top || pos == Position::Bottom) {
             if (dockShowRect.height() > mainwindowRect.height() - 2
-                && dockShowRect.height() < mainwindowRect.height() + 2) {
+                    && dockShowRect.height() < mainwindowRect.height() + 2) {
                 emit requestNotifyWindowManager();
                 return;
             }
         } else if (pos == Position::Left || pos == Position::Right) {
             if (dockShowRect.width() > mainwindowRect.width() - 2
-                && dockShowRect.width() < mainwindowRect.width() + 2) {
+                    && dockShowRect.width() < mainwindowRect.width() + 2) {
                 emit requestNotifyWindowManager();
                 return;
             }
@@ -1320,13 +1334,17 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
     // 如果更改了显示位置，在显示之前应该更新一下界面布局方向
     if (fromPos != toPos)
         connect(ani1, &QVariantAnimation::finished, this, [ = ] {
+            const auto display = QX11Info::display();
+            if (!display) {
+                qWarning() << "QX11Info::display() is " << display;
+            } else {
+                // 先清除原先的窗管任务栏区域
+                XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
+            }
 
-        // 先清除原先的窗管任务栏区域
-        XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
-
-        // 隐藏后需要通知界面更新布局方向
-        emit requestUpdateLayout();
-    });
+            // 隐藏后需要通知界面更新布局方向
+            emit requestUpdateLayout();
+        });
 
     connect(group, &QVariantAnimation::finished, this, [ = ] {
         m_aniStart = false;
@@ -1715,9 +1733,9 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
     QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-           (scaledPos - screen->geometry().topLeft()) *
-           screen->devicePixelRatio()
-           : scaledPos;
+                    (scaledPos - screen->geometry().topLeft()) *
+                    screen->devicePixelRatio()
+                  : scaledPos;
 }
 
 /**

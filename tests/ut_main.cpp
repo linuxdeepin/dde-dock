@@ -23,6 +23,8 @@
 #include "dockapplication.h"
 
 #include <QDebug>
+#include <QMouseEvent>
+#include <QTouchEvent>
 
 #include <DLog>
 
@@ -33,6 +35,17 @@ int main(int argc, char **argv)
     DockApplication app(argc, argv);
 
     qApp->setProperty("CANSHOW", true);
+
+    QMouseEvent mouseEvent1(QMouseEvent::MouseButtonPress, QPoint(), QPoint(), QPoint(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    qApp->sendEvent(&app, &mouseEvent1);
+
+    QMouseEvent mouseEvent2(QMouseEvent::MouseButtonPress, QPoint(), QPoint(), QPoint(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByApplication);
+    qApp->sendEvent(&app, &mouseEvent2);
+
+    QList<QTouchEvent::TouchPoint> list;
+    list << QTouchEvent::TouchPoint(0) << QTouchEvent::TouchPoint(1) << QTouchEvent::TouchPoint(2);
+    QTouchEvent touchEven(QEvent::TouchBegin, nullptr, Qt::NoModifier, Qt::TouchPointPressed, list);
+    qApp->sendEvent(&app, &touchEven);
 
     ::testing::InitGoogleTest(&argc, argv);
 

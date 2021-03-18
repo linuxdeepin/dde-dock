@@ -25,7 +25,9 @@
 
 #include <gtest/gtest.h>
 
+#define private public
 #include "mainpanelcontrol.h"
+#undef private
 
 using namespace ::testing;
 
@@ -53,4 +55,20 @@ void Test_MainPanelControl::TearDown()
 TEST_F(Test_MainPanelControl, coverage_test)
 {
     ASSERT_TRUE(mainPanel);
+
+    mainPanel->setPositonValue(Dock::Position::Top);
+    mainPanel->updateMainPanelLayout();
+    QTest::qWait(10);
+
+    mainPanel->setPositonValue(Dock::Position::Bottom);
+    mainPanel->updateMainPanelLayout();
+    QTest::qWait(10);
+
+    mainPanel->setPositonValue(Dock::Position::Left);
+    mainPanel->updateMainPanelLayout();
+    QTest::qWait(10);
+
+    mainPanel->setPositonValue(Dock::Position::Right);
+    mainPanel->updateMainPanelLayout();
+    QTest::qWait(10);
 }

@@ -56,26 +56,6 @@
 using org::kde::StatusNotifierWatcher;
 using DBusDock = com::deepin::dde::daemon::Dock;
 
-const QPoint rawXPosition(const QPoint &scaledPos)
-{
-    QScreen const *screen = Utils::screenAtByScaled(scaledPos);
-
-    return screen ? screen->geometry().topLeft() +
-           (scaledPos - screen->geometry().topLeft()) *
-           screen->devicePixelRatio()
-           : scaledPos;
-}
-
-const QPoint scaledPos(const QPoint &rawXPos)
-{
-    QScreen const *screen = Utils::screenAt(rawXPos);
-
-    return screen
-           ? screen->geometry().topLeft() +
-           (rawXPos - screen->geometry().topLeft()) / screen->devicePixelRatio()
-           : rawXPos;
-}
-
 // let startdde know that we've already started.
 void RegisterDdeSession()
 {
@@ -110,14 +90,19 @@ MainWindow::MainWindow(QWidget *parent)
     , m_dragWidget(new DragWidget(this))
     , m_launched(false)
 {
-    setAccessibleName("mainwindow");
-    m_mainPanel->setAccessibleName("mainpanel");
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_X11DoNotAcceptFocus);
 
-    // 确保下面两行代码的先后顺序，否则会导致任务栏界面不再置顶
+    //1 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
     setWindowFlags(Qt::WindowDoesNotAcceptFocus);
-    XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
+
+    const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+    } else {
+        //2 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
+        XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
+    }
 
     setMouseTracking(true);
     setAcceptDrops(true);

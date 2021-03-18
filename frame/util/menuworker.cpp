@@ -220,10 +220,8 @@ QMenu *MenuWorker::createMenu()
 void MenuWorker::showDockSettingsMenu()
 {
     // 菜单功能被禁用
-    const QGSettings *setting = Utils::SettingsPtr("menu");
+    static const QGSettings *setting = Utils::SettingsPtr("menu", this);
     if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
-        delete setting;
-        setting = nullptr;
         return;
     }
 

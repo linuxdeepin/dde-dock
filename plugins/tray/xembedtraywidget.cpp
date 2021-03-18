@@ -153,6 +153,10 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 void XEmbedTrayWidget::configContainerPosition()
 {
     auto c = QX11Info::connection();
+    if (!c) {
+        qWarning() << "QX11Info::connection() is " << c;
+        return;
+    }
 
     const QPoint p(rawXPosition(QCursor::pos()));
 
@@ -173,6 +177,10 @@ void XEmbedTrayWidget::configContainerPosition()
 void XEmbedTrayWidget::wrapWindow()
 {
     auto c = QX11Info::connection();
+    if (!c) {
+        qWarning() << "QX11Info::connection() is " << c;
+        return;
+    }
 
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
@@ -334,6 +342,10 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 {
     const auto display = QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::display() is " << display;
+        return QString();
+    }
 
     Atom atom_prop = XInternAtom(display, propName.toLocal8Bit(), true);
     if (!atom_prop) {
@@ -383,6 +395,11 @@ void XEmbedTrayWidget::refershIconImage()
 {
     const auto ratio = devicePixelRatioF();
     auto c = QX11Info::connection();
+    if (!c) {
+        qWarning() << "QX11Info::connection() is " << c;
+        return;
+    }
+
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
     if (geom.isNull())
@@ -504,6 +521,10 @@ void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 void XEmbedTrayWidget::setWindowOnTop(const bool top)
 {
     auto c = QX11Info::connection();
+    if (!c) {
+        qWarning() << "QX11Info::connection() is " << c;
+        return;
+    }
     const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     xcb_flush(c);

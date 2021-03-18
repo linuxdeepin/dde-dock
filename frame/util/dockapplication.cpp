@@ -4,7 +4,8 @@
 #include <QMouseEvent>
 #include <QTouchEvent>
 
-DockApplication::DockApplication(int &argc, char **argv) : DApplication (argc, argv)
+DockApplication::DockApplication(int &argc, char **argv)
+    : DApplication (argc, argv)
 {
 }
 

@@ -38,13 +38,10 @@ class Test_AppItem : public ::testing::Test
 public:
     virtual void SetUp() override;
     virtual void TearDown() override;
-
-public:
-    AppItem *appItem = nullptr;
 };
 
 void Test_AppItem::SetUp()
-{ 
+{
 }
 
 void Test_AppItem::TearDown()
@@ -59,7 +56,7 @@ TEST_F(Test_AppItem, coverage_test)
     ON_CALL(mock, keys()).WillByDefault(Return(QStringList() << "enable" << "control"));
     ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){return true; }));
 
-    appItem = new AppItem(&mock, &mock, &mock, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
+    AppItem *appItem = new AppItem(&mock, &mock, &mock, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
 
     // 触发信号测试
 //    emit appItem->m_refershIconTimer->start(10);
