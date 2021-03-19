@@ -293,31 +293,6 @@ void PluginsItem::startDrag()
 {
     // 拖拽已放到MainPanelControl处理
     return;
-
-    const QPixmap pixmap = grab();
-
-    m_dragging = true;
-    m_centralWidget->setVisible(false);
-    update();
-
-    QMimeData *mime = new QMimeData;
-    mime->setData(DOCK_PLUGIN_MIME, m_itemKey.toStdString().c_str());
-
-    QDrag *drag = new QDrag(this);
-    drag->setPixmap(pixmap);
-    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
-    drag->setMimeData(mime);
-
-    emit dragStarted();
-    const Qt::DropAction result = drag->exec(Qt::MoveAction);
-    Q_UNUSED(result);
-    emit itemDropped(drag->target(), QCursor::pos());
-
-    m_dragging = false;
-    m_hover = false;
-    m_centralWidget->setVisible(true);
-    setVisible(true);
-    update();
 }
 
 void PluginsItem::mouseClicked()

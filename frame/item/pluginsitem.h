@@ -38,8 +38,6 @@ public:
     void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
-    void setInContainer(const bool container);
-
     QString pluginName() const;
     PluginsItemInterface::PluginSizePolicy pluginSizePolicy() const;
 
