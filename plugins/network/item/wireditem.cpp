@@ -268,12 +268,10 @@ void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
             m_stateButton->setVisible(false);
             m_loadingStat->setVisible(true);
             m_loadingStat->start();
-            m_loadingStat->show();
         }
         break;
         case NetworkDevice::Activated: {
             m_loadingStat->stop();
-            m_loadingStat->hide();
             m_loadingStat->setVisible(false);
             m_stateButton->setVisible(true);
         }
@@ -289,6 +287,8 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
         m_stateButton->setVisible(false);
     } else {
         m_stateButton->setVisible(true);
+        m_loadingStat->stop();
+        m_loadingStat->setVisible(false);
     }
 
     auto strTitle = connInfo.value("ConnectionName").toString();
