@@ -66,8 +66,8 @@ TEST_F(Test_MainWindow, coverage_test)
     m_window->callShow();
     QTest::qWait(450);
 
-    m_window->relaodPlugins();
-    QTest::qWait(100);
+//    m_window->relaodPlugins();
+//    QTest::qWait(100);
 
     QEvent enterEvent(QEvent::Enter);
     qApp->sendEvent(m_window, &enterEvent);

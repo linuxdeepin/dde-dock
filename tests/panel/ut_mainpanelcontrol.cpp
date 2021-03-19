@@ -72,3 +72,22 @@ TEST_F(Test_MainPanelControl, coverage_test)
     mainPanel->updateMainPanelLayout();
     QTest::qWait(10);
 }
+
+TEST_F(Test_MainPanelControl, event_test)
+{
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::DragLeave));
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::DragEnter));
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::Drop));
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::MouseButtonPress));
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::DragMove));
+    QApplication::postEvent(mainPanel, new QEvent(QEvent::Resize));
+}
+
+TEST_F(Test_MainPanelControl, cover_test)
+{
+    mainPanel->removeAppAreaItem(new QWidget);
+    mainPanel->removeTrayAreaItem(new QWidget);
+    mainPanel->updateAppAreaSonWidgetSize();
+    mainPanel->setDelegate(mainPanel->delegate());
+    mainPanel->checkNeedShowDesktop();
+}

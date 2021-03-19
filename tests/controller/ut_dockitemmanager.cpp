@@ -29,6 +29,7 @@
 #include "dockitemmanager.h"
 #include "dockitem.h"
 #undef private
+#include "item/testplugin.h"
 
 class Test_DockItemManager : public ::testing::Test
 {
@@ -42,32 +43,45 @@ public:
 
 void Test_DockItemManager::SetUp()
 {
-//    manager = DockItemManager::instance();
+    manager = DockItemManager::instance();
 }
 
 void Test_DockItemManager::TearDown()
 {
 }
 
-//TEST_F(Test_DockItemManager, appIsOnDock_test)
-//{
-//    ASSERT_TRUE(manager->appIsOnDock("test"));
+TEST_F(Test_DockItemManager, appIsOnDock_test)
+{
+    manager->appIsOnDock("test");
 
 //    manager->startLoadPlugins();
-//}
+}
 
 TEST_F(Test_DockItemManager, get_method_test)
 {
-//    manager->itemList();
-//    manager->pluginList();
+    manager->itemList();
+    manager->pluginList();
 
-//    qDebug() << manager->m_itemList.size();
-//    for (auto item: manager->m_itemList)
-//        qDebug() << item->itemType();
+    qDebug() << manager->m_itemList.size();
+    for (auto item: manager->m_itemList)
+        qDebug() << item->itemType();
 }
 
 TEST_F(Test_DockItemManager, refershItemsIcon_test)
 {
-//    manager->refershItemsIcon();
-//    manager->sortPluginItems();
+    manager->refershItemsIcon();
+    manager->sortPluginItems();
+}
+
+TEST_F(Test_DockItemManager, cover_test)
+{
+    manager->updatePluginsItemOrderKey();
+    manager->itemAdded("", 0);
+    manager->appItemAdded(QDBusObjectPath(), 0);
+    manager->onPluginLoadFinished();
+    manager->reloadAppItems();
+    manager->pluginItemRemoved(new PluginsItem(new TestPlugin, "", ""));
+    manager->pluginItemInserted(new PluginsItem(new TestPlugin, "", ""));
+    manager->appItemRemoved("");
+    manager->itemMoved(new PluginsItem(new TestPlugin, "", ""), new PluginsItem(new TestPlugin, "", ""));
 }

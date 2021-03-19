@@ -25,7 +25,12 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#define protected public
+#define private public
 #include "dockitem.h"
+#undef private
+#undef protected
+
 class Test_DockItem : public ::testing::Test
 {
 public:
@@ -68,4 +73,52 @@ TEST_F(Test_DockItem, dockitem_hide_test)
     QThread::msleep(450);
 
     ASSERT_EQ(dockItem->isVisible(), false);
+}
+
+TEST_F(Test_DockItem, cover_test)
+{
+    DockItem::setDockPosition(Dock::Top);
+    DockItem::setDockDisplayMode(Dock::Fashion);
+
+//    ASSERT_EQ(dockItem->itemType(), DockItem::App);
+    dockItem->sizeHint();
+    ASSERT_EQ(dockItem->accessibleName(), "");
+    dockItem->refreshIcon();
+    dockItem->contextMenu();
+    dockItem->popupTips();
+    dockItem->popupWindowAccept();
+//    dockItem->showPopupApplet(new QWidget);
+    dockItem->invokedMenuItem("", true);
+    dockItem->checkAndResetTapHoldGestureState();
+}
+
+TEST_F(Test_DockItem, event_test)
+{
+    dockItem->m_popupShown = true;
+    dockItem->update();
+
+    QMouseEvent event(QEvent::MouseButtonPress, QPointF(0.0, 0.0), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    qApp->sendEvent(dockItem, &event);
+
+    QEnterEvent event1(QPointF(0.0, 0.0), QPointF(0.0, 0.0), QPointF(0.0, 0.0));
+    qApp->sendEvent(dockItem, &event1);
+
+    QEvent event2(QEvent::Leave);
+    qApp->sendEvent(dockItem, &event2);
+}
+
+TEST_F(Test_DockItem, topleftPoint_test)
+{
+    DockItem::setDockPosition(Dock::Top);
+    dockItem->popupMarkPoint();
+    dockItem->topleftPoint();
+    DockItem::setDockPosition(Dock::Right);
+    dockItem->popupMarkPoint();
+    dockItem->topleftPoint();
+    DockItem::setDockPosition(Dock::Bottom);
+    dockItem->popupMarkPoint();
+    dockItem->topleftPoint();
+    DockItem::setDockPosition(Dock::Left);
+    dockItem->popupMarkPoint();
+    dockItem->topleftPoint();
 }
