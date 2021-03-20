@@ -31,8 +31,6 @@ using namespace ::testing;
 #include "launcheritem.h"
 #undef private
 
-#include "mock/qgsettingsmock.h"
-
 class Test_LauncherItem : public ::testing::Test
 {
 public:

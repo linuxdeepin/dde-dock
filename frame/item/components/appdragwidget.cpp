@@ -21,7 +21,7 @@
 
 #include "../appitem.h"
 #include "appdragwidget.h"
-#include "qgsettingsinterface.h"
+#include "utils.h"
 
 class AppGraphicsObject : public QGraphicsObject
 {
@@ -59,9 +59,8 @@ private:
     QPixmap m_appPixmap;
 };
 
-AppDragWidget::AppDragWidget(QGSettingsInterface *interface, QWidget *parent)
+AppDragWidget::AppDragWidget(QWidget *parent)
     : QGraphicsView(parent)
-    , m_qgInterface(interface)
     , m_object(new AppGraphicsObject)
     , m_scene(new QGraphicsScene(this))
     , m_followMouseTimer(new QTimer(this))
@@ -72,7 +71,7 @@ AppDragWidget::AppDragWidget(QGSettingsInterface *interface, QWidget *parent)
     , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
     , m_removeTips(new TipsWidget(this))
     , m_popupWindow(nullptr)
-    , m_distanceMultiple(interface->get("distance-multiple").toDouble())
+    , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
 {
     m_removeTips->setText(tr("Remove"));
     m_removeTips->setObjectName("AppRemoveTips");
@@ -123,9 +122,6 @@ AppDragWidget::~AppDragWidget()
         delete m_popupWindow;
         m_popupWindow=nullptr;
     }
-
-    delete m_qgInterface;
-    m_qgInterface = nullptr;
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)

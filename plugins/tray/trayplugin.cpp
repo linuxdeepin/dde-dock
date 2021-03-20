@@ -23,12 +23,12 @@
 #include "trayplugin.h"
 #include "fashiontray/fashiontrayitem.h"
 #include "snitraywidget.h"
+#include "utils.h"
 
 #include <QDir>
 #include <QWindow>
 #include <QWidget>
 #include <QX11Info>
-#include <QGSettings>
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
@@ -385,10 +385,8 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
         return;
     }
 
-    QGSettings settings("com.deepin.dde.dock.module.systemtray");
-    if (settings.keys().contains("enable") && !settings.get("enable").toBool()) {
+    if (!Utils::SettingValue("com.deepin.dde.dock.module.systemtray", QByteArray(), "enable", false).toBool())
         return;
-    }
 
     AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
     if (trayWidget->isValid())
@@ -432,10 +430,8 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
             }
         }
 
-        QGSettings settings("com.deepin.dde.dock.module.systemtray");
-        if (settings.keys().contains("enable") && !settings.get("enable").toBool()) {
+        if (!Utils::SettingValue("com.deepin.dde.dock.module.systemtray", QByteArray(), "enable", false).toBool())
             return false;
-        }
 
         if (sniServicePath.startsWith("/") || !sniServicePath.contains("/")) {
             qDebug() << "SNI service path invalid";
@@ -470,10 +466,8 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indic
         return;
     }
 
-    QGSettings settings("com.deepin.dde.dock.module.systemtray");
-    if (settings.keys().contains("enable") && !settings.get("enable").toBool()) {
+    if (!Utils::SettingValue("com.deepin.dde.dock.module.systemtray", QByteArray(), "enable", false).toBool())
         return;
-    }
 
     IndicatorTray *indicatorTray = nullptr;
     if (!m_indicatorMap.keys().contains(indicatorName)) {

@@ -25,14 +25,15 @@
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 #include "util/utils.h"
+
 #include <DGuiApplicationHelper>
+#include <DApplication>
+#include <DStandardItem>
+#include <DFontSizeManager>
 
 #include <QLabel>
 #include <QIcon>
 #include <QScrollBar>
-#include <DApplication>
-#include <DStandardItem>
-#include <DFontSizeManager>
 
 #define WIDTH       260
 #define MAX_HEIGHT  300
@@ -120,7 +121,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_model(new QStandardItemModel(m_listView))
     , m_deviceInfo("")
     , m_lastPort(nullptr)
-    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.sound", QByteArray(), this))
+    , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))
 
 {
     initUi();
@@ -183,7 +184,7 @@ void SoundApplet::initUi()
     m_volumeSlider->setFixedHeight(SLIDER_HIGHT);
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
-    updateVolumeSliderStatus(m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString());
+    updateVolumeSliderStatus(Utils::SettingValue("com.deepin.dde.dock.module.sound", QByteArray(), "Enabled").toString());
     connect(m_gsettings, &QGSettings::changed, [ = ] (const QString &key) {
         if (key == GSETTING_SOUND_OUTPUT_SLIDER) {
             updateVolumeSliderStatus(m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString());
@@ -559,7 +560,7 @@ void SoundApplet::updateCradsInfo()
 
 void SoundApplet::enableDevice(bool flag)
 {
-    QString status = m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString();
+    QString status = m_gsettings ? m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString() : "Enabled";
     if ("Disabled" == status ) {
         m_volumeSlider->setEnabled(false);
     } else if ("Enabled" == status) {

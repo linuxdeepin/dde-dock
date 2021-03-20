@@ -21,6 +21,7 @@
 
 #include "multiscreenworker.h"
 #include "mainwindow.h"
+#include "utils.h"
 
 #include <QWidget>
 #include <QScreen>
@@ -50,8 +51,8 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus()))
     , m_monitorUpdateTimer(new QTimer(this))
-    , m_delayTimer(new QTimer(this))
-    , m_monitorSetting(nullptr)
+    , m_delayWakeTimer(new QTimer(this))
+    , m_gsettings(Utils::SettingsPtr("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this))
     , m_ds(m_displayInter->primary())
     , m_monitorRotation(1)
     , m_showAniStart(false)
@@ -80,7 +81,7 @@ void MultiScreenWorker::initShow()
     // 仅在初始化时调用一次
     static bool first = true;
     if (!first)
-        qFatal("this method can only be called once");
+       return;
     first = false;
 
     //　这里是为了在调用时让MainWindow更新界面布局方向
@@ -104,6 +105,14 @@ void MultiScreenWorker::initShow()
     }
 }
 
+/**
+ * @brief dockRect
+ * @param screenName            屏幕名
+ * @param pos                   任务栏位置
+ * @param hideMode              模式
+ * @param displayMode           状态
+ * @return                      按照给定的数据计算出任务栏所在位置
+ */
 QRect MultiScreenWorker::dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
 {
     if (hideMode == HideMode::KeepShowing)
@@ -112,11 +121,24 @@ QRect MultiScreenWorker::dockRect(const QString &screenName, const Position &pos
         return getDockHideGeometry(screenName, pos, displayMode);
 }
 
+/**
+ * @brief dockRect
+ * @param screenName        屏幕名
+ * @return                  按照当前屏幕的当前属性给出任务栏所在区域
+ */
 QRect MultiScreenWorker::dockRect(const QString &screenName)
 {
     return dockRect(screenName, m_position, m_hideMode, m_displayMode);
 }
 
+/**
+ * @brief realDockRect      给出不计算缩放情况的区域信息(和后端接口保持一致)
+ * @param screenName        屏幕名
+ * @param pos               任务栏位置
+ * @param hideMode          模式
+ * @param displayMode       状态
+ * @return
+ */
 QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
 {
     if (hideMode == HideMode::KeepShowing)
@@ -158,6 +180,10 @@ void MultiScreenWorker::onAutoHideChanged(bool autoHide)
     }
 }
 
+/**
+ * @brief updateDaemonDockSize
+ * @param dockSize              这里的高度是通过qt获取的，不能使用后端的接口数据
+ */
 void MultiScreenWorker::updateDaemonDockSize(int dockSize)
 {
     m_dockInter->setWindowSize(uint(dockSize));
@@ -228,7 +254,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
         return;
 
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
-    m_delayTimer->stop();
+    m_delayWakeTimer->stop();
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
@@ -544,6 +570,12 @@ void MultiScreenWorker::onOpacityChanged(const double value)
     emit opacityChanged(quint8(value * 255));
 }
 
+/**
+ * @brief onRequestUpdateRegionMonitor  更新监听区域信息
+ * 触发时机:屏幕大小,屏幕坐标,屏幕数量,发生变化
+ *          任务栏位置发生变化
+ *          任务栏'模式'发生变化
+ */
 void MultiScreenWorker::onRequestUpdateRegionMonitor()
 {
     if (!m_registerKey.isEmpty()) {
@@ -955,13 +987,18 @@ void MultiScreenWorker::onRequestDelayShowDock(const QString &screenName)
     }
 }
 
+MainWindow *MultiScreenWorker::parent()
+{
+    return static_cast<MainWindow *>(m_parent);
+}
+
 void MultiScreenWorker::initMembers()
 {
     m_monitorUpdateTimer->setInterval(100);
     m_monitorUpdateTimer->setSingleShot(true);
 
-    m_delayTimer->setInterval(2000);
-    m_delayTimer->setSingleShot(true);
+    m_delayWakeTimer->setInterval(2000);
+    m_delayWakeTimer->setSingleShot(true);
 
     // init check
     checkDaemonDockService();
@@ -971,21 +1008,16 @@ void MultiScreenWorker::initMembers()
 
 void MultiScreenWorker::initGSettingConfig()
 {
-    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.mainwindow")) {
-        m_monitorSetting = new QGSettings("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this);
-        if (m_monitorSetting->keys().contains(MonitorsSwitchTime)) {
-            m_delayTimer->setInterval(m_monitorSetting->get(MonitorsSwitchTime).toInt());
-        } else {
-            qWarning() << "can not find key:" << MonitorsSwitchTime;
-        }
-
-        if (m_monitorSetting->keys().contains(OnlyShowPrimary)) {
-            m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
-        } else {
-            qWarning() << "can not find key:" << OnlyShowPrimary;
-        }
+    if (m_gsettings && m_gsettings->keys().contains(MonitorsSwitchTime)) {
+        m_delayWakeTimer->setInterval(m_gsettings->get(MonitorsSwitchTime).toInt());
     } else {
-        qWarning() << "com.deepin.dde.dock is uninstalled.";
+        qWarning() << "can not find key:" << MonitorsSwitchTime;
+    }
+
+    if (m_gsettings && m_gsettings->keys().contains(OnlyShowPrimary)) {
+        m_mtrInfo.setShowInPrimary(m_gsettings->get(OnlyShowPrimary).toBool());
+    } else {
+        qWarning() << "can not find key:" << OnlyShowPrimary;
     }
 }
 
@@ -1027,7 +1059,7 @@ void MultiScreenWorker::initConnection()
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
     connect(this, &MultiScreenWorker::requestDelayShowDock, this, &MultiScreenWorker::onRequestDelayShowDock);
 
-    connect(m_delayTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
+    connect(m_delayWakeTimer, &QTimer::timeout, this, &MultiScreenWorker::delayShowDock);
 
     //　更新任务栏内容展示
     connect(this, &MultiScreenWorker::requestUpdateLayout, this, [ = ] {
@@ -1060,7 +1092,8 @@ void MultiScreenWorker::initConnection()
         emit requestNotifyWindowManager();
     });
 
-    connect(m_monitorSetting, &QGSettings::changed, this, &MultiScreenWorker::onConfigChange);
+    if (m_gsettings)
+        connect(m_gsettings, &QGSettings::changed, this, &MultiScreenWorker::onGSettingsChange);
 }
 
 void MultiScreenWorker::initUI()
@@ -1105,6 +1138,10 @@ void MultiScreenWorker::initDBus()
     }
 }
 
+/**
+ * @brief initDisplayData
+ * 初始化任务栏的所有必要信息,并更新其位置
+ */
 void MultiScreenWorker::initDisplayData()
 {
     //1\初始化monitor信息
@@ -1120,6 +1157,10 @@ void MultiScreenWorker::initDisplayData()
     resetDockScreen();
 }
 
+/**
+ * @brief reInitDisplayData
+ * 重新初始化任务栏的所有必要信息,并更新其位置
+ */
 void MultiScreenWorker::reInitDisplayData()
 {
     initDBus();
@@ -1256,6 +1297,13 @@ void MultiScreenWorker::displayAnimation(const QString &screen, AniAction act)
     return displayAnimation(screen, m_position, act);
 }
 
+/**
+ * @brief changeDockPosition    做一个动画操作
+ * @param lastScreen            上次任务栏所在的屏幕
+ * @param deskScreen            任务栏要移动到的屏幕
+ * @param fromPos               任务栏上次的方向
+ * @param toPos                 任务栏打算移动到的方向
+ */
 void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen, const Position &fromPos, const Position &toPos)
 {
     if (fromScreen == toScreen && fromPos == toPos) {
@@ -1360,6 +1408,10 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
     group->start(QVariantAnimation::DeleteWhenStopped);
 }
 
+/**
+ * @brief updateDockScreenName  将任务栏所在屏幕信息进行更新,在任务栏切换屏幕显示后,这里应该被调用
+ * @param screenName            目标屏幕
+ */
 void MultiScreenWorker::updateDockScreenName(const QString &screenName)
 {
     Q_UNUSED(screenName);
@@ -1369,6 +1421,10 @@ void MultiScreenWorker::updateDockScreenName(const QString &screenName)
     qInfo() << "update dock screen: " << m_ds.current();
 }
 
+/**
+ * @brief getValidScreen        获取一个当前任务栏可以停靠的屏幕，优先使用主屏
+ * @return
+ */
 QString MultiScreenWorker::getValidScreen(const Position &pos)
 {
     QList<Monitor *> monitorList = m_mtrInfo.validMonitor();
@@ -1407,6 +1463,9 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     Q_UNREACHABLE();
 }
 
+/**
+ * @brief resetDockScreen     检查一下当前屏幕所在边缘是够允许任务栏停靠，不允许的情况需要更换下一块屏幕
+ */
 void MultiScreenWorker::resetDockScreen()
 {
     QList<Monitor *> monitorList = m_mtrInfo.validMonitor();
@@ -1437,6 +1496,10 @@ void MultiScreenWorker::resetDockScreen()
     parent()->panel()->move(0, 0);
 }
 
+/**
+ * @brief checkDaemonDockService
+ * 避免com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
+ */
 void MultiScreenWorker::checkDaemonDockService()
 {
     auto connectionInit = [ = ](DBusDock * dockInter) {
@@ -1481,6 +1544,10 @@ void MultiScreenWorker::checkDaemonDockService()
     }
 }
 
+/**
+ * @brief checkDaemonDisplayService
+ * 避免com.deepin.daemon.Display服务比dock晚启动，导致dock启动后的状态错误
+ */
 void MultiScreenWorker::checkDaemonDisplayService()
 {
     auto connectionInit = [ = ](DisplayInter *displayInter) {
@@ -1519,6 +1586,10 @@ void MultiScreenWorker::checkDaemonDisplayService()
     }
 }
 
+/**
+ * @brief checkDaemonXEventMonitorService
+ * 避免com.deepin.api.XEventMonitor服务比dock晚启动，导致dock启动后的状态错误
+ */
 void MultiScreenWorker::checkXEventMonitorService()
 {
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
@@ -1557,11 +1628,6 @@ void MultiScreenWorker::checkXEventMonitorService()
     } else {
         connectionInit(m_eventInter, m_extralEventInter, m_touchEventInter);
     }
-}
-
-MainWindow *MultiScreenWorker::parent()
-{
-    return static_cast<MainWindow *>(m_parent);
 }
 
 /**
@@ -1822,6 +1888,11 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
     tryToShowDock(x, y);
 }
 
+/**
+ * @brief tryToShowDock 根据xEvent监控区域信号的x，y坐标处理任务栏唤醒显示
+ * @param eventX        监控信号x坐标
+ * @param eventY        监控信号y坐标
+ */
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
     if (m_draging || m_aniStart) {
@@ -1860,9 +1931,9 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
-        if (!m_delayTimer->isActive()) {
+        if (!m_delayWakeTimer->isActive()) {
             m_delayScreen = toScreen;
-            m_delayTimer->start();
+            m_delayWakeTimer->start();
         }
     } else {
         // 任务栏隐藏状态，但需要显示
@@ -1886,12 +1957,12 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     }
 }
 
-void MultiScreenWorker::onConfigChange(const QString &changeKey)
+void MultiScreenWorker::onGSettingsChange(const QString &changeKey)
 {
     if (changeKey == MonitorsSwitchTime) {
-        m_delayTimer->setInterval(m_monitorSetting->get(MonitorsSwitchTime).toInt());
+        m_delayWakeTimer->setInterval(m_gsettings ? m_gsettings->get(MonitorsSwitchTime).toInt() : 2000);
     } else if (changeKey == OnlyShowPrimary) {
-        m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
+        m_mtrInfo.setShowInPrimary(m_gsettings && m_gsettings->get(OnlyShowPrimary).toBool());
         // 每次切换都更新一下屏幕显示的信息
         emit requestUpdateMonitorInfo();
     }

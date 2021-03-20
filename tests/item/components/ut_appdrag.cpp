@@ -24,7 +24,6 @@
 #include <gtest/gtest.h>
 
 #include "appdrag.h"
-#include "mock/qgsettingsmock.h"
 
 class Test_AppDrag : public ::testing::Test
 {
@@ -44,10 +43,7 @@ void Test_AppDrag::TearDown()
 TEST_F(Test_AppDrag, drag_test)
 {
     QWidget *w = new QWidget;
-    QGSettingsMock mock;
-    ON_CALL(mock, get(::testing::_)) .WillByDefault(::testing::Invoke([](const QString& key){return 1.5; }));
-
-    AppDrag *drag = new AppDrag(&mock, w);
+    AppDrag *drag = new AppDrag(w);
     QPixmap pix(":/res/all_settings_on.png");
     drag->setPixmap(pix);
 

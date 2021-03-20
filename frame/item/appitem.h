@@ -28,7 +28,6 @@
 #include "appdrag.h"
 #include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
-#include "qgsettingsinterface.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -38,13 +37,13 @@
 #include <com_deepin_dde_daemon_dock_entry.h>
 
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
-
+class QGSettings;
 class AppItem : public DockItem
 {
     Q_OBJECT
 
 public:
-    explicit AppItem(QGSettingsInterface *appSettings, QGSettingsInterface *activeAppSettings, QGSettingsInterface *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
@@ -103,9 +102,10 @@ private slots:
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
-    QGSettingsInterface *m_qgAppInterface;
-    QGSettingsInterface *m_qgActiveAppInterface;
-    QGSettingsInterface *m_qgDockedAppInterface;
+    const QGSettings *m_appSettings;
+    const QGSettings *m_activeAppSettings;
+    const QGSettings *m_dockedAppSettings;
+
     TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;

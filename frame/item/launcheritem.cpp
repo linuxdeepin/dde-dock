@@ -36,7 +36,7 @@ LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
     , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_tips(new TipsWidget(this))
-    , m_gsettings(Utils::SettingsPtr("launcher", this))
+    , m_gsettings(Utils::ModuleSettingsPtr("launcher", QByteArray(), this))
 {
     m_launcherInter->setSync(true, false);
 

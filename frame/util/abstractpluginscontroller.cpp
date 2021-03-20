@@ -21,12 +21,13 @@
 
 #include "abstractpluginscontroller.h"
 #include "pluginsiteminterface.h"
-#include "DNotifySender"
+#include "utils.h"
 
+#include <DNotifySender>
 #include <DSysInfo>
+
 #include <QDebug>
 #include <QDir>
-#include <QGSettings>
 
 static const QStringList CompatiblePluginApiList {
     "1.1.1",
@@ -160,11 +161,8 @@ void AbstractPluginsController::startLoader(PluginLoader *loader)
     });
     connect(loader, &PluginLoader::pluginFounded, this, &AbstractPluginsController::loadPlugin, Qt::QueuedConnection);
 
-
-    QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
-
-    QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(),
-                       loader, [ = ] { loader->start(QThread::LowestPriority); });
+    int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
+    QTimer::singleShot(delay, loader, [ = ] { loader->start(QThread::LowestPriority); });
 }
 
 void AbstractPluginsController::displayModeChanged()

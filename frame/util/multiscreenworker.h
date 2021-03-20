@@ -222,66 +222,18 @@ public:
 
     void initShow();
 
-    DBusDock *dockInter() {return m_dockInter;}
+    DBusDock *dockInter() { return m_dockInter; }
 
-    /**
-     * @brief lastScreen
-     * @return                      任务栏上次所在的屏幕
-     */
-    inline const QString &lastScreen() {return m_ds.last();/*return m_lastScreen;*/}
-    /**
-     * @brief deskScreen
-     * @return                      任务栏目标屏幕.可以理解为任务栏当前所在屏幕
-     */
-    inline const QString &deskScreen() {return m_ds.current();/*return m_currentScreen;*/}
-    /**
-     * @brief position
-     * @return                      任务栏所在方向(上下左右)
-     */
-    inline const Position &position() {return m_position;}
-    /**
-     * @brief displayMode
-     * @return                      任务栏显示模式(时尚模式,高效模式)
-     */
-    inline const DisplayMode &displayMode() {return m_displayMode;}
-    /**
-     * @brief hideMode
-     * @return                      任务栏状态(一直显示,一直隐藏,智能隐藏)
-     */
-    inline const HideMode &hideMode() {return m_hideMode;}
-    /**
-     * @brief hideState
-     * @return                      任务栏的智能隐藏时的一个状态值(1显示,2隐藏,其他不处理)
-     */
-    inline const HideState &hideState() {return m_hideState;}
-    /**
-     * @brief opacity
-     * @return                      任务栏透明度
-     */
-    inline quint8 opacity() {return m_opacity * 255;}
-    /**
-     * @brief dockRect
-     * @param screenName            屏幕名
-     * @param pos                   任务栏位置
-     * @param hideMode              模式
-     * @param displayMode           状态
-     * @return                      按照给定的数据计算出任务栏所在位置
-     */
+    inline const QString &lastScreen() { return m_ds.last(); }
+    inline const QString &deskScreen() { return m_ds.current(); }
+    inline const Position &position() { return m_position; }
+    inline const DisplayMode &displayMode() { return m_displayMode; }
+    inline const HideMode &hideMode() { return m_hideMode; }
+    inline const HideState &hideState() { return m_hideState; }
+    inline quint8 opacity() { return m_opacity * 255; }
+
     QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
-    /**
-     * @brief dockRect
-     * @param screenName        屏幕名
-     * @return                  按照当前屏幕的当前属性给出任务栏所在区域
-     */
     QRect dockRect(const QString &screenName);
-    /**
-     * @brief realDockRect      给出不计算缩放情况的区域信息(和后端接口保持一致)
-     * @param screenName        屏幕名
-     * @param pos               任务栏位置
-     * @param hideMode          模式
-     * @param displayMode       状态
-     * @return
-     */
     QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
 
 signals:
@@ -305,13 +257,8 @@ signals:
 
 public slots:
     void onAutoHideChanged(bool autoHide);
-    /**
-     * @brief updateDaemonDockSize
-     * @param dockSize              这里的高度是通过qt获取的，不能使用后端的接口数据
-     */
     void updateDaemonDockSize(int dockSize);
     void onDragStateChanged(bool draging);
-
     void handleDbusSignal(QDBusMessage);
 
 private slots:
@@ -341,12 +288,6 @@ private slots:
     void onHideStateChanged();
     void onOpacityChanged(const double value);
 
-    /**
-     * @brief onRequestUpdateRegionMonitor  更新监听区域信息
-     * 触发时机:屏幕大小,屏幕坐标,屏幕数量,发生变化
-     *          任务栏位置发生变化
-     *          任务栏'模式'发生变化
-     */
     void onRequestUpdateRegionMonitor();
 
     // 通知后端任务栏所在位置
@@ -368,74 +309,32 @@ private slots:
     void onTouchRelease(int type, int x, int y, const QString &key);
 
     // gsetting配置改变响应槽
-    void onConfigChange(const QString &changeKey);
+    void onGSettingsChange(const QString &changeKey);
 
 private:
+    MainWindow *parent();
     // 初始化数据信息
     void initMembers();
     void initGSettingConfig();
     void initDBus();
     void initConnection();
     void initUI();
-    /**
-     * @brief initDisplayData
-     * 初始化任务栏的所有必要信息,并更新其位置
-     */
     void initDisplayData();
-    /**
-     * @brief reInitDisplayData
-     * 重新初始化任务栏的所有必要信息,并更新其位置
-     */
     void reInitDisplayData();
 
     void displayAnimation(const QString &screen, const Position &pos, AniAction act);
-
     void displayAnimation(const QString &screen, AniAction act);
-    /**
-     * @brief tryToShowDock 根据xEvent监控区域信号的x，y坐标处理任务栏唤醒显示
-     * @param eventX        监控信号x坐标
-     * @param eventY        监控信号y坐标
-     */
-    void tryToShowDock(int eventX, int eventY);
-    /**
-     * @brief changeDockPosition    做一个动画操作
-     * @param lastScreen            上次任务栏所在的屏幕
-     * @param deskScreen            任务栏要移动到的屏幕
-     * @param fromPos               任务栏上次的方向
-     * @param toPos                 任务栏打算移动到的方向
-     */
-    void changeDockPosition(QString lastScreen, QString deskScreen, const Position &fromPos, const Position &toPos);
-    /**
-     * @brief updateDockScreenName  将任务栏所在屏幕信息进行更新,在任务栏切换屏幕显示后,这里应该被调用
-     * @param screenName            目标屏幕
-     */
-    void updateDockScreenName(const QString &screenName);
-    /**
-     * @brief getValidScreen        获取一个当前任务栏可以停靠的屏幕，优先使用主屏
-     * @return
-     */
-    QString getValidScreen(const Position &pos);
-    /**
-     * @brief resetDockScreen     检查一下当前屏幕所在边缘是够允许任务栏停靠，不允许的情况需要更换下一块屏幕
-     */
-    void resetDockScreen();
-    /**
-     * @brief checkDaemonDockService
-     * 避免com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
-     */
-    void checkDaemonDockService();
-    /**
-     * @brief checkDaemonDisplayService
-     * 避免com.deepin.daemon.Display服务比dock晚启动，导致dock启动后的状态错误
-     */
-    void checkDaemonDisplayService();
-    /**
-     * @brief checkDaemonXEventMonitorService
-     * 避免com.deepin.api.XEventMonitor服务比dock晚启动，导致dock启动后的状态错误
-     */
-    void checkXEventMonitorService();
 
-    MainWindow *parent();
+    void tryToShowDock(int eventX, int eventY);
+    void changeDockPosition(QString lastScreen, QString deskScreen, const Position &fromPos, const Position &toPos);
+
+    void updateDockScreenName(const QString &screenName);
+    QString getValidScreen(const Position &pos);
+    void resetDockScreen();
+
+    void checkDaemonDockService();
+    void checkDaemonDisplayService();
+    void checkXEventMonitorService();
 
     QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
@@ -465,14 +364,12 @@ private:
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
-    QTimer *m_delayTimer;               // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
+    QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
 
-    QGSettings *m_monitorSetting;       // 多屏配置控制
+    const QGSettings *m_gsettings;              // 多屏配置控制
 
-    // 屏幕名称信息
-    DockScreen m_ds;
-    // 显示器信息
-    MonitorInfo m_mtrInfo;
+    DockScreen m_ds;                            // 屏幕名称信息
+    MonitorInfo m_mtrInfo;                      // 显示器信息
 
     // 任务栏属性
     double m_opacity;
@@ -481,10 +378,8 @@ private:
     HideState m_hideState;
     DisplayMode m_displayMode;
 
-    //当前屏幕的方向
-    int m_monitorRotation;
-    //当前屏幕的所有方向
-    RotationList m_rotations; // 逆时针旋转（向下，向右，向上，向左）
+    int m_monitorRotation;                      //当前屏幕的方向
+    RotationList m_rotations;                   // 当前屏幕的所有方向,逆时针旋转（向下，向右，向上，向左）
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;

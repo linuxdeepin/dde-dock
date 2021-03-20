@@ -28,7 +28,6 @@
 #include "traypluginitem.h"
 #include "dockitemmanager.h"
 #include "touchsignalmanager.h"
-#include "qgsettingsinterfaceimpl.h"
 #include "utils.h"
 
 #include <QDrag>
@@ -623,7 +622,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
 
-    static const QGSettings *g_settings = Utils::SettingsPtr("app");
+    static const QGSettings *g_settings = Utils::ModuleSettingsPtr("app");
     if (!g_settings || !g_settings->keys().contains("removeable") || g_settings->get("removeable").toBool())
         startDrag(item);
 
@@ -660,7 +659,7 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
     QDrag *drag = nullptr;
     if (item->itemType() == DockItem::App) {
-        AppDrag *appDrag = new AppDrag(new QGSettingsInterfaceImpl("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/"),item);
+        AppDrag *appDrag = new AppDrag(item);
 
         m_appDragWidget = appDrag->appDragWidget();
 

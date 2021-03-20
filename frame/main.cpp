@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QDateTime>
-#include <QGSettings>
 #include <QDir>
 
 #include <DApplication>

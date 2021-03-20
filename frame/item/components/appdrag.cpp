@@ -20,11 +20,10 @@
  */
 
 #include "appdrag.h"
-#include "qgsettingsinterfaceimpl.h"
 
-AppDrag::AppDrag(QGSettingsInterface *interface, QObject *dragSource)
+AppDrag::AppDrag(QObject *dragSource)
     : QDrag(dragSource)
-    , m_appDragWidget(new AppDragWidget(interface))
+    , m_appDragWidget(new AppDragWidget)
 {
     // delete by itself
     m_appDragWidget->setVisible(false);

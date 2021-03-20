@@ -111,7 +111,7 @@ private:
 
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
-    QGSettings* m_gsettings;
+    const QGSettings* m_gsettings;
 };
 
 #endif // SYSTEMTRAYITEM_H

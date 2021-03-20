@@ -26,7 +26,6 @@
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "appspreviewprovider.h"
-#include "qgsettingsinterfaceimpl.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -40,17 +39,18 @@
 #include <QTimeLine>
 #include <QX11Info>
 #include <QGSettings>
+
 #include <DGuiApplicationHelper>
 
 #define APP_DRAG_THRESHOLD      20
 
 QPoint AppItem::MousePressPos;
 
-AppItem::AppItem(QGSettingsInterface *appSettings, QGSettingsInterface *activeAppSettings, QGSettingsInterface *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
-    , m_qgAppInterface(appSettings)
-    , m_qgActiveAppInterface(activeAppSettings)
-    , m_qgDockedAppInterface(dockedAppSettings)
+    , m_appSettings(appSettings)
+    , m_activeAppSettings(activeAppSettings)
+    , m_dockedAppSettings(dockedAppSettings)
     , m_appNameTips(new TipsWidget(this))
     , m_appPreviewTips(nullptr)
     , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
@@ -106,12 +106,12 @@ AppItem::AppItem(QGSettingsInterface *appSettings, QGSettingsInterface *activeAp
     updateWindowInfos(m_itemEntryInter->windowInfos());
     refreshIcon();
 
-    if (m_qgAppInterface && m_qgAppInterface->gsettings())
-        connect(m_qgAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    if (m_qgDockedAppInterface && m_qgDockedAppInterface->gsettings())
-        connect(m_qgDockedAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
-    if (m_qgActiveAppInterface && m_qgActiveAppInterface->gsettings())
-        connect(m_qgActiveAppInterface->gsettings(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_appSettings)
+        connect(m_appSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_dockedAppSettings)
+        connect(m_dockedAppSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    if (m_activeAppSettings)
+        connect(m_activeAppSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
@@ -340,7 +340,6 @@ void AppItem::mousePressEvent(QMouseEvent *e)
     if (checkGSettingsControl()) {
         return;
     }
-
     m_updateIconGeometryTimer->stop();
     hidePopup();
 
@@ -706,24 +705,24 @@ void AppItem::onGSettingsChanged(const QString &key)
         return;
     }
 
-    QGSettingsInterface *setting = m_itemEntryInter->isDocked()
-            ? m_qgDockedAppInterface
-            : m_qgActiveAppInterface;
+    const QGSettings *setting = m_itemEntryInter->isDocked()
+            ? m_dockedAppSettings
+            : m_activeAppSettings;
 
-    if (setting->keys().contains("enable")) {
-        const bool isEnable = m_qgAppInterface->keys().contains("enable") && m_qgAppInterface->get("enable").toBool();
+    if (setting && setting->keys().contains("enable")) {
+        const bool isEnable = !m_appSettings || m_appSettings->keys().contains("enable") && m_appSettings->get("enable").toBool();
         setVisible(isEnable && setting->get("enable").toBool());
     }
 }
 
 bool AppItem::checkGSettingsControl() const
 {
-    QGSettingsInterface *setting = m_itemEntryInter->isDocked()
-            ? m_qgDockedAppInterface
-            : m_qgActiveAppInterface;
+    const QGSettings *setting = m_itemEntryInter->isDocked()
+            ? m_dockedAppSettings
+            : m_activeAppSettings;
 
-    return (setting->keys().contains("control") && setting->get("control").toBool()) ||
-            (m_qgAppInterface->keys().contains("control") && m_qgAppInterface->get("control").toBool());
+    return (setting && setting->keys().contains("control") && setting->get("control").toBool()) ||
+            (m_appSettings && m_appSettings->keys().contains("control") && m_appSettings->get("control").toBool());
 }
 
 void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)

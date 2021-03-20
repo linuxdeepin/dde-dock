@@ -113,7 +113,7 @@ private:
     ShutdownWidget *m_shutdownWidget;
     Dock::TipsWidget *m_tipsLabel;
     DBusPowerManager* m_powerManagerInter;
-    QGSettings *m_gsettings;
+    const QGSettings *m_gsettings;
 };
 
 #endif // SHUTDOWNPLUGIN_H

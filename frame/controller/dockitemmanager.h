@@ -85,6 +85,10 @@ private:
     QList<QString> m_appIDist;
 
     bool m_loadFinished; // 记录所有插件是否加载完成
+
+    static const QGSettings *m_appSettings;
+    static const QGSettings *m_activeSettings;
+    static const QGSettings *m_dockedSettings;
 };
 
 #endif // DOCKITEMMANAGER_H

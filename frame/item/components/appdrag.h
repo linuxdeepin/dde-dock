@@ -30,7 +30,7 @@
 class AppDrag : public QDrag
 {
 public:
-    explicit AppDrag(QGSettingsInterface *interface, QObject *dragSource);
+    explicit AppDrag(QObject *dragSource);
     virtual ~AppDrag();
 
     void setPixmap(const QPixmap &);

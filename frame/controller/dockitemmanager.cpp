@@ -24,61 +24,15 @@
 #include "launcheritem.h"
 #include "pluginsitem.h"
 #include "traypluginitem.h"
-#include "qgsettingsinterfaceimpl.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QGSettings>
 
 DockItemManager *DockItemManager::INSTANCE = nullptr;
-
-static QGSettingsInterface *GSettingsByApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.app");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
-static QGSettingsInterface *GSettingsByActiveApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.activeapp");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
-static QGSettingsInterface *GSettingsByDockApp(QGSettingsInterface::Type type)
-{
-    switch (type) {
-    case QGSettingsInterface::Type::ImplType:
-    {
-        static QGSettingsInterfaceImpl settings("com.deepin.dde.dock.module.dockapp");
-        return &settings;
-    }
-    default:
-    {
-        qWarning("Unless you are doing unit testing, you should't see this message");
-        return nullptr;
-    }
-    }
-}
-
+const QGSettings *DockItemManager::m_appSettings = Utils::ModuleSettingsPtr("app");
+const QGSettings *DockItemManager::m_activeSettings = Utils::ModuleSettingsPtr("activeapp");
+const QGSettings *DockItemManager::m_dockedSettings = Utils::ModuleSettingsPtr("dockapp");
 
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
@@ -91,10 +45,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(GSettingsByApp(QGSettingsInterface::ImplType)
-                                  , GSettingsByActiveApp(QGSettingsInterface::ImplType)
-                                  , GSettingsByDockApp(QGSettingsInterface::ImplType)
-                                  , entry);
+        AppItem *it = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, entry);
         manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
@@ -149,14 +100,8 @@ bool DockItemManager::appIsOnDock(const QString &appDesktop) const
 
 void DockItemManager::startLoadPlugins() const
 {
-    if (!QGSettings::isSchemaInstalled("com.deepin.dde.dock")) {
-        qWarning("com.deepin.dde.dock is not installed");
-        return;
-    }
-
-    QGSettings gsetting("com.deepin.dde.dock", "/com/deepin/dde/dock/");
-
-    QTimer::singleShot(gsetting.get("delay-plugins-time").toUInt(), m_pluginsInter, &DockPluginsController::startLoader);
+    int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
+    QTimer::singleShot(delay, m_pluginsInter, &DockPluginsController::startLoader);
 }
 
 void DockItemManager::refershItemsIcon()
@@ -243,10 +188,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(GSettingsByApp(QGSettingsInterface::ImplType)
-                                , GSettingsByActiveApp(QGSettingsInterface::ImplType)
-                                , GSettingsByDockApp(QGSettingsInterface::ImplType)
-                                , path);
+    AppItem *item = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;

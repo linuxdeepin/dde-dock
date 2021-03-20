@@ -50,7 +50,7 @@ QMenu *MenuWorker::createMenu()
     settingsMenu->setTitle("Settings Menu");
 
     // 模式
-    const QGSettings *menuSettings = Utils::SettingsPtr("menu");
+    const QGSettings *menuSettings = Utils::ModuleSettingsPtr("menu");
     if (!menuSettings || !menuSettings->keys().contains("modeVisible") || menuSettings->get("modeVisible").toBool()) {
         const DisplayMode displayMode = static_cast<DisplayMode>(m_dockInter->displayMode());
 
@@ -168,7 +168,7 @@ QMenu *MenuWorker::createMenu()
             const QString &display = p->pluginDisplayName();
 
             // 模块和菜单均需要响应enable配置的变化
-            const QGSettings *setting = Utils::SettingsPtr(name);
+            const QGSettings *setting = Utils::ModuleSettingsPtr(name);
             if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
                 continue;
             }
@@ -192,7 +192,7 @@ QMenu *MenuWorker::createMenu()
             connect(act, &QAction::triggered, this, [ p ]{p->pluginStateSwitched();});
 
             // check plugin hide menu.
-            const QGSettings *pluginSettings = Utils::SettingsPtr(name);
+            const QGSettings *pluginSettings = Utils::ModuleSettingsPtr(name);
             if (pluginSettings && (!pluginSettings->keys().contains("visible") || pluginSettings->get("visible").toBool()))
                 actions << act;
         }
@@ -220,7 +220,7 @@ QMenu *MenuWorker::createMenu()
 void MenuWorker::showDockSettingsMenu()
 {
     // 菜单功能被禁用
-    static const QGSettings *setting = Utils::SettingsPtr("menu", this);
+    static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray(), this);
     if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
         return;
     }

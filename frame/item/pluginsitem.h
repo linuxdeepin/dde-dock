@@ -53,6 +53,8 @@ public:
 
 public slots:
     void refreshIcon() override;
+
+private slots:
     void onGSettingsChanged(const QString &key);
 
 protected:
@@ -84,7 +86,7 @@ private:
     bool m_dragging;
 
     static QPoint MousePressPoint;
-    QGSettings *m_gsettings;
+    const QGSettings *m_gsettings;
 };
 
 #endif // PLUGINSITEM_H

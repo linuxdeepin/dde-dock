@@ -44,7 +44,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     , m_pluginApi(plginApi)
     , m_itemKey(itemKey)
     , m_dragging(false)
-    , m_gsettings(nullptr)
+    , m_gsettings(Utils::ModuleSettingsPtr(pluginInter->pluginName()))
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -62,17 +62,8 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     setAccessibleName(pluginInter->pluginName());
     setAttribute(Qt::WA_TranslucentBackground);
 
-    const QByteArray &schema{
-        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
-    };
-    if (QGSettings::isSchemaInstalled(schema)) {
-        m_gsettings = new QGSettings(schema);
-        m_gsettings->setParent(this);
-        connect(m_gsettings, &QGSettings::changed, this,
-                &PluginsItem::onGSettingsChanged);
-    } else {
-        m_gsettings = nullptr;
-    }
+    if (m_gsettings)
+        connect(m_gsettings, &QGSettings::changed, this, &PluginsItem::onGSettingsChanged);
 }
 
 PluginsItem::~PluginsItem()
@@ -132,11 +123,11 @@ void PluginsItem::refreshIcon()
 
 void PluginsItem::onGSettingsChanged(const QString &key)
 {
-    if (key != "enable" || !m_gsettings) {
+    if (key != "enable") {
         return;
     }
 
-    if (m_gsettings->keys().contains("enable")) {
+    if (m_gsettings && m_gsettings->keys().contains("enable")) {
         setVisible(m_gsettings->get("enable").toBool());
     }
 }
@@ -308,16 +299,13 @@ void PluginsItem::mouseClicked()
     }
 
     // request popup applet
-    QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey);
-    if (w)
+    if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
         showPopupApplet(w);
 }
 
 bool PluginsItem::checkGSettingsControl() const
 {
-    return m_gsettings ? m_gsettings->keys().contains("control") &&
-           m_gsettings->get("control").toBool()
-           : false;
+    return m_gsettings ? m_gsettings->keys().contains("control") && m_gsettings->get("control").toBool() : false;
 }
 
 void PluginsItem::resizeEvent(QResizeEvent *event)

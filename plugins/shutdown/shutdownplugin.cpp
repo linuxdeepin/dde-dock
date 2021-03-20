@@ -44,7 +44,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_tipsLabel(new TipsWidget)
     , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
-    , m_gsettings(new QGSettings("com.deepin.dde.dock.module.shutdown", QByteArray(), this))
+    , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setAccessibleName("shutdown");
@@ -118,7 +118,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.reserve(6);
 
     QMap<QString, QVariant> shutdown;
-    if (m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool()) {
+    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SHUTDOWN) && m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool())) {
         shutdown["itemId"] = "Shutdown";
         shutdown["itemText"] = tr("Shut down");
         shutdown["isActive"] = true;
@@ -140,7 +140,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     ;
     if (can_sleep) {
         QMap<QString, QVariant> suspend;
-        if (m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool()) {
+        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SUSPEND) && m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool())) {
             suspend["itemId"] = "Suspend";
             suspend["itemText"] = tr("Suspend");
             suspend["isActive"] = true;
@@ -153,7 +153,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
-        if (m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool()) {
+        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_HIBERNATE) && m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool())) {
             hibernate["itemId"] = "Hibernate";
             hibernate["itemText"] = tr("Hibernate");
             hibernate["isActive"] = true;
@@ -164,7 +164,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 #endif
 
     QMap<QString, QVariant> lock;
-    if (m_gsettings->get(GSETTING_SHOW_LOCK).toBool()) {
+    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_LOCK) && m_gsettings->get(GSETTING_SHOW_LOCK).toBool())) {
         lock["itemId"] = "Lock";
         lock["itemText"] = tr("Lock");
         lock["isActive"] = true;

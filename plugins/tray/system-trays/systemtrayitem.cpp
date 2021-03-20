@@ -20,12 +20,12 @@
  */
 
 #include "systemtrayitem.h"
+#include "utils.h"
 
 #include <QProcess>
 #include <QDebug>
 
 #include <xcb/xproto.h>
-#include <QGSettings>
 
 Dock::Position SystemTrayItem::DockPosition = Dock::Position::Top;
 QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
@@ -39,6 +39,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
     , m_itemKey(itemKey)
+    , m_gsettings(Utils::ModuleSettingsPtr(pluginInter->pluginName(), QByteArray(), this))
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -77,32 +78,16 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
     connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
+    if (m_gsettings)
+        connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
+
     grabGesture(Qt::TapAndHoldGesture);
-
-    const QByteArray &schema{
-        QString("com.deepin.dde.dock.module.%1").arg(pluginInter->pluginName()).toUtf8()
-    };
-
-    if (QGSettings::isSchemaInstalled(schema)) {
-        m_gsettings = new QGSettings(schema);
-        m_gsettings->setParent(this);
-        connect(m_gsettings, &QGSettings::changed, this,
-                &SystemTrayItem::onGSettingsChanged);
-    }
-    else {
-        m_gsettings = nullptr;
-    }
 }
 
 SystemTrayItem::~SystemTrayItem()
 {
     if (m_popupShown)
         popupWindowAccept();
-
-    if(nullptr != m_gsettings){
-        m_gsettings->deleteLater();
-        m_gsettings = nullptr;
-    }
 }
 
 QString SystemTrayItem::itemKeyForConfig()
@@ -203,7 +188,7 @@ void SystemTrayItem::enterEvent(QEvent *event)
     if (checkGSettingsControl()) {
         //网络需要显示Tips，需要特殊处理。
         if (m_pluginInter->pluginName() != "network")
-        return;
+            return;
     }
 
     // 触屏不显示hover效果
@@ -493,11 +478,11 @@ void SystemTrayItem::updatePopupPosition()
 }
 
 void SystemTrayItem::onGSettingsChanged(const QString &key) {
-    if (key != "enable" || !m_gsettings) {
+    if (key != "enable") {
         return;
     }
 
-    if (m_gsettings->keys().contains("enable")) {
+    if (m_gsettings && m_gsettings->keys().contains("enable")) {
         const bool visible = m_gsettings->get("enable").toBool();
         setVisible(visible);
         emit itemVisibleChanged(visible);
@@ -506,5 +491,5 @@ void SystemTrayItem::onGSettingsChanged(const QString &key) {
 
 bool SystemTrayItem::checkGSettingsControl() const
 {
-    return m_gsettings ? m_gsettings->get("control").toBool() : false;
+    return (m_gsettings && m_gsettings->get("control").toBool());
 }

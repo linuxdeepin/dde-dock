@@ -156,7 +156,7 @@ private:
     QList<Port *> m_ports;
     QString m_deviceInfo;
     QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
-    QGSettings *m_gsettings;
+    const QGSettings *m_gsettings;
 };
 
 #endif // SOUNDAPPLET_H

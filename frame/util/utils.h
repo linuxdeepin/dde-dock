@@ -25,16 +25,59 @@
 #include <QApplication>
 #include <QScreen>
 #include <QGSettings>
+#include <QDebug>
 
 namespace Utils {
 
 #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
 
-// 这样命名就是为了强调这是个指针类型
-inline const QGSettings *SettingsPtr(const QString &module, QObject *parent = nullptr) {
-    return QGSettings::isSchemaInstalled(QString("com.deepin.dde.dock.module." + module).toUtf8())
-            ? new QGSettings(QString("com.deepin.dde.dock.module." + module).toUtf8(), QByteArray(), parent) // 自动销毁
-            : nullptr;
+/**
+ * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
+ * @param schema_id The id of the schema
+ * @param path If non-empty, specifies the path for a relocatable schema
+ * @param parent 创建指针的付对象
+ * @return
+ */
+inline const QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
+    if (QGSettings::isSchemaInstalled(schema_id.toUtf8())) {
+        QGSettings *settings = new QGSettings(schema_id.toUtf8(), path, parent);
+        return settings;
+    }
+    qDebug() << "Cannot find gsettings, schema_id:" << schema_id;
+    return nullptr;
+}
+
+/**
+ * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
+ * @param module 传入QGSettings构造函数时，会添加"com.deepin.dde.dock.module."前缀
+ * @param path If non-empty, specifies the path for a relocatable schema
+ * @param parent 创建指针的付对象
+ * @return
+ */
+inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
+    return SettingsPtr("com.deepin.dde.dock.module." + module, path, parent);
+}
+
+/**
+ * @brief SettingValue 根据给定信息返回获取的值
+ * @param schema_id The id of the schema
+ * @param path If non-empty, specifies the path for a relocatable schema
+ * @param key 对应信息的key值
+ * @param fallback 如果找不到信息，返回此默认值
+ * @return
+ */
+inline const QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant()){
+    const QGSettings *settings = SettingsPtr(schema_id, path);
+    if (settings && settings->keys().contains(key)) {
+        QVariant v = settings->get(key);
+        delete settings;
+        return v;
+    } else{
+        qDebug() << "Cannot find gsettings, schema_id:" << schema_id
+                 << " path:" << path << " key:" << key
+                 << "Use fallback value:" << fallback;
+        return fallback;
+    }
 }
 
 inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
@@ -53,7 +96,7 @@ inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal dev
     return pixmap;
 }
 
-inline QScreen * screenAt(const QPoint &point) {
+inline QScreen *screenAt(const QPoint &point) {
     for (QScreen *screen : qApp->screens()) {
         const QRect r { screen->geometry() };
         const QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
@@ -66,7 +109,7 @@ inline QScreen * screenAt(const QPoint &point) {
 }
 
 //!!! 注意:这里传入的QPoint是未计算缩放的
-inline QScreen * screenAtByScaled(const QPoint &point) {
+inline QScreen *screenAtByScaled(const QPoint &point) {
     for (QScreen *screen : qApp->screens()) {
         const QRect r { screen->geometry() };
         QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };

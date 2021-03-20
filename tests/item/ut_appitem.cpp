@@ -25,11 +25,10 @@
 
 #include <gtest/gtest.h>
 
+#include "utils.h"
 #define private public
 #include "appitem.h"
 #undef private
-
-#include "mock/qgsettingsmock.h"
 
 using namespace ::testing;
 
@@ -50,16 +49,14 @@ void Test_AppItem::TearDown()
 
 TEST_F(Test_AppItem, coverage_test)
 {
-    QGSettingsMock mock;
+    const QGSettings *appSettings = Utils::ModuleSettingsPtr("app");
+    const QGSettings *activeSettings = Utils::ModuleSettingsPtr("activeapp");
+    const QGSettings *dockedSettings = Utils::ModuleSettingsPtr("dockapp");
 
-    ON_CALL(mock, type()).WillByDefault(Return(QGSettingsMock::Type::MockType));
-    ON_CALL(mock, keys()).WillByDefault(Return(QStringList() << "enable" << "control"));
-    ON_CALL(mock, get(_)) .WillByDefault(::testing::Invoke([](const QString& key){return true; }));
-
-    AppItem *appItem = new AppItem(&mock, &mock, &mock, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
+    AppItem *appItem = new AppItem(appSettings, activeSettings, dockedSettings, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
 
     // 触发信号测试
-//    emit appItem->m_refershIconTimer->start(10);
+    //    emit appItem->m_refershIconTimer->start(10);
     QTest::qWait(20);
 
     // FIXME: 测试不到？
@@ -97,12 +94,18 @@ TEST_F(Test_AppItem, coverage_test)
     QTest::mousePress(appItem, Qt::LeftButton, Qt::NoModifier);
     QTest::mouseRelease(appItem, Qt::LeftButton, Qt::NoModifier);
     QTest::qWait(400);
-//    QTest::mouseClick(appItem, Qt::MiddleButton, Qt::NoModifier);
-//    QTest::qWait(400);
-//    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier, QPoint(-1, -1));
-//    QTest::qWait(400);
-//    QTest::mouseMove(appItem, appItem->geometry().center());
+    //    QTest::mouseClick(appItem, Qt::MiddleButton, Qt::NoModifier);
+    //    QTest::qWait(400);
+    //    QTest::mouseClick(appItem, Qt::LeftButton, Qt::NoModifier, QPoint(-1, -1));
+    //    QTest::qWait(400);
+    //    QTest::mouseMove(appItem, appItem->geometry().center());
 
     delete appItem;
     appItem = nullptr;
+    delete appSettings;
+    appSettings = nullptr;
+    delete activeSettings;
+    activeSettings = nullptr;
+    delete dockedSettings;
+    dockedSettings = nullptr;
 }

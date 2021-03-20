@@ -22,7 +22,6 @@
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
-#include <QGSettings>
 #include <QApplication>
 
 #include <DApplication>

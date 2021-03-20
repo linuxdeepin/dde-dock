@@ -25,7 +25,6 @@
 #include <DDBusSender>
 
 #include <QJsonDocument>
-#include <QGSettings>
 #include <QFile>
 
 using namespace dde::network;

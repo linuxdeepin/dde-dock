@@ -39,7 +39,6 @@
 #include <QGuiApplication>
 #include <QX11Info>
 #include <qpa/qplatformwindow.h>
-#include <QGSettings>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>
@@ -523,8 +522,7 @@ void MainWindow::touchRequestResizeDock()
         return;
     }
 
-    QGSettings settings("com.deepin.dde.dock.touch", QByteArray(), this);
-    int resizeHeight = settings.get("resizeHeight").toInt();
+    int resizeHeight = Utils::SettingValue("com.deepin.dde.dock.touch", QByteArray(), "resizeHeight", 7).toInt();
 
     QRect touchRect;
     // 任务栏屏幕 内侧边线 内外resizeHeight距离矩形区域内长按可拖动任务栏高度

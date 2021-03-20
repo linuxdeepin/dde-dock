@@ -37,13 +37,12 @@
 #include "../widgets/tipswidget.h"
 #include "dockpopupwindow.h"
 
-class QGSettingsInterface;
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit AppDragWidget(QGSettingsInterface *interface, QWidget *parent = Q_NULLPTR);
+    explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
     virtual ~AppDragWidget() override;
 
     void setAppPixmap(const QPixmap &pix);
@@ -75,7 +74,6 @@ private:
     bool isRemoveItem();
 
 private:
-    QGSettingsInterface *m_qgInterface;
     AppGraphicsObject *m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;
