@@ -1,7 +1,6 @@
 usr/share
 usr/bin
 usr/lib/dde-dock/plugins/libdatetime.so
-usr/lib/dde-dock/plugins/libkeyboard-layout.so
 usr/lib/dde-dock/plugins/libshutdown.so
 usr/lib/dde-dock/plugins/libtrash.so
 usr/lib/dde-dock/plugins/libtray.so
@@ -10,4 +9,3 @@ usr/lib/dde-dock/plugins/system-trays
 usr/lib/dde-dock/plugins/libmultitasking.so
 usr/lib/dde-dock/plugins/libshow-desktop.so
 usr/share
-etc/dde-dock
