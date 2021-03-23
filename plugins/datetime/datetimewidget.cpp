@@ -50,6 +50,12 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
 
     connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DatetimeWidget::setShortDateFormat);
     connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DatetimeWidget::setShortTimeFormat);
+    //连接日期时间修改信号,更新日期时间插件的布局
+    connect(m_timedateInter, &Timedate::TimeUpdate, this, [ = ]{
+        if (isVisible()) {
+            emit requestUpdateGeometry();
+        }
+    });
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)
