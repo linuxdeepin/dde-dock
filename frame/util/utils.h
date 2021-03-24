@@ -58,6 +58,30 @@ inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArr
     return SettingsPtr("com.deepin.dde.dock.module." + module, path, parent);
 }
 
+/* convert 'some-key' to 'someKey' or 'SomeKey'.
+ * the second form is needed for appending to 'set' for 'setSomeKey'
+ */
+inline QString qtify_name(const char *name)
+{
+    bool next_cap = false;
+    QString result;
+
+    while (*name) {
+        if (*name == '-') {
+            next_cap = true;
+        } else if (next_cap) {
+            result.append(QChar(*name).toUpper().toLatin1());
+            next_cap = false;
+        } else {
+            result.append(*name);
+        }
+
+        name++;
+    }
+
+    return result;
+}
+
 /**
  * @brief SettingValue 根据给定信息返回获取的值
  * @param schema_id The id of the schema
@@ -68,7 +92,8 @@ inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArr
  */
 inline const QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant()){
     const QGSettings *settings = SettingsPtr(schema_id, path);
-    if (settings && settings->keys().contains(key)) {
+
+    if (settings && ((settings->keys().contains(key)) || settings->keys().contains(qtify_name(key.toUtf8().data())))) {
         QVariant v = settings->get(key);
         delete settings;
         return v;
