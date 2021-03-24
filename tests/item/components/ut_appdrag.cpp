@@ -51,6 +51,6 @@ TEST_F(Test_AppDrag, drag_test)
 
     drag->exec();
 
-    delete drag;
-    drag = nullptr;
+    delete w;
+    w = nullptr;
 }

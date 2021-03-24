@@ -183,11 +183,12 @@ void XEmbedTrayWidget::wrapWindow()
     }
 
     auto cookie = xcb_get_geometry(c, m_windowId);
-    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    if (clientGeom.isNull()) {
+    xcb_get_geometry_reply_t *clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (!clientGeom) {
         m_valid = false;
         return;
     }
+    free(clientGeom);
 
     //create a container window
     const auto ratio = devicePixelRatioF();
@@ -401,9 +402,10 @@ void XEmbedTrayWidget::refershIconImage()
     }
 
     auto cookie = xcb_get_geometry(c, m_windowId);
-    QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    if (geom.isNull())
+    xcb_get_geometry_reply_t *geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (!geom) {
         return;
+    }
 
     xcb_expose_event_t expose;
     expose.response_type = XCB_EXPOSE;
@@ -416,12 +418,16 @@ void XEmbedTrayWidget::refershIconImage()
     xcb_flush(c);
 
     xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
-    if (!image)
+    if (!image) {
+        free(geom);
         return;
+    }
 
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
-    if (qimage.isNull())
+    if (qimage.isNull()) {
+         free(geom);
         return;
+    }
 
     m_image = qimage.scaled(iconSize * ratio, iconSize * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_image.setDevicePixelRatio(ratio);

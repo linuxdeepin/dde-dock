@@ -5,7 +5,16 @@
 TestPlugin::TestPlugin()
     : m_sortKey(0)
     , m_type(Normal)
+    , m_widget(new QWidget)
 {
+}
+
+TestPlugin::~TestPlugin()
+{
+    if (m_widget) {
+        delete m_widget;
+        m_widget = nullptr;
+    }
 }
 
 const QString TestPlugin::pluginName() const
@@ -24,7 +33,7 @@ void TestPlugin::init(PluginProxyInterface *)
 
 QWidget *TestPlugin::itemWidget(const QString &)
 {
-    return new QWidget;
+    return m_widget;
 }
 
 int TestPlugin::itemSortKey(const QString &)

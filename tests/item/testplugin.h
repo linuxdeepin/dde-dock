@@ -3,12 +3,15 @@
 
 #include "pluginsiteminterface.h"
 
+#include <QPointer>
 const QString Name = "Test";
 
+class QWidget;
 class TestPlugin : public PluginsItemInterface
 {
 public:
     TestPlugin();
+    ~ TestPlugin() override;
 
     virtual const QString pluginName() const override;
     virtual const QString pluginDisplayName() const override;
@@ -25,6 +28,7 @@ public:
 private:
     int m_sortKey;
     PluginType m_type;
+    QPointer<QWidget> m_widget;
 };
 
 #endif // TESTPLUGIN_H

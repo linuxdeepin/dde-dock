@@ -47,7 +47,8 @@ void Test_FloatingPreview::TearDown()
 
 TEST_F(Test_FloatingPreview, view_test)
 {
-    FloatingPreview *view = new FloatingPreview(new QWidget);
+    QWidget *parent = new QWidget;
+    FloatingPreview *view = new FloatingPreview(parent);
     AppSnapshot *shot = new AppSnapshot(1000);
     view->trackWindow(shot);
 
@@ -68,7 +69,7 @@ TEST_F(Test_FloatingPreview, view_test)
     ASSERT_TRUE(view->m_titleBtn->text().isEmpty());
     ASSERT_EQ(view->trackedWindow(), shot);
 
-    delete view;
-    view = nullptr;
+    delete parent;
+    parent = nullptr;
 }
 

@@ -50,7 +50,6 @@ public:
 
 public:
     SNITrayWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
-    virtual ~SNITrayWidget() override;
 
     QString itemKeyForConfig() override;
     void setActive(const bool active) override;

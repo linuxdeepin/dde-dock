@@ -48,7 +48,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     , m_sniServicePath(sniServicePath)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_handleMouseReleaseTimer(new QTimer(this))
-    , m_tipsLabel(new TipsWidget)
+    , m_tipsLabel(new TipsWidget(this))
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
@@ -143,14 +143,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     });
 
     initSNIPropertys();
-}
-
-SNITrayWidget::~SNITrayWidget()
-{
-    if(m_tipsLabel != nullptr){
-        m_tipsLabel->deleteLater();
-        m_tipsLabel = nullptr;
-    }
 }
 
 QString SNITrayWidget::itemKeyForConfig()

@@ -96,6 +96,10 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size, cons
         layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
         calendar->setLayout(layout);
         pixmap = calendar->grab(calendar->rect());
+
+        delete calendar;
+        calendar = nullptr;
+
         if (pixmap.size().width() != s) {
             pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
