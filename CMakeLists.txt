@@ -28,7 +28,7 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 
     # generate qm
     execute_process(COMMAND bash "translate_generation.sh"
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DQT_DEBUG")
@@ -63,7 +63,7 @@ include_directories(
     frame/window
     frame/xcb
     frame/mockinterface
-)
+    )
 
 aux_source_directory(frame/controller CONTROLLER)
 aux_source_directory(frame/dbus DBUS)
@@ -89,7 +89,7 @@ file(GLOB SRC_PATH
     ${WINDOW}
     ${XCB}
     ${MOCKINTERFACE}
-)
+    )
 
 add_subdirectory("frame")
 add_subdirectory("plugins")
@@ -103,17 +103,21 @@ endif ()
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
-        DESTINATION share/dde-dock/translations)
+    DESTINATION share/dde-dock/translations)
 
 ## dev files
 install(FILES ${INTERFACES}
-        DESTINATION include/dde-dock)
+    DESTINATION include/dde-dock)
 
 install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
-        DESTINATION share/glib-2.0/schemas)
+    DESTINATION share/glib-2.0/schemas)
+
+# Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")

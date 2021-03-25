@@ -710,7 +710,7 @@ void AppItem::onGSettingsChanged(const QString &key)
             : m_activeAppSettings;
 
     if (setting && setting->keys().contains("enable")) {
-        const bool isEnable = !m_appSettings || m_appSettings->keys().contains("enable") && m_appSettings->get("enable").toBool();
+        const bool isEnable = !m_appSettings || (m_appSettings->keys().contains("enable") && m_appSettings->get("enable").toBool());
         setVisible(isEnable && setting->get("enable").toBool());
     }
 }
