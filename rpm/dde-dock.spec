@@ -30,6 +30,8 @@ BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  qt5-linguist
+BuildRequires:  gtest-devel
+BuildRequires:  gmock-devel
 Requires:       dbusmenu-qt5
 Requires:       dde-network-utils
 Requires:       dde-qt-dbus-factory
@@ -83,11 +85,8 @@ export PATH=%{_qt5_bindir}:$PATH
 
 %files
 %license LICENSE
-%{_sysconfdir}/%{name}/indicator/keybord_layout.json
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
-%{_datadir}/%{name}/
-%{_datadir}/dbus-1/services/*.service
 %{_datarootdir}/glib-2.0/schemas/com.deepin.dde.dock.module.gschema.xml
 %{_datarootdir}/polkit-1/actions/com.deepin.dde.dock.overlay.policy
 
