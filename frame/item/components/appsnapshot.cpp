@@ -200,7 +200,6 @@ void AppSnapshot::fetchSnapshot()
     m_snapshotSrcRect.moveLeft(m_snapshotSrcRect.left() * scale + 0.5);
     m_snapshotSrcRect.setWidth(size.width() - 0.5);
     m_snapshotSrcRect.setHeight(size.height() - 0.5);
-    m_snapshot.setDevicePixelRatio(ratio);
 
     if (image_data) shmdt(image_data);
     if (ximage) XDestroyImage(ximage);
