@@ -104,6 +104,7 @@ public:
 Q_SIGNALS:
     void geometryChanged() const;
     void enableChanged(bool enable) const;
+    void nameChanged(const QString &name) const;
 
 public Q_SLOTS:
     void setX(const int x);

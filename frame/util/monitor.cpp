@@ -80,6 +80,8 @@ void Monitor::setName(const QString &name)
 {
     qDebug() << "screen name change from :" << m_name << " to: " << name;
     m_name = name;
+
+    Q_EMIT nameChanged(m_name);
 }
 
 void Monitor::setPath(const QString &path)
