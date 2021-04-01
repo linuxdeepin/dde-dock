@@ -356,6 +356,8 @@ private slots:
     // gsetting配置改变响应槽
     void onConfigChange(const QString &changeKey);
 
+    Monitor *waitAndGetScreen(const QString& screenName);
+
 private:
     // 初始化数据信息
     void initMembers();

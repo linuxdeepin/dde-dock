@@ -277,10 +277,22 @@ void MultiScreenWorker::monitorAdded(const QString &path)
     // 这里有可能在使用Monitor中的数据时，但实际上Monitor数据还未准备好．以Monitor中的信号为准，不能以MonitorInter中信号为准，
     connect(mon, &Monitor::geometryChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
     connect(mon, &Monitor::enableChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
+    connect(mon, &Monitor::nameChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
     // NOTE: DO NOT using async dbus call. because we need to have a unique name to distinguish each monitor
     Q_ASSERT(inter->isValid());
     mon->setName(inter->name());
+
+#if 0 // 模拟屏幕名称中途发生变化的情况，测试任务栏是否还能正常显示
+    QTimer::singleShot(5000, this, [ = ]{
+        if (mon->name() == "VGA-0")
+            mon->setName(":0.0");
+    });
+    QTimer::singleShot(10000, this, [ = ]{
+        if (mon->name() == ":0.0")
+            mon->setName("VGA-0");
+    });
+#endif
 
     mon->setMonitorEnable(inter->enabled());
     mon->setPath(path);
@@ -356,6 +368,16 @@ void MultiScreenWorker::onWindowSizeChanged(uint value)
 
 void MultiScreenWorker::primaryScreenChanged()
 {
+    QString primaryName = m_displayInter->primary();
+    if (primaryName.isEmpty() && qApp->primaryScreen()->name().isEmpty()) {
+        qWarning() << "current primary screen:" << primaryName;
+        return;
+    }
+
+    // 后端数据不准确，使用qt获取的数据
+    if (primaryName.isEmpty())
+        primaryName = qApp->primaryScreen()->name();
+
     // 先更新主屏信息
     m_ds.updatePrimary(m_displayInter->primary());
     m_mtrInfo.setPrimary(m_displayInter->primary());
@@ -512,9 +534,8 @@ void MultiScreenWorker::onHideStateChanged()
     m_hideState = state;
 
     // 检查当前屏幕的当前位置是否允许显示,不允许需要更新显示信息(这里应该在函数外部就处理好,不应该走到这里)
-    Monitor *currentMonitor = monitorByName(m_mtrInfo.validMonitor(), m_ds.current());
+    Monitor *currentMonitor = waitAndGetScreen(m_ds.current());
     if (!currentMonitor) {
-        qWarning() << "cannot find monitor by name: " << m_ds.current();
         return;
     }
 
@@ -925,9 +946,9 @@ void MultiScreenWorker::onRequestDelayShowDock(const QString &screenName)
 
     m_ds.updateDockedScreen(screenName);
 
-    Monitor *currentMonitor = monitorByName(m_mtrInfo.validMonitor(), screenName);
+    // 检查当前屏幕的当前位置是否允许显示,不允许需要更新显示信息(这里应该在函数外部就处理好,不应该走到这里)
+    Monitor *currentMonitor = waitAndGetScreen(screenName);
     if (!currentMonitor) {
-        qWarning() << "cannot find monitor by name: " << screenName;
         return;
     }
 
@@ -985,6 +1006,8 @@ void MultiScreenWorker::initConnection()
      * 或去修改 qt-dbus-factory，取消 DBusExtendedAbstractInterface::internalPropGet 中将数据写入属性值，
      * 但是 qt-dbus-factory 修改涉及面较广，需要大量测试确认没有问题，再合入。
      */
+    connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+
 #if 0
     //    connect(m_dockInter, &DBusDock::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
     //    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
@@ -1363,15 +1386,19 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
         }
     }
 
-    if (primaryName.isEmpty()) {
+    if (primaryName.isEmpty() && qApp->primaryScreen()->name().isEmpty()) {
         qWarning() << "cannnot find primary screen, wait for 3s to update...";
         QTimer::singleShot(3000, this, &MultiScreenWorker::requestUpdateMonitorInfo);
         return QString();
     }
 
-    Monitor *primaryMonitor = monitorByName(m_mtrInfo.validMonitor(), primaryName);
+    if (primaryName.isEmpty()) {
+        primaryName = qApp->primaryScreen()->name();
+        m_ds.updatePrimary(primaryName);
+    }
+
+    Monitor *primaryMonitor = waitAndGetScreen(primaryName);
     if (!primaryMonitor) {
-        qWarning() << "cannot find monitor by name: " << primaryName;
         return QString();
     }
 
@@ -1393,9 +1420,8 @@ void MultiScreenWorker::resetDockScreen()
 {
     QList<Monitor *> monitorList = m_mtrInfo.validMonitor();
     if (monitorList.size() == 2) {
-        Monitor *primaryMonitor = monitorByName(m_mtrInfo.validMonitor(), m_ds.primary());
+        Monitor *primaryMonitor = waitAndGetScreen(m_ds.primary());
         if (!primaryMonitor) {
-            qWarning() << "cannot find monitor by name: " << m_ds.primary();
             return;
         }
         if (!primaryMonitor->dockPosition().docked(position())) {
@@ -1877,4 +1903,32 @@ void MultiScreenWorker::onConfigChange(const QString &changeKey)
         // 每次切换都更新一下屏幕显示的信息
         emit requestUpdateMonitorInfo();
     }
+}
+
+/**
+ * @brief MultiScreenWorker::wait_and_get_screen 阻塞性质的函数，用于查找屏幕信息，找不到会做等待
+ * @param screenName 找对screenName对应的指针，如果一直找不到，那么就是m_mtrInfo数据异常了，基本需要从Display服务中查询数据了
+ * @return
+ */
+Monitor *MultiScreenWorker::waitAndGetScreen(const QString& screenName)
+{
+    Monitor *currentMonitor = nullptr;
+    int tryNum =0;
+    do {
+        currentMonitor = monitorByName(m_mtrInfo.validMonitor(), screenName);
+        if (currentMonitor)
+            break;
+
+        tryNum ++;
+        qWarning() << "cannot find monitor by name: " << m_ds.current() << ", try " << tryNum << "times";
+
+        // 阻塞200ms，尝试等待数据正常
+        QThread::msleep(200);
+    } while (!currentMonitor && tryNum <= 30);  // 最多等待6秒，还是获取不到就绝对是数据异常了
+
+    if (!currentMonitor) {
+        qWarning() << "cannot find monitor by name: " << m_ds.current();
+    }
+
+    return currentMonitor;
 }
