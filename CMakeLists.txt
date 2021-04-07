@@ -51,44 +51,40 @@ file(GLOB INTERFACES "interfaces/*.h")
 #单元测试的CMakeLists和主程序的CMakeLists路径不同，编译单元测试时会提示找不到文件
 #因此设置搜索路径
 include_directories(
+    frame/accessible
     frame/controller
     frame/dbus
     frame/dbus/sni
     frame/item
     frame/item/components
     frame/item/resources
-    frame/panel
-    frame/qss
     frame/util
     frame/window
     frame/xcb
-    frame/mockinterface
+    ../widgets
+    ../interfaces
     )
-
+aux_source_directory(frame/accessible ACCESSIBLE)
 aux_source_directory(frame/controller CONTROLLER)
 aux_source_directory(frame/dbus DBUS)
 aux_source_directory(frame/dbus/sni SNI)
 aux_source_directory(frame/item ITEM)
 aux_source_directory(frame/item/components COMPONENTS)
 aux_source_directory(frame/item/resources RESOURCES)
-aux_source_directory(frame/panel PANEL)
-aux_source_directory(frame/qss QSSPATH)
 aux_source_directory(frame/util UTIL)
 aux_source_directory(frame/window WINDOW)
 aux_source_directory(frame/xcb XCB)
-aux_source_directory(frame/mockinterface MOCKINTERFACE)
 
 file(GLOB SRC_PATH
+    ${ACCESSIBLE}
     ${CONTROLLER}
     ${DBUS}
     ${SNI}
     ${ITEM}
     ${COMPONENTS}
-    ${PANEL}
     ${UTIL}
     ${WINDOW}
     ${XCB}
-    ${MOCKINTERFACE}
     )
 
 add_subdirectory("frame")

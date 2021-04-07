@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "window/mainwindow.h"
-#include "window/accessible.h"
-#include "dbus/dbusdockadaptors.h"
-#include "util/utils.h"
-#include "util/themeappicon.h"
-#include "controller/dockitemmanager.h"
-#include "util/dockapplication.h"
+#include "mainwindow.h"
+#include "accessible.h"
+#include "dbusdockadaptors.h"
+#include "utils.h"
+#include "themeappicon.h"
+#include "dockitemmanager.h"
+#include "dockapplication.h"
 
 #include <QAccessible>
 #include <QDir>

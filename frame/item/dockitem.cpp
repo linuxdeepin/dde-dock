@@ -20,7 +20,7 @@
  */
 
 #include "dockitem.h"
-#include "components/hoverhighlighteffect.h"
+#include "hoverhighlighteffect.h"
 #include "pluginsitem.h"
 
 #include <QMouseEvent>

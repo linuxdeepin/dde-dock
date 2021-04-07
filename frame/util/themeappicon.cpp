@@ -31,7 +31,7 @@
 #include <QLabel>
 #include <QDate>
 
-#include "../frame/util/imageutil.h"
+#include "imageutil.h"
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {

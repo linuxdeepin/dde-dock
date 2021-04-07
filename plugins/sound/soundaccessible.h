@@ -1,6 +1,6 @@
 #ifndef SOUNDACCESSIBLE_H
 #define SOUNDACCESSIBLE_H
-#include "../frame/window/accessibledefine.h"
+#include "accessibledefine.h"
 
 #include "sounditem.h"
 #include "soundapplet.h"
