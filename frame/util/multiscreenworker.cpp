@@ -81,7 +81,7 @@ void MultiScreenWorker::initShow()
     // 仅在初始化时调用一次
     static bool first = true;
     if (!first)
-       return;
+        return;
     first = false;
 
     //　这里是为了在调用时让MainWindow更新界面布局方向
@@ -405,8 +405,8 @@ void MultiScreenWorker::primaryScreenChanged()
         primaryName = qApp->primaryScreen()->name();
 
     // 先更新主屏信息
-    m_ds.updatePrimary(m_displayInter->primary());
-    m_mtrInfo.setPrimary(m_displayInter->primary());
+    m_ds.updatePrimary(primaryName);
+    m_mtrInfo.setPrimary(primaryName);
 
     const int screenRawHeight = m_displayInter->screenHeight();
     const int screenRawWidth = m_displayInter->screenWidth();
@@ -885,13 +885,6 @@ void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const P
 
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
 {
-    // 双屏，复制模式，两个屏幕的信息是一样的
-    if (m_mtrInfo.validMonitor().size() == 2
-            && m_mtrInfo.validMonitor().first()->rect() == m_mtrInfo.validMonitor().last()->rect()) {
-        qInfo() << "repeat screen";
-        return;
-    }
-
     m_monitorUpdateTimer->start();
 }
 
@@ -920,7 +913,9 @@ void MultiScreenWorker::updateMonitorDockedInfo()
         qFatal("shouldn't be here");
     }
 
-    qInfo() << "monitor info changed" << s1->rect() << s2->rect();
+    qInfo() << "monitor info changed"
+            << s1->name() << s1->rect()
+            << s2->name() << s2->rect();
 
     // 先重置
     s1->dockPosition().reset();
@@ -1044,6 +1039,8 @@ void MultiScreenWorker::initGSettingConfig()
 
 void MultiScreenWorker::initConnection()
 {
+    connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
+
     /** FIXME
      * 这里关联的信号有时候收不到是因为 qt-dbus-factory 中的 changed 的信号有时候会发不出来，
      * qt-dbus-factory 中的 DBusExtendedAbstractInterface::internalPropGet 在同步调用情况下，会将缓存中的数据写入属性中，
@@ -1052,8 +1049,6 @@ void MultiScreenWorker::initConnection()
      * 或去修改 qt-dbus-factory，取消 DBusExtendedAbstractInterface::internalPropGet 中将数据写入属性值，
      * 但是 qt-dbus-factory 修改涉及面较广，需要大量测试确认没有问题，再合入。
      */
-    connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-
 #if 0
     //    connect(m_dockInter, &DBusDock::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
     //    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
@@ -1439,7 +1434,7 @@ void MultiScreenWorker::updateDockScreenName(const QString &screenName)
 {
     Q_UNUSED(screenName);
 
-    m_ds.updateDockedScreen(getValidScreen(m_position));
+    m_ds.updateDockedScreen(screenName);
 
     qInfo() << "update dock screen: " << m_ds.current();
 }
@@ -1501,6 +1496,8 @@ void MultiScreenWorker::resetDockScreen()
         if (!primaryMonitor) {
             return;
         }
+
+        // 优先判断任务栏在主屏是否可以以现在的位置进行显示
         if (!primaryMonitor->dockPosition().docked(position())) {
             foreach (auto monitor, monitorList) {
                 if (monitor->name() != m_ds.current()
@@ -1509,6 +1506,8 @@ void MultiScreenWorker::resetDockScreen()
                     qInfo() << "update dock screen: " << monitor->name();
                 }
             }
+        } else {
+            m_ds.updateDockedScreen(m_ds.primary());
         }
     }
 
@@ -1579,10 +1578,10 @@ void MultiScreenWorker::checkDaemonDisplayService()
     auto connectionInit = [ = ](DisplayInter *displayInter) {
         connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::onMonitorListChanged);
         connect(displayInter, &DisplayInter::MonitorsChanged, this, &MultiScreenWorker::requestUpdateRegionMonitor);
-        connect(displayInter, &DisplayInter::PrimaryRectChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-        connect(displayInter, &DisplayInter::ScreenHeightChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-        connect(displayInter, &DisplayInter::ScreenWidthChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
-        connect(displayInter, &DisplayInter::PrimaryChanged, this, &MultiScreenWorker::primaryScreenChanged, Qt::QueuedConnection);
+        connect(displayInter, &DisplayInter::PrimaryRectChanged, this, &MultiScreenWorker::primaryScreenChanged);
+        connect(displayInter, &DisplayInter::ScreenHeightChanged, this, &MultiScreenWorker::primaryScreenChanged);
+        connect(displayInter, &DisplayInter::ScreenWidthChanged, this, &MultiScreenWorker::primaryScreenChanged);
+        connect(displayInter, &DisplayInter::PrimaryChanged, this, &MultiScreenWorker::primaryScreenChanged);
     };
 
     const QString serverName = "com.deepin.daemon.Display";
@@ -1951,10 +1950,6 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     }
     lastPos = QPoint(eventX, eventY);
 
-#ifdef QT_DEBUG
-    qDebug() << eventX << eventY << m_ds.current() << toScreen;
-#endif
-
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
         if (!m_delayWakeTimer->isActive()) {
@@ -2012,8 +2007,8 @@ Monitor *MultiScreenWorker::waitAndGetScreen(const QString& screenName)
         qWarning() << "cannot find monitor by name: " << m_ds.current() << ", try " << tryNum << "times";
 
         // 阻塞200ms，尝试等待数据正常
-        QThread::msleep(200);
-    } while (!currentMonitor && tryNum <= 30);  // 最多等待6秒，还是获取不到就绝对是数据异常了
+        QThread::msleep(500);
+    } while (!currentMonitor && tryNum < 12);  // 最多等待6秒，还是获取不到就绝对是数据异常了
 
     if (!currentMonitor) {
         qWarning() << "cannot find monitor by name: " << m_ds.current();
