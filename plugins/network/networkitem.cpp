@@ -10,6 +10,7 @@
 
 #include <QVBoxLayout>
 #include <QJsonDocument>
+#include <QGSettings>
 
 extern const int ItemWidth;
 extern const int ItemMargin;
@@ -46,6 +47,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_timeOut(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
+    , m_wirelessScanTimer(new QTimer(this))
 {
     m_timer->setInterval(100);
 
@@ -142,6 +144,21 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
+
+    QGSettings *gsetting = new QGSettings("com.deepin.dde.dock", QByteArray(), this);
+    connect(gsetting, &QGSettings::changed, [&](const QString &key) {
+        if (key == "wireless-scan-interval") {
+            m_wirelessScanTimer->setInterval(gsetting->get("wireless-scan-interval").toInt());
+        }
+    });
+    connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
+        for (auto wirelessItem : m_wirelessItems) {
+            if (wirelessItem) {
+                wirelessItem->requestWirelessScan();
+            }
+        }
+    });
+    m_wirelessScanTimer->start(gsetting->get("wireless-scan-interval").toInt() * 1000);
 }
 
 QWidget *NetworkItem::itemApplet()
