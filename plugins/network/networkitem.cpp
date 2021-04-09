@@ -48,6 +48,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
     , m_wirelessScanTimer(new QTimer(this))
+    , m_wirelessScanInterval(10)
 {
     m_timer->setInterval(100);
 
@@ -148,7 +149,8 @@ NetworkItem::NetworkItem(QWidget *parent)
     QGSettings *gsetting = new QGSettings("com.deepin.dde.dock", QByteArray(), this);
     connect(gsetting, &QGSettings::changed, [&](const QString &key) {
         if (key == "wireless-scan-interval") {
-            m_wirelessScanTimer->setInterval(gsetting->get("wireless-scan-interval").toInt());
+            m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
+            m_wirelessScanTimer->setInterval(m_wirelessScanInterval * 1000);
         }
     });
     connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
@@ -158,7 +160,7 @@ NetworkItem::NetworkItem(QWidget *parent)
             }
         }
     });
-    m_wirelessScanTimer->start(gsetting->get("wireless-scan-interval").toInt() * 1000);
+    m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
 }
 
 QWidget *NetworkItem::itemApplet()
@@ -1103,6 +1105,14 @@ void NetworkItem::updateView()
         centralWidget->setFixedHeight(contentHeight);
         m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight);
         m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+
+    if (m_wirelessControlPanel->isVisible()) {
+        if (!m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->start(m_wirelessScanInterval * 1000);
+    } else {
+        if (m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->stop();
     }
 }
 
