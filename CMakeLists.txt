@@ -55,6 +55,7 @@ include_directories(
     frame/controller
     frame/dbus
     frame/dbus/sni
+    frame/display
     frame/item
     frame/item/components
     frame/item/resources
@@ -68,6 +69,7 @@ aux_source_directory(frame/accessible ACCESSIBLE)
 aux_source_directory(frame/controller CONTROLLER)
 aux_source_directory(frame/dbus DBUS)
 aux_source_directory(frame/dbus/sni SNI)
+aux_source_directory(frame/display DISPLAY)
 aux_source_directory(frame/item ITEM)
 aux_source_directory(frame/item/components COMPONENTS)
 aux_source_directory(frame/item/resources RESOURCES)
@@ -80,6 +82,7 @@ file(GLOB SRC_PATH
     ${CONTROLLER}
     ${DBUS}
     ${SNI}
+    ${DISPLAY}
     ${ITEM}
     ${COMPONENTS}
     ${UTIL}

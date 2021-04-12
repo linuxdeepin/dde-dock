@@ -65,108 +65,6 @@ class MainWindow;
 class QGSettings;
 
 /**
- * @brief The MonitorInfo class
- * 保存显示器信息
- */
-class MonitorInfo : public QObject
-{
-    Q_OBJECT
-public:
-    explicit MonitorInfo() {}
-
-    /**
-     * @brief data
-     * @return 所有的显示器信息
-     */
-    inline QMap<Monitor *, MonitorInter *> data() {return m_monitorInfo;}
-
-    /**
-     * @brief validMonitor
-     * @return 返回一个列表，包含所有可用的显示器
-     */
-    const QList<Monitor *> validMonitor()
-    {
-        QList<Monitor *> list;
-        QMapIterator<Monitor *, MonitorInter *>it(m_monitorInfo);
-        while (it.hasNext()) {
-            it.next();
-            // 仅显示在主屏的情况下，可用屏幕信息只提供主屏幕(m_primary有可能不是主屏幕的名字，数据还没来得及切换过来)
-            // 问题场景：连接双屏，设置任务栏仅显示在主屏（gsettings），然后拔掉主屏幕显示器，任务栏崩溃
-            if (it.key()->enable()) {
-                if (m_showInPrimary) {
-                    if (it.key()->name() == m_primary) {
-                        list.clear();
-                        list.append(it.key());
-                        return list;
-                    }
-
-                    if (!list.isEmpty()) {
-                        list.removeAt(0);
-                        list.push_front(it.key());
-                    } else
-                        list << it.key();
-                } else
-                    list << it.key();
-            }
-        }
-
-        return list;
-    }
-    /**
-     * @brief insert 插入新的屏幕信息
-     * @param mon　插入的屏幕信息
-     * @param monInter　插入的屏幕对应的dbus指针
-     */
-    void insert(Monitor *mon, MonitorInter *monInter)
-    {
-        m_monitorInfo.insert(mon, monInter);
-
-        Q_EMIT monitorChanged();
-    }
-    /**
-     * @brief remove 删除显示其信息
-     * @param mon　待删除的数据
-     */
-    void remove(Monitor *mon)
-    {
-        m_monitorInfo.value(mon)->deleteLater();
-        m_monitorInfo.remove(mon);
-        mon->deleteLater();
-
-        Q_EMIT monitorChanged();
-    }
-    /**
-     * @brief setShowInPrimary  设置仅显示在主屏
-     * @param showIn
-     */
-    void setShowInPrimary(const bool &showIn)
-    {
-        if (m_showInPrimary != showIn)
-            m_showInPrimary = showIn;
-    }
-    /**
-     * @brief setPrimary 记录一下主屏信息
-     * @param primary
-     */
-    void setPrimary(const QString &primary)
-    {
-        if (m_primary != primary)
-            m_primary = primary;
-    }
-
-signals:
-    /**
-     * @brief monitorChanged 显示器信息发生变化
-     */
-    void monitorChanged();
-
-private:
-    QMap<Monitor *, MonitorInter *> m_monitorInfo;
-    QString m_primary;
-    bool m_showInPrimary = false;
-};
-
-/**
  * @brief The DockScreen class
  * 保存任务栏的屏幕信息
  */
@@ -258,18 +156,13 @@ signals:
 public slots:
     void onAutoHideChanged(bool autoHide);
     void updateDaemonDockSize(int dockSize);
-    void onDragStateChanged(bool draging);
+    void onRequestUpdateRegionMonitor();
     void handleDbusSignal(QDBusMessage);
 
 private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void onExtralRegionMonitorChanged(int x, int y, const QString &key);
-
-    // Display Monitor
-    void onMonitorListChanged(const QList<QDBusObjectPath> &mons);
-    void monitorAdded(const QString &path);
-    void monitorRemoved(const QString &path);
 
     // Animation
     void showAniFinished();
@@ -288,8 +181,6 @@ private slots:
     void onHideStateChanged();
     void onOpacityChanged(const double value);
 
-    void onRequestUpdateRegionMonitor();
-
     // 通知后端任务栏所在位置
     void onRequestUpdateFrontendGeometry();
 
@@ -298,26 +189,13 @@ private slots:
     void onRequestUpdateMonitorInfo();
     void onRequestDelayShowDock(const QString &screenName);
 
-    void updateMonitorDockedInfo();
-    /**
-     * @brief updatePrimaryDisplayRotation
-     * 更新主屏幕的方向
-     */
-    void updatePrimaryDisplayRotation();
-
     void onTouchPress(int type, int x, int y, const QString &key);
     void onTouchRelease(int type, int x, int y, const QString &key);
-
-    // gsetting配置改变响应槽
-    void onGSettingsChange(const QString &changeKey);
-
-    Monitor *waitAndGetScreen(const QString& screenName);
 
 private:
     MainWindow *parent();
     // 初始化数据信息
     void initMembers();
-    void initGSettingConfig();
     void initDBus();
     void initConnection();
     void initUI();
@@ -335,20 +213,14 @@ private:
     void resetDockScreen();
 
     void checkDaemonDockService();
-    void checkDaemonDisplayService();
     void checkXEventMonitorService();
 
     QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
 
-    Monitor *monitorByName(const QList<Monitor *> &list, const QString &screenName);
     QScreen *screenByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
-    bool onScreenEdge(const QPoint &point);
-    bool contains(const MonitRect &rect, const QPoint &pos);
-    bool contains(const QList<MonitRect> &rectList, const QPoint &pos);
     const QPoint rawXPosition(const QPoint &scaledPos);
-    void updateScreenSize();
 
 private:
     QWidget *m_parent;
@@ -361,17 +233,13 @@ private:
 
     // DBus interface
     DBusDock *m_dockInter;
-    DisplayInter *m_displayInter;
     DBusLuncher *m_launcherInter;
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
     QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
 
-    const QGSettings *m_gsettings;              // 多屏配置控制
-
     DockScreen m_ds;                            // 屏幕名称信息
-    MonitorInfo m_mtrInfo;                      // 显示器信息
 
     // 任务栏属性
     double m_opacity;
@@ -380,19 +248,13 @@ private:
     HideState m_hideState;
     DisplayMode m_displayMode;
 
-    int m_monitorRotation;                      //当前屏幕的方向
-    RotationList m_rotations;                   // 当前屏幕的所有方向,逆时针旋转（向下，向右，向上，向左）
-
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
-    int m_screenRawHeight;
-    int m_screenRawWidth;
     QString m_registerKey;
     QString m_extralRegisterKey;
     QString m_touchRegisterKey;                 // 触控屏唤起任务栏监控区域key
     bool m_showAniStart;                        // 动画显示过程正在执行标志
     bool m_hideAniStart;                        // 动画隐藏过程正在执行标志
     bool m_aniStart;                            // changeDockPosition是否正在运行中
-    bool m_draging;                             // 鼠标是否正在调整任务栏的宽度或高度
     bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
     bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
     bool m_touchPress;                          // 触屏按下

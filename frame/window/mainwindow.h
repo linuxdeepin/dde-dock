@@ -145,6 +145,7 @@ private:
     void moveEvent(QMoveEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
+    void initMember();
     void initSNIHost();
     void initComponents();
     void initConnections();
@@ -156,7 +157,7 @@ signals:
     void panelGeometryChanged();
 
 public slots:
-    void resetDragWindow();
+    void resetDragWindow(); // 任务栏调整高度或宽度后需调用此函数
 
 private slots:
     void compositeChanged();
@@ -164,7 +165,6 @@ private slots:
 
     void onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
     void onMainWindowSizeChanged(QPoint offset);
-    void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
     void touchRequestResizeDock();
 
@@ -184,6 +184,8 @@ private:
     bool m_launched;
     QString m_registerKey;
     QStringList m_registerKeys;
+
+    QTimer *m_updateDragAreaTimer;
 };
 
 #endif // MAINWINDOW_H

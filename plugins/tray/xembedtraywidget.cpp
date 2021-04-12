@@ -56,7 +56,7 @@ static QMap<QString, QMap<quint32, int>> AppWinidSuffixMap;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
-    QRect g = qApp->primaryScreen()->geometry();
+    QRect g = qApp->primaryScreen() ? qApp->primaryScreen()->geometry() : QRect();
     for (auto *screen : qApp->screens())
     {
         const QRect &sg = screen->geometry();

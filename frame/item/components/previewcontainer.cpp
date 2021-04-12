@@ -139,7 +139,7 @@ void PreviewContainer::adjustSize()
 
     if (composite) {
         // 3D
-        const QRect r = qApp->primaryScreen()->geometry();
+        const QRect r = qApp->primaryScreen() ? qApp->primaryScreen()->geometry() : QRect();
         const int padding = 20;
 
         const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;

@@ -52,6 +52,8 @@
 #define MAINWINDOW_MIN_SIZE       (40)
 #define DRAG_AREA_SIZE (5)
 
+#define DRAG_STATE_PROP "DRAG_STATE"
+
 using org::kde::StatusNotifierWatcher;
 using DBusDock = com::deepin::dde::daemon::Dock;
 
@@ -88,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_sniWatcher(new StatusNotifierWatcher(SNI_WATCHER_SERVICE, SNI_WATCHER_PATH, QDBusConnection::sessionBus(), this))
     , m_dragWidget(new DragWidget(this))
     , m_launched(false)
+    , m_updateDragAreaTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_X11DoNotAcceptFocus);
@@ -115,6 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_mainPanel->setDisplayMode(m_multiScreenWorker->displayMode());
 
+    initMember();
     initSNIHost();
     initComponents();
     initConnections();
@@ -241,10 +245,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent *e)
 void MainWindow::moveEvent(QMoveEvent *event)
 {
     Q_UNUSED(event);
+
+    if (!qApp->property(DRAG_STATE_PROP).toBool())
+        m_updateDragAreaTimer->start();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
+    if (!qApp->property(DRAG_STATE_PROP).toBool())
+        m_updateDragAreaTimer->start();
+
     // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
     Q_EMIT panelGeometryChanged();
 
@@ -257,6 +267,12 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);
+}
+
+void MainWindow::initMember()
+{
+    m_updateDragAreaTimer->setInterval(100);
+    m_updateDragAreaTimer->setSingleShot(true);
 }
 
 void MainWindow::initSNIHost()
@@ -310,11 +326,17 @@ void MainWindow::initConnections()
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
 
-    connect(m_dragWidget, &DragWidget::dragPointOffset, m_multiScreenWorker, [ = ] {m_multiScreenWorker->onDragStateChanged(true);});
-    connect(m_dragWidget, &DragWidget::dragFinished, m_multiScreenWorker, [ = ] {m_multiScreenWorker->onDragStateChanged(false);});
+    // -拖拽任务栏改变高度或宽度-------------------------------------------------------------------------------
+    connect(m_updateDragAreaTimer, &QTimer::timeout, this, &MainWindow::resetDragWindow);
+    connect(m_updateDragAreaTimer, &QTimer::timeout, m_multiScreenWorker, &MultiScreenWorker::onRequestUpdateRegionMonitor);
+
+
+    connect(m_dragWidget, &DragWidget::dragPointOffset, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, true); });
+    connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, false); });
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
-    connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::onDragFinished);
+    connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::resetDragWindow);   //　更新拖拽区域
+    // ----------------------------------------------------------------------------------------------------
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::themeTypeChanged);
 
@@ -324,9 +346,6 @@ void MainWindow::initConnections()
     connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanegd, this, &MainWindow::adjustShadowMask, Qt::QueuedConnection);
 
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDockEntry, DockItemManager::instance(), &DockItemManager::requestUpdateDockItem);
-
-    //　更新拖拽区域
-    connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDragArea, this, &MainWindow::resetDragWindow);
 
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
@@ -463,40 +482,34 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         newRect.setWidth(rect.width());
         newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset.y(), MAINWINDOW_MAX_SIZE));
     }
-    break;
+        break;
     case Bottom: {
         newRect.setX(rect.x());
         newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
         newRect.setWidth(rect.width());
         newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() - offset.y(), MAINWINDOW_MAX_SIZE));
     }
-    break;
+        break;
     case Left: {
         newRect.setX(rect.x());
         newRect.setY(rect.y());
         newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() + offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
     }
-    break;
+        break;
     case Right: {
         newRect.setX(rect.x() + rect.width() - qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setY(rect.y());
         newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset.x(), MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
     }
-    break;
+        break;
     }
 
     // 更新界面大小
     m_mainPanel->setFixedSize(newRect.size());
     setFixedSize(newRect.size());
     move(newRect.topLeft());
-}
-
-void MainWindow::onDragFinished()
-{
-    qDebug() << "drag finished";
-    resetDragWindow();
 }
 
 void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
@@ -569,19 +582,19 @@ void MainWindow::sendNotifications()
     hints["x-deepin-action-reload"] = QString("dbus-send,--session,--dest=com.deepin.dde.Dock,--print-reply,/com/deepin/dde/Dock,com.deepin.dde.Dock.ReloadPlugins");
     QTimer::singleShot(0, this, [=] {
         DDBusSender()
-            .service("com.deepin.dde.Notification")
-            .path("/com/deepin/dde/Notification")
-            .interface("com.deepin.dde.Notification")
-            .method(QString("Notify"))
-            .arg(QString("dde-control-center"))                                            // appname
-            .arg(static_cast<uint>(0))                                                     // id
-            .arg(QString("preferences-system"))                                            // icon
-            .arg(QString(tr("Dock - Safe Mode")))                                          // summary
-            .arg(QString(tr("The Dock is in safe mode, please exit to show it properly"))) // content
-            .arg(actionButton)                                                             // actions
-            .arg(hints)                                                                    // hints
-            .arg(15000)                                                                    // timeout
-            .call();
+                .service("com.deepin.dde.Notification")
+                .path("/com/deepin/dde/Notification")
+                .interface("com.deepin.dde.Notification")
+                .method(QString("Notify"))
+                .arg(QString("dde-control-center"))                                            // appname
+                .arg(static_cast<uint>(0))                                                     // id
+                .arg(QString("preferences-system"))                                            // icon
+                .arg(QString(tr("Dock - Safe Mode")))                                          // summary
+                .arg(QString(tr("The Dock is in safe mode, please exit to show it properly"))) // content
+                .arg(actionButton)                                                             // actions
+                .arg(hints)                                                                    // hints
+                .arg(15000)                                                                    // timeout
+                .call();
     });
 }
 
