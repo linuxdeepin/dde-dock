@@ -164,6 +164,7 @@ void DisplayManager::updateScreenDockInfo()
                 m_screenPositionMap.insert(s, map);
             }
         }
+        return;
     }
 
     if (m_screens.size() == 1) {
