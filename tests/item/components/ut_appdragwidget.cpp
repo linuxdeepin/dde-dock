@@ -42,7 +42,7 @@ void Test_AppDragWidget::TearDown()
 {
 }
 
-TEST_F(Test_AppDragWidget, cuntion_test)
+TEST_F(Test_AppDragWidget, funtion_test)
 {
     AppDragWidget *dragWidget = new AppDragWidget;
 

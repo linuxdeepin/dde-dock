@@ -66,8 +66,8 @@ TEST_F(Test_MainWindow, coverage_test)
     m_window->callShow();
     QTest::qWait(450);
 
-//    m_window->relaodPlugins();
-//    QTest::qWait(100);
+    //TODO 这里无论输入什么，均返回true
+    //    ASSERT_FALSE(m_window->appIsOnDock("testname"));
 
     QEvent enterEvent(QEvent::Enter);
     qApp->sendEvent(m_window, &enterEvent);
@@ -82,10 +82,4 @@ TEST_F(Test_MainWindow, coverage_test)
     qApp->sendEvent(m_window->m_dragWidget, &dragLeaveEvent);
     QTest::qWait(10);
     ASSERT_EQ(QApplication::overrideCursor()->shape(), Qt::ArrowCursor);
-
-//    QTest::mouseClick(m_window, Qt::RightButton, Qt::NoModifier, QPoint(100 ,10));
-//    QTest::qWait(10);
-
-//    QTest::mouseClick(m_window, Qt::LeftButton, Qt::NoModifier, QPoint(0 ,0));
-//    QTest::qWait(10);
 }
