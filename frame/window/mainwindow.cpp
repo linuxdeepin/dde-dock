@@ -144,6 +144,10 @@ MainWindow::~MainWindow()
 
 }
 
+/**
+ * @brief MainWindow::launch
+ * 任务栏初次启动时调用此方法，里面是做了一些初始化操作
+ */
 void MainWindow::launch()
 {
     if (!qApp->property("CANSHOW").toBool())
@@ -156,6 +160,13 @@ void MainWindow::launch()
     m_shadowMaskOptimizeTimer->start();
 }
 
+/**
+ * @brief MainWindow::callShow
+ * 此方法是被外部进程通过DBus调用的。
+ * @note 当任务栏以-r参数启动时，其不会显示界面，需要在外部通过DBus调用此接口之后才会显示界面，
+ * 这里是以前为了优化任务栏的启动速度做的处理，当任务栏启动时，此时窗管进程可能还未启动完全，
+ * 部分设置未初始化完等，导致任务栏显示的界面异常，所以留下此接口，被startdde延后调用
+ */
 void MainWindow::callShow()
 {
     static bool flag = false;
@@ -175,6 +186,10 @@ void MainWindow::callShow()
     });
 }
 
+/**
+ * @brief MainWindow::relaodPlugins
+ * 需要重新加载插件时，此接口会被调用，目前是用于任务栏的安全模式退出时调用
+ */
 void MainWindow::relaodPlugins()
 {
     if (qApp->property("PLUGINSLOADED").toBool()) {
@@ -362,11 +377,18 @@ void MainWindow::initConnections()
     });
 }
 
+/**
+ * @brief MainWindow::getTrayVisableItemCount
+ * 重新获取以下当前托盘区域有多少个可见的图标，并更新图标的大小
+ */
 void MainWindow::getTrayVisableItemCount()
 {
     m_mainPanel->getTrayVisableItemCount();
 }
 
+/**
+ * @brief MainWindow::adjustShadowMask 更新任务栏的圆角大小（时尚模式下才有圆角效果）
+ */
 void MainWindow::adjustShadowMask()
 {
     if (!m_launched || m_shadowMaskOptimizeTimer->isActive())
@@ -397,6 +419,10 @@ void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldO
     }
 }
 
+/**
+ * @brief MainWindow::setEffectEnabled
+ * @param enabled 根据当前系统是否enabled特效来更新任务栏的外观样式
+ */
 void MainWindow::setEffectEnabled(const bool enabled)
 {
     setMaskColor(AutoColor);
@@ -406,16 +432,29 @@ void MainWindow::setEffectEnabled(const bool enabled)
     m_platformWindowHandle.setBorderWidth(enabled ? 1 : 0);
 }
 
+/**
+ * @brief MainWindow::setComposite
+ * @param hasComposite 系统是否支持混成（也就是特效）
+ */
 void MainWindow::setComposite(const bool hasComposite)
 {
     setEffectEnabled(hasComposite);
 }
 
+/**
+ * @brief MainWindow::appIsOnDock 判断应用是否驻留在任务栏上
+ * @param appDesktop 应用的desktop文件的完整路径
+ * @return true: 驻留；false:未驻留
+ */
 bool MainWindow::appIsOnDock(const QString &appDesktop)
 {
     return DockItemManager::instance()->appIsOnDock(appDesktop);
 }
 
+/**
+ * @brief MainWindow::resetDragWindow 更新任务栏的拖拽区域
+ * @note 任务栏远离屏幕的一边是支持拖拽的，由一个不可见的widget提拽支持，当任务栏的geometry发生变化的时候，此拖拽区域也需要更新其自身的geometry
+ */
 void MainWindow::resetDragWindow()
 {
     switch (m_multiScreenWorker->position()) {
@@ -468,6 +507,10 @@ void MainWindow::resetDragWindow()
     }
 }
 
+/**
+ * @brief MainWindow::onMainWindowSizeChanged 任务栏拖拽过程中会不听调用此方法更新自身大小
+ * @param offset 拖拽时的坐标偏移量
+ */
 void MainWindow::onMainWindowSizeChanged(QPoint offset)
 {
     const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
@@ -512,6 +555,10 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
     move(newRect.topLeft());
 }
 
+/**
+ * @brief MainWindow::themeTypeChanged 系统主题发生变化时，此方法被调用
+ * @param themeType 当前系统主题
+ */
 void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     if (m_wmHelper->hasComposite()) {
@@ -522,6 +569,9 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     }
 }
 
+/**
+ * @brief MainWindow::touchRequestResizeDock 触屏情况用手指调整任务栏高度或宽度
+ */
 void MainWindow::touchRequestResizeDock()
 {
     const QPoint touchPos(QCursor::pos());
@@ -562,6 +612,10 @@ void MainWindow::touchRequestResizeDock()
                                                   , Qt::NoModifier, Qt::MouseEventSynthesizedByApplication));
 }
 
+/**
+ * @brief MainWindow::setGeometry
+ * @param rect 设置任务栏的位置和大小，重写此函数时为了及时发出panelGeometryChanged信号，最终供外部DBus调用方使用
+ */
 void MainWindow::setGeometry(const QRect &rect)
 {
     if (rect == this->geometry()) {

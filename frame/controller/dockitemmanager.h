@@ -33,6 +33,10 @@
 #include <QObject>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
+/**
+ * @brief The DockItemManager class
+ * 管理类，管理所有的应用数据，插件数据
+ */
 class DockItemManager : public QObject
 {
     Q_OBJECT

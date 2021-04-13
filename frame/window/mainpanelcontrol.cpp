@@ -144,6 +144,10 @@ void MainPanelControl::initUi()
     m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
 }
 
+/**
+ * @brief MainPanelControl::setDisplayMode 根据任务栏显示模式更新界面显示，如果是时尚模式，没有‘显示桌面'区域，否则就有
+ * @param dislayMode 任务栏显示模式
+ */
 void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
 {
     if (dislayMode == m_dislayMode)
@@ -275,6 +279,10 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     moveAppSonWidget();
 }
 
+/**
+ * @brief setPositonValue 根据传入的位置更新界面布局，比如任务栏在左，布局应该是上下布局，任务栏在下，应该是左右布局
+ * @param position 任务栏的位置
+ */
 void MainPanelControl::setPositonValue(Dock::Position position)
 {
     if (m_position == position)
@@ -340,10 +348,10 @@ void MainPanelControl::removeItem(DockItem *item)
     resizeDockIcon();
 }
 
-MainPanelDelegate *MainPanelControl::delegate() const
-{
-    return m_delegate;
-}
+//MainPanelDelegate *MainPanelControl::delegate() const
+//{
+//    return m_delegate;
+//}
 
 void MainPanelControl::setDelegate(MainPanelDelegate *delegate)
 {

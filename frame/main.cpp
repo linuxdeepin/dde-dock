@@ -57,6 +57,10 @@ const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::Conf
 
 using namespace std;
 
+/**
+ * @brief IsSaveMode
+ * @return 判断当前是否应该进入安全模式（安全模式下不加载插件）
+ */
 bool IsSaveMode()
 {
     QSettings settings(g_cfgPath, QSettings::IniFormat);
@@ -73,6 +77,10 @@ bool IsSaveMode()
     return false;
 }
 
+/**
+ * @brief sig_crash
+ * @return 当应用收到对应的退出信号时，会调用此函数，用于保存一下应用崩溃时间，崩溃次数，用以判断是否应该进入安全模式，见IsSaveMode()
+ */
 [[noreturn]] void sig_crash(int sig)
 {
     QDir dir(QStandardPaths::standardLocations(QStandardPaths::CacheLocation)[0]);
@@ -181,6 +189,7 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
 
+    // 自动化标记由此开始
     QAccessible::installFactory(accessibleFactory);
 
     // load dde-network-utils translator
@@ -211,6 +220,7 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
+    // 注册任务栏的DBus服务
     MainWindow mw;
     DBusDockAdaptors adaptor(&mw);
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");

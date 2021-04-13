@@ -67,7 +67,7 @@ public:
     void getTrayVisableItemCount();
     void updatePluginsLayout();
 
-    MainPanelDelegate *delegate() const;
+//    MainPanelDelegate *delegate() const;
     void setDelegate(MainPanelDelegate *delegate);
 
 public slots:

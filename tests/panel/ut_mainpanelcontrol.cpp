@@ -88,6 +88,6 @@ TEST_F(Test_MainPanelControl, cover_test)
     mainPanel->removeAppAreaItem(new QWidget);
     mainPanel->removeTrayAreaItem(new QWidget);
     mainPanel->updateAppAreaSonWidgetSize();
-    mainPanel->setDelegate(mainPanel->delegate());
+//    mainPanel->setDelegate(mainPanel->delegate());
     mainPanel->checkNeedShowDesktop();
 }
