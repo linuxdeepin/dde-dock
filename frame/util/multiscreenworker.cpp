@@ -773,6 +773,9 @@ void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const P
 
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
 {
+    // 只需要在屏幕信息变化的时候更新，其他时间不需要更新
+    onRequestUpdateRegionMonitor();
+
     m_monitorUpdateTimer->start();
 }
 
@@ -880,9 +883,9 @@ void MultiScreenWorker::initConnection()
         // 更新所在屏幕
         resetDockScreen();
         // 通知后端
-        emit requestUpdateFrontendGeometry();
+        onRequestUpdateFrontendGeometry();
         // 通知窗管
-        emit requestNotifyWindowManager();
+        onRequestNotifyWindowManager();
     });
 }
 

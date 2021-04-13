@@ -344,6 +344,7 @@ void MainWindow::initConnections()
 
     // -拖拽任务栏改变高度或宽度-------------------------------------------------------------------------------
     connect(m_updateDragAreaTimer, &QTimer::timeout, this, &MainWindow::resetDragWindow);
+    //TODO 后端考虑删除这块，目前还不能删除，调整任务栏高度的时候，任务栏外部区域有变化
     connect(m_updateDragAreaTimer, &QTimer::timeout, m_multiScreenWorker, &MultiScreenWorker::onRequestUpdateRegionMonitor);
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, true); });
