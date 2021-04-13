@@ -286,7 +286,8 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 
 void MainWindow::initMember()
 {
-    m_updateDragAreaTimer->setInterval(100);
+    //INFO 这里要大于动画的300ms，否则可能动画过程中这个定时器就被触发了
+    m_updateDragAreaTimer->setInterval(500);
     m_updateDragAreaTimer->setSingleShot(true);
 }
 
@@ -344,7 +345,6 @@ void MainWindow::initConnections()
     // -拖拽任务栏改变高度或宽度-------------------------------------------------------------------------------
     connect(m_updateDragAreaTimer, &QTimer::timeout, this, &MainWindow::resetDragWindow);
     connect(m_updateDragAreaTimer, &QTimer::timeout, m_multiScreenWorker, &MultiScreenWorker::onRequestUpdateRegionMonitor);
-
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, true); });
     connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, false); });
