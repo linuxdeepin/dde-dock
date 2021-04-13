@@ -35,7 +35,11 @@ DisplayManager::DisplayManager(QObject *parent)
     , m_onlyInPrimary(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool())
 {
     connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::primaryScreenChanged);
-    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &DisplayManager::screenCountChanged);
+    connect(qApp, &QGuiApplication::screenAdded, this, &DisplayManager::screenCountChanged);
+    connect(qApp, &QGuiApplication::screenRemoved, this, &DisplayManager::screenCountChanged);
+    //Note: 如果只关联QDesktopWidget::screenCountChanged信号，反复插拔显示器，概率性崩溃，是因为m_screens里面的指针部分还没来得及remove就被销毁了，导致野指针
+    // screenCountChanged信号不是立刻发送的，源码里面可以看到所在函数是队列连接的形式，即通过qApp->screens()拿到的的数据已经变了，这个信号仍然未发送
+    //    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &DisplayManager::screenCountChanged);
     connect(m_delayTimer, &QTimer::timeout, this, [ = ] {
         updateScreenDockInfo();
 
@@ -251,6 +255,7 @@ void DisplayManager::updateScreenDockInfo()
  */
 void DisplayManager::screenCountChanged()
 {
+    qDebug() << __FUNCTION__;
     // 找到过期的screen指针
     QList<QScreen *> to_remove_list;
     for (auto s : m_screens) {
@@ -286,6 +291,8 @@ void DisplayManager::screenCountChanged()
 
         m_screens.append(s);
     }
+
+    qDebug() << "屏幕数量" << m_screens.count();
 
     // 屏幕数量发生变化，应该刷新一下任务栏的显示
     m_delayTimer->start();
