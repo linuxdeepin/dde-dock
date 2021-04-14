@@ -1133,14 +1133,9 @@ void NetworkItem::updateMasterControlSwitch()
     m_switchWiredBtn->blockSignals(false);
     /* 根据有线适配器启用状态增/删布局中的组件 */
     for (WiredItem *wiredItem : m_wiredItems) {
-        if (!wiredItem) {
+        if (!wiredItem)
             continue;
-        }
-        if (m_switchWiredBtnState) {
-            m_wiredLayout->addWidget(wiredItem->itemApplet());
-        } else {
-            m_wiredLayout->removeWidget(wiredItem->itemApplet());
-        }
+
         // wiredItem->itemApplet()->setVisible(m_switchWiredBtnState); // TODO
         wiredItem->setVisible(m_switchWiredBtnState);
     }
@@ -1158,9 +1153,9 @@ void NetworkItem::updateMasterControlSwitch()
     m_switchWirelessBtn->blockSignals(false);
     /* 根据无线适配器启用状态增/删布局中的组件 */
     for (WirelessItem *wirelessItem : m_wirelessItems) {
-        if (!wirelessItem) {
+        if (!wirelessItem)
             continue;
-        }
+
         if (m_switchWirelessBtnState) {
             m_wirelessLayout->addWidget(wirelessItem->itemApplet());
         } else {

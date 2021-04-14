@@ -255,7 +255,6 @@ void DisplayManager::updateScreenDockInfo()
  */
 void DisplayManager::screenCountChanged()
 {
-    qDebug() << __FUNCTION__;
     // 找到过期的screen指针
     QList<QScreen *> to_remove_list;
     for (auto s : m_screens) {
@@ -291,8 +290,6 @@ void DisplayManager::screenCountChanged()
 
         m_screens.append(s);
     }
-
-    qDebug() << "屏幕数量" << m_screens.count();
 
     // 屏幕数量发生变化，应该刷新一下任务栏的显示
     m_delayTimer->start();
