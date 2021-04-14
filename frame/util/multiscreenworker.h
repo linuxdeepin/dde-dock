@@ -115,12 +115,29 @@ public:
         Hide
     };
 
+    enum RunState {
+        ShowAnimationStart = 0x1,           // 单次显示动画正在运行状态
+        HideAnimationStart = 0x2,           // 单次隐藏动画正在运行状态
+        ChangePositionAnimationStart = 0x4, // 任务栏切换位置动画运行状态
+        AutoHide = 0x8,                     // 和MenuWorker保持一致,未设置此state时表示菜单已经打开
+        MousePress = 0x10,                  // 当前鼠标是否被按下
+        TouchPress = 0x20,                  // 当前触摸屏下是否按下
+
+        // 如果要添加新的状态，可以在上面添加
+        RunState_Mask = 0xffffffff,
+    };
+
+     Q_DECLARE_FLAGS(RunStates, RunState)
+
     MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
     ~MultiScreenWorker();
 
     void initShow();
 
     DBusDock *dockInter() { return m_dockInter; }
+
+    inline bool testState(RunState state) { return (m_state & state); }
+    void setStates(RunStates state, bool on = true);
 
     inline const QString &lastScreen() { return m_ds.last(); }
     inline const QString &deskScreen() { return m_ds.current(); }
@@ -252,17 +269,12 @@ private:
     QString m_registerKey;
     QString m_extralRegisterKey;
     QString m_touchRegisterKey;                 // 触控屏唤起任务栏监控区域key
-    bool m_showAniStart;                        // 动画显示过程正在执行标志
-    bool m_hideAniStart;                        // 动画隐藏过程正在执行标志
-    bool m_aniStart;                            // changeDockPosition是否正在运行中
-    bool m_autoHide;                            // 和MenuWorker保持一致,为false时表示菜单已经打开
-    bool m_btnPress;                            // 鼠标按下时移动到唤醒区域不应该响应唤醒
-    bool m_touchPress;                          // 触屏按下
     QPoint m_touchPos;                          // 触屏按下坐标
     QList<MonitRect> m_monitorRectList;         // 监听唤起任务栏区域
     QList<MonitRect> m_extralRectList;          // 任务栏外部区域,随m_monitorRectList一起更新
     QList<MonitRect> m_touchRectList;           // 监听触屏唤起任务栏区域
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
+    RunStates m_state;
     /*****************************************************************/
 };
 

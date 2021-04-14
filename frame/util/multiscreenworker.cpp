@@ -51,11 +51,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
     , m_ds(DisplayManager::instance()->primary())
-    , m_showAniStart(false)
-    , m_hideAniStart(false)
-    , m_aniStart(false)
-    , m_autoHide(true)
-    , m_btnPress(false)
+    , m_state(AutoHide)
 {
     qInfo() << "init dock screen: " << m_ds.current();
 
@@ -98,6 +94,21 @@ void MultiScreenWorker::initShow()
         else if (m_hideState == HideState::Hide)
             displayAnimation(m_ds.current(), AniAction::Hide);
     }
+}
+
+/**
+ * @brief MultiScreenWorker::setStates 用于存储一些状态
+ * @param state 标识是哪一种状态，后面有需求可以扩充
+ * @param on 设置状态为true或false
+ */
+void MultiScreenWorker::setStates(RunStates state, bool on)
+{
+    RunState type = static_cast<RunState>(int(state & RunState::RunState_Mask));
+
+    if (on)
+        m_state |= type;
+    else
+        m_state &= ~(type);
 }
 
 /**
@@ -144,10 +155,10 @@ QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const P
 
 void MultiScreenWorker::onAutoHideChanged(bool autoHide)
 {
-    if (m_autoHide != autoHide) {
-        m_autoHide = autoHide;
-    }
-    if (m_autoHide) {
+    if (testState(AutoHide) != autoHide)
+        setStates(AutoHide, autoHide);
+
+    if (testState(AutoHide)) {
         /**
          * 当任务栏由一直隐藏模式切换至一直显示模式时，由于信号先调用的这里，再调用的DBus服务去修改m_hideMode的值，
          * 导致这里走的是KeepHidden，任务栏表现为直接隐藏了，而不是一直显示。
@@ -215,7 +226,7 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
 
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-    if (m_registerKey != key || m_btnPress)
+    if (m_registerKey != key || testState(MousePress))
         return;
 
     tryToShowDock(x, y);
@@ -325,7 +336,7 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Positi
 
 void MultiScreenWorker::updateParentGeometry(const QVariant &value)
 {
-    if (!m_showAniStart && !m_hideAniStart)
+    if (!testState(ShowAnimationStart) && !testState(HideAnimationStart))
         return;
 
     updateParentGeometry(value, m_position);
@@ -956,7 +967,10 @@ void MultiScreenWorker::reInitDisplayData()
  */
 void MultiScreenWorker::displayAnimation(const QString &screen, const Position &pos, AniAction act)
 {
-    if (!m_autoHide || qApp->property("DRAG_STATE").toBool() || m_aniStart || m_hideAniStart || m_showAniStart)
+    if (!testState(AutoHide) || qApp->property("DRAG_STATE").toBool()
+            || testState(ChangePositionAnimationStart)
+            || testState(HideAnimationStart)
+            || testState(ShowAnimationStart))
         return;
 
     QRect mainwindowRect = parent()->geometry();
@@ -1035,18 +1049,18 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
         switch (act) {
         case AniAction::Show:
             if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                m_showAniStart = true;
+                setStates(ShowAnimationStart);
             }
             if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                m_showAniStart = false;
+                setStates(ShowAnimationStart, false);
             }
             break;
         case AniAction::Hide:
             if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                m_hideAniStart = true;
+                setStates(HideAnimationStart);
             }
             if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                m_hideAniStart = false;
+                setStates(HideAnimationStart, false);
             }
             break;
         default:
@@ -1174,7 +1188,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
         });
 
     connect(group, &QVariantAnimation::finished, this, [ = ] {
-        m_aniStart = false;
+        setStates(ChangePositionAnimationStart, false);
 
         // 结束之后需要根据确定需要再隐藏
         emit showAniFinished();
@@ -1182,7 +1196,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
         emit requestNotifyWindowManager();
     });
 
-    m_aniStart = true;
+    setStates(ChangePositionAnimationStart);
 
     group->start(QVariantAnimation::DeleteWhenStopped);
 }
@@ -1297,13 +1311,13 @@ void MultiScreenWorker::checkXEventMonitorService()
 {
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
         connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
-        connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] {m_btnPress = true;});
-        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {m_btnPress = false;});
+        connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
+        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] { setStates(MousePress, false); });
 
         connect(extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
 
         // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
-        connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {m_touchPress = false;});
+        connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] { setStates(TouchPress, false); });
         connect(touchEventInter, &XEventMonitor::ButtonPress, this, &MultiScreenWorker::onTouchPress);
         connect(touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
     };
@@ -1478,7 +1492,7 @@ void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)
         return;
     }
 
-    m_touchPress = true;
+    setStates(TouchPress);
     m_touchPos = QPoint(x, y);
 }
 
@@ -1489,10 +1503,10 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
         return;
     }
 
-    if (!m_touchPress) {
+    if (!testState(TouchPress)) {
         return;
     }
-    m_touchPress = false;
+    setStates(TouchPress, false);
 
     // 不从指定方向划入，不进行任务栏唤醒；如当任务栏在下，需从下往上划
     switch (m_position) {
@@ -1528,7 +1542,7 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
  */
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
-    if ( qApp->property("DRAG_STATE").toBool() || m_aniStart) {
+    if ( qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
         qWarning() << "dock is draging or animation is running";
         return;
     }
@@ -1572,7 +1586,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
             return;
         }
 
-        if (m_showAniStart) {
+        if (testState(ShowAnimationStart)) {
             qDebug() << "animation is running";
             return;
         }
