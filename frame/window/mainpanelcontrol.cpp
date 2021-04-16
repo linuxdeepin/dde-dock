@@ -348,16 +348,6 @@ void MainPanelControl::removeItem(DockItem *item)
     resizeDockIcon();
 }
 
-//MainPanelDelegate *MainPanelControl::delegate() const
-//{
-//    return m_delegate;
-//}
-
-void MainPanelControl::setDelegate(MainPanelDelegate *delegate)
-{
-    m_delegate = delegate;
-}
-
 void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 {
     // get target index
@@ -540,7 +530,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         return;
     }
 
-    if (m_delegate && m_delegate->appIsOnDock(DragmineData->data(m_draggingMimeKey))) {
+    if (appIsOnDock(DragmineData->data(m_draggingMimeKey))) {
         e->setAccepted(false);
         return;
     }
@@ -1152,4 +1142,14 @@ bool MainPanelControl::checkNeedShowDesktop()
 
     qDebug() << "wm call GetIsShowDesktop fail, res:" << reply.type();
     return false;
+}
+
+/**
+ * @brief MainWindow::appIsOnDock 判断应用是否驻留在任务栏上
+ * @param appDesktop 应用的desktop文件的完整路径
+ * @return true: 驻留；false:未驻留
+ */
+bool MainPanelControl::appIsOnDock(const QString &appDesktop)
+{
+    return DockItemManager::instance()->appIsOnDock(appDesktop);
 }

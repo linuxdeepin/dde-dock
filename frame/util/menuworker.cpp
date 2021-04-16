@@ -33,10 +33,7 @@ MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     , m_dockInter(dockInter)
     , m_autoHide(true)
 {
-    DApplication *app = qobject_cast<DApplication *>(qApp);
-    if (app) {
-        connect(app, &DApplication::iconThemeChanged, this, &MenuWorker::gtkIconThemeChanged);
-    }
+
 }
 
 MenuWorker::~MenuWorker()
@@ -235,11 +232,6 @@ void MenuWorker::showDockSettingsMenu()
     setAutoHide(true);
     delete menu;
     menu = nullptr;
-}
-
-void MenuWorker::gtkIconThemeChanged()
-{
-    DockItemManager::instance()->refershItemsIcon();
 }
 
 void MenuWorker::setAutoHide(const bool autoHide)

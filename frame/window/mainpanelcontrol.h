@@ -36,12 +36,6 @@ using Gesture = com::deepin::daemon::Gesture;
 class TrayPluginItem;
 class PluginsItem;
 
-class MainPanelDelegate
-{
-public:
-    virtual bool appIsOnDock(const QString &appDesktop) = 0;
-};
-
 class DesktopWidget : public QWidget
 {
     Q_OBJECT
@@ -66,9 +60,6 @@ public:
     void setDisplayMode(DisplayMode dislayMode);
     void getTrayVisableItemCount();
     void updatePluginsLayout();
-
-//    MainPanelDelegate *delegate() const;
-    void setDelegate(MainPanelDelegate *delegate);
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -113,6 +104,7 @@ private:
     void calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
+    bool appIsOnDock(const QString &appDesktop);
 
 private:
     QBoxLayout *m_mainPanelLayout;
@@ -133,7 +125,6 @@ private:
 
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
-    MainPanelDelegate *m_delegate;
     QString m_draggingMimeKey;
     AppDragWidget *m_appDragWidget;
     DisplayMode m_dislayMode;

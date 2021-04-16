@@ -106,7 +106,7 @@ private:
     }
 };
 
-class MainWindow : public DBlurEffectWidget, public MainPanelDelegate
+class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
 
@@ -150,7 +150,6 @@ private:
     void initComponents();
     void initConnections();
 
-    bool appIsOnDock(const QString &appDesktop) override;
     void getTrayVisableItemCount();
 
 signals:

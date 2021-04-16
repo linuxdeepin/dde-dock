@@ -122,6 +122,7 @@ public:
         AutoHide = 0x8,                     // 和MenuWorker保持一致,未设置此state时表示菜单已经打开
         MousePress = 0x10,                  // 当前鼠标是否被按下
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
+        LauncherDisplay = 0x40,             // 启动器是否显示
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -149,7 +150,6 @@ public:
 
     QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
     QRect dockRect(const QString &screenName);
-    QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
 
 signals:
     void opacityChanged(const quint8 value) const;
@@ -163,7 +163,6 @@ signals:
     void requestUpdateLayout();                                 //　界面需要根据任务栏更新布局的方向
     void requestUpdateDragArea();                               //　更新拖拽区域
     void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
-    void requestDelayShowDock(const QString &screenName);       //　延时唤醒任务栏
 
     void requestStopShowAni();
     void requestStopHideAni();
@@ -189,7 +188,6 @@ private slots:
     void primaryScreenChanged();
     void updateParentGeometry(const QVariant &value, const Position &pos);
     void updateParentGeometry(const QVariant &value);
-    void delayShowDock();
 
     // 任务栏属性变化
     void onPositionChanged();
@@ -204,7 +202,7 @@ private slots:
     void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
     void onRequestUpdateMonitorInfo();
-    void onRequestDelayShowDock(const QString &screenName);
+    void onRequestDelayShowDock();
 
     void onTouchPress(int type, int x, int y, const QString &key);
     void onTouchRelease(int type, int x, int y, const QString &key);
@@ -231,6 +229,8 @@ private:
 
     void checkDaemonDockService();
     void checkXEventMonitorService();
+
+    QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
 
     QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);

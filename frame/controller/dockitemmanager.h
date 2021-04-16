@@ -60,7 +60,7 @@ signals:
     void requestUpdateDockItem() const;
 
 public slots:
-    void refershItemsIcon();
+    void refreshItemsIcon();
     void sortPluginItems();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);

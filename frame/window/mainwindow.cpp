@@ -125,7 +125,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     resetDragWindow();
 
-    m_mainPanel->setDelegate(this);
     for (auto item : DockItemManager::instance()->itemList())
         m_mainPanel->insertItem(-1, item);
 
@@ -440,16 +439,6 @@ void MainWindow::setEffectEnabled(const bool enabled)
 void MainWindow::setComposite(const bool hasComposite)
 {
     setEffectEnabled(hasComposite);
-}
-
-/**
- * @brief MainWindow::appIsOnDock 判断应用是否驻留在任务栏上
- * @param appDesktop 应用的desktop文件的完整路径
- * @return true: 驻留；false:未驻留
- */
-bool MainWindow::appIsOnDock(const QString &appDesktop)
-{
-    return DockItemManager::instance()->appIsOnDock(appDesktop);
 }
 
 /**

@@ -67,9 +67,9 @@ TEST_F(Test_DockItemManager, get_method_test)
         qDebug() << item->itemType();
 }
 
-TEST_F(Test_DockItemManager, refershItemsIcon_test)
+TEST_F(Test_DockItemManager, refreshItemsIcon_test)
 {
-    manager->refershItemsIcon();
+    manager->refreshItemsIcon();
     manager->sortPluginItems();
 }
 

@@ -47,9 +47,6 @@ signals:
 public slots:
     void setAutoHide(const bool autoHide);
 
-private slots:
-    void gtkIconThemeChanged();
-
 private:
     QMenu *createMenu();
 

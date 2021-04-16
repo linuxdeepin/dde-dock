@@ -29,6 +29,8 @@
 #include <QDebug>
 #include <QGSettings>
 
+#include <DApplication>
+
 DockItemManager *DockItemManager::INSTANCE = nullptr;
 const QGSettings *DockItemManager::m_appSettings = Utils::ModuleSettingsPtr("app");
 const QGSettings *DockItemManager::m_activeSettings = Utils::ModuleSettingsPtr("activeapp");
@@ -71,8 +73,13 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
+    DApplication *app = qobject_cast<DApplication *>(qApp);
+    if (app) {
+        connect(app, &DApplication::iconThemeChanged, this, &DockItemManager::refreshItemsIcon);
+    }
+
     // 刷新图标
-    QMetaObject::invokeMethod(this, "refershItemsIcon", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "refreshItemsIcon", Qt::QueuedConnection);
 }
 
 DockItemManager *DockItemManager::instance(QObject *parent)
@@ -104,7 +111,7 @@ void DockItemManager::startLoadPlugins() const
     QTimer::singleShot(delay, m_pluginsInter, &DockPluginsController::startLoader);
 }
 
-void DockItemManager::refershItemsIcon()
+void DockItemManager::refreshItemsIcon()
 {
     for (auto item : m_itemList) {
         item->refreshIcon();
