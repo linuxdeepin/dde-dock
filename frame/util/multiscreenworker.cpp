@@ -516,7 +516,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     for (auto s : DIS_INS->screens()) {
         // 屏幕此位置不可停靠时,不用监听这块区域
         if (!DIS_INS->canDock(s, m_position))
-            return;
+            continue;
 
         MonitRect monitorRect;
         QRect screenRect = s->geometry();
@@ -565,7 +565,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     for (auto s : DIS_INS->screens()) {
         // 屏幕此位置不可停靠时,不用监听这块区域
         if (!DIS_INS->canDock(s, m_position))
-            return;
+            continue;
 
         MonitRect monitorRect;
         QRect screenRect = s->geometry();
@@ -618,7 +618,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     for (auto s : DIS_INS->screens()) {
         // 屏幕此位置不可停靠时,不用监听这块区域
         if (!DIS_INS->canDock(s, m_position))
-            return;
+            continue;
 
         MonitRect monitorRect;
         QRect screenRect = s->geometry();
@@ -1568,7 +1568,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
         if (!m_delayWakeTimer->isActive()) {
-            m_delayScreen = toScreen;      
+            m_delayScreen = toScreen;
             m_delayWakeTimer->start(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", MonitorsSwitchTime, 2000).toInt());
         }
     } else {
