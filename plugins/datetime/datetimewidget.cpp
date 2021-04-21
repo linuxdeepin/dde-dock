@@ -134,7 +134,9 @@ QSize DatetimeWidget::curTimeSize() const
     QSize dateSize = QFontMetrics(m_dateFont).boundingRect("0000/00/00").size();
 
     if (position == Dock::Bottom || position == Dock::Top) {
-        while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() + QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height() > height()) {
+        // 时间绘制区域未做判断，当时间字体占的高度大于任务栏高度的一半时，时间不能完全显示，部分被切割，添加判断时间字体占的高度大于任务栏高度的一半减2时，时间字体要调小，
+        // 直到时间字体占的高度小于任务栏高度的一半减2，时间就可以完整显示了
+        while (QFontMetrics(m_timeFont).boundingRect(timeString).size().height() + QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height() > height() || QFontMetrics(m_timeFont).boundingRect(timeString).size().height() > (height() / 2 -2)) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             timeSize.setWidth(QFontMetrics(m_timeFont).boundingRect(timeString).size().width());
             if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1) {
@@ -191,10 +193,12 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     QRect dateRect = rect();
 
     if (position == Dock::Top || position == Dock::Bottom) {
-        timeRect.setBottom(rect().center().y() + 6);
+        // 上下显示dock时,藏文字体比较特殊,调整时间和日期区域的布局
+        timeRect.setBottom(rect().center().y() + 10);
         dateRect.setTop(timeRect.bottom() - 4);
     } else {
-        timeRect.setBottom(rect().center().y() + m_timeOffset);
+        // 左右显示dock时,藏文字体比较特殊,调整时间和日期区域的布局
+        timeRect.setBottom(rect().center().y() + m_timeOffset + 6);
         dateRect.setTop(timeRect.bottom());
     }
     painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, current.toString(format));
