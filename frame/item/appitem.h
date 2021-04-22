@@ -121,6 +121,7 @@ private:
     bool m_active;
     int m_retryTimes;
     int m_lastShowDay;
+    bool m_iconValid;
     unsigned long m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;

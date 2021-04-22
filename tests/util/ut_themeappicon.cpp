@@ -44,11 +44,18 @@ void Ut_ThemeAppIcon::TearDown()
 TEST_F(Ut_ThemeAppIcon, getIcon_test)
 {
     ThemeAppIcon appIcon;
-    const QPixmap &pix1 = appIcon.getIcon("", 50, 1.0);
+    QPixmap pix1;
+    appIcon.getIcon(pix1, "", 50, 1.0);
     ASSERT_FALSE(pix1.isNull());
-    appIcon.getIcon("dde-calendar", 50, 1.0);
-    const QPixmap &pix2 = appIcon.getIcon("data:image/test", 50, 1.0);
+
+    QPixmap pix;
+    appIcon.getIcon(pix, "dde-calendar", 50, 1.0);
+
+    QPixmap pix2;
+    appIcon.getIcon(pix2, "data:image/test", 50, 1.0);
     ASSERT_FALSE(pix2.isNull());
-    const QPixmap &pix3 = appIcon.getIcon(":/res/all_settings_on.png", 50, 1.0);
+
+    QPixmap pix3;
+    appIcon.getIcon(pix3, ":/res/all_settings_on.png", 50, 1.0);
     ASSERT_FALSE(pix3.isNull());
 }

@@ -51,11 +51,10 @@ LauncherItem::LauncherItem(QWidget *parent)
 void LauncherItem::refreshIcon()
 {
     const int iconSize = qMin(width(), height());
-    if (DockDisplayMode == Efficient)
-    {
-        m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7, devicePixelRatioF());
+    if (DockDisplayMode == Efficient) {
+        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.7, devicePixelRatioF());
     } else {
-        m_icon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8, devicePixelRatioF());
+        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.8, devicePixelRatioF());
     }
 
     update();

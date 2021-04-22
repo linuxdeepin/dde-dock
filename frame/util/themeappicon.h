@@ -31,7 +31,8 @@ public:
     explicit ThemeAppIcon(QObject *parent = 0);
     ~ThemeAppIcon();
 
-    static const QPixmap getIcon(const QString iconName, const int size, const qreal ratio);
+    static QIcon getIcon(const QString &name);
+    static bool getIcon(QPixmap &pix, const QString iconName, const int size, const qreal ratio, bool reObtain = false);
 };
 
 #endif // THEMEAPPICON_H

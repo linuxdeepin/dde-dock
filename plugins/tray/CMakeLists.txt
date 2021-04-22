@@ -34,6 +34,7 @@ add_library(${PLUGIN_NAME} SHARED ${SRCS} tray.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
+                                                 ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
                                                  ${XCB_LIBS_INCLUDE_DIRS}
                                                  ${DDE-Network-Utils_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}

@@ -542,7 +542,7 @@ QPixmap SNITrayWidget::newIconPixmap(IconType iconType)
         // so, it should be the last fallback
         if (!iconName.isEmpty()) {
             // ThemeAppIcon::getIcon 会处理高分屏缩放问题
-            pixmap = ThemeAppIcon::getIcon(iconName, IconSize, devicePixelRatioF());
+             ThemeAppIcon::getIcon(pixmap, iconName, IconSize, devicePixelRatioF());
             if (!pixmap.isNull()) {
                 break;
             }

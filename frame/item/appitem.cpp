@@ -61,6 +61,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_dragging(false)
     , m_retryTimes(0)
     , m_lastShowDay(0)
+    , m_iconValid(false)
     , m_lastclickTimes(0)
     , m_appIcon(QPixmap())
     , m_updateIconGeometryTimer(new QTimer(this))
@@ -600,20 +601,27 @@ void AppItem::refreshIcon()
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
-        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7, devicePixelRatioF());
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.7, devicePixelRatioF(), !m_iconValid);
     else
-        m_appIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8, devicePixelRatioF());
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.8, devicePixelRatioF(), !m_iconValid);
 
     if (!m_refershIconTimer->isActive() && m_itemEntryInter->icon() == "dde-calendar") {
         m_refershIconTimer->start();
     }
 
-    if (m_appIcon.isNull()) {
+    if (!m_iconValid) {
         if (m_retryTimes < 5) {
             m_retryTimes++;
             qDebug() << m_itemEntryInter->name() << "obtain app icon(" << icon << ")failed, retry times:" << m_retryTimes;
             m_retryObtainIconTimer->start();
+        } else {
+            // 如果图标获取失败，没隔10秒刷新一次
+            if (!m_iconValid)
+                QTimer::singleShot(10 * 1000, this, [ = ] { m_retryObtainIconTimer->start(); });
         }
+
+        update();
+
         return;
     } else if (m_retryTimes > 0) {
         // reset times

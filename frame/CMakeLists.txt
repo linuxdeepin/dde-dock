@@ -61,6 +61,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${DFrameworkDBus_LIBRARIES}
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${Qt5X11Extras_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
