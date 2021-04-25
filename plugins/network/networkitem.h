@@ -116,6 +116,8 @@ private:
     PluginState m_pluginState;
     QTimer *m_timer;
     QTimer *m_switchWireTimer;
+    QTimer *m_wirelessScanTimer;
+    int m_wirelessScanInterval;
 };
 
 #endif // NETWORKITEM_H

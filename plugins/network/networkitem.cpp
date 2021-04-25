@@ -10,6 +10,7 @@
 
 #include <QVBoxLayout>
 #include <QJsonDocument>
+#include <QGSettings>
 
 extern const int ItemWidth;
 extern const int ItemMargin;
@@ -46,6 +47,8 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_timeOut(true)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
+    , m_wirelessScanTimer(new QTimer(this))
+    , m_wirelessScanInterval(10)
 {
     m_timer->setInterval(100);
 
@@ -142,6 +145,22 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
+
+    QGSettings *gsetting = new QGSettings("com.deepin.dde.dock", QByteArray(), this);
+    connect(gsetting, &QGSettings::changed, [&](const QString &key) {
+        if (key == "wireless-scan-interval") {
+            m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
+            m_wirelessScanTimer->setInterval(m_wirelessScanInterval * 1000);
+        }
+    });
+    connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
+        for (auto wirelessItem : m_wirelessItems) {
+            if (wirelessItem) {
+                wirelessItem->requestWirelessScan();
+            }
+        }
+    });
+    m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
 }
 
 QWidget *NetworkItem::itemApplet()
@@ -1086,6 +1105,14 @@ void NetworkItem::updateView()
         centralWidget->setFixedHeight(contentHeight);
         m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight);
         m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
+
+    if (m_wirelessControlPanel->isVisible()) {
+        if (!m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->start(m_wirelessScanInterval * 1000);
+    } else {
+        if (m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->stop();
     }
 }
 
