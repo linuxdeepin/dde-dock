@@ -3,6 +3,7 @@
 #include "item/wirelessitem.h"
 #include "../../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
+#include "utils.h"
 
 #include <DHiDPIHelper>
 #include <DApplicationHelper>
@@ -48,7 +49,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_timer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
     , m_wirelessScanTimer(new QTimer(this))
-    , m_wirelessScanInterval(10)
+    , m_wirelessScanInterval(Utils::SettingValue("com.deepin.dde.dock", QByteArray(), "wireless-scan-interval", 10).toInt())
 {
     m_timer->setInterval(100);
 
@@ -146,11 +147,12 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
 
-    QGSettings *gsetting = new QGSettings("com.deepin.dde.dock", QByteArray(), this);
-    connect(gsetting, &QGSettings::changed, [&](const QString &key) {
+    const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", "wireless-scan-interval", this);
+    if (gsetting)
+        connect(gsetting, &QGSettings::changed, [&](const QString &key) {
         if (key == "wireless-scan-interval") {
-            m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
-            m_wirelessScanTimer->setInterval(m_wirelessScanInterval * 1000);
+            m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt() * 1000;
+            m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
         }
     });
     connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
@@ -160,7 +162,8 @@ NetworkItem::NetworkItem(QWidget *parent)
             }
         }
     });
-    m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt();
+
+    m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
 }
 
 QWidget *NetworkItem::itemApplet()
