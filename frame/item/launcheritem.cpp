@@ -52,9 +52,9 @@ void LauncherItem::refreshIcon()
 {
     const int iconSize = qMin(width(), height());
     if (DockDisplayMode == Efficient) {
-        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.7, devicePixelRatioF());
+        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.7);
     } else {
-        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.8, devicePixelRatioF());
+        ThemeAppIcon::getIcon(m_icon, "deepin-launcher", iconSize * 0.8);
     }
 
     update();

@@ -601,9 +601,9 @@ void AppItem::refreshIcon()
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
-        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.7, devicePixelRatioF(), !m_iconValid);
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.7, !m_iconValid);
     else
-        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.8, devicePixelRatioF(), !m_iconValid);
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.8, !m_iconValid);
 
     if (!m_refershIconTimer->isActive() && m_itemEntryInter->icon() == "dde-calendar") {
         m_refershIconTimer->start();

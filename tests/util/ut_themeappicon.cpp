@@ -45,17 +45,17 @@ TEST_F(Ut_ThemeAppIcon, getIcon_test)
 {
     ThemeAppIcon appIcon;
     QPixmap pix1;
-    appIcon.getIcon(pix1, "", 50, 1.0);
+    appIcon.getIcon(pix1, "", 50);
     ASSERT_FALSE(pix1.isNull());
 
     QPixmap pix;
-    appIcon.getIcon(pix, "dde-calendar", 50, 1.0);
+    appIcon.getIcon(pix, "dde-calendar", 50);
 
     QPixmap pix2;
-    appIcon.getIcon(pix2, "data:image/test", 50, 1.0);
+    appIcon.getIcon(pix2, "data:image/test", 50);
     ASSERT_FALSE(pix2.isNull());
 
     QPixmap pix3;
-    appIcon.getIcon(pix3, ":/res/all_settings_on.png", 50, 1.0);
+    appIcon.getIcon(pix3, ":/res/all_settings_on.png", 50);
     ASSERT_FALSE(pix3.isNull());
 }

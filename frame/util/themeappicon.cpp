@@ -31,6 +31,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDate>
+#include <QPainter>
 
 #include <private/qguiapplication_p.h>
 #include <private/qiconloader_p.h>
@@ -68,66 +69,43 @@ QIcon ThemeAppIcon::getIcon(const QString &name)
     return icon;
 }
 
-bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size, const qreal ratio, bool reObtain)
+bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain)
 {
     QString key;
     QIcon icon;
     bool ret = true;
     // 把size改为小于size的最大偶数 :)
-    const int s = int(size * ratio) & ~1;
-    const float iconZoom = size / 64.0 * 0.8;
+    const int s = int(size * qApp->devicePixelRatio()) & ~1;
 
     if (iconName == "dde-calendar") {
+        const double iconZoom =  s / 256.0;
         QDate const date(QDate::currentDate());
 
-        auto calendar = new QWidget() ;
-        calendar->setFixedSize(s, s);
+        QPixmap pixmap(":/indicator/resources/calendar_bg.svg");
+        pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        calendar->setAutoFillBackground(true);
-        QPalette palette = calendar->palette();
-        palette.setBrush(QPalette::Window,
-                         QBrush(QPixmap(":/indicator/resources/calendar_bg.svg").scaled(
-                                    calendar->size(),
-                                    Qt::IgnoreAspectRatio,
-                                    Qt::SmoothTransformation)));
-        calendar->setPalette(palette);
+        QPainter painter(&pixmap);
+        painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->setSpacing(0);
-        auto month = new QLabel();
-        auto monthPix = ImageUtil::loadSvg(QString(":/icons/resources/month%1.svg").arg(date.month()), QSize(36, 16)*iconZoom, ratio);
-        month->setPixmap(monthPix.scaled(monthPix.width()*ratio,monthPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        month->setFixedHeight(month->pixmap()->height());
-        month->setAlignment(Qt::AlignCenter);
-        month->setFixedWidth(s - 5 * iconZoom);
-        layout->addWidget(month, Qt::AlignVCenter);
+        //根据不同日期显示不同日历图表
+        int tw = pixmap.rect().width();
+        int th = pixmap.rect().height();
+        int tx = pixmap.rect().x();
+        int ty = pixmap.rect().y();
 
-        auto day = new QLabel();
-        auto dayPix =ImageUtil::loadSvg(QString(":/icons/resources/day%1.svg").arg(date.day()), QSize(32, 30)*iconZoom, ratio);
-        day->setPixmap(dayPix.scaled(dayPix.width()*ratio,dayPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        day->setAlignment(Qt::AlignCenter);
-        day->setFixedHeight(day->pixmap()->height()/ratio);
-        day->raise();
-        layout->addWidget(day, Qt::AlignVCenter);
+        //绘制月份
+        QRectF rcMonth(tx + (tw / 3.4), ty + (th / 5.4), 80 * iconZoom, 40 * iconZoom);
+        painter.drawPixmap(rcMonth.topLeft(), ImageUtil::loadSvg(QString(":/icons/resources/month%1.svg").arg(date.month()), rcMonth.size().toSize()));
+        //绘制日
+        QRectF rcDay(tx + (tw / 3.5), ty + th / 3.1, 112 * iconZoom, 104 * iconZoom);
+        painter.drawPixmap(rcDay.topLeft(), ImageUtil::loadSvg(QString(":/icons/resources/day%1.svg").arg(date.day()), rcDay.size().toSize()));
+        //绘制周
+        QRectF rcWeek(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom);
+        painter.drawPixmap(rcWeek.topLeft(), ImageUtil::loadSvg(QString(":/icons/resources/week%1.svg").arg(date.dayOfWeek()), rcWeek.size().toSize()));
 
-        auto week = new QLabel();
-        auto weekPix = ImageUtil::loadSvg(QString(":/icons/resources/week%1.svg").arg(date.dayOfWeek()), QSize(26, 13)*iconZoom, ratio);
-        week->setPixmap(weekPix.scaled(weekPix.width()*ratio,weekPix.height()*ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        week->setFixedHeight(week->pixmap()->height());
-        week->setAlignment(Qt::AlignCenter);
-        week->setFixedWidth(s + 5 * iconZoom);
-        layout->addWidget(week, Qt::AlignVCenter);
-        layout->setSpacing(0);
-        layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
-        calendar->setLayout(layout);
-        pix = calendar->grab(calendar->rect());
+        pix = pixmap;
+        pix.setDevicePixelRatio(qApp->devicePixelRatio());
 
-        delete calendar;
-        calendar = nullptr;
-
-        if (pix.size().width() != s) {
-            pix = pix.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        }
         return ret;
     }
 
@@ -194,7 +172,7 @@ bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size,
     if (pix.size().width() != s) {
         pix = pix.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-    pix.setDevicePixelRatio(ratio);
+    pix.setDevicePixelRatio(qApp->devicePixelRatio());
 
     return ret;
 }

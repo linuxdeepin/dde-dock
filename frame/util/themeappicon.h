@@ -32,7 +32,7 @@ public:
     ~ThemeAppIcon();
 
     static QIcon getIcon(const QString &name);
-    static bool getIcon(QPixmap &pix, const QString iconName, const int size, const qreal ratio, bool reObtain = false);
+    static bool getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain = false);
 };
 
 #endif // THEMEAPPICON_H
