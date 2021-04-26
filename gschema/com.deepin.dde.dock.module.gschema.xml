@@ -509,11 +509,4 @@
       <description>Determine to show dock only in primary monitor</description>
     </key>
   </schema>
- <schema path="/com/deepin/dde/dock/" id="com.deepin.dde.dock" gettext-domain="DDE">
-   <key type="i" name="wireless-scan-interval">
-     <default>5</default>
-     <summary></summary>
-     <description>wireless scan interval</description>
-   </key>
-  </schema>
 </schemalist>
