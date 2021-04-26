@@ -694,6 +694,7 @@ void MainWindow::positionChanged(const Position prevPos, const Position nextPos)
         // }
         ///end
 
+        m_size = m_settings->m_mainWindowSize;
         updatePanelVisible();
     });
 
