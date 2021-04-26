@@ -140,6 +140,9 @@ bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size,
         }
 
         // 重新从主题中获取一次
+
+        // 如果此提交我们使用的qt版本已经包含，那就可以不需要reObtain的逻辑了
+        // https://codereview.qt-project.org/c/qt/qtbase/+/343396
         if (reObtain)
             icon = getIcon(iconName);
         else

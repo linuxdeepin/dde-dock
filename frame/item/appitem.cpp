@@ -88,7 +88,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
-    m_retryObtainIconTimer->setInterval(500);
+    m_retryObtainIconTimer->setInterval(3000);
     m_retryObtainIconTimer->setSingleShot(true);
 
     m_refershIconTimer->setInterval(1000);
@@ -610,14 +610,18 @@ void AppItem::refreshIcon()
     }
 
     if (!m_iconValid) {
-        if (m_retryTimes < 5) {
+        if (m_retryTimes < 10) {
             m_retryTimes++;
             qDebug() << m_itemEntryInter->name() << "obtain app icon(" << icon << ")failed, retry times:" << m_retryTimes;
+            // Maybe the icon was installed after we loaded the caches.
+            // QIcon::setThemeSearchPaths will force Qt to re-check the gtk cache validity.
+            QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
+
             m_retryObtainIconTimer->start();
         } else {
-            // 如果图标获取失败，没隔10秒刷新一次
+            // 如果图标获取失败，一分钟后再自动刷新一次（如果还是显示异常，基本需要应用自身看下为什么了）
             if (!m_iconValid)
-                QTimer::singleShot(10 * 1000, this, [ = ] { m_retryObtainIconTimer->start(); });
+                QTimer::singleShot(60 * 1000, this, &AppItem::refreshIcon);
         }
 
         update();
