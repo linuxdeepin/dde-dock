@@ -153,12 +153,6 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile){
-        QPair<QString, PluginsItemInterface *> pair;
-        pair.first = pluginFile;
-        pair.second = nullptr;
-        m_pluginLoadMap.insert(pair, false);
-    });
     connect(loader, &PluginLoader::pluginFounded, this, &AbstractPluginsController::loadPlugin, Qt::QueuedConnection);
 
     int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
@@ -219,23 +213,15 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
             return;
     }
 
+    QPair<QString, PluginsItemInterface *> newPair;
+    newPair.first = pluginFile;
+    newPair.second = interface;
+    m_pluginLoadMap.insert(newPair, true);
+
     // 保存 PluginLoader 对象指针
     QMap<QString, QObject *> interfaceData;
     interfaceData["pluginloader"] = pluginLoader;
     m_pluginsMap.insert(interface, interfaceData);
-
-    for (auto &pair: m_pluginLoadMap.keys()) {
-        if (pair.first == pluginFile) {
-            m_pluginLoadMap.remove(pair);
-
-            QPair<QString, PluginsItemInterface *> newPair;
-            newPair.first = pluginFile;
-            newPair.second = interface;
-            m_pluginLoadMap.insert(newPair, false);
-            break;
-        }
-    }
-
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
     if (!dbusService.isEmpty() && !m_dbusDaemonInterface->isServiceRegistered(dbusService).value()) {
         qDebug() << objectName() << dbusService << "daemon has not started, waiting for signal";
@@ -264,19 +250,7 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
 {
     qDebug() << objectName() << "init plugin: " << interface->pluginName();
     interface->init(this);
-    for (const auto &pair : m_pluginLoadMap.keys()) {
-        if (pair.second == interface)
-            m_pluginLoadMap.insert(pair, true);
-    }
-
-    bool loaded = true;
-    for (int i = 0; i < m_pluginLoadMap.keys().size(); ++i) {
-        if (!m_pluginLoadMap.values()[i]) {
-            loaded = false;
-            break;
-        }
-    }
-    if (loaded) {
+    if (qApp->property("PLUGINSNUMBER").toInt() == m_pluginLoadMap.keys().size()) {
         emit pluginLoaderFinished();
     }
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();
