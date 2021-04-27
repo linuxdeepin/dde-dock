@@ -60,6 +60,8 @@ private:
     Timedate *m_timedateInter;
     QString m_shortDateFormat;
     QString m_shortTimeFormat;
+    QRect m_timeRect;
+    QRect m_dateRect;
 
 };
 
