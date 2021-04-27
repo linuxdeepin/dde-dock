@@ -61,6 +61,10 @@ void TipsWidget::paintEvent(QPaintEvent *event)
     int fontHeight = fontMetrics().height();
     option.setAlignment(Qt::AlignCenter);
 
+    QFont textFont;
+    textFont.setPixelSize(rect().height() / 2 - 1);
+    painter.setFont(textFont);
+
     switch (m_type) {
     case SingleLine: {
         painter.drawText(rect(), m_text, option);
