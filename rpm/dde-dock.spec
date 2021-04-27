@@ -1,12 +1,12 @@
 %global sname deepin-dock
 
 Name:           dde-dock
-Version:        5.4.9
+Version:        5.4.12.1
 Release:        1
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
 URL:            http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/RERFNS4wLjAuNjU3NQ/pool/main/d/dde-dock/
-Source0:        %{name}-%{version}.orig.tar.xz	
+Source0:        %{name}-%{version}.orig.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -64,7 +64,7 @@ sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt \
 sed -i -E '30,39d' CMakeLists.txt
 
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginscontroller.cpp \
-                          frame/panel/mainpanelcontrol.cpp \
+                          frame/window/mainpanelcontrol.cpp \
                           plugins/tray/system-trays/systemtrayscontroller.cpp
 
 
@@ -100,6 +100,6 @@ export PATH=%{_qt5_bindir}:$PATH
 
 
 %changelog
-* Thu Mar 23 2021 uoser <uoser@uniontech.com> - 5.4.9-1
-- Update to 5.4.9
+* Thu Mar 23 2021 uoser <uoser@uniontech.com> - 5.4.12.1-1
+- Update to 5.4.12.1
 
