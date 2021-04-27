@@ -40,6 +40,7 @@ protected:
 
 private:
     QString m_pluginDirPath;
+
 };
 
 #endif // PLUGINLOADER_H

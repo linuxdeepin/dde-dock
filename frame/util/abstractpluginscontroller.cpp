@@ -153,6 +153,12 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
+    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile){
+         QPair<QString, PluginsItemInterface *> pair;
+         pair.first = pluginFile;
+         pair.second = nullptr;
+         m_pluginLoadMap.insert(pair, false);
+     });
     connect(loader, &PluginLoader::pluginFounded, this, &AbstractPluginsController::loadPlugin, Qt::QueuedConnection);
 
     int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
@@ -203,20 +209,38 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     if (!pluginIsValid) {
+        for (auto &pair: m_pluginLoadMap.keys()) {
+            if (pair.first == pluginFile) {
+                m_pluginLoadMap.remove(pair);
+            }
+        }
         QString notifyMessage(tr("The plugin %1 is not compatible with the system."));
         Dtk::Core::DUtil::DNotifySender(notifyMessage.arg(QFileInfo(pluginFile).fileName())).appIcon("dialog-warning").call();
         return;
     }
 
     if (interface->pluginName() == "multitasking") {
-        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer)
+        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer){
+            for (auto &pair: m_pluginLoadMap.keys()) {
+                if (pair.first == pluginFile) {
+                    m_pluginLoadMap.remove(pair);
+                }
+            }
             return;
+        }
     }
 
-    QPair<QString, PluginsItemInterface *> newPair;
-    newPair.first = pluginFile;
-    newPair.second = interface;
-    m_pluginLoadMap.insert(newPair, true);
+    for (auto &pair: m_pluginLoadMap.keys()) {
+        if (pair.first == pluginFile) {
+            m_pluginLoadMap.remove(pair);
+
+            QPair<QString, PluginsItemInterface *> newPair;
+            newPair.first = pluginFile;
+            newPair.second = interface;
+            m_pluginLoadMap.insert(newPair, false);
+            break;
+        }
+    }
 
     // 保存 PluginLoader 对象指针
     QMap<QString, QObject *> interfaceData;
@@ -250,7 +274,21 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
 {
     qDebug() << objectName() << "init plugin: " << interface->pluginName();
     interface->init(this);
-    if (qApp->property("PLUGINSNUMBER").toInt() == m_pluginLoadMap.keys().size()) {
+
+    for (const auto &pair : m_pluginLoadMap.keys()) {
+        if (pair.second == interface)
+            m_pluginLoadMap.insert(pair, true);
+    }
+
+    bool loaded = true;
+    for (int i = 0; i < m_pluginLoadMap.keys().size(); ++i) {
+        if (!m_pluginLoadMap.values()[i]) {
+            loaded = false;
+            break;
+        }
+    }
+
+    if (loaded) {
         emit pluginLoaderFinished();
     }
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();

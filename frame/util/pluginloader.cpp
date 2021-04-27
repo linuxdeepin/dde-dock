@@ -25,7 +25,7 @@
 #include <QDebug>
 #include <QLibrary>
 #include <QGSettings>
-#include <QApplication>
+
 PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     : QThread(parent)
     , m_pluginDirPath(pluginDirPath)
@@ -64,9 +64,8 @@ void PluginLoader::run()
             continue;
         }
         plugins << file;
-    }
-    qApp->setProperty("PLUGINSNUMBER", plugins.count());
 
+    }
     for (auto plugin : plugins) {
         emit pluginFounded(pluginsDir.absoluteFilePath(plugin));
     }
