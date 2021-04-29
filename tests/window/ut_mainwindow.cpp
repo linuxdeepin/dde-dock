@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QThread>
 #include <QTest>
+#include <QSignalSpy>
 
 #include <gtest/gtest.h>
 
@@ -82,4 +83,11 @@ TEST_F(Test_MainWindow, coverage_test)
     qApp->sendEvent(m_window->m_dragWidget, &dragLeaveEvent);
     QTest::qWait(10);
     ASSERT_EQ(QApplication::overrideCursor()->shape(), Qt::ArrowCursor);
+
+    // 测试窗口大小变化时是否发出panelGeometryChanged信号
+    QEvent resizeEvent(QEvent::Resize);
+    QSignalSpy signal(m_window, &MainWindow::panelGeometryChanged);
+    qApp->sendEvent(m_window, &resizeEvent);
+    QTest::qWait(10);
+    ASSERT_EQ(signal.count(), 1);
 }
