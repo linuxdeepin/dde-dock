@@ -45,6 +45,9 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     , m_label(new DLabel(text, this))
     , m_layout(new QHBoxLayout(this))
 {
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, QPalette::BrightText);
+    m_label->setPalette(palette);
     setAccessibleName("BluetoothSettingLabel");
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);

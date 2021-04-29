@@ -66,6 +66,7 @@ void BluetoothDeviceItem::initActionList()
     m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
     m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
 
+    m_labelAction->setTextColorRole(DPalette::BrightText);
     m_labelAction->setText(m_device->alias());
     updateDeviceState(m_device->state());
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
