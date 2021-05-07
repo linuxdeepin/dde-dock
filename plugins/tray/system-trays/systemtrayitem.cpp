@@ -491,5 +491,7 @@ void SystemTrayItem::onGSettingsChanged(const QString &key) {
 
 bool SystemTrayItem::checkGSettingsControl() const
 {
-    return (m_gsettings && m_gsettings->get("control").toBool());
+    // 优先判断com.deepin.dde.dock.module.systemtray的control值是否为true（优先级更高），如果不为true，再判断每一个托盘对应的gsetting配置的control值
+    bool isEnable = Utils::SettingValue("com.deepin.dde.dock.module.systemtray", QByteArray(), "control", false).toBool();
+    return (isEnable || (m_gsettings && m_gsettings->get("control").toBool()));
 }

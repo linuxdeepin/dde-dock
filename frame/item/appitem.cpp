@@ -732,8 +732,8 @@ bool AppItem::checkGSettingsControl() const
             ? m_dockedAppSettings
             : m_activeAppSettings;
 
-    return (setting && setting->keys().contains("control") && setting->get("control").toBool()) ||
-            (m_appSettings && m_appSettings->keys().contains("control") && m_appSettings->get("control").toBool());
+    return ((m_appSettings && m_appSettings->keys().contains("control") && m_appSettings->get("control").toBool())
+            || (setting && setting->keys().contains("control") && setting->get("control").toBool()));
 }
 
 void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
