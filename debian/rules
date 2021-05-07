@@ -13,3 +13,4 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 override_dh_auto_configure:
 	dh_auto_configure -- \
 	  -DHOST_MULTIARCH="$(DEB_HOST_MULTIARCH)"
+	  -DPLUGIN_INSTALL_DIR=/usr/lib64
