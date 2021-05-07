@@ -17,6 +17,7 @@ extern const int ItemWidth;
 extern const int ItemMargin;
 extern const int ItemHeight;
 const int ControlItemHeight = 35;
+const int SeparatorItemHeight = 2;
 const QString MenueEnable = "enable";
 const QString MenueWiredEnable = "wireEnable";
 const QString MenueWirelessEnable = "wirelessEnable";
@@ -50,6 +51,9 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_switchWireTimer(new QTimer(this))
     , m_wirelessScanTimer(new QTimer(this))
     , m_wirelessScanInterval(Utils::SettingValue("com.deepin.dde.dock", QByteArray(), "wireless-scan-interval", 10).toInt())
+    , m_firstSeparator(new HorizontalSeperator(this))
+    , m_secondSeparator(new HorizontalSeperator(this))
+    , m_thirdSeparator(new HorizontalSeperator(this))
 {
     m_timer->setInterval(100);
 
@@ -85,13 +89,13 @@ NetworkItem::NetworkItem(QWidget *parent)
     auto switchWirelessLayout = new QHBoxLayout;
     switchWirelessLayout->setMargin(0);
     switchWirelessLayout->setSpacing(0);
-    switchWirelessLayout->addSpacing(2);
+    switchWirelessLayout->addSpacing(20);
     switchWirelessLayout->addWidget(m_wirelessTitle);
     switchWirelessLayout->addStretch();
     switchWirelessLayout->addWidget(m_loadingIndicator);
     switchWirelessLayout->addSpacing(10);
     switchWirelessLayout->addWidget(m_switchWirelessBtn);
-    switchWirelessLayout->addSpacing(2);
+    switchWirelessLayout->addSpacing(8);
     m_wirelessControlPanel->setLayout(switchWirelessLayout);
     m_wirelessControlPanel->setFixedHeight(ControlItemHeight);
 
@@ -109,11 +113,11 @@ NetworkItem::NetworkItem(QWidget *parent)
     auto switchWiredLayout = new QHBoxLayout;
     switchWiredLayout->setMargin(0);
     switchWiredLayout->setSpacing(0);
-    switchWiredLayout->addSpacing(2);
+    switchWiredLayout->addSpacing(20);
     switchWiredLayout->addWidget(m_wiredTitle);
     switchWiredLayout->addStretch();
     switchWiredLayout->addWidget(m_switchWiredBtn);
-    switchWiredLayout->addSpacing(2);
+    switchWiredLayout->addSpacing(8);
     m_wiredControlPanel->setLayout(switchWiredLayout);
     m_wiredControlPanel->setFixedHeight(ControlItemHeight);
 
@@ -121,9 +125,13 @@ NetworkItem::NetworkItem(QWidget *parent)
     auto centralLayout = new QVBoxLayout;
     centralLayout->setContentsMargins(QMargins(ItemMargin, 0, ItemMargin, 0));
     centralLayout->setSpacing(0);
+    centralLayout->setMargin(0);
     centralLayout->addWidget(m_wirelessControlPanel);
+    centralLayout->addWidget(m_firstSeparator);
     centralLayout->addLayout(m_wirelessLayout);
+    centralLayout->addWidget(m_secondSeparator);
     centralLayout->addWidget(m_wiredControlPanel);
+    centralLayout->addWidget(m_thirdSeparator);
     centralLayout->addLayout(m_wiredLayout);
     centralWidget->setLayout(centralLayout);
     centralWidget->setFixedWidth(ItemWidth);
@@ -137,6 +145,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     centralWidget->setAutoFillBackground(false);
     m_applet->viewport()->setAutoFillBackground(false);
     m_applet->setVisible(false);
+    setControlBackground();
 
     connect(m_switchWireTimer, &QTimer::timeout, [ = ] {
         m_switchWire = !m_switchWire;
@@ -164,6 +173,24 @@ NetworkItem::NetworkItem(QWidget *parent)
     });
 
     m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
+}
+
+void NetworkItem::setControlBackground()
+{
+    QPalette backgroud;
+    QColor separatorColor;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        backgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
+        separatorColor.setRgb(0, 0, 0, 0.1 * 255);
+    } else {
+        backgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
+        separatorColor.setRgb(255, 255, 255, 0.1 * 255);
+    }
+    m_applet->setAutoFillBackground(true);
+    m_applet->setPalette(backgroud);
+    m_firstSeparator->setColor(separatorColor);
+    m_secondSeparator->setColor(separatorColor);
+    m_thirdSeparator->setColor(separatorColor);
 }
 
 QWidget *NetworkItem::itemApplet()
@@ -309,6 +336,8 @@ void NetworkItem::invokeMenuItem(const QString &menuId, const bool checked)
 
 void NetworkItem::refreshIcon()
 {
+    setControlBackground();
+
     // 刷新按钮图标
     QPixmap pixmap;
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
@@ -514,6 +543,7 @@ void NetworkItem::wirelessEnable(bool enable)
             wirelessItem->itemApplet()->setVisible(enable);
         }
     }
+    m_secondSeparator->setVisible(enable);
 }
 
 void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
@@ -1107,9 +1137,8 @@ void NetworkItem::updateView()
     } else {
         contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
         contentHeight += wiredDeviceCnt * ItemHeight;
-        centralWidget->setFixedHeight(contentHeight);
-        m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight);
-        m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        centralWidget->setFixedHeight(contentHeight + SeparatorItemHeight * 3);
+        m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight + SeparatorItemHeight * 3);
     }
 
     if (m_wirelessControlPanel->isVisible()) {

@@ -34,7 +34,9 @@
 #include <QLabel>
 #include <QIcon>
 #include <QScrollBar>
+#include <QPainter>
 
+#define SEPARATOR_HEIGHT 2
 #define WIDTH       260
 #define MAX_HEIGHT  300
 #define ICON_SIZE   24
@@ -47,6 +49,25 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 using namespace Dock;
+
+ItemDelegate::ItemDelegate(QAbstractItemView *parent)
+    : DStyledItemDelegate(parent)
+{
+
+}
+
+void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QStyleOptionViewItem styleOption = option;
+
+    if ((styleOption.state & QStyle::State_MouseOver)) {
+        styleOption.showDecorationSelected  = true;
+        styleOption.state |= QStyle::State_Selected;
+        styleOption.rect += QMargins(1, 1, 1, 1);
+    }
+
+    DStyledItemDelegate::paint(painter, styleOption, index);
+}
 
 Q_DECLARE_METATYPE(const Port *)
 
@@ -113,7 +134,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
-    , m_separator(new HorizontalSeparator)
+    , m_separator(new HorizontalSeparator(this))
+    , m_secondSeparator(new HorizontalSeparator(this))
     , m_deviceLabel(nullptr)
     , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
@@ -122,21 +144,56 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_deviceInfo("")
     , m_lastPort(nullptr)
     , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))
+    , m_itemDelegate(new ItemDelegate(m_listView))
 
 {
     initUi();
 }
 
+void SoundApplet::setControlBackground()
+{
+    QPalette soundAppletBackgroud;
+    QPalette listViewBackgroud = m_listView->palette();
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        soundAppletBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
+        m_separator->setColor(QColor(0, 0, 0, 0.1 * 255));
+        m_secondSeparator->setColor(QColor(0, 0, 0, 0.1 * 255));
+    } else {
+        soundAppletBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
+        m_separator->setColor(QColor(255, 255, 255, 0.1 * 255));
+        m_secondSeparator->setColor(QColor(255, 255, 255, 0.1 * 255));
+    }
+    this->setAutoFillBackground(true);
+    this->setPalette(soundAppletBackgroud);
+    listViewBackgroud.setColor(QPalette::Base, Qt::transparent);
+    m_listView->setAutoFillBackground(true);
+    m_listView->setPalette(listViewBackgroud);
+}
+
+void SoundApplet::setItemHoverColor()
+{
+    QPalette hoverBackgroud = m_listView->palette();
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(0, 0, 0, 30));
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, QColor(0, 0, 0, 255));
+    } else {
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(255, 255, 255, 30));
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, QColor(255, 255, 255, 255));
+    }
+    m_listView->setPalette(hoverBackgroud);
+    m_listView->setItemDelegate(m_itemDelegate);
+}
+
 void SoundApplet::initUi()
 {
+    setControlBackground();
     m_listView->setEditTriggers(DListView::NoEditTriggers);
     m_listView->setSelectionMode(QAbstractItemView::NoSelection);
     m_listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_listView->setBackgroundType(DStyledItemDelegate::NoBackground);
+    m_listView->setItemRadius(0);
     m_listView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-    m_listView->setViewportMargins(QMargins(0, 0, 12, 0));
-    m_listView->setSpacing(ITEM_SPACING);
     m_listView->setFixedHeight(0);
+    m_listView->setItemSpacing(1);
 
     m_centralWidget->setAccessibleName("volumn-centralwidget");
     m_volumeBtn->setAccessibleName("volume-button");
@@ -168,14 +225,20 @@ void SoundApplet::initUi()
     deviceLineLayout->setSpacing(DEVICE_SPACING);
 
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
-    volumeCtrlLayout->addSpacing(2);
+    volumeCtrlLayout->addSpacing(8);
     volumeCtrlLayout->addWidget(m_volumeBtn);
     volumeCtrlLayout->addSpacing(10);
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->addSpacing(10);
     volumeCtrlLayout->addWidget(m_volumeIconMax);
+    volumeCtrlLayout->addSpacing(8);
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
+
+    QVBoxLayout *volumeLineLayout = new QVBoxLayout;
+    volumeLineLayout->addLayout(volumeCtrlLayout);
+    volumeLineLayout->addWidget(m_secondSeparator);
+    volumeLineLayout->setMargin(0);
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -192,12 +255,16 @@ void SoundApplet::initUi()
     });
 
     m_centralLayout = new QVBoxLayout;
+    m_centralLayout->setMargin(0);
+    m_centralLayout->setSpacing(0);
     m_centralLayout->addLayout(deviceLineLayout);
-    m_centralLayout->addSpacing(8);
-    m_centralLayout->addLayout(volumeCtrlLayout);
+    m_centralLayout->addLayout(volumeLineLayout);
     m_centralLayout->setContentsMargins(8, 8, 8, 0);
 
     m_listView->setModel(m_model);
+    setItemHoverColor();
+    m_centralLayout->setMargin(0);
+    m_centralLayout->setSpacing(0);
     m_centralLayout->addWidget(m_listView);
     m_centralWidget->setLayout(m_centralLayout);
     m_centralWidget->setFixedWidth(WIDTH);
@@ -428,11 +495,14 @@ void SoundApplet::refreshIcon()
         color = Qt::white;
         break;
     }
+    setControlBackground();
     //主题改变时，同步修改item颜色
     for (int i = 0; i < m_model->rowCount(); i++) {
         auto item = m_model->item(i);
         item->setForeground(color);
+        item->setBackground(Qt::transparent);
     }
+    setItemHoverColor();
     const auto ratio = devicePixelRatioF();
     QPixmap ret = ImageUtil::loadSvg(iconRight, ":/", ICON_SIZE, ratio);
     m_volumeIconMax->setPixmap(ret);
@@ -661,9 +731,9 @@ void SoundApplet::updateListHeight()
     int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;
-    m_listView->setFixedHeight(viewHeight);
+    m_listView->setFixedHeight(viewHeight + SEPARATOR_HEIGHT);
     setFixedHeight(totalHeight);
-    m_centralWidget->setFixedHeight(totalHeight);
+    m_centralWidget->setFixedHeight(totalHeight + SEPARATOR_HEIGHT);
     update();
 }
 

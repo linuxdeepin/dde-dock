@@ -63,6 +63,7 @@ public:
     void invokeMenuItem(const QString &menuId, const bool checked);
     void refreshTips();
     bool isShowControlCenter();
+    void setControlBackground();
 
 public slots:
     void updateSelf();
@@ -118,6 +119,10 @@ private:
     QTimer *m_switchWireTimer;
     QTimer *m_wirelessScanTimer;
     int m_wirelessScanInterval;
+
+    HorizontalSeperator *m_firstSeparator;
+    HorizontalSeperator *m_secondSeparator;
+    HorizontalSeperator *m_thirdSeparator;
 };
 
 #endif // NETWORKITEM_H

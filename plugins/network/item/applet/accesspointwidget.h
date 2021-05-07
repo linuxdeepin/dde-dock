@@ -74,6 +74,9 @@ private:
     void leaveEvent(QEvent *e);
     void setStrengthIcon(const int strength);
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private slots:
     void ssidClicked();
     void disconnectBtnClicked();
@@ -89,6 +92,8 @@ private:
 
     QPixmap m_securityPixmap;
     QSize m_securityIconSize;
+
+    bool m_isEnter;
 };
 
 #endif // ACCESSPOINTWIDGET_H

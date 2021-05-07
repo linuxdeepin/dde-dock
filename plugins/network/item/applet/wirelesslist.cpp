@@ -53,10 +53,15 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 {
     setFixedHeight(ItemHeight);
 
+    QPalette backgroud;
+    backgroud.setColor(QPalette::Background, Qt::transparent);
+    this->setAutoFillBackground(true);
+    this->setPalette(backgroud);
+
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
 
-    m_centralWidget->setFixedWidth(ItemWidth - 2 * ItemMargin);
+    m_centralWidget->setFixedWidth(ItemWidth);
     m_centralWidget->setLayout(m_centralLayout);
 
     m_centralLayout->addWidget(m_controlPanel);

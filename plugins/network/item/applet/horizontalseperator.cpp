@@ -25,14 +25,16 @@
 
 HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     : QWidget(parent),
-      m_color(255, 255, 255, 100)
+      m_color(0, 0, 0, 0.1*255)
 {
+    setFixedHeight(2);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void HorizontalSeperator::setColor(const QColor color)
 {
     m_color = color;
+    update();
 }
 
 void HorizontalSeperator::paintEvent(QPaintEvent *e)

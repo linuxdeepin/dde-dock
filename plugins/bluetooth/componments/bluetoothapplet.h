@@ -24,6 +24,7 @@
 #define BLUETOOTHAPPLET_H
 
 #include <QWidget>
+#include <QScrollArea>
 #include <QStandardItemModel>
 
 #include <dtkwidget_global.h>
@@ -44,6 +45,22 @@ DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
 
+class HorizontalSeperator : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit HorizontalSeperator(QWidget *parent = nullptr);
+
+    void setColor(const QColor color);
+
+protected:
+    void paintEvent(QPaintEvent *e);
+
+private:
+    QColor m_color;
+};
+
 class SettingLabel : public QWidget
 {
     Q_OBJECT
@@ -57,6 +74,9 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *ev) override;
     void paintEvent(QPaintEvent *event) override;
+
+private:
+    void updateIconTheme();
 
 private:
     DLabel *m_label = nullptr;
@@ -99,6 +119,10 @@ private:
     void initConnect();
     // 更新蓝牙插件主界面大小
     void updateSize();
+    void updateIconTheme();
+
+private:
+    QScrollArea *m_scroarea = nullptr;
     QWidget *m_contentWidget = nullptr;
     AdaptersManager *m_adaptersManager = nullptr;
     SettingLabel *m_settingLabel = nullptr;
@@ -107,6 +131,7 @@ private:
 
     QStringList m_connectDeviceName;
     QMap<QString, BluetoothAdapterItem *> m_adapterItems;
+    HorizontalSeperator *m_Separator = nullptr;
 };
 
 #endif // BLUETOOTHAPPLET_H

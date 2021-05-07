@@ -49,7 +49,10 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     m_refreshTimer->setSingleShot(true);
     m_refreshTimer->setInterval(10000);
 
-    m_wirelessApplet->setVisible(false);
+    QPalette backgroud;
+    backgroud.setColor(QPalette::Background, Qt::transparent);
+    m_wirelessApplet->setAutoFillBackground(true);
+    m_wirelessApplet->setPalette(backgroud);
 
     m_refreshLimitTimer->setSingleShot(true);
     m_refreshLimitTimer->setInterval(REFRESH_TRY_TIME_SECOND);

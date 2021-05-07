@@ -22,7 +22,6 @@
 
 #include "bluetoothadapteritem.h"
 #include "componments/adapter.h"
-#include "bluetoothapplet.h"
 #include "bluetoothconstants.h"
 #include "refreshbutton.h"
 
@@ -35,6 +34,25 @@
 #include <DListView>
 #include <DSpinner>
 #include <DApplicationHelper>
+
+ItemDelegate::ItemDelegate(QAbstractItemView *parent)
+    : DStyledItemDelegate(parent)
+{
+
+}
+
+void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QStyleOptionViewItem styleOption = option;
+
+    if ((styleOption.state & QStyle::State_MouseOver)) {
+        styleOption.showDecorationSelected  = true;
+        styleOption.state |= QStyle::State_Selected;
+        styleOption.rect += QMargins(1, 1, 1, 1);
+    }
+
+    DStyledItemDelegate::paint(painter, styleOption, index);
+}
 
 BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DListView *parent)
     : m_style(style)
@@ -65,6 +83,7 @@ void BluetoothDeviceItem::initActionList()
     m_standarditem->setAccessibleText(m_device->alias());
     m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
     m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
+    m_standarditem->setBackground(Qt::transparent);
 
     m_labelAction->setTextColorRole(DPalette::BrightText);
     m_labelAction->setText(m_device->alias());
@@ -129,6 +148,8 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
                                          QDBusConnection::sessionBus(),
                                          this))
     , m_showUnnamedDevices(false)
+    , m_Separator(new HorizontalSeperator(this))
+    , m_itemDelegate(new ItemDelegate(m_deviceListview))
 {
     initData();
     initUi();
@@ -174,9 +195,12 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
 {
     if (type == DGuiApplicationHelper::LightType) {
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+        m_Separator->setColor(QColor(0, 0, 0, 0.1 * 255));
     } else {
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+        m_Separator->setColor(QColor(255, 255, 255, 0.1 * 255));
     }
+    setItemHoverColor();
 }
 
 int BluetoothAdapterItem::currentDeviceCount()
@@ -256,6 +280,20 @@ void BluetoothAdapterItem::onDeviceNameUpdated(const Device *device)
     }
 }
 
+void BluetoothAdapterItem::setItemHoverColor()
+{
+    QPalette hoverBackgroud = m_deviceListview->palette();
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(0, 0, 0, 30));
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, Qt::black);
+    } else {
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(255, 255, 255, 30));
+        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, Qt::white);
+    }
+    m_deviceListview->setPalette(hoverBackgroud);
+    m_deviceListview->setItemDelegate(m_itemDelegate);
+}
+
 void BluetoothAdapterItem::initUi()
 {
     m_refreshBtn->setFixedSize(24, 24);
@@ -276,9 +314,14 @@ void BluetoothAdapterItem::initUi()
 
     m_deviceListview->setAccessibleName("DeviceItemList");
     m_deviceListview->setModel(m_deviceModel);
+    updateIconTheme(DGuiApplicationHelper::instance()->themeType());
     m_deviceListview->setItemSpacing(1);
     m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
     m_deviceListview->setBackgroundType(DStyledItemDelegate::ClipCornerBackground);
+    QPalette backgroud;
+    backgroud.setColor(QPalette::Base, Qt::transparent);
+    m_deviceListview->setAutoFillBackground(true);
+    m_deviceListview->setPalette(backgroud);
     m_deviceListview->setItemRadius(0);
     m_deviceListview->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_deviceListview->setSelectionMode(QAbstractItemView::NoSelection);
@@ -289,6 +332,7 @@ void BluetoothAdapterItem::initUi()
 
     mainLayout->addWidget(m_adapterLabel);
     mainLayout->addSpacing(2);
+    mainLayout->addWidget(m_Separator);
     mainLayout->addWidget(m_deviceListview);
 
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());

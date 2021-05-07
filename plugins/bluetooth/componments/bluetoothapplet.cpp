@@ -31,7 +31,6 @@
 #include <QBoxLayout>
 #include <QMouseEvent>
 #include <QDebug>
-#include <QScrollArea>
 
 #include <DApplicationHelper>
 #include <DDBusSender>
@@ -40,20 +39,56 @@
 #include <DScrollArea>
 #include <DListView>
 
+HorizontalSeperator::HorizontalSeperator(QWidget *parent)
+    : QWidget(parent),
+      m_color(0, 0, 0, 0.1*255)
+{
+    setFixedHeight(2);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
+void HorizontalSeperator::setColor(const QColor color)
+{
+    m_color = color;
+    update();
+}
+
+void HorizontalSeperator::paintEvent(QPaintEvent *e)
+{
+    QWidget::paintEvent(e);
+
+    QPainter painter(this);
+    painter.fillRect(rect(), m_color);
+}
+
 SettingLabel::SettingLabel(QString text, QWidget *parent)
     : QWidget(parent)
     , m_label(new DLabel(text, this))
     , m_layout(new QHBoxLayout(this))
 {
-    QPalette palette;
-    palette.setColor(QPalette::WindowText, QPalette::BrightText);
-    m_label->setPalette(palette);
+    updateIconTheme();
     setAccessibleName("BluetoothSettingLabel");
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);
     m_layout->addSpacing(20);
     m_layout->addWidget(m_label, 0, Qt::AlignLeft | Qt::AlignHCenter);
     m_layout->addStretch();
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &SettingLabel::updateIconTheme);
+}
+
+void SettingLabel::updateIconTheme()
+{
+    QPalette backgroud;
+    QPalette textColor;
+    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType){
+        textColor.setColor(QPalette::WindowText, QPalette::BrightText);
+    } else {
+        textColor.setColor(QPalette::WindowText, Qt::white);
+    }
+    m_label->setPalette(textColor);
+    backgroud.setColor(QPalette::Background, Qt::transparent);
+    this->setAutoFillBackground(true);
+    this->setPalette(backgroud);
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
@@ -76,11 +111,7 @@ void SettingLabel::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::LightType) {
-        painter.setBrush(QColor(0, 0, 0, 0.03 * 255));
-    } else {
-        painter.setBrush(QColor(255, 255, 255, 0.03 * 255));
-    }
+    painter.setBrush(Qt::transparent);
     painter.drawRoundedRect(rect(), 0, 0);
 
     return QWidget::paintEvent(event);
@@ -93,6 +124,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
+    , m_Separator(new HorizontalSeperator(this))
 {
     initUi();
     initConnect();
@@ -160,6 +192,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
     connect(adapterItem, &BluetoothAdapterItem::requestRefreshAdapter, m_adaptersManager, &AdaptersManager::adapterRefresh);
 
     m_adapterItems.insert(adapter->id(), adapterItem);
+    m_contentLayout->insertWidget(0, m_Separator, Qt::AlignTop | Qt::AlignVCenter);
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
@@ -209,20 +242,21 @@ void BluetoothApplet::initUi()
     m_contentLayout->setSpacing(0);
     m_contentLayout->addWidget(m_settingLabel, 0, Qt::AlignBottom | Qt::AlignVCenter);
 
-    QScrollArea *scroarea = new QScrollArea(this);
-    m_contentWidget->setAttribute(Qt::WA_TranslucentBackground);
+    m_scroarea = new QScrollArea(this);
 
-    scroarea->setWidgetResizable(true);
-    scroarea->setFrameStyle(QFrame::NoFrame);
-    scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scroarea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-    scroarea->setContentsMargins(0, 0, 0, 0);
-    scroarea->setWidget(m_contentWidget);
+    m_scroarea->setWidgetResizable(true);
+    m_scroarea->setFrameStyle(QFrame::NoFrame);
+    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+    m_scroarea->setContentsMargins(0, 0, 0, 0);
+    m_scroarea->setWidget(m_contentWidget);
+
+    updateIconTheme();
 
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(0);
-    m_mainLayout->addWidget(scroarea);
+    m_mainLayout->addWidget(m_scroarea);
     updateSize();
 }
 
@@ -240,6 +274,25 @@ void BluetoothApplet::initConnect()
         .arg(QString("bluetooth"))
         .call();
     });
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
+}
+
+void BluetoothApplet::updateIconTheme()
+{
+    QPalette widgetBackgroud;
+    QPalette scroareaBackgroud;
+    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType){
+        widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
+        m_Separator->setColor(QColor(0, 0, 0, 0.1 * 255));
+    } else {
+        widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
+        m_Separator->setColor(QColor(255, 255, 255, 0.1 * 255));
+    }
+    m_contentWidget->setAutoFillBackground(true);
+    m_contentWidget->setPalette(widgetBackgroud);
+    scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);
+    m_scroarea->setAutoFillBackground(true);
+    m_scroarea->setPalette(scroareaBackgroud);
 }
 
 void BluetoothApplet::updateSize()

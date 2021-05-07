@@ -24,9 +24,11 @@
 #define BLUETOOTHADAPTERITEM_H
 
 #include "componments/device.h"
+#include "bluetoothapplet.h"
 
 #include <QWidget>
 
+#include <DListView>
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
@@ -50,6 +52,13 @@ class RefreshButton;
 
 const QString LightString = QString(":/light/buletooth_%1_light.svg");
 const QString DarkString = QString(":/dark/buletooth_%1_dark.svg");
+
+class ItemDelegate : public DStyledItemDelegate
+{
+public:
+    ItemDelegate(QAbstractItemView *parent = nullptr);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+};
 
 class BluetoothDeviceItem : public QObject
 {
@@ -120,6 +129,7 @@ signals:
 
 private:
     void initData();
+    void setItemHoverColor();
     void initUi();
     void initConnect();
     void setUnnamedDevicesVisible(bool isShow);
@@ -128,12 +138,14 @@ private:
     SettingLabel *m_adapterLabel = nullptr;
     DSwitchButton *m_adapterStateBtn = nullptr;
     DListView *m_deviceListview = nullptr;
+    ItemDelegate *m_itemDelegate;
     QStandardItemModel *m_deviceModel = nullptr;
     RefreshButton *m_refreshBtn = nullptr;
     DBusBluetooth *m_bluetoothInter;
     bool m_showUnnamedDevices;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
+    HorizontalSeperator *m_Separator;
 };
 
 #endif // BLUETOOTHADAPTERITEM_H

@@ -70,13 +70,13 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
     auto itemLayout = new QHBoxLayout;
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
-    itemLayout->addSpacing(16);
+    itemLayout->addSpacing(28);
     itemLayout->addWidget(m_wiredIcon);
     itemLayout->addSpacing(8);
     itemLayout->addWidget(m_connectedName);
     itemLayout->addWidget(m_stateButton);
     itemLayout->addWidget(m_loadingStat);
-    itemLayout->addSpacing(3);
+    itemLayout->addSpacing(11);
     connectionLayout->addLayout(itemLayout);
     setLayout(connectionLayout);
 

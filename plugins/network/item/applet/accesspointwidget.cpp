@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QFontMetrics>
 #include <QIcon>
+#include <QPainter>
 
 using namespace dde::network;
 
@@ -51,7 +52,13 @@ AccessPointWidget::AccessPointWidget()
     , m_securityLabel(new QLabel)
     , m_strengthLabel(new QLabel)
     , m_stateButton(new StateButton(this))
+    , m_isEnter(false)
 {
+    QPalette backgroud;
+    backgroud.setColor(QPalette::Background, Qt::transparent);
+    this->setAutoFillBackground(true);
+    this->setPalette(backgroud);
+
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_ssidBtn->setObjectName("Ssid");
@@ -71,9 +78,10 @@ AccessPointWidget::AccessPointWidget()
     m_securityLabel->setFixedSize(m_securityIconSize / devicePixelRatioF());
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
-    infoLayout->addWidget(m_securityLabel);
     infoLayout->setMargin(0);
     infoLayout->setSpacing(0);
+    infoLayout->addSpacing(12);
+    infoLayout->addWidget(m_securityLabel);
     infoLayout->addSpacing(2);
     infoLayout->addWidget(m_strengthLabel);
     infoLayout->addSpacing(10);
@@ -147,13 +155,41 @@ void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
     m_stateButton->setVisible(isActive);
 }
 
+void AccessPointWidget::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setPen(Qt::NoPen);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        if(m_isEnter) {
+            painter.setBrush(QColor(0, 0, 0, 0.12*255));
+        } else {
+            painter.setBrush(Qt::transparent);
+        }
+    } else {
+        if(m_isEnter) {
+            painter.setBrush(QColor(255, 255, 255, 0.12*255));
+        } else {
+            painter.setBrush(Qt::transparent);
+        }
+    }
+
+    painter.drawRect(rect());
+}
+
 void AccessPointWidget::enterEvent(QEvent *e)
 {
-    QWidget::enterEvent(e);}
+    m_isEnter = true;
+    update();
+    QWidget::enterEvent(e);
+}
 
 void AccessPointWidget::leaveEvent(QEvent *e)
 {
-    QWidget::leaveEvent(e);}
+    m_isEnter = false;
+    update();
+    QWidget::leaveEvent(e);
+}
 
 void AccessPointWidget::setStrengthIcon(const int strength)
 {

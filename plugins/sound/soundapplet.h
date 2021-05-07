@@ -46,6 +46,14 @@ class QGSettings;
 namespace Dock{
 class TipsWidget;
 }
+
+class ItemDelegate : public DStyledItemDelegate
+{
+public:
+    ItemDelegate(QAbstractItemView *parent = nullptr);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+};
+
 class Port : public QObject
 {
     Q_OBJECT
@@ -109,6 +117,8 @@ public:
     Port *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
     void initUi();
+    void setItemHoverColor();
+    void setControlBackground();
 
 signals:
     void volumeChanged(const int value) const;
@@ -147,12 +157,14 @@ private:
     Dock::TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
     HorizontalSeparator *m_separator;
+    HorizontalSeparator *m_secondSeparator;
     Dock::TipsWidget *m_deviceLabel;
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;
     DTK_WIDGET_NAMESPACE::DListView  *m_listView;
     QStandardItemModel *m_model;
+    ItemDelegate *m_itemDelegate;
     QList<Port *> m_ports;
     QString m_deviceInfo;
     QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备

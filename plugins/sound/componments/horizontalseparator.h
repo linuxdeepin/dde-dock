@@ -31,8 +31,13 @@ class HorizontalSeparator : public QWidget
 public:
     explicit HorizontalSeparator(QWidget *parent = 0);
 
+    void setColor(const QColor color);
+
 protected:
     void paintEvent(QPaintEvent *e);
+
+private:
+    QColor m_color;
 };
 
 #endif // HORIZONTALSEPARATOR_H
