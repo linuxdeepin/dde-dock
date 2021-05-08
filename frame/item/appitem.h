@@ -120,7 +120,6 @@ private:
     bool m_dragging;
     bool m_active;
     int m_retryTimes;
-    int m_lastShowDay;
     bool m_iconValid;
     unsigned long m_lastclickTimes;
 
@@ -134,9 +133,9 @@ private:
 
     QTimer *m_updateIconGeometryTimer;
     QTimer *m_retryObtainIconTimer;
-    QTimer *m_refershIconTimer;
+    QTimer *m_refershIconTimer;         // 当APP为日历时定时（1S）检测是否刷新ICON
 
-    QDate m_curDate;
+    QDate m_curDate;                    // 保存当前icon的日期来判断是否需要更新日历APP的ICON
 
     QFutureWatcher<QPixmap> *m_smallWatcher;
     QFutureWatcher<QPixmap> *m_largeWatcher;

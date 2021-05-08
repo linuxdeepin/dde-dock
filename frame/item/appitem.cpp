@@ -60,7 +60,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_drag(nullptr)
     , m_dragging(false)
     , m_retryTimes(0)
-    , m_lastShowDay(0)
     , m_iconValid(false)
     , m_lastclickTimes(0)
     , m_appIcon(QPixmap())
@@ -116,10 +115,10 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
+    /** 日历 1S定时判断是否刷新icon的处理 */
     connect(m_refershIconTimer, &QTimer::timeout, this, [ = ]() {
-        m_curDate = QDate::currentDate();
-        if (m_curDate.day() != m_lastShowDay) {
-            m_lastShowDay = m_curDate.day();
+        if (QDate::currentDate() != m_curDate) {
+            m_curDate = QDate::currentDate();
             refreshIcon();
         }
     });
