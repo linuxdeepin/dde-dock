@@ -29,34 +29,19 @@
 
 DisplayManager::DisplayManager(QObject *parent)
     : QObject(parent)
-    , m_display(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
-    , m_delayTimer(new QTimer(this))
     , m_gsettings(Utils::SettingsPtr("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this))
     , m_onlyInPrimary(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool())
 {
     connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::primaryScreenChanged);
     connect(qApp, &QGuiApplication::screenAdded, this, &DisplayManager::screenCountChanged);
     connect(qApp, &QGuiApplication::screenRemoved, this, &DisplayManager::screenCountChanged);
-    //Note: 如果只关联QDesktopWidget::screenCountChanged信号，反复插拔显示器，概率性崩溃，是因为m_screens里面的指针部分还没来得及remove就被销毁了，导致野指针
-    // screenCountChanged信号不是立刻发送的，源码里面可以看到所在函数是队列连接的形式，即通过qApp->screens()拿到的的数据已经变了，这个信号仍然未发送
-    //    connect(QApplication::desktop(), &QDesktopWidget::screenCountChanged, this, &DisplayManager::screenCountChanged);
-    connect(m_delayTimer, &QTimer::timeout, this, [ = ] {
-        updateScreenDockInfo();
 
-#ifdef QT_DEBUG
-        qInfo() << m_screenPositionMap;
-#endif
-
-        Q_EMIT screenInfoChanged();
-    });
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &DisplayManager::onGSettingsChanged);
 
-    m_delayTimer->setInterval(10);
-    m_delayTimer->setSingleShot(true);
-
     screenCountChanged();
-    updateScreenDockInfo();
+
+    QTimer::singleShot(0, this, &DisplayManager::screenInfoChanged);
 }
 
 /**
@@ -80,7 +65,6 @@ QScreen *DisplayManager::screen(const QString &screenName) const
             return s;
     }
 
-    qWarning() << "Screen: " << screenName << " can`t be found!";
     return nullptr;
 }
 
@@ -284,15 +268,33 @@ void DisplayManager::screenCountChanged()
                                     | Qt::InvertedLandscapeOrientation
                                     | Qt::InvertedPortraitOrientation);
 
-        connect(s, &QScreen::geometryChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-        connect(s, &QScreen::primaryOrientationChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-        connect(s, &QScreen::orientationChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+        // 显示器信息发生任何变化时，都应该重新刷新一次任务栏的显示位置
+        connect(s, &QScreen::geometryChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::availableGeometryChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::physicalSizeChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::physicalDotsPerInchChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::logicalDotsPerInchChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::virtualGeometryChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::primaryOrientationChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::orientationChanged, this, &DisplayManager::dockInfoChanged);
+        connect(s, &QScreen::refreshRateChanged, this, &DisplayManager::dockInfoChanged);
 
         m_screens.append(s);
     }
 
     // 屏幕数量发生变化，应该刷新一下任务栏的显示
-    m_delayTimer->start();
+    dockInfoChanged();
+}
+
+void DisplayManager::dockInfoChanged()
+{
+    updateScreenDockInfo();
+
+#ifdef QT_DEBUG
+    qInfo() << m_screenPositionMap;
+#endif
+
+    Q_EMIT screenInfoChanged();
 }
 
 /**
@@ -305,8 +307,6 @@ void DisplayManager::onGSettingsChanged(const QString &key)
     if (key == "onlyShowPrimary") {
         m_onlyInPrimary = Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool();
 
-        updateScreenDockInfo();
-
-        m_delayTimer->start();
+        dockInfoChanged();
     }
 }
