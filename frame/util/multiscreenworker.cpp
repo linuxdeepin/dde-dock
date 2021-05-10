@@ -239,7 +239,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
-    if (m_extralRegisterKey != key)
+    if (m_extralRegisterKey != key || testState(MousePress))
         return;
 
     // FIXME:每次都要重置一下，是因为qt中的QScreen类缺少nameChanged信号，后面会给上游提交patch修复
