@@ -642,4 +642,3 @@ void MainWindow::sendNotifications()
     });
 }
 
-#include "mainwindow.moc"

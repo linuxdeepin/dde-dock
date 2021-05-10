@@ -1052,6 +1052,8 @@ void NetworkItem::getPluginState()
             m_timeOut = false;
         }
         break;
+    default:
+        break;
     }
 }
 
