@@ -3,13 +3,12 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
+
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
-    , m_width(0)
     , m_type(SingleLine)
 {
-
 }
 
 void TipsWidget::setText(const QString &text)
@@ -21,7 +20,13 @@ void TipsWidget::setText(const QString &text)
     // 同时去掉两边的空白信息，例如qBittorrent的提示
     m_text = document.toPlainText().simplified();
 
-    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().height());
+#if 0 //测试时可以使用下面的语句
+    // FIXME:藏语字体绘制会有异常，设置高度时需要使用fontMetrics().boundingRect()去获取整体的边界矩形的高度，
+    // 使用fontMetrics().height()去获取时，针对藏语这种字体，其高度和实际显示区域并不等同
+    m_text = "བོད་སྐད་ཡིག་གཟུགས་ཚད་ལེན་ཚོད་ལྟའི་སྐོར་གྱི་རྗོད་ཚིག";
+#endif
+
+    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().boundingRect(m_text).height());
 
     update();
 
@@ -38,15 +43,14 @@ void TipsWidget::setTextList(const QStringList &textList)
     m_type = TipsWidget::MultiLine;
     m_textList = textList;
 
-    int maxLength = 0;
-    int k = fontMetrics().height() * m_textList.size();
-    setFixedHeight(k);
+    int width = 0;
+    int height = 0;
     for (QString text : m_textList) {
-        int fontLength = fontMetrics().width(text) + 20;
-        maxLength = maxLength > fontLength ? maxLength : fontLength;
+        width = qMax(width, fontMetrics().width(text) + 20);
+        height += fontMetrics().boundingRect(text).height();
     }
-    m_width = maxLength;
-    setFixedWidth(maxLength);
+
+    setFixedSize(width, height);
 
     update();
 }
@@ -57,13 +61,9 @@ void TipsWidget::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setPen(QPen(palette().brightText(), 1));
-    QTextOption option;
-    int fontHeight = fontMetrics().height();
-    option.setAlignment(Qt::AlignCenter);
 
-    QFont textFont;
-    textFont.setPixelSize(rect().height() / 2 - 1);
-    painter.setFont(textFont);
+    QTextOption option;
+    option.setAlignment(Qt::AlignCenter);
 
     switch (m_type) {
     case SingleLine: {
@@ -75,8 +75,9 @@ void TipsWidget::paintEvent(QPaintEvent *event)
         if (m_textList.size() != 1)
             option.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         for (QString text : m_textList) {
-            painter.drawText(QRect(0, y, m_width, fontHeight), text, option);
-            y += fontHeight;
+            int lineHeight = fontMetrics().boundingRect(text).height();
+            painter.drawText(QRect(0, y, rect().width(), lineHeight), text, option);
+            y += lineHeight;
         }
     }
         break;
@@ -86,23 +87,17 @@ void TipsWidget::paintEvent(QPaintEvent *event)
 bool TipsWidget::event(QEvent *event)
 {
     if (event->type() == QEvent::FontChange) {
-        if (m_type == SingleLine) {
-            if (!m_text.trimmed().isEmpty()) {
-                 setFixedSize(fontMetrics().width(m_text) + 6, fontMetrics().height());
-                 update();
-            }
-        } else {
-            if (m_textList.size() > 0) {
-                int maxLength = 0;
-                setFixedHeight(fontMetrics().height() * m_textList.size());
-                for (QString text : m_textList) {
-                    int fontLength = fontMetrics().width(text) + 6;
-                    maxLength = qMax(maxLength,fontLength);
-                }
-                m_width = maxLength;
-                setFixedWidth(maxLength);
-                update();
-            }
+        switch (m_type) {
+        case SingleLine:
+        {
+            setText(m_text);
+            break;
+        }
+        case MultiLine:
+        {
+            setTextList(m_textList);
+            break;
+        }
         }
     }
     return QFrame::event(event);

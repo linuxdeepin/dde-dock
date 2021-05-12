@@ -199,30 +199,6 @@ void MainWindow::relaodPlugins()
     qApp->setProperty("PLUGINSLOADED", true);
 }
 
-void MainWindow::showEvent(QShowEvent *e)
-{
-    QWidget::showEvent(e);
-
-    //    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
-    //    windowHandle(), [this](QScreen * new_screen) {
-    //        QScreen *old_screen = windowHandle()->screen();
-    //        windowHandle()->setScreen(new_screen);
-    //        // 屏幕变化后可能导致控件缩放比变化，此时应该重设控件位置大小
-    //        // 比如：窗口大小为 100 x 100, 显示在缩放比为 1.0 的屏幕上，此时窗口的真实大小 = 100x100
-    //        // 随后窗口被移动到了缩放比为 2.0 的屏幕上，应该将真实大小改为 200x200。另外，只能使用
-    //        // QPlatformWindow直接设置大小来绕过QWidget和QWindow对新旧geometry的比较。
-    //        const qreal scale = devicePixelRatioF();
-    //        const QPoint screenPos = new_screen->geometry().topLeft();
-    //        const QPoint posInScreen = this->pos() - old_screen->geometry().topLeft();
-    //        const QPoint pos = screenPos + posInScreen * scale;
-    //        const QSize size = this->size() * scale;
-
-    //        windowHandle()->handle()->setGeometry(QRect(pos, size));
-    //    }, Qt::UniqueConnection);
-
-    //    windowHandle()->setScreen(qGuiApp->primaryScreen());
-}
-
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();

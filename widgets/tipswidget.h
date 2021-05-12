@@ -18,7 +18,7 @@ public:
     const QStringList &textList() { return  m_textList; }
     void setText(const QString &text);
     void setTextList(const QStringList &textList);
-    
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool event(QEvent *event) override;
@@ -26,7 +26,6 @@ protected:
 private:
     QString m_text;
     QStringList m_textList;
-    int m_width;
     ShowType m_type;
 };
 }

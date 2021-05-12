@@ -136,7 +136,6 @@ public slots:
 
 private:
     using QWidget::show;
-    void showEvent(QShowEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void enterEvent(QEvent *e) override;
