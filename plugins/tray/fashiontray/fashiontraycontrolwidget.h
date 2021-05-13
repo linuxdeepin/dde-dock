@@ -26,6 +26,10 @@
 
 #include <QLabel>
 
+/**
+ * @brief The FashionTrayControlWidget class
+ * @note  系统托盘上的展开合并按钮
+ */
 class FashionTrayControlWidget : public QWidget
 {
     Q_OBJECT

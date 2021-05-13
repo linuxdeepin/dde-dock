@@ -40,7 +40,6 @@ DWIDGET_USE_NAMESPACE
 
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
 
-class MainPanel;
 class MainPanelControl;
 class QTimer;
 class MenuWorker;
@@ -110,12 +109,6 @@ class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
 
-    enum Flag{
-        Motion = 1 << 0,
-        Button = 1 << 1,
-        Key    = 1 << 2
-    };
-
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
@@ -124,7 +117,6 @@ public:
     void setGeometry(const QRect &rect);
     void sendNotifications();
 
-    friend class MainPanel;
     friend class MainPanelControl;
 
     MainPanelControl *panel() {return m_mainPanel;}
@@ -167,14 +159,14 @@ private slots:
     void touchRequestResizeDock();
 
 private:
-    MainPanelControl *m_mainPanel;
+    MainPanelControl *m_mainPanel;                      // 任务栏
     DPlatformWindowHandle m_platformWindowHandle;
     DWindowManagerHelper *m_wmHelper;
-    MultiScreenWorker *m_multiScreenWorker;
+    MultiScreenWorker *m_multiScreenWorker;             // 多屏幕管理
     MenuWorker *m_menuWorker;
     QTimer *m_shadowMaskOptimizeTimer;
     QDBusConnectionInterface *m_dbusDaemonInterface;
-    org::kde::StatusNotifierWatcher *m_sniWatcher;
+    org::kde::StatusNotifierWatcher *m_sniWatcher;      // DBUS状态通知
     DragWidget *m_dragWidget;
 
     QString m_sniHostService;

@@ -309,7 +309,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     case DockItem::Placeholder:
         addAppAreaItem(index, item);
         break;
-    case DockItem::TrayPlugin:
+    case DockItem::TrayPlugin: // 此处只会有一个tray系统托盘插件，微信、声音、网络蓝牙等等，都在系统托盘插件中处理的
         addTrayAreaItem(index, item);
         break;
     case DockItem::Plugins:

@@ -302,6 +302,10 @@ void TrayPlugin::initXEmbed()
     m_refreshXEmbedItemsTimer->start();
 }
 
+/**
+ * @brief TrayPlugin::initSNI
+ * @note 初始化监听信号绑定
+ */
 void TrayPlugin::initSNI()
 {
     connect(m_refreshSNIItemsTimer, &QTimer::timeout, this, &TrayPlugin::sniItemsChanged);
@@ -311,6 +315,10 @@ void TrayPlugin::initSNI()
     m_refreshSNIItemsTimer->start();
 }
 
+/**
+ * @brief TrayPlugin::sniItemsChanged
+ * @note 移除关闭的item,插入新增item
+ */
 void TrayPlugin::sniItemsChanged()
 {
     const QStringList &itemServicePaths = m_sniWatcher->registeredStatusNotifierItems();
@@ -399,6 +407,7 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
 void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServicePath)
 {
     QFutureWatcher<bool> *watcher = new QFutureWatcher<bool>();
+    // 开线程去处理添加任务
     connect(watcher, &QFutureWatcher<int>::finished, this, [=] {
         watcher->deleteLater();
         if (!watcher->result()) {

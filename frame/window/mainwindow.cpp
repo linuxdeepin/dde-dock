@@ -199,6 +199,11 @@ void MainWindow::relaodPlugins()
     qApp->setProperty("PLUGINSLOADED", true);
 }
 
+/**
+ * @brief MainWindow::mousePressEvent
+ * @param e
+ * @note 右键显示任务栏的菜单
+ */
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
@@ -266,6 +271,10 @@ void MainWindow::initMember()
     m_updateDragAreaTimer->setSingleShot(true);
 }
 
+/**
+ * @brief MainWindow::initSNIHost
+ * @note 将Dock注册到StatusNotifierWatcher服务上
+ */
 void MainWindow::initSNIHost()
 {
     // registor dock as SNI Host on dbus

@@ -197,9 +197,11 @@ int main(int argc, char *argv[])
     translator.load("/usr/share/dde-network-utils/translations/dde-network-utils_" + QLocale::system().name());
     app.installTranslator(&translator);
 
+    // 设置日志输出到控制台以及文件
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    // 启动入参 dde-dock --help可以看到一下内容， -x不加载插件 -r 一般用在startdde启动任务栏
     QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
     QCommandLineOption runOption(QStringList() << "r" << "run-by-stardde", "run by startdde.");
     QCommandLineParser parser;
@@ -210,6 +212,7 @@ int main(int argc, char *argv[])
     parser.addOption(runOption);
     parser.process(app);
 
+    // 任务栏单进程限制
     DGuiApplicationHelper::setSingleInstanceInterval(-1);
     if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
         qDebug() << "set single instance failed!";
@@ -226,10 +229,12 @@ int main(int argc, char *argv[])
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 
+    // 当任务栏以-r参数启动时，设置CANSHOW未false，之后调用launch不显示任务栏
     qApp->setProperty("CANSHOW", !parser.isSet(runOption));
 
     mw.launch();
 
+    // 判断是否进入安全模式，是否带有入参 -x
     if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
         DockItemManager::instance()->startLoadPlugins();
         qApp->setProperty("PLUGINSLOADED", true);
