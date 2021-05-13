@@ -1,7 +1,7 @@
 %global sname deepin-dock
 
 Name:           dde-dock
-Version:        5.4.12.1
+Version:        5.4.12.2
 Release:        1
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -64,11 +64,11 @@ sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt \
 sed -i -E '30,39d' CMakeLists.txt
 
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginscontroller.cpp \
-                          frame/window/mainpanelcontrol.cpp \
                           plugins/tray/system-trays/systemtrayscontroller.cpp
 
 
-sed -i 's|/lib|/libexec|g' plugins/show-desktop/showdesktopplugin.cpp
+sed -i 's|/lib|/libexec|g' plugins/show-desktop/showdesktopplugin.cpp \
+                          frame/window/mainpanelcontrol.cpp
 
 sed -i 's|/usr/lib/dde-dock/plugins|%{_libdir}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
 sed -i 's|local/lib/dde-dock/plugins|local/%{_lib}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
@@ -101,6 +101,6 @@ export PATH=%{_qt5_bindir}:$PATH
 
 
 %changelog
-* Thu Mar 23 2021 uoser <uoser@uniontech.com> - 5.4.12.1-1
-- Update to 5.4.12.1
+* Thu Mar 23 2021 uoser <uoser@uniontech.com> - 5.4.12.2-1
+- Update to 5.4.12.2
 
