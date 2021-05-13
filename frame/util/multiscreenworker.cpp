@@ -1242,6 +1242,11 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
  */
 void MultiScreenWorker::resetDockScreen()
 {
+    if (testState(ChangePositionAnimationStart)
+            || testState(HideAnimationStart)
+            || testState(ShowAnimationStart))
+        return;
+
     m_ds.updateDockedScreen(getValidScreen(position()));
     // 更新任务栏自身信息
     /**
