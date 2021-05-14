@@ -243,7 +243,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
         return;
 
     // FIXME:每次都要重置一下，是因为qt中的QScreen类缺少nameChanged信号，后面会给上游提交patch修复
-    resetDockScreen();
+    m_ds.updateDockedScreen(getValidScreen(position()));
 
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
     m_delayWakeTimer->stop();
