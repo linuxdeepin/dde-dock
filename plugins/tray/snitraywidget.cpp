@@ -665,7 +665,12 @@ void SNITrayWidget::showHoverTips()
         if (tooltip.title.isEmpty())
             return;
 
-        m_tipsLabel->setText(tooltip.title);
+        // 当提示信息中有换行符时，需要使用setTextList
+        if (tooltip.title.contains('\n'))
+            m_tipsLabel->setTextList(tooltip.title.split('\n'));
+        else
+            m_tipsLabel->setText(tooltip.title);
+
         m_tipsLabel->setAccessibleName(itemKeyForConfig().replace("sni:",""));
 
         showPopupWindow(m_tipsLabel);

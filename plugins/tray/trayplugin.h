@@ -98,8 +98,8 @@ private:
     QTimer *m_refreshSNIItemsTimer;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
-    QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;
-    QMap<QString, IndicatorTray*> m_indicatorMap;
+    QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;     //这个目前好像无用了
+    QMap<QString, IndicatorTray*> m_indicatorMap;           //这个有键盘跟license
 
     Dock::TipsWidget *m_tipsLabel;
     bool m_pluginLoaded;

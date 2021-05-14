@@ -39,6 +39,10 @@ class TipsWidget;
 //using namespace com::deepin::dde;
 using namespace org::kde;
 
+/**
+ * @brief The SNITrayWidget class
+ * @note 系统托盘第三方程序窗口
+ */
 class SNITrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT

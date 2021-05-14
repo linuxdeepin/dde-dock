@@ -85,12 +85,12 @@ private:
     QTimer *m_attentionDelayTimer;
 
     TrayPlugin *m_trayPlugin;
-    FashionTrayControlWidget *m_controlWidget;
+    FashionTrayControlWidget *m_controlWidget;          //展开按钮
     FashionTrayWidgetWrapper *m_currentDraggingTray;
 
-    NormalContainer *m_normalContainer;
+    NormalContainer *m_normalContainer;                 //左侧可展开窗口
     AttentionContainer *m_attentionContainer;
-    HoldContainer *m_holdContainer;
+    HoldContainer *m_holdContainer;                     //常驻窗口
 
     static int TrayWidgetWidth;
     static int TrayWidgetHeight;
