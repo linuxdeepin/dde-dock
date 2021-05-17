@@ -25,6 +25,7 @@
 #include <QScreen>
 #include <QApplication>
 #include <QDragEnterEvent>
+#include <QDesktopWidget>
 
 #define SPACING           0
 #define MARGIN            0
@@ -194,6 +195,8 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     });
 
     m_windowListLayout->addWidget(snap);
+    if (m_snapshots.size() >= (QDesktopWidget().screenGeometry(this).width() / (SNAP_WIDTH / 2)))
+        snap->setVisible(false);
 
     m_snapshots.insert(wid, snap);
 
