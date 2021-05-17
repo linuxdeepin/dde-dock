@@ -187,8 +187,6 @@ ThemeAppIcon::~ThemeAppIcon()
  */
 QIcon ThemeAppIcon::getIcon(const QString &name)
 {
-    QIcon icon;
-
     QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
     bool hasUserTheme = QIconLoader::instance()->hasUserTheme();
 
@@ -196,9 +194,7 @@ QIcon ThemeAppIcon::getIcon(const QString &name)
         return QIcon::fromTheme(name);
 
     QIconEngine * const engine = platformTheme->createIconEngine(name);
-    QIcon *cachedIcon  = new QIcon(engine);
-    icon = *cachedIcon;
-    return icon;
+    return QIcon(engine);
 }
 
 bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain)

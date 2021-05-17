@@ -592,8 +592,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
-        QDropEvent *e = static_cast<QDropEvent *>(event);
-        bool isContains = rect().contains(mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+        bool isContains = rect().contains(mapFromGlobal(QCursor::pos()));
         if (isContains) {
             if (event->type() == QEvent::DragMove) {
                 handleDragMove(static_cast<QDragMoveEvent *>(event), true);

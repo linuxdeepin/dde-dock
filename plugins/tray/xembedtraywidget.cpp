@@ -541,6 +541,10 @@ bool XEmbedTrayWidget::isBadWindow()
     auto c = QX11Info::connection();
 
     auto cookie = xcb_get_geometry(c, m_windowId);
-    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    return clientGeom.isNull();
+    xcb_get_geometry_reply_t *clientGeom = xcb_get_geometry_reply(c, cookie, Q_NULLPTR);
+    bool result = clientGeom ? false : true;
+
+    free(clientGeom);
+
+    return result;
 }
