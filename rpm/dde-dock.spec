@@ -38,6 +38,7 @@ Requires:       dde-qt-dbus-factory
 Requires:       xcb-util-wm
 Requires:       xcb-util-image
 Requires:       libxcb
+Requires:       onboard
 
 %description
 Deepin desktop-environment - Dock module.
