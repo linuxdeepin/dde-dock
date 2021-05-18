@@ -70,6 +70,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_dislayMode(Efficient)
     , m_isHover(false)
     , m_needRecoveryWin(false)
+    , m_trashItem(nullptr)
 {
     initUi();
     updateMainPanelLayout();
@@ -226,6 +227,11 @@ void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
     QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
     m_pluginLayout->insertLayout(index, boxLayout, 0);
+
+    // 保存垃圾箱插件指针
+    PluginsItem *pluginsItem = qobject_cast<PluginsItem *>(wdg);
+    if (pluginsItem && pluginsItem->pluginName() == "trash")
+        m_trashItem = pluginsItem;
 }
 
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
@@ -247,6 +253,11 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 {
     //因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
     //因此remove插件图标时，需要从多的一层布局中取widget进行判断是否需要移除的插件
+    // 清空保存的垃圾箱插件指针
+    PluginsItem *pluginsItem = qobject_cast<PluginsItem *>(wdg);
+    if (pluginsItem && pluginsItem->pluginName() == "trash")
+        m_trashItem = nullptr;
+
     for (int i = 0; i < m_pluginLayout->count(); ++i) {
         QLayoutItem *layoutItem = m_pluginLayout->itemAt(i);
         QLayout *boxLayout = layoutItem->layout();
@@ -709,6 +720,15 @@ void MainPanelControl::startDrag(DockItem *dockItem)
         drag->setPixmap(pixmap);
         drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     }
+
+    // isNeedBack 保存是否需要重置垃圾箱的AcceptDrops
+    // 设置垃圾箱插件AcceptDrops false
+    bool isNeedBack = false;
+    if (item->itemType() == DockItem::Plugins && m_trashItem && dockItem != m_trashItem) {
+        m_trashItem->centralWidget()->setAcceptDrops(false);
+        isNeedBack = true;
+    }
+
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
 
@@ -716,6 +736,10 @@ void MainPanelControl::startDrag(DockItem *dockItem)
         m_appDragWidget = nullptr;
         item->setDraging(false);
         item->update();
+
+        // isNeedBack是否需要设置垃圾箱插件AcceptDrops true
+        if (isNeedBack)
+            m_trashItem->centralWidget()->setAcceptDrops(true);
     }
 }
 

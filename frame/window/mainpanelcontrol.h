@@ -134,6 +134,8 @@ private:
     bool m_isHover;         // 判断鼠标是否移到desktop区域
     bool m_needRecoveryWin; // 判断鼠标移出desktop区域是否恢复之前窗口
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
+
+    PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
 };
 
 #endif // MAINPANELCONTROL_H
