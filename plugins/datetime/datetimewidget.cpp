@@ -198,15 +198,15 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     QString dateStr = current.toString(format);
 
     if (position == Dock::Top || position == Dock::Bottom) {
-        timeRect.setBottom(rect().top() + QFontMetrics(m_timeFont).boundingRect(timeStr).height() + 6);
-        dateRect.setTop(timeRect.bottom() - 4);
+        timeRect.setBottom(rect().top() + QFontMetrics(m_timeFont).boundingRect(timeStr).height());
+        dateRect.setTop(timeRect.bottom() - 5);//此处的5只是试验效果所写的值
     } else {
         timeRect.setBottom(rect().center().y() + m_timeOffset);
         dateRect.setTop(timeRect.bottom());
     }
     painter.setFont(m_timeFont);
-    painter.drawText(timeRect, Qt::AlignCenter, timeStr);
+    painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, timeStr);
 
     painter.setFont(m_dateFont);
-    painter.drawText(dateRect, Qt::AlignCenter, dateStr);
+    painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, dateStr);
 }
