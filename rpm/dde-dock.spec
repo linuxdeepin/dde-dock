@@ -62,7 +62,7 @@ deepin desktop-environment - dock plugin.
 sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt \
                                  plugins/plugin-guide/plugins-developer-guide.md
 
-sed -i -E '30,39d' CMakeLists.txt
+sed -i -E '32,39d' CMakeLists.txt
 
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginscontroller.cpp \
                           plugins/tray/system-trays/systemtrayscontroller.cpp
@@ -73,6 +73,8 @@ sed -i 's|/lib|/libexec|g' plugins/show-desktop/showdesktopplugin.cpp \
 
 sed -i 's|/usr/lib/dde-dock/plugins|%{_libdir}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
 sed -i 's|local/lib/dde-dock/plugins|local/%{_lib}/dde-dock/plugins|' plugins/plugin-guide/plugins-developer-guide.md
+
+sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 
 %build
 export PATH=%{_qt5_bindir}:$PATH
@@ -85,6 +87,7 @@ export PATH=%{_qt5_bindir}:$PATH
 %ldconfig_scriptlets
 
 %files
+%{_datadir}/%{name}/translations/*.qm
 %license LICENSE
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
