@@ -118,10 +118,8 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
 AppDragWidget::~AppDragWidget()
 {
-    if (m_popupWindow != nullptr) {
-        delete m_popupWindow;
-        m_popupWindow=nullptr;
-    }
+    delete m_popupWindow;
+    delete m_object;
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)

@@ -31,7 +31,7 @@ AppDrag::AppDrag(QObject *dragSource)
 
 AppDrag::~AppDrag() {
     // delete when AppDragWidget is invisible
-    if (m_appDragWidget && !m_appDragWidget->isVisible()) {
+    if (m_appDragWidget) {
         m_appDragWidget->deleteLater();
     }
 }

@@ -44,7 +44,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     , m_pluginApi(plginApi)
     , m_itemKey(itemKey)
     , m_dragging(false)
-    , m_gsettings(Utils::ModuleSettingsPtr(pluginInter->pluginName()))
+    , m_gsettings(Utils::ModuleSettingsPtr(pluginInter->pluginName(), QByteArray(), this))
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 

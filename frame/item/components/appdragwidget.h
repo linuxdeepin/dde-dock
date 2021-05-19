@@ -74,7 +74,7 @@ private:
     bool isRemoveItem();
 
 private:
-    AppGraphicsObject *m_object;
+    QPointer<AppGraphicsObject> m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;
     QPropertyAnimation *m_animScale;
@@ -88,7 +88,7 @@ private:
     QPoint m_originPoint;
     QSize m_iconSize;
     Dock::TipsWidget *m_removeTips;
-    DockPopupWindow *m_popupWindow;
+    QPointer<DockPopupWindow> m_popupWindow;
     /**
      * @brief m_distanceMultiple: 倍数
      * dock栏上应用区驻留应用被拖拽远离dock的距离除以dock的宽或者高（更小的一个）的比值

@@ -20,6 +20,7 @@
  */
 #include <QObject>
 #include <QDebug>
+#include <QTest>
 
 #include <DWindowManagerHelper>
 
@@ -30,6 +31,7 @@
 #include "dockitem.h"
 #undef private
 #include "item/testplugin.h"
+#include "traypluginitem.h"
 
 class Test_DockItemManager : public ::testing::Test
 {
@@ -54,7 +56,7 @@ TEST_F(Test_DockItemManager, appIsOnDock_test)
 {
     manager->appIsOnDock("test");
 
-//    manager->startLoadPlugins();
+    //    manager->startLoadPlugins();
 }
 
 TEST_F(Test_DockItemManager, get_method_test)
@@ -80,8 +82,11 @@ TEST_F(Test_DockItemManager, cover_test)
     manager->appItemAdded(QDBusObjectPath(), 0);
     manager->onPluginLoadFinished();
     manager->reloadAppItems();
-    manager->pluginItemRemoved(new PluginsItem(new TestPlugin, "", ""));
-    manager->pluginItemInserted(new PluginsItem(new TestPlugin, "", ""));
+
+    QScopedPointer<TestPlugin> testPlugin(new TestPlugin);
+    TrayPluginItem item(testPlugin.get(), "", "");
+    manager->pluginItemInserted(&item);
+    manager->pluginItemRemoved(&item);
+
     manager->appItemRemoved("");
-    manager->itemMoved(new PluginsItem(new TestPlugin, "", ""), new PluginsItem(new TestPlugin, "", ""));
 }

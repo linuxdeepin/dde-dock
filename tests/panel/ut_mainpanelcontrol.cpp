@@ -85,9 +85,9 @@ TEST_F(Test_MainPanelControl, event_test)
 
 TEST_F(Test_MainPanelControl, cover_test)
 {
-    mainPanel->removeAppAreaItem(new QWidget);
-    mainPanel->removeTrayAreaItem(new QWidget);
+    QScopedPointer<QWidget> w(new QWidget);
+    mainPanel->removeAppAreaItem(w.get());
+    mainPanel->removeTrayAreaItem(w.get());
     mainPanel->updateAppAreaSonWidgetSize();
-//    mainPanel->setDelegate(mainPanel->delegate());
     mainPanel->checkNeedShowDesktop();
 }
