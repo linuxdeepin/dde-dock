@@ -95,7 +95,8 @@ private slots:
     void positionChanged(const Position prevPos, const Position nextPos);
     void updatePosition();
     void updateGeometry();
-    void setStrutPartial();
+    void setStrutPartialX11();
+    void setStrutPartialWayland();
     void compositeChanged();
     void internalMove(const QPoint &p);
     void updateDisplayMode();
@@ -113,6 +114,7 @@ private slots:
     void onMainWindowSizeChanged(QPoint offset);
     void onDragFinished();
     void themeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+    void setStrutPartials();
 
 private:
     bool m_launched;

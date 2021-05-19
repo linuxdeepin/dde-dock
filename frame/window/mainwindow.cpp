@@ -187,6 +187,11 @@ MainWindow::MainWindow(QWidget *parent)
     setMouseTracking(true);
     setAcceptDrops(true);
 
+    if (QApplication::platformName() != "wayland") {
+        //x11
+        setWindowFlags(Qt::WindowDoesNotAcceptFocus);
+        XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
+    }
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
@@ -442,7 +447,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *e)
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    setStrutPartial();
+    setStrutPartials();
 }
 
 void MainWindow::leaveEvent(QEvent *e)
@@ -601,7 +606,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::autoHideChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::trayCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::DirectConnection);
-    connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartials, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowHideModeChanged, m_leaveDelayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
@@ -750,7 +755,85 @@ void MainWindow::getTrayVisableItemCount()
     m_mainPanel->getTrayVisableItemCount();
 }
 
-void MainWindow::setStrutPartial()
+void MainWindow::setStrutPartialX11()
+{
+    const auto ratio = devicePixelRatioF();
+    const int maxScreenHeight = m_settings->screenRawHeight();
+    const int maxScreenWidth = m_settings->screenRawWidth();
+    const Position side = m_curDockPos;
+    const QPoint &p = rawXPosition(m_settings->windowRect(m_curDockPos).topLeft());
+    const QSize &s = m_settings->windowSize();
+    const QRect &primaryRawRect = m_settings->primaryRawRect();
+
+    XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
+    uint strut = 0;
+    uint strutStart = 0;
+    uint strutEnd = 0;
+
+    QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
+    switch (side) {
+    case Position::Top:
+        orientation = XcbMisc::OrientationTop;
+        strut = p.y() + s.height() * ratio;
+        strutStart = p.x();
+        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
+        strutArea.setLeft(strutStart);
+        strutArea.setRight(strutEnd);
+        strutArea.setBottom(strut);
+        break;
+    case Position::Bottom:
+        orientation = XcbMisc::OrientationBottom;
+        strut = maxScreenHeight - p.y();
+        strutStart = p.x();
+        strutEnd = qMin(qRound(p.x() + s.width() * ratio), primaryRawRect.right());
+        strutArea.setLeft(strutStart);
+        strutArea.setRight(strutEnd);
+        strutArea.setTop(p.y());
+        break;
+    case Position::Left:
+        orientation = XcbMisc::OrientationLeft;
+        strut = p.x() + s.width() * ratio;
+        strutStart = p.y();
+        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
+        strutArea.setTop(strutStart);
+        strutArea.setBottom(strutEnd);
+        strutArea.setRight(strut);
+        break;
+    case Position::Right:
+        orientation = XcbMisc::OrientationRight;
+        strut = maxScreenWidth - p.x();
+        strutStart = p.y();
+        strutEnd = qMin(qRound(p.y() + s.height() * ratio), primaryRawRect.bottom());
+        strutArea.setTop(strutStart);
+        strutArea.setBottom(strutEnd);
+        strutArea.setLeft(p.x());
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+
+//         pass if strut area is intersect with other screen
+//        优化了文件管理的代码 会导致bug 15351 需要注释一下代码
+    int count = 0;
+    const QRect pr = m_settings->primaryRect();
+    for (auto *screen : qApp->screens()) {
+        const QRect sr = screen->geometry();
+        if (sr == pr)
+            continue;
+        if (sr.intersects(strutArea))
+            ++count;
+    }
+    if (count > 0) {
+        qWarning() << "strutArea is intersects with another screen.";
+        qWarning() << maxScreenHeight << maxScreenWidth << side << p << s;
+        return;
+    }
+
+
+    XcbMisc::instance()->set_strut_partial(winId(), orientation, strut + m_settings->dockMargin() * ratio, strutStart, strutEnd);
+}
+
+void MainWindow::setStrutPartialWayland()
 {
     /*
      * 给窗管设置dock的区域，窗管的数据结构体如下：
@@ -1098,6 +1181,14 @@ void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
         else
             m_platformWindowHandle.setBorderColor(QColor(QColor::Invalid));
     }
+}
+
+void MainWindow::setStrutPartials()
+{
+    if (QApplication::platformName() == "wayland")
+        setStrutPartialWayland();
+    else
+        setStrutPartialX11();
 }
 
 void MainWindow::onRegionMonitorChanged(const QPoint &p)

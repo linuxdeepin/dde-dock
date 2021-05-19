@@ -157,7 +157,6 @@ void sig_crash(int sig)
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DApplication app(argc, argv);
     //崩溃信号
