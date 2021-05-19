@@ -156,7 +156,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
 
-    const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", "wireless-scan-interval", this);
+    const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", QByteArray(), this);
     if (gsetting)
         connect(gsetting, &QGSettings::changed, [&](const QString &key) {
         if (key == "wireless-scan-interval") {
