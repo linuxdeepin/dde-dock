@@ -198,15 +198,35 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     QString dateStr = current.toString(format);
 
     if (position == Dock::Top || position == Dock::Bottom) {
-        timeRect.setBottom(rect().top() + QFontMetrics(m_timeFont).boundingRect(timeStr).height());
-        dateRect.setTop(timeRect.bottom() - 5);//此处的5只是试验效果所写的值
+        // 只处理上下位置的，特殊处理一下藏文，其他的语言如果有问题也可以类似特殊处理一下
+        // Unifont字体有点特殊
+        // 以下的0.23 0.18 0.2 0.13数值是测试过程中微调时间跟日期之间的间距系数，不是特别计算的精确值
+        QLocale locale;
+        int timeHeight = QFontMetrics(m_timeFont).boundingRect(timeStr).height() + 2;   // +2只是防止显示在边界的几个像素被截断
+        int dateHeight = QFontMetrics(m_dateFont).boundingRect(dateStr).height() + 2;
+        int marginH = (height() - timeHeight - dateHeight) / 2;
+
+        if (locale.language() == QLocale::Tibetan) {
+            if (m_timeFont.family() == "Noto Serif Tibetan")
+                marginH = marginH + 0.23 * timeHeight;
+            else if (m_timeFont.family() == "Noto Sans Tibetan")
+                marginH = marginH + 0.18 * timeHeight;
+            else if (m_timeFont.family() == "Tibetan Machine Uni")
+                marginH = marginH + 0.2 * timeHeight;
+        } else {
+            if (m_timeFont.family() != "Unifont")
+                marginH = marginH + 0.13 * timeHeight;
+        }
+
+        timeRect = QRect(0, marginH, width(), timeHeight);
+        dateRect = QRect(0, height() - dateHeight - marginH, width(), dateHeight);
     } else {
         timeRect.setBottom(rect().center().y() + m_timeOffset);
         dateRect.setTop(timeRect.bottom());
     }
     painter.setFont(m_timeFont);
-    painter.drawText(timeRect, Qt::AlignBottom | Qt::AlignHCenter, timeStr);
+    painter.drawText(timeRect, Qt::AlignCenter, timeStr);
 
     painter.setFont(m_dateFont);
-    painter.drawText(dateRect, Qt::AlignTop | Qt::AlignHCenter, dateStr);
+    painter.drawText(dateRect, Qt::AlignCenter, dateStr);
 }
