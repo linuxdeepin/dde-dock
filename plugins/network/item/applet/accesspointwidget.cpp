@@ -54,6 +54,7 @@ AccessPointWidget::AccessPointWidget()
     , m_stateButton(new StateButton(this))
     , m_isEnter(false)
 {
+    //设置wifi列表item背景色为透明
     QPalette backgroud;
     backgroud.setColor(QPalette::Background, Qt::transparent);
     this->setAutoFillBackground(true);
@@ -155,6 +156,10 @@ void AccessPointWidget::setActiveState(const NetworkDevice::DeviceStatus state)
     m_stateButton->setVisible(isActive);
 }
 
+/**
+ * @brief AccessPointWidget::paintEvent 根据主题颜色绘制wifi列表item背景色
+ * @param event
+ */
 void AccessPointWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

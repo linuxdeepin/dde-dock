@@ -23,6 +23,10 @@
 
 #include <QPainter>
 
+/**
+ * @brief HorizontalSeperator::HorizontalSeperator 网络界面控件分割线,高度值初始化为2个像素
+ * @param parent
+ */
 HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     : QWidget(parent),
       m_color(0, 0, 0, 0.1*255)

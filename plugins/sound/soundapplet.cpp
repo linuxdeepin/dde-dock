@@ -56,6 +56,12 @@ ItemDelegate::ItemDelegate(QAbstractItemView *parent)
 
 }
 
+/**
+ * @brief ItemDelegate::paint 绘制鼠标移动到音频列表某条item上的选中效果
+ * @param painter
+ * @param option
+ * @param index
+ */
 void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItem styleOption = option;
@@ -150,6 +156,9 @@ SoundApplet::SoundApplet(QWidget *parent)
     initUi();
 }
 
+/**
+ * @brief SoundApplet::setControlBackground 设置音频界面控件背景颜色
+ */
 void SoundApplet::setControlBackground()
 {
     QPalette soundAppletBackgroud;
@@ -170,6 +179,9 @@ void SoundApplet::setControlBackground()
     m_listView->setPalette(listViewBackgroud);
 }
 
+/**
+ * @brief SoundApplet::setItemHoverColor 通过代理方式根据当前主题设置音频列表文字颜色和item选中颜色
+ */
 void SoundApplet::setItemHoverColor()
 {
     QPalette hoverBackgroud = m_listView->palette();
@@ -235,6 +247,7 @@ void SoundApplet::initUi()
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
 
+    //音频界面添加第二个分割线
     QVBoxLayout *volumeLineLayout = new QVBoxLayout;
     volumeLineLayout->addLayout(volumeCtrlLayout);
     volumeLineLayout->addWidget(m_secondSeparator);
@@ -731,6 +744,7 @@ void SoundApplet::updateListHeight()
     int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;
+    //加上分割线占用的高度，否则显示界面高度不够显示，会造成音频列表item最后一项比其它项的高度小
     m_listView->setFixedHeight(viewHeight + SEPARATOR_HEIGHT);
     setFixedHeight(totalHeight);
     m_centralWidget->setFixedHeight(totalHeight + SEPARATOR_HEIGHT);

@@ -127,6 +127,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
     centralLayout->addWidget(m_wirelessControlPanel);
+    //添加网络界面控件分割线
     centralLayout->addWidget(m_firstSeparator);
     centralLayout->addLayout(m_wirelessLayout);
     centralLayout->addWidget(m_secondSeparator);
@@ -175,6 +176,9 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
 }
 
+/**
+ * @brief NetworkItem::setControlBackground 设置网络界面控件背景颜色
+ */
 void NetworkItem::setControlBackground()
 {
     QPalette backgroud;
@@ -543,6 +547,7 @@ void NetworkItem::wirelessEnable(bool enable)
             wirelessItem->itemApplet()->setVisible(enable);
         }
     }
+    //禁用无线网络时对应的分割线设置为不可见防止两分割线叠加增加分割线高度与下面分割线高度不一样
     m_secondSeparator->setVisible(enable);
 }
 
@@ -1137,6 +1142,7 @@ void NetworkItem::updateView()
     } else {
         contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
         contentHeight += wiredDeviceCnt * ItemHeight;
+	//加上分割线占用的高度，否则显示界面高度不够显示，会造成无线网络列表item最后一项比其它项的高度小
         centralWidget->setFixedHeight(contentHeight + SeparatorItemHeight * 3);
         m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight + SeparatorItemHeight * 3);
     }

@@ -288,6 +288,7 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
         }
     }
 
+    //插件全部加载完成
     if (loaded) {
         emit pluginLoaderFinished();
     }

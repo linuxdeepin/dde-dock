@@ -39,6 +39,10 @@
 #include <DScrollArea>
 #include <DListView>
 
+/**
+ * @brief HorizontalSeperator::HorizontalSeperator 蓝牙界面控件分割线,高度值初始化为2个像素
+ * @param parent
+ */
 HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     : QWidget(parent),
       m_color(0, 0, 0, 0.1*255)
@@ -47,6 +51,10 @@ HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
+/**
+ * @brief HorizontalSeperator::setColor 蓝牙界面控件分割线背景颜色设置
+ * @param color 颜色值
+ */
 void HorizontalSeperator::setColor(const QColor color)
 {
     m_color = color;
@@ -76,11 +84,15 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &SettingLabel::updateIconTheme);
 }
 
+/**
+ * @brief SettingLabel::updateIconTheme 根据主题的深浅设置字体的颜色，控件的背景颜色
+ */
 void SettingLabel::updateIconTheme()
 {
     QPalette backgroud;
     QPalette textColor;
     if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType){
+        //蓝牙设置，电脑用户名文字显示高亮
         textColor.setColor(QPalette::WindowText, QPalette::BrightText);
     } else {
         textColor.setColor(QPalette::WindowText, Qt::white);
@@ -192,6 +204,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
     connect(adapterItem, &BluetoothAdapterItem::requestRefreshAdapter, m_adaptersManager, &AdaptersManager::adapterRefresh);
 
     m_adapterItems.insert(adapter->id(), adapterItem);
+    //插入分割线
     m_contentLayout->insertWidget(0, m_Separator, Qt::AlignTop | Qt::AlignVCenter);
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
@@ -277,6 +290,9 @@ void BluetoothApplet::initConnect()
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
 }
 
+/**
+ * @brief BluetoothApplet::updateIconTheme 根据主题颜色设置蓝牙界面控件背景色
+ */
 void BluetoothApplet::updateIconTheme()
 {
     QPalette widgetBackgroud;

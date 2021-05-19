@@ -41,6 +41,12 @@ ItemDelegate::ItemDelegate(QAbstractItemView *parent)
 
 }
 
+/**
+ * @brief ItemDelegate::paint 绘制鼠标移动到蓝牙列表某条item上的选中效果
+ * @param painter
+ * @param option
+ * @param index
+ */
 void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItem styleOption = option;
@@ -83,8 +89,10 @@ void BluetoothDeviceItem::initActionList()
     m_standarditem->setAccessibleText(m_device->alias());
     m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
     m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
+    //设置蓝牙列表item背景为透明
     m_standarditem->setBackground(Qt::transparent);
 
+    //蓝牙列表可用蓝牙设备信息文字显示高亮
     m_labelAction->setTextColorRole(DPalette::BrightText);
     m_labelAction->setText(m_device->alias());
     updateDeviceState(m_device->state());
@@ -195,9 +203,11 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
 {
     if (type == DGuiApplicationHelper::LightType) {
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+        //浅色主题蓝牙界面控件分割线颜色
         m_Separator->setColor(QColor(0, 0, 0, 0.1 * 255));
     } else {
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+        //深色主题蓝牙界面控件分割线颜色
         m_Separator->setColor(QColor(255, 255, 255, 0.1 * 255));
     }
     setItemHoverColor();
@@ -280,6 +290,9 @@ void BluetoothAdapterItem::onDeviceNameUpdated(const Device *device)
     }
 }
 
+/**
+ * @brief BluetoothAdapterItem::setItemHoverColor 通过代理方式根据当前主题设置蓝牙列表文字颜色和item选中颜色
+ */
 void BluetoothAdapterItem::setItemHoverColor()
 {
     QPalette hoverBackgroud = m_deviceListview->palette();
@@ -318,6 +331,7 @@ void BluetoothAdapterItem::initUi()
     m_deviceListview->setItemSpacing(1);
     m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
     m_deviceListview->setBackgroundType(DStyledItemDelegate::ClipCornerBackground);
+    //设置蓝牙列表DListView背景为透明
     QPalette backgroud;
     backgroud.setColor(QPalette::Base, Qt::transparent);
     m_deviceListview->setAutoFillBackground(true);

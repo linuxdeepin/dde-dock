@@ -55,6 +55,10 @@ void TipsWidget::setTextList(const QStringList &textList)
     update();
 }
 
+/**
+ * @brief TipsWidget::paintEvent 任务栏插件提示信息绘制
+ * @param event
+ */
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
     QFrame::paintEvent(event);

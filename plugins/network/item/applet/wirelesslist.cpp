@@ -53,6 +53,7 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
 {
     setFixedHeight(ItemHeight);
 
+    //无线网络列表背景色设置为透明
     QPalette backgroud;
     backgroud.setColor(QPalette::Background, Qt::transparent);
     this->setAutoFillBackground(true);

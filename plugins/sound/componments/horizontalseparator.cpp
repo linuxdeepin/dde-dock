@@ -23,6 +23,10 @@
 
 #include <QPainter>
 
+/**
+ * @brief HorizontalSeparator::HorizontalSeparator 声音界面控件分割线,高度值初始化为2个像素
+ * @param parent
+ */
 HorizontalSeparator::HorizontalSeparator(QWidget *parent)
     : QWidget(parent)
 {

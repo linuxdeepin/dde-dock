@@ -115,6 +115,10 @@ void DatetimeWidget::setShortTimeFormat(int type)
     }
 }
 
+/**
+ * @brief DatetimeWidget::curTimeSize 调整时间日期字体大小
+ * @return 返回时间和日期绘制的区域大小
+ */
 QSize DatetimeWidget::curTimeSize() const
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
@@ -172,6 +176,10 @@ QSize DatetimeWidget::sizeHint() const
     return curTimeSize();
 }
 
+/**
+ * @brief DatetimeWidget::paintEvent 绘制任务栏时间日期
+ * @param e
+ */
 void DatetimeWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
