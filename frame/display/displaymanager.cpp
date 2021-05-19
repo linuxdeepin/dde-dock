@@ -188,13 +188,33 @@ void DisplayManager::updateScreenDockInfo()
         QPoint s1bottomRight = QPoint(s1.x() + s1.width(), s1.y() + s1.height());
         QPoint s1bottomLeft = QPoint(s1.x(), s1.y() + s1.height());
 
-        // 对角拼接，重置，默认均可停靠
+        /*
+         * 对角拼接，重置，默认均可停靠
+---------                       ---------
+|       |                       |       |
+|   s0  |                       |   s1  |
+|       |                       |       |
+-----------------               -----------------
+        |       |                       |       |
+        |   s1  |                           s0  |
+        |       |                       |       |
+        ---------                       ---------
+*/
         if (s0bottomRight == s1topLeft
-                || s0topRight == s1bottomRight) {
+                || s0topLeft == s1bottomRight) {
             return;
         }
 
-        // 左右拼接，s0左，s1右
+        /*
+         * 左右拼接，s0左，s1右
+---------------------               -------------
+|           |       |               |           |
+|           |  s1   |               |           |--------
+|     s0    |       |               |     s0    |       |
+|           |--------               |           |  s1   |
+|           |                       |           |       |
+-------------                       ---------------------
+*/
         if (s0Right == s1left
                 && (s0topRight == s1topLeft || s0bottomRight == s1bottomLeft)) {
             m_screenPositionMap[m_screens.at(0)].insert(Position::Right, false);
@@ -202,15 +222,37 @@ void DisplayManager::updateScreenDockInfo()
             return;
         }
 
-        // 左右拼接，s0右，s1左
+        /*
+         * 左右拼接，s1左，s0右
+---------------------               -------------
+|           |       |               |           |
+|           |  s0   |               |           |--------
+|     s1    |       |               |     s1    |       |
+|           |--------               |           |  s0   |
+|           |                       |           |       |
+-------------                       ---------------------
+*/
         if (s0left== s1Right
-                && (s0topRight == s1topRight || s0bottomLeft == s1bottomRight)) {
+                && (s0topLeft == s1topRight || s0bottomLeft == s1bottomRight)) {
             m_screenPositionMap[m_screens.at(0)].insert(Position::Left, false);
             m_screenPositionMap[m_screens.at(1)].insert(Position::Right, false);
             return;
         }
 
-        // 上下拼接，s0上，s1下
+        /*
+         * 上下拼接，s0上，s1下
+---------                           ---------
+|       |                           |       |
+|   s0  |                           |   s0  |
+|       |                           |       |
+-------------                   -------------
+|           |                   |           |
+|           |                   |           |
+|     s1    |                   |     s1    |
+|           |                   |           |
+|           |                   |           |
+-------------                   -------------
+*/
         if (s0bottom == s1top
                 && (s0bottomLeft == s1topLeft || s0bottomRight == s1topRight)) {
             m_screenPositionMap[m_screens.at(0)].insert(Position::Bottom, false);
@@ -218,7 +260,20 @@ void DisplayManager::updateScreenDockInfo()
             return;
         }
 
-        // 上下拼接，s0下，s1上
+        /*
+         * 上下拼接，s1上，s0下
+---------                   ---------
+|       |                   |       |
+|   s1  |                   |   s1  |
+|       |                   |       |
+-------------           -------------
+|           |           |           |
+|           |           |           |
+|     s0    |           |     s0    |
+|           |           |           |
+|           |           |           |
+-------------           -------------
+*/
         if (s0top == s1bottom
                 && (s0topLeft == s1bottomLeft || s0topRight == s1bottomRight)) {
             m_screenPositionMap[m_screens.at(0)].insert(Position::Top, false);
