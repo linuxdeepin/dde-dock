@@ -49,6 +49,7 @@ class Adapter;
 class SettingLabel;
 class QStandardItemModel;
 class RefreshButton;
+class HorizontalSeperator;
 
 const QString LightString = QString(":/light/buletooth_%1_light.svg");
 const QString DarkString = QString(":/dark/buletooth_%1_dark.svg");
@@ -145,7 +146,8 @@ private:
     bool m_showUnnamedDevices;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
-    HorizontalSeperator *m_Separator;
+    HorizontalSeperator *m_seperator;
+    HorizontalSeperator *m_bottomSeperator;
 };
 
 #endif // BLUETOOTHADAPTERITEM_H

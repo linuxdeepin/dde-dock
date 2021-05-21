@@ -21,7 +21,7 @@
 
 #include "soundapplet.h"
 #include "sinkinputwidget.h"
-#include "componments/horizontalseparator.h"
+#include "util/horizontalseperator.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 #include "util/utils.h"
@@ -140,8 +140,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_volumeIconMax(new QLabel)
     , m_volumeSlider(new VolumeSlider)
     , m_soundShow(new TipsWidget)
-    , m_separator(new HorizontalSeparator(this))
-    , m_secondSeparator(new HorizontalSeparator(this))
+    , m_seperator(new HorizontalSeperator(this))
+    , m_secondSeperator(new HorizontalSeperator(this))
     , m_deviceLabel(nullptr)
     , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
@@ -163,15 +163,11 @@ void SoundApplet::setControlBackground()
 {
     QPalette soundAppletBackgroud;
     QPalette listViewBackgroud = m_listView->palette();
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         soundAppletBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-        m_separator->setColor(QColor(0, 0, 0, 0.1 * 255));
-        m_secondSeparator->setColor(QColor(0, 0, 0, 0.1 * 255));
-    } else {
+    else
         soundAppletBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-        m_separator->setColor(QColor(255, 255, 255, 0.1 * 255));
-        m_secondSeparator->setColor(QColor(255, 255, 255, 0.1 * 255));
-    }
+
     this->setAutoFillBackground(true);
     this->setPalette(soundAppletBackgroud);
     listViewBackgroud.setColor(QPalette::Base, Qt::transparent);
@@ -232,7 +228,7 @@ void SoundApplet::initUi()
 
     QVBoxLayout *deviceLineLayout = new QVBoxLayout;
     deviceLineLayout->addLayout(deviceLayout);
-    deviceLineLayout->addWidget(m_separator);
+    deviceLineLayout->addWidget(m_seperator);
     deviceLineLayout->setMargin(0);
     deviceLineLayout->setSpacing(DEVICE_SPACING);
 
@@ -250,7 +246,7 @@ void SoundApplet::initUi()
     //音频界面添加第二个分割线
     QVBoxLayout *volumeLineLayout = new QVBoxLayout;
     volumeLineLayout->addLayout(volumeCtrlLayout);
-    volumeLineLayout->addWidget(m_secondSeparator);
+    volumeLineLayout->addWidget(m_secondSeperator);
     volumeLineLayout->setMargin(0);
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
@@ -392,7 +388,7 @@ void SoundApplet::sinkInputsChanged()
     }
 
     for (auto input : m_audioInter->sinkInputs()) {
-        appLayout->addWidget(new HorizontalSeparator);
+        appLayout->addWidget(new HorizontalSeperator(this));
 
         SinkInputWidget *si = new SinkInputWidget(input.path());
         appLayout->addWidget(si);
@@ -740,7 +736,7 @@ void SoundApplet::updateListHeight()
     int viewHeight = visualHeight + m_listView->spacing() * count * 2 + listMargin;
     // 设备信息高度 = 设备标签 + 分隔线 + 滚动条 + 间隔
     int labelHeight = m_deviceLabel->height() > m_soundShow->height() ? m_deviceLabel->height() : m_soundShow->height();
-    int infoHeight = labelHeight + m_separator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
+    int infoHeight = labelHeight + m_seperator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
     int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;

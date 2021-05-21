@@ -19,32 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "horizontalseperator.h"
+#ifndef HORIZONTALSEPERATOR_H
+#define HORIZONTALSEPERATOR_H
 
-#include <QPainter>
+#include <QWidget>
 
-/**
- * @brief HorizontalSeperator::HorizontalSeperator 网络界面控件分割线,高度值初始化为2个像素
- * @param parent
- */
-HorizontalSeperator::HorizontalSeperator(QWidget *parent)
-    : QWidget(parent),
-      m_color(0, 0, 0, 0.1*255)
+class HorizontalSeperator : public QWidget
 {
-    setFixedHeight(2);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-}
+    Q_OBJECT
 
-void HorizontalSeperator::setColor(const QColor color)
-{
-    m_color = color;
-    update();
-}
+public:
+    explicit HorizontalSeperator(QWidget *parent = nullptr);
 
-void HorizontalSeperator::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
+protected:
+    void paintEvent(QPaintEvent *e);
+};
 
-    QPainter painter(this);
-    painter.fillRect(rect(), m_color);
-}
+#endif // HORIZONTALSEPERATOR_H

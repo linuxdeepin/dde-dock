@@ -40,7 +40,7 @@ DWIDGET_USE_NAMESPACE
 using DBusAudio = com::deepin::daemon::Audio;
 using DBusSink = com::deepin::daemon::audio::Sink;
 
-class HorizontalSeparator;
+class HorizontalSeperator;
 class QGSettings;
 
 namespace Dock{
@@ -156,8 +156,8 @@ private:
     VolumeSlider *m_volumeSlider;
     Dock::TipsWidget *m_soundShow;
     QVBoxLayout *m_centralLayout;
-    HorizontalSeparator *m_separator;
-    HorizontalSeparator *m_secondSeparator;
+    HorizontalSeperator *m_seperator;
+    HorizontalSeperator *m_secondSeperator;
     Dock::TipsWidget *m_deviceLabel;
 
     DBusAudio *m_audioInter;

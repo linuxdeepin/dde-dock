@@ -27,11 +27,6 @@
 #include "adapter.h"
 #include "bluetoothadapteritem.h"
 
-#include <QString>
-#include <QBoxLayout>
-#include <QMouseEvent>
-#include <QDebug>
-
 #include <DApplicationHelper>
 #include <DDBusSender>
 #include <DLabel>
@@ -39,35 +34,10 @@
 #include <DScrollArea>
 #include <DListView>
 
-/**
- * @brief HorizontalSeperator::HorizontalSeperator 蓝牙界面控件分割线,高度值初始化为2个像素
- * @param parent
- */
-HorizontalSeperator::HorizontalSeperator(QWidget *parent)
-    : QWidget(parent),
-      m_color(0, 0, 0, 0.1*255)
-{
-    setFixedHeight(2);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-}
-
-/**
- * @brief HorizontalSeperator::setColor 蓝牙界面控件分割线背景颜色设置
- * @param color 颜色值
- */
-void HorizontalSeperator::setColor(const QColor color)
-{
-    m_color = color;
-    update();
-}
-
-void HorizontalSeperator::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
-
-    QPainter painter(this);
-    painter.fillRect(rect(), m_color);
-}
+#include <QString>
+#include <QBoxLayout>
+#include <QMouseEvent>
+#include <QDebug>
 
 SettingLabel::SettingLabel(QString text, QWidget *parent)
     : QWidget(parent)
@@ -136,7 +106,6 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
-    , m_Separator(new HorizontalSeperator(this))
 {
     initUi();
     initConnect();
@@ -205,7 +174,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 
     m_adapterItems.insert(adapter->id(), adapterItem);
     //插入分割线
-    m_contentLayout->insertWidget(0, m_Separator, Qt::AlignTop | Qt::AlignVCenter);
+//    m_contentLayout->insertWidget(0, m_Separator, Qt::AlignTop | Qt::AlignVCenter);
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
@@ -297,13 +266,11 @@ void BluetoothApplet::updateIconTheme()
 {
     QPalette widgetBackgroud;
     QPalette scroareaBackgroud;
-    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType){
+    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-        m_Separator->setColor(QColor(0, 0, 0, 0.1 * 255));
-    } else {
+    else
         widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-        m_Separator->setColor(QColor(255, 255, 255, 0.1 * 255));
-    }
+
     m_contentWidget->setAutoFillBackground(true);
     m_contentWidget->setPalette(widgetBackgroud);
     scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);

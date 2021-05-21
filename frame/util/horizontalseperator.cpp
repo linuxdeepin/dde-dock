@@ -19,31 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "horizontalseparator.h"
+#include "horizontalseperator.h"
+
+#include <DApplicationHelper>
 
 #include <QPainter>
 
 /**
- * @brief HorizontalSeparator::HorizontalSeparator 声音界面控件分割线,高度值初始化为2个像素
+ * @brief HorizontalSeperator::HorizontalSeperator 分割线控件,高度值初始化为2个像素
  * @param parent
  */
-HorizontalSeparator::HorizontalSeparator(QWidget *parent)
+HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     : QWidget(parent)
 {
     setFixedHeight(2);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Light, QColor(0, 0, 0, 0.1 * 255));
+    palette.setColor(QPalette::Dark, QColor(255, 255, 255, 0.1 * 255));
+    this->setPalette(palette);
 }
 
-void HorizontalSeparator::setColor(const QColor color)
+void HorizontalSeperator::paintEvent(QPaintEvent *e)
 {
-    m_color = color;
-    update();
-}
-
-void HorizontalSeparator::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
+    Q_UNUSED(e)
 
     QPainter painter(this);
-    painter.fillRect(rect(), m_color);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        painter.fillRect(rect(), palette().color(QPalette::Light));
+    else
+        painter.fillRect(rect(), palette().color(QPalette::Dark));
 }

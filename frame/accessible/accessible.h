@@ -100,6 +100,7 @@ SET_LABEL_ACCESSIBLE(QLabel, m_w->objectName() == "notifications" ? m_w->objectN
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "imagebutton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton, m_w->text().isEmpty() ? "switchbutton" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DesktopWidget, "desktopWidget");
+SET_FORM_ACCESSIBLE(HorizontalSeperator, "HorizontalSeperator");
 // 几个没什么用的标记，但为了提醒大家不要遗漏标记控件，还是不要去掉
 SET_FORM_ACCESSIBLE(DBlurEffectWidget, "DBlurEffectWidget")
 SET_FORM_ACCESSIBLE(DListView, "DListView")
@@ -183,6 +184,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, NetworkItem);
     USE_ACCESSIBLE(classname, StateButton);
     USE_ACCESSIBLE(classname, DeviceControlWidget);
+    USE_ACCESSIBLE(classname, HorizontalSeperator);
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

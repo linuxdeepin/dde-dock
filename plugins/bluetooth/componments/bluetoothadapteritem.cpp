@@ -24,9 +24,7 @@
 #include "componments/adapter.h"
 #include "bluetoothconstants.h"
 #include "refreshbutton.h"
-
-#include <QBoxLayout>
-#include <QStandardItemModel>
+#include "util/horizontalseperator.h"
 
 #include <DFontSizeManager>
 #include <DLabel>
@@ -34,6 +32,9 @@
 #include <DListView>
 #include <DSpinner>
 #include <DApplicationHelper>
+
+#include <QBoxLayout>
+#include <QStandardItemModel>
 
 ItemDelegate::ItemDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
@@ -156,8 +157,9 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
                                          QDBusConnection::sessionBus(),
                                          this))
     , m_showUnnamedDevices(false)
-    , m_Separator(new HorizontalSeperator(this))
+    , m_seperator(new HorizontalSeperator(this))
     , m_itemDelegate(new ItemDelegate(m_deviceListview))
+    , m_bottomSeperator(new HorizontalSeperator(this))
 {
     initData();
     initUi();
@@ -201,15 +203,11 @@ void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
 
 void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 {
-    if (type == DGuiApplicationHelper::LightType) {
+    if (type == DGuiApplicationHelper::LightType)
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
-        //浅色主题蓝牙界面控件分割线颜色
-        m_Separator->setColor(QColor(0, 0, 0, 0.1 * 255));
-    } else {
+    else
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
-        //深色主题蓝牙界面控件分割线颜色
-        m_Separator->setColor(QColor(255, 255, 255, 0.1 * 255));
-    }
+
     setItemHoverColor();
 }
 
@@ -346,8 +344,9 @@ void BluetoothAdapterItem::initUi()
 
     mainLayout->addWidget(m_adapterLabel);
     mainLayout->addSpacing(2);
-    mainLayout->addWidget(m_Separator);
+    mainLayout->addWidget(m_seperator);
     mainLayout->addWidget(m_deviceListview);
+    mainLayout->addWidget(m_bottomSeperator);
 
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
     if (m_adapter->discover()) {
@@ -379,6 +378,7 @@ void BluetoothAdapterItem::initConnect()
         initData();
         m_refreshBtn->setVisible(state);
         m_deviceListview->setVisible(state);
+        m_seperator->setVisible(state);
         m_adapterStateBtn->setChecked(state);
         m_adapterStateBtn->setEnabled(true);
         emit adapterPowerChanged();
@@ -388,6 +388,7 @@ void BluetoothAdapterItem::initConnect()
         m_deviceItems.clear();
         m_deviceModel->clear();
         m_deviceListview->setVisible(false);
+        m_seperator->setVisible(false);
         m_adapterStateBtn->setEnabled(false);
         m_refreshBtn->setVisible(state);
         emit requestSetAdapterPower(m_adapter, state);

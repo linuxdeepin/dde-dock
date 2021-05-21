@@ -183,18 +183,13 @@ void NetworkItem::setControlBackground()
 {
     QPalette backgroud;
     QColor separatorColor;
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         backgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-        separatorColor.setRgb(0, 0, 0, 0.1 * 255);
-    } else {
+    else
         backgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-        separatorColor.setRgb(255, 255, 255, 0.1 * 255);
-    }
+
     m_applet->setAutoFillBackground(true);
     m_applet->setPalette(backgroud);
-    m_firstSeparator->setColor(separatorColor);
-    m_secondSeparator->setColor(separatorColor);
-    m_thirdSeparator->setColor(separatorColor);
 }
 
 QWidget *NetworkItem::itemApplet()

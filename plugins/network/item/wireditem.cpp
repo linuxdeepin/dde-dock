@@ -22,7 +22,7 @@
 
 #include "constants.h"
 #include "wireditem.h"
-#include "applet/horizontalseperator.h"
+#include "util/horizontalseperator.h"
 #include "../widgets/tipswidget.h"
 #include "util/utils.h"
 #include "util/statebutton.h"

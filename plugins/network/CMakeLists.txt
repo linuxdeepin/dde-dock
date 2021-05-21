@@ -6,7 +6,8 @@ project(${PLUGIN_NAME})
 # Sources files
 file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
     "../../frame/util/imageutil.h" "../../frame/util/imageutil.cpp"
-    "../../frame/util/statebutton.h" "../../frame/util/statebutton.cpp")
+    "../../frame/util/statebutton.h" "../../frame/util/statebutton.cpp"
+    "../../frame/util/horizontalseperator.h" "../../frame/util/horizontalseperator.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)

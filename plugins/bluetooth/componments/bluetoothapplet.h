@@ -45,22 +45,6 @@ DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
 
-class HorizontalSeperator : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit HorizontalSeperator(QWidget *parent = nullptr);
-
-    void setColor(const QColor color);
-
-protected:
-    void paintEvent(QPaintEvent *e);
-
-private:
-    QColor m_color;
-};
-
 class SettingLabel : public QWidget
 {
     Q_OBJECT
@@ -130,8 +114,7 @@ private:
     QVBoxLayout *m_contentLayout = nullptr;
 
     QStringList m_connectDeviceName;
-    QMap<QString, BluetoothAdapterItem *> m_adapterItems;
-    HorizontalSeperator *m_Separator = nullptr;
+    QMap<QString, BluetoothAdapterItem *> m_adapterItems;           // 所有蓝牙适配器
 };
 
 #endif // BLUETOOTHAPPLET_H
