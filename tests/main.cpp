@@ -19,6 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <gtest/gtest.h>
+#ifdef QT_DEBUG
+#include <sanitizer/asan_interface.h>
+#endif
 
 #include "dockapplication.h"
 
@@ -29,7 +32,7 @@
 
 int main(int argc, char **argv)
 {
-    // gerrit编译时没有显示器，需要指定环境变量,本地Debug模式编译时不要设置这个宏，导致获取不到显示器相关信息
+        // gerrit编译时没有显示器，需要指定环境变量,本地Debug模式编译时不要设置这个宏，导致获取不到显示器相关信息
 #ifndef QT_DEBUG
     qputenv("QT_QPA_PLATFORM", "offscreen");
 #endif
@@ -40,5 +43,8 @@ int main(int argc, char **argv)
 
     ::testing::InitGoogleTest(&argc, argv);
 
+#ifdef QT_DEBUG
+    __sanitizer_set_report_path("asan.log");
+#endif
     return RUN_ALL_TESTS();
 }

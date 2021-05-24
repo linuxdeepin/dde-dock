@@ -7,6 +7,9 @@ cd ../
 rm -rf $BUILD_DIR
 mkdir $BUILD_DIR
 cd $BUILD_DIR
+
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+
 cmake ../
 make -j 16
 
@@ -20,3 +23,5 @@ lcov -r code.info '*/dbus/*' '*/xcb/*' -o final.info
 rm -rf ../../tests/$REPORT_DIR
 mkdir -p ../../tests/$REPORT_DIR
 genhtml -o ../../tests/$REPORT_DIR final.info
+
+mv asan.log* asan_dde-dock.log

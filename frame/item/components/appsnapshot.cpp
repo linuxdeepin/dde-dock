@@ -57,6 +57,7 @@ using namespace Dock;
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
+    , m_closeAble(false)
     , m_isWidowHidden(false)
     , m_title(new TipsWidget(this))
     , m_waitLeaveTimer(new QTimer(this))
