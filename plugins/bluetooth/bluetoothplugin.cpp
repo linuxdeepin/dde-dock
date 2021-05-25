@@ -47,13 +47,13 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
     if (m_bluetoothItem)
         return;
 
-    m_bluetoothItem = new BluetoothItem;
+    m_bluetoothItem.reset(new BluetoothItem);
 
-    connect(m_bluetoothItem, &BluetoothItem::justHasAdapter, [&] {
+    connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
         m_enableState = true;
         refreshPluginItemsVisible();
     });
-    connect(m_bluetoothItem, &BluetoothItem::noAdapter, [&] {
+    connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
         m_enableState = false;
         refreshPluginItemsVisible();
     });
@@ -79,7 +79,7 @@ bool BluetoothPlugin::pluginIsDisable()
 QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == BLUETOOTH_KEY) {
-        return m_bluetoothItem;
+        return m_bluetoothItem.data();
     }
 
     return nullptr;

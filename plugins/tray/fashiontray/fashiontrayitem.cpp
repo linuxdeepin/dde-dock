@@ -34,15 +34,14 @@ int FashionTrayItem::TrayWidgetHeight = PLUGIN_BACKGROUND_MAX_SIZE;
 
 FashionTrayItem::FashionTrayItem(TrayPlugin *trayPlugin, QWidget *parent)
     : QWidget(parent),
-      m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight)),
-      m_attentionDelayTimer(new QTimer(this)),
-      m_trayPlugin(trayPlugin),
-      m_controlWidget(new FashionTrayControlWidget(trayPlugin->dockPosition())),
-      m_currentDraggingTray(nullptr),
-      m_normalContainer(new NormalContainer(m_trayPlugin)),
-      m_attentionContainer(new AttentionContainer(m_trayPlugin)),
-      m_holdContainer(new HoldContainer(m_trayPlugin)),
-      m_leftSpace(new QWidget)
+      m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
+    , m_attentionDelayTimer(new QTimer(this))
+    , m_trayPlugin(trayPlugin)
+    , m_controlWidget(new FashionTrayControlWidget(trayPlugin->dockPosition()))
+    , m_normalContainer(new NormalContainer(m_trayPlugin, this))
+    , m_attentionContainer(new AttentionContainer(m_trayPlugin, this))
+    , m_holdContainer(new HoldContainer(m_trayPlugin, this))
+    , m_leftSpace(new QWidget(this))
 {
     setAcceptDrops(true);
 

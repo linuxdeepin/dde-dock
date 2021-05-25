@@ -48,7 +48,7 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_soundItem = new SoundItem;
+    m_soundItem.reset(new SoundItem);
 
     if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, SOUND_KEY);
@@ -69,7 +69,7 @@ bool SoundPlugin::pluginIsDisable()
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == SOUND_KEY) {
-        return m_soundItem;
+        return m_soundItem.data();
     }
 
     return nullptr;

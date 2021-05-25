@@ -130,7 +130,7 @@ private:
     DisplayMode m_dislayMode;
     QPoint m_mousePressPos;
     int m_trayIconCount;
-    TrayPluginItem *m_tray = nullptr;
+    TrayPluginItem *m_tray;
     bool m_isHover;         // 判断鼠标是否移到desktop区域
     bool m_needRecoveryWin; // 判断鼠标移出desktop区域是否恢复之前窗口
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置

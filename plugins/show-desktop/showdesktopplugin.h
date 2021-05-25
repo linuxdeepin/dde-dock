@@ -63,8 +63,8 @@ private:
 private:
     bool m_pluginLoaded;
 
-    ShowDesktopWidget *m_showDesktopWidget;
-    Dock::TipsWidget *m_tipsLabel;
+    QScopedPointer<ShowDesktopWidget> m_showDesktopWidget;
+    QScopedPointer<Dock::TipsWidget> m_tipsLabel;
 };
 
 #endif // SHOWDESKTOPPLUGIN_H

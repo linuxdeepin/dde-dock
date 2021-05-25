@@ -29,11 +29,11 @@
 
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
-    : QObject(parent),
-
-      m_pluginLoaded(false),
-      m_startupState(false),
-      m_tipsLabel(new TipsWidget)
+    : QObject(parent)
+    , m_pluginLoaded(false)
+    , m_startupState(false)
+    , m_onboardItem(nullptr)
+    , m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setText(tr("Onboard"));
     m_tipsLabel->setVisible(false);
@@ -54,14 +54,14 @@ QWidget *OnboardPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_onboardItem;
+    return m_onboardItem.data();
 }
 
 QWidget *OnboardPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 void OnboardPlugin::init(PluginProxyInterface *proxyInter)
@@ -184,7 +184,7 @@ void OnboardPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_onboardItem = new OnboardItem;
+    m_onboardItem.reset(new OnboardItem);
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

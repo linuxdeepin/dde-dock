@@ -65,6 +65,8 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     : m_style(style)
     , m_device(device)
     , m_standarditem(new DStandardItem())
+    , m_labelAction(nullptr)
+    , m_stateAction(nullptr)
     , m_loading(new DSpinner(parent))
 {
     initActionList();
@@ -77,6 +79,14 @@ BluetoothDeviceItem::~BluetoothDeviceItem()
         delete m_loading;
         m_loading = nullptr;
     }
+
+    delete m_standarditem;
+
+    if (m_labelAction)
+        delete m_labelAction;
+
+    if (m_stateAction)
+        delete m_stateAction;
 }
 
 void BluetoothDeviceItem::initActionList()
@@ -150,6 +160,7 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_adapterLabel(new SettingLabel(adapter->name(), this))
     , m_adapterStateBtn(new DSwitchButton(this))
     , m_deviceListview(new DListView(this))
+    , m_itemDelegate(new ItemDelegate(m_deviceListview))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
     , m_refreshBtn(new RefreshButton(this))
     , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth",
@@ -158,7 +169,6 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
                                          this))
     , m_showUnnamedDevices(false)
     , m_seperator(new HorizontalSeperator(this))
-    , m_itemDelegate(new ItemDelegate(m_deviceListview))
     , m_bottomSeperator(new HorizontalSeperator(this))
 {
     initData();

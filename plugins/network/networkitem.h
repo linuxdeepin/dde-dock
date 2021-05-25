@@ -91,7 +91,6 @@ private:
     Dock::TipsWidget *m_tipsWidget;
     QScrollArea *m_applet;
 
-    QLabel *m_wiredTitle;
     DSwitchButton *m_switchWiredBtn;
     QVBoxLayout *m_wiredLayout;
     QWidget *m_wiredControlPanel;
@@ -115,7 +114,7 @@ private:
 
     QPixmap m_iconPixmap;
     PluginState m_pluginState;
-    QTimer *m_timer;
+    QTimer *refreshIconTimer;
     QTimer *m_switchWireTimer;
     QTimer *m_wirelessScanTimer;
     int m_wirelessScanInterval;

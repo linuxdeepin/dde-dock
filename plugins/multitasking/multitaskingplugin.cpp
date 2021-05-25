@@ -34,6 +34,7 @@ using namespace Dock;
 MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_multitaskingWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
@@ -65,7 +66,7 @@ QWidget *MultitaskingPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_multitaskingWidget;
+    return m_multitaskingWidget.data();
 }
 
 QWidget *MultitaskingPlugin::itemTipsWidget(const QString &itemKey)
@@ -74,7 +75,7 @@ QWidget *MultitaskingPlugin::itemTipsWidget(const QString &itemKey)
 
     m_tipsLabel->setText(pluginDisplayName());
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 void MultitaskingPlugin::init(PluginProxyInterface *proxyInter)
@@ -201,7 +202,7 @@ void MultitaskingPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_multitaskingWidget = new MultitaskingWidget;
+    m_multitaskingWidget.reset(new MultitaskingWidget);
 
     m_proxyInter->itemAdded(this, pluginName());
 

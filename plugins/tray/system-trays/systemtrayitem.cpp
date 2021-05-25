@@ -66,6 +66,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("systemtraypopup");
         PopupWindow = arrowRectangle;
+        connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
     m_popupTipsDelayTimer->setInterval(500);

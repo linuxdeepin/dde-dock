@@ -73,10 +73,9 @@ void TrashPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
 
-    if (!m_trashWidget)
-        m_trashWidget = new TrashWidget;
+    if (m_trashWidget.isNull())
+        m_trashWidget.reset(new TrashWidget);
 
-//    DFMGlobal::instance()->installTranslator();
     displayModeChanged(displayMode());
 }
 
@@ -84,7 +83,7 @@ QWidget *TrashPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_trashWidget;
+    return m_trashWidget.data();
 }
 
 QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
@@ -97,7 +96,7 @@ QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
     else
         m_tipsLabel->setText(tr("Trash - %1 files").arg(count));
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 QWidget *TrashPlugin::itemPopupApplet(const QString &itemKey)
@@ -105,7 +104,6 @@ QWidget *TrashPlugin::itemPopupApplet(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return nullptr;
-//    return m_trashWidget->popupApplet();
 }
 
 const QString TrashPlugin::itemCommand(const QString &itemKey)
@@ -171,6 +169,8 @@ void TrashPlugin::setSortKey(const QString &itemKey, const int order)
 
 void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
+    Q_UNUSED(displayMode);
+
     if (pluginIsDisable()) {
         return;
     }

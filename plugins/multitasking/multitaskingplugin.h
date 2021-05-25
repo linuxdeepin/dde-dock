@@ -25,7 +25,7 @@
 #include "pluginsiteminterface.h"
 #include "multitaskingwidget.h"
 
-#include <QLabel>
+#include <QScopedPointer>
 
 namespace Dock {
 class TipsWidget;
@@ -64,8 +64,8 @@ private:
 private:
     bool m_pluginLoaded;
 
-    MultitaskingWidget *m_multitaskingWidget;
-    Dock::TipsWidget *m_tipsLabel;
+    QScopedPointer<MultitaskingWidget> m_multitaskingWidget;
+    QScopedPointer<Dock::TipsWidget> m_tipsLabel;
 };
 
 #endif // MULTITASKINGPLUGIN_H

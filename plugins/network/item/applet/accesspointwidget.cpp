@@ -45,12 +45,12 @@ extern const QString DarkType;
 extern const QString LightType;
 extern void initFontColor(QWidget *widget);
 
-AccessPointWidget::AccessPointWidget()
-    : QFrame(nullptr)
+AccessPointWidget::AccessPointWidget(QWidget *parent)
+    : QFrame(parent)
     , m_activeState(NetworkDevice::Unknown)
     , m_ssidBtn(new SsidButton(this))
-    , m_securityLabel(new QLabel)
-    , m_strengthLabel(new QLabel)
+    , m_securityLabel(new QLabel(this))
+    , m_strengthLabel(new QLabel(this))
     , m_stateButton(new StateButton(this))
     , m_isEnter(false)
 {

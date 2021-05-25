@@ -72,7 +72,6 @@ protected:
     void setWrapperLayout(QBoxLayout *layout);
     bool expand() const;
     Dock::Position dockPosition() const;
-//    QSize wrapperSize() const;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

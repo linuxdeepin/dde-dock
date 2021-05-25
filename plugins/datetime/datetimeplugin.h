@@ -75,8 +75,8 @@ private:
     QDBusInterface *timedateInterface();
 
 private:
-    QPointer<DatetimeWidget> m_centralWidget;
-    QPointer<Dock::TipsWidget> m_dateTipsLabel;
+    QScopedPointer<DatetimeWidget> m_centralWidget;
+    QScopedPointer<Dock::TipsWidget> m_dateTipsLabel;
     QTimer *m_refershTimer;
     QString m_currentTimeString;
     QDBusInterface *m_interface;

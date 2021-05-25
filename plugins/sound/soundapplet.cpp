@@ -135,11 +135,11 @@ void Port::setCardId(const uint &cardId)
 
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
-    , m_centralWidget(new QWidget)
+    , m_centralWidget(new QWidget(this))
     , m_volumeBtn(new DIconButton(this))
-    , m_volumeIconMax(new QLabel)
-    , m_volumeSlider(new VolumeSlider)
-    , m_soundShow(new TipsWidget)
+    , m_volumeIconMax(new QLabel(this))
+    , m_volumeSlider(new VolumeSlider(this))
+    , m_soundShow(new TipsWidget(this))
     , m_seperator(new HorizontalSeperator(this))
     , m_secondSeperator(new HorizontalSeperator(this))
     , m_deviceLabel(nullptr)
@@ -147,11 +147,10 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
+    , m_itemDelegate(new ItemDelegate(m_listView))
     , m_deviceInfo("")
     , m_lastPort(nullptr)
     , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))
-    , m_itemDelegate(new ItemDelegate(m_listView))
-
 {
     initUi();
 }
@@ -215,7 +214,7 @@ void SoundApplet::initUi()
 
     m_soundShow->setText(QString("%1%").arg(0));
 
-    m_deviceLabel = new TipsWidget;
+    m_deviceLabel = new TipsWidget(this);
     m_deviceLabel->setText(tr("Device"));
     DFontSizeManager::instance()->bind(m_deviceLabel, DFontSizeManager::T4, QFont::Medium);
 
@@ -263,7 +262,7 @@ void SoundApplet::initUi()
         }
     });
 
-    m_centralLayout = new QVBoxLayout;
+    m_centralLayout = new QVBoxLayout(this);
     m_centralLayout->setMargin(0);
     m_centralLayout->setSpacing(0);
     m_centralLayout->addLayout(deviceLineLayout);
@@ -294,7 +293,7 @@ void SoundApplet::initUi()
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(m_audioInter, &DBusAudio::IncreaseVolumeChanged, this, &SoundApplet::increaseVolumeChanged);
     connect(m_audioInter, &DBusAudio::PortEnabledChanged, [this](uint cardId, QString portId) {
-            portEnableChange(cardId, portId);
+        portEnableChange(cardId, portId);
     });;
     connect(m_listView, &DListView::clicked, this, [this](const QModelIndex & idx) {
         const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();

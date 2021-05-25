@@ -40,16 +40,15 @@ extern void initFontColor(QWidget *widget);
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
+    , m_deviceName(new QLabel(this))
+    , m_switchBtn(new DSwitchButton(this))
+    , m_loadingIndicator(new DLoadingIndicator(this))
 {
-    m_deviceName = new QLabel(this);
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     initFontColor(m_deviceName);
 
-    m_switchBtn = new DSwitchButton;
-
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
-    m_loadingIndicator = new DLoadingIndicator;
     m_loadingIndicator->setLoading(false);
     m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);

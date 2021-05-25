@@ -26,6 +26,8 @@
 #include "onboarditem.h"
 
 #include <QLabel>
+#include <QScopedPointer>
+
 #include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_dde_daemon_dock_entry.h>
 
@@ -71,8 +73,8 @@ private:
     bool m_pluginLoaded;
     bool m_startupState;
 
-    OnboardItem *m_onboardItem;
-    Dock::TipsWidget *m_tipsLabel;
+    QScopedPointer<OnboardItem> m_onboardItem;
+    QScopedPointer<Dock::TipsWidget> m_tipsLabel;
 };
 
 #endif // ONBOARDPLUGIN_H

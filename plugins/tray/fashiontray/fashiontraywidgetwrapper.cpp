@@ -40,14 +40,14 @@
 DWIDGET_USE_NAMESPACE
 
 FashionTrayWidgetWrapper::FashionTrayWidgetWrapper(const QString &itemKey, AbstractTrayWidget *absTrayWidget, QWidget *parent)
-    : QWidget(parent),
-      m_absTrayWidget(absTrayWidget),
-      m_layout(new QVBoxLayout(this)),
-      m_attention(false),
-      m_dragging(false),
-      m_hover(false),
-      m_pressed(false),
-      m_itemKey(itemKey)
+    : QWidget(parent)
+    , m_absTrayWidget(absTrayWidget)
+    , m_layout(new QVBoxLayout(this))
+    , m_attention(false)
+    , m_dragging(false)
+    , m_hover(false)
+    , m_pressed(false)
+    , m_itemKey(itemKey)
 
 {
     setStyleSheet("background: transparent;");

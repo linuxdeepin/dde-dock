@@ -49,6 +49,15 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
     connect(m_dockDaemonInter, &DockDaemonInter::PluginSettingsSynced, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
+AbstractPluginsController::~AbstractPluginsController()
+{
+    for (auto inter: m_pluginsMap.keys()) {
+        m_pluginsMap.remove(inter);
+        delete m_pluginsMap.value(inter).value("pluginloader");
+        delete inter;
+    }
+}
+
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value)
 {
     // is it necessary?
@@ -185,7 +194,7 @@ void AbstractPluginsController::positionChanged()
 
 void AbstractPluginsController::loadPlugin(const QString &pluginFile)
 {
-    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile);
+    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
     bool pluginIsValid = true;
@@ -199,6 +208,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
+
     if (!interface) {
         qDebug() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
 

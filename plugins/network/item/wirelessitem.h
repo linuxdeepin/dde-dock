@@ -83,7 +83,7 @@ Q_SIGNALS:
     void deviceStateChanged();
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 private slots:
     void init();

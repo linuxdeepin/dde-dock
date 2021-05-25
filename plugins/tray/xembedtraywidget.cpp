@@ -79,6 +79,7 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, QWidget *parent)
     : AbstractTrayWidget(parent)
     , m_windowId(winId)
     , m_appName(getAppNameForWindow(winId))
+    , m_valid(true)
 {
     wrapWindow();
 

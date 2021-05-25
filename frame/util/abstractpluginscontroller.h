@@ -41,6 +41,7 @@ class AbstractPluginsController : public QObject, PluginProxyInterface
 
 public:
     explicit AbstractPluginsController(QObject *parent = 0);
+    ~ AbstractPluginsController() override;
 
     // implements PluginProxyInterface
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;

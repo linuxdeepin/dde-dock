@@ -40,6 +40,7 @@ int WaitingAuthAgentTimes = 0;
 OverlayWarningPlugin::OverlayWarningPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_warningWidget(nullptr)
     , m_showDisableOverlayDialogTimer(new QTimer(this))
 {
     m_showDisableOverlayDialogTimer->setInterval(6000);
@@ -61,7 +62,7 @@ QWidget *OverlayWarningPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_warningWidget;
+    return m_warningWidget.data();
 }
 
 QWidget *OverlayWarningPlugin::itemTipsWidget(const QString &itemKey)
@@ -140,7 +141,7 @@ void OverlayWarningPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_warningWidget = new OverlayWarningWidget;
+    m_warningWidget.reset(new OverlayWarningWidget);
 
     if (!isOverlayRoot()) {
         return;

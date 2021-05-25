@@ -66,8 +66,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_updateIconGeometryTimer(new QTimer(this))
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
-    , m_smallWatcher(new QFutureWatcher<QPixmap>(this))
-    , m_largeWatcher(new QFutureWatcher<QPixmap>(this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);

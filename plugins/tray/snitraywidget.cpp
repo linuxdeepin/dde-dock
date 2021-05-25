@@ -68,6 +68,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("snitraypopup");
         PopupWindow = arrowRectangle;
+        connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
     if (m_sniServicePath.startsWith("/") || !m_sniServicePath.contains("/")) {

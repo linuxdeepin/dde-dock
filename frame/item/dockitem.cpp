@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QJsonObject>
 #include <QCursor>
+#include <QApplication>
 
 #define PLUGIN_MARGIN  10
 #define ITEM_MAXSIZE    100
@@ -56,6 +57,7 @@ DockItem::DockItem(QWidget *parent)
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("apppopup");
         PopupWindow = arrowRectangle;
+        connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
     m_popupTipsDelayTimer->setInterval(500);

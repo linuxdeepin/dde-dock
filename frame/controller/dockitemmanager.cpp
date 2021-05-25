@@ -78,6 +78,8 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(app, &DApplication::iconThemeChanged, this, &DockItemManager::refreshItemsIcon);
     }
 
+    connect(qApp, &QApplication::aboutToQuit, this, &QObject::deleteLater);
+
     // 刷新图标
     QMetaObject::invokeMethod(this, "refreshItemsIcon", Qt::QueuedConnection);
 }
@@ -345,9 +347,9 @@ void DockItemManager::sortPluginItems()
     if (firstPluginIndex == -1)
         return;
 
-    std::sort(m_itemList.begin() + firstPluginIndex, m_itemList.end(), [](DockItem * a, DockItem * b) -> bool {
-        PluginsItem *pa = static_cast<PluginsItem *>(a);
-        PluginsItem *pb = static_cast<PluginsItem *>(b);
+    std::sort(m_itemList.begin() + firstPluginIndex, m_itemList.end(), [](QPointer<DockItem> a, QPointer<DockItem> b) -> bool {
+        PluginsItem *pa = static_cast<PluginsItem *>(a.data());
+        PluginsItem *pb = static_cast<PluginsItem *>(b.data());
 
         const int aKey = pa->itemSortKey();
         const int bKey = pb->itemSortKey();

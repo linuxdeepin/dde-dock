@@ -35,7 +35,8 @@ class SsidButton : public QLabel
 {
     Q_OBJECT
 public:
-    explicit SsidButton(QWidget *parent = nullptr) : QLabel(parent) {}
+    explicit SsidButton(QWidget *parent = nullptr)
+        : QLabel(parent) {}
     virtual ~SsidButton() override {}
 
 signals:
@@ -56,7 +57,7 @@ class AccessPointWidget : public QFrame
     Q_PROPERTY(bool active READ active DESIGNABLE true)
 
 public:
-    explicit AccessPointWidget();
+    explicit AccessPointWidget(QWidget *parent = nullptr);
 
     const AccessPoint ap() const { return m_ap; }
     void updateAP(const AccessPoint &ap);
@@ -70,8 +71,8 @@ signals:
     void clicked() const;
 
 private:
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
     void setStrengthIcon(const int strength);
 
 protected:

@@ -57,7 +57,6 @@ private:
     void refershIconImage();
 
     static QString getAppNameForWindow(quint32 winId);
-//    static int getTrayWidgetKeySuffix(const QString &appName, quint32 winId);
 
 private slots:
     void setX11PassMouseEvent(const bool pass);
@@ -73,7 +72,7 @@ private:
 
     QTimer *m_updateTimer;
     QTimer *m_sendHoverEvent;
-    bool m_valid = true;
+    bool m_valid;
 };
 
 #endif // XEMBEDTRAYWIDGET_H

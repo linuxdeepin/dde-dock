@@ -26,6 +26,8 @@
 #include "pluginsiteminterface.h"
 #include "bluetoothitem.h"
 
+#include <QScopedPointer>
+
 class BluetoothPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -55,7 +57,7 @@ private:
     void refreshPluginItemsVisible();
 
 private:
-    BluetoothItem *m_bluetoothItem;
+    QScopedPointer<BluetoothItem> m_bluetoothItem;
     bool m_enableState = true;
 };
 

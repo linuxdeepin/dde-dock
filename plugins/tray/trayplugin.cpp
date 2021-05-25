@@ -84,17 +84,12 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
     m_systemTraysController = new SystemTraysController(this);
     m_refreshXEmbedItemsTimer = new QTimer(this);
     m_refreshSNIItemsTimer = new QTimer(this);
-    m_tipsLabel = new TipsWidget;
 
     m_refreshXEmbedItemsTimer->setInterval(0);
     m_refreshXEmbedItemsTimer->setSingleShot(true);
 
     m_refreshSNIItemsTimer->setInterval(0);
     m_refreshSNIItemsTimer->setSingleShot(true);
-
-    m_tipsLabel->setObjectName("tray");
-    m_tipsLabel->setText(tr("System Tray"));
-    m_tipsLabel->setVisible(false);
 
     connect(m_systemTraysController, &SystemTraysController::pluginItemAdded, this, &TrayPlugin::addTrayWidget);
     connect(m_systemTraysController, &SystemTraysController::pluginItemRemoved, this, [ = ](const QString & itemKey) { trayRemoved(itemKey); });
@@ -480,7 +475,7 @@ void TrayPlugin::trayIndicatorAdded(const QString &itemKey, const QString &indic
 
     IndicatorTray *indicatorTray = nullptr;
     if (!m_indicatorMap.keys().contains(indicatorName)) {
-        indicatorTray = new IndicatorTray(indicatorName);
+        indicatorTray = new IndicatorTray(indicatorName, this);
         m_indicatorMap[indicatorName] = indicatorTray;
     } else {
         indicatorTray = m_indicatorMap[itemKey];

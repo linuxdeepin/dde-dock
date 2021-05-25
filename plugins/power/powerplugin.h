@@ -70,8 +70,8 @@ private:
     bool m_pluginLoaded;
     bool m_showTimeToFull;
 
-    PowerStatusWidget *m_powerStatusWidget;
-    Dock::TipsWidget *m_tipsLabel;
+    QScopedPointer<PowerStatusWidget> m_powerStatusWidget;
+    QScopedPointer<Dock::TipsWidget> m_tipsLabel;
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;

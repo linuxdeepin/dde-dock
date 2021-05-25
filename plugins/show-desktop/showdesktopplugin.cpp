@@ -23,12 +23,14 @@
 #include "../widgets/tipswidget.h"
 
 #include <QIcon>
+#include <QDebug>
 
 #define PLUGIN_STATE_KEY    "enable"
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_showDesktopWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
 {
     m_tipsLabel->setVisible(false);
@@ -49,7 +51,7 @@ QWidget *ShowDesktopPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_showDesktopWidget;
+    return m_showDesktopWidget.data();
 }
 
 QWidget *ShowDesktopPlugin::itemTipsWidget(const QString &itemKey)
@@ -58,7 +60,7 @@ QWidget *ShowDesktopPlugin::itemTipsWidget(const QString &itemKey)
 
     m_tipsLabel->setText(pluginDisplayName());
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 void ShowDesktopPlugin::init(PluginProxyInterface *proxyInter)
@@ -178,7 +180,7 @@ void ShowDesktopPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_showDesktopWidget = new ShowDesktopWidget;
+    m_showDesktopWidget.reset(new ShowDesktopWidget);
 
     m_proxyInter->itemAdded(this, pluginName());
 

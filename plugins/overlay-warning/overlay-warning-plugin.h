@@ -71,7 +71,7 @@ private slots:
 private:
     bool m_pluginLoaded;
 
-    OverlayWarningWidget *m_warningWidget;
+    QScopedPointer<OverlayWarningWidget> m_warningWidget;
     QTimer *m_showDisableOverlayDialogTimer;
 };
 

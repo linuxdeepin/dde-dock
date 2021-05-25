@@ -24,7 +24,7 @@
 #include "../../frame/util/utils.h"
 
 #include <DDBusSender>
-#include <QLabel>
+
 #include <QDebug>
 #include <QDBusConnectionInterface>
 
@@ -35,6 +35,9 @@
 using namespace Dock;
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent)
+    , m_centralWidget(nullptr)
+    , m_dateTipsLabel(nullptr)
+    , m_refershTimer(nullptr)
     , m_interface(nullptr)
     , m_pluginLoaded(false)
 {
@@ -83,16 +86,16 @@ void DatetimePlugin::loadPlugin()
         return;
 
     m_pluginLoaded = true;
-    m_dateTipsLabel = new TipsWidget;
+    m_dateTipsLabel.reset(new TipsWidget);
     m_refershTimer = new QTimer(this);
     m_dateTipsLabel->setObjectName("datetime");
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();
 
-    m_centralWidget = new DatetimeWidget;
+    m_centralWidget.reset(new DatetimeWidget);
 
-    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
+    connect(m_centralWidget.data(), &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, pluginName()); });
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 
     m_proxyInter->itemAdded(this, pluginName());
@@ -132,14 +135,14 @@ QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_centralWidget;
+    return m_centralWidget.data();
 }
 
 QWidget *DatetimePlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_dateTipsLabel;
+    return m_dateTipsLabel.data();
 }
 
 const QString DatetimePlugin::itemCommand(const QString &itemKey)
@@ -188,12 +191,12 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "open") {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
-        .arg(QString("datetime"))
-        .call();
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method(QString("ShowModule"))
+                .arg(QString("datetime"))
+                .call();
     } else {
         const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
         timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);
@@ -255,11 +258,11 @@ QDBusInterface* DatetimePlugin::timedateInterface()
 {
     if (!m_interface) {
         if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.daemon.Timedate")) {
-            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate");
+            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate", QDBusConnection::sessionBus(), this);
         } else {
             const QString path = QString("/com/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
             QDBusInterface * systemInterface = new QDBusInterface("com.deepin.daemon.Accounts", path, "com.deepin.daemon.Accounts.User",
-                                      QDBusConnection::systemBus(), this);
+                                                                  QDBusConnection::systemBus(), this);
             return systemInterface;
         }
     }

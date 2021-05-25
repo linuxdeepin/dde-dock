@@ -59,9 +59,6 @@ private:
     bool m_empty;
     int m_trashItemsCount;
 
-//    Dtk::Widget::DLinkButton *m_openBtn;
-//    Dtk::Widget::DLinkButton *m_clearBtn;
-
     QFileSystemWatcher *m_fsWatcher;
 };
 

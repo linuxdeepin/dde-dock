@@ -36,7 +36,7 @@
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent)
     , m_closeBtn3D(new DIconButton(this))
-    , m_titleBtn(new DPushButton)
+    , m_titleBtn(new DPushButton(this))
 {
     m_closeBtn3D->setObjectName("closebutton-3d");
     m_closeBtn3D->setFixedSize(24, 24);

@@ -43,7 +43,10 @@ PowerPlugin::PowerPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
     , m_showTimeToFull(true)
+    , m_powerStatusWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
+    , m_systemPowerInter(nullptr)
+    , m_powerInter(nullptr)
     , m_preChargeTimer(new QTimer(this))
 {
     m_tipsLabel->setVisible(false);
@@ -66,7 +69,7 @@ const QString PowerPlugin::pluginDisplayName() const
 QWidget *PowerPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-        return m_powerStatusWidget;
+        return m_powerStatusWidget.data();
 
     return nullptr;
 }
@@ -83,7 +86,7 @@ QWidget *PowerPlugin::itemTipsWidget(const QString &itemKey)
 
     refreshTipsData();
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 void PowerPlugin::init(PluginProxyInterface *proxyInter)
@@ -201,7 +204,7 @@ void PowerPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_powerStatusWidget = new PowerStatusWidget;
+    m_powerStatusWidget.reset(new PowerStatusWidget);
     m_powerInter = new DBusPower(this);
 
     m_systemPowerInter = new SystemPowerInter("com.deepin.system.Power", "/com/deepin/system/Power", QDBusConnection::systemBus(), this);

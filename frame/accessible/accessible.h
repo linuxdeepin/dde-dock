@@ -125,66 +125,66 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 
     QAccessibleInterface *interface = nullptr;
 
-    USE_ACCESSIBLE(classname, MainWindow);
-    USE_ACCESSIBLE(classname, MainPanelControl);
-    USE_ACCESSIBLE(QString(classname).replace("Dock::", ""), TipsWidget);
-    USE_ACCESSIBLE(classname, DockPopupWindow);
-    USE_ACCESSIBLE(classname, LauncherItem);
-    USE_ACCESSIBLE(classname, AppItem);
-    USE_ACCESSIBLE(classname, PreviewContainer);
-    USE_ACCESSIBLE(classname, PluginsItem);
-    USE_ACCESSIBLE(classname, TrayPluginItem);
-    USE_ACCESSIBLE(classname, PlaceholderItem);
-    USE_ACCESSIBLE(classname, AppDragWidget);
-    USE_ACCESSIBLE(classname, AppSnapshot);
-    USE_ACCESSIBLE(classname, FloatingPreview);
-    USE_ACCESSIBLE(classname, SNITrayWidget);
-    USE_ACCESSIBLE(classname, AbstractTrayWidget);
-    USE_ACCESSIBLE(classname, SystemTrayItem);
-    USE_ACCESSIBLE(classname, FashionTrayItem);
-    USE_ACCESSIBLE(classname, FashionTrayWidgetWrapper);
-    USE_ACCESSIBLE(classname, FashionTrayControlWidget);
-    USE_ACCESSIBLE(classname, AttentionContainer);
-    USE_ACCESSIBLE(classname, HoldContainer);
-    USE_ACCESSIBLE(classname, NormalContainer);
-    USE_ACCESSIBLE(classname, SpliterAnimated);
-    USE_ACCESSIBLE(classname, IndicatorTrayWidget);
-    USE_ACCESSIBLE(classname, XEmbedTrayWidget);
-    USE_ACCESSIBLE(classname, DesktopWidget);
-    USE_ACCESSIBLE(classname, DatetimeWidget);
-    USE_ACCESSIBLE(classname, OnboardItem);
-    USE_ACCESSIBLE(classname, TrashWidget);
-    USE_ACCESSIBLE(classname, PopupControlWidget);
-    USE_ACCESSIBLE(classname, ShutdownWidget);
-    USE_ACCESSIBLE(classname, MultitaskingWidget);
-    USE_ACCESSIBLE(classname, ShowDesktopWidget);
-    USE_ACCESSIBLE(classname, OverlayWarningWidget);
-    USE_ACCESSIBLE(classname, QWidget);
-    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_fix");
-    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_app");
-    USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_tray");
-    USE_ACCESSIBLE(classname, QLabel);
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-2d");
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-3d");
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "");
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBlurEffectWidget);
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DListView);
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DLoadingIndicator);
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSpinner);
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton);
-    USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DIconButton);
-    USE_ACCESSIBLE(classname, QMenu);
-    USE_ACCESSIBLE(classname, QPushButton);
-    USE_ACCESSIBLE(classname, QSlider);
-    USE_ACCESSIBLE(classname, QScrollBar);
-    USE_ACCESSIBLE(classname, QScrollArea);
-    USE_ACCESSIBLE(classname, QFrame);
-    USE_ACCESSIBLE(classname, QGraphicsView);
-    USE_ACCESSIBLE(classname, DragWidget);
-    USE_ACCESSIBLE(classname, NetworkItem);
-    USE_ACCESSIBLE(classname, StateButton);
-    USE_ACCESSIBLE(classname, DeviceControlWidget);
-    USE_ACCESSIBLE(classname, HorizontalSeperator);
+    USE_ACCESSIBLE(classname, MainWindow)
+            ELSE_USE_ACCESSIBLE(classname, MainPanelControl)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dock::", ""), TipsWidget)
+            ELSE_USE_ACCESSIBLE(classname, DockPopupWindow)
+            ELSE_USE_ACCESSIBLE(classname, LauncherItem)
+            ELSE_USE_ACCESSIBLE(classname, AppItem)
+            ELSE_USE_ACCESSIBLE(classname, PreviewContainer)
+            ELSE_USE_ACCESSIBLE(classname, PluginsItem)
+            ELSE_USE_ACCESSIBLE(classname, TrayPluginItem)
+            ELSE_USE_ACCESSIBLE(classname, PlaceholderItem)
+            ELSE_USE_ACCESSIBLE(classname, AppDragWidget)
+            ELSE_USE_ACCESSIBLE(classname, AppSnapshot)
+            ELSE_USE_ACCESSIBLE(classname, FloatingPreview)
+            ELSE_USE_ACCESSIBLE(classname, SNITrayWidget)
+            ELSE_USE_ACCESSIBLE(classname, AbstractTrayWidget)
+            ELSE_USE_ACCESSIBLE(classname, SystemTrayItem)
+            ELSE_USE_ACCESSIBLE(classname, FashionTrayItem)
+            ELSE_USE_ACCESSIBLE(classname, FashionTrayWidgetWrapper)
+            ELSE_USE_ACCESSIBLE(classname, FashionTrayControlWidget)
+            ELSE_USE_ACCESSIBLE(classname, AttentionContainer)
+            ELSE_USE_ACCESSIBLE(classname, HoldContainer)
+            ELSE_USE_ACCESSIBLE(classname, NormalContainer)
+            ELSE_USE_ACCESSIBLE(classname, SpliterAnimated)
+            ELSE_USE_ACCESSIBLE(classname, IndicatorTrayWidget)
+            ELSE_USE_ACCESSIBLE(classname, XEmbedTrayWidget)
+            ELSE_USE_ACCESSIBLE(classname, DesktopWidget)
+            ELSE_USE_ACCESSIBLE(classname, DatetimeWidget)
+            ELSE_USE_ACCESSIBLE(classname, OnboardItem)
+            ELSE_USE_ACCESSIBLE(classname, TrashWidget)
+            ELSE_USE_ACCESSIBLE(classname, PopupControlWidget)
+            ELSE_USE_ACCESSIBLE(classname, ShutdownWidget)
+            ELSE_USE_ACCESSIBLE(classname, MultitaskingWidget)
+            ELSE_USE_ACCESSIBLE(classname, ShowDesktopWidget)
+            ELSE_USE_ACCESSIBLE(classname, OverlayWarningWidget)
+            ELSE_USE_ACCESSIBLE(classname, QWidget)
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_fix")
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_app")
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(classname, QLabel, "spliter_tray")
+            ELSE_USE_ACCESSIBLE(classname, QLabel)
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-2d")
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, "closebutton-3d")
+            ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, "")
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBlurEffectWidget)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DListView)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DLoadingIndicator)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSpinner)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton)
+            ELSE_USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DIconButton)
+            ELSE_USE_ACCESSIBLE(classname, QMenu)
+            ELSE_USE_ACCESSIBLE(classname, QPushButton)
+            ELSE_USE_ACCESSIBLE(classname, QSlider)
+            ELSE_USE_ACCESSIBLE(classname, QScrollBar)
+            ELSE_USE_ACCESSIBLE(classname, QScrollArea)
+            ELSE_USE_ACCESSIBLE(classname, QFrame)
+            ELSE_USE_ACCESSIBLE(classname, QGraphicsView)
+            ELSE_USE_ACCESSIBLE(classname, DragWidget)
+            ELSE_USE_ACCESSIBLE(classname, NetworkItem)
+            ELSE_USE_ACCESSIBLE(classname, StateButton)
+            ELSE_USE_ACCESSIBLE(classname, DeviceControlWidget)
+            ELSE_USE_ACCESSIBLE(classname, HorizontalSeperator);
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

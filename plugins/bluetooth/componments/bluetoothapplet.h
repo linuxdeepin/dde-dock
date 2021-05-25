@@ -63,8 +63,8 @@ private:
     void updateIconTheme();
 
 private:
-    DLabel *m_label = nullptr;
-    QHBoxLayout *m_layout = nullptr;
+    DLabel *m_label;
+    QHBoxLayout *m_layout;
 };
 
 class BluetoothApplet : public QWidget
@@ -106,12 +106,12 @@ private:
     void updateIconTheme();
 
 private:
-    QScrollArea *m_scroarea = nullptr;
-    QWidget *m_contentWidget = nullptr;
-    AdaptersManager *m_adaptersManager = nullptr;
-    SettingLabel *m_settingLabel = nullptr;
-    QVBoxLayout *m_mainLayout = nullptr;
-    QVBoxLayout *m_contentLayout = nullptr;
+    QScrollArea *m_scroarea;
+    QWidget *m_contentWidget;
+    AdaptersManager *m_adaptersManager;
+    SettingLabel *m_settingLabel;
+    QVBoxLayout *m_mainLayout;
+    QVBoxLayout *m_contentLayout;
 
     QStringList m_connectDeviceName;
     QMap<QString, BluetoothAdapterItem *> m_adapterItems;           // 所有蓝牙适配器

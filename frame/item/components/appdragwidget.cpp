@@ -71,7 +71,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
     , m_dockPosition(Dock::Position::Bottom)
     , m_removeTips(new TipsWidget(this))
-    , m_popupWindow(nullptr)
+    , m_popupWindow(new DockPopupWindow(this))
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
 {
     m_removeTips->setText(tr("Remove"));
@@ -79,14 +79,12 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     m_removeTips->setVisible(false);
     m_removeTips->installEventFilter(this);
 
-    DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
-    arrowRectangle->setShadowBlurRadius(20);
-    arrowRectangle->setRadius(18);
-    arrowRectangle->setShadowYOffset(2);
-    arrowRectangle->setShadowXOffset(0);
-    arrowRectangle->setArrowWidth(18);
-    arrowRectangle->setArrowHeight(10);
-    m_popupWindow = arrowRectangle;
+    m_popupWindow->setShadowBlurRadius(20);
+    m_popupWindow->setRadius(18);
+    m_popupWindow->setShadowYOffset(2);
+    m_popupWindow->setShadowXOffset(0);
+    m_popupWindow->setArrowWidth(18);
+    m_popupWindow->setArrowHeight(10);
     m_popupWindow->setRadius(18);
 
     m_scene->addItem(m_object);
@@ -364,6 +362,8 @@ bool AppDragWidget::isRemoveItem()
 
 void AppDragWidget::enterEvent(QEvent *event)
 {
+    Q_UNUSED(event);
+
     if (m_goBackAnim->state() != QPropertyAnimation::State::Running
             && m_animGroup->state() != QParallelAnimationGroup::Running) {
         hide();

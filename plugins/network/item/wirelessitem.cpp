@@ -43,7 +43,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     , m_refreshLimit(0)
     , m_refreshLimitTimer(new QTimer(this))
     , m_refreshTimer(new QTimer(this))
-    , m_wirelessApplet(new QWidget)
+    , m_wirelessApplet(new QWidget(this))
     , m_APList(nullptr)
 {
     m_refreshTimer->setSingleShot(true);
@@ -101,8 +101,12 @@ WirelessItem::WirelessItem(WirelessDevice *device)
 
 WirelessItem::~WirelessItem()
 {
-    m_APList->deleteLater();
-    m_APList->controlPanel()->deleteLater();
+    if (m_APList) {
+        m_APList->deleteLater();
+
+        if (m_APList->controlPanel())
+            m_APList->controlPanel()->deleteLater();
+    }
 }
 
 QWidget *WirelessItem::itemApplet()
@@ -232,6 +236,6 @@ void WirelessItem::adjustHeight(bool visibel)
         return;
 
     auto height = visibel ? (m_APList->height() + controlPanel->height())
-                  : m_APList->height();
+                          : m_APList->height();
     m_wirelessApplet->setFixedHeight(height);
 }

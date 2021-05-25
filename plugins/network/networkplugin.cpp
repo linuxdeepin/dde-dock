@@ -56,7 +56,7 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
     if (m_networkItem)
         return;
 
-    m_networkItem = new NetworkItem;
+    m_networkItem.reset(new NetworkItem);
 
     if (!pluginIsDisable()) {
         loadPlugin();
@@ -113,7 +113,7 @@ const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
 QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == NETWORK_KEY) {
-        return m_networkItem;
+        return m_networkItem.data();
     }
 
     return nullptr;
@@ -195,11 +195,11 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             wiredItems.insert(path, static_cast<WiredItem *>(item));
 
             connect(static_cast<WiredItem *>(item), &WiredItem::wiredStateChanged,
-                    m_networkItem, &NetworkItem::updateSelf);
+                    m_networkItem.data(), &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::enableChanged,
-                    m_networkItem, &NetworkItem::updateSelf);
+                    m_networkItem.data(), &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
-                    m_networkItem, &NetworkItem::updateSelf);
+                    m_networkItem.data(), &NetworkItem::updateSelf);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device));
@@ -207,26 +207,26 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             wirelessItems.insert(path, static_cast<WirelessItem *>(item));
 
             connect(static_cast<WirelessItem *>(item), &WirelessItem::queryActiveConnInfo,
-                    m_networkWorker, &NetworkWorker::queryActiveConnInfo);
+                    m_networkWorker.data(), &NetworkWorker::queryActiveConnInfo);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestActiveAP,
-                    m_networkWorker, &NetworkWorker::activateAccessPoint);
+                    m_networkWorker.data(), &NetworkWorker::activateAccessPoint);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestDeactiveAP,
-                    m_networkWorker, &NetworkWorker::disconnectDevice);
+                    m_networkWorker.data(), &NetworkWorker::disconnectDevice);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::feedSecret,
-                    m_networkWorker, &NetworkWorker::feedSecret);
+                    m_networkWorker.data(), &NetworkWorker::feedSecret);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::cancelSecret,
-                    m_networkWorker, &NetworkWorker::cancelSecret);
+                    m_networkWorker.data(), &NetworkWorker::cancelSecret);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
-                    m_networkWorker, &NetworkWorker::requestWirelessScan);
+                    m_networkWorker.data(), &NetworkWorker::requestWirelessScan);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::createApConfig,
-                    m_networkWorker, &NetworkWorker::createApConfig);
+                    m_networkWorker.data(), &NetworkWorker::createApConfig);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::queryConnectionSession,
-                    m_networkWorker, &NetworkWorker::queryConnectionSession);
+                    m_networkWorker.data(), &NetworkWorker::queryConnectionSession);
 
             connect(static_cast<WirelessItem *>(item), &WirelessItem::deviceStateChanged,
-                    m_networkItem, &NetworkItem::updateSelf);
+                    m_networkItem.data(), &NetworkItem::updateSelf);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
-                    m_networkItem, &NetworkItem::wirelessScan);
+                    m_networkItem.data(), &NetworkItem::wirelessScan);
 
             m_networkWorker->requestWirelessScan();
             break;
@@ -234,9 +234,9 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             Q_UNREACHABLE();
         }
 
-        connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker, &NetworkWorker::setDeviceEnable);
-        connect(m_networkModel, &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
-        connect(m_networkModel, &NetworkModel::connectivityChanged, m_networkItem, &NetworkItem::updateSelf);
+        connect(item, &DeviceItem::requestSetDeviceEnable, m_networkWorker.data(), &NetworkWorker::setDeviceEnable);
+        connect(m_networkModel.data(), &NetworkModel::connectivityChanged, item, &DeviceItem::refreshConnectivity);
+        connect(m_networkModel.data(), &NetworkModel::connectivityChanged, m_networkItem.data(), &NetworkItem::updateSelf);
     }
 
     m_hasDevice = wiredItems.size() || wirelessItems.size();
@@ -245,10 +245,10 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 
 void NetworkPlugin::loadPlugin()
 {
-    m_networkModel = new NetworkModel;
-    m_networkWorker = new NetworkWorker(m_networkModel);
+    m_networkModel.reset(new NetworkModel);
+    m_networkWorker.reset(new NetworkWorker(m_networkModel.data()));
 
-    connect(m_networkModel, &NetworkModel::deviceListChanged, this, &NetworkPlugin::onDeviceListChanged);
+    connect(m_networkModel.data(), &NetworkModel::deviceListChanged, this, &NetworkPlugin::onDeviceListChanged);
 
     m_networkModel->moveToThread(qApp->thread());
     m_networkWorker->moveToThread(qApp->thread());

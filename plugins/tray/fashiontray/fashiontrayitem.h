@@ -86,7 +86,6 @@ private:
 
     TrayPlugin *m_trayPlugin;
     FashionTrayControlWidget *m_controlWidget;          //展开按钮
-    FashionTrayWidgetWrapper *m_currentDraggingTray;
 
     NormalContainer *m_normalContainer;                 //左侧可展开窗口
     AttentionContainer *m_attentionContainer;

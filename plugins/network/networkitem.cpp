@@ -47,7 +47,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_applet(new QScrollArea(this))
     , m_switchWire(true)
     , m_timeOut(true)
-    , m_timer(new QTimer(this))
+    , refreshIconTimer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
     , m_wirelessScanTimer(new QTimer(this))
     , m_wirelessScanInterval(Utils::SettingValue("com.deepin.dde.dock", QByteArray(), "wireless-scan-interval", 10).toInt())
@@ -55,7 +55,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_secondSeparator(new HorizontalSeperator(this))
     , m_thirdSeparator(new HorizontalSeperator(this))
 {
-    m_timer->setInterval(100);
+    refreshIconTimer->setInterval(100);
 
     m_tipsWidget->setVisible(false);
 
@@ -72,7 +72,7 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
-    m_loadingIndicator = new DLoadingIndicator;
+    m_loadingIndicator = new DLoadingIndicator(this);
     m_loadingIndicator->setLoading(false);
     m_loadingIndicator->setSmooth(true);
     m_loadingIndicator->setAniDuration(1000);
@@ -86,7 +86,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wirelessLayout = new QVBoxLayout;
     m_wirelessLayout->setMargin(0);
     m_wirelessLayout->setSpacing(0);
-    auto switchWirelessLayout = new QHBoxLayout;
+    QHBoxLayout *switchWirelessLayout = new QHBoxLayout;
     switchWirelessLayout->setMargin(0);
     switchWirelessLayout->setSpacing(0);
     switchWirelessLayout->addSpacing(20);
@@ -101,28 +101,28 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     m_wiredControlPanel = new QWidget(this);
 
-    m_wiredTitle = new QLabel(m_wiredControlPanel);
-    m_wiredTitle->setText(tr("Wired Network"));
-    m_wiredTitle->setFont(titlefont);
-    initFontColor(m_wiredTitle);
+    QLabel *wiredTitle = new QLabel(m_wiredControlPanel);
+    wiredTitle->setText(tr("Wired Network"));
+    wiredTitle->setFont(titlefont);
+    initFontColor(wiredTitle);
     m_switchWiredBtn = new DSwitchButton(m_wiredControlPanel);
     m_switchWiredBtnState = false;
     m_wiredLayout = new QVBoxLayout;
     m_wiredLayout->setMargin(0);
     m_wiredLayout->setSpacing(0);
-    auto switchWiredLayout = new QHBoxLayout;
+    QHBoxLayout *switchWiredLayout = new QHBoxLayout;
     switchWiredLayout->setMargin(0);
     switchWiredLayout->setSpacing(0);
     switchWiredLayout->addSpacing(20);
-    switchWiredLayout->addWidget(m_wiredTitle);
+    switchWiredLayout->addWidget(wiredTitle);
     switchWiredLayout->addStretch();
     switchWiredLayout->addWidget(m_switchWiredBtn);
     switchWiredLayout->addSpacing(8);
     m_wiredControlPanel->setLayout(switchWiredLayout);
     m_wiredControlPanel->setFixedHeight(ControlItemHeight);
 
-    auto centralWidget = new QWidget(m_applet);
-    auto centralLayout = new QVBoxLayout;
+    QWidget *centralWidget = new QWidget;
+    QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->setContentsMargins(QMargins(ItemMargin, 0, ItemMargin, 0));
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
@@ -152,7 +152,7 @@ NetworkItem::NetworkItem(QWidget *parent)
         m_switchWire = !m_switchWire;
         m_timeOut = true;
     });
-    connect(m_timer, &QTimer::timeout, this, &NetworkItem::refreshIcon);
+    connect(refreshIconTimer, &QTimer::timeout, this, &NetworkItem::refreshIcon);
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
@@ -381,7 +381,7 @@ void NetworkItem::refreshIcon()
         iconString = QString("network-%1-symbolic").arg(stateString);
         break;
     case Connecting: {
-        m_timer->start();
+        refreshIconTimer->start();
         if (m_switchWire) {
             strength = QTime::currentTime().msec() / 10 % 100;
             stateString = getStrengthStateString(strength);
@@ -393,7 +393,7 @@ void NetworkItem::refreshIcon()
             update();
             return;
         } else {
-            m_timer->start(200);
+            refreshIconTimer->start(200);
             const int index = QTime::currentTime().msec() / 200 % 10;
             const int num = index + 1;
             iconString = QString("network-wired-symbolic-connecting%1").arg(num);
@@ -406,7 +406,7 @@ void NetworkItem::refreshIcon()
         }
     }
     case Aconnecting: {
-        m_timer->start();
+        refreshIconTimer->start();
         strength = QTime::currentTime().msec() / 10 % 100;
         stateString = getStrengthStateString(strength);
         iconString = QString("wireless-%1-symbolic").arg(stateString);
@@ -418,7 +418,7 @@ void NetworkItem::refreshIcon()
         return;
     }
     case Bconnecting: {
-        m_timer->start(200);
+        refreshIconTimer->start(200);
         const int index = QTime::currentTime().msec() / 200 % 10;
         const int num = index + 1;
         iconString = QString("network-wired-symbolic-connecting%1").arg(num);
@@ -453,7 +453,7 @@ void NetworkItem::refreshIcon()
         iconString = QString("wireless-%1").arg(stateString);
     }
 
-    m_timer->stop();
+    refreshIconTimer->stop();
 
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);

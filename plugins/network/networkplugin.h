@@ -69,10 +69,10 @@ private:
     void refreshPluginItemsVisible();
 
 private:
-    dde::network::NetworkModel *m_networkModel;
-    dde::network::NetworkWorker *m_networkWorker;
+    QScopedPointer<dde::network::NetworkModel> m_networkModel;
+    QScopedPointer<dde::network::NetworkWorker> m_networkWorker;
 
-    NetworkItem *m_networkItem;
+    QScopedPointer<NetworkItem> m_networkItem;
 
     bool m_hasDevice;
 };

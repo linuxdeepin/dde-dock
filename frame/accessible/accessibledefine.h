@@ -389,8 +389,19 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
     interface = new Accessible##classname(static_cast<classname *>(object));\
     }\
 
+#define ELSE_USE_ACCESSIBLE(classnamestring,classname)    else if (classnamestring == QLatin1String(#classname) && object && object->isWidgetType())\
+{\
+    interface = new Accessible##classname(static_cast<classname *>(object));\
+    }\
+
+
 // [指定objectname]---适用同一个类，但objectname不同的情况
 #define USE_ACCESSIBLE_BY_OBJECTNAME(classnamestring,classname,objectname)    if (classnamestring == QLatin1String(#classname) && object && (object->objectName() == objectname) && object->isWidgetType())\
+{\
+    interface = new Accessible##classname(static_cast<classname *>(object));\
+    }\
+
+#define ELSE_USE_ACCESSIBLE_BY_OBJECTNAME(classnamestring,classname,objectname)    else if (classnamestring == QLatin1String(#classname) && object && (object->objectName() == objectname) && object->isWidgetType())\
 {\
     interface = new Accessible##classname(static_cast<classname *>(object));\
     }\

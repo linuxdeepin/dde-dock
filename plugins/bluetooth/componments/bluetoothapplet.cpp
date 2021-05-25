@@ -101,6 +101,7 @@ void SettingLabel::paintEvent(QPaintEvent *event)
 
 BluetoothApplet::BluetoothApplet(QWidget *parent)
     : QWidget(parent)
+    , m_scroarea(nullptr)
     , m_contentWidget(new QWidget(this))
     , m_adaptersManager(new AdaptersManager(this))
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))

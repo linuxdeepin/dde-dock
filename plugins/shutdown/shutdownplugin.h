@@ -110,8 +110,8 @@ private:
 private:
     bool m_pluginLoaded;
 
-    ShutdownWidget *m_shutdownWidget;
-    Dock::TipsWidget *m_tipsLabel;
+    QScopedPointer<ShutdownWidget> m_shutdownWidget;
+    QScopedPointer<Dock::TipsWidget> m_tipsLabel;
     DBusPowerManager* m_powerManagerInter;
     const QGSettings *m_gsettings;
 };

@@ -48,8 +48,8 @@ WirelessList::WirelessList(WirelessDevice *deviceIter, QWidget *parent)
     , m_activeAP()
     , m_updateAPTimer(new QTimer(this))
     , m_centralLayout(new QVBoxLayout)
-    , m_centralWidget(new QWidget)
-    , m_controlPanel(new DeviceControlWidget)
+    , m_centralWidget(new QWidget(this))
+    , m_controlPanel(new DeviceControlWidget(this))
 {
     setFixedHeight(ItemHeight);
 
@@ -227,7 +227,7 @@ void WirelessList::updateAPList()
         if (m_apList.size() > m_apwList.size()) {
             int i = m_apList.size() - m_apwList.size();
             for (int index = 0; index != i; index++) {
-                AccessPointWidget *apw = new AccessPointWidget;
+                AccessPointWidget *apw = new AccessPointWidget(this);
                 apw->setFixedHeight(ItemHeight);
                 m_apwList << apw;
                 m_centralLayout->addWidget(apw);

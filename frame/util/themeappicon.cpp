@@ -29,7 +29,6 @@
 #include <QPixmapCache>
 #include <QCryptographicHash>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QDate>
 #include <QPainter>
 #include <QStandardPaths>

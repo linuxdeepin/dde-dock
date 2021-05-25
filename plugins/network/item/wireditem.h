@@ -87,7 +87,6 @@ private:
     StateButton *m_stateButton;
     DSpinner *m_loadingStat;
 
-    HorizontalSeperator *m_line;
     QTimer *m_freshWiredIcon;
     NetworkDevice::DeviceStatus m_deviceState;
 };

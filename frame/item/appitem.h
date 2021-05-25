@@ -137,8 +137,6 @@ private:
 
     QDate m_curDate;                    // 保存当前icon的日期来判断是否需要更新日历APP的ICON
 
-    QFutureWatcher<QPixmap> *m_smallWatcher;
-    QFutureWatcher<QPixmap> *m_largeWatcher;
     DGuiApplicationHelper::ColorType m_themeType;
 
     static QPoint MousePressPos;

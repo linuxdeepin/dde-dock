@@ -88,11 +88,11 @@ private:
     DStyleHelper m_style;
     QString m_deviceIcon;
 
-    const Device *m_device = nullptr;
-    DStandardItem *m_standarditem = nullptr;
-    DViewItemAction *m_labelAction = nullptr;
-    DViewItemAction *m_stateAction = nullptr;
-    DSpinner *m_loading = nullptr;
+    const Device *m_device;
+    DStandardItem *m_standarditem;
+    DViewItemAction *m_labelAction;
+    DViewItemAction *m_stateAction;
+    DSpinner *m_loading;
 };
 
 class BluetoothAdapterItem : public QWidget
@@ -135,13 +135,13 @@ private:
     void initConnect();
     void setUnnamedDevicesVisible(bool isShow);
 
-    Adapter *m_adapter = nullptr;
-    SettingLabel *m_adapterLabel = nullptr;
-    DSwitchButton *m_adapterStateBtn = nullptr;
-    DListView *m_deviceListview = nullptr;
+    Adapter *m_adapter;
+    SettingLabel *m_adapterLabel;
+    DSwitchButton *m_adapterStateBtn;
+    DListView *m_deviceListview;
     ItemDelegate *m_itemDelegate;
-    QStandardItemModel *m_deviceModel = nullptr;
-    RefreshButton *m_refreshBtn = nullptr;
+    QStandardItemModel *m_deviceModel;
+    RefreshButton *m_refreshBtn;
     DBusBluetooth *m_bluetoothInter;
     bool m_showUnnamedDevices;
 

@@ -42,6 +42,7 @@ using namespace Dock;
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_shutdownWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
     , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
@@ -64,7 +65,7 @@ QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_shutdownWidget;
+    return m_shutdownWidget.data();
 }
 
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
@@ -75,7 +76,7 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
     // font size be changed in ControlCenter
     m_tipsLabel->setText(tr("Power"));
 
-    return m_tipsLabel;
+    return m_tipsLabel.data();
 }
 
 void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
@@ -284,7 +285,7 @@ void ShutdownPlugin::loadPlugin()
 
     m_pluginLoaded = true;
 
-    m_shutdownWidget = new ShutdownWidget;
+    m_shutdownWidget.reset(new ShutdownWidget);
 
     m_proxyInter->itemAdded(this, pluginName());
     displayModeChanged(displayMode());

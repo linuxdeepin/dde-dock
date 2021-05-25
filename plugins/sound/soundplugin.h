@@ -54,7 +54,7 @@ private:
     void refreshPluginItemsVisible();
 
 private:
-    SoundItem *m_soundItem;
+    QScopedPointer<SoundItem> m_soundItem;
 };
 
 #endif // SOUNDPLUGIN_H
