@@ -27,6 +27,7 @@
 #include <QGSettings>
 
 #include <DApplication>
+#include <DSysInfo>
 
 MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     : QObject (parent)
@@ -117,24 +118,26 @@ QMenu *MenuWorker::createMenu()
         statusSubMenu->setAccessibleName("statussubmenu");
 
         QAction *keepShownAct = new QAction(tr("Keep Shown"), this);
-        QAction *keepHiddenAct = new QAction(tr("Keep Hidden"), this);
-        QAction *smartHideAct = new QAction(tr("Smart Hide"), this);
-
         keepShownAct->setCheckable(true);
-        keepHiddenAct->setCheckable(true);
-        smartHideAct->setCheckable(true);
-
         keepShownAct->setChecked(hideMode == KeepShowing);
-        keepHiddenAct->setChecked(hideMode == KeepHidden);
-        smartHideAct->setChecked(hideMode == SmartHide);
-
         connect(keepShownAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepShowing); });
-        connect(keepHiddenAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepHidden); });
-        connect(smartHideAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(SmartHide); });
-
         statusSubMenu->addAction(keepShownAct);
-        statusSubMenu->addAction(keepHiddenAct);
-        statusSubMenu->addAction(smartHideAct);
+
+        if (Dtk::Core::DSysInfo::uosEditionType() != Dtk::Core::DSysInfo::UosEuler) {
+            QAction *keepHiddenAct = new QAction(tr("Keep Hidden"), this);
+            QAction *smartHideAct = new QAction(tr("Smart Hide"), this);
+            keepHiddenAct->setCheckable(true);
+            smartHideAct->setCheckable(true);
+
+            keepHiddenAct->setChecked(hideMode == KeepHidden);
+            smartHideAct->setChecked(hideMode == SmartHide);
+
+            connect(keepHiddenAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepHidden); });
+            connect(smartHideAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(SmartHide); });
+
+            statusSubMenu->addAction(keepHiddenAct);
+            statusSubMenu->addAction(smartHideAct);
+        }
 
         QAction *act = new QAction(tr("Status"), this);
         act->setMenu(statusSubMenu);
