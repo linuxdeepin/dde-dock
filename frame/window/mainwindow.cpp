@@ -1013,9 +1013,11 @@ void MainWindow::updatePanelVisible()
             r.setWidth(r.width() + margin);
             break;
         }
-        //  if (r.contains(QCursor::pos())) {
-        //      break;
-        //  }
+
+        //一直隐藏模式，判断光标是否处于任务栏窗口内部。是则不允许隐藏任务栏
+        if (r.contains(QCursor::pos())) {
+            break;
+        }
 
         //        const QRect windowRect = m_settings->windowRect(m_curDockPos, true);
         //        move(windowRect.topLeft());
