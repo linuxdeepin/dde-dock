@@ -66,6 +66,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_updateIconGeometryTimer(new QTimer(this))
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
+    , m_themeType(DGuiApplicationHelper::instance()->themeType())
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
