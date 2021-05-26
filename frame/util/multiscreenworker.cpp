@@ -1161,14 +1161,14 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
     switch (act) {
     case AniAction::Show:
         if (pos == Position::Top || pos == Position::Bottom) {
-            if (dockShowRect.height() > mainwindowRect.height() - 2
-                && dockShowRect.height() < mainwindowRect.height() + 2) {
+            if (qAbs(dockShowRect.height() - mainwindowRect.height()) <= 1
+                    && mainwindowRect.contains(dockShowRect.center())) {
                 emit requestNotifyWindowManager();
                 return;
             }
         } else if (pos == Position::Left || pos == Position::Right) {
-            if (dockShowRect.width() > mainwindowRect.width() - 2
-                && dockShowRect.width() < mainwindowRect.width() + 2) {
+            if (qAbs(dockShowRect.width() - mainwindowRect.width()) <= 1
+                    && mainwindowRect.contains(dockShowRect.center())) {
                 emit requestNotifyWindowManager();
                 return;
             }
