@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2018 ~ 2028 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
@@ -828,8 +828,24 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
 {
     qInfo() << "request change pos from: " << fromPos << " to: " << toPos;
+
+    QString dstScreenName = m_ds.current();
+    QList<Monitor *> monitorList = m_mtrInfo.validMonitor();
+    Monitor *currentMonitor = waitAndGetScreen(dstScreenName);
+    if (currentMonitor) {
+        if (!currentMonitor->dockPosition().docked(toPos)) {
+            // 当前屏不满足再找其他屏幕
+            foreach (auto monitor, monitorList) {
+                if (monitor->name() != dstScreenName && monitor->dockPosition().docked(toPos)) {
+                    dstScreenName = monitor->name();
+                }
+            }
+        }
+    }
     // 更新要切换到的屏幕
-    m_ds.updateDockedScreen(getValidScreen(m_position));
+    if (dstScreenName != m_ds.current()) {
+        m_ds.updateDockedScreen(dstScreenName);
+    }
 
     qInfo() << "update allow screen: " << m_ds.current();
 
