@@ -32,6 +32,7 @@
 #include <QDate>
 #include <QPainter>
 #include <QStandardPaths>
+#include <QProcess>
 
 #include <private/qguiapplication_p.h>
 #include <private/qiconloader_p.h>
@@ -182,18 +183,38 @@ ThemeAppIcon::~ThemeAppIcon()
  * @brief ThemeAppIcon::getIcon 根据传入的\a name 参数重新从系统主题中获取一次图标
  * @param name 图标名
  * @return 获取到的图标
- * @note 之所以不使用QIcon::fromTheme是因为这个函数中有缓存机制，获取系统主题中的图标的时候，第一次获取不到，下一次也是获取不到
+ * @note 只有在正常查找图标失败时，才走这个逻辑，如果直接使用QIcon::fromTheme可以获取到图标，是没必要的
  */
 QIcon ThemeAppIcon::getIcon(const QString &name)
 {
-    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
-    bool hasUserTheme = QIconLoader::instance()->hasUserTheme();
+    //TODO 这里找图标会耗时，界面轻微卡顿，后面有时间可以放到AppItem里面，单独开启线程去查找
+    auto getIconList = [ = ] (const QString &iconName) {
+        QProcess process;
+        process.start("qtxdg-iconfinder", QStringList() << iconName);
+        process.closeWriteChannel();
+        process.waitForFinished();
 
-    if (!platformTheme || hasUserTheme)
-        return QIcon::fromTheme(name);
+        int exitCode = process.exitCode();
+        QString outputTxt = process.readAllStandardOutput();
 
-    QIconEngine * const engine = platformTheme->createIconEngine(name);
-    return QIcon(engine);
+        auto list = outputTxt.split("\n");
+
+        if (exitCode != 0 || list.size() <= 3)
+            return QStringList() << "";
+
+        // 去掉无用数据
+        list.removeFirst();
+        list.removeLast();
+        list.removeLast();
+
+        for (auto &s : list) {
+            s = s.simplified();
+        }
+
+        return list;
+    };
+
+    return QIcon::fromTheme(getIconList(name).first());
 }
 
 bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain)

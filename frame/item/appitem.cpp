@@ -60,7 +60,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_drag(nullptr)
     , m_dragging(false)
     , m_retryTimes(0)
-    , m_iconValid(false)
+    , m_iconValid(true)
     , m_lastclickTimes(0)
     , m_appIcon(QPixmap())
     , m_updateIconGeometryTimer(new QTimer(this))
