@@ -53,11 +53,14 @@ private slots:
 private:
     void refreshIcon();
 
+protected:
+    bool eventFilter(QObject* watcher, QEvent *event) override;
+
 private:
     DBusSinkInput *m_inputInter;
 
     DIconButton *m_appBtn;
-    DIconButton *m_volumeBtnMin;
+    QLabel *m_volumeIconMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     Dock::TipsWidget *m_volumeLabel;

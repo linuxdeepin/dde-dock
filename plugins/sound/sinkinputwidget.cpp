@@ -50,7 +50,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     : QWidget(parent)
     , m_inputInter(new DBusSinkInput("com.deepin.daemon.Audio",inputPath,  QDBusConnection::sessionBus(), this))
     , m_appBtn(new DIconButton(this))
-    , m_volumeBtnMin(new DIconButton(this))
+    , m_volumeIconMin(new QLabel(this))
     , m_volumeIconMax(new QLabel(this))
     , m_volumeSlider(new VolumeSlider(this))
     , m_volumeLabel(new TipsWidget(this))
@@ -65,12 +65,8 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     titleLabel->setForegroundRole(DPalette::TextTitle);
     titleLabel->setText(titleLabel->fontMetrics().elidedText(m_inputInter->name(), Qt::TextElideMode::ElideRight, APP_TITLE_SIZE));
 
-    m_volumeBtnMin->setAccessibleName("volume-button");
-    m_volumeBtnMin->setFixedSize(ICON_SIZE, ICON_SIZE);
-    m_volumeBtnMin->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_volumeBtnMin->setIcon(DHiDPIHelper::loadNxPixmap("://audio-volume-low-symbolic.svg"));
-    m_volumeBtnMin->setFlat(true);
-
+    m_volumeIconMin->setAccessibleName("volume-button");
+    m_volumeIconMin->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
 
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
@@ -91,7 +87,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     // 音量图标+slider
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->addSpacing(2);
-    volumeCtrlLayout->addWidget(m_volumeBtnMin);
+    volumeCtrlLayout->addWidget(m_volumeIconMin);
     volumeCtrlLayout->addSpacing(10);
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->addSpacing(10);
@@ -108,8 +104,6 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::onVolumeChanged);
-//    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SinkInputWidget::onPlaySoundEffect);
-    connect(m_volumeBtnMin, &DIconButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
     connect(m_inputInter, &DBusSinkInput::VolumeChanged, this, [ = ] {
         m_volumeSlider->setValue(m_inputInter->volume() * 1000);
@@ -123,6 +117,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(60);
+    m_volumeIconMin->installEventFilter(this);
 
     setMuteIcon();
     refreshIcon();
@@ -168,9 +163,9 @@ void SinkInputWidget::setMuteIcon()
         p.drawPixmap(0, 0, muteIcon);
 
         appIconSource.setDevicePixelRatio(ratio);
-        m_volumeBtnMin->setIcon(appIconSource);
+        m_volumeIconMin->setPixmap(appIconSource);
     } else {
-        m_volumeBtnMin->setIcon(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
+        m_volumeIconMin->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(ICON_SIZE, ICON_SIZE), devicePixelRatioF()));
     }
 
     refreshIcon();
@@ -200,7 +195,17 @@ void SinkInputWidget::refreshIcon()
     m_volumeIconMax->setPixmap(ret);
 
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
-    m_volumeBtnMin->setIcon(ret);
+    m_volumeIconMin->setPixmap(ret);
+}
+
+bool SinkInputWidget::eventFilter(QObject *watcher, QEvent *event)
+{
+    if (watcher == m_volumeIconMin) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            setMute();
+        }
+    }
+    return false;
 }
 
 void SinkInputWidget:: onVolumeChanged()
