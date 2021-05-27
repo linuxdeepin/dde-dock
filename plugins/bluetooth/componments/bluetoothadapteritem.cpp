@@ -36,31 +36,6 @@
 #include <QBoxLayout>
 #include <QStandardItemModel>
 
-ItemDelegate::ItemDelegate(QAbstractItemView *parent)
-    : DStyledItemDelegate(parent)
-{
-
-}
-
-/**
- * @brief ItemDelegate::paint 绘制鼠标移动到蓝牙列表某条item上的选中效果
- * @param painter
- * @param option
- * @param index
- */
-void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItem styleOption = option;
-
-    if ((styleOption.state & QStyle::State_MouseOver)) {
-        styleOption.showDecorationSelected  = true;
-        styleOption.state |= QStyle::State_Selected;
-        styleOption.rect += QMargins(1, 1, 1, 1);
-    }
-
-    DStyledItemDelegate::paint(painter, styleOption, index);
-}
-
 BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DListView *parent)
     : m_style(style)
     , m_device(device)
@@ -154,13 +129,10 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_adapterLabel(new SettingLabel(adapter->name(), this))
     , m_adapterStateBtn(new DSwitchButton(this))
     , m_deviceListview(new DListView(this))
-    , m_itemDelegate(new ItemDelegate(m_deviceListview))
+    , m_itemDelegate(new DStyledItemDelegate(m_deviceListview))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
     , m_refreshBtn(new RefreshButton(this))
-    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth",
-                                         "/com/deepin/daemon/Bluetooth",
-                                         QDBusConnection::sessionBus(),
-                                         this))
+    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this))
     , m_showUnnamedDevices(false)
     , m_seperator(new HorizontalSeperator(this))
     , m_bottomSeperator(new HorizontalSeperator(this))

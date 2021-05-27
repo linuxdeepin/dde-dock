@@ -54,13 +54,6 @@ class HorizontalSeperator;
 const QString LightString = QString(":/light/buletooth_%1_light.svg");
 const QString DarkString = QString(":/dark/buletooth_%1_dark.svg");
 
-class ItemDelegate : public DStyledItemDelegate
-{
-public:
-    ItemDelegate(QAbstractItemView *parent = nullptr);
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-};
-
 class BluetoothDeviceItem : public QObject
 {
     Q_OBJECT
@@ -139,7 +132,7 @@ private:
     SettingLabel *m_adapterLabel;
     DSwitchButton *m_adapterStateBtn;
     DListView *m_deviceListview;
-    ItemDelegate *m_itemDelegate;
+    DStyledItemDelegate *m_itemDelegate;
     QStandardItemModel *m_deviceModel;
     RefreshButton *m_refreshBtn;
     DBusBluetooth *m_bluetoothInter;

@@ -50,31 +50,6 @@ DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 using namespace Dock;
 
-ItemDelegate::ItemDelegate(QAbstractItemView *parent)
-    : DStyledItemDelegate(parent)
-{
-
-}
-
-/**
- * @brief ItemDelegate::paint 绘制鼠标移动到音频列表某条item上的选中效果
- * @param painter
- * @param option
- * @param index
- */
-void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItem styleOption = option;
-
-    if ((styleOption.state & QStyle::State_MouseOver)) {
-        styleOption.showDecorationSelected  = true;
-        styleOption.state |= QStyle::State_Selected;
-        styleOption.rect += QMargins(1, 1, 1, 1);
-    }
-
-    DStyledItemDelegate::paint(painter, styleOption, index);
-}
-
 Q_DECLARE_METATYPE(const Port *)
 
 Port::Port(QObject *parent)
@@ -147,7 +122,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
-    , m_itemDelegate(new ItemDelegate(m_listView))
+    , m_itemDelegate(new DStyledItemDelegate(m_listView))
     , m_deviceInfo("")
     , m_lastPort(nullptr)
     , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))

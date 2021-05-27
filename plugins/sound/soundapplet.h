@@ -47,13 +47,6 @@ namespace Dock{
 class TipsWidget;
 }
 
-class ItemDelegate : public DStyledItemDelegate
-{
-public:
-    ItemDelegate(QAbstractItemView *parent = nullptr);
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-};
-
 class Port : public QObject
 {
     Q_OBJECT
@@ -164,7 +157,7 @@ private:
     DBusSink *m_defSinkInter;
     DTK_WIDGET_NAMESPACE::DListView  *m_listView;
     QStandardItemModel *m_model;
-    ItemDelegate *m_itemDelegate;
+    DStyledItemDelegate *m_itemDelegate;
     QList<Port *> m_ports;
     QString m_deviceInfo;
     QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
