@@ -81,12 +81,6 @@ BluetoothDeviceItem::~BluetoothDeviceItem()
     }
 
     delete m_standarditem;
-
-    if (m_labelAction)
-        delete m_labelAction;
-
-    if (m_stateAction)
-        delete m_stateAction;
 }
 
 void BluetoothDeviceItem::initActionList()
