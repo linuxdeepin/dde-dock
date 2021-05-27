@@ -70,8 +70,8 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_animGroup(new QParallelAnimationGroup(this))
     , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
     , m_dockPosition(Dock::Position::Bottom)
-    , m_removeTips(new TipsWidget(this))
-    , m_popupWindow(new DockPopupWindow(this))
+    , m_removeTips(new TipsWidget)
+    , m_popupWindow(new DockPopupWindow)
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
 {
     m_removeTips->setText(tr("Remove"));
@@ -117,6 +117,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
 AppDragWidget::~AppDragWidget()
 {
+    delete m_removeTips;
     delete m_popupWindow;
     delete m_object;
 }
