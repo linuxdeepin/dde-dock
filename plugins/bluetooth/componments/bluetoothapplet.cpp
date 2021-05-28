@@ -174,8 +174,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
     connect(adapterItem, &BluetoothAdapterItem::requestRefreshAdapter, m_adaptersManager, &AdaptersManager::adapterRefresh);
 
     m_adapterItems.insert(adapter->id(), adapterItem);
-    //插入分割线
-//    m_contentLayout->insertWidget(0, m_Separator, Qt::AlignTop | Qt::AlignVCenter);
+
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();

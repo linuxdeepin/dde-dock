@@ -43,5 +43,8 @@ void HorizontalSeperator::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     QColor c = palette().color(QPalette::BrightText);
     c.setAlpha(int(0.1 * 255));
+
+    painter.setPen(c);
+    painter.setBrush(c);
     painter.fillRect(rect(), c);
 }

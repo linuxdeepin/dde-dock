@@ -169,13 +169,14 @@ SoundApplet::SoundApplet(QWidget *parent)
 void SoundApplet::initUi()
 {
     //    setControlBackground();
+    m_listView->setFrameShape(QFrame::NoFrame);
     m_listView->setEditTriggers(DListView::NoEditTriggers);
     m_listView->setSelectionMode(QAbstractItemView::NoSelection);
     m_listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_listView->setItemRadius(0);
     m_listView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     m_listView->setFixedHeight(0);
-    m_listView->setItemSpacing(1);
+    m_listView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_listView->setModel(m_model);
 
     m_centralWidget->setAccessibleName("volumn-centralwidget");
@@ -208,6 +209,7 @@ void SoundApplet::initUi()
     // 标题部分
     QHBoxLayout *deviceLayout = new QHBoxLayout;
     deviceLayout->setSpacing(0);
+    deviceLayout->setMargin(0);
     deviceLayout->setContentsMargins(20, 0, 10, 0);
     deviceLayout->addWidget(m_deviceLabel, 0, Qt::AlignLeft);
     deviceLayout->addWidget(m_soundShow, 0, Qt::AlignRight);
@@ -215,12 +217,14 @@ void SoundApplet::initUi()
     // 音量滑动条
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->setSpacing(0);
+    volumeCtrlLayout->setMargin(0);
     volumeCtrlLayout->setContentsMargins(12, 0, 12, 0);
     volumeCtrlLayout->addWidget(m_volumeIconMin);
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->addWidget(m_volumeIconMax);
 
     m_centralLayout = new QVBoxLayout(this);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setMargin(0);
     m_centralLayout->setSpacing(0);
     m_centralLayout->addLayout(deviceLayout);
@@ -228,15 +232,11 @@ void SoundApplet::initUi()
     m_centralLayout->addLayout(volumeCtrlLayout);
     // 需要判断是否有声音端口
     m_centralLayout->addWidget(m_secondSeperator);
-    m_secondSeperator->setVisible(m_model->rowCount() > 0);
 
-    //    setItemHoverColor();
-    m_centralLayout->setContentsMargins(0, 0, 0, 10);
-    m_centralLayout->setSpacing(0);
     m_centralLayout->addWidget(m_listView);
     m_centralWidget->setLayout(m_centralLayout);
     m_centralWidget->setFixedWidth(WIDTH);
-    m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    m_centralWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     setFixedWidth(WIDTH);
     setWidget(m_centralWidget);
@@ -245,6 +245,8 @@ void SoundApplet::initUi()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
+
+    m_secondSeperator->setVisible(m_model->rowCount() > 0);
 
     updateVolumeSliderStatus(Utils::SettingValue("com.deepin.dde.dock.module.sound", QByteArray(), "Enabled").toString());
     connect(m_gsettings, &QGSettings::changed, [ = ] (const QString &key) {
@@ -676,7 +678,7 @@ void SoundApplet::updateListHeight()
 
     int listMargin = m_listView->contentsMargins().top() + m_listView->contentsMargins().bottom();
     //显示声音设备列表高度 = 设备的高度 + 间隔 + 边距
-    int viewHeight = visualHeight + m_listView->spacing() * count * 2 + listMargin;
+    int viewHeight = visualHeight + m_listView->spacing() * (count - 1) + listMargin;
     // 设备信息高度 = 设备标签 + 分隔线 + 滚动条 + 间隔
     int labelHeight = m_deviceLabel->height() > m_soundShow->height() ? m_deviceLabel->height() : m_soundShow->height();
     int infoHeight = labelHeight + m_seperator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
@@ -684,10 +686,9 @@ void SoundApplet::updateListHeight()
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;
     //加上分割线占用的高度，否则显示界面高度不够显示，会造成音频列表item最后一项比其它项的高度小
-    m_listView->setFixedHeight(viewHeight + SEPARATOR_HEIGHT);
+    m_listView->setFixedHeight(viewHeight);
     setFixedHeight(totalHeight);
-    m_centralWidget->setFixedHeight(totalHeight + SEPARATOR_HEIGHT);
-    update();
+    m_centralWidget->setFixedHeight(totalHeight);
 }
 
 void SoundApplet::portEnableChange(unsigned int cardId, QString portId)

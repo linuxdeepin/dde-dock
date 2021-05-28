@@ -302,14 +302,8 @@ void BluetoothAdapterItem::initUi()
     m_deviceListview->setAccessibleName("DeviceItemList");
     m_deviceListview->setModel(m_deviceModel);
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
-    m_deviceListview->setItemSpacing(1);
     m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
     m_deviceListview->setBackgroundType(DStyledItemDelegate::ClipCornerBackground);
-    //设置蓝牙列表DListView背景为透明
-    QPalette backgroud;
-    backgroud.setColor(QPalette::Base, Qt::transparent);
-    m_deviceListview->setAutoFillBackground(true);
-    m_deviceListview->setPalette(backgroud);
     m_deviceListview->setItemRadius(0);
     m_deviceListview->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_deviceListview->setSelectionMode(QAbstractItemView::NoSelection);
@@ -319,7 +313,6 @@ void BluetoothAdapterItem::initUi()
     m_deviceListview->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     mainLayout->addWidget(m_adapterLabel);
-    mainLayout->addSpacing(2);
     mainLayout->addWidget(m_seperator);
     mainLayout->addWidget(m_deviceListview);
     mainLayout->addWidget(m_bottomSeperator);
