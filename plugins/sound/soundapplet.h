@@ -110,8 +110,8 @@ public:
     Port *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
     void initUi();
-    void setItemHoverColor();
-    void setControlBackground();
+//    void setItemHoverColor();
+//    void setControlBackground();
 
 signals:
     void volumeChanged(const int value) const;
@@ -121,9 +121,6 @@ private slots:
     void defaultSinkChanged();
     void onVolumeChanged(double volume);
     void volumeSliderValueChanged();
-    void sinkInputsChanged();
-    void toggleMute();
-    void onPlaySoundEffect();
     void increaseVolumeChanged();
     void cardsChanged(const QString &cards);
     void removePort(const QString &portId, const uint &cardId);
@@ -144,14 +141,14 @@ private:
 
 private:
     QWidget *m_centralWidget;
-    DIconButton *m_volumeBtn;
+    DIconButton *m_volumeIconMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
-    Dock::TipsWidget *m_soundShow;
+    QLabel *m_soundShow;
+    QLabel *m_deviceLabel;
     QVBoxLayout *m_centralLayout;
     HorizontalSeperator *m_seperator;
     HorizontalSeperator *m_secondSeperator;
-    Dock::TipsWidget *m_deviceLabel;
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;

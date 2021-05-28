@@ -4,12 +4,10 @@
 
 #include "sounditem.h"
 #include "soundapplet.h"
-#include "sinkinputwidget.h"
 #include "./componments/volumeslider.h"
 
 SET_BUTTON_ACCESSIBLE(SoundItem, "plugin-sounditem")
 SET_FORM_ACCESSIBLE(SoundApplet, "soundapplet")
-SET_FORM_ACCESSIBLE(SinkInputWidget, "sinkinputwidget")
 SET_SLIDER_ACCESSIBLE(VolumeSlider, "volumeslider")
 
 QAccessibleInterface *soundAccessibleFactory(const QString &classname, QObject *object)
@@ -18,7 +16,6 @@ QAccessibleInterface *soundAccessibleFactory(const QString &classname, QObject *
 
     USE_ACCESSIBLE(classname, SoundItem);
     USE_ACCESSIBLE(classname, SoundApplet);
-    USE_ACCESSIBLE(classname, SinkInputWidget);
     USE_ACCESSIBLE(classname, VolumeSlider);
 
     return interface;

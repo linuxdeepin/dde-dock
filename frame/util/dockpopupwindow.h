@@ -68,8 +68,6 @@ private:
     bool m_model;
     QPoint m_lastPoint;
 
-    QTimer *m_acceptDelayTimer;
-
     DRegionMonitor *m_regionInter;
     DWindowManagerHelper *m_wmHelper;
 };

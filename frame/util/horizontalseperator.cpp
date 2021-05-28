@@ -34,11 +34,6 @@ HorizontalSeperator::HorizontalSeperator(QWidget *parent)
 {
     setFixedHeight(2);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Light, QColor(0, 0, 0, 0.1 * 255));
-    palette.setColor(QPalette::Dark, QColor(255, 255, 255, 0.1 * 255));
-    this->setPalette(palette);
 }
 
 void HorizontalSeperator::paintEvent(QPaintEvent *e)
@@ -46,8 +41,7 @@ void HorizontalSeperator::paintEvent(QPaintEvent *e)
     Q_UNUSED(e)
 
     QPainter painter(this);
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        painter.fillRect(rect(), palette().color(QPalette::Light));
-    else
-        painter.fillRect(rect(), palette().color(QPalette::Dark));
+    QColor c = palette().color(QPalette::BrightText);
+    c.setAlpha(int(0.1 * 255));
+    painter.fillRect(rect(), c);
 }
