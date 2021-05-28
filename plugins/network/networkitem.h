@@ -96,7 +96,6 @@ private:
     QWidget *m_wiredControlPanel;
     bool m_switchWiredBtnState;
 
-    QLabel *m_wirelessTitle;
     DLoadingIndicator *m_loadingIndicator;
     DSwitchButton *m_switchWirelessBtn;
     QVBoxLayout *m_wirelessLayout;

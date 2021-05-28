@@ -8,6 +8,7 @@
 #include <DHiDPIHelper>
 #include <DApplicationHelper>
 #include <DDBusSender>
+#include <DFontSizeManager>
 
 #include <QVBoxLayout>
 #include <QJsonDocument>
@@ -16,12 +17,13 @@
 extern const int ItemWidth;
 extern const int ItemMargin;
 extern const int ItemHeight;
-const int ControlItemHeight = 35;
 const int SeparatorItemHeight = 2;
 const QString MenueEnable = "enable";
 const QString MenueWiredEnable = "wireEnable";
 const QString MenueWirelessEnable = "wirelessEnable";
 const QString MenueSettings = "settings";
+
+#define TITLE_HEIGHT 46
 
 extern void initFontColor(QWidget *widget)
 {
@@ -59,14 +61,14 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     m_tipsWidget->setVisible(false);
 
-    auto defaultFont = font();
-    auto titlefont = QFont(defaultFont.family(), defaultFont.pointSize() + 2);
-
     m_wirelessControlPanel = new QWidget(this);
-    m_wirelessTitle = new QLabel(m_wirelessControlPanel);
-    m_wirelessTitle->setText(tr("Wireless Network"));
-    m_wirelessTitle->setFont(titlefont);
-    initFontColor(m_wirelessTitle);
+
+    QLabel *wirelessTitle = new QLabel(m_wirelessControlPanel);
+    wirelessTitle->setText(tr("Wireless Network"));
+    wirelessTitle->setFixedHeight(TITLE_HEIGHT);
+    wirelessTitle->setForegroundRole(QPalette::BrightText);
+    DFontSizeManager::instance()->bind(wirelessTitle, DFontSizeManager::T4, QFont::Medium);
+
     m_switchWirelessBtn = new DSwitchButton(m_wirelessControlPanel);
     m_switchWirelessBtnState = false;
 
@@ -86,54 +88,60 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wirelessLayout = new QVBoxLayout;
     m_wirelessLayout->setMargin(0);
     m_wirelessLayout->setSpacing(0);
+
+    // 无线网络控制器
     QHBoxLayout *switchWirelessLayout = new QHBoxLayout;
-    switchWirelessLayout->setMargin(0);
-    switchWirelessLayout->setSpacing(0);
-    switchWirelessLayout->addSpacing(20);
-    switchWirelessLayout->addWidget(m_wirelessTitle);
+    switchWirelessLayout->setContentsMargins(20, 0, 10, 0);
+    switchWirelessLayout->addWidget(wirelessTitle);
     switchWirelessLayout->addStretch();
     switchWirelessLayout->addWidget(m_loadingIndicator);
     switchWirelessLayout->addSpacing(10);
     switchWirelessLayout->addWidget(m_switchWirelessBtn);
-    switchWirelessLayout->addSpacing(8);
     m_wirelessControlPanel->setLayout(switchWirelessLayout);
-    m_wirelessControlPanel->setFixedHeight(ControlItemHeight);
+    m_wirelessControlPanel->setFixedHeight(TITLE_HEIGHT);
 
     m_wiredControlPanel = new QWidget(this);
 
     QLabel *wiredTitle = new QLabel(m_wiredControlPanel);
     wiredTitle->setText(tr("Wired Network"));
-    wiredTitle->setFont(titlefont);
-    initFontColor(wiredTitle);
+    wiredTitle->setForegroundRole(QPalette::BrightText);
+    DFontSizeManager::instance()->bind(wiredTitle, DFontSizeManager::T4, QFont::Medium);
+
     m_switchWiredBtn = new DSwitchButton(m_wiredControlPanel);
     m_switchWiredBtnState = false;
     m_wiredLayout = new QVBoxLayout;
     m_wiredLayout->setMargin(0);
     m_wiredLayout->setSpacing(0);
+
+    // 有线网络控制器
     QHBoxLayout *switchWiredLayout = new QHBoxLayout;
-    switchWiredLayout->setMargin(0);
-    switchWiredLayout->setSpacing(0);
-    switchWiredLayout->addSpacing(20);
+    switchWiredLayout->setContentsMargins(20, 0, 10, 0);
     switchWiredLayout->addWidget(wiredTitle);
     switchWiredLayout->addStretch();
     switchWiredLayout->addWidget(m_switchWiredBtn);
-    switchWiredLayout->addSpacing(8);
     m_wiredControlPanel->setLayout(switchWiredLayout);
-    m_wiredControlPanel->setFixedHeight(ControlItemHeight);
+    m_wiredControlPanel->setFixedHeight(TITLE_HEIGHT);
 
     QWidget *centralWidget = new QWidget;
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->setContentsMargins(QMargins(ItemMargin, 0, ItemMargin, 0));
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
+
     centralLayout->addWidget(m_wirelessControlPanel);
-    //添加网络界面控件分割线
     centralLayout->addWidget(m_firstSeparator);
     centralLayout->addLayout(m_wirelessLayout);
     centralLayout->addWidget(m_secondSeparator);
+
+    //TODO 先暂时这样写，后面要重构，届时布局要重新修改，直接使用dlistview
+    m_wirelessControlPanel->setVisible(m_wirelessItems.count() > 0);
+    m_firstSeparator->setVisible(m_wirelessItems.count() > 0);
+    m_secondSeparator->setVisible(m_wirelessItems.count() > 0);
+
     centralLayout->addWidget(m_wiredControlPanel);
     centralLayout->addWidget(m_thirdSeparator);
     centralLayout->addLayout(m_wiredLayout);
+
     centralWidget->setLayout(centralLayout);
     centralWidget->setFixedWidth(ItemWidth);
     centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -160,11 +168,11 @@ NetworkItem::NetworkItem(QWidget *parent)
     const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", QByteArray(), this);
     if (gsetting)
         connect(gsetting, &QGSettings::changed, [&](const QString &key) {
-        if (key == "wireless-scan-interval") {
-            m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt() * 1000;
-            m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
-        }
-    });
+            if (key == "wireless-scan-interval") {
+                m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt() * 1000;
+                m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
+            }
+        });
     connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
         for (auto wirelessItem : m_wirelessItems) {
             if (wirelessItem) {
@@ -325,12 +333,12 @@ void NetworkItem::invokeMenuItem(const QString &menuId, const bool checked)
         wirelessEnable(!m_switchWirelessBtnState);
     else if (menuId == MenueSettings)
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
-        .arg(QString("network"))
-        .call();
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method(QString("ShowModule"))
+                .arg(QString("network"))
+                .call();
 }
 
 void NetworkItem::refreshIcon()
@@ -538,7 +546,7 @@ void NetworkItem::wirelessEnable(bool enable)
         if (wirelessItem) {
             wirelessItem->setDeviceEnabled(enable);
             enable ? m_wirelessLayout->addWidget(wirelessItem->itemApplet())
-            : m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
+                   : m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
             wirelessItem->itemApplet()->setVisible(enable);
         }
     }
@@ -1125,8 +1133,8 @@ void NetworkItem::updateView()
     itemCount += wiredDeviceCnt;
 
     // 分割线 都有设备时才有
-//    auto hasDevice = wirelessDeviceCnt && wiredDeviceCnt;
-//    m_line->setVisible(hasDevice);
+    //    auto hasDevice = wirelessDeviceCnt && wiredDeviceCnt;
+    //    m_line->setVisible(hasDevice);
 
     auto centralWidget = m_applet->widget();
     if (itemCount <= constDisplayItemCnt) {
@@ -1137,7 +1145,7 @@ void NetworkItem::updateView()
     } else {
         contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
         contentHeight += wiredDeviceCnt * ItemHeight;
-	//加上分割线占用的高度，否则显示界面高度不够显示，会造成无线网络列表item最后一项比其它项的高度小
+        //加上分割线占用的高度，否则显示界面高度不够显示，会造成无线网络列表item最后一项比其它项的高度小
         centralWidget->setFixedHeight(contentHeight + SeparatorItemHeight * 3);
         m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight + SeparatorItemHeight * 3);
     }
@@ -1279,7 +1287,7 @@ void NetworkItem::refreshTips()
         }
         m_tipsWidget->setTextList(textList);
     }
-    break;
+        break;
     case Aconnected: {
         QString strTips;
         int wirelessIndex=1;
@@ -1303,7 +1311,7 @@ void NetworkItem::refreshTips()
         }
         m_tipsWidget->setTextList(textList);
     }
-    break;
+        break;
     case Bconnected: {
         QString strTips;
         QStringList textList;
@@ -1327,7 +1335,7 @@ void NetworkItem::refreshTips()
         }
         m_tipsWidget->setTextList(textList);
     }
-    break;
+        break;
     case Disconnected:
     case Adisconnected:
     case Bdisconnected:

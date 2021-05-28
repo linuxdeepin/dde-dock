@@ -67,7 +67,7 @@ AccessPointWidget::AccessPointWidget(QWidget *parent)
 
     bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
 
-    m_stateButton->setFixedSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE);
+    m_stateButton->setFixedSize(16, 16);
     m_stateButton->setType(StateButton::Check);
     m_stateButton->setVisible(false);
 
