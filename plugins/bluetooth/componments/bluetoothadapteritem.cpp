@@ -54,8 +54,6 @@ BluetoothDeviceItem::~BluetoothDeviceItem()
         delete m_loading;
         m_loading = nullptr;
     }
-
-    delete m_standarditem;
 }
 
 void BluetoothDeviceItem::initActionList()
@@ -183,8 +181,6 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
     else
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
-
-    setItemHoverColor();
 }
 
 int BluetoothAdapterItem::currentDeviceCount()
@@ -264,22 +260,13 @@ void BluetoothAdapterItem::onDeviceNameUpdated(const Device *device)
     }
 }
 
-/**
- * @brief BluetoothAdapterItem::setItemHoverColor 通过代理方式根据当前主题设置蓝牙列表文字颜色和item选中颜色
- */
-void BluetoothAdapterItem::setItemHoverColor()
-{
-    QPalette hoverBackgroud = m_deviceListview->palette();
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(0, 0, 0, 30));
-        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, Qt::black);
-    } else {
-        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(255, 255, 255, 30));
-        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, Qt::white);
-    }
-    m_deviceListview->setPalette(hoverBackgroud);
-    m_deviceListview->setItemDelegate(m_itemDelegate);
-}
+///**
+// * @brief BluetoothAdapterItem::setItemHoverColor 通过代理方式根据当前主题设置蓝牙列表文字颜色和item选中颜色
+// */
+//void BluetoothAdapterItem::setItemHoverColor()
+//{
+//    m_deviceListview->setItemDelegate(m_itemDelegate);
+//}
 
 void BluetoothAdapterItem::initUi()
 {
@@ -301,7 +288,6 @@ void BluetoothAdapterItem::initUi()
 
     m_deviceListview->setAccessibleName("DeviceItemList");
     m_deviceListview->setModel(m_deviceModel);
-    updateIconTheme(DGuiApplicationHelper::instance()->themeType());
     m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
     m_deviceListview->setBackgroundType(DStyledItemDelegate::ClipCornerBackground);
     m_deviceListview->setItemRadius(0);
@@ -316,6 +302,8 @@ void BluetoothAdapterItem::initUi()
     mainLayout->addWidget(m_seperator);
     mainLayout->addWidget(m_deviceListview);
     mainLayout->addWidget(m_bottomSeperator);
+
+    m_deviceListview->setItemDelegate(m_itemDelegate);
 
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
     if (m_adapter->discover()) {

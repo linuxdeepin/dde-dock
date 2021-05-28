@@ -245,8 +245,9 @@ void SoundApplet::initUi()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
+    m_listView->setItemDelegate(m_itemDelegate);
 
-    m_secondSeperator->setVisible(m_model->rowCount() > 0);
+    m_secondSeperator->setVisible(m_model->rowCount() > 1);
 
     updateVolumeSliderStatus(Utils::SettingValue("com.deepin.dde.dock.module.sound", QByteArray(), "Enabled").toString());
     connect(m_gsettings, &QGSettings::changed, [ = ] (const QString &key) {
@@ -529,7 +530,7 @@ void SoundApplet::addPort(const Port *port)
     }
     m_model->appendRow(pi);
     m_model->sort(0);
-    m_secondSeperator->setVisible(m_model->rowCount() > 0);
+    m_secondSeperator->setVisible(m_model->rowCount() > 1);
     updateListHeight();
 }
 
@@ -549,7 +550,7 @@ void SoundApplet::removePort(const QString &portId, const uint &cardId)
     };
 
     rmFunc(m_model);
-    m_secondSeperator->setVisible(m_model->rowCount() > 0);
+    m_secondSeperator->setVisible(m_model->rowCount() > 1);
     updateListHeight();
 }
 
@@ -673,7 +674,7 @@ void SoundApplet::updateListHeight()
     }
 
     int visualHeight = 0;
-    for (int i = 0; i < count; i++)
+    for (int i = 1; i < count; i++)
         visualHeight += m_listView->visualRect(m_model->index(i, 0)).height();
 
     int listMargin = m_listView->contentsMargins().top() + m_listView->contentsMargins().bottom();

@@ -52,6 +52,7 @@ public:
     explicit SettingLabel(QString text, QWidget *parent = nullptr);
     void addButton(QWidget *button, int space);
     DLabel *label() { return m_label; }
+
 signals:
     void clicked();
 
@@ -59,8 +60,6 @@ protected:
     void mousePressEvent(QMouseEvent *ev) override;
     void paintEvent(QPaintEvent *event) override;
 
-private:
-    void updateIconTheme();
 
 private:
     DLabel *m_label;

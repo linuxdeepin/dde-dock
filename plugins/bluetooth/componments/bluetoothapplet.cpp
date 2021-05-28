@@ -44,33 +44,19 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     , m_label(new DLabel(text, this))
     , m_layout(new QHBoxLayout(this))
 {
-    updateIconTheme();
     setAccessibleName("BluetoothSettingLabel");
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);
     m_layout->addSpacing(20);
     m_layout->addWidget(m_label, 0, Qt::AlignLeft | Qt::AlignHCenter);
     m_layout->addStretch();
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &SettingLabel::updateIconTheme);
-}
 
-/**
- * @brief SettingLabel::updateIconTheme 根据主题的深浅设置字体的颜色，控件的背景颜色
- */
-void SettingLabel::updateIconTheme()
-{
-    QPalette backgroud;
-    QPalette textColor;
-    if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType){
-        //蓝牙设置，电脑用户名文字显示高亮
-        textColor.setColor(QPalette::WindowText, QPalette::BrightText);
-    } else {
-        textColor.setColor(QPalette::WindowText, Qt::white);
-    }
-    m_label->setPalette(textColor);
-    backgroud.setColor(QPalette::Background, Qt::transparent);
-    this->setAutoFillBackground(true);
-    this->setPalette(backgroud);
+    setAutoFillBackground(true);
+    QPalette p = this->palette();
+    p.setColor(QPalette::Background, Qt::transparent);
+    this->setPalette(p);
+
+    m_label->setForegroundRole(QPalette::BrightText);
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
