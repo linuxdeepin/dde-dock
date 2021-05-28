@@ -37,7 +37,7 @@
 
 DGUI_USE_NAMESPACE
 
-const int ItemHeight = 30;
+const int ItemHeight = 36;
 extern const QString DarkType = "_dark.svg";
 extern const QString LightType = ".svg";
 extern void initFontColor(QWidget *widget);
