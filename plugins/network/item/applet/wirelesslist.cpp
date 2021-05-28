@@ -122,12 +122,15 @@ void WirelessList::APAdded(const QJsonObject &apInfo)
     AccessPoint ap(apInfo);
     const auto mIndex = m_apList.indexOf(ap);
     if (mIndex != -1) {
-        if(ap.strength() < 5 && ap.path() == m_apList.at(mIndex).path())
+        if (ap.strength() < 5 && ap.path() == m_apList.at(mIndex).path())
             m_apList.removeAt(mIndex);
-         else
+        else if ((ap.strength() < m_apList.at(mIndex).strength() && ap.path() == m_apList.at(mIndex).path())
+                  || (ap.strength() > m_apList.at(mIndex).strength()))
             m_apList.replace(mIndex, ap);
+        else
+            return;
     } else {
-        if(ap.strength() < 5)
+        if (ap.strength() < 5)
             return;
         m_apList.append(ap);
     }
@@ -198,7 +201,11 @@ void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
        }
     }else {
        if (mIndex != -1) {
-           m_apList.replace(mIndex, ap);
+           if ((ap.strength() < m_apList.at(mIndex).strength() && ap.path() == m_apList.at(mIndex).path())
+                   || (ap.strength() > m_apList.at(mIndex).strength()))
+               m_apList.replace(mIndex, ap);
+           else
+               return;
         }else {
            m_apList.append(ap);
         }
