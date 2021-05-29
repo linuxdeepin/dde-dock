@@ -232,7 +232,8 @@ void DatetimePlugin::updateCurrentTimeString()
         return;
 
     m_currentTimeString = currentString;
-    m_centralWidget->update();
+    //当时间显示格式为12小时制且格式为0:00时，当从9:59变到10:00时，插件宽度需要变化
+    m_centralWidget->requestUpdateGeometry();
 }
 
 void DatetimePlugin::refreshPluginItemsVisible()
