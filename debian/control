@@ -41,16 +41,16 @@ Replaces:
  dde-dock-applets,
  dde-trash-plugin
 Description: deepin desktop-environment - dock module
- Deepin desktop environment - dock module.
+ Dock module of deepin desktop-environment
 
 Package: dde-dock-dev
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin desktop-environment - dock module development files
- Deepin desktop environment - dock module development files.
+ Dock module development files of deepin desktop-environment
 
 Package: dde-dock-onboard-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
-Description: deepin desktop-environment - dock plugin
- Deepin desktop environment - dock plugin for onboard
+Description: deepin desktop-environment - dock plugin for onboard
+ Dock plugin for onboard of deepin desktop-environment

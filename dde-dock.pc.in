@@ -1,6 +1,6 @@
 prefix=/usr
 exec_prefix=${prefix}
-libdir=${prefix}/lib/x86_64-linux-gnu
+libdir=${prefix}/lib/@HOST_MULTIARCH@
 includedir=${prefix}/include/dde-dock
 
 Name: dde dock
