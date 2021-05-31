@@ -21,7 +21,6 @@
 
 #include "launcheritem.h"
 #include "themeappicon.h"
-#include "imagefactory.h"
 #include "utils.h"
 
 #include <QPainter>

@@ -24,7 +24,6 @@
 
 #include "constants.h"
 #include "dockpopupwindow.h"
-#include "hoverhighlighteffect.h"
 
 #include <QFrame>
 #include <QPointer>
@@ -114,8 +113,6 @@ protected:
     QMenu m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
-    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
-//    QPointer<HoverHighlightEffect> m_hoverEffect;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;

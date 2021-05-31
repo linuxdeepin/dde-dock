@@ -22,7 +22,6 @@
 
 #include "appitem.h"
 #include "themeappicon.h"
-#include "imagefactory.h"
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "appspreviewprovider.h"
@@ -555,10 +554,11 @@ void AppItem::startDrag()
 
 bool AppItem::hasAttention() const
 {
-    for (const auto &info : m_windowInfos)
-        if (info.attention)
-            return true;
-    return false;
+    auto it = std::find_if(m_windowInfos.constBegin(), m_windowInfos.constEnd(), [ = ] (const auto &info) {
+        return info.attention;
+    });
+
+    return (it != m_windowInfos.end());
 }
 
 QPoint AppItem::appIconPosition() const

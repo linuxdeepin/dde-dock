@@ -34,16 +34,13 @@ public:
     ~IndicatorTrayWidget();
 
     QString itemKeyForConfig() override;
-    void setActive(const bool active) override;
     void updateIcon() override;
-    const QImage trayImage() override;
     void sendClick(uint8_t, int, int) override;
     static QString toIndicatorKey(const QString &indicatorName) { return QString("indicator:%1").arg(indicatorName); }
     static bool isIndicatorKey(const QString &itemKey) { return itemKey.startsWith("indicator:"); }
 
 public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapData(const QByteArray &data);
-    Q_SCRIPTABLE void setPixmapPath(const QString &text);
     Q_SCRIPTABLE void setText(const QString &text);
 
 Q_SIGNALS:

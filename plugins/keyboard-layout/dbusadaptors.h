@@ -40,7 +40,7 @@ class DBusAdaptors : public QDBusAbstractAdaptor
 //                "")
 
 public:
-     DBusAdaptors(QObject *parent = nullptr);
+     explicit DBusAdaptors(QObject *parent = nullptr);
     ~DBusAdaptors();
 
 public:

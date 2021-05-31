@@ -50,6 +50,9 @@ public:
     }
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) override {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+
         Q_ASSERT(!m_appPixmap.isNull());
 
         painter->drawPixmap(QPoint(0, 0), m_appPixmap);
@@ -373,7 +376,6 @@ void AppDragWidget::enterEvent(QEvent *event)
 
 void AppDragWidget::showRemoveTips()
 {
-    bool model = true;
     Dock::Position pos = Dock::Position::Bottom;
 
     DockPopupWindow *popup = m_popupWindow;
@@ -393,9 +395,9 @@ void AppDragWidget::showRemoveTips()
 
         const QPoint p = popupMarkPoint(pos);
         if (!popup->isVisible())
-            QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+            QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, true));
         else
-            popup->show(p, model);
+            popup->show(p, true);
 
         m_object->setOpacity(0.5);
         m_animOpacity->setStartValue(0.5);

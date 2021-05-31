@@ -67,19 +67,9 @@ QString IndicatorTrayWidget::itemKeyForConfig()
     return toIndicatorKey(m_indicatorName);
 }
 
-void IndicatorTrayWidget::setActive(const bool)
-{
-
-}
-
 void IndicatorTrayWidget::updateIcon()
 {
 
-}
-
-const QImage IndicatorTrayWidget::trayImage()
-{
-    return m_label->grab().toImage();
 }
 
 void IndicatorTrayWidget::sendClick(uint8_t buttonIndex, int x, int y)
@@ -92,11 +82,6 @@ void IndicatorTrayWidget::setPixmapData(const QByteArray &data)
     auto rawPixmap = QPixmap::fromImage(QImage::fromData(data));
     rawPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_label->setPixmap(rawPixmap);
-}
-
-void IndicatorTrayWidget::setPixmapPath(const QString &text)
-{
-    m_label->setPixmap(QPixmap(text));
 }
 
 void IndicatorTrayWidget::setText(const QString &text)

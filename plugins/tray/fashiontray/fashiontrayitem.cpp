@@ -169,8 +169,6 @@ void FashionTrayItem::onExpandChanged(const bool expand)
 {
     m_trayPlugin->saveValue(FASHION_MODE_ITEM_KEY, ExpandedKey, expand);
 
-//    refreshHoldContainerPosition();
-
     m_normalContainer->setExpand(expand);
 
     m_attentionContainer->setExpand(expand);
@@ -290,20 +288,6 @@ void FashionTrayItem::requestResize()
     setProperty("TrayVisableItemCount", count + 1); // +1 : m_controlWidget
 
     resizeTray();
-}
-
-void FashionTrayItem::refreshHoldContainerPosition()
-{
-    m_mainBoxLayout->removeWidget(m_holdContainer);
-
-    int destIndex = 0;
-    if (m_controlWidget->expanded()) {
-        destIndex = m_mainBoxLayout->indexOf(m_controlWidget);
-    } else {
-        destIndex = m_mainBoxLayout->indexOf(m_attentionContainer);
-    }
-
-    m_mainBoxLayout->insertWidget(destIndex, m_holdContainer);
 }
 
 void FashionTrayItem::onRequireDraggingWrapper()

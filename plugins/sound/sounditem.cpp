@@ -54,7 +54,7 @@ SoundItem::SoundItem(QWidget *parent)
 
     m_applet->setVisible(false);
 
-    connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink *) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
+    connect(m_applet, &SoundApplet::defaultSinkChanged, this, &SoundItem::sinkChanged);
     connect(m_applet, &SoundApplet::volumeChanged, this, &SoundItem::refresh, Qt::QueuedConnection);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {

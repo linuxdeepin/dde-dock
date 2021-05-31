@@ -72,7 +72,6 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     device->setDeviceType(bluetoothDeviceType);
 
     m_devices[id] = device;
-    divideDevice(device);
 
     emit deviceAdded(device);
 }
@@ -83,7 +82,6 @@ void Adapter::removeDevice(const QString &deviceId)
     auto device = const_cast<Device *>(constDevice);
     if (device) {
         m_devices.remove(deviceId);
-        m_paredDev.remove(deviceId);
         emit deviceRemoved(device);
         delete device;
     }
@@ -117,37 +115,6 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
         device->setState(state);
         device->setDeviceType(bluetoothDeviceType);
         emit deviceNameUpdated(device);
-    }
-}
-
-//void Adapter::removeAllDevices()
-//{
-//    QMapIterator<QString, const Device *> iterator(m_devices);
-//    while (iterator.hasNext()) {
-//        iterator.next();
-//        auto device = const_cast<Device *>(iterator.value());
-//        if (device) {
-//            m_devices.remove(device->id());
-//            m_paredDev.remove(device->id());
-//            delete device;
-//        }
-//    }
-//}
-
-const QMap<QString, const Device *> &Adapter::paredDevices() const
-{
-    return  m_paredDev;
-}
-
-//int Adapter::paredDevicesCount() const
-//{
-//    return  m_paredDev.size();
-//}
-
-void Adapter::divideDevice(const Device *device)
-{
-    if (device->paired()) {
-        m_paredDev[device->id()] = device;
     }
 }
 
@@ -186,7 +153,6 @@ void Adapter::initDevicesList(const QJsonDocument &doc)
         device->setDeviceType(bluetoothDeviceType);
 
         m_devices[id] = device;
-        divideDevice(device);
     }
 }
 

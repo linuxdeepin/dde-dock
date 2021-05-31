@@ -22,9 +22,7 @@
 #include "constants.h"
 #include "pluginsitem.h"
 #include "pluginsiteminterface.h"
-
 #include "utils.h"
-#include "imagefactory.h"
 
 #include <QPainter>
 #include <QBoxLayout>

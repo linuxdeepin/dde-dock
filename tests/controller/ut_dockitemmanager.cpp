@@ -72,7 +72,6 @@ TEST_F(Test_DockItemManager, get_method_test)
 TEST_F(Test_DockItemManager, refreshItemsIcon_test)
 {
     manager->refreshItemsIcon();
-    manager->sortPluginItems();
 }
 
 TEST_F(Test_DockItemManager, cover_test)

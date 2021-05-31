@@ -29,7 +29,6 @@ AbstractContainer::AbstractContainer(TrayPlugin *trayPlugin, QWidget *parent)
     , m_currentDraggingWrapper(nullptr)
     , m_expand(true)
     , m_dockPosition(Dock::Position::Bottom)
-//    , m_wrapperSize(QSize(PLUGIN_BACKGROUND_MAX_SIZE, PLUGIN_BACKGROUND_MAX_SIZE))
 {
     setAcceptDrops(true);
 
@@ -230,22 +229,12 @@ int AbstractContainer::itemCount()
 
 bool AbstractContainer::containsWrapper(FashionTrayWidgetWrapper *wrapper)
 {
-    for (auto w : m_wrapperList) {
-        if (w == wrapper) {
-            return true;
-        }
-    }
-
-    return false;
+    return m_wrapperList.contains(wrapper);
 }
 
 bool AbstractContainer::containsWrapperByTrayWidget(AbstractTrayWidget *trayWidget)
 {
-    if (wrapperByTrayWidget(trayWidget)) {
-        return true;
-    }
-
-    return false;
+    return wrapperByTrayWidget(trayWidget);
 }
 
 FashionTrayWidgetWrapper *AbstractContainer::wrapperByTrayWidget(AbstractTrayWidget *trayWidget)

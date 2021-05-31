@@ -37,8 +37,6 @@ public:
 
     QString itemKeyForConfig() override;
     void updateIcon() override;
-    void setActive(const bool active) override;
-    const QImage trayImage() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
 
     static QString getWindowProperty(quint32 winId, QString propName);

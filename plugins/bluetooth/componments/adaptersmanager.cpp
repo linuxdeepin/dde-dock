@@ -35,7 +35,6 @@ AdaptersManager::AdaptersManager(QObject *parent)
                                          "/com/deepin/daemon/Bluetooth",
                                          QDBusConnection::sessionBus(),
                                          this))
-    , m_defaultAdapterState(false)
 {
     connect(m_bluetoothInter, &DBusBluetooth::AdapterAdded, this, &AdaptersManager::onAddAdapter);
     connect(m_bluetoothInter, &DBusBluetooth::AdapterRemoved, this, &AdaptersManager::onRemoveAdapter);
@@ -78,7 +77,6 @@ AdaptersManager::AdaptersManager(QObject *parent)
     for (int index = 0; index < arr.size(); index++) {
         auto *adapter = new Adapter(this);
         adapterAdd(adapter, arr[index].toObject());
-        m_defaultAdapterState |= adapter->powered();
     }
 }
 
@@ -102,11 +100,11 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
             }
         });
     } else {
-        QDBusPendingCall call = m_bluetoothInter->ClearUnpairedDevice();
-        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+        QDBusPendingCall clearUnpairedCall = m_bluetoothInter->ClearUnpairedDevice();
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(clearUnpairedCall, this);
         connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
-            if (call.isError())
-                qWarning() << call.error().message();
+            if (clearUnpairedCall.isError())
+                qWarning() << clearUnpairedCall.error().message();
         });
     }
 }
@@ -130,11 +128,6 @@ void AdaptersManager::connectDevice(const Device *device, Adapter *adapter)
             break;
         }
     }
-}
-
-bool AdaptersManager::defaultAdapterInitPowerState()
-{
-    return m_defaultAdapterState;
 }
 
 int AdaptersManager::adaptersCount()

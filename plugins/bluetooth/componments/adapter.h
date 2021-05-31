@@ -55,9 +55,6 @@ public:
     void addDevice(const QJsonObject &deviceObj);
     void removeDevice(const QString &deviceId);
     void updateDevice(const QJsonObject &dviceJson);
-//    void removeAllDevices();
-    const QMap<QString, const Device *> &paredDevices() const;
-//    int paredDevicesCount() const;
 
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
@@ -68,9 +65,6 @@ Q_SIGNALS:
     void discoveringChanged(const bool discover) const;
 
 private:
-    void divideDevice(const Device *device);
-
-private:
     QString m_id;
     QString m_name;
     bool m_powered;
@@ -78,7 +72,6 @@ private:
     bool m_discover;
 
     QMap<QString, const Device *> m_devices;
-    QMap<QString, const Device *> m_paredDev;
 };
 
 #endif // ADAPTER_H

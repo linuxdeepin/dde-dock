@@ -34,6 +34,7 @@
 #include <QIcon>
 #include <QScrollBar>
 #include <QPainter>
+#include <QListIterator>
 
 #define SEPARATOR_HEIGHT 2
 #define WIDTH       260
@@ -130,45 +131,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     initUi();
 }
 
-///**
-// * @brief SoundApplet::setControlBackground 设置音频界面控件背景颜色
-// */
-//void SoundApplet::setControlBackground()
-//{
-//    QPalette soundAppletBackgroud;
-//    QPalette listViewBackgroud = m_listView->palette();
-//    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-//        soundAppletBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-//    else
-//        soundAppletBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-
-//    this->setAutoFillBackground(true);
-//    this->setPalette(soundAppletBackgroud);
-//    listViewBackgroud.setColor(QPalette::Base, Qt::transparent);
-//    m_listView->setAutoFillBackground(true);
-//    m_listView->setPalette(listViewBackgroud);
-//}
-
-///**
-// * @brief SoundApplet::setItemHoverColor 通过代理方式根据当前主题设置音频列表文字颜色和item选中颜色
-// */
-//void SoundApplet::setItemHoverColor()
-//{
-//    QPalette hoverBackgroud = m_listView->palette();
-//    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-//        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(0, 0, 0, 30));
-//        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, QColor(0, 0, 0, 255));
-//    } else {
-//        hoverBackgroud.setColor(QPalette::Normal, QPalette::Highlight, QColor(255, 255, 255, 30));
-//        hoverBackgroud.setColor(QPalette::Normal, QPalette::HighlightedText, QColor(255, 255, 255, 255));
-//    }
-//    m_listView->setPalette(hoverBackgroud);
-//    m_listView->setItemDelegate(m_itemDelegate);
-//}
-
 void SoundApplet::initUi()
 {
-    //    setControlBackground();
     m_listView->setFrameShape(QFrame::NoFrame);
     m_listView->setEditTriggers(DListView::NoEditTriggers);
     m_listView->setSelectionMode(QAbstractItemView::NoSelection);
@@ -260,7 +224,7 @@ void SoundApplet::initUi()
     });
     connect(qApp, &QGuiApplication::fontChanged, this, &SoundApplet::updateListHeight);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
-    connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
+    connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, &SoundApplet::onDefaultSinkChanged);
     connect(m_audioInter, &DBusAudio::IncreaseVolumeChanged, this, &SoundApplet::increaseVolumeChanged);
     connect(m_audioInter, &DBusAudio::PortEnabledChanged, [this](uint cardId, QString portId) {
         portEnableChange(cardId, portId);
@@ -279,7 +243,7 @@ void SoundApplet::initUi()
     QDBusConnection::sessionBus().connect("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", "org.freedesktop.DBus.Properties"
                                           ,"PropertiesChanged", "sa{sv}as", this, SLOT(haldleDbusSignal(QDBusMessage)));
 
-    QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "onDefaultSinkChanged", Qt::QueuedConnection);
 
     refreshIcon();
 
@@ -301,7 +265,7 @@ VolumeSlider *SoundApplet::mainSlider()
     return m_volumeSlider;
 }
 
-void SoundApplet::defaultSinkChanged()
+void SoundApplet::onDefaultSinkChanged()
 {
     //防止手动切换设备，与后端交互时，获取到多个信号，设备切换多次，造成混乱
     QThread::msleep(200);
@@ -388,7 +352,7 @@ void SoundApplet::cardsChanged(const QString &cards)
         tmpCardIds.insert(cardId, tmpPorts);
     }
 
-    defaultSinkChanged();//重新获取切换的设备信息
+    onDefaultSinkChanged();//重新获取切换的设备信息
     enableDevice(true);
 
     for (Port *port : m_ports) {
@@ -495,10 +459,12 @@ bool SoundApplet::containsPort(const Port *port)
 
 Port *SoundApplet::findPort(const QString &portId, const uint &cardId) const
 {
-    for (Port *port : m_ports) {
-        if (port->id() == portId && port->cardId() == cardId) {
-            return port;
-        }
+    auto it = std::find_if(m_ports.begin(), m_ports.end(), [ = ] (Port *p) {
+        return (p->id() == portId && p->cardId() == cardId);
+    });
+
+    if (it != m_ports.end()) {
+        return *it;
     }
 
     return nullptr;

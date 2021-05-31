@@ -333,42 +333,6 @@ void DockItemManager::reloadAppItems()
         appItemAdded(path, -1);
 }
 
-// 不同的模式下，插件顺序不一样
-void DockItemManager::sortPluginItems()
-{
-    int firstPluginIndex = -1;
-    for (int i(0); i != m_itemList.size(); ++i) {
-        if (m_itemList[i]->itemType() == DockItem::Plugins) {
-            firstPluginIndex = i;
-            break;
-        }
-    }
-
-    if (firstPluginIndex == -1)
-        return;
-
-    std::sort(m_itemList.begin() + firstPluginIndex, m_itemList.end(), [](QPointer<DockItem> a, QPointer<DockItem> b) -> bool {
-        PluginsItem *pa = static_cast<PluginsItem *>(a.data());
-        PluginsItem *pb = static_cast<PluginsItem *>(b.data());
-
-        const int aKey = pa->itemSortKey();
-        const int bKey = pb->itemSortKey();
-
-        if (bKey == -1)
-            return true;
-        if (aKey == -1)
-            return false;
-
-        return aKey < bKey;
-    });
-
-    // reset order
-    for (int i(firstPluginIndex); i != m_itemList.size(); ++i) {
-        emit itemRemoved(m_itemList[i]);
-        emit itemInserted(-1, m_itemList[i]);
-    }
-}
-
 void DockItemManager::manageItem(DockItem *item)
 {
     connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);

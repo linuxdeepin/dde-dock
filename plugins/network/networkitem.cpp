@@ -519,16 +519,16 @@ QString NetworkItem::getStrengthStateString(int strength)
 {
     if (5 >= strength)
         return "0";
-    else if (5 < strength && 30 >= strength)
+    else if (30 >= strength)
         return "20";
-    else if (30 < strength && 55 >= strength)
+    else if (55 >= strength)
         return "40";
-    else if (55 < strength && 65 >= strength)
+    else if (65 >= strength)
         return "60";
-    else if (65 < strength)
-        return "80";
     else
-        return "0";
+        return "80";
+
+    Q_UNREACHABLE();
 }
 
 void NetworkItem::wiredsEnable(bool enable)

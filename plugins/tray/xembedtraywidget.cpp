@@ -109,11 +109,6 @@ QString XEmbedTrayWidget::itemKeyForConfig()
     return QString("window:%1").arg(getAppNameForWindow(m_windowId));
 }
 
-const QImage XEmbedTrayWidget::trayImage()
-{
-    return m_image;
-}
-
 void XEmbedTrayWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
@@ -385,12 +380,6 @@ QString XEmbedTrayWidget::toXEmbedKey(quint32 winId)
 bool XEmbedTrayWidget::isXEmbedKey(const QString &itemKey)
 {
     return itemKey.startsWith("window:");
-}
-
-void XEmbedTrayWidget::setActive(const bool active)
-{
-    m_active = active;
-    m_updateTimer->start();
 }
 
 void XEmbedTrayWidget::refershIconImage()

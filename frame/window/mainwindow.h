@@ -52,7 +52,8 @@ private:
     QPoint m_resizePoint;
 
 public:
-    DragWidget(QWidget *parent = nullptr) : QWidget(parent)
+    explicit DragWidget(QWidget *parent = nullptr)
+        : QWidget(parent)
     {
         setObjectName("DragWidget");
         m_dragStatus = false;

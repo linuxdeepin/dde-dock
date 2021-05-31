@@ -56,10 +56,8 @@ public:
     SNITrayWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
 
     QString itemKeyForConfig() override;
-    void setActive(const bool active) override;
     void updateIcon() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
-    const QImage trayImage() override;
 
     bool isValid() override;
     SNITrayWidget::ItemStatus status();

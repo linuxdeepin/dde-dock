@@ -23,7 +23,6 @@
 #define MULTISCREENWORKER_H
 
 #include "constants.h"
-#include "monitor.h"
 #include "utils.h"
 #include "dockitem.h"
 #include "xcb_misc.h"
@@ -37,6 +36,7 @@
 #include <DWindowManagerHelper>
 
 #include <QObject>
+#include <QFlag>
 
 #define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
@@ -128,7 +128,7 @@ public:
         RunState_Mask = 0xffffffff,
     };
 
-     Q_DECLARE_FLAGS(RunStates, RunState)
+    typedef QFlags<RunState> RunStates;
 
     MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
     ~MultiScreenWorker();
@@ -223,7 +223,6 @@ private:
     void tryToShowDock(int eventX, int eventY);
     void changeDockPosition(QString lastScreen, QString deskScreen, const Position &fromPos, const Position &toPos);
 
-    void updateDockScreenName(const QString &screenName);
     QString getValidScreen(const Position &pos);
     void resetDockScreen();
 

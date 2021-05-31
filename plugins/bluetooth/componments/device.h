@@ -64,10 +64,8 @@ public:
     void setConnectState(const bool connectState);
 
     inline bool trusted() const { return m_trusted; }
-    void setTrusted(bool trusted);
 
     inline bool connecting() const { return m_connecting; }
-    void setConnecting(bool connecting);
 
     inline int rssi() const { return  m_rssi; }
     void setRssi(int rssi);
@@ -78,17 +76,12 @@ public:
     inline QString deviceType() const { return m_deviceType; }
     void setDeviceType(const QString &deviceType);
 
-    inline int deviceTime() const { return m_time; }
-    void updateDeviceTime();
-
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void aliasChanged(const QString &alias) const;
     void pairedChanged(const bool paired) const;
     void stateChanged(const State state) const;
     void connectStateChanged(const bool connectState) const;
-    void trustedChanged(const bool trusted) const;
-    void connectingChanged(const bool &connecting) const;
     void rssiChanged(const int rssi) const;
 
 private:
@@ -103,7 +96,6 @@ private:
     bool m_connectState;
     QString m_adapterId;
     QString m_deviceType;
-    int m_time;
 };
 
 QDebug &operator<<(QDebug &stream, const Device *device);

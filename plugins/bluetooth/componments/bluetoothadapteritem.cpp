@@ -363,7 +363,7 @@ void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
     if (isShow) {
         // 计算已连接蓝牙设备数
         int connectCount = 0;
-        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); ++i) {
             BluetoothDeviceItem *deviceItem = i.value();
 
             if (deviceItem && deviceItem->device() && deviceItem->device()->paired()
@@ -372,7 +372,7 @@ void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
         }
 
         // 显示所有蓝牙设备
-        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+        for (i = m_deviceItems.begin(); i != m_deviceItems.end(); ++i) {
             BluetoothDeviceItem *deviceItem = i.value();
 
             if (deviceItem && deviceItem->device() && deviceItem->device()->name().isEmpty()) {
@@ -388,7 +388,7 @@ void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
     }
 
 
-    for (i = m_deviceItems.begin(); i != m_deviceItems.end(); i++) {
+    for (i = m_deviceItems.begin(); i != m_deviceItems.end(); ++i) {
         BluetoothDeviceItem *deviceItem = i.value();
 
         // 将名称为空的蓝牙设备过滤,如果蓝牙正在连接或者已连接不过滤

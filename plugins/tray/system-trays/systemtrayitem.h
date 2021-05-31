@@ -41,9 +41,7 @@ public:
 
 public:
     QString itemKeyForConfig() override;
-    void setActive(const bool active) override;
     void updateIcon() override;
-    const QImage trayImage() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
     inline TrayType trayTyep() const override { return TrayType::SystemTray; }
 

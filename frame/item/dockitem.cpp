@@ -20,7 +20,6 @@
  */
 
 #include "dockitem.h"
-#include "hoverhighlighteffect.h"
 #include "pluginsitem.h"
 
 #include <QMouseEvent>
@@ -41,8 +40,6 @@ DockItem::DockItem(QWidget *parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_draging(false)
-    //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
-//    , m_hoverEffect(new HoverHighlightEffect(this))
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
 

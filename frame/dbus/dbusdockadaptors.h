@@ -44,7 +44,7 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "")
 
 public:
-    DBusDockAdaptors(MainWindow *parent);
+    explicit DBusDockAdaptors(MainWindow *parent);
     virtual ~DBusDockAdaptors();
 
     MainWindow *parent() const;

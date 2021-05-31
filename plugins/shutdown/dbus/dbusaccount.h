@@ -79,7 +79,7 @@ public:
     { return "com.deepin.daemon.Accounts"; }
 
 public:
-    DBusAccount(QObject *parent = 0);
+    explicit DBusAccount(QObject *parent = 0);
 
     ~DBusAccount();
 

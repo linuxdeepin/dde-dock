@@ -1200,19 +1200,6 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
 }
 
 /**
- * @brief updateDockScreenName  将任务栏所在屏幕信息进行更新,在任务栏切换屏幕显示后,这里应该被调用
- * @param screenName            目标屏幕
- */
-void MultiScreenWorker::updateDockScreenName(const QString &screenName)
-{
-    Q_UNUSED(screenName);
-
-    m_ds.updateDockedScreen(screenName);
-
-    qInfo() << "update dock screen: " << m_ds.current();
-}
-
-/**
  * @brief getValidScreen        获取一个当前任务栏可以停靠的屏幕，优先使用主屏
  * @return
  */

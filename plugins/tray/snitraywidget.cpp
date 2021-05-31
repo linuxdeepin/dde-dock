@@ -168,10 +168,6 @@ QString SNITrayWidget::itemKeyForConfig()
     return QString("sni:%1").arg(key);
 }
 
-void SNITrayWidget::setActive(const bool active)
-{
-}
-
 void SNITrayWidget::updateIcon()
 {
     m_updateIconTimer->start();
@@ -198,11 +194,6 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         qDebug() << "unknown mouse button key";
         break;
     }
-}
-
-const QImage SNITrayWidget::trayImage()
-{
-    return m_pixmap.toImage();
 }
 
 bool SNITrayWidget::isValid()

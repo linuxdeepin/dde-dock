@@ -47,7 +47,7 @@ class TrayPlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "tray.json")
 
 public:
-    explicit TrayPlugin(QObject *parent = 0);
+    explicit TrayPlugin(QObject *parent = nullptr);
 
     const QString pluginName() const override;
     void init(PluginProxyInterface *proxyInter) override;

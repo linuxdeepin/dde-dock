@@ -77,7 +77,6 @@ private Q_SLOTS:
     void attentionWrapperToNormalWrapper();
     void normalWrapperToAttentionWrapper(FashionTrayWidgetWrapper *wrapper);
     void requestResize();
-    void refreshHoldContainerPosition();
     void onRequireDraggingWrapper();
 
 private:

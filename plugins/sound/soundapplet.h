@@ -118,7 +118,7 @@ signals:
     void defaultSinkChanged(DBusSink *sink) const;
 
 private slots:
-    void defaultSinkChanged();
+    void onDefaultSinkChanged();
     void onVolumeChanged(double volume);
     void volumeSliderValueChanged();
     void increaseVolumeChanged();

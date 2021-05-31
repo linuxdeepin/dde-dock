@@ -22,6 +22,7 @@
 
 #include "device.h"
 
+#include <DStyleHelper>
 #include <QDateTime>
 
 QMap<QString, QString> Device::deviceType2Icon = {
@@ -52,16 +53,10 @@ Device::Device(QObject *parent)
     , m_state(StateUnavailable)
     , m_connectState(false)
 {
-    m_time = static_cast<int>(QDateTime::currentDateTime().toTime_t());
 }
 
 Device::~Device()
 {
-}
-
-void Device::updateDeviceTime()
-{
-    m_time = static_cast<int>(QDateTime::currentDateTime().toTime_t());
 }
 
 void Device::setId(const QString &id)
@@ -106,22 +101,6 @@ void Device::setConnectState(const bool connectState)
     if (connectState != m_connectState) {
         m_connectState = connectState;
         Q_EMIT connectStateChanged(connectState);
-    }
-}
-
-void Device::setTrusted(bool trusted)
-{
-    if (trusted != m_trusted) {
-        m_trusted = trusted;
-        Q_EMIT trustedChanged(trusted);
-    }
-}
-
-void Device::setConnecting(bool connecting)
-{
-    if (connecting != m_connecting) {
-        m_connecting = connecting;
-        Q_EMIT connectingChanged(connecting);
     }
 }
 

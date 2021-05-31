@@ -91,10 +91,10 @@ bool IsSaveMode()
 
     // 创建默认配置文件,记录段时间内的崩溃次数
     if (!QFile::exists(g_cfgPath)) {
-        QFile file(g_cfgPath);
-        if (!file.open(QIODevice::WriteOnly))
+        QFile cfgFile(g_cfgPath);
+        if (!cfgFile.open(QIODevice::WriteOnly))
             exit(0);
-        file.close();
+        cfgFile.close();
     }
 
     QSettings settings(g_cfgPath, QSettings::IniFormat);

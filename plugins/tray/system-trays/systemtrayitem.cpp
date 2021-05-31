@@ -96,19 +96,9 @@ QString SystemTrayItem::itemKeyForConfig()
     return m_itemKey;
 }
 
-void SystemTrayItem::setActive(const bool active)
-{
-    Q_UNUSED(active);
-}
-
 void SystemTrayItem::updateIcon()
 {
     m_pluginInter->refreshIcon(m_itemKey);
-}
-
-const QImage SystemTrayItem::trayImage()
-{
-    return QImage();
 }
 
 void SystemTrayItem::sendClick(uint8_t mouseButton, int x, int y)

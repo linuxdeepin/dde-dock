@@ -61,7 +61,6 @@ signals:
 
 public slots:
     void refreshItemsIcon();
-    void sortPluginItems();
     void itemMoved(DockItem *const sourceItem, DockItem *const targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 

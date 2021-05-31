@@ -36,7 +36,6 @@ public:
 
     void setAdapterPowered(const Adapter *adapter, const bool &powered);
     void connectDevice(const Device *device, Adapter *adapter);
-    bool defaultAdapterInitPowerState();
     int adaptersCount();
     void adapterRefresh(const Adapter *adapter);
     void disconnectDevice(Device *device);
@@ -62,7 +61,6 @@ private:
 private:
     DBusBluetooth *m_bluetoothInter;
     QMap<QString, const Adapter *> m_adapters;
-    bool m_defaultAdapterState;
 };
 
 #endif // ADAPTERSMANAGER_H
