@@ -88,7 +88,7 @@ AccessPointWidget::AccessPointWidget(QWidget *parent)
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_ssidBtn);
     infoLayout->addWidget(m_stateButton);
-    infoLayout->addSpacing(3);
+    infoLayout->addSpacing(10);
     infoLayout->setSpacing(0);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;

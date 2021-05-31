@@ -112,7 +112,7 @@ void Port::setCardId(const uint &cardId)
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
     , m_centralWidget(new QWidget(this))
-    , m_volumeIconMin(new DIconButton(this))
+    , m_volumeIconMin(new QLabel(this))
     , m_volumeIconMax(new QLabel(this))
     , m_volumeSlider(new VolumeSlider(this))
     , m_soundShow(new QLabel(this))
@@ -129,6 +129,8 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))
 {
     initUi();
+
+    m_volumeIconMin->installEventFilter(this);
 }
 
 void SoundApplet::initUi()
@@ -152,14 +154,12 @@ void SoundApplet::initUi()
     verticalScrollBar()->setAccessibleName("volume-verticalscrollbar");
 
     m_volumeIconMin->setFixedSize(ICON_SIZE, ICON_SIZE);
-    m_volumeIconMin->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_volumeIconMin->setFlat(true);
     m_volumeIconMax->setFixedSize(ICON_SIZE, ICON_SIZE);
 
     m_soundShow->setText(QString("%1%").arg(0));
     m_soundShow->setFixedHeight(TITLE_HEIGHT);
     m_soundShow->setForegroundRole(QPalette::BrightText);
-    DFontSizeManager::instance()->bind(m_soundShow, DFontSizeManager::T4, QFont::Medium);
+    DFontSizeManager::instance()->bind(m_soundShow, DFontSizeManager::T8, QFont::Medium);
 
     m_deviceLabel->setText(tr("Device"));
     m_deviceLabel->setFixedHeight(TITLE_HEIGHT);
@@ -204,6 +204,7 @@ void SoundApplet::initUi()
 
     setFixedWidth(WIDTH);
     setWidget(m_centralWidget);
+    setContentsMargins(0, 0, 0, 0);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -218,9 +219,6 @@ void SoundApplet::initUi()
         if (key == GSETTING_SOUND_OUTPUT_SLIDER) {
             updateVolumeSliderStatus(m_gsettings->get(GSETTING_SOUND_OUTPUT_SLIDER).toString());
         }
-    });
-    connect(m_volumeIconMin, &DIconButton::clicked, this, [ = ] {
-        m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
     });
     connect(qApp, &QGuiApplication::fontChanged, this, &SoundApplet::updateListHeight);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
@@ -409,20 +407,20 @@ void SoundApplet::refreshIcon()
         color = Qt::white;
         break;
     }
-    //    setControlBackground();
+
     //主题改变时，同步修改item颜色
     for (int i = 0; i < m_model->rowCount(); i++) {
         auto item = m_model->item(i);
         item->setForeground(color);
         item->setBackground(Qt::transparent);
     }
-    //    setItemHoverColor();
+
     const auto ratio = devicePixelRatioF();
     QPixmap ret = ImageUtil::loadSvg(iconRight, ":/", ICON_SIZE, ratio);
     m_volumeIconMax->setPixmap(ret);
 
     ret = ImageUtil::loadSvg(iconLeft, ":/", ICON_SIZE, ratio);
-    m_volumeIconMin->setIcon(ret);
+    m_volumeIconMin->setPixmap(ret);
 }
 
 /**
@@ -620,6 +618,14 @@ void SoundApplet::updateVolumeSliderStatus(const QString &status)
     m_volumeIconMax->setVisible(flag);
 }
 
+bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
+{
+    if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
+        m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
+    }
+    return false;
+}
+
 void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
 {
     Q_UNUSED(msg)
@@ -630,7 +636,7 @@ void SoundApplet::haldleDbusSignal(const QDBusMessage &msg)
 void SoundApplet::updateListHeight()
 {
     //设备数多于10个时显示滚动条,固定高度
-    int count = m_model->rowCount();
+    int count = m_model->rowCount() == 1 ? 0 : m_model->rowCount();
 
     if (m_model->rowCount() > 10) {
         count = 10;
@@ -640,7 +646,7 @@ void SoundApplet::updateListHeight()
     }
 
     int visualHeight = 0;
-    for (int i = 1; i < count; i++)
+    for (int i = 0; i < count; i++)
         visualHeight += m_listView->visualRect(m_model->index(i, 0)).height();
 
     int listMargin = m_listView->contentsMargins().top() + m_listView->contentsMargins().bottom();
@@ -648,7 +654,7 @@ void SoundApplet::updateListHeight()
     int viewHeight = visualHeight + m_listView->spacing() * (count - 1) + listMargin;
     // 设备信息高度 = 设备标签 + 分隔线 + 滚动条 + 间隔
     int labelHeight = m_deviceLabel->height() > m_soundShow->height() ? m_deviceLabel->height() : m_soundShow->height();
-    int infoHeight = labelHeight + m_seperator->height() + m_volumeSlider->height() + m_centralLayout->spacing() * 3 + DEVICE_SPACING;
+    int infoHeight = labelHeight + m_seperator->height() * 2 + m_volumeSlider->height();
     int margain = m_centralLayout->contentsMargins().top() + m_centralLayout->contentsMargins().bottom();
     //整个界面高度 = 显示声音设备列表高度 + 设备信息高度 + 边距
     int totalHeight = viewHeight + infoHeight + margain;

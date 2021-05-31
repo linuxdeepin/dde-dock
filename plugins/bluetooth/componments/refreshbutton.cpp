@@ -1,4 +1,5 @@
 #include "refreshbutton.h"
+#include "imageutil.h"
 
 #include <QTimer>
 #include <QPainter>
@@ -19,7 +20,7 @@ RefreshButton::RefreshButton(QWidget *parent)
 
 void RefreshButton::setRotateIcon(QString path)
 {
-    m_pixmap = QIcon(path).pixmap(size());
+    m_pixmap = ImageUtil::loadSvg(path, ":/", qMin(width(), height()), devicePixelRatio());
 }
 
 void RefreshButton::startRotate()
@@ -44,7 +45,7 @@ void RefreshButton::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::NoBrush);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     painter.translate(this->width() / 2, this->height() / 2);
     painter.rotate(m_rotateAngle);

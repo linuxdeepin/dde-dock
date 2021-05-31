@@ -269,6 +269,10 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
         }
     }
 
+    m_wirelessControlPanel->setVisible(m_wirelessItems.count() > 0);
+    m_firstSeparator->setVisible(m_wirelessItems.count() > 0);
+    m_secondSeparator->setVisible(m_wirelessItems.count() > 0);
+
     updateSelf();
 }
 
@@ -1134,22 +1138,14 @@ void NetworkItem::updateView()
     if (m_switchWiredBtnState)
         itemCount += wiredDeviceCnt;
 
-    // 分割线 都有设备时才有
-    //    auto hasDevice = wirelessDeviceCnt && wiredDeviceCnt;
-    //    m_line->setVisible(hasDevice);
-
     auto centralWidget = m_applet->widget();
     if (itemCount <= constDisplayItemCnt) {
-        contentHeight += (itemCount - wiredDeviceCnt) * ITEM_HEIGHT;
-        contentHeight += wiredDeviceCnt * ITEM_HEIGHT;
-        centralWidget->setFixedHeight(contentHeight);
-        m_applet->setFixedHeight(contentHeight);
-    } else {
-        contentHeight += (itemCount - wiredDeviceCnt) * ITEM_HEIGHT;
-        contentHeight += wiredDeviceCnt * ITEM_HEIGHT;
-        //加上分割线占用的高度，否则显示界面高度不够显示，会造成无线网络列表item最后一项比其它项的高度小
-        centralWidget->setFixedHeight(contentHeight + SeparatorItemHeight * 3);
-        m_applet->setFixedHeight(constDisplayItemCnt * ITEM_HEIGHT + SeparatorItemHeight * 3);
+        centralWidget->setFixedHeight(centralWidget->sizeHint().height());
+        m_applet->setFixedHeight(centralWidget->sizeHint().height());
+    } else {//最大大小
+        contentHeight += itemCount * ITEM_HEIGHT;
+        centralWidget->setFixedHeight(centralWidget->sizeHint().height());
+        m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), 360));
     }
 
     if (m_wirelessControlPanel->isVisible()) {

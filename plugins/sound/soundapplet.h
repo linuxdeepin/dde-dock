@@ -110,8 +110,6 @@ public:
     Port *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
     void initUi();
-//    void setItemHoverColor();
-//    void setControlBackground();
 
 signals:
     void volumeChanged(const int value) const;
@@ -139,9 +137,12 @@ private:
     void removeDisabledDevice(QString portId, unsigned int cardId);
     void updateVolumeSliderStatus(const QString &status);
 
+protected:
+    bool eventFilter(QObject *watcher, QEvent *event) override;
+
 private:
     QWidget *m_centralWidget;
-    DIconButton *m_volumeIconMin;
+    QLabel *m_volumeIconMin;
     QLabel *m_volumeIconMax;
     VolumeSlider *m_volumeSlider;
     QLabel *m_soundShow;
