@@ -76,9 +76,9 @@ public:
         , m_lastScreen(primary)
         , m_primary(primary)
     {}
-    inline const QString &current() {return m_currentScreen;}
-    inline const QString &last() {return m_lastScreen;}
-    inline const QString &primary() {return m_primary;}
+    inline const QString &current() const {return m_currentScreen;}
+    inline const QString &last() const {return m_lastScreen;}
+    inline const QString &primary() const {return m_primary;}
 
     void updateDockedScreen(const QString &screenName)
     {

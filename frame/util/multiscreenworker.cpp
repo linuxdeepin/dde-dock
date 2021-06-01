@@ -1090,8 +1090,8 @@ void MultiScreenWorker::displayAnimation(const QString &screen, AniAction act)
 
 /**
  * @brief changeDockPosition    做一个动画操作
- * @param lastScreen            上次任务栏所在的屏幕
- * @param deskScreen            任务栏要移动到的屏幕
+ * @param fromScreen            上次任务栏所在的屏幕
+ * @param toScreen              任务栏要移动到的屏幕
  * @param fromPos               任务栏上次的方向
  * @param toPos                 任务栏打算移动到的方向
  */

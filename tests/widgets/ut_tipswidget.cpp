@@ -28,7 +28,9 @@
 
 #include "../widgets/tipswidget.h"
 
-namespace Dock {
+using namespace ::testing;
+using namespace Dock;
+
 class Test_TipsWidget : public ::testing::Test
 {
 public:
@@ -80,5 +82,4 @@ TEST_F(Test_TipsWidget, setTextList_test)
     QEvent event(QEvent::FontChange);
     qApp->sendEvent(tipsWidget, &event);
     QTest::qWait(10);
-}
 }

@@ -96,7 +96,7 @@ private Q_SLOTS:
     void onSNIMenuChanged(const QDBusObjectPath &value);
     void onSNIOverlayIconNameChanged(const QString &value);
     void onSNIOverlayIconPixmapChanged(DBusImageList  value);
-    void onSNIStatusChanged(const QString &value);
+    void onSNIStatusChanged(const QString &status);
     void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
