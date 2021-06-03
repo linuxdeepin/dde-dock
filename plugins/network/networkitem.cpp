@@ -1104,49 +1104,22 @@ void NetworkItem::updateView()
 {
     // 固定显示高度即为固定示项目数
     const int constDisplayItemCnt = 10;
-    int contentHeight = 0;
-    int itemCount = 0;
-
     auto wirelessCnt = m_wirelessItems.size();
+
     if (m_switchWirelessBtnState) {
         for (auto wirelessItem : m_wirelessItems) {
-            if (wirelessItem) {
-                if (wirelessItem->device()->enabled())
-                    itemCount += wirelessItem->APcount();
+            if (wirelessItem && wirelessItem->device()->enabled())
                 // 单个设备开关控制项
-                if (wirelessCnt == 1) {
-                    wirelessItem->setControlPanelVisible(false);
-                    continue;
-                } else {
-                    wirelessItem->setControlPanelVisible(true);
-                }
-                itemCount++;
-            }
+                wirelessItem->setControlPanelVisible(wirelessCnt != 1);
         }
     }
     // 设备总控开关只与是否有设备相关
-    auto wirelessDeviceCnt = m_wirelessItems.size();
-    if (wirelessDeviceCnt)
-        contentHeight += m_wirelessControlPanel->height();
-    m_wirelessControlPanel->setVisible(wirelessDeviceCnt);
-
-    auto wiredDeviceCnt = m_wiredItems.size();
-    if (wiredDeviceCnt)
-        contentHeight += m_wiredControlPanel->height();
-    m_wiredControlPanel->setVisible(wiredDeviceCnt);
-
-    if (m_switchWiredBtnState)
-        itemCount += wiredDeviceCnt;
+    m_wirelessControlPanel->setVisible(m_wirelessItems.size());
+    m_wiredControlPanel->setVisible(m_wiredItems.size());
 
     auto centralWidget = m_applet->widget();
-    if (itemCount <= constDisplayItemCnt) {
-        centralWidget->setFixedHeight(centralWidget->sizeHint().height());
-        m_applet->setFixedHeight(centralWidget->sizeHint().height());
-    } else {//最大大小
-        contentHeight += itemCount * ITEM_HEIGHT;
-        centralWidget->setFixedHeight(centralWidget->sizeHint().height());
-        m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), 360));
-    }
+    centralWidget->setFixedHeight(centralWidget->sizeHint().height());
+    m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), constDisplayItemCnt * ITEM_HEIGHT));
 
     if (m_wirelessControlPanel->isVisible()) {
         if (!m_wirelessScanTimer->isActive())
