@@ -92,13 +92,11 @@ bool NetworkPlugin::pluginIsDisable()
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey)
-    return (m_hasDevice && !m_networkItem->isShowControlCenter())
-            ? QString()
-            : QString("dbus-send --print-reply "
-                      "--dest=com.deepin.dde.ControlCenter "
-                      "/com/deepin/dde/ControlCenter "
-                      "com.deepin.dde.ControlCenter.ShowModule "
-                      "\"string:network\"");
+    return m_hasDevice ? QString() : QString("dbus-send --print-reply "
+                                              "--dest=com.deepin.dde.ControlCenter "
+                                              "/com/deepin/dde/ControlCenter "
+                                              "com.deepin.dde.ControlCenter.ShowModule "
+                                              "\"string:network\"");
 }
 
 const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
@@ -130,7 +128,7 @@ QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
-    if (itemKey == NETWORK_KEY && m_hasDevice && !m_networkItem->isShowControlCenter()) {
+    if (itemKey == NETWORK_KEY && m_hasDevice) {
         return m_networkItem->itemApplet();
     }
 
