@@ -1004,56 +1004,23 @@ void NetworkItem::updateView()
 {
     // 固定显示高度即为固定示项目数
     const int constDisplayItemCnt = 10;
-    int contentHeight = 0;
-    int itemCount = 0;
-
     auto wirelessCnt = m_wirelessItems.size();
+
     if (m_switchWirelessBtnState) {
         for (auto wirelessItem : m_wirelessItems) {
-            if (wirelessItem) {
-                if (wirelessItem->device()->enabled())
-                    itemCount += wirelessItem->APcount();
+            if (wirelessItem && wirelessItem->device()->enabled())
                 // 单个设备开关控制项
-                if (wirelessCnt == 1) {
-                    wirelessItem->setControlPanelVisible(false);
-                    continue;
-                } else {
-                    wirelessItem->setControlPanelVisible(true);
-                }
-                itemCount++;
-            }
+                wirelessItem->setControlPanelVisible(wirelessCnt != 1);
         }
     }
     // 设备总控开关只与是否有设备相关
-    auto wirelessDeviceCnt = m_wirelessItems.size();
-    if (wirelessDeviceCnt)
-        contentHeight += m_wirelessControlPanel->height();
-    m_wirelessControlPanel->setVisible(wirelessDeviceCnt);
-
-    auto wiredDeviceCnt = m_wiredItems.size();
-    if (wiredDeviceCnt)
-        contentHeight += m_wiredControlPanel->height();
-    m_wiredControlPanel->setVisible(wiredDeviceCnt);
-
-    itemCount += wiredDeviceCnt;
+    m_wirelessControlPanel->setVisible(wirelessCnt);
+    m_wiredControlPanel->setVisible(m_wiredItems.size());
 
     // 分割线 都有设备时才有
-//    auto hasDevice = wirelessDeviceCnt && wiredDeviceCnt;
-//    m_line->setVisible(hasDevice);
-
     auto centralWidget = m_applet->widget();
-    if (itemCount <= constDisplayItemCnt) {
-        contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
-        contentHeight += wiredDeviceCnt * ItemHeight;
-        centralWidget->setFixedHeight(contentHeight);
-        m_applet->setFixedHeight(contentHeight);
-    } else {
-        contentHeight += (itemCount - wiredDeviceCnt) * ItemHeight;
-        contentHeight += wiredDeviceCnt * ItemHeight;
-        centralWidget->setFixedHeight(contentHeight);
-        m_applet->setFixedHeight(constDisplayItemCnt * ItemHeight);
-        m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    }
+    centralWidget->setFixedHeight(centralWidget->sizeHint().height());
+    m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), constDisplayItemCnt * ItemHeight));
 }
 
 void NetworkItem::updateSelf()
