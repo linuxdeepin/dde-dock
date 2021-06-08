@@ -62,7 +62,10 @@ MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     initUI();
     initConnection();
 
-    QTimer::singleShot(0, this, [=] {onGSettingsChanged("enable");});
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+        onTrashGSettingsChanged("enable");
+    });
 }
 
 MenuWorker::~MenuWorker()
