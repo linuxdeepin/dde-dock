@@ -157,6 +157,11 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 void XEmbedTrayWidget::configContainerPosition()
 {
     auto c = m_xcbCnn;
+    auto cookie = xcb_get_geometry(c, m_containerWid);
+    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (clientGeom.isNull()) {
+        return;
+    }
 
     const QPoint p(rawXPosition(QCursor::pos()));
 
@@ -169,6 +174,12 @@ void XEmbedTrayWidget::configContainerPosition()
     // move the actual tray window to {0,0}, because tray icons from some wine
     // applications (QQ, TIM, etc...) may somehow moved to very long distance positions.
     const uint32_t trayVals[2] = { 0, 0 };
+
+    auto windowCookie = xcb_get_geometry(c, m_windowId);
+    QScopedPointer<xcb_get_geometry_reply_t> windowClientGeom(xcb_get_geometry_reply(c, windowCookie, Q_NULLPTR));
+    if (windowClientGeom.isNull()) {
+        return;
+    }
     xcb_configure_window(c, m_windowId, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, trayVals);
 
     xcb_flush(c);
@@ -351,6 +362,11 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 // NOTE: WM_NAME may can not obtain successfully
 QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 {
+    //TODO  调用下面XGetWindowProperty函数，会引发一个badwindow，导致崩溃，目前还没有想到合适的方法解决
+    //通过判断是不是一个badwindow可以避免，但是又会引发client连接超过最大连接数量，所以暂时返回一个空的字符串
+    //并且不会影响xem托盘显示问题
+    return QString();
+
     //const auto display = m_display;
     const auto display = XOpenDisplay(nullptr);
 
@@ -524,6 +540,12 @@ void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 void XEmbedTrayWidget::setWindowOnTop(const bool top)
 {
     auto c = m_xcbCnn;
+    auto cookie = xcb_get_geometry(c, m_containerWid);
+    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (clientGeom.isNull()) {
+        return;
+    }
+
     const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     xcb_flush(c);
