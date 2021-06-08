@@ -511,31 +511,39 @@ void NetworkItem::getPluginState()
         if (wirelessItem) {
             temp = wirelessItem->getDeviceState();
             state |= temp;
-            if ((temp & WirelessItem::Connected) >> 18) {
+            if ((temp & WirelessItem::Connected) >> 18)
                 m_connectedWirelessDevice.insert(iwireless.key(), wirelessItem);
-            }
+            else
+                m_connectedWirelessDevice.remove(iwireless.key());
         }
     }
     // 按如下顺序得到当前无线设备状态
     temp = state;
     if (!temp)
         wirelessState = WirelessItem::Unknow;
-    temp = state;
+
     if ((temp & WirelessItem::Disabled) >> 17)
         wirelessState = WirelessItem::Disabled;
-    temp = state;
+
     if ((temp & WirelessItem::Disconnected) >> 19)
         wirelessState = WirelessItem::Disconnected;
-    temp = state;
+
     if ((temp & WirelessItem::Connecting) >> 20)
         wirelessState = WirelessItem::Connecting;
-    temp = state;
+
     if ((temp & WirelessItem::ConnectNoInternet) >> 24)
         wirelessState = WirelessItem::ConnectNoInternet;
-    temp = state;
-    if ((temp & WirelessItem::Connected) >> 18) {
+
+    if ((temp & WirelessItem::Connected) >> 18)
         wirelessState = WirelessItem::Connected;
-    }
+
+    //将无线获取地址状态中显示为连接中状态
+    if ((temp & WirelessItem::ObtainingIP) >> 22)
+        wirelessState = WirelessItem::ObtainingIP;
+
+    //无线正在认证
+    if ((temp & WirelessItem::Authenticating) >> 17)
+        wirelessState = WirelessItem::Authenticating;
 
     state = 0;
     temp = 0;
@@ -546,430 +554,211 @@ void NetworkItem::getPluginState()
         if (wiredItem) {
             temp = wiredItem->getDeviceState();
             state |= temp;
-            if ((temp & WiredItem::Connected) >> 2) {
+            if ((temp & WiredItem::Connected) >> 2)
                 m_connectedWiredDevice.insert(iwired.key(), wiredItem);
-            }
+            else
+                m_connectedWiredDevice.remove(iwired.key());
         }
     }
+
     temp = state;
     if (!temp)
         wiredState = WiredItem::Unknow;
-    temp = state;
+
     if ((temp & WiredItem::Nocable) >> 9)
         wiredState = WiredItem::Nocable;
-    temp = state;
+
     if ((temp & WiredItem::Disabled) >> 1)
         wiredState = WiredItem::Disabled;
-    temp = state;
+
     if ((temp & WiredItem::Disconnected) >> 3)
         wiredState = WiredItem::Disconnected;
-    temp = state;
+
     if ((temp & WiredItem::Connecting) >> 4)
         wiredState = WiredItem::Connecting;
-    temp = state;
+
     if ((temp & WiredItem::ConnectNoInternet) >> 8)
         wiredState = WiredItem::ConnectNoInternet;
-    temp = state;
-    if ((temp & WiredItem::Connected) >> 2) {
+
+    if ((temp & WiredItem::Connected) >> 2)
         wiredState = WiredItem::Connected;
-    }
+
+    //将有线获取地址状态中显示为连接中状态
+    if ((temp & WiredItem::ObtainingIP) >> 6)
+        wiredState = WiredItem::ObtainingIP;
+
+    //有线正在认证
+    if ((temp & WiredItem::Authenticating) >> 5)
+        wiredState = WiredItem::Authenticating;
 
     switch (wirelessState | wiredState) {
     case 0:
         m_pluginState = Unknow;
         break;
-    case 0x00000001:
+    case 0x00000001: //无线未知 有线启用
+    case 0x00000008: //无线未知 有线断开连接
+    case 0x00000080: //无线未知 有线获取IP失败
+    case 0x00020001: //无线禁用 有线启用
+    case 0x00020008: //无线禁用 有线断开连接
+    case 0x00020080: //无线禁用 有线获取IP失败
         m_pluginState = Bdisconnected;
         break;
-    case 0x00000002:
+    case 0x00000002: //无线未知 有线禁用
         m_pluginState = Bdisabled;
         break;
-    case 0x00000004:
+    case 0x00000004: //无线未知 有线已连接
+    case 0x00010004: //无线启用 有线已连接
+    case 0x00020004: //无线禁用 有线已连接
+    case 0x00080004: //无线断开连接 有线已连接
+    case 0x00800004: //无线获取IP失败 有线已连接
+    case 0x01000004: //无线连接但无网络 有线已连接
+    case 0x02000004: //无线连接失败 有线已连接
         m_pluginState = Bconnected;
         break;
-    case 0x00000008:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00000010:
+    case 0x00000010: //无线未知 有线正在连接
+    case 0x00000020: //无线未知 有线正在认证
+    case 0x00000040: //无线未知 有线正在获取IP
+    case 0x00010010: //无线启用 有线正在连接
+    case 0x00010020: //无线启用 有线正在认证
+    case 0x00010040: //无线启用 有线正在获取IP
+    case 0x00020010: //无线禁用 有线正在连接
+    case 0x00020020: //无线禁用 有线正在认证
+    case 0x00020040: //无线禁用 有线正在获取IP
+    case 0x00080010: //无线断开连接 有线正在连接
+    case 0x00080020: //无线断开连接 有线正在认证
+    case 0x00080040: //无线断开连接 有线正在获取IP
+    case 0x00800010: //无线获取IP失败 有线正在连接
+    case 0x00800020: //无线获取IP失败 有线正在认证
+    case 0x00800040: //无线获取IP失败 有线正在获取IP
+    case 0x01000010: //无线连接但无网络 有线正在连接
+    case 0x01000020: //无线连接但无网络 有线正在认证
+    case 0x01000040: //无线连接但无网络 有线正在获取IP
+    case 0x02000010: //无线连接失败 有线正在连接
+    case 0x02000020: //无线连接失败 有线正在认证
+    case 0x02000040: //无线连接失败 有线正在获取IP
+    case 0x00040010: //无线已连接 有线正在连接
+    case 0x00040020: //无线已连接 有线正在认证
+    case 0x00040040: //无线已连接 有线正在获取IP
         m_pluginState = Bconnecting;
         break;
-    case 0x00000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00000080:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00000100:
+    case 0x00000100: //无线未知 有线连接但无网络
+    case 0x00010100: //无线启用 有线连接但无网络
+    case 0x00020100: //无线禁用 有线连接但无网络
+    case 0x00080100: //无线断开连接 有线连接但无网络
+    case 0x00800100: //无线获取IP失败 有线连接但无网络
+    case 0x02000100: //无线连接失败 有线连接但无网络
         m_pluginState = BconnectNoInternet;
         break;
-    case 0x00000200:
+    case 0x00000200: //无线未知 有线未插入网线
+    case 0x00020200: //无线禁用 有线未插入网线
         m_pluginState = Nocable;
         break;
-    case 0x00000400:
+    case 0x00000400: //无线未知 有线连接失败
+    case 0x00020400: //无线禁用 有线连接失败
         m_pluginState = Bfailed;
         break;
-    case 0x00010000:
+    case 0x00010000: //无线启用 有线未知
+    case 0x00010002: //无线启用 有线禁用
+    case 0x00010200: //无线启用 有线未插入网线
+    case 0x00010400: //无线启用 有线连接失败
+    case 0x00080000: //无线断开连接 有线未知
+    case 0x00080002: //无线断开连接 有线禁用
+    case 0x00080200: //无线断开连接 有线未插入网线
+    case 0x00080400: //无线断开连接 有线连接失败
+    case 0x00800000: //无线获取IP失败 有线未知
+    case 0x00800002: //无线获取IP失败 有线禁用
+    case 0x00800200: //无线获取IP失败 有线未插入网线
+    case 0x00800400: //无线获取IP失败 有线连接失败
+    case 0x02000000: //无线连接失败 有线未知
+    case 0x02000002: //无线连接失败 有线禁用
+    case 0x02000200: //无线连接失败 有线未插入网线
+    case 0x02000400: //无线连接失败 有线连接失败
         m_pluginState = Adisconnected;
         break;
-    case 0x00020000:
+    case 0x00020000: //无线禁用 有线未知
         m_pluginState = Adisabled;
         break;
-    case 0x00040000:
+    case 0x00040000: //无线已连接 有线未知
+    case 0x00040001: //无线已连接 有线启用
+    case 0x00040002: //无线已连接 有线禁用
+    case 0x00040008: //无线已连接 有线断开连接
+    case 0x00040080: //无线已连接 有线获取IP失败
+    case 0x00040100: //无线已连接 有线连接但无网络
+    case 0x00040200: //无线已连接 有线未插入网线
+    case 0x00040400: //无线已连接 有线连接失败
         m_pluginState = Aconnected;
         break;
-    case 0x00080000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100000:
+    case 0x00100000: //无线正在连接 有线未知
+    case 0x00100001: //无线正在连接 有线启用
+    case 0x00100002: //无线正在连接 有线禁用
+    case 0x00100008: //无线正在连接 有线断开连接
+    case 0x00100080: //无线正在连接 有线获取IP失败
+    case 0x00100100: //无线正在连接 有线连接但无网络
+    case 0x00100200: //无线正在连接 有线未插入网线
+    case 0x00100400: //无线正在连接 有线连接失败
+    case 0x00100004: //无线正在连接 有线已连接
+    case 0x00200000: //无线正在认证 有线未知
+    case 0x00200001: //无线正在认证 有线启用
+    case 0x00200002: //无线正在认证 有线禁用
+    case 0x00200008: //无线正在认证 有线断开连接
+    case 0x00200080: //无线正在认证 有线获取IP失败
+    case 0x00200100: //无线正在认证 有线连接但无网络
+    case 0x00200200: //无线正在认证 有线未插入网线
+    case 0x00200400: //无线正在认证 有线连接失败
+    case 0x00200004: //无线正在认证 有线已连接
+    case 0x00400000: //无线正在获取IP 有线未知
+    case 0x00400001: //无线正在获取IP 有线启用
+    case 0x00400002: //无线正在获取IP 有线禁用
+    case 0x00400008: //无线正在获取IP 有线断开连接
+    case 0x00400080: //无线正在获取IP 有线获取IP失败
+    case 0x00400100: //无线正在获取IP 有线连接但无网络
+    case 0x00400200: //无线正在获取IP 有线未插入网线
+    case 0x00400400: //无线正在获取IP 有线连接失败
+    case 0x00400004: //无线正在获取IP 有线已连接
         m_pluginState = Aconnecting;
         break;
-    case 0x00200000:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400000:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000000:
+    case 0x01000000: //无线连接但无网络 有线未知
+    case 0x01000001: //无线连接但无网络 有线启用
+    case 0x01000002: //无线连接但无网络 有线禁用
+    case 0x01000008: //无线连接但无网络 有线断开连接
+    case 0x01000080: //无线连接但无网络 有线获取IP失败
+    case 0x01000200: //无线连接但无网络 有线未插入网线
+    case 0x01000400: //无线连接但无网络 有线连接失败
         m_pluginState = AconnectNoInternet;
         break;
-    case 0x02000000:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010001:
+    case 0x00010001: //无线启用 有线启用
+    case 0x00010008: //无线启用 有线断开连接
+    case 0x00010080: //无线启用 有线获取IP失败
+    case 0x00080001: //无线断开连接 有线启用
+    case 0x00080008: //无线断开连接 有线断开连接
+    case 0x00080080: //无线断开连接 有线获取IP失败
+    case 0x00800001: //无线获取IP失败 有线启用
+    case 0x00800008: //无线获取IP失败 有线断开连接
+    case 0x00800080: //无线获取IP失败 有线获取IP失败
+    case 0x02000001: //无线连接失败 有线启用
+    case 0x02000008: //无线连接失败 有线断开连接
+    case 0x02000080: //无线连接失败 有线获取IP失败
         m_pluginState = Disconnected;
         break;
-    case 0x00020001:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040001:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400001:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000001:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000001:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020002:
+    case 0x00020002: //无线禁用 有线禁用
         m_pluginState = Disabled;
         break;
-    case 0x00040002:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400002:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000002:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000002:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00020004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00040004:
+    case 0x00040004: //无线已连接 有线已连接
         m_pluginState = Connected;
         break;
-    case 0x00080004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00100004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00200004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00400004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00800004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x01000004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x02000004:
-        m_pluginState = Bconnected;
-        break;
-    case 0x00010008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00020008:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040008:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400008:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000008:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000008:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040010:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100010:
+    case 0x00100010: //无线正在连接 有线正在连接
+    case 0x00100020: //无线正在连接 有线正在认证
+    case 0x00100040: //无线正在连接 有线正在获取IP
+    case 0x00200010: //无线正在认证 有线正在连接
+    case 0x00200020: //无线正在认证 有线正在认证
+    case 0x00200040: //无线正在认证 有线正在获取IP
+    case 0x00400010: //无线正在获取IP 有线正在连接
+    case 0x00400020: //无线正在获取IP 有线正在认证
+    case 0x00400040: //无线正在获取IP 有线正在获取IP
         m_pluginState = Connecting;
         break;
-    case 0x00200010:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400010:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000010:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040020:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00200020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400020:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000020:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00020040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00040040:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00100040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00200040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00400040:
-        m_pluginState = Connecting;
-        break;
-    case 0x00800040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x01000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x02000040:
-        m_pluginState = Bconnecting;
-        break;
-    case 0x00010080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00020080:
-        m_pluginState = Bdisconnected;
-        break;
-    case 0x00040080:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00100080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400080:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x01000080:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000080:
-        m_pluginState = Disconnected;
-        break;
-    case 0x00010100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00020100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00040100:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00100100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400100:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x01000100:
+    case 0x01000100: //无线连接但无网络 有线连接但无网络
         m_pluginState = ConnectNoInternet;
-        break;
-    case 0x02000100:
-        m_pluginState = BconnectNoInternet;
-        break;
-    case 0x00010200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020200:
-        m_pluginState = Nocable;
-        break;
-    case 0x00040200:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400200:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000200:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000200:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00010400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00020400:
-        m_pluginState = Bfailed;
-        break;
-    case 0x00040400:
-        m_pluginState = Aconnected;
-        break;
-    case 0x00080400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x00100400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00200400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00400400:
-        m_pluginState = Aconnecting;
-        break;
-    case 0x00800400:
-        m_pluginState = Adisconnected;
-        break;
-    case 0x01000400:
-        m_pluginState = AconnectNoInternet;
-        break;
-    case 0x02000400:
-        m_pluginState = Bfailed;
         break;
     }
 
@@ -1108,10 +897,10 @@ void NetworkItem::refreshTips()
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWirelessDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1126,10 +915,10 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1150,10 +939,10 @@ void NetworkItem::refreshTips()
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
@@ -1174,10 +963,10 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
