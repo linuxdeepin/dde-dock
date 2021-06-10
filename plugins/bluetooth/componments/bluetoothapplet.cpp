@@ -26,6 +26,7 @@
 #include "adaptersmanager.h"
 #include "adapter.h"
 #include "bluetoothadapteritem.h"
+#include "util/horizontalseperator.h"
 
 #include <DApplicationHelper>
 #include <DDBusSender>
@@ -98,6 +99,7 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
+    , m_seperator(new HorizontalSeperator(this))
 {
     initUi();
     initConnect();
@@ -213,6 +215,7 @@ void BluetoothApplet::initUi()
     m_contentWidget->setContentsMargins(0, 0, 0, 0);
     m_contentLayout->setMargin(0);
     m_contentLayout->setSpacing(0);
+    m_contentLayout->addWidget(m_seperator);
     m_contentLayout->addWidget(m_settingLabel, 0, Qt::AlignBottom | Qt::AlignVCenter);
 
     m_scroarea = new QScrollArea(this);
@@ -271,19 +274,18 @@ void BluetoothApplet::updateIconTheme()
 
 void BluetoothApplet::updateSize()
 {
-    int hetght = 0;
-    int count = 0;
+    int height = 0;
+    height += TitleSpace;
     foreach (const auto item, m_adapterItems) {
-        hetght += TitleHeight + TitleSpace;
-        if (item->adapter()->powered()) {
-            count += item->currentDeviceCount();
-            hetght += count * DeviceItemHeight;
-        }
+        height += TitleHeight;
+        height += item->sizeHint().height();
     }
 
-    hetght += DeviceItemHeight;
-    int maxHeight = (TitleHeight + TitleSpace) + MaxDeviceCount * DeviceItemHeight;
-    hetght = hetght > maxHeight ? maxHeight : hetght;
-    setFixedSize(ItemWidth, hetght);
+    // 加上蓝牙设置选项的高度
+    height += DeviceItemHeight;
+
+    static const int maxHeight = (TitleHeight + TitleSpace) + MaxDeviceCount * DeviceItemHeight;
+
+    setFixedSize(ItemWidth, qMin(maxHeight, height));
 }
 

@@ -131,7 +131,6 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this))
     , m_showUnnamedDevices(false)
     , m_seperator(new HorizontalSeperator(this))
-    , m_bottomSeperator(new HorizontalSeperator(this))
 {
     initData();
     initUi();
@@ -179,6 +178,12 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
     else
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+}
+
+QSize BluetoothAdapterItem::sizeHint() const
+{
+    return QSize(ItemWidth, m_deviceListview->model()->rowCount() * DeviceItemHeight
+                 + (m_deviceListview->model()->rowCount() > 0 ? m_seperator->sizeHint().height() : 0));// 加上割线的高度
 }
 
 int BluetoothAdapterItem::currentDeviceCount()
@@ -292,13 +297,10 @@ void BluetoothAdapterItem::initUi()
     mainLayout->addWidget(m_adapterLabel);
     mainLayout->addWidget(m_seperator);
     mainLayout->addWidget(m_deviceListview);
-    mainLayout->addWidget(m_bottomSeperator);
 
     m_seperator->setVisible(m_deviceListview->count() != 0);
-    m_bottomSeperator->setVisible(m_deviceListview->count() != 0);
     connect(m_deviceListview, &DListView::rowCountChanged, this, [ = ] {
         m_seperator->setVisible(m_deviceListview->count() != 0);
-        m_bottomSeperator->setVisible(m_deviceListview->count() != 0);
     });
 
     m_deviceListview->setItemDelegate(m_itemDelegate);
@@ -334,7 +336,6 @@ void BluetoothAdapterItem::initConnect()
         m_refreshBtn->setVisible(state);
         m_deviceListview->setVisible(state);
         m_seperator->setVisible(state);
-        m_bottomSeperator->setVisible(state);
         m_adapterStateBtn->setChecked(state);
         m_adapterStateBtn->setEnabled(true);
         emit adapterPowerChanged();
@@ -345,7 +346,6 @@ void BluetoothAdapterItem::initConnect()
         m_deviceModel->clear();
         m_deviceListview->setVisible(false);
         m_seperator->setVisible(false);
-        m_bottomSeperator->setVisible(false);
         m_adapterStateBtn->setEnabled(false);
         m_refreshBtn->setVisible(state);
         emit requestSetAdapterPower(m_adapter, state);

@@ -31,8 +31,10 @@ class HorizontalSeperator : public QWidget
 public:
     explicit HorizontalSeperator(QWidget *parent = nullptr);
 
+    QSize sizeHint() const override;
+
 protected:
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 };
 
 #endif // HORIZONTALSEPERATOR_H

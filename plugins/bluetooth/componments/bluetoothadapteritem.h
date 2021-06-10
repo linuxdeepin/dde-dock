@@ -113,6 +113,8 @@ public slots:
     void onAdapterNameChanged(const QString name);
     void updateIconTheme(DGuiApplicationHelper::ColorType type);
 
+    QSize sizeHint() const override;
+
 signals:
     void adapterPowerChanged();
     void requestSetAdapterPower(Adapter *adapter, bool state);
@@ -140,7 +142,6 @@ private:
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
     HorizontalSeperator *m_seperator;
-    HorizontalSeperator *m_bottomSeperator;
 };
 
 #endif // BLUETOOTHADAPTERITEM_H

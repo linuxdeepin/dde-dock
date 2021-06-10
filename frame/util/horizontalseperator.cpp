@@ -36,6 +36,11 @@ HorizontalSeperator::HorizontalSeperator(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
+QSize HorizontalSeperator::sizeHint() const
+{
+    return QSize(QWidget::sizeHint().width(), 2);
+}
+
 void HorizontalSeperator::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)

@@ -36,6 +36,7 @@ class Device;
 class Adapter;
 class BluetoothAdapterItem;
 class AdaptersManager;
+class HorizontalSeperator;
 
 DWIDGET_BEGIN_NAMESPACE
 class DLabel;
@@ -111,6 +112,7 @@ private:
     SettingLabel *m_settingLabel;
     QVBoxLayout *m_mainLayout;
     QVBoxLayout *m_contentLayout;
+    HorizontalSeperator *m_seperator;
 
     QStringList m_connectDeviceName;
     QMap<QString, BluetoothAdapterItem *> m_adapterItems;           // 所有蓝牙适配器
