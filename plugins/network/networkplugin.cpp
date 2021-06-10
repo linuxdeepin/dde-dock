@@ -132,6 +132,7 @@ QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
     if (itemKey == NETWORK_KEY && m_hasDevice && !m_networkItem->isShowControlCenter()) {
+        Q_EMIT m_networkModel->requestWifiScanning(true);
         return m_networkItem->itemApplet();
     }
 
@@ -209,6 +210,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem, &NetworkItem::updateSelf);
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
                     m_networkModel, &NetworkModel::updateApList);
+            connect(static_cast<WirelessItem *>(item), &WirelessItem::onWifiScanning,
+                    m_networkModel, &NetworkModel::requestWifiScanning);
             //点击的时候更新一下wifi数据
             Q_EMIT m_networkModel->updateApList();
             break;

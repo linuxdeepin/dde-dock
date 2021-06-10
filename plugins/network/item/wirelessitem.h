@@ -83,6 +83,7 @@ Q_SIGNALS:
     void requestActiveAP(const QString &devPath, const QString &apPath, const QString &uuid) const;
     void requestDeactiveAP(const QString &devPath) const;
     void requestWirelessScan();
+    void onWifiScanning(const bool enable);
     void deviceStateChanged();
     void activeApInfoChanged();
 

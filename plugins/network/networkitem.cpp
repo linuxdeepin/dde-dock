@@ -142,7 +142,8 @@ QWidget *NetworkItem::itemApplet()
 {
     m_applet->setVisible(true);
     wirelessItemsRequireScan();
-
+    //点开详情页面，告知后端可以进行刷新策略
+    WirelessScaningEnable(true);
     return m_applet;
 }
 
@@ -411,6 +412,10 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
             qDebug() << Q_FUNC_INFO;
             wirelessItemsRequireScan();
         }
+        else if (event->type() == QEvent::Hide) {
+            //关闭页面的时候会有该控件的隐藏，所以需要告知后端进行其他的wifi刷新策略
+            WirelessScaningEnable(false);
+        }
     }
     return false;
 }
@@ -678,6 +683,15 @@ void NetworkItem::wirelessItemsRequireScan()
         }
     }
     wirelessScan();
+}
+
+void NetworkItem::WirelessScaningEnable(const bool enable)
+{
+    for (auto wirelessItem : m_wirelessItems) {
+        if (wirelessItem) {
+            Q_EMIT wirelessItem->onWifiScanning(enable);
+        }
+    }
 }
 
 void NetworkItem::updateMasterControlSwitch()

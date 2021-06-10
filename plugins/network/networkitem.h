@@ -89,6 +89,7 @@ private:
      * @brief 刷新wifi数据
      **/
     void wirelessItemsRequireScan();
+    void WirelessScaningEnable(const bool enable);
 
 private:
     Dock::TipsWidget *m_tipsWidget;
