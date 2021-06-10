@@ -54,12 +54,6 @@ AccessPointWidget::AccessPointWidget(QWidget *parent)
     , m_stateButton(new StateButton(this))
     , m_isEnter(false)
 {
-    //设置wifi列表item背景色为透明
-    QPalette backgroud;
-    backgroud.setColor(QPalette::Background, Qt::transparent);
-    this->setAutoFillBackground(true);
-    this->setPalette(backgroud);
-
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_ssidBtn->setObjectName("Ssid");

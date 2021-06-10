@@ -64,7 +64,6 @@ void PluginLoader::run()
             continue;
         }
         plugins << file;
-
     }
     for (auto plugin : plugins) {
         emit pluginFounded(pluginsDir.absoluteFilePath(plugin));

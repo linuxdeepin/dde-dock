@@ -29,6 +29,7 @@
 #include <DApplication>
 #include <DStandardItem>
 #include <DFontSizeManager>
+#include <DApplicationHelper>
 
 #include <QLabel>
 #include <QIcon>
@@ -123,7 +124,6 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
-    , m_itemDelegate(new DStyledItemDelegate(m_listView))
     , m_deviceInfo("")
     , m_lastPort(nullptr)
     , m_gsettings(Utils::ModuleSettingsPtr("sound", QByteArray(), this))
@@ -139,6 +139,7 @@ void SoundApplet::initUi()
     m_listView->setEditTriggers(DListView::NoEditTriggers);
     m_listView->setSelectionMode(QAbstractItemView::NoSelection);
     m_listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_listView->setBackgroundType(DStyledItemDelegate::NoBackground);
     m_listView->setItemRadius(0);
     m_listView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     m_listView->setFixedHeight(0);
@@ -178,6 +179,9 @@ void SoundApplet::initUi()
     deviceLayout->addWidget(m_deviceLabel, 0, Qt::AlignLeft);
     deviceLayout->addWidget(m_soundShow, 0, Qt::AlignRight);
 
+    BackgroundWidget *deviceWidget = new BackgroundWidget(this);
+    deviceWidget->setLayout(deviceLayout);
+
     // 音量滑动条
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->setSpacing(0);
@@ -187,13 +191,16 @@ void SoundApplet::initUi()
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->addWidget(m_volumeIconMax);
 
+    BackgroundWidget *volumnWidget = new BackgroundWidget(this);
+    volumnWidget->setLayout(volumeCtrlLayout);
+
     m_centralLayout = new QVBoxLayout(this);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setMargin(0);
     m_centralLayout->setSpacing(0);
-    m_centralLayout->addLayout(deviceLayout);
+    m_centralLayout->addWidget(deviceWidget);
     m_centralLayout->addWidget(m_seperator);
-    m_centralLayout->addLayout(volumeCtrlLayout);
+    m_centralLayout->addWidget(volumnWidget);
     // 需要判断是否有声音端口
     m_centralLayout->addWidget(m_secondSeperator);
 
@@ -210,7 +217,7 @@ void SoundApplet::initUi()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_centralWidget->setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
-    m_listView->setItemDelegate(m_itemDelegate);
+    m_listView->setItemDelegate(new DStyledItemDelegate(m_listView));
 
     m_secondSeperator->setVisible(m_model->rowCount() > 1);
 
@@ -396,23 +403,9 @@ void SoundApplet::refreshIcon()
     QString iconLeft = QString("audio-volume-%1-symbolic").arg(volumeString);
     QString iconRight = QString("audio-volume-high-symbolic");
 
-    QColor color;
-    switch (DGuiApplicationHelper::instance()->themeType()) {
-    case DGuiApplicationHelper::LightType:
-        color = Qt::black;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         iconLeft.append("-dark");
         iconRight.append("-dark");
-        break;
-    default:
-        color = Qt::white;
-        break;
-    }
-
-    //主题改变时，同步修改item颜色
-    for (int i = 0; i < m_model->rowCount(); i++) {
-        auto item = m_model->item(i);
-        item->setForeground(color);
-        item->setBackground(Qt::transparent);
     }
 
     const auto ratio = devicePixelRatioF();
@@ -473,8 +466,7 @@ void SoundApplet::addPort(const Port *port)
     DStandardItem *pi = new DStandardItem;
     QString deviceName = port->name() + "(" + port->cardName() + ")";
     pi->setText(deviceName);
-    pi->setBackground(Qt::transparent);
-    pi->setForeground(QBrush(Qt::black));
+    pi->setTextColorRole(QPalette::BrightText);
     pi->setData(QVariant::fromValue<const Port *>(port), Qt::WhatsThisPropertyRole);
 
     connect(port, &Port::nameChanged, this, [ = ](const QString &str) {
@@ -492,6 +484,7 @@ void SoundApplet::addPort(const Port *port)
     if (port->isActive()) {
         pi->setCheckState(Qt::CheckState::Checked);
     }
+
     m_model->appendRow(pi);
     m_model->sort(0);
     m_secondSeperator->setVisible(m_model->rowCount() > 1);

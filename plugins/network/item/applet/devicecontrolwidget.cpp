@@ -62,20 +62,19 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->setMargin(0);
     infoLayout->setSpacing(0);
-    infoLayout->addSpacing(3);
+    infoLayout->setContentsMargins(0, 0, 0, 0);
     infoLayout->addWidget(m_deviceName);
     infoLayout->addStretch();
     infoLayout->addWidget(m_loadingIndicator);
-    infoLayout->addSpacing(10);
+    infoLayout->addSpacing(4);
     infoLayout->addWidget(m_switchBtn);
-    infoLayout->addSpacing(3);
+    infoLayout->addSpacing(8);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addStretch();
     centralLayout->addLayout(infoLayout);
-    centralLayout->addStretch();
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
     setFixedHeight(ItemHeight);

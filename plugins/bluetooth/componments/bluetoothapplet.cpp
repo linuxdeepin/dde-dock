@@ -47,7 +47,8 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     setAccessibleName("BluetoothSettingLabel");
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);
-    m_layout->addSpacing(20);
+    m_layout->setSpacing(4);
+    m_layout->setContentsMargins(20, 0, 8, 0);
     m_layout->addWidget(m_label, 0, Qt::AlignLeft | Qt::AlignHCenter);
     m_layout->addStretch();
 
@@ -79,7 +80,11 @@ void SettingLabel::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::transparent);
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::LightType) {
+        painter.setBrush(QColor(0, 0, 0, 0.03 * 255));
+    } else {
+        painter.setBrush(QColor(255, 255, 255, 0.03 * 255));
+    }
     painter.drawRoundedRect(rect(), 0, 0);
 
     return QWidget::paintEvent(event);

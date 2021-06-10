@@ -34,6 +34,7 @@
 
 #include <DIconButton>
 #include <DListView>
+#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -92,6 +93,29 @@ private:
     QString m_cardName;
     bool m_isActive;
     Direction m_direction;
+};
+
+class BackgroundWidget : public QWidget
+{
+public:
+    explicit BackgroundWidget(QWidget *parent = nullptr)
+        : QWidget(parent) {}
+
+protected:
+    void paintEvent(QPaintEvent *event)
+    {
+        QPainter painter(this);
+        painter.setPen(Qt::NoPen);
+        if (DApplicationHelper::instance()->themeType() == DApplicationHelper::LightType) {
+            painter.setBrush(QColor(0, 0, 0, 0.03 * 255));
+        } else {
+            painter.setBrush(QColor(255, 255, 255, 0.03 * 255));
+        }
+        painter.drawRect(rect());
+
+        return QWidget::paintEvent(event);
+    }
+
 };
 
 class SoundApplet : public QScrollArea
@@ -155,7 +179,6 @@ private:
     DBusSink *m_defSinkInter;
     DTK_WIDGET_NAMESPACE::DListView  *m_listView;
     QStandardItemModel *m_model;
-    DStyledItemDelegate *m_itemDelegate;
     QList<Port *> m_ports;
     QString m_deviceInfo;
     QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备

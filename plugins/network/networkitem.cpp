@@ -92,11 +92,13 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     // 无线网络控制器
     QHBoxLayout *switchWirelessLayout = new QHBoxLayout;
-    switchWirelessLayout->setContentsMargins(20, 0, 10, 0);
+    switchWirelessLayout->setMargin(0);
+    switchWirelessLayout->setSpacing(0);
+    switchWirelessLayout->setContentsMargins(20, 0, 8, 0);
     switchWirelessLayout->addWidget(wirelessTitle);
     switchWirelessLayout->addStretch();
     switchWirelessLayout->addWidget(m_loadingIndicator);
-    switchWirelessLayout->addSpacing(10);
+    switchWirelessLayout->addSpacing(4);
     switchWirelessLayout->addWidget(m_switchWirelessBtn);
     m_wirelessControlPanel->setLayout(switchWirelessLayout);
     m_wirelessControlPanel->setFixedHeight(TITLE_HEIGHT);
@@ -137,7 +139,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     //TODO 先暂时这样写，后面要重构，届时布局要重新修改，直接使用dlistview
     m_wirelessControlPanel->setVisible(m_wirelessItems.count() > 0);
     m_firstSeparator->setVisible(m_wirelessItems.count() > 0);
-    m_secondSeparator->setVisible(m_wirelessItems.count() > 0);
+    m_secondSeparator->setVisible(m_wirelessItems.count() > 0 && m_wiredItems.count() > 0);
 
     centralLayout->addWidget(m_wiredControlPanel);
     centralLayout->addWidget(m_thirdSeparator);
@@ -271,7 +273,7 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
 
     m_wirelessControlPanel->setVisible(m_wirelessItems.count() > 0);
     m_firstSeparator->setVisible(m_wirelessItems.count() > 0);
-    m_secondSeparator->setVisible(m_wirelessItems.count() > 0);
+    m_secondSeparator->setVisible(m_wirelessItems.count() > 0 && m_wiredItems.count() > 0);
 
     updateSelf();
 }
@@ -556,7 +558,7 @@ void NetworkItem::wirelessEnable(bool enable)
         }
     }
     //禁用无线网络时对应的分割线设置为不可见防止两分割线叠加增加分割线高度与下面分割线高度不一样
-    m_secondSeparator->setVisible(enable);
+    m_secondSeparator->setVisible(enable && m_wiredItems.count() > 0);
 }
 
 void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
@@ -1192,7 +1194,7 @@ void NetworkItem::updateMasterControlSwitch()
     /* 更新无线适配器总开关状态（阻塞信号是为了防止重复设置适配器启用状态） */
     m_switchWirelessBtn->blockSignals(true);
     m_switchWirelessBtn->setChecked(m_switchWirelessBtnState);
-    m_secondSeparator->setVisible(m_switchWirelessBtnState);
+    m_secondSeparator->setVisible(m_switchWirelessBtnState && m_wiredItems.count() > 0);
     m_switchWirelessBtn->blockSignals(false);
     /* 根据无线适配器启用状态增/删布局中的组件 */
     for (WirelessItem *wirelessItem : m_wirelessItems) {

@@ -67,8 +67,6 @@ void BluetoothDeviceItem::initActionList()
     m_standarditem->setAccessibleText(m_device->alias());
     m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
     m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
-    //设置蓝牙列表item背景为透明
-    m_standarditem->setBackground(Qt::transparent);
 
     //蓝牙列表可用蓝牙设备信息文字显示高亮
     m_labelAction->setTextColorRole(DPalette::BrightText);
@@ -260,14 +258,6 @@ void BluetoothAdapterItem::onDeviceNameUpdated(const Device *device)
     }
 }
 
-///**
-// * @brief BluetoothAdapterItem::setItemHoverColor 通过代理方式根据当前主题设置蓝牙列表文字颜色和item选中颜色
-// */
-//void BluetoothAdapterItem::setItemHoverColor()
-//{
-//    m_deviceListview->setItemDelegate(m_itemDelegate);
-//}
-
 void BluetoothAdapterItem::initUi()
 {
     m_refreshBtn->setFixedSize(24, 24);
@@ -277,7 +267,7 @@ void BluetoothAdapterItem::initUi()
     setContentsMargins(0, 0, 0, 0);
     m_adapterLabel->setFixedSize(ItemWidth, TitleHeight);
     m_adapterLabel->addButton(m_refreshBtn, 0);
-    m_adapterLabel->addButton(m_adapterStateBtn, 10);
+    m_adapterLabel->addButton(m_adapterStateBtn, 0);
     DFontSizeManager::instance()->bind(m_adapterLabel->label(), DFontSizeManager::T4);
 
     m_adapterStateBtn->setChecked(m_adapter->powered());
@@ -285,6 +275,7 @@ void BluetoothAdapterItem::initUi()
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
     m_deviceListview->setAccessibleName("DeviceItemList");
     m_deviceListview->setModel(m_deviceModel);
@@ -302,6 +293,13 @@ void BluetoothAdapterItem::initUi()
     mainLayout->addWidget(m_seperator);
     mainLayout->addWidget(m_deviceListview);
     mainLayout->addWidget(m_bottomSeperator);
+
+    m_seperator->setVisible(m_deviceListview->count() != 0);
+    m_bottomSeperator->setVisible(m_deviceListview->count() != 0);
+    connect(m_deviceListview, &DListView::rowCountChanged, this, [ = ] {
+        m_seperator->setVisible(m_deviceListview->count() != 0);
+        m_bottomSeperator->setVisible(m_deviceListview->count() != 0);
+    });
 
     m_deviceListview->setItemDelegate(m_itemDelegate);
 
@@ -336,6 +334,7 @@ void BluetoothAdapterItem::initConnect()
         m_refreshBtn->setVisible(state);
         m_deviceListview->setVisible(state);
         m_seperator->setVisible(state);
+        m_bottomSeperator->setVisible(state);
         m_adapterStateBtn->setChecked(state);
         m_adapterStateBtn->setEnabled(true);
         emit adapterPowerChanged();
@@ -346,6 +345,7 @@ void BluetoothAdapterItem::initConnect()
         m_deviceModel->clear();
         m_deviceListview->setVisible(false);
         m_seperator->setVisible(false);
+        m_bottomSeperator->setVisible(false);
         m_adapterStateBtn->setEnabled(false);
         m_refreshBtn->setVisible(state);
         emit requestSetAdapterPower(m_adapter, state);
