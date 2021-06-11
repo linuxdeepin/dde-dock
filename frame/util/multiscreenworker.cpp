@@ -461,6 +461,9 @@ void MultiScreenWorker::onHideStateChanged()
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
         displayAnimation(m_ds.current(), AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
+        // 如果鼠标正在任务栏要显示的区域,就可以不用隐藏(相当于智能隐藏被唤醒一样)
+        if (getDockShowGeometry(m_ds.current(), m_position, m_displayMode).contains(QCursor::pos()))
+            return;
         displayAnimation(m_ds.current(), AniAction::Hide);
     } else {
         Q_UNREACHABLE();
