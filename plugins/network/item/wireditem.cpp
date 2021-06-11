@@ -242,6 +242,11 @@ void WiredItem::refreshConnectivity()
     setWiredStateIcon();
 }
 
+QSize WiredItem::sizeHint() const
+{
+    return QSize(DeviceItem::sizeHint().width(), ItemHeight);
+}
+
 void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
     m_deviceState = state;

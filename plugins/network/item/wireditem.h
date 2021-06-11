@@ -70,6 +70,9 @@ public:
     void setWiredStateIcon();
     void refreshConnectivity() override;
 
+protected:
+    QSize sizeHint() const;
+
 signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
     void wiredStateChanged();

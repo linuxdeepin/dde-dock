@@ -104,6 +104,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_wirelessControlPanel->setFixedHeight(TITLE_HEIGHT);
 
     m_wiredControlPanel = new QWidget(this);
+    m_wiredControlPanel->setFixedHeight(TITLE_HEIGHT);
 
     QLabel *wiredTitle = new QLabel(m_wiredControlPanel);
     wiredTitle->setText(tr("Wired Network"));
@@ -157,7 +158,6 @@ NetworkItem::NetworkItem(QWidget *parent)
     centralWidget->setAutoFillBackground(false);
     m_applet->viewport()->setAutoFillBackground(false);
     m_applet->setVisible(false);
-    setControlBackground();
 
     connect(m_switchWireTimer, &QTimer::timeout, [ = ] {
         m_switchWire = !m_switchWire;
@@ -185,22 +185,6 @@ NetworkItem::NetworkItem(QWidget *parent)
     });
 
     m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
-}
-
-/**
- * @brief NetworkItem::setControlBackground 设置网络界面控件背景颜色
- */
-void NetworkItem::setControlBackground()
-{
-    QPalette backgroud;
-    QColor separatorColor;
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        backgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-    else
-        backgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-
-    m_applet->setAutoFillBackground(true);
-    m_applet->setPalette(backgroud);
 }
 
 QWidget *NetworkItem::itemApplet()
@@ -350,8 +334,6 @@ void NetworkItem::invokeMenuItem(const QString &menuId, const bool checked)
 
 void NetworkItem::refreshIcon()
 {
-    setControlBackground();
-
     // 刷新按钮图标
     QPixmap pixmap;
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
@@ -543,8 +525,14 @@ void NetworkItem::wiredsEnable(bool enable)
         if (wiredItem) {
             wiredItem->setDeviceEnabled(enable);
             wiredItem->setVisible(enable);
+            if (enable)
+                m_wiredLayout->addWidget(wiredItem);
+            else
+                m_wiredLayout->removeWidget(wiredItem);
         }
     }
+
+    updateView();
 }
 
 void NetworkItem::wirelessEnable(bool enable)
@@ -559,6 +547,7 @@ void NetworkItem::wirelessEnable(bool enable)
     }
     //禁用无线网络时对应的分割线设置为不可见防止两分割线叠加增加分割线高度与下面分割线高度不一样
     m_secondSeparator->setVisible(enable && m_wiredItems.count() > 0);
+    updateView();
 }
 
 void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
@@ -1104,6 +1093,7 @@ void NetworkItem::getPluginState()
 
 void NetworkItem::updateView()
 {
+    int height = 0;
     // 固定显示高度即为固定示项目数
     const int constDisplayItemCnt = 10;
     auto wirelessCnt = m_wirelessItems.size();
@@ -1113,15 +1103,18 @@ void NetworkItem::updateView()
             if (wirelessItem && wirelessItem->device()->enabled())
                 // 单个设备开关控制项
                 wirelessItem->setControlPanelVisible(wirelessCnt != 1);
+                height += wirelessItem->itemApplet()->height();
         }
     }
     // 设备总控开关只与是否有设备相关
     m_wirelessControlPanel->setVisible(m_wirelessItems.size());
+    height += m_wirelessItems.size() ? TITLE_HEIGHT + 2 : 0;// 分割线
     m_wiredControlPanel->setVisible(m_wiredItems.size());
+    height += m_wiredItems.size() ? TITLE_HEIGHT : 0;
+    height += m_wiredLayout->count() * ITEM_HEIGHT;
 
-    auto centralWidget = m_applet->widget();
-    centralWidget->setFixedHeight(centralWidget->sizeHint().height());
-    m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), constDisplayItemCnt * ITEM_HEIGHT));
+    m_applet->widget()->setFixedHeight(height);
+    m_applet->setFixedHeight(qMin(height, constDisplayItemCnt * ITEM_HEIGHT));
 
     if (m_wirelessControlPanel->isVisible()) {
         if (!m_wirelessScanTimer->isActive())
@@ -1182,6 +1175,10 @@ void NetworkItem::updateMasterControlSwitch()
 
         // wiredItem->itemApplet()->setVisible(m_switchWiredBtnState); // TODO
         wiredItem->setVisible(m_switchWiredBtnState);
+        if (wiredItem->deviceEabled())
+            m_wiredLayout->addWidget(wiredItem);
+        else
+            m_wiredLayout->removeWidget(wiredItem);
     }
 
     /* 获取无线适配器启用状态 */
