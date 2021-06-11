@@ -40,7 +40,6 @@ DGUI_USE_NAMESPACE
 const int ItemHeight = 36;
 extern const QString DarkType = "_dark.svg";
 extern const QString LightType = ".svg";
-extern void initFontColor(QWidget *widget);
 
 WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *parent)
     : DeviceItem(device, parent)
@@ -61,7 +60,7 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
 
     m_connectedName->setText(m_deviceName);
     m_connectedName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    initFontColor(m_connectedName);
+    m_connectedName->setForegroundRole(QPalette::BrightText);
 
     auto connectionLayout = new QVBoxLayout(this);
     connectionLayout->setMargin(0);

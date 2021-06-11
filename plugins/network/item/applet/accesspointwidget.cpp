@@ -43,7 +43,6 @@ DGUI_USE_NAMESPACE
 
 extern const QString DarkType;
 extern const QString LightType;
-extern void initFontColor(QWidget *widget);
 
 AccessPointWidget::AccessPointWidget(QWidget *parent)
     : QFrame(parent)
@@ -57,7 +56,7 @@ AccessPointWidget::AccessPointWidget(QWidget *parent)
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_ssidBtn->setObjectName("Ssid");
-    initFontColor(m_ssidBtn);
+    m_ssidBtn->setForegroundRole(QPalette::BrightText);
 
     bool isLight = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType);
 

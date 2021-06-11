@@ -182,8 +182,15 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
 
 QSize BluetoothAdapterItem::sizeHint() const
 {
-    return QSize(ItemWidth, m_deviceListview->model()->rowCount() * DeviceItemHeight
-                 + (m_deviceListview->model()->rowCount() > 0 ? m_seperator->sizeHint().height() : 0));// 加上割线的高度
+    int visualHeight = 0;
+    for (int i = 0; i < m_deviceListview->count(); i++)
+        visualHeight += m_deviceListview->visualRect(m_deviceModel->index(i, 0)).height();
+
+    int listMargin = m_deviceListview->contentsMargins().top() + m_deviceListview->contentsMargins().bottom();
+    //显示声音设备列表高度 = 设备的高度 + 间隔 + 边距
+    int viewHeight = visualHeight + m_deviceListview->spacing() * (m_deviceListview->count() - 1) + listMargin;
+
+    return QSize(ItemWidth, m_adapterLabel->height() + (m_adapter->powered() ? m_seperator->sizeHint().height() + viewHeight : 0));// 加上分割线的高度
 }
 
 int BluetoothAdapterItem::currentDeviceCount()
@@ -283,16 +290,19 @@ void BluetoothAdapterItem::initUi()
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     m_deviceListview->setAccessibleName("DeviceItemList");
-    m_deviceListview->setModel(m_deviceModel);
-    m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
+    m_deviceListview->setContentsMargins(0, 0, 0, 0);
     m_deviceListview->setBackgroundType(DStyledItemDelegate::ClipCornerBackground);
     m_deviceListview->setItemRadius(0);
+    m_deviceListview->setFrameShape(QFrame::NoFrame);
     m_deviceListview->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_deviceListview->setSelectionMode(QAbstractItemView::NoSelection);
     m_deviceListview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_deviceListview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_deviceListview->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     m_deviceListview->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_deviceListview->setItemSize(QSize(ItemWidth, DeviceItemHeight));
+    m_deviceListview->setItemMargins(QMargins(0, 0, 0, 0));
+    m_deviceListview->setModel(m_deviceModel);
 
     mainLayout->addWidget(m_adapterLabel);
     mainLayout->addWidget(m_seperator);

@@ -125,7 +125,6 @@ signals:
 
 private:
     void initData();
-//    void setItemHoverColor();
     void initUi();
     void initConnect();
     void setUnnamedDevicesVisible(bool isShow);

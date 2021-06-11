@@ -26,24 +26,6 @@ const QString MenueSettings = "settings";
 #define TITLE_HEIGHT 46
 #define ITEM_HEIGHT 36
 
-extern void initFontColor(QWidget *widget)
-{
-    if (!widget)
-        return;
-
-    auto fontChange = [&](QWidget * widget) {
-        QPalette defaultPalette = widget->palette();
-        defaultPalette.setBrush(QPalette::WindowText, defaultPalette.brightText());
-        widget->setPalette(defaultPalette);
-    };
-
-    fontChange(widget);
-
-    QObject::connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, widget, [ = ] {
-        fontChange(widget);
-    });
-}
-
 NetworkItem::NetworkItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsWidget(new Dock::TipsWidget(this))

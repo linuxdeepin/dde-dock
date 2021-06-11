@@ -36,7 +36,6 @@ DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 extern const int ItemHeight = 30;
-extern void initFontColor(QWidget *widget);
 
 DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     : QWidget(parent)
@@ -45,7 +44,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     , m_loadingIndicator(new DLoadingIndicator(this))
 {
     m_deviceName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    initFontColor(m_deviceName);
+    m_deviceName->setForegroundRole(QPalette::BrightText);
 
     const QPixmap pixmap = DHiDPIHelper::loadNxPixmap(":/wireless/resources/wireless/refresh.svg");
 
