@@ -84,11 +84,13 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
         }
         // 修改插件的order值，位置为队尾
         QString name = localObject.keys().last();
-        localObject.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
-
-        // daemon中同样修改
-        remoteObjectInter.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
-        remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
+        // 此次做一下判断，有可能初始数据不存在pos_*字段，会导致enable字段被修改。或者此处可以循环所有字段是否存在pos_开头的字段？
+        if (name != key) {
+            localObject.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
+            // daemon中同样修改
+            remoteObjectInter.insert(name, QJsonValue::fromVariant(fixedPluginCount)); //Note: QVariant::toJsonValue() not work in Qt 5.7
+            remoteObject.insert(itemInter->pluginName(), remoteObjectInter);
+        }
     }
 
     m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
