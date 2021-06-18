@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
  *
  * Author:     liuxing <liuxing@uniontech.com>
  *
