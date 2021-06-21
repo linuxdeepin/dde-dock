@@ -11,11 +11,13 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Concurrent REQUIRED)
+find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
+pkg_check_modules(DDE-Network-Core REQUIRED dde-network-core)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
@@ -26,7 +28,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
-                                                 ${DDE-Network-Utils_INCLUDE_DIRS}
+                                                 ${DDE-Network-Core_INCLUDE_DIRS}
                                                  ../../interfaces
                                                  ../../frame)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
@@ -35,7 +37,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5Svg_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
-    ${DDE-Network-Utils_LIBRARIES}
+    ${DDE-Network-Core_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
 )
 

@@ -235,7 +235,55 @@
     </message>
 </context>
 <context>
-    <name>NetworkItem</name>
+    <name>NetworkPanel</name>
+    <message>
+        <source>Wired connection: %1</source>
+        <translation>Wired connection: %1</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Wired Network</translation>
+    </message>
+    <message>
+        <source>Wireless connection: %1</source>
+        <translation>Wireless connection: %1</translation>
+    </message>
+    <message>
+        <source>Wireless Network</source>
+        <translation>Wireless Network</translation>
+    </message>
+    <message>
+        <source>Device disabled</source>
+        <translation>Device disabled</translation>
+    </message>
+    <message>
+        <source>Network cable unplugged</source>
+        <translation>Network cable unplugged</translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation>Not connected</translation>
+    </message>
+    <message>
+        <source>Connecting</source>
+        <translation>Connecting</translation>
+    </message>
+    <message>
+        <source>Connected but no Internet access</source>
+        <translation>Connected but no Internet access</translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation>Connection failed</translation>
+    </message>
+    <message>
+        <source>Wired Network</source>
+        <translation>Wired Network</translation>
+    </message>
+    <message>
+        <source>wireless Network</source>
+        <translation>wireless Network</translation>
+    </message>
     <message>
         <source>Disable wired connection</source>
         <translation>Disable wired connection</translation>
@@ -264,45 +312,23 @@
         <source>Network settings</source>
         <translation>Network settings</translation>
     </message>
+</context>
+<context>
+    <name>BaseControllItem</name>
     <message>
-        <source>Device disabled</source>
-        <translation>Device disabled</translation>
+        <source>wireless</source>
+        <translation>wireless</translation>
     </message>
     <message>
-        <source>Wireless connection: %1</source>
-        <translation>Wireless connection: %1</translation>
+        <source>wired</source>
+        <translation>wired</translation>
     </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Wired connection: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Not connected</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Connecting</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connected but no Internet access</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Network cable unplugged</translation>
-    </message>
+</context>
+<context>
+    <name>WirelessController</name>
     <message>
         <source>Wireless Network</source>
         <translation>Wireless Network</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Wired Network</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Connection failed</translation>
     </message>
 </context>
 <context>

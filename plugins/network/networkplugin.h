@@ -23,14 +23,11 @@
 #define NETWORKPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "item/deviceitem.h"
-
-#include <NetworkWorker>
-#include <NetworkModel>
 
 #define NETWORK_KEY "network-item-key"
 
-class NetworkItem;
+class NetworkPanel;
+
 class NetworkPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -38,7 +35,8 @@ class NetworkPlugin : public QObject, PluginsItemInterface
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "network.json")
 
 public:
-    explicit NetworkPlugin(QObject *parent = nullptr);
+    explicit NetworkPlugin(QObject *parent = Q_NULLPTR);
+    ~NetworkPlugin() Q_DECL_OVERRIDE;
 
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
@@ -59,22 +57,14 @@ public:
 
     void pluginSettingsChanged() override;
 
-//    static bool isConnectivity();
-
-private slots:
-    void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
-
 private:
     void loadPlugin();
     void refreshPluginItemsVisible();
+    bool hasDevice();
 
 private:
-    QScopedPointer<dde::network::NetworkModel> m_networkModel;
-    QScopedPointer<dde::network::NetworkWorker> m_networkWorker;
 
-    QScopedPointer<NetworkItem> m_networkItem;
-
-    bool m_hasDevice;
+    QScopedPointer<NetworkPanel> m_networkPanel;
 };
 
 #endif // NETWORKPLUGIN_H

@@ -5,6 +5,7 @@
 #include "tipswidget.h"
 #include "dockpopupwindow.h"
 #include "statebutton.h"
+#include "horizontalseperator.h"
 
 #include "launcheritem.h"
 #include "appitem.h"
@@ -29,17 +30,7 @@
 #include "fashiontray/containers/normalcontainer.h"
 #include "fashiontray/containers/spliteranimated.h"
 
-// 这部分由sound插件单独维护,这样做是因为在标记volumeslider这个类时,需要用到其setValue的实现,
-// 但插件的源文件dock这边并没有包含,不想引入复杂的包含关系,其实最好的做法就是像sound插件这样,谁维护谁的
-//#include "../plugins/sound/sounditem.h"
-//#include "../plugins/sound/soundapplet.h"
-//#include "../plugins/sound/sinkinputwidget.h"
-//#include "../plugins/sound/componments/volumeslider.h"
-//#include "../plugins/sound/componments/horizontalseparator.h"
-
 #include "showdesktopwidget.h"
-#include "networkitem.h"
-#include "item/applet/devicecontrolwidget.h"
 #include "datetimewidget.h"
 #include "onboarditem.h"
 #include "trashwidget.h"
@@ -47,6 +38,15 @@
 #include "shutdownwidget.h"
 #include "multitaskingwidget.h"
 #include "overlaywarningwidget.h"
+#include "networkpanel.h"
+
+// 这部分由sound插件单独维护,这样做是因为在标记volumeslider这个类时,需要用到其setValue的实现,
+// 但插件的源文件dock这边并没有包含,不想引入复杂的包含关系,其实最好的做法就是像sound插件这样,谁维护谁的
+//#include "../plugins/sound/sounditem.h"
+//#include "../plugins/sound/soundapplet.h"
+//#include "../plugins/sound/sinkinputwidget.h"
+//#include "../plugins/sound/componments/volumeslider.h"
+//#include "../plugins/sound/componments/horizontalseparator.h"
 
 #include <DIconButton>
 #include <DSwitchButton>
@@ -114,9 +114,8 @@ SET_FORM_ACCESSIBLE(QScrollArea, "QScrollArea")
 SET_FORM_ACCESSIBLE(QFrame, "QFrame")
 SET_FORM_ACCESSIBLE(QGraphicsView, "QGraphicsView")
 SET_FORM_ACCESSIBLE(DragWidget, "DragWidget")
-SET_FORM_ACCESSIBLE(NetworkItem, "NetworkItem")
+SET_FORM_ACCESSIBLE(NetworkPanel, "NetworkPanel")
 SET_FORM_ACCESSIBLE(StateButton, "StateButton")
-SET_FORM_ACCESSIBLE(DeviceControlWidget, "DeviceControlWidget")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -181,9 +180,8 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
             ELSE_USE_ACCESSIBLE(classname, QFrame)
             ELSE_USE_ACCESSIBLE(classname, QGraphicsView)
             ELSE_USE_ACCESSIBLE(classname, DragWidget)
-            ELSE_USE_ACCESSIBLE(classname, NetworkItem)
+            ELSE_USE_ACCESSIBLE(classname, NetworkPanel)
             ELSE_USE_ACCESSIBLE(classname, StateButton)
-            ELSE_USE_ACCESSIBLE(classname, DeviceControlWidget)
             ELSE_USE_ACCESSIBLE(classname, HorizontalSeperator);
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
