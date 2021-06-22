@@ -410,6 +410,7 @@ void DockSettings::onDisplayModeChanged()
 
     emit displayModeChanegd();
     calculateWindowConfig();
+    emit windowGeometryChanged();
 
     //QTimer::singleShot(1, m_itemManager, &DockItemManager::sortPluginItems);
 }

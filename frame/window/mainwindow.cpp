@@ -746,6 +746,7 @@ void MainWindow::updateGeometry()
     QWidget::setFixedSize(m_settings->m_mainWindowSize);
 
     resizeMainPanelWindow();
+    m_size = m_settings->m_mainWindowSize;
 
     m_mainPanel->update();
 }
