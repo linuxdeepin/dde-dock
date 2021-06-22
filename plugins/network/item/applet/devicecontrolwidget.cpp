@@ -61,13 +61,15 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->setMargin(0);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(0, 0, 0, 0);
+    infoLayout->setContentsMargins(20, 0, 0, 0);
     infoLayout->addWidget(m_deviceName);
     infoLayout->addStretch();
     infoLayout->addWidget(m_loadingIndicator);
     infoLayout->addSpacing(4);
     infoLayout->addWidget(m_switchBtn);
-    infoLayout->addSpacing(8);
+    // DSwitchButton 按照设计要求: 在保持现有控件的尺寸下,这里需要预留绘制focusRect的区域,borderWidth为2,间隙宽度为2
+    // 所以此处按设计的要求 10-4 = 6
+    infoLayout->addSpacing(6);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addLayout(infoLayout);

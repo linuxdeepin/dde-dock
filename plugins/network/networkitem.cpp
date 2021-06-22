@@ -76,7 +76,9 @@ NetworkItem::NetworkItem(QWidget *parent)
     QHBoxLayout *switchWirelessLayout = new QHBoxLayout;
     switchWirelessLayout->setMargin(0);
     switchWirelessLayout->setSpacing(0);
-    switchWirelessLayout->setContentsMargins(20, 0, 8, 0);
+    // DSwitchButton 按照设计要求: 在保持现有控件的尺寸下,这里需要预留绘制focusRect的区域,borderWidth为2,间隙宽度为2
+    // 所以此处按设计的要求 10-4 = 6 right margin
+    switchWirelessLayout->setContentsMargins(20, 0, 6, 0);
     switchWirelessLayout->addWidget(wirelessTitle);
     switchWirelessLayout->addStretch();
     switchWirelessLayout->addWidget(m_loadingIndicator);
@@ -101,7 +103,7 @@ NetworkItem::NetworkItem(QWidget *parent)
 
     // 有线网络控制器
     QHBoxLayout *switchWiredLayout = new QHBoxLayout;
-    switchWiredLayout->setContentsMargins(20, 0, 10, 0);
+    switchWiredLayout->setContentsMargins(20, 0, 6, 0);
     switchWiredLayout->addWidget(wiredTitle);
     switchWiredLayout->addStretch();
     switchWiredLayout->addWidget(m_switchWiredBtn);
@@ -1075,7 +1077,6 @@ void NetworkItem::getPluginState()
 
 void NetworkItem::updateView()
 {
-    int height = 0;
     // 固定显示高度即为固定示项目数
     const int constDisplayItemCnt = 10;
     auto wirelessCnt = m_wirelessItems.size();
@@ -1085,18 +1086,14 @@ void NetworkItem::updateView()
             if (wirelessItem && wirelessItem->device()->enabled())
                 // 单个设备开关控制项
                 wirelessItem->setControlPanelVisible(wirelessCnt != 1);
-                height += wirelessItem->itemApplet()->height();
         }
     }
     // 设备总控开关只与是否有设备相关
-    m_wirelessControlPanel->setVisible(m_wirelessItems.size());
-    height += m_wirelessItems.size() ? TITLE_HEIGHT + 2 : 0;// 分割线
+    m_wirelessControlPanel->setVisible(wirelessCnt);
     m_wiredControlPanel->setVisible(m_wiredItems.size());
-    height += m_wiredItems.size() ? TITLE_HEIGHT : 0;
-    height += m_wiredLayout->count() * ITEM_HEIGHT;
 
-    m_applet->widget()->setFixedHeight(height);
-    m_applet->setFixedHeight(qMin(height, constDisplayItemCnt * ITEM_HEIGHT));
+    m_applet->widget()->adjustSize();
+    m_applet->setFixedHeight(qMin(m_applet->widget()->height(), constDisplayItemCnt * ITEM_HEIGHT));
 
     if (m_wirelessControlPanel->isVisible()) {
         if (!m_wirelessScanTimer->isActive())

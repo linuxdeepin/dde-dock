@@ -49,7 +49,7 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
     m_layout->setMargin(0);
     m_layout->setSpacing(4);
-    m_layout->setContentsMargins(20, 0, 8, 0);
+    m_layout->setContentsMargins(20, 0, 6, 0);
     m_layout->addWidget(m_label, 0, Qt::AlignLeft | Qt::AlignHCenter);
     m_layout->addStretch();
 
