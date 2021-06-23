@@ -968,6 +968,9 @@ void MainWindow::onDragFinished()
 
 
     setStrutPartial();
+
+    // 拖拽完成通知尺寸变化
+    emit panelGeometryChanged();
 }
 
 void MainWindow::themeTypeChanged(DGuiApplicationHelper::ColorType themeType)
