@@ -382,6 +382,16 @@ void MainWindow::leaveEvent(QEvent *e)
     m_leaveDelayTimer->start();
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
+    Q_EMIT panelGeometryChanged();
+
+    adjustShadowMask();
+
+    return DBlurEffectWidget::resizeEvent(event);
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
 {
     QWidget::dragEnterEvent(e);
@@ -486,8 +496,6 @@ void MainWindow::initConnections()
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_panelShowAni, &QPropertyAnimation::finished, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::panelGeometryChanged);
-    connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::panelGeometryChanged);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));

@@ -78,6 +78,7 @@ private:
     void leaveEvent(QEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
+    void resizeEvent(QResizeEvent *event) override;
 
     void initSNIHost();
     void initComponents();
