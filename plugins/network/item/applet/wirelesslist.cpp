@@ -120,22 +120,7 @@ int WirelessList::APcount()
 void WirelessList::APAdded(const QJsonObject &apInfo)
 {
     AccessPoint ap(apInfo);
-    const auto mIndex = m_apList.indexOf(ap);
-    if (mIndex != -1) {
-        if (ap.strength() < 5 && ap.path() == m_apList.at(mIndex).path())
-            m_apList.removeAt(mIndex);
-        else if ((ap.strength() < m_apList.at(mIndex).strength() && ap.path() == m_apList.at(mIndex).path())
-                  || (ap.strength() > m_apList.at(mIndex).strength()))
-            m_apList.replace(mIndex, ap);
-        else
-            return;
-    } else {
-        if (ap.strength() < 5)
-            return;
-        m_apList.append(ap);
-    }
-
-    m_updateAPTimer->start();
+    updateAP(ap);
 }
 
 void WirelessList::APRemoved(const QJsonObject &apInfo)
@@ -190,27 +175,7 @@ void WirelessList::loadAPList()
 void WirelessList::APPropertiesChanged(const QJsonObject &apInfo)
 {
     AccessPoint ap(apInfo);
-    const auto mIndex = m_apList.indexOf(ap);
-    if(ap.strength() < 5)
-    {
-      if(mIndex != -1){
-         if (ap.path() == m_apList.at(mIndex).path()) {
-              m_apList.removeAt(mIndex);
-              m_updateAPTimer->start();
-          }
-       }
-    }else {
-       if (mIndex != -1) {
-           if ((ap.strength() < m_apList.at(mIndex).strength() && ap.path() == m_apList.at(mIndex).path())
-                   || (ap.strength() > m_apList.at(mIndex).strength()))
-               m_apList.replace(mIndex, ap);
-           else
-               return;
-        }else {
-           m_apList.append(ap);
-        }
-        m_updateAPTimer->start();
-    }
+    updateAP(ap);
 }
 
 void WirelessList::updateAPList()
@@ -295,6 +260,41 @@ void WirelessList::updateAPList()
     emit requestUpdatePopup();
 
     QTimer::singleShot(100, this, &WirelessList::updateIndicatorPos);
+}
+
+/**
+ * @brief WirelessList::updateAP
+ * @param ap
+ * @note 更新m_apList中的信息
+ */
+void WirelessList::updateAP(const AccessPoint &ap)
+{
+    const auto mIndex = m_apList.indexOf(ap);
+    if (ap.strength() < 5) {
+        if (mIndex != -1 && ap.path() == m_apList.at(mIndex).path()) {
+            m_apList.removeAt(mIndex);
+            m_updateAPTimer->start();
+        }
+    } else {
+       if (mIndex != -1) {
+           /* 1.如果是当前已连接AP则直接更新
+            * 2.否则，如果当前保存的apPath相等则直接更新，如果不等，则保存strength高的ap
+            */
+           if (ap.ssid() == m_device->activeApSsid()) {
+               if (ap.path() == m_device->activeApPath())
+                    m_apList.replace(mIndex, ap);
+               else
+                   return;
+           } else if (ap.path() == m_apList.at(mIndex).path() || (ap.strength() > m_apList.at(mIndex).strength())) {
+               m_apList.replace(mIndex, ap);
+           } else {
+               return;
+           }
+        } else {
+           m_apList.append(ap);
+        }
+        m_updateAPTimer->start();
+    }
 }
 
 void WirelessList::onEnableButtonToggle(const bool enable)

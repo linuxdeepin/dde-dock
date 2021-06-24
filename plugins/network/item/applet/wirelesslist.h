@@ -77,6 +77,7 @@ private slots:
 private:
     AccessPoint accessPointBySsid(const QString &ssid);
     AccessPointWidget *accessPointWidgetByAp(const AccessPoint ap);
+    void updateAP(const AccessPoint &ap);
 
 private:
     QPointer<dde::network::WirelessDevice> m_device;
