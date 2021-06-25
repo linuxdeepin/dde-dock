@@ -38,6 +38,7 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QX11Info>
+#include <QtConcurrent>
 #include <qpa/qplatformwindow.h>
 
 #include <X11/X.h>
@@ -609,7 +610,8 @@ void MainWindow::sendNotifications()
     actionButton << "reload" << tr("Exit Safe Mode");
     QVariantMap hints;
     hints["x-deepin-action-reload"] = QString("dbus-send,--session,--dest=com.deepin.dde.Dock,--print-reply,/com/deepin/dde/Dock,com.deepin.dde.Dock.ReloadPlugins");
-    QTimer::singleShot(0, this, [=] {
+    // 在进入安全模式时，执行此DBUS耗时25S左右，导致任务栏显示阻塞，所以使用线程调用
+    QtConcurrent::run(QThreadPool::globalInstance(), [=] {
         DDBusSender()
                 .service("com.deepin.dde.Notification")
                 .path("/com/deepin/dde/Notification")

@@ -69,6 +69,11 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
+    // 必须初始化父窗口，否则当主题切换之后再设置父窗口的时候palette会更改为主题切换前的palette
+    if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey)) {
+        w->setParent(PopupWindow.data());
+    }
+
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
 

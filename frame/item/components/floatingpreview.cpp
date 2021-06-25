@@ -107,7 +107,9 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     }
 
     QTimer::singleShot(0, this, [ = ] {
-        setGeometry(snap->geometry());
+        // 此处获取的snap->geometry()有可能是错误的，所以做个判断并且在resizeEvent中也做处理
+        if(snap->width() == SNAP_WIDTH)
+            setGeometry(snap->geometry());
     });
 }
 
@@ -135,17 +137,6 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
-
-    // 预览图
-    QBrush brush;
-    brush.setTextureImage(snapshot);
-    painter.setBrush(brush);
-    painter.setPen(Qt::NoPen);
-    painter.scale(1 / ratio, 1 / ratio);
-    painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
-    painter.drawRoundedRect(snapshot_geometry, radius * ratio, radius * ratio);
-    painter.translate(QPoint(-offset_x * ratio, -offset_y * ratio));
-    painter.scale(ratio, ratio);
 
     // 选中外框
     QPen pen;
@@ -179,8 +170,13 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if (watched == m_tracked && event->type() == QEvent::Destroy)
-        hide();
+    if (watched == m_tracked) {
+        if (event->type() == QEvent::Destroy)
+            hide();
+
+        if (event->type() == QEvent::Resize && m_tracked->width() == SNAP_WIDTH)
+            setGeometry(m_tracked->geometry());
+    }
 
     return QWidget::eventFilter(watched, event);
 }

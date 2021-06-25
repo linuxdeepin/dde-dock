@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ~ 2028 Deepin Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
  *
