@@ -34,7 +34,9 @@ namespace Utils {
 
     inline QScreen * screenAtByScaled(const QPoint &point) {
         for (QScreen *screen : qApp->screens()) {
-            if (screen->geometry().contains(point)) {
+            const QRect r { screen->geometry() };
+            const QRect rect { r.topLeft(), r.size() * screen->devicePixelRatio() };
+            if (rect.contains(point)) {
                 return screen;
             }
         }
