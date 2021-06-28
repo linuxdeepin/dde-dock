@@ -173,8 +173,9 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
     for (auto device : devices) {
         if (device && device->type() == NetworkDevice::Wired)
             wiredDeviceCnt++;
-        else
+        else if (!static_cast<WirelessDevice *>(device)->supportHotspot()) {
             wirelessDeviceCnt++;
+        }
     }
 
     // 编号 (与控制中心有线设备保持一致命名)
@@ -203,6 +204,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             connect(static_cast<WiredItem *>(item), &WiredItem::requestSetDeviceEnable, m_networkModel, &NetworkModel::onDeviceEnable);
             break;
         case NetworkDevice::Wireless:
+            if (static_cast<WirelessDevice *>(device)->supportHotspot())
+                break;
             item = new WirelessItem(static_cast<WirelessDevice *>(device), m_networkModel);
             static_cast<WirelessItem *>(item)->setDeviceInfo(wirelessDeviceCnt == 1 ? -1 : ++wirelessNum);
             wirelessItems.insert(path, static_cast<WirelessItem *>(item));
