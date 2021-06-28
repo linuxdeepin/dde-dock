@@ -129,7 +129,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_applet->setWidget(centralWidget);
     m_applet->setFrameShape(QFrame::NoFrame);
     m_applet->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_applet->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     centralWidget->setAutoFillBackground(false);
     m_applet->viewport()->setAutoFillBackground(false);
     m_applet->setVisible(false);
@@ -808,6 +808,7 @@ void NetworkItem::updateView()
 
     // 分割线 都有设备时才有
     auto centralWidget = m_applet->widget();
+    centralWidget->adjustSize();
     centralWidget->setFixedHeight(centralWidget->sizeHint().height());
     m_applet->setFixedHeight(qMin(centralWidget->sizeHint().height(), constDisplayItemCnt * ItemHeight));
 }
