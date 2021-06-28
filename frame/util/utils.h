@@ -38,7 +38,7 @@ namespace Utils {
  * @param parent 创建指针的付对象
  * @return
  */
-inline const QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
+inline QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
     if (QGSettings::isSchemaInstalled(schema_id.toUtf8())) {
         QGSettings *settings = new QGSettings(schema_id.toUtf8(), path, parent);
         return settings;
@@ -101,7 +101,28 @@ inline const QVariant SettingValue(const QString &schema_id, const QByteArray &p
         qDebug() << "Cannot find gsettings, schema_id:" << schema_id
                  << " path:" << path << " key:" << key
                  << "Use fallback value:" << fallback;
+        // 如果settings->keys()不包含key则会存在内存泄露，所以需要释放
+        if (settings)
+            delete settings;
+
         return fallback;
+    }
+}
+
+inline bool SettingSaveValue(const QString &schema_id, const QByteArray &path, const QString &key, const QVariant &value ){
+    QGSettings *settings = SettingsPtr(schema_id, path);
+
+    if (settings && ((settings->keys().contains(key)) || settings->keys().contains(qtify_name(key.toUtf8().data())))) {
+        settings->set(key, value);
+        delete settings;
+        return true;
+    } else{
+        qDebug() << "Cannot find gsettings, schema_id:" << schema_id
+                 << " path:" << path << " key:" << key;
+        if (settings)
+            delete settings;
+
+        return false;
     }
 }
 
