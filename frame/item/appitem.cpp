@@ -122,6 +122,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
     connect(GSettingsByDockApp(), &QGSettings::changed, this, &AppItem::onGSettingsChanged);
+    connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, [ = ] { onGSettingsChanged("enable"); });
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
     connect(m_refershIconTimer, &QTimer::timeout, this, [ = ]() {
@@ -705,7 +707,9 @@ void AppItem::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByApp()->keys().contains("enable") && GSettingsByApp()->get("enable").toBool();
-        setVisible(isEnable && setting->get("enable").toBool());
+        bool open = !m_itemEntryInter->windowInfos().isEmpty();
+        // 如果应用已经打开的情况下,隐藏驻留时也不应把应用图标隐藏
+        setVisible(open || (isEnable && setting->get("enable").toBool()));
     }
 }
 
