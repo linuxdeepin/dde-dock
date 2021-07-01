@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Zapri varni način</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Varni način sidrišča</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Sidrišče deluje v varnem načinu. Izhod za pravilen prikaz</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Vtičniki</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Polnjenje %1 bo končano čez %2 ur in %3 min</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Napolnjen</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Zmogljivost %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Prazno</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Sistemski pladenj</translation>
     </message>
 </context>
 <context>

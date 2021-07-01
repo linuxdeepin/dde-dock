@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>Charging %1, %2 hr %3 min until full</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Charged</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacity %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Empty</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>System Tray</translation>
     </message>
 </context>
 <context>

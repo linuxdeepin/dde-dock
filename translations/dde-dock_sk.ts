@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Pluginy</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>Nabíjanie %1, %2 hod %3 min do plnej kapacity</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Nabitý</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Kapacita %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Vysypať</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Systémový panel</translation>
     </message>
 </context>
 <context>

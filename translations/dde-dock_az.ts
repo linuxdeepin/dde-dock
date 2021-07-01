@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Təhlükəsiz rejimdən çıxın</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dok - Təhlükəsiz rejim</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dok təhlükəsiz rejimdədir, onun düzgün göstərilməsi üçün çıxın</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Qoşmalar</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Yalnız əsas ekranda</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Kursorun olduğu ekranda</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Dok&apos;da göstərmək</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Yüklənmə %1, dolmağa %2 saat %3 dəq qalır</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Yükləndi</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Tutum %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Boş</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Sistem çubuğu</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -157,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Exit Safe Mode</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Dock - Safe Mode</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"></translation>
+        <translation>The Dock is in safe mode, please exit to show it properly</translation>
     </message>
 </context>
 <context>
@@ -221,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Plugins</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Only on main screen</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>On screen where the cursor is</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Show the Dock</translation>
     </message>
 </context>
 <context>
@@ -358,10 +368,6 @@
         <translation>Charging %1, %2 hr %3 min until full</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Charged</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacity %1</translation>
     </message>
@@ -485,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Empty</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>System Tray</translation>
     </message>
 </context>
 <context>

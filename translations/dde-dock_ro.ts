@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Extensii</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>Încărcare %1, %2 Ore %3 Min rămase până la plin</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Încărcat</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capactitate %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Gol</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Platou de sistem</translation>
     </message>
 </context>
 <context>

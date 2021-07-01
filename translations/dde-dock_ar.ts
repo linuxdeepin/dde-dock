@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>الإضافات</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>جاري الشحن 1%, 2% ساعة 3% دقيقة للاكتمال</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>مشحون</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>فارغ</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>منطقة إعلام النظام</translation>
     </message>
 </context>
 <context>

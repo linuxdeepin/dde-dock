@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Poistu vikasietotilasta</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Paneeli - vikasietotila</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Paneeli on vikasietotilassa. Poistu nähtyäsi sen toimivan oikein</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Lisäosat</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Vain päänäytöllä</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Näytöllä, missä kohdistin on</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Näytä paneeli</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Lataa %1, %2 t %3 min täyteen</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Ladattu</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Varaus %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Tyhjennä</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Ilmaisinalue</translation>
     </message>
 </context>
 <context>

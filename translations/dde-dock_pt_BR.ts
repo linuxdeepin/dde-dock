@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Sair do Modo de Segurança</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Modo de Segurança</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>A Dock está em modo de segurança; saia para exibi-la corretamente</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Plugins</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Somente na tela principal</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Na tela onde está o cursor</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Exibir a dock</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Carregando %1 - %2h%3 até completar</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Carregado</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>%1 Carregado</translation>
     </message>
@@ -441,7 +449,7 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Sem Áudio</translation>
+        <translation>Sem áudio</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Esvaziar</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Bandeja do Sistema</translation>
     </message>
 </context>
 <context>

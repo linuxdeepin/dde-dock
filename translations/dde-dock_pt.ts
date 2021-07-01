@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Sair do Modo Seguro</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Doca - Modo Seguro</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>A Doca está em modo seguro, saia para a mostrar corretamente</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Plugins</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Apenas no ecrã principal</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>No ecrã onde o cursor está</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Mostrar a Doca</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>A carregar %1, %2 hr %3 min até ficar carregada</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Carregado</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacidade %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Esvaziar</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Área de notificação do sistema</translation>
     </message>
 </context>
 <context>

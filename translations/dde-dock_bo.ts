@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>འཇུག་ཆས།</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>བརྙན་ཡོལ་ཨ་མ་ཁོ་ན་མངོན་པ།</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>ཙི་གུའི་གནས་ཡུལ་ལྟར་མངོན་པ།</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>བརྙན་ཡོལ་མང་པོ་འཆར་བའི་སྒྲིག་འགོད།</translation>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>གློག་གསོག་བཞིན་ཡོད་%1 ད་དུང་ཆུ་ཚོད་%2དང་སྐར་མ་%3དགོས།</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>ཁེངས་ཟིན།</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>གློག་ཚད་%1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>གསལ་ཐོ་གཙང་སེལ།</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>རྒྱུད་ཁོངས་སྡེར་མ།</translation>
     </message>
 </context>
 <context>

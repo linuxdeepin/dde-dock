@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>プラグイン</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>充電中 %1、充電完了まで %2 時間 %3 分</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>充電完了</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>バッテリー残量 %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>空</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>システムトレイ</translation>
     </message>
 </context>
 <context>

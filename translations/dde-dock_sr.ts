@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Изађи из безбедног режима</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Док - Безбедни режим</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Док је у безбедном режиму, изађите за нормалан приказ</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Додаци</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Само на главном екрану</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>На екрану где је показивач</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Прикажи док</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Пуни се %1, %2 ч %3 мин преостало</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Напуњено</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Ниво %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Испразни</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Системска касета</translation>
     </message>
 </context>
 <context>

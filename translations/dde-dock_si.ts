@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>ආධාරක යෙදවුම්</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>%1 ආරෝපණය වෙමින්, සම්පූර්ණ විමට පැය %2 මිනිත්තු %3</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>ආරෝපිතයි</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>ධාරිතාවය %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>හිස්</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>පද්ධති තට්ටුව</translation>
     </message>
 </context>
 <context>

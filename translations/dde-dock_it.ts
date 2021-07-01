@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Esci dalla modalità provvisoria</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Modalità provvisoria</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>La Dock è in modalità provvisoria, esci per mostrarla in modo tradizionale</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Plugin</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Solo sullo schermo principale</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Sullo schermo dove è presente il cursore</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Mostra la Dock</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Carica %1, %2 ore e %3 min. per la carica completa</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Carico</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Carica %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Svuota</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Tray di Sistema</translation>
     </message>
 </context>
 <context>

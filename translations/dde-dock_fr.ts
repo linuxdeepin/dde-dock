@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode sans échec de sortie</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Mode sans échec</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Le Dock est en mode sans échec, veuillez quitter pour l&apos;afficher correctement</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Mode étendu </translation>
+        <translation>Mode étendu</translation>
     </message>
     <message>
         <source>Top</source>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Extensions</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Uniquement sur l&apos;écran principal</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Sur l&apos;écran où se trouve le curseur</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Afficher le dock</translation>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>En charge %1, %2 heures et %3 minutes avant la charge complète</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Chargé</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacité %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Vide</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Zone de notification</translation>
     </message>
 </context>
 <context>

@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>플러그인</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>%1 충전중, 완전 충전까지 %2시간 %3분 남음</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>충전됨</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>용량 %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>비우기</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>시스템 트레이</translation>
     </message>
 </context>
 <context>

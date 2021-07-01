@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Surt del mode segur</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Acoblador - Mode segur</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;acoblador és en mode segur. Si us plau, sortiu-ne perquè es mostri adequadament.</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Connectors</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -356,10 +368,6 @@
         <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Carregada</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacitat %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Buit</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Safata del sistema</translation>
     </message>
 </context>
 <context>

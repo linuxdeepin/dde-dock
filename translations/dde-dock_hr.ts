@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Priključci</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>Punim %1, %2 hr %3 min dok ne bude potpuno pun</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Napunjeno</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Kapacitet %1</translation>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>Prazno</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Sustavski pladanj</translation>
     </message>
 </context>
 <context>

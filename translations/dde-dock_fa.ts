@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>پلاگین ها</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -356,10 +368,6 @@
         <translation>درحال شارژ %1 ، %2 ساعت و  %3 دقیقه تا شارژ کامل</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
@@ -483,13 +491,6 @@
     <message>
         <source>Empty</source>
         <translation>خالی</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>سینی سیستم</translation>
     </message>
 </context>
 <context>
