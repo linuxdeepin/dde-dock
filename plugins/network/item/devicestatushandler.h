@@ -24,9 +24,14 @@
 
 #include <QObject>
 
-class DeviceController;
-class UWiredDevice;
-class UWirelessDevice;
+namespace dde {
+  namespace network {
+    class UWiredDevice;
+    class UWirelessDevice;
+  }
+}
+
+using namespace dde::network;
 
 enum class NetDeviceStatus {
     Unknown = 0,

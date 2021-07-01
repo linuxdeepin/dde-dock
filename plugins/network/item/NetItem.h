@@ -29,21 +29,26 @@
 #include <QJsonObject>
 #include <QStyledItemDelegate>
 
-#include <unetworkconst.h>
-
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
-class DeviceController;
 class NetworkDevice;
 class NetItem;
 class QLabel;
 class QPushButton;
-class UNetworkDeviceBase;
-class UWiredDevice;
-class UWirelessDevice;
-class UAccessPoints;
-class UWiredConnection;
+
+namespace dde {
+  namespace network {
+    class UNetworkDeviceBase;
+    class UWiredDevice;
+    class UWirelessDevice;
+    class UAccessPoints;
+    class UWiredConnection;
+    enum class UDeviceType;
+  }
+}
+
+using namespace dde::network;
 
 namespace Dtk {
   namespace Widget {
@@ -98,7 +103,7 @@ class DeviceControllItem : public NetItem
     Q_OBJECT
 
 public:
-    DeviceControllItem(QWidget *parent, UDeviceType deviceType);
+    DeviceControllItem(const UDeviceType &deviceType, QWidget *parent);
     ~DeviceControllItem() Q_DECL_OVERRIDE;
 
     void setDevices(const QList<UNetworkDeviceBase *> &devices);

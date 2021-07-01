@@ -43,6 +43,7 @@
 #define SWITCH_HEIGHT 32
 
 DWIDGET_USE_NAMESPACE
+
 /**
  * 单个列表项的基类
  */
@@ -72,7 +73,7 @@ QWidget *NetItem::parentWidget()
  * @brief baseControllItem::baseControllItem
  * 总线控制器
  */
-DeviceControllItem::DeviceControllItem(QWidget *parent,UDeviceType deviceType)
+DeviceControllItem::DeviceControllItem(const UDeviceType &deviceType, QWidget *parent)
     : NetItem(parent)
     , m_deviceType(deviceType)
 {
@@ -196,6 +197,7 @@ UWiredDevice *WiredControllItem::device()
 
 void WiredControllItem::updateView()
 {
+    standardItem()->setText(m_device->deviceName());
     m_switcher->setChecked(m_device->isEnabled());
 }
 
@@ -274,6 +276,7 @@ UWirelessDevice *WirelessControllItem::device()
 
 void WirelessControllItem::updateView()
 {
+    standardItem()->setText(m_device->deviceName());
     m_switcher->setChecked(m_device->isEnabled());
 
     // 刷新按钮图标

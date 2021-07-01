@@ -268,7 +268,7 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
     if (wirelessDevices.size() > 1) {
         DeviceControllItem *ctrl = findBaseController(UDeviceType::Wireless);
         if (!ctrl)
-            ctrl = new DeviceControllItem(m_netListView->viewport(), UDeviceType::Wireless);
+            ctrl = new DeviceControllItem(UDeviceType::Wireless, m_netListView->viewport());
         else
             ctrl->updateView();
 
@@ -311,7 +311,7 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
     if (wiredDevices.size() > 1) {
         DeviceControllItem *ctrl = findBaseController(UDeviceType::Wired);
         if (!ctrl)
-            ctrl = new DeviceControllItem(m_netListView->viewport(), UDeviceType::Wired);
+            ctrl = new DeviceControllItem(UDeviceType::Wired, m_netListView->viewport());
         else
             ctrl->updateView();
 

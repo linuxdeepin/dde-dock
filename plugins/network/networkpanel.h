@@ -40,11 +40,17 @@ namespace Dock {
   class TipsWidget;
 }
 
+namespace dde {
+  namespace network {
+    enum class UDeviceType;
+    class UNetworkDeviceBase;
+  }
+}
+
 class QTimer;
 class NetItem;
-class UNetworkDeviceBase;
 
-enum class UDeviceType;
+using namespace dde::network;
 
 class NetworkPanel : public QWidget
 {
