@@ -44,11 +44,10 @@ MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
         if (!m_proxyInter || !m_pluginLoaded)
             return;
 
-        if (DWindowManagerHelper::instance()->hasComposite()) {
+        if (DWindowManagerHelper::instance()->hasComposite() && !pluginIsDisable())
             m_proxyInter->itemAdded(this, PLUGIN_KEY);
-        } else {
+        else
             m_proxyInter->itemRemoved(this, PLUGIN_KEY);
-        }
     });
 }
 
