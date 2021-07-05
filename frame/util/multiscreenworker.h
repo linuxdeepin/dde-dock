@@ -177,7 +177,7 @@ public:
     void updatePrimary(const QString &primary)
     {
         m_primary = primary;
-        if (m_currentScreen.isEmpty()) {
+        if (!primary.isEmpty()) {
             updateDockedScreen(primary);
         }
     }
