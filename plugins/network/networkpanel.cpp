@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -23,7 +23,7 @@
 #include "constants.h"
 #include "../../widgets/tipswidget.h"
 #include "utils.h"
-#include <item/NetItem.h>
+#include <item/netitem.h>
 #include "item/devicestatushandler.h"
 #include <imageutil.h>
 
@@ -35,11 +35,10 @@
 #include <QScroller>
 #include <QVBoxLayout>
 
-#include <unetworkcontroller.h>
-#include <unetworkcontroller.h>
-#include <unetworkdevicebase.h>
-#include <uwireddevice.h>
-#include <uwirelessdevice.h>
+#include <networkcontroller.h>
+#include <networkdevicebase.h>
+#include <wireddevice.h>
+#include <wirelessdevice.h>
 
 const int ItemWidth = 250;
 const QString MenueEnable = "enable";
@@ -52,7 +51,6 @@ NetworkPanel::NetworkPanel(QWidget *parent)
     , m_refreshIconTimer(new QTimer(this))
     , m_switchWireTimer(new QTimer(this))
     , m_wirelessScanTimer(new QTimer(this))
-    , m_wirelessScanInterval(Utils::SettingValue("com.deepin.dde.dock", QByteArray(), "wireless-scan-interval", 10).toInt())
     , m_tipsWidget(new Dock::TipsWidget(this))
     , m_switchWire(true)
     , m_applet(new QScrollArea(this))
@@ -70,15 +68,6 @@ NetworkPanel::~NetworkPanel()
 
 void NetworkPanel::initUi()
 {
-    const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", QByteArray(), this);
-    if (gsetting)
-        connect(gsetting, &QGSettings::changed, [&](const QString &key) {
-            if (key == "wireless-scan-interval") {
-                m_wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt() * 1000;
-                m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
-            }
-        });
-
     m_refreshIconTimer->setInterval(100);
     m_tipsWidget->setVisible(false);
 
@@ -118,13 +107,13 @@ void NetworkPanel::initConnection()
     connect(m_refreshIconTimer, &QTimer::timeout, this, &NetworkPanel::refreshIcon);
 
     // 主题发生变化触发的信号
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkPanel::updatePlugView);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkPanel::onUpdatePlugView);
 
     // 连接信号
-    UNetworkController *networkController = UNetworkController::instance();
-    connect(networkController, &UNetworkController::deviceAdded, this, &NetworkPanel::onDeviceAdded);
-    connect(networkController, &UNetworkController::deviceRemoved, this, &NetworkPanel::updatePlugView);
-    connect(networkController, &UNetworkController::connectivityChanged, this, &NetworkPanel::updatePlugView);
+    NetworkController *networkController = NetworkController::instance();
+    connect(networkController, &NetworkController::deviceAdded, this, &NetworkPanel::onDeviceAdded);
+    connect(networkController, &NetworkController::deviceRemoved, this, &NetworkPanel::onUpdatePlugView);
+    connect(networkController, &NetworkController::connectivityChanged, this, &NetworkPanel::onUpdatePlugView);
 
     // 点击列表的信号
     connect(m_netListView, &DListView::clicked, this, &NetworkPanel::onClickListView);
@@ -133,6 +122,26 @@ void NetworkPanel::initConnection()
     connect(m_switchWireTimer, &QTimer::timeout, [ = ]() {
         m_switchWire = !m_switchWire;
         m_timeOut = true;
+    });
+
+    int wirelessScanInterval = Utils::SettingValue("com.deepin.dde.dock", QByteArray(), "wireless-scan-interval", 10).toInt();
+    m_wirelessScanTimer->setInterval(wirelessScanInterval);
+    const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", QByteArray(), this);
+    if (gsetting)
+        connect(gsetting, &QGSettings::changed, [ & ](const QString &key) {
+            if (key == "wireless-scan-interval") {
+                int wirelessScanInterval = gsetting->get("wireless-scan-interval").toInt() * 1000;
+                m_wirelessScanTimer->setInterval(wirelessScanInterval);
+            }
+        });
+    connect(m_wirelessScanTimer, &QTimer::timeout, [&] {
+        QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+        for (NetworkDeviceBase *device : devices) {
+            if (device->deviceType() == DeviceType::Wireless) {
+                WirelessDevice *wirelessDevice = static_cast<WirelessDevice *>(device);
+                wirelessDevice->scanNetwork();
+            }
+        }
     });
 }
 
@@ -176,9 +185,8 @@ void NetworkPanel::getPluginState()
 
 void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
 {
-    auto findBaseController = [ = ](UDeviceType t)->DeviceControllItem *{
-        for (int i = 0; i < m_items.size(); i++) {
-            NetItem *item = m_items[i];
+    auto findBaseController = [ = ](DeviceType t)->DeviceControllItem *{
+        for (NetItem *item : m_items) {
             if (item->itemType() != NetItemType::DeviceControllViewItem)
                 continue;
 
@@ -190,9 +198,8 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         return Q_NULLPTR;
     };
 
-    auto findWiredController = [ = ](UWiredDevice *device)->WiredControllItem *{
-        for (int i = 0; i < m_items.size(); i++) {
-            NetItem *item = m_items[i];
+    auto findWiredController = [ = ](WiredDevice *device)->WiredControllItem *{
+        for (NetItem *item : m_items) {
             if (item->itemType() != NetItemType::WiredControllViewItem)
                 continue;
 
@@ -204,9 +211,8 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         return Q_NULLPTR;
     };
 
-    auto findWiredItem = [ = ](UWiredConnection *conn)->WiredItem *{
-        for (int i = 0; i < m_items.size(); i++) {
-            NetItem *item = m_items[i];
+    auto findWiredItem = [ = ](WiredConnection *conn)->WiredItem *{
+        for (NetItem *item : m_items) {
             if (item->itemType() != NetItemType::WiredViewItem)
                 continue;
 
@@ -218,9 +224,8 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         return Q_NULLPTR;
     };
 
-    auto findWirelessController = [ = ](UWirelessDevice *device)->WirelessControllItem *{
-        for (int i = 0; i < m_items.size(); i++) {
-            NetItem *item = m_items[i];
+    auto findWirelessController = [ = ](WirelessDevice *device)->WirelessControllItem *{
+        for (NetItem *item : m_items) {
             if (item->itemType() != NetItemType::WirelessControllViewItem)
                 continue;
 
@@ -232,14 +237,13 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         return Q_NULLPTR;
     };
 
-    auto findWirelessItem = [ = ](const UAccessPoints *ap)->WirelessItem *{
-        for (int i = 0; i < m_items.size(); i++) {
-            NetItem *item = m_items[i];
+    auto findWirelessItem = [ = ](const AccessPoints *ap)->WirelessItem *{
+        for (NetItem *item : m_items) {
             if (item->itemType() != NetItemType::WirelessViewItem)
                 continue;
 
             WirelessItem *wirelessItem = static_cast<WirelessItem *>(item);
-            const UAccessPoints *apData = wirelessItem->accessPoint();
+            const AccessPoints *apData = wirelessItem->accessPoint();
             if (apData == ap)
                 return wirelessItem;
         }
@@ -247,18 +251,16 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         return Q_NULLPTR;
     };
 
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    QList<UWiredDevice *> wiredDevices;
-    QList<UWirelessDevice *> wirelessDevices;
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    QList<WiredDevice *> wiredDevices;
+    QList<WirelessDevice *> wirelessDevices;
 
-    for (int i = 0; i < devices.size(); i++) {
-        UNetworkDeviceBase *device = devices[i];
-
-        if (device->deviceType() == UDeviceType::Wired) {
-            UWiredDevice *dev = static_cast<UWiredDevice *>(device);
+    for (NetworkDeviceBase *device : devices) {
+        if (device->deviceType() == DeviceType::Wired) {
+            WiredDevice *dev = static_cast<WiredDevice *>(device);
             wiredDevices << dev;
-        } else if (device->deviceType() == UDeviceType::Wireless) {
-            UWirelessDevice *dev = static_cast<UWirelessDevice *>(device);
+        } else if (device->deviceType() == DeviceType::Wireless) {
+            WirelessDevice *dev = static_cast<WirelessDevice *>(device);
             wirelessDevices << dev;
         }
     }
@@ -266,9 +268,9 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
     // 存在多个无线设备的情况下，需要显示总开关
     QList<NetItem *> items;
     if (wirelessDevices.size() > 1) {
-        DeviceControllItem *ctrl = findBaseController(UDeviceType::Wireless);
+        DeviceControllItem *ctrl = findBaseController(DeviceType::Wireless);
         if (!ctrl)
-            ctrl = new DeviceControllItem(UDeviceType::Wireless, m_netListView->viewport());
+            ctrl = new DeviceControllItem(DeviceType::Wireless, m_netListView->viewport());
         else
             ctrl->updateView();
 
@@ -277,26 +279,24 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
     }
 
     // 遍历当前所有的无线网卡
-    auto accessPoints = [ & ](UWirelessDevice *device) {
+    auto accessPoints = [ & ](WirelessDevice *device) {
         if (device->isEnabled())
             return device->accessPointItems();
 
-        return QList<UAccessPoints *>();
+        return QList<AccessPoints *>();
     };
 
-    for (int i = 0; i < wirelessDevices.size(); i++) {
-        UWirelessDevice *device = wirelessDevices[i];
+    for (WirelessDevice *device : wirelessDevices) {
         WirelessControllItem *ctrl = findWirelessController(device);
         if (!ctrl)
-            ctrl = new WirelessControllItem(m_netListView->viewport(), static_cast<UWirelessDevice *>(device));
+            ctrl = new WirelessControllItem(m_netListView->viewport(), static_cast<WirelessDevice *>(device));
         else
             ctrl->updateView();
 
         items << ctrl;
 
-        QList<UAccessPoints *> aps = accessPoints(device);
-        for (int j = 0; j < aps.size(); j++) {
-            UAccessPoints *ap = aps[j];
+        QList<AccessPoints *> aps = accessPoints(device);
+        for (AccessPoints *ap : aps) {
             WirelessItem *apCtrl = findWirelessItem(ap);
             if (!apCtrl)
                 apCtrl = new WirelessItem(m_netListView->viewport(), device, ap);
@@ -309,9 +309,9 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
 
     // 存在多个有线设备的情况下，需要显示总开关
     if (wiredDevices.size() > 1) {
-        DeviceControllItem *ctrl = findBaseController(UDeviceType::Wired);
+        DeviceControllItem *ctrl = findBaseController(DeviceType::Wired);
         if (!ctrl)
-            ctrl = new DeviceControllItem(UDeviceType::Wired, m_netListView->viewport());
+            ctrl = new DeviceControllItem(DeviceType::Wired, m_netListView->viewport());
         else
             ctrl->updateView();
 
@@ -319,16 +319,15 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
         items << ctrl;
     }
 
-    auto wiredConnections = [ & ](UWiredDevice *device) {
+    auto wiredConnections = [ & ](WiredDevice *device) {
         if (device->isEnabled())
             return device->items();
 
-        return QList<UWiredConnection *>();
+        return QList<WiredConnection *>();
     };
 
     // 遍历当前所有的有线网卡
-    for (int i = 0; i < wiredDevices.size(); i++) {
-        UWiredDevice *device = wiredDevices[i];
+    for (WiredDevice *device : wiredDevices) {
         WiredControllItem *ctrl = findWiredController(device);
         if (!ctrl)
             ctrl = new WiredControllItem(m_netListView->viewport(), device);
@@ -337,9 +336,8 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
 
         items << ctrl;
 
-        QList<UWiredConnection *> connItems = wiredConnections(device);
-        for (int j = 0; j < connItems.size(); j++) {
-            UWiredConnection *conn = connItems.at(j);
+        QList<WiredConnection *> connItems = wiredConnections(device);
+        for (WiredConnection *conn : connItems) {
             WiredItem *connectionCtrl = findWiredItem(conn);
             if (!connectionCtrl)
                 connectionCtrl = new WiredItem(m_netListView->viewport(), device, conn);
@@ -352,8 +350,7 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
 
     // 把原来列表中不存在的项放到移除列表中
     removeItems.clear();
-    for (int i = m_items.size() - 1; i >=0 ; i--) {
-        NetItem *item = m_items[i];
+    for (NetItem *item : m_items) {
         if (!items.contains(item)) {
             m_items.removeOne(item);
             removeItems << item;
@@ -370,10 +367,8 @@ void NetworkPanel::updateView()
     updateItems(removeItems);
 
     // 先删除所有不存在的列表
-    for (int i = 0; i < removeItems.size(); i++) {
-        NetItem *item = removeItems[i];
+    for (NetItem *item : removeItems)
         m_model->removeRow(item->standardItem()->row());
-    }
 
     qDeleteAll(removeItems);
     removeItems.clear();
@@ -401,17 +396,25 @@ void NetworkPanel::updateView()
     m_centerWidget->setFixedSize(PANELWIDTH, totalHeight);
     m_applet->setFixedSize(PANELWIDTH, height);
     m_netListView->update();
+
+    // 判断当前的面板是否可见状态，如果当前面板可见，则开启计时器(自动刷新网络列表)，否则关闭定时计时器
+    if (isVisible()) {
+        if (!m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->start();
+    } else {
+        if (m_wirelessScanTimer->isActive())
+            m_wirelessScanTimer->stop();
+    }
 }
 
-QStringList NetworkPanel::ipTipsMessage(const UDeviceType &devType)
+QStringList NetworkPanel::ipTipsMessage(const DeviceType &devType)
 {
     int typeCount = deviceCount(devType);
-    UDeviceType type = static_cast<UDeviceType>(devType);
+    DeviceType type = static_cast<DeviceType>(devType);
     QStringList tipMessage;
     int deviceIndex = 1;
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    for (int i = 0; i < devices.size(); i ++) {
-        UNetworkDeviceBase *device = devices[i];
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    for (NetworkDeviceBase *device : devices) {
         if (device->deviceType() != type)
             continue;
 
@@ -420,14 +423,14 @@ QStringList NetworkPanel::ipTipsMessage(const UDeviceType &devType)
             continue;
 
         switch (type) {
-        case UDeviceType::Wired: {
+        case DeviceType::Wired: {
             if (typeCount == 1)
                 tipMessage << tr("Wired connection: %1").arg(ipv4);
             else
                 tipMessage << tr("Wired Network").append(QString("%1").arg(deviceIndex++)).append(":" + ipv4);
             break;
         }
-        case UDeviceType::Wireless: {
+        case DeviceType::Wireless: {
             if (typeCount == 1)
                 tipMessage << tr("Wireless connection: %1").arg(ipv4);
             else
@@ -446,15 +449,15 @@ void NetworkPanel::updateTooltips()
     switch (m_pluginState) {
     case PluginState::Connected: {
         QStringList textList;
-        textList << ipTipsMessage(UDeviceType::Wireless) << ipTipsMessage(UDeviceType::Wired);
+        textList << ipTipsMessage(DeviceType::Wireless) << ipTipsMessage(DeviceType::Wired);
         m_tipsWidget->setTextList(textList);
         break;
     }
     case PluginState::WirelessConnected:
-        m_tipsWidget->setTextList(ipTipsMessage(UDeviceType::Wireless));
+        m_tipsWidget->setTextList(ipTipsMessage(DeviceType::Wireless));
         break;
     case PluginState::WiredConnected:
-        m_tipsWidget->setTextList(ipTipsMessage(UDeviceType::Wired));
+        m_tipsWidget->setTextList(ipTipsMessage(DeviceType::Wired));
         break;
     case PluginState::Disabled:
     case PluginState::WirelessDisabled:
@@ -516,68 +519,67 @@ void NetworkPanel::resizeEvent(QResizeEvent *e)
     refreshIcon();
 }
 
-int NetworkPanel::deviceCount(const UDeviceType &devType)
+int NetworkPanel::deviceCount(const DeviceType &devType)
 {
     // 获取指定的设备类型的设备数量
     int count = 0;
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    for (int i = 0; i < devices.size(); i ++) {
-        UNetworkDeviceBase *dev = devices[i];
-        if (dev->deviceType() == static_cast<UDeviceType>(devType))
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    for (NetworkDeviceBase *dev : devices)
+        if (dev->deviceType() == static_cast<DeviceType>(devType))
             count++;
-    }
 
     return count;
 }
 
-void NetworkPanel::onDeviceAdded(QList<UNetworkDeviceBase *> devices)
+void NetworkPanel::onDeviceAdded(QList<NetworkDeviceBase *> devices)
 {
     // 处理新增设备的信号
-    for (int i = 0; i < devices.size(); i++) {
-        UNetworkDeviceBase *device = devices[i];
+    for (NetworkDeviceBase *device : devices) {
         // 当网卡连接状态发生变化的时候重新绘制任务栏的图标
-        connect(device, &UNetworkDeviceBase::deviceStatusChanged, this, &NetworkPanel::updatePlugView);
+        connect(device, &NetworkDeviceBase::deviceStatusChanged, this, &NetworkPanel::onUpdatePlugView);
         switch (device->deviceType()) {
-        case UDeviceType::Wired: {
-            UWiredDevice *wiredDevice = static_cast<UWiredDevice *>(device);
+        case DeviceType::Wired: {
+            WiredDevice *wiredDevice = static_cast<WiredDevice *>(device);
 
-            connect(wiredDevice, &UNetworkDeviceBase::deviceStatusChanged, this, &NetworkPanel::wirelessChanged);
-            connect(wiredDevice, &UNetworkDeviceBase::enableChanged, this, &NetworkPanel::wirelessChanged);
-            connect(wiredDevice, &UNetworkDeviceBase::connectionChanged, this, &NetworkPanel::wirelessChanged);
-            break;
+            connect(wiredDevice, &WiredDevice::connectionAdded, this, &NetworkPanel::onUpdatePlugView);
+            connect(wiredDevice, &WiredDevice::connectionRemoved, this, &NetworkPanel::onUpdatePlugView);
+            connect(wiredDevice, &NetworkDeviceBase::deviceStatusChanged, this, &NetworkPanel::onUpdatePlugView);
+            connect(wiredDevice, &NetworkDeviceBase::enableChanged, this, &NetworkPanel::onUpdatePlugView);
+            connect(wiredDevice, &NetworkDeviceBase::connectionChanged, this, &NetworkPanel::onUpdatePlugView);
         }
-        case UDeviceType::Wireless: {
-            UWirelessDevice *wirelessDevice = static_cast<UWirelessDevice *>(device);
+        break;
+        case DeviceType::Wireless: {
+            WirelessDevice *wirelessDevice = static_cast<WirelessDevice *>(device);
 
-            connect(wirelessDevice, &UWirelessDevice::networkAdded, this, &NetworkPanel::wirelessChanged);
-            connect(wirelessDevice, &UWirelessDevice::networkRemoved, this, &NetworkPanel::wirelessChanged);
-            connect(wirelessDevice, &UWirelessDevice::networkInfoChanged, this, &NetworkPanel::wirelessChanged);
-            connect(wirelessDevice, &UWirelessDevice::enableChanged, this, &NetworkPanel::wirelessChanged);
-            connect(wirelessDevice, &UWirelessDevice::connectionChanged, this, &NetworkPanel::wirelessChanged);
+            connect(wirelessDevice, &WirelessDevice::networkAdded, this, &NetworkPanel::onUpdatePlugView);
+            connect(wirelessDevice, &WirelessDevice::networkRemoved, this, &NetworkPanel::onUpdatePlugView);
+            connect(wirelessDevice, &WirelessDevice::networkInfoChanged, this, &NetworkPanel::onUpdatePlugView);
+            connect(wirelessDevice, &WirelessDevice::enableChanged, this, &NetworkPanel::onUpdatePlugView);
+            connect(wirelessDevice, &WirelessDevice::connectionChanged, this, &NetworkPanel::onUpdatePlugView);
 
             wirelessDevice->scanNetwork();
-            break;
         }
+        break;
         default:break;
         }
     }
 
-    updatePlugView();
+    onUpdatePlugView();
 }
 
 void NetworkPanel::invokeMenuItem(const QString &menuId)
 {
     // 有线设备是否可用
-    bool wiredEnabled = deviceEnabled(UDeviceType::Wired);
+    bool wiredEnabled = deviceEnabled(DeviceType::Wired);
     // 无线设备是否可用
-    bool wirelessEnabeld = deviceEnabled(UDeviceType::Wireless);
+    bool wirelessEnabeld = deviceEnabled(DeviceType::Wireless);
     if (menuId == MenueEnable) {
-        setDeviceEnabled(UDeviceType::Wired, !wiredEnabled);
-        setDeviceEnabled(UDeviceType::Wireless, !wirelessEnabeld);
+        setDeviceEnabled(DeviceType::Wired, !wiredEnabled);
+        setDeviceEnabled(DeviceType::Wireless, !wirelessEnabeld);
     } else if (menuId == MenueWiredEnable) {
-        setDeviceEnabled(UDeviceType::Wired, !wiredEnabled);
+        setDeviceEnabled(DeviceType::Wired, !wiredEnabled);
     } else if (menuId == MenueWirelessEnable) {
-        setDeviceEnabled(UDeviceType::Wireless, !wirelessEnabeld);
+        setDeviceEnabled(DeviceType::Wireless, !wirelessEnabeld);
     } else if (menuId == MenueSettings) {
         DDBusSender()
                 .service("com.deepin.dde.ControlCenter")
@@ -592,8 +594,8 @@ void NetworkPanel::invokeMenuItem(const QString &menuId)
 bool NetworkPanel::needShowControlCenter()
 {
     // 得到有线设备和无线设备的数量
-    int wiredCount = deviceCount(UDeviceType::Wired);
-    int wirelessCount = deviceCount(UDeviceType::Wireless);
+    int wiredCount = deviceCount(DeviceType::Wired);
+    int wirelessCount = deviceCount(DeviceType::Wireless);
     bool onlyOneTypeDevice = false;
     if ((wiredCount == 0 && wirelessCount > 0)
             || (wiredCount > 0 && wirelessCount == 0))
@@ -632,32 +634,28 @@ bool NetworkPanel::needShowControlCenter()
     return true;
 }
 
-bool NetworkPanel::deviceEnabled(const UDeviceType &deviceType) const
+bool NetworkPanel::deviceEnabled(const DeviceType &deviceType) const
 {
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    for (int i = 0; i < devices.size(); i ++) {
-        UNetworkDeviceBase *device = devices[i];
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    for (NetworkDeviceBase *device : devices)
         if (device->deviceType() == deviceType && device->isEnabled())
             return true;
-    }
 
     return false;
 }
 
-void NetworkPanel::setDeviceEnabled(const UDeviceType &deviceType, bool enabeld)
+void NetworkPanel::setDeviceEnabled(const DeviceType &deviceType, bool enabeld)
 {
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    for (int i = 0; i < devices.size(); i ++) {
-        UNetworkDeviceBase *dev = devices[i];
-        if (dev->deviceType() == deviceType)
-            dev->setEnabled(enabeld);
-    }
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    for (NetworkDeviceBase *device : devices)
+        if (device->deviceType() == deviceType)
+            device->setEnabled(enabeld);
 }
 
 const QString NetworkPanel::contextMenu() const
 {
-    bool wiredEnabled = deviceEnabled(UDeviceType::Wired);
-    bool wirelessEnabeld = deviceEnabled(UDeviceType::Wireless);
+    bool wiredEnabled = deviceEnabled(DeviceType::Wired);
+    bool wirelessEnabeld = deviceEnabled(DeviceType::Wireless);
     QList<QVariant> items;
     if (wiredEnabled && wirelessEnabeld) {
         items.reserve(3);
@@ -720,7 +718,7 @@ QWidget *NetworkPanel::itemApplet()
 
 bool NetworkPanel::hasDevice()
 {
-    return UNetworkController::instance()->devices().size() > 0;
+    return NetworkController::instance()->devices().size() > 0;
 }
 
 void NetworkPanel::refreshIcon()
@@ -867,7 +865,7 @@ void NetworkPanel::setControlBackground()
     m_applet->setPalette(backgroud);
 }
 
-void NetworkPanel::updatePlugView()
+void NetworkPanel::onUpdatePlugView()
 {
     getPluginState();
     refreshIcon();
@@ -875,29 +873,24 @@ void NetworkPanel::updatePlugView()
     updateView();
 }
 
-void NetworkPanel::wirelessChanged()
-{
-    updatePlugView();
-}
-
 void NetworkPanel::onClickListView(const QModelIndex &index)
 {
     NetItemType type = static_cast<NetItemType>(index.data(NetItemRole::TypeRole).toInt());
     switch (type) {
     case WirelessViewItem: {
-        UAccessPoints *ap = static_cast<UAccessPoints *>(index.data(NetItemRole::DataRole).value<void *>());
+        AccessPoints *ap = static_cast<AccessPoints *>(index.data(NetItemRole::DataRole).value<void *>());
         if (ap && !ap->connected()) {
-            UWirelessDevice *device = static_cast<UWirelessDevice *>(index.data(NetItemRole::DeviceDataRole).value<void *>());
-            UAccessPoints *activeAp = device->activeAccessPoints();
+            WirelessDevice *device = static_cast<WirelessDevice *>(index.data(NetItemRole::DeviceDataRole).value<void *>());
+            AccessPoints *activeAp = device->activeAccessPoints();
             if (activeAp != ap)
                 device->connectNetwork(ap);
         }
         break;
     }
     case WiredViewItem: {
-        UWiredConnection *conn = static_cast<UWiredConnection *>(index.data(NetItemRole::DataRole).value<void *>());
+        WiredConnection *conn = static_cast<WiredConnection *>(index.data(NetItemRole::DataRole).value<void *>());
         if (conn && !conn->connected()) {
-            UWiredDevice *device = static_cast<UWiredDevice *>(index.data(NetItemRole::DeviceDataRole).value<void *>());
+            WiredDevice *device = static_cast<WiredDevice *>(index.data(NetItemRole::DeviceDataRole).value<void *>());
             device->connectNetwork(conn);
         }
         break;
@@ -909,14 +902,13 @@ void NetworkPanel::onClickListView(const QModelIndex &index)
 int NetworkPanel::getStrongestAp()
 {
     int retStrength = -1;
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
-    for (int i = 0; i < devices.size(); i ++) {
-        UNetworkDeviceBase *device = devices[i];
-        if (device->deviceType() != UDeviceType::Wireless)
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
+    for (NetworkDeviceBase *device : devices) {
+        if (device->deviceType() != DeviceType::Wireless)
             continue;
 
-        UWirelessDevice *dev = static_cast<UWirelessDevice *>(device);
-        UAccessPoints *ap = dev->activeAccessPoints();
+        WirelessDevice *dev = static_cast<WirelessDevice *>(device);
+        AccessPoints *ap = dev->activeAccessPoints();
         if (ap && retStrength < ap->strength())
             retStrength = ap->strength();
     }

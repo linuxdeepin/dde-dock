@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -26,8 +26,8 @@
 
 namespace dde {
   namespace network {
-    class UWiredDevice;
-    class UWirelessDevice;
+    class WiredDevice;
+    class WirelessDevice;
   }
 }
 
@@ -86,10 +86,10 @@ private:
     explicit DeviceStatusHandler(QObject *parent = Q_NULLPTR);
     ~DeviceStatusHandler();
 
-    static NetDeviceStatus wiredStatus(UWiredDevice * device);
-    static NetDeviceStatus wiredStatus(QList<UWiredDevice *> devices);
-    static NetDeviceStatus wirelessStatus(UWirelessDevice *device);
-    static NetDeviceStatus wirelessStatus(QList<UWirelessDevice *>devices);
+    static NetDeviceStatus wiredStatus(WiredDevice * device);
+    static NetDeviceStatus wiredStatus(const QList<WiredDevice *> &devices);
+    static NetDeviceStatus wirelessStatus(WirelessDevice *device);
+    static NetDeviceStatus wirelessStatus(const QList<WirelessDevice *> &devices);
     static PluginState plugState(const NetDeviceStatus &wiredStatus, const NetDeviceStatus &wirelessStatus);
 
 private:

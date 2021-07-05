@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -21,9 +21,9 @@
 
 #include "devicestatushandler.h"
 
-#include <uwireddevice.h>
-#include <uwirelessdevice.h>
-#include <unetworkcontroller.h>
+#include <wireddevice.h>
+#include <wirelessdevice.h>
+#include <networkcontroller.h>
 
 DeviceStatusHandler::DeviceStatusHandler(QObject *parent)
     : QObject(parent)
@@ -36,17 +36,16 @@ DeviceStatusHandler::~DeviceStatusHandler()
 
 PluginState DeviceStatusHandler::pluginState()
 {
-    QList<UNetworkDeviceBase *> devices = UNetworkController::instance()->devices();
+    QList<NetworkDeviceBase *> devices = NetworkController::instance()->devices();
     // 筛选出所有的有线和无线的状态
-    QList<UWiredDevice *> wiredDevices;
-    QList<UWirelessDevice *> wirelessDevice;
-    for (int i = 0; i < devices.size(); i++) {
-        UNetworkDeviceBase *deviceBase = devices[i];
-        if (deviceBase->deviceType() == UDeviceType::Wired) {
-            UWiredDevice *device = static_cast<UWiredDevice *>(deviceBase);
+    QList<WiredDevice *> wiredDevices;
+    QList<WirelessDevice *> wirelessDevice;
+    for (NetworkDeviceBase *deviceBase : devices) {
+        if (deviceBase->deviceType() == DeviceType::Wired) {
+            WiredDevice *device = static_cast<WiredDevice *>(deviceBase);
             wiredDevices << device;
-        } else if (deviceBase->deviceType() == UDeviceType::Wireless) {
-            UWirelessDevice *device = static_cast<UWirelessDevice *>(deviceBase);
+        } else if (deviceBase->deviceType() == DeviceType::Wireless) {
+            WirelessDevice *device = static_cast<WirelessDevice *>(deviceBase);
             wirelessDevice << device;
         }
     }
@@ -57,15 +56,15 @@ PluginState DeviceStatusHandler::pluginState()
     return plugState(wiredStat, wirelessStat);
 }
 
-NetDeviceStatus DeviceStatusHandler::wiredStatus(UWiredDevice *device)
+NetDeviceStatus DeviceStatusHandler::wiredStatus(WiredDevice *device)
 {
     // 如果当前网卡是禁用，直接返回禁用
     if (!device->isEnabled())
         return NetDeviceStatus::Disabled;
 
     // 网络是已连接，但是当前的连接状态不是Full，则认为网络连接成功，但是无法上网
-    if (device->deviceStatus() == UDeviceStatus::Activated
-            && UNetworkController::instance()->connectivity() != Connectivity::Full) {
+    if (device->deviceStatus() == DeviceStatus::Activated
+            && NetworkController::instance()->connectivity() != Connectivity::Full) {
         return NetDeviceStatus::ConnectNoInternet;
     }
 
@@ -75,32 +74,30 @@ NetDeviceStatus DeviceStatusHandler::wiredStatus(UWiredDevice *device)
 
     // 根据设备状态来直接获取返回值
     switch (device->deviceStatus()) {
-    case UDeviceStatus::Unmanaged:
-    case UDeviceStatus::Unavailable:    return NetDeviceStatus::Nocable;
-    case UDeviceStatus::Disconnected:   return NetDeviceStatus::Disconnected;
-    case UDeviceStatus::Prepare:
-    case UDeviceStatus::Config:         return NetDeviceStatus::Connecting;
-    case UDeviceStatus::NeedAuth:       return NetDeviceStatus::Authenticating;
-    case UDeviceStatus::IpConfig:
-    case UDeviceStatus::IpCheck:
-    case UDeviceStatus::Secondaries:    return NetDeviceStatus::ObtainingIP;
-    case UDeviceStatus::Activated:      return NetDeviceStatus::Connected;
-    case UDeviceStatus::Deactivation:
-    case UDeviceStatus::Failed:         return NetDeviceStatus::ConnectFailed;
-    default:                            return NetDeviceStatus::Unknown;
+    case DeviceStatus::Unmanaged:
+    case DeviceStatus::Unavailable:    return NetDeviceStatus::Nocable;
+    case DeviceStatus::Disconnected:   return NetDeviceStatus::Disconnected;
+    case DeviceStatus::Prepare:
+    case DeviceStatus::Config:         return NetDeviceStatus::Connecting;
+    case DeviceStatus::Needauth:       return NetDeviceStatus::Authenticating;
+    case DeviceStatus::IpConfig:
+    case DeviceStatus::IpCheck:
+    case DeviceStatus::Secondaries:    return NetDeviceStatus::ObtainingIP;
+    case DeviceStatus::Activated:      return NetDeviceStatus::Connected;
+    case DeviceStatus::Deactivation:
+    case DeviceStatus::Failed:         return NetDeviceStatus::ConnectFailed;
+    default:                           return NetDeviceStatus::Unknown;
     }
 
     Q_UNREACHABLE();
     return NetDeviceStatus::Unknown;
 }
 
-NetDeviceStatus DeviceStatusHandler::wiredStatus(QList<UWiredDevice *> devices)
+NetDeviceStatus DeviceStatusHandler::wiredStatus(const QList<WiredDevice *> &devices)
 {
     QList<NetDeviceStatus> deviceStatus;
-    for (int i = 0; i < devices.size(); i++) {
-        UWiredDevice *dev = devices[i];
-        deviceStatus << wiredStatus(dev);
-    }
+    for (WiredDevice *device : devices)
+        deviceStatus << wiredStatus(device);
 
     // 显示的规则:从allDeviceStatus列表中按照顺序遍历所有的状态，
     // 再遍历所有的设备的状态，只要其中一个设备的状态满足当前的状态，就返回当前状态
@@ -117,48 +114,46 @@ NetDeviceStatus DeviceStatusHandler::wiredStatus(QList<UWiredDevice *> devices)
     return NetDeviceStatus::Unknown;
 }
 
-NetDeviceStatus DeviceStatusHandler::wirelessStatus(UWirelessDevice *device)
+NetDeviceStatus DeviceStatusHandler::wirelessStatus(WirelessDevice *device)
 {
     if (!device->isEnabled())
         return NetDeviceStatus::Disabled;
 
-    if (device->deviceStatus() == UDeviceStatus::Activated
-            && device->connectivity()!= Connectivity::Full) {
+    if (device->deviceStatus() == DeviceStatus::Activated
+            && device->connectivity() != Connectivity::Full) {
         return NetDeviceStatus::ConnectNoInternet;
     }
 
     if (!device->IPValid())
         return NetDeviceStatus::ObtainIpFailed;
 
-    UDeviceStatus status = device->deviceStatus();
+    DeviceStatus status = device->deviceStatus();
     switch (status) {
-    case UDeviceStatus::Unmanaged:
-    case UDeviceStatus::Unavailable:
-    case UDeviceStatus::Disconnected:  return NetDeviceStatus::Disconnected;
-    case UDeviceStatus::Prepare:
-    case UDeviceStatus::Config:        return NetDeviceStatus::Connecting;
-    case UDeviceStatus::NeedAuth:      return NetDeviceStatus::Authenticating;
-    case UDeviceStatus::IpConfig:
-    case UDeviceStatus::IpCheck:
-    case UDeviceStatus::Secondaries:   return NetDeviceStatus::ObtainingIP;
-    case UDeviceStatus::Activated:     return NetDeviceStatus::Connected;
-    case UDeviceStatus::Deactivation:
-    case UDeviceStatus::Failed:        return NetDeviceStatus::ConnectFailed;
-    default:                           return NetDeviceStatus::Unknown;
+    case DeviceStatus::Unmanaged:
+    case DeviceStatus::Unavailable:
+    case DeviceStatus::Disconnected:  return NetDeviceStatus::Disconnected;
+    case DeviceStatus::Prepare:
+    case DeviceStatus::Config:        return NetDeviceStatus::Connecting;
+    case DeviceStatus::Needauth:      return NetDeviceStatus::Authenticating;
+    case DeviceStatus::IpConfig:
+    case DeviceStatus::IpCheck:
+    case DeviceStatus::Secondaries:   return NetDeviceStatus::ObtainingIP;
+    case DeviceStatus::Activated:     return NetDeviceStatus::Connected;
+    case DeviceStatus::Deactivation:
+    case DeviceStatus::Failed:        return NetDeviceStatus::ConnectFailed;
+    default:                          return NetDeviceStatus::Unknown;
     }
 
     Q_UNREACHABLE();
     return NetDeviceStatus::Unknown;
 }
 
-NetDeviceStatus DeviceStatusHandler::wirelessStatus(QList<UWirelessDevice *> devices)
+NetDeviceStatus DeviceStatusHandler::wirelessStatus(const QList<WirelessDevice *> &devices)
 {
     // 所有设备状态叠加
     QList<NetDeviceStatus> devStatus;
-    for (int i = 0; i < devices.size(); i++) {
-        UWirelessDevice *dev= devices[i];
-        devStatus << wirelessStatus(dev);
-    }
+    for (WirelessDevice *device : devices)
+        devStatus << wirelessStatus(device);
 
     static QList<NetDeviceStatus> allDeviceStatus =
         { NetDeviceStatus::Authenticating, NetDeviceStatus::ObtainingIP, NetDeviceStatus::Connected,
@@ -362,7 +357,7 @@ bool DeviceStatusHandler::isWirelessConnected(const NetDeviceStatus &wiredStatus
         { NetDeviceStatus::Unknown, NetDeviceStatus::Enabled
         , NetDeviceStatus::Disabled, NetDeviceStatus::Disconnected
         , NetDeviceStatus::ObtainIpFailed, NetDeviceStatus::ConnectNoInternet
-        , NetDeviceStatus::Nocable, NetDeviceStatus::ConnectFailed};
+        , NetDeviceStatus::Nocable, NetDeviceStatus::ConnectFailed };
 
     return (wiredFailusStatus.contains(wiredStatus)
             && wirelessStatus == NetDeviceStatus::Connected);
@@ -382,7 +377,7 @@ bool DeviceStatusHandler::isWirelessConnecting(const NetDeviceStatus &wiredStatu
         , NetDeviceStatus::Disabled, NetDeviceStatus::Connected
         , NetDeviceStatus::Disconnected, NetDeviceStatus::ObtainIpFailed
         , NetDeviceStatus::ConnectNoInternet, NetDeviceStatus::Nocable
-        , NetDeviceStatus::ConnectFailed};
+        , NetDeviceStatus::ConnectFailed };
 
     return (wirelessConnecting.contains(wirelessStatus)
             && wiredOfConnecting.contains(wiredStatus));

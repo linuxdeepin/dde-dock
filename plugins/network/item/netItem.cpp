@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "NetItem.h"
+#include "netitem.h"
 #include "constants.h"
 
 #include <DApplicationHelper>
@@ -34,10 +34,10 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
-#include <unetworkdevicebase.h>
-#include <uwireddevice.h>
-#include <uwirelessdevice.h>
-#include <unetworkconst.h>
+#include <networkdevicebase.h>
+#include <wireddevice.h>
+#include <wirelessdevice.h>
+#include <networkconst.h>
 
 #define SWITCH_WIDTH 60
 #define SWITCH_HEIGHT 32
@@ -73,7 +73,7 @@ QWidget *NetItem::parentWidget()
  * @brief baseControllItem::baseControllItem
  * 总线控制器
  */
-DeviceControllItem::DeviceControllItem(const UDeviceType &deviceType, QWidget *parent)
+DeviceControllItem::DeviceControllItem(const DeviceType &deviceType, QWidget *parent)
     : NetItem(parent)
     , m_deviceType(deviceType)
 {
@@ -87,17 +87,15 @@ DeviceControllItem::~DeviceControllItem()
     m_switcher->deleteLater();
 }
 
-void DeviceControllItem::setDevices(const QList<UNetworkDeviceBase *> &devices)
+void DeviceControllItem::setDevices(const QList<NetworkDeviceBase *> &devices)
 {
     m_devices.clear();
-    for (int i = 0; i < devices.size(); i++) {
-        UNetworkDeviceBase *device = devices[i];
+    for (NetworkDeviceBase *device : devices)
         if (m_deviceType == device->deviceType())
             m_devices << device;
-    }
 }
 
-UDeviceType DeviceControllItem::deviceType()
+DeviceType DeviceControllItem::deviceType()
 {
     return m_deviceType;
 }
@@ -106,14 +104,17 @@ void DeviceControllItem::updateView()
 {
     // 更新状态显示
     bool onOrOff = false;
-    for (int i = 0; i < m_devices.size(); i ++) {
-        if (m_devices[i]->isEnabled()) {
+    for (NetworkDeviceBase *device : m_devices) {
+        if (device->isEnabled()) {
             onOrOff = true;
             break;
         }
     }
 
+    // 阻塞状态，防止多次触发
+    m_switcher->blockSignals(true);
     m_switcher->setChecked(onOrOff);
+    m_switcher->blockSignals(false);
 }
 
 NetItemType DeviceControllItem::itemType()
@@ -129,7 +130,7 @@ void DeviceControllItem::initItemText()
     standardItem()->setData(NetItemType::DeviceControllViewItem, NetItemRole::TypeRole);
     standardItem()->setFontSize(DFontSizeManager::T3);
 
-    if (m_deviceType == UDeviceType::Wireless)
+    if (m_deviceType == DeviceType::Wireless)
         standardItem()->setText(tr("wireless"));
     else
         standardItem()->setText(tr("wired"));
@@ -154,14 +155,12 @@ void DeviceControllItem::initConnection()
 
 void DeviceControllItem::onSwitchDevices(bool on)
 {
-    for (int i = 0; i < m_devices.size(); i ++) {
-        UNetworkDeviceBase *device = m_devices[i];
+    for (NetworkDeviceBase *device : m_devices)
         if (device->isEnabled() != on)
             device->setEnabled(on);
-    }
 }
 
-WiredControllItem::WiredControllItem(QWidget *parent, UWiredDevice *device)
+WiredControllItem::WiredControllItem(QWidget *parent, WiredDevice *device)
     : NetItem(parent)
     , m_device(device)
 {
@@ -190,7 +189,7 @@ WiredControllItem::~WiredControllItem()
     m_switcher->deleteLater();
 }
 
-UWiredDevice *WiredControllItem::device()
+WiredDevice *WiredControllItem::device()
 {
     return m_device;
 }
@@ -198,7 +197,10 @@ UWiredDevice *WiredControllItem::device()
 void WiredControllItem::updateView()
 {
     standardItem()->setText(m_device->deviceName());
+
+    m_switcher->blockSignals(true);
     m_switcher->setChecked(m_device->isEnabled());
+    m_switcher->blockSignals(false);
 }
 
 NetItemType WiredControllItem::itemType()
@@ -220,7 +222,7 @@ QString WirelessControllItem::iconFile()
     return QString(":/wireless/resources/wireless/refresh.svg");
 }
 
-WirelessControllItem::WirelessControllItem(QWidget *parent, UWirelessDevice *device)
+WirelessControllItem::WirelessControllItem(QWidget *parent, WirelessDevice *device)
     : NetItem(parent)
     , m_device(device)
 {
@@ -259,7 +261,7 @@ WirelessControllItem::WirelessControllItem(QWidget *parent, UWirelessDevice *dev
     standardItem()->setFlags(Qt::ItemIsEnabled);
     standardItem()->setData(NetItemType::WirelessControllViewItem, NetItemRole::TypeRole);
     standardItem()->setData(QVariant::fromValue(static_cast<void *>(m_device)), NetItemRole::DeviceDataRole);
-    standardItem()->setFontSize(DFontSizeManager::T5);
+    standardItem()->setFontSize(DFontSizeManager::T4);
 
     connect(m_switcher, &DSwitchButton::checkedChanged, this, &WirelessControllItem::onSwitchDevices);
 }
@@ -269,7 +271,7 @@ WirelessControllItem::~WirelessControllItem()
     m_widget->deleteLater();
 }
 
-UWirelessDevice *WirelessControllItem::device()
+WirelessDevice *WirelessControllItem::device()
 {
     return m_device;
 }
@@ -277,7 +279,10 @@ UWirelessDevice *WirelessControllItem::device()
 void WirelessControllItem::updateView()
 {
     standardItem()->setText(m_device->deviceName());
+
+    m_switcher->blockSignals(true);
     m_switcher->setChecked(m_device->isEnabled());
+    m_switcher->blockSignals(false);
 
     // 刷新按钮图标
     QPixmap pix = DHiDPIHelper::loadNxPixmap(iconFile());
@@ -311,7 +316,7 @@ void WirelessControllItem::onSwitchDevices(bool on)
         m_device->setEnabled(on);
 }
 
-WiredItem::WiredItem(QWidget *parent, UWiredDevice *device, UWiredConnection *connection)
+WiredItem::WiredItem(QWidget *parent, WiredDevice *device, WiredConnection *connection)
     : NetItem(parent)
     , m_connection(connection)
     , m_device(device)
@@ -325,7 +330,7 @@ WiredItem::~WiredItem()
     m_button->deleteLater();
 }
 
-UWiredConnection *WiredItem::connection()
+WiredConnection *WiredItem::connection()
 {
     return m_connection;
 }
@@ -415,7 +420,7 @@ void WiredItem::onConnectionClicked()
         m_device->connectNetwork(m_connection);
 }
 
-WirelessItem::WirelessItem(QWidget *parent, UWirelessDevice *device, UAccessPoints *ap)
+WirelessItem::WirelessItem(QWidget *parent, WirelessDevice *device, AccessPoints *ap)
     : NetItem(parent)
     , m_accessPoint(ap)
     , m_device(device)
@@ -430,7 +435,7 @@ WirelessItem::~WirelessItem()
     m_loadingStat->deleteLater();
 }
 
-const UAccessPoints *WirelessItem::accessPoint()
+const AccessPoints *WirelessItem::accessPoint()
 {
     return m_accessPoint;
 }
@@ -567,7 +572,7 @@ void WirelessItem::updateConnectionStatus()
     } else {
         m_button->setVisible(false);
 
-        if (m_accessPoint->connectionStatus() == UActiveConnectionStatus::Activating) {
+        if (m_accessPoint->connectionStatus() == ConnectionStatus::Activating) {
             // 如果当前网络是正在连接状态
             m_loadingStat->setVisible(true);
             m_loadingStat->start();

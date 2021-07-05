@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
  *
@@ -24,7 +24,7 @@
 
 #include <DDBusSender>
 
-#include <unetworkcontroller.h>
+#include <networkcontroller.h>
 
 #define STATE_KEY       "enabled"
 

@@ -21,11 +21,11 @@ Build-Depends: debhelper (>= 8.0.0),
  libdframeworkdbus-dev (>=5.3.0.24),
  libgsettings-qt-dev,
  cmake,
- libdde-network-utils-dev (>=5.3.0.5),
  libdbusmenu-qt5-dev,
  libdtkgui-dev,
  libgtest-dev,
- libgmock-dev
+ libgmock-dev,
+ dde-network-core-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
@@ -34,12 +34,12 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
  deepin-desktop-schemas (>=5.8.0.34),
  libdframeworkdbus2 (>=5.3.0.24),
- libdde-network-utils (>=5.3.0.5),
  dde-qt5xcb-plugin (>=5.0.19),
  dde-daemon (>=5.12.0.31),
  startdde (>=5.6.0.34),
  lastore-daemon (>=5.1.0.21),
- qtxdg-dev-tools
+ qtxdg-dev-tools,
+ dde-network-core
 Recommends: dde-disk-mount-plugin, dde-dock-onboard-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),

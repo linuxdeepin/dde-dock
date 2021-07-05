@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -39,12 +39,12 @@ class QPushButton;
 
 namespace dde {
   namespace network {
-    class UNetworkDeviceBase;
-    class UWiredDevice;
-    class UWirelessDevice;
-    class UAccessPoints;
-    class UWiredConnection;
-    enum class UDeviceType;
+    class NetworkDeviceBase;
+    class WiredDevice;
+    class WirelessDevice;
+    class AccessPoints;
+    class WiredConnection;
+    enum class DeviceType;
   }
 }
 
@@ -103,11 +103,11 @@ class DeviceControllItem : public NetItem
     Q_OBJECT
 
 public:
-    DeviceControllItem(const UDeviceType &deviceType, QWidget *parent);
+    DeviceControllItem(const DeviceType &deviceType, QWidget *parent);
     ~DeviceControllItem() Q_DECL_OVERRIDE;
 
-    void setDevices(const QList<UNetworkDeviceBase *> &devices);
-    UDeviceType deviceType();
+    void setDevices(const QList<NetworkDeviceBase *> &devices);
+    DeviceType deviceType();
     void updateView() Q_DECL_OVERRIDE;
     NetItemType itemType() Q_DECL_OVERRIDE;
 
@@ -120,8 +120,8 @@ private Q_SLOTS:
     void onSwitchDevices(bool on);
 
 private:
-    QList<UNetworkDeviceBase *> m_devices;
-    UDeviceType m_deviceType;
+    QList<NetworkDeviceBase *> m_devices;
+    DeviceType m_deviceType;
     DSwitchButton *m_switcher;
 };
 
@@ -130,18 +130,18 @@ class WiredControllItem : public NetItem
     Q_OBJECT
 
 public:
-    WiredControllItem(QWidget *parent, UWiredDevice *device);
+    WiredControllItem(QWidget *parent, WiredDevice *device);
     ~WiredControllItem() Q_DECL_OVERRIDE;
 
-    UWiredDevice *device();
+    WiredDevice *device();
     void updateView() Q_DECL_OVERRIDE;
     NetItemType itemType() Q_DECL_OVERRIDE;
 
-protected Q_SLOTS:
+private Q_SLOTS:
     void onSwitchDevices(bool on);
 
 private:
-    UWiredDevice *m_device;
+    WiredDevice *m_device;
     DSwitchButton *m_switcher;
 };
 
@@ -150,10 +150,10 @@ class WirelessControllItem : public NetItem
     Q_OBJECT
 
 public:
-    WirelessControllItem(QWidget *parent, UWirelessDevice *device);
+    WirelessControllItem(QWidget *parent, WirelessDevice *device);
     ~WirelessControllItem() Q_DECL_OVERRIDE;
 
-    UWirelessDevice *device();
+    WirelessDevice *device();
     void updateView() Q_DECL_OVERRIDE;
     NetItemType itemType() Q_DECL_OVERRIDE;
 
@@ -162,11 +162,11 @@ protected:
 
     QString iconFile();
 
-protected Q_SLOTS:
+private Q_SLOTS:
     void onSwitchDevices(bool on);
 
 private:
-    UWirelessDevice *m_device;
+    WirelessDevice *m_device;
     QWidget *m_widget;
     DSwitchButton *m_switcher;
     DLoadingIndicator *m_loadingIndicator;
@@ -177,26 +177,27 @@ class WiredItem : public NetItem
     Q_OBJECT
 
 public:
-    WiredItem(QWidget *parent, UWiredDevice *device, UWiredConnection *connection);
+    WiredItem(QWidget *parent, WiredDevice *device, WiredConnection *connection);
     ~WiredItem() Q_DECL_OVERRIDE;
 
-    UWiredConnection *connection();
+    WiredConnection *connection();
     void updateView() Q_DECL_OVERRIDE;
     NetItemType itemType() Q_DECL_OVERRIDE;
 
 protected:
+    bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
+
+private:
     void initUi();
     void initConnection();
-
-    bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
 
 protected Q_SLOTS:
     void onConnectionClicked();
 
 private:
-    UWiredConnection *m_connection;
+    WiredConnection *m_connection;
     DViewItemAction *m_connectionItem;
-    UWiredDevice *m_device;
+    WiredDevice *m_device;
     QPushButton *m_button;
 
     DViewItemAction *m_connIconAction;
@@ -207,10 +208,10 @@ class WirelessItem : public NetItem
     Q_OBJECT
 
 public:
-    WirelessItem(QWidget *parent, UWirelessDevice *device, UAccessPoints *ap);
+    WirelessItem(QWidget *parent, WirelessDevice *device, AccessPoints *ap);
     ~WirelessItem() Q_DECL_OVERRIDE;
 
-    const UAccessPoints *accessPoint();
+    const AccessPoints *accessPoint();
     void updateView() Q_DECL_OVERRIDE;
     NetItemType itemType() Q_DECL_OVERRIDE;
     static QString getStrengthStateString(int strength);
@@ -229,10 +230,10 @@ private Q_SLOTS:
     void onConnection();
 
 private:
-    UAccessPoints *m_accessPoint;
+    AccessPoints *m_accessPoint;
     DViewItemAction *m_connLabel;
     QPushButton *m_button;
-    UWirelessDevice *m_device;
+    WirelessDevice *m_device;
     DViewItemAction *m_securityAction;
     DViewItemAction *m_wifiLabel;
     DSpinner *m_loadingStat;

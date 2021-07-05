@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2011 ~ 2021 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
  *
@@ -42,8 +42,8 @@ namespace Dock {
 
 namespace dde {
   namespace network {
-    enum class UDeviceType;
-    class UNetworkDeviceBase;
+    enum class DeviceType;
+    class NetworkDeviceBase;
   }
 }
 
@@ -69,6 +69,10 @@ public:
 
     void refreshIcon();
 
+protected:
+    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
+
 private:
     void setControlBackground();
     void initUi();
@@ -77,21 +81,17 @@ private:
     void updateView();                                                  // 更新网络列表内容大小
     void updateTooltips();                                              // 更新提示的内容
     void updateItems(QList<NetItem *> &removeItems);
-    bool deviceEnabled(const UDeviceType &deviceType) const;
-    void setDeviceEnabled(const UDeviceType &deviceType, bool enabeld);
+    bool deviceEnabled(const DeviceType &deviceType) const;
+    void setDeviceEnabled(const DeviceType &deviceType, bool enabeld);
 
     int getStrongestAp();
-    int deviceCount(const UDeviceType &devType);
-    QStringList ipTipsMessage(const UDeviceType &devType);
-
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
+    int deviceCount(const DeviceType &devType);
+    QStringList ipTipsMessage(const DeviceType &devType);
 
 private Q_SLOTS:
-    void onDeviceAdded(QList<UNetworkDeviceBase *> devices);
+    void onDeviceAdded(QList<NetworkDeviceBase *> devices);
 
-    void updatePlugView();
-    void wirelessChanged();
+    void onUpdatePlugView();
 
     void onClickListView(const QModelIndex &index);
 
@@ -101,7 +101,6 @@ private:
     QTimer *m_refreshIconTimer;
     QTimer *m_switchWireTimer;
     QTimer *m_wirelessScanTimer;
-    int m_wirelessScanInterval;
 
     Dock::TipsWidget *m_tipsWidget;
     bool m_switchWire;
