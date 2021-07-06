@@ -240,6 +240,18 @@ void DockItem::showContextMenu()
 
     qDeleteAll(m_contextMenu.actions());
 
+    QJsonArray windows = jsonMenu["windows"].toArray();
+    for (const QJsonValueRef item : windows) {
+        QJsonObject itemObj = item.toObject();
+        QAction *action = new QAction(itemObj["title"].toString());
+        action->setData(itemObj["winid"].toString());
+        action->setProperty("__APP_WINDOWS__", true);
+        action->setProperty("__APP_MENU_GROUP__", "windows");
+        m_contextMenu.addAction(action);
+    }
+
+    m_contextMenu.addSeparator();
+
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
         QJsonObject itemObj = item.toObject();
@@ -261,6 +273,10 @@ void DockItem::showContextMenu()
 
 void DockItem::menuActionClicked(QAction *action)
 {
+    if (action->property("__APP_WINDOWS__").toBool()) {
+        return invokedMenuItem(action->property("__APP_MENU_GROUP__").toString(), action->data().toString(), true);
+    }
+
     invokedMenuItem(action->data().toString(), true);
 }
 
@@ -341,6 +357,13 @@ void DockItem::showPopupApplet(QWidget *const applet)
 
 void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
+    Q_UNUSED(itemId)
+    Q_UNUSED(checked)
+}
+
+void DockItem::invokedMenuItem(const QString &group, const QString &itemId, const bool checked)
+{
+    Q_UNUSED(group)
     Q_UNUSED(itemId)
     Q_UNUSED(checked)
 }

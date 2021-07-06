@@ -82,6 +82,7 @@ private:
 
     void showHoverTips() override;
     void invokedMenuItem(const QString &itemId, const bool checked) override;
+    void invokedMenuItem(const QString &group, const QString &itemId, const bool checked) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
     void startDrag();
