@@ -15,7 +15,7 @@ make -j 16
 
 cd tests/
 
-./dde_dock_unit_test
+./dde_dock_unit_test --gtest_output=xml:dde_test_report_dde_dock.xml
 lcov -c -d ./ -o cover.info
 lcov -e cover.info '*/frame/*' '*/dde-dock/widgets/*' -o code.info
 lcov -r code.info '*/dbus/*' '*/xcb/*' -o final.info
