@@ -37,8 +37,9 @@
 
 class FashionTrayItem;
 namespace Dock {
-class TipsWidget;
+  class TipsWidget;
 }
+class QDBusServiceWatcher;
 class TrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -95,6 +96,7 @@ private:
     SystemTraysController *m_systemTraysController;
     QTimer *m_refreshXEmbedItemsTimer;
     QTimer *m_refreshSNIItemsTimer;
+    QDBusServiceWatcher *m_sniItemServerWatcher;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
     QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;

@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QX11Info>
 #include <QGSettings>
+#include <QDBusServiceWatcher>
 
 #include "../widgets/tipswidget.h"
 #include "xcb/xcb_icccm.h"
@@ -44,6 +45,7 @@ using namespace Dock;
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , m_sniItemServerWatcher(new QDBusServiceWatcher(this))
 {
 }
 
@@ -304,6 +306,10 @@ void TrayPlugin::initSNI()
     connect(m_refreshSNIItemsTimer, &QTimer::timeout, this, &TrayPlugin::sniItemsChanged);
     connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemRegistered, this, [ = ] {m_refreshSNIItemsTimer->start();});
     connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, [ = ] {m_refreshSNIItemsTimer->start();});
+    connect(m_sniItemServerWatcher, &QDBusServiceWatcher::serviceRegistered, [ & ] (const QString &service) {
+        m_sniItemServerWatcher->removeWatchedService(service);
+        sniItemsChanged();
+    });
 
     m_refreshSNIItemsTimer->start();
 }
@@ -412,12 +418,17 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
     }
 
     QStringList list = sniServicePath.split("/");
-    QString nsiServerName = list.takeFirst();
+    QString sniServerName = list.takeFirst();
 
-    QProcess p;
-    p.start("qdbus", {nsiServerName});
-    if (!p.waitForFinished(1000)) {
-        qDebug() << "sni dbus service error : " << nsiServerName;
+    if (sniServerName.isEmpty()) {
+        qDebug() << "sni dbus service error : " << sniServerName;
+        return;
+    }
+
+    QDBusInterface sniItemDBus(sniServerName, "/" + list.last());
+    if (!sniItemDBus.isValid()) {
+        qDebug() << "sni dbus service error : " << sniServerName;
+        m_sniItemServerWatcher->addWatchedService(sniServerName);
         return;
     }
 
