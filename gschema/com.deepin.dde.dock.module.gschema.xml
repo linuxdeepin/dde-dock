@@ -511,7 +511,7 @@
       <description>Control duration of dock switch in monitors</description>
     </key>
     <key type="b" name="only-show-primary">
-      <default>false</default>
+      <default>true</default>
       <summary></summary>
       <description>Determine to show dock only in primary monitor</description>
     </key>
