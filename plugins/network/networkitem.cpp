@@ -519,6 +519,8 @@ void NetworkItem::getPluginState()
             state |= temp;
             if ((temp & WirelessItem::Connected) >> 18) {
                 m_connectedWirelessDevice.insert(iwireless.key(), wirelessItem);
+            } else {
+                m_connectedWirelessDevice.remove(iwireless.key());
             }
         }
     }
@@ -564,6 +566,8 @@ void NetworkItem::getPluginState()
             state |= temp;
             if ((temp & WiredItem::Connected) >> 2) {
                 m_connectedWiredDevice.insert(iwired.key(), wiredItem);
+            } else {
+                m_connectedWiredDevice.remove(iwired.key());
             }
         }
     }
@@ -1171,14 +1175,14 @@ void NetworkItem::refreshTips()
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWirelessDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
-                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":" + ipv4.value("Address").toString()) + '\n';
                 }
                 strTips.chop(1);
                 textList << strTips;
@@ -1188,14 +1192,14 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
-                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":" + ipv4.value("Address").toString()) + '\n';
                 }
                 strTips.chop(1);
                 textList << strTips;
@@ -1206,20 +1210,20 @@ void NetworkItem::refreshTips()
     break;
     case Aconnected: {
         QString strTips;
-        int wirelessIndex=1;
+        int wirelessIndex = 1;
         QStringList textList;
         for (auto wirelessItem : m_connectedWirelessDevice) {
             if (wirelessItem) {
                 auto info = wirelessItem->getActiveWirelessConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wireless connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
-                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                    strTips = tr("Wireless Network").append(QString("%1").arg(wirelessIndex++)).append(":" + ipv4.value("Address").toString()) + '\n';
                 }
                 strTips.chop(1);
                 textList << strTips;
@@ -1236,14 +1240,14 @@ void NetworkItem::refreshTips()
             if (wiredItem) {
                 auto info = wiredItem->getActiveWiredConnectionInfo();
                 if (!info.contains("Ip4"))
-                    break;
+                    continue;
                 const QJsonObject ipv4 = info.value("Ip4").toObject();
                 if (!ipv4.contains("Address"))
-                    break;
+                    continue;
                 if (m_connectedWiredDevice.size() == 1) {
                     strTips = tr("Wired connection: %1").arg(ipv4.value("Address").toString()) + '\n';
                 } else {
-                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":"+ipv4.value("Address").toString()) + '\n';
+                    strTips = tr("Wired Network").append(QString("%1").arg(wireIndex++)).append(":" + ipv4.value("Address").toString()) + '\n';
                 }
                 strTips.chop(1);
                 textList << strTips;
@@ -1327,4 +1331,15 @@ void NetworkItem::wirelessScan()
     QTimer::singleShot(1000, this, [ = ] {
         m_loadingIndicator->setLoading(false);
     });
+}
+
+void NetworkItem::switchWired()
+{
+    WiredItem *connectWired = static_cast<WiredItem *>(sender());
+
+    for (auto itWired = m_wiredItems.begin(); itWired != m_wiredItems.end(); itWired++) {
+        WiredItem *item = itWired.value();
+        if (item != connectWired)
+            item->disConnectedNetwork();
+    }
 }

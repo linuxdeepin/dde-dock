@@ -24,19 +24,28 @@
 
 #include "deviceitem.h"
 
-#include <WiredDevice>
-
 #include <DGuiApplicationHelper>
 #include <DSpinner>
 
-using namespace dde::network;
+#include <WiredDevice>
+
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
+
+namespace dde {
+  namespace network {
+    class NetworkModel;
+    class NetworkWorker;
+  }
+}
+
+using namespace dde::network;
 
 class QLabel;
 class TipsWidget;
 class HorizontalSeperator;
 class StateButton;
+
 class WiredItem : public DeviceItem
 {
     Q_OBJECT
@@ -59,7 +68,8 @@ public:
     Q_ENUM(WiredStatus)
 
 public:
-    explicit WiredItem(dde::network::WiredDevice *device, const QString &deviceName, QWidget *parent = nullptr);
+    explicit WiredItem(WiredDevice *device, const QString &deviceName, NetworkWorker *netWorker,
+                       NetworkModel *networkModel, bool canSwitchWired, QWidget *parent = nullptr);
     void setTitle(const QString &name);
     bool deviceEabled();
     void setDeviceEnabled(bool enabled);
@@ -69,12 +79,19 @@ public:
     void setThemeType(DGuiApplicationHelper::ColorType themeType);
     void setWiredStateIcon();
     void refreshConnectivity() override;
+    void disConnectedNetwork();
+
+protected:
+    void requestConnection();
+
+    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
 signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
     void wiredStateChanged();
     void enableChanged();
     void activeConnectionChanged();
+    void wiredChanged();
 
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
@@ -90,6 +107,9 @@ private:
     HorizontalSeperator *m_line;
     QTimer *m_freshWiredIcon;
     NetworkDevice::DeviceStatus m_deviceState;
+    NetworkModel *m_networkModel;
+    NetworkWorker *m_netWorker;
+    bool m_canSwitchWired;
 };
 
 #endif // WIREDITEM_H

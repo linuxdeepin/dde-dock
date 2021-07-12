@@ -26,6 +26,8 @@
 
 #include <DDBusSender>
 
+#include <QGSettings>
+
 using namespace dde::network;
 
 #define STATE_KEY       "enabled"
@@ -36,7 +38,14 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
     , m_networkWorker(nullptr)
     , m_networkItem(nullptr)
     , m_hasDevice(false)
+    , m_canSwitchWired(false)
 {
+    // 读取是否使用切换多网卡
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.module.network")) {
+        QGSettings setting("com.deepin.dde.dock.module.network", "/com/deepin/dde/dock/module/network/", this);
+        if (setting.keys().contains("switchwired"))
+            m_canSwitchWired = setting.get("switchwired").toBool();
+    }
 }
 
 const QString NetworkPlugin::pluginName() const
@@ -93,12 +102,12 @@ const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey)
     return (m_hasDevice && !m_networkItem->isShowControlCenter())
-            ? QString()
-            : QString("dbus-send --print-reply "
-                      "--dest=com.deepin.dde.ControlCenter "
-                      "/com/deepin/dde/ControlCenter "
-                      "com.deepin.dde.ControlCenter.ShowModule "
-                      "\"string:network\"");
+           ? QString()
+           : QString("dbus-send --print-reply "
+                     "--dest=com.deepin.dde.ControlCenter "
+                     "/com/deepin/dde/ControlCenter "
+                     "com.deepin.dde.ControlCenter.ShowModule "
+                     "\"string:network\"");
 }
 
 const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
@@ -163,7 +172,7 @@ void NetworkPlugin::pluginSettingsChanged()
 
 void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 {
-    QMap<QString, WirelessItem*> wirelessItems;
+    QMap<QString, WirelessItem *> wirelessItems;
     QMap<QString, WiredItem *> wiredItems;
 
     int wiredDeviceCnt = 0;
@@ -191,7 +200,7 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                 text = tr("Wired Network");
             else
                 text = tr("Wired Network %1").arg(wiredNum);
-            item = new WiredItem(static_cast<WiredDevice *>(device), text);
+            item = new WiredItem(static_cast<WiredDevice *>(device), text, m_networkWorker, m_networkModel, m_canSwitchWired);
             wiredItems.insert(path, static_cast<WiredItem *>(item));
 
             connect(static_cast<WiredItem *>(item), &WiredItem::wiredStateChanged,
@@ -200,6 +209,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem, &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
                     m_networkItem, &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::wiredChanged,
+                    m_networkItem, &NetworkItem::switchWired);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device));

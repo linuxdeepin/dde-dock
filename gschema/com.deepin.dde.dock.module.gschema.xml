@@ -114,6 +114,13 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="switchwired">
+      <default>true</default>
+      <summary>Switch Wired</summary>
+      <description>
+          Can Switch Wired
+      </description>
+    </key>
   </schema>
   <schema path="/com/deepin/dde/dock/module/onboard/" id="com.deepin.dde.dock.module.onboard" gettext-domain="DDE">
     <key type="b" name="control">

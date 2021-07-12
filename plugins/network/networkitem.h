@@ -24,8 +24,7 @@ class NetworkItem : public QWidget
 {
     Q_OBJECT
 
-    enum PluginState
-    {
+    enum PluginState {
         Unknow              = 0,
         // A 无线 B 有线
         Disabled,
@@ -57,7 +56,7 @@ public:
     QWidget *itemApplet();
     QWidget *itemTips();
 
-    void updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap<QString, WirelessItem*> &wirelessItems);
+    void updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap<QString, WirelessItem *> &wirelessItems);
 
     const QString contextMenu() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
@@ -68,11 +67,12 @@ public slots:
     void updateSelf();
     void refreshIcon();
     void wirelessScan();
+    void switchWired();
 
 protected:
     void resizeEvent(QResizeEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
-    bool eventFilter(QObject *obj,QEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
     QString getStrengthStateString(int strength = 0);
 
 private slots:

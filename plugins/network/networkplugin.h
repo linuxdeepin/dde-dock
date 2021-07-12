@@ -75,6 +75,7 @@ private:
     NetworkItem *m_networkItem;
 
     bool m_hasDevice;
+    bool m_canSwitchWired;
 };
 
 #endif // NETWORKPLUGIN_H
