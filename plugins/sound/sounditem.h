@@ -45,7 +45,7 @@ public:
     QWidget *tipsWidget();
     QWidget *popupApplet();
 
-    const QString contextMenu() const;
+    const QString contextMenu();
     void invokeMenuItem(const QString menuId, const bool checked);
 
     void refreshIcon();

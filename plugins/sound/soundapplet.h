@@ -27,14 +27,14 @@
 #include <com_deepin_daemon_audio.h>
 #include <com_deepin_daemon_audio_sink.h>
 
+#include <DIconButton>
+#include <DListView>
+#include <DApplicationHelper>
+
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
-
-#include <DIconButton>
-#include <DListView>
-#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +44,7 @@ using DBusSink = com::deepin::daemon::audio::Sink;
 class HorizontalSeperator;
 class QGSettings;
 
-namespace Dock{
+namespace Dock {
 class TipsWidget;
 }
 
@@ -134,6 +134,8 @@ public:
     Port *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
     void initUi();
+
+    bool existActiveOutputDevice();
 
 signals:
     void volumeChanged(const int value) const;
