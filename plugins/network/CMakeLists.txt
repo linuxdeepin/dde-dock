@@ -39,4 +39,4 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DFrameworkDBus_LIBRARIES}
 )
 
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}/dde-dock/plugins/system-trays)

@@ -125,7 +125,7 @@ PluginsItem 的 mousePressEvent 中只直接调用了 QWidget::mousePressEvent �
 - 电池
 - 挂载
 
-dock 要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins`，而托盘插件要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins/system-trays`。
+默认情况下，dock 要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins`，而托盘插件要加载的插件所在的目录是 `/usr/lib/dde-dock/plugins/system-trays`，但是路径可以在编译的时候被修改 `PLUGIN_INSTALL_DIR`
 为 dock 编写的插件几乎不用做任何改动就可以放到 `system-trays` 目录下让托盘插件去加载，在代码上唯一要改动的地方是不必再为时尚模式改变控件的样式，因为时尚模式和高效模式下托盘插件内的控件样式是一样的，不需要发生改变。
 
 除了这些“插件内插件”，托盘插件还会提供以下两种类型应用托盘和一种托盘插件自定义的托盘类型，即指示器：
