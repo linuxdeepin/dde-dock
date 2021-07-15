@@ -531,8 +531,7 @@ void SoundApplet::activePort(const QString &portId, const uint &cardId)
 
 void SoundApplet::updateCradsInfo()
 {
-    QDBusInterface inter("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio","com.deepin.daemon.Audio",QDBusConnection::sessionBus(), this);
-    QString info = inter.property("CardsWithoutUnavailable").toString();
+    QString info = m_audioInter->property("CardsWithoutUnavailable").toString();
     if(m_deviceInfo != info){
         cardsChanged(info);
         m_deviceInfo = info;
@@ -611,11 +610,42 @@ void SoundApplet::updateVolumeSliderStatus(const QString &status)
     m_volumeIconMax->setVisible(flag);
 }
 
+/** 判断是否存在未禁用的声音输出设备
+ * @brief SoundApplet::existActiveOutputDevice
+ * @return 存在返回true,否则返回false
+ */
+bool SoundApplet::existActiveOutputDevice()
+{
+    QString info = m_audioInter->property("CardsWithoutUnavailable").toString();
+
+    QJsonDocument doc = QJsonDocument::fromJson(info.toUtf8());
+    QJsonArray jCards = doc.array();
+    for (QJsonValue cV : jCards) {
+        QJsonObject jCard = cV.toObject();
+        QJsonArray jPorts = jCard["Ports"].toArray();
+
+        for (QJsonValue pV : jPorts) {
+            QJsonObject jPort = pV.toObject();
+            if (jPort["Direction"].toInt() == 1 && jPort["Enabled"].toBool())
+                return true;
+        }
+    }
+
+    return false;
+}
+
 bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
 {
+    // 当控制中心禁用所有输出设备时，静音按钮置灰，其他情况正常．
     if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
-        m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
+        if (!existActiveOutputDevice()) {
+            m_volumeIconMin->setEnabled(false);
+        } else {
+            m_volumeIconMin->setEnabled(true);
+            m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
+        }
     }
+
     return false;
 }
 

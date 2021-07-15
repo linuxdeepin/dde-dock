@@ -19,30 +19,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QPainter>
-#include <QIcon>
-#include <QMouseEvent>
-#include <QApplication>
-
-#include <DApplication>
-#include <DDBusSender>
-#include <DGuiApplicationHelper>
-
-DWIDGET_USE_NAMESPACE
-DGUI_USE_NAMESPACE
-
 #include "sounditem.h"
 #include "constants.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 #include "../frame/util/utils.h"
 
+#include <DApplication>
+#include <DDBusSender>
+#include <DGuiApplicationHelper>
+
+#include <QPainter>
+#include <QIcon>
+#include <QMouseEvent>
+#include <QApplication>
+#include <QDBusInterface>
+
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
+
 // menu actions
 #define MUTE     "mute"
 #define SETTINGS "settings"
 
-
 using namespace Dock;
+
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
@@ -77,18 +78,23 @@ QWidget *SoundItem::popupApplet()
     return m_applet;
 }
 
-const QString SoundItem::contextMenu() const
+const QString SoundItem::contextMenu()
 {
     QList<QVariant> items;
     items.reserve(2);
 
     QMap<QString, QVariant> open;
     open["itemId"] = MUTE;
-    if (m_sinkInter->mute())
+    if (m_sinkInter->mute()) {
         open["itemText"] = tr("Unmute");
-    else
+        if (!m_applet->existActiveOutputDevice())
+            open["isActive"] = false;
+        else
+            open["isActive"] = true;
+    } else {
         open["itemText"] = tr("Mute");
-    open["isActive"] = true;
+        open["isActive"] = true;
+    }
     items.push_back(open);
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
@@ -101,7 +107,6 @@ const QString SoundItem::contextMenu() const
         qInfo() << "----------icbc sound setting.";
 #endif
     }
-
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;
