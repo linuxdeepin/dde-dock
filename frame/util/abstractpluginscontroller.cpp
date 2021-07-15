@@ -247,16 +247,13 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     while (it.hasNext()) {
         it.next();
         if (it.key().first == pluginFile) {
+            m_pluginLoadMap.remove(it.key());
+            QPair<QString, PluginsItemInterface *> newPair;
+            newPair.first = pluginFile;
+            newPair.second = interface;
+            m_pluginLoadMap.insert(newPair, false);
             break;
         }
-    }
-
-    if (it.hasNext()) {
-        m_pluginLoadMap.remove(it.key());
-        QPair<QString, PluginsItemInterface *> newPair;
-        newPair.first = pluginFile;
-        newPair.second = interface;
-        m_pluginLoadMap.insert(newPair, false);
     }
 
     // 保存 PluginLoader 对象指针
