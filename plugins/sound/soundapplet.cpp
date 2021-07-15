@@ -650,6 +650,7 @@ bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
     if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
         m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
     }
+
     return false;
 }
 
