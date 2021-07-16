@@ -166,7 +166,7 @@ void MultiScreenWorker::onAutoHideChanged(bool autoHide)
          * 导致这里走的是KeepHidden，任务栏表现为直接隐藏了，而不是一直显示。
          * 引入特性：右键菜单关闭后，延时500ms任务栏才执行动画
          */
-        QTimer::singleShot(500, [=] {
+        QTimer::singleShot(500, [ = ] {
             switch (m_hideMode) {
             case HideMode::KeepHidden: {
                 // 这时候鼠标如果在任务栏上,就不能隐藏
@@ -328,16 +328,16 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Positi
     case Position::Top: {
         parent()->panel()->move(0, rect.height() - panelSize);
     }
-        break;
+    break;
     case Position::Left: {
         parent()->panel()->move(rect.width() - panelSize, 0);
     }
-        break;
+    break;
     case Position::Bottom:
     case Position::Right: {
         parent()->panel()->move(0, 0);
     }
-        break;
+    break;
     }
 }
 
@@ -535,28 +535,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + monitorHeight;
         }
-            break;
+        break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y() + screenRect.height() - monitorHeight;
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Left: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + monitorHeight;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Right: {
             monitorRect.x1 = screenRect.x() + screenRect.width() - monitorHeight;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         }
 
         if (!m_monitorRectList.contains(monitorRect)) {
@@ -584,28 +584,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height() - realDockSize;
         }
-            break;
+        break;
         case Left: {
             monitorRect.x1 = screenRect.x() + realDockSize;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Right: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width() - realDockSize;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         }
 
         if (!m_extralRectList.contains(monitorRect)) {
@@ -637,28 +637,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + monitHeight;
         }
-            break;
+        break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y() + screenRect.height() - monitHeight;
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Left: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + monitHeight;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         case Right: {
             monitorRect.x1 = screenRect.x() + screenRect.width() - monitHeight;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-            break;
+        break;
         }
 
 
@@ -690,6 +690,27 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 }
 
 /**
+ * @brief 判断屏幕是否为复制模式的依据，第一个屏幕的X和Y值是否和其他的屏幕的X和Y值相等
+ * 对于复制模式，这两个值肯定是相等的，如果不是复制模式，这两个值肯定不等，目前支持双屏
+ */
+static bool isCopyMode()
+{
+    QList<QScreen *> screens = DIS_INS->screens();
+    if (screens.size() < 2)
+        return false;
+
+    // 在多个屏幕的情况下，如果所有屏幕的位置的X和Y值都相等，则认为是复制模式
+    QRect rect0 = screens[0]->availableGeometry();
+    for (int i = 1; i < screens.size(); i++) {
+        QRect rect = screens[i]->availableGeometry();
+        if (rect0.x() != rect.x() || rect0.y() != rect.y())
+            return false;
+    }
+
+    return true;
+}
+
+/**
  * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
  * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
  */
@@ -700,7 +721,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     static int lastScreenHeight = 0;
 
     /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
-    if (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing) {
+    if (!isCopyMode() && (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing)) {
         lastRect = QRect();
 
         const auto display = QX11Info::display();
@@ -850,7 +871,7 @@ void MultiScreenWorker::initConnection()
     connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
-    connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ] (bool value) { setStates(LauncherDisplay, value); });
+    connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
     /** FIXME
      * 这里关联的信号有时候收不到是因为 qt-dbus-factory 中的 changed 的信号有时候会发不出来，
@@ -1047,7 +1068,7 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
 
     connect(ani, &QVariantAnimation::valueChanged, this, static_cast<void (MultiScreenWorker::*)(const QVariant &value)>(&MultiScreenWorker::updateParentGeometry));
 
-    connect(ani, &QVariantAnimation::stateChanged, this, [=](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
+    connect(ani, &QVariantAnimation::stateChanged, this, [ = ](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
         // 更新动画是否正在进行的信号值
         switch (act) {
         case AniAction::Show:
@@ -1186,7 +1207,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
 
             // 隐藏后需要通知界面更新布局方向
             emit requestUpdateLayout();
-        });
+    });
 
     connect(group, &QVariantAnimation::finished, this, [ = ] {
         setStates(ChangePositionAnimationStart, false);
@@ -1211,16 +1232,14 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     //TODO 考虑在主屏幕名变化时自动更新，是不是就不需要手动处理了
     m_ds.updatePrimary(DIS_INS->primary());
 
-    if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()) ,pos)) {
+    if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()), pos))
         return m_ds.current();
-    }
 
-    if (DIS_INS->canDock(qApp->primaryScreen() ,pos)) {
+    if (DIS_INS->canDock(qApp->primaryScreen(), pos))
         return DIS_INS->primary();
-    }
 
     for (auto s : DIS_INS->screens()) {
-        if (DIS_INS->canDock(s ,pos))
+        if (DIS_INS->canDock(s, pos))
             return s->name();
     }
 
@@ -1473,9 +1492,9 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
     QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-                    (scaledPos - screen->geometry().topLeft()) *
-                    screen->devicePixelRatio()
-                  : scaledPos;
+           (scaledPos - screen->geometry().topLeft()) *
+           screen->devicePixelRatio()
+           : scaledPos;
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)
@@ -1535,7 +1554,7 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
  */
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
-    if ( qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
+    if (qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
         qWarning() << "dock is draging or animation is running";
         return;
     }
