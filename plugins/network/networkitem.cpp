@@ -13,6 +13,8 @@
 #include <QVBoxLayout>
 #include <QJsonDocument>
 #include <QGSettings>
+#include <QNetworkInterface>
+#include <QHostAddress>
 
 extern const int ItemWidth;
 extern const int ItemMargin;
@@ -39,6 +41,10 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_firstSeparator(new HorizontalSeperator(this))
     , m_secondSeparator(new HorizontalSeperator(this))
     , m_thirdSeparator(new HorizontalSeperator(this))
+    , m_networkInter(new DbusNetwork("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this))
+    , m_detectTimer(new QTimer(this))
+    , m_ipAddr(QString())
+    , m_ipConflict(false)
 {
     refreshIconTimer->setInterval(100);
 
@@ -67,6 +73,8 @@ NetworkItem::NetworkItem(QWidget *parent)
     m_loadingIndicator->viewport()->setAutoFillBackground(false);
     m_loadingIndicator->setFrameShape(QFrame::NoFrame);
     m_loadingIndicator->installEventFilter(this);
+
+    this->installEventFilter(this);
 
     m_wirelessLayout = new QVBoxLayout;
     m_wirelessLayout->setMargin(0);
@@ -151,6 +159,22 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWiredBtn, &DSwitchButton::toggled, this, &NetworkItem::wiredsEnable);
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
+
+    connect(m_networkInter, &DbusNetwork::IPConflict, this, &NetworkItem::ipConfllict);
+    connect(m_detectTimer, &QTimer::timeout, [ & ]() {
+        // 检查所有网卡ip(有线，无线，虚拟)是否与外界ip冲突
+        foreach(const QString ip, currentIpList()) {
+            // 主动检测，如果冲突会触发IPConflict信号
+            m_networkInter->RequestIPConflictCheck(ip, "");
+        }
+
+        // 距离上一次冲突处理3秒内没有触发信号就视为ip冲突已处理
+        if (m_timeElapse.elapsed() > 3000) {
+            m_ipConflict = false;
+            m_detectTimer->stop();
+            updateSelf();
+        }
+    });
 
     const QGSettings *gsetting = Utils::SettingsPtr("com.deepin.dde.dock", QByteArray(), this);
     if (gsetting)
@@ -332,6 +356,18 @@ void NetworkItem::refreshIcon()
     int iconSize = PLUGIN_ICON_MAX_SIZE;
     int strength = 0;
 
+    if (m_ipConflict) {
+        stateString = "offline";
+        iconString = QString("network-%1-symbolic").arg(stateString);
+        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
+                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            iconString.append(PLUGIN_MIN_ICON_NAME);
+
+        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+        update();
+        return;
+    }
+
     switch (m_pluginState) {
     case Disabled:
     case Adisabled:
@@ -432,6 +468,7 @@ void NetworkItem::refreshIcon()
     case Failed: //无线连接失败改为 disconnect
         stateString = "disconnect";
         iconString = QString("wireless-%1").arg(stateString);
+        break;
     }
 
     refreshIconTimer->stop();
@@ -482,6 +519,24 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
                 }
             }
             wirelessScan();
+        }
+    }
+
+    // DbusNetwork::IPConflict信号不能保证ip冲突后一直发送信号出来，
+    // 当网络冲突放置很长时间或者进程杀死又重新启动后没有收到ip冲突信号，
+    // 用户会鼠标悬浮检查网络状态，此时发起检测，并更新网络状态
+    if (obj == this) {
+        if (event->type() == QEvent::Enter) {
+            foreach(const QString ip, currentIpList()) {
+                // 主动检测，如果冲突会触发IPConflict信号
+                m_networkInter->RequestIPConflictCheck(ip, "");
+            }
+
+            if (m_timeElapse.elapsed() > 3000) {
+                m_ipConflict = false;
+                m_detectTimer->stop();
+                updateSelf();
+            }
         }
     }
     return false;
@@ -540,6 +595,21 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
         wiredItem->setThemeType(themeType);
     }
     refreshIcon();
+}
+
+void NetworkItem::ipConfllict(const QString &in0, const QString &in1)
+{
+    Q_UNUSED(in0);
+    Q_UNUSED(in1);
+
+    m_timeElapse.start();
+    m_detectTimer->start(1000);
+
+    if (m_ipConflict)
+        return;
+
+    m_ipConflict = true;
+    updateSelf();
 }
 
 void NetworkItem::getPluginState()
@@ -1191,6 +1261,11 @@ void NetworkItem::updateMasterControlSwitch()
 
 void NetworkItem::refreshTips()
 {
+    if (m_ipConflict) {
+        m_tipsWidget->setText(tr("IP conflict"));
+        return;
+    }
+
     switch (m_pluginState) {
     case Disabled:
     case Adisabled:
@@ -1352,6 +1427,28 @@ bool NetworkItem::isShowControlCenter()
     }
 
     return false;
+}
+
+const QStringList NetworkItem::currentIpList()
+{
+    QStringList strIpAddress = QStringList();
+    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+    // 获取第一个本主机的IPv4地址
+    int nListSize = ipAddressesList.size();
+    for (int i = 0; i < nListSize; ++i) {
+        if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
+                ipAddressesList.at(i).toIPv4Address()) {
+            if (strIpAddress.contains(ipAddressesList.at(i).toString()))
+                continue;
+
+            strIpAddress.append(ipAddressesList.at(i).toString());
+        }
+    }
+
+    if (strIpAddress.isEmpty())
+        strIpAddress.append(QHostAddress(QHostAddress::LocalHost).toString());
+
+    return strIpAddress;
 }
 
 void NetworkItem::wirelessScan()

@@ -14,6 +14,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -27,6 +28,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
                                                  ${DDE-Network-Utils_INCLUDE_DIRS}
+                                                 ${Qt5Network_INCLUDE_DIRS}
                                                  ../../interfaces
                                                  ../../frame)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
@@ -37,6 +39,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${DDE-Network-Utils_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
+    ${Qt5Network_LIBRARIES}
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays)
