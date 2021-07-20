@@ -1,6 +1,8 @@
 #ifndef NETWORKITEM_H
 #define NETWORKITEM_H
 
+#include "com_deepin_daemon_network.h"
+
 #include <DGuiApplicationHelper>
 #include <DSwitchButton>
 #include <dloadingindicator.h>
@@ -20,6 +22,9 @@ class TipsWidget;
 class WiredItem;
 class WirelessItem;
 class HorizontalSeperator;
+
+using DbusNetwork = com::deepin::daemon::Network;
+
 class NetworkItem : public QWidget
 {
     Q_OBJECT
@@ -64,6 +69,8 @@ public:
     void refreshTips();
     bool isShowControlCenter();
 
+    const QStringList currentIpList();
+
 public slots:
     void updateSelf();
     void refreshIcon();
@@ -79,6 +86,7 @@ private slots:
     void wiredsEnable(bool enable);
     void wirelessEnable(bool enable);
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+    void ipConfllict(const QString &in0, const QString &in1);
 
 private:
     void getPluginState();
@@ -120,6 +128,12 @@ private:
     HorizontalSeperator *m_firstSeparator;
     HorizontalSeperator *m_secondSeparator;
     HorizontalSeperator *m_thirdSeparator;
+
+    DbusNetwork *m_networkInter;
+    QTimer *m_detectTimer;
+    QTime m_timeElapse;
+    QString m_ipAddr;
+    bool m_ipConflict;
 };
 
 #endif // NETWORKITEM_H
