@@ -1378,7 +1378,9 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
             QRect screenRect = s->geometry();
-            screenRect.setSize(screenRect.size() * s->devicePixelRatio());
+            // 不能直接用screenRect乘缩放率，因为那样会四舍五入得到的数值有误差，桌面在判断当前显示器的时候得到的显示器错误，引起桌面图标的显示错误
+            screenRect.setWidth(s->geometry().x() + int(s->geometry().width() * s->devicePixelRatio()));
+            screenRect.setHeight(s->geometry().y() + int(s->geometry().height() * s->devicePixelRatio()));
 
             switch (pos) {
             case Position::Top:
@@ -1429,7 +1431,9 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
             QRect screenRect = s->geometry();
-            screenRect.setSize(screenRect.size() * s->devicePixelRatio());
+            // 不能直接用screenRect乘缩放率，因为那样会四舍五入得到的数值有误差，桌面在判断当前显示器的时候得到的显示器错误，引起桌面图标的显示错误
+            screenRect.setWidth(s->geometry().x() + int(s->geometry().width() * s->devicePixelRatio()));
+            screenRect.setHeight(s->geometry().y() + int(s->geometry().height() * s->devicePixelRatio()));
 
             switch (pos) {
             case Position::Top:
