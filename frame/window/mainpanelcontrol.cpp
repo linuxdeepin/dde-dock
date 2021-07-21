@@ -84,6 +84,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
     m_desktopWidget->installEventFilter(this);
+    m_pluginAreaWidget->installEventFilter(this);
 
     //在设置每条线大小前，应该设置fixedsize(0,0)
     //应为paintEvent函数会先调用设置背景颜色，大小为随机值
@@ -573,6 +574,15 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             break;
         default:
             moveAppSonWidget();
+            break;
+        }
+    }
+
+    // fix:88133 在计算icon大小时m_pluginAreaWidget的数据错误
+    if (watched == m_pluginAreaWidget) {
+        switch (event->type()) {
+        case QEvent::Resize:
+            resizeDockIcon();
             break;
         }
     }
