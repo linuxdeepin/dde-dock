@@ -32,6 +32,7 @@
 #include <QVariantAnimation>
 #include <QX11Info>
 #include <QDBusConnection>
+#include <qpa/qplatformscreen.h>
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
@@ -1234,13 +1235,11 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     //TODO 考虑在主屏幕名变化时自动更新，是不是就不需要手动处理了
     m_ds.updatePrimary(DIS_INS->primary());
 
-    if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()), pos)) {
+    if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()), pos))
         return m_ds.current();
-    }
 
-    if (DIS_INS->canDock(qApp->primaryScreen(), pos)) {
+    if (DIS_INS->canDock(qApp->primaryScreen(), pos))
         return DIS_INS->primary();
-    }
 
     for (auto s : DIS_INS->screens()) {
         if (DIS_INS->canDock(s, pos))
@@ -1381,10 +1380,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
-            QRect screenRect = s->geometry();
-            // 不能直接用screenRect乘缩放率，因为那样会四舍五入得到的数值有误差，桌面在判断当前显示器的时候得到的显示器错误，引起桌面图标的显示错误
-            screenRect.setWidth(s->geometry().x() + int(s->geometry().width() * s->devicePixelRatio()));
-            screenRect.setHeight(s->geometry().y() + int(s->geometry().height() * s->devicePixelRatio()));
+            // 拿到当前显示器缩放之前的分辨率
+            QRect screenRect = s->handle()->geometry();
 
             switch (pos) {
             case Position::Top:
@@ -1434,10 +1431,8 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
 
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
-            QRect screenRect = s->geometry();
-            // 不能直接用screenRect乘缩放率，因为那样会四舍五入得到的数值有误差，桌面在判断当前显示器的时候得到的显示器错误，引起桌面图标的显示错误
-            screenRect.setWidth(s->geometry().x() + int(s->geometry().width() * s->devicePixelRatio()));
-            screenRect.setHeight(s->geometry().y() + int(s->geometry().height() * s->devicePixelRatio()));
+            // 拿到当前显示器缩放之前的分辨率
+            QRect screenRect = s->handle()->geometry();
 
             switch (pos) {
             case Position::Top:
