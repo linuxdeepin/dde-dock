@@ -314,6 +314,10 @@
         <source>Connection failed</source>
         <translation>A kapcsolódás sikertelen</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>

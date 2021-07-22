@@ -314,6 +314,10 @@
         <source>Connection failed</source>
         <translation>連線失敗</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP位址衝突</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>

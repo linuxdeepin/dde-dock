@@ -314,6 +314,10 @@
         <source>Connection failed</source>
         <translation>ئۇلىنىش مەغلۇپ بولدى</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP ئادرېس توقۇنۇشۇپ قالدى</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
