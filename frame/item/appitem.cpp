@@ -610,8 +610,12 @@ void AppItem::refershIcon()
         if (m_retryTimes < 5) {
             m_retryTimes++;
             qDebug() << m_itemEntryInter->name() << "obtain app icon(" << icon << ")failed, retry times:" << m_retryTimes;
+            QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
             m_retryObtainIconTimer->start();
+        } else {
+            QTimer::singleShot(60 * 1000, this, &AppItem::refershIcon);
         }
+        update();
         return;
     } else if (m_retryTimes > 0) {
         // reset times
