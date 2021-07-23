@@ -183,7 +183,7 @@ void NetworkPanel::getPluginState()
     }
 }
 
-void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
+void NetworkPanel::updateItems()
 {
     auto findBaseController = [ = ](DeviceType t)->DeviceControllItem *{
         for (NetItem *item : m_items) {
@@ -349,12 +349,9 @@ void NetworkPanel::updateItems(QList<NetItem *> &removeItems)
     }
 
     // 把原来列表中不存在的项放到移除列表中
-    removeItems.clear();
     for (NetItem *item : m_items) {
-        if (!items.contains(item)) {
-            m_items.removeOne(item);
-            removeItems << item;
-        }
+        if (!items.contains(item))
+            delete item;
     }
 
     m_items = items;
@@ -364,16 +361,9 @@ void NetworkPanel::updateView()
 {
     QList<NetItem *> removeItems;
 
-    updateItems(removeItems);
+    updateItems();
 
-    // 先删除所有不存在的列表
-    for (NetItem *item : removeItems)
-        m_model->removeRow(item->standardItem()->row());
-
-    qDeleteAll(removeItems);
-    removeItems.clear();
-    int height = 0;
-    int totalHeight = 0;
+    QList<QStandardItem *> items;
     for (int i = 0; i < m_items.size(); i++) {
         NetItem *item = m_items[i];
         int nRow = item->standardItem()->row();
@@ -385,7 +375,28 @@ void NetworkPanel::updateView()
             m_model->insertRow(i, item->standardItem());
         }
 
-        QSize size = item->standardItem()->sizeHint();
+        items << item->standardItem();
+    }
+
+    // 删除model在items中不存在的项目
+    QList<int > rmRows;
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        QStandardItem *item = m_model->item(i);
+        if (!items.contains(item))
+            rmRows << item->row();
+    }
+
+    // 将row按照从大到小的顺序排序，否则会出现删除错误的问题
+    qSort(rmRows.begin(), rmRows.end(), [ = ] (int &row1, int &row2) { return row1 > row2; });
+    for (int row: rmRows)
+        m_model->removeRow(row);
+
+    // 设置高度
+    int height = 0;
+    int totalHeight = 0;
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        QStandardItem *item = m_model->item(i);
+        QSize size = item->sizeHint();
         if (i < 16)
              height += size.height();
 

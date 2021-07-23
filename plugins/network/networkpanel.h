@@ -80,7 +80,7 @@ private:
     void getPluginState();
     void updateView();                                                  // 更新网络列表内容大小
     void updateTooltips();                                              // 更新提示的内容
-    void updateItems(QList<NetItem *> &removeItems);
+    void updateItems();
     bool deviceEnabled(const DeviceType &deviceType) const;
     void setDeviceEnabled(const DeviceType &deviceType, bool enabeld);
 
