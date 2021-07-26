@@ -148,6 +148,22 @@
       </description>
     </key>
   </schema>
+  <schema path="/com/deepin/dde/dock/module/keyboard/" id="com.deepin.dde.dock.module.keyboard" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="item-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          disable item
+      </description>
+    </key>
+  </schema>
   <schema path="/com/deepin/dde/dock/module/onboard/" id="com.deepin.dde.dock.module.onboard" gettext-domain="DDE">
     <key type="b" name="control">
       <default>false</default>

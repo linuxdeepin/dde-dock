@@ -26,6 +26,10 @@
 #include <QLibrary>
 #include <QGSettings>
 
+#include <DSysInfo>
+
+DCORE_USE_NAMESPACE
+
 PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     : QThread(parent)
     , m_pluginDirPath(pluginDirPath)
@@ -54,6 +58,10 @@ void PluginLoader::run()
     // 查找可用插件
     for (QString file : files) {
         if (!QLibrary::isLibrary(file))
+            continue;
+
+        // 社区版需要加载键盘布局，其他不需要
+        if (file.contains("libkeyboard-layout") && !DSysInfo::isCommunityEdition())
             continue;
 
         // TODO: old dock plugins is uncompatible
