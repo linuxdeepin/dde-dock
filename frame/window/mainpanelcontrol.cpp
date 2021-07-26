@@ -159,6 +159,9 @@ void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
     updateDisplayMode();
 }
 
+/**根据任务栏在屏幕上的位置，更新任务栏各控件布局
+ * @brief MainPanelControl::updateMainPanelLayout
+ */
 void MainPanelControl::updateMainPanelLayout()
 {
     switch (m_position) {
@@ -192,10 +195,18 @@ void MainPanelControl::updateMainPanelLayout()
         break;
     }
 
+    // 显示桌面的区域
     resizeDesktopWidget();
+
+    // 设置任务栏各区域图标大小
     resizeDockIcon();
 }
 
+/**往固定区域添加应用
+ * @brief MainPanelControl::addFixedAreaItem
+ * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
+ * @param wdg　应用指针对象
+ */
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
     if(m_position == Position::Top || m_position == Position::Bottom){
@@ -206,6 +217,11 @@ void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
     m_fixedAreaLayout->insertWidget(index, wdg);
 }
 
+/**往应用区域添加应用
+ * @brief MainPanelControl::addAppAreaItem
+ * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
+ * @param wdg　应用指针对象
+ */
 void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
 {
     if(m_position == Position::Top || m_position == Position::Bottom){
@@ -216,12 +232,22 @@ void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
     m_appAreaSonLayout->insertWidget(index, wdg);
 }
 
+/**往托盘插件区域添加应用
+ * @brief MainPanelControl::addTrayAreaItem
+ * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
+ * @param wdg　应用指针对象
+ */
 void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_tray = static_cast<TrayPluginItem *>(wdg);
     m_trayAreaLayout->insertWidget(index, wdg);
 }
 
+/**往插件区域添加应用，保存回收站插件指针对象
+ * @brief MainPanelControl::addPluginAreaItem
+ * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
+ * @param wdg　应用指针对象
+ */
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
     //因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
@@ -236,21 +262,37 @@ void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
         m_trashItem = pluginsItem;
 }
 
+/**移除固定区域某一应用
+ * @brief MainPanelControl::removeFixedAreaItem
+ * @param wdg 应用指针对象
+ */
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
 {
     m_fixedAreaLayout->removeWidget(wdg);
 }
 
+/**移除应用区域某一应用
+ * @brief MainPanelControl::removeAppAreaItem
+ * @param wdg 应用指针对象
+ */
 void MainPanelControl::removeAppAreaItem(QWidget *wdg)
 {
     m_appAreaSonLayout->removeWidget(wdg);
 }
 
+/**移除托盘插件区域某一应用
+ * @brief MainPanelControl::removeTrayAreaItem
+ * @param wdg 应用指针对象
+ */
 void MainPanelControl::removeTrayAreaItem(QWidget *wdg)
 {
     m_trayAreaLayout->removeWidget(wdg);
 }
 
+/**移除插件区域某一应用
+ * @brief MainPanelControl::removePluginAreaItem
+ * @param wdg 应用指针对象
+ */
 void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 {
     //因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
@@ -277,6 +319,9 @@ void MainPanelControl::resizeEvent(QResizeEvent *event)
     return QWidget::resizeEvent(event);
 }
 
+/**根据任务栏所在位置， 设置应用区域控件的大小
+ * @brief MainPanelControl::updateAppAreaSonWidgetSize
+ */
 void MainPanelControl::updateAppAreaSonWidgetSize()
 {
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
@@ -307,6 +352,11 @@ void MainPanelControl::setPositonValue(Dock::Position position)
     });
 }
 
+/**向任务栏插入各类应用,并将属于同一个应用的窗口合并到同一个应用图标
+ * @brief MainPanelControl::insertItem
+ * @param index 位置索引
+ * @param item 应用指针对象
+ */
 void MainPanelControl::insertItem(int index, DockItem *item)
 {
     item->installEventFilter(this);
@@ -328,8 +378,6 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     case DockItem::Plugins:
         addPluginAreaItem(index, item);
         break;
-    default:
-        break;
     }
 
     // 同removeItem处 注意:不能屏蔽此接口，否则会造成插件插入时无法显示
@@ -342,6 +390,10 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     item->checkEntry();
 }
 
+/**从任务栏移除某一应用，并更新任务栏图标大小
+ * @brief MainPanelControl::removeItem
+ * @param item 应用指针对象
+ */
 void MainPanelControl::removeItem(DockItem *item)
 {
     switch (item->itemType()) {
@@ -359,8 +411,6 @@ void MainPanelControl::removeItem(DockItem *item)
     case DockItem::Plugins:
         removePluginAreaItem(item);
         break;
-    default:
-        break;
     }
 
     /** 此处重新计算大小的时候icon的个数在原有个数上减少了一个，导致每个icon的大小跟原来大小不一致，需要重新设置setFixedSize
@@ -371,6 +421,11 @@ void MainPanelControl::removeItem(DockItem *item)
         resizeDockIcon();
 }
 
+/**任务栏移动应用图标
+ * @brief MainPanelControl::moveItem
+ * @param sourceItem 即将插入的应用
+ * @param targetItem 被移动的应用
+ */
 void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 {
     // get target index
@@ -563,6 +618,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    // 更新应用区域大小和任务栏图标大小
     if (watched == m_appAreaSonWidget) {
         switch (event->type()) {
         case QEvent::LayoutRequest:
@@ -584,9 +640,12 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         case QEvent::Resize:
             resizeDockIcon();
             break;
+        default:
+            break;
         }
     }
 
+    // 高效模式下，鼠标移入移出＇显示桌面＇区域的处理
     if (watched == m_desktopWidget) {
         if (event->type() == QEvent::Enter) {
             if (checkNeedShowDesktop()) {
@@ -605,6 +664,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
+    // 更新应用区域子控件大小以及位置
     if (watched == m_appAreaWidget) {
         if (event->type() == QEvent::Resize)
             updateAppAreaSonWidgetSize();
@@ -841,6 +901,9 @@ void MainPanelControl::updateDisplayMode()
     resizeDesktopWidget();
 }
 
+/**把驻留应用和被打开的应用所在窗口移动到指定位置
+ * @brief MainPanelControl::moveAppSonWidget
+ */
 void MainPanelControl::moveAppSonWidget()
 {
     QRect rect(QPoint(0, 0), m_appAreaSonWidget->size());
@@ -883,6 +946,9 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
+/**通知布局器，控件已发生变化，需要重新设置几何位置
+ * @brief MainPanelControl::updatePluginsLayout
+ */
 void MainPanelControl::updatePluginsLayout()
 {
     for (int i = 0; i < m_pluginLayout->count(); ++i) {
@@ -935,6 +1001,9 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 25));
 }
 
+/**重新计算任务栏上应用图标、插件图标的大小，并设置
+ * @brief MainPanelControl::resizeDockIcon
+ */
 void MainPanelControl::resizeDockIcon()
 {
     // 插件有点特殊，因为会引入第三方的插件，并不会受dock的缩放影响，我们只能限制我们自己的插件，否则会导致显示错误。
@@ -1147,6 +1216,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     }
 }
 
+/**获取托盘插件的个数并更新任务栏图标大小
+ * @brief MainPanelControl::getTrayVisableItemCount
+ */
 void MainPanelControl::getTrayVisableItemCount()
 {
     if (m_trayAreaLayout->count() > 0) {
@@ -1159,6 +1231,9 @@ void MainPanelControl::getTrayVisableItemCount()
     resizeDockIcon();
 }
 
+/**时尚模式没有‘显示桌面’区域
+ * @brief MainPanelControl::resizeDesktopWidget
+ */
 void MainPanelControl::resizeDesktopWidget()
 {
     if (m_position == Position::Right || m_position == Position::Left)
@@ -1189,9 +1264,9 @@ bool MainPanelControl::checkNeedShowDesktop()
 }
 
 /**
- * @brief MainWindow::appIsOnDock 判断应用是否驻留在任务栏上
+ * @brief MainWindow::appIsOnDock 判断指定的应用（驻留和运行显示在任务栏的所有应用）是否在任务栏上
  * @param appDesktop 应用的desktop文件的完整路径
- * @return true: 驻留；false:未驻留
+ * @return true: 在任务栏；false: 不在任务栏
  */
 bool MainPanelControl::appIsOnDock(const QString &appDesktop)
 {

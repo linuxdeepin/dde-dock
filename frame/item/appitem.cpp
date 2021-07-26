@@ -129,6 +129,9 @@ AppItem::~AppItem()
     m_appNameTips->deleteLater();
 }
 
+/**将属于同一个应用的窗口合并到同一个应用图标
+ * @brief AppItem::checkEntry
+ */
 void AppItem::checkEntry()
 {
     m_itemEntryInter->Check();
@@ -162,6 +165,9 @@ void AppItem::updateWindowIconGeometries()
         xcb_misc->set_window_icon_geometry(it.key(), r);
 }
 
+/**取消驻留在dock上的应用
+ * @brief AppItem::undock
+ */
 void AppItem::undock()
 {
     m_itemEntryInter->RequestUndock();

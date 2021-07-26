@@ -113,7 +113,7 @@ private:
     QBoxLayout *m_fixedAreaLayout;  //
     QLabel *m_fixedSpliter;         // 固定区域与应用区域间的分割线
     QWidget *m_appAreaWidget;       // 应用区域
-    QWidget *m_appAreaSonWidget;    // 子应用区域
+    QWidget *m_appAreaSonWidget;    // 子应用区域，所在位置根据显示模式手动指定
     QBoxLayout *m_appAreaSonLayout; //
     QLabel *m_appSpliter;           // 应用区域与托盘区域间的分割线
     QWidget *m_trayAreaWidget;      // 托盘区域

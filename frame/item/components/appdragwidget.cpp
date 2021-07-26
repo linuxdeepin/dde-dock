@@ -150,6 +150,10 @@ void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
+/**获取应用的左上角坐标
+ * @brief AppDragWidget::topleftPoint
+ * @return 返回应用左上角坐标
+ */
 const QPoint AppDragWidget::topleftPoint() const
 {
     QPoint p;
@@ -162,6 +166,11 @@ const QPoint AppDragWidget::topleftPoint() const
     return p;
 }
 
+/**拖动从任务栏移除应用时浮窗坐标
+ * @brief AppDragWidget::popupMarkPoint
+ * @param pos　任务栏所在位置
+ * @return　拖动从任务栏移除应用时浮窗坐标
+ */
 const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
 {
     QPoint p(topleftPoint());
@@ -269,6 +278,9 @@ void AppDragWidget::initAnimations()
     connect(m_goBackAnim, &QPropertyAnimation::finished, this, &AppDragWidget::hide);
 }
 
+/**显示移除动画
+ * @brief AppDragWidget::showRemoveAnimation
+ */
 void AppDragWidget::showRemoveAnimation()
 {
     if (m_animGroup->state() == QParallelAnimationGroup::Running) {
@@ -278,6 +290,9 @@ void AppDragWidget::showRemoveAnimation()
     m_animGroup->start();
 }
 
+/**显示放弃移除后的动画
+ * @brief AppDragWidget::showGoBackAnimation
+ */
 void AppDragWidget::showGoBackAnimation()
 {
     m_goBackAnim->setDuration(300);
@@ -289,16 +304,16 @@ void AppDragWidget::showGoBackAnimation()
 void AppDragWidget::onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
                                                   QAbstractAnimation::State oldState)
 {
+    Q_UNUSED(oldState);
     if (newState == QAbstractAnimation::Stopped) {
         hide();
     }
 }
 
-/**
- * @brief 判断图标拖到一定高度后是否可以移除
+/**判断图标拖到一定高度(默认任务栏高度的1.5倍)后是否可以移除
+ * @brief AppDragWidget::isRemoveAble
  * @param curPos 当前鼠标所在位置
- * @return true
- * @return false
+ * @return 返回true可移除，false不可移除
  */
 bool AppDragWidget::isRemoveAble(const QPoint &curPos)
 {
@@ -324,17 +339,13 @@ bool AppDragWidget::isRemoveAble(const QPoint &curPos)
             return true;
         }
         break;
-    default:
-        break;
     }
     return false;
 }
 
-/**
- * @brief 判断应用区域图标是否拖出任务栏
- *
- * @return true
- * @return false
+/**判断应用区域图标是否被拖出任务栏
+ * @brief AppDragWidget::isRemoveItem
+ * @return 返回true应用移出任务栏，false应用在任务栏内
  */
 bool AppDragWidget::isRemoveItem()
 {
@@ -374,6 +385,9 @@ void AppDragWidget::enterEvent(QEvent *event)
     }
 }
 
+/**显示移除应用提示窗口
+ * @brief AppDragWidget::showRemoveTips
+ */
 void AppDragWidget::showRemoveTips()
 {
     Dock::Position pos = Dock::Position::Bottom;
