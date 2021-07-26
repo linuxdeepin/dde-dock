@@ -18,10 +18,14 @@
  */
 
 #include "keyboardplugin.h"
+#include "utils.h"
 
 KeyboardPlugin::KeyboardPlugin(QObject *parent)
     : QObject(parent)
+    , m_gsettings(Utils::ModuleSettingsPtr(pluginName(), QByteArray(), this))
 {
+    if (m_gsettings)
+        connect(m_gsettings, &QGSettings::changed, this, &KeyboardPlugin::onGSettingsChanged);
 }
 
 KeyboardPlugin::~KeyboardPlugin()
@@ -90,4 +94,16 @@ void KeyboardPlugin::setSortKey(const QString &itemKey, const int order)
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
 
     m_proxyInter->saveValue(this, key, order);
+}
+
+void KeyboardPlugin::onGSettingsChanged(const QString &key)
+{
+    Q_UNUSED(key);
+
+    // 键盘布局插件处显示的内容就是QLabel中的内容，有文字了就显示，没有文字就不显示了
+    if (m_gsettings && m_gsettings->keys().contains("enable")) {
+        const bool enable = m_gsettings->get("enable").toBool();
+        QString layoutStr = m_dbusAdaptors->getCurrentKeyboard()->currentLayout().split(';').first();
+        m_dbusAdaptors->setLayout(enable ? layoutStr : "");
+    }
 }

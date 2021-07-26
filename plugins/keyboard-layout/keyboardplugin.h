@@ -23,6 +23,8 @@
 #include "pluginsiteminterface.h"
 #include "dbusadaptors.h"
 
+class QGSettings;
+
 class KeyboardPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -43,8 +45,12 @@ public:
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
 
+private slots:
+    void onGSettingsChanged(const QString &key);
+
 private:
     DBusAdaptors *m_dbusAdaptors = nullptr;
+    const QGSettings *m_gsettings;
 };
 
 #endif

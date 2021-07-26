@@ -44,8 +44,11 @@ public:
     ~DBusAdaptors();
 
 public:
-    Q_PROPERTY(QString layout READ layout NOTIFY layoutChanged)
+    Q_PROPERTY(QString layout READ layout WRITE setLayout NOTIFY layoutChanged)
     QString layout() const;
+    void setLayout(const QString &str);
+
+    Keyboard *getCurrentKeyboard();
 
 public slots:
     void onClicked(int button, int x, int y);

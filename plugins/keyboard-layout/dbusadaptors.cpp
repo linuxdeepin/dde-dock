@@ -61,6 +61,17 @@ QString DBusAdaptors::layout() const
     return m_currentLayout;
 }
 
+void DBusAdaptors::setLayout(const QString &str)
+{
+    m_currentLayout = str;
+    emit layoutChanged(str);
+}
+
+Keyboard *DBusAdaptors::getCurrentKeyboard()
+{
+    return m_keyboard;
+}
+
 void DBusAdaptors::onClicked(int button, int x, int y)
 {
 //    button value means(XCB_BUTTON_INDEX):
