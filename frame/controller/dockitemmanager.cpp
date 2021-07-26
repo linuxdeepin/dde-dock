@@ -310,7 +310,7 @@ void DockItemManager::reloadAppItems()
     // remove old item
     for (auto item : m_itemList)
         if (item->itemType() == DockItem::App)
-            appItemRemoved(static_cast<AppItem *>(item.data()));
+            appItemRemoved(static_cast<AppItem *>(item.data())->appId());
 
     // append new item
     for (auto path : m_appInter->entries())
