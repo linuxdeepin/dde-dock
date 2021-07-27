@@ -130,10 +130,10 @@ private:
     HorizontalSeperator *m_thirdSeparator;
 
     DbusNetwork *m_networkInter;
-    QTimer *m_detectTimer;
-    QTime m_timeElapse;
-    QString m_ipAddr;
-    bool m_ipConflict;
+    QString m_macAddrStr;
+    QMap<QString, QString> m_ipAndMacMap;  // ip冲突的数据
+    QTimer *m_detectConflictTimer;         // 定时器自检,当其他主机主动解除ip冲突，我方需要更新网络状态
+    bool m_ipConflict;                     // ip冲突的标识
 };
 
 #endif // NETWORKITEM_H
