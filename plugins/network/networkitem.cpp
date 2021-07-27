@@ -15,6 +15,7 @@
 #include <QGSettings>
 #include <QNetworkInterface>
 #include <QHostAddress>
+#include <QMap>
 
 extern const int ItemWidth;
 extern const int ItemMargin;
@@ -42,8 +43,8 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_secondSeparator(new HorizontalSeperator(this))
     , m_thirdSeparator(new HorizontalSeperator(this))
     , m_networkInter(new DbusNetwork("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this))
-    , m_detectTimer(new QTimer(this))
-    , m_ipAddr(QString())
+    , m_macAddrStr(QString())
+    , m_detectConflictTimer(new QTimer(this))
     , m_ipConflict(false)
 {
     refreshIconTimer->setInterval(100);
@@ -161,18 +162,11 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
 
     connect(m_networkInter, &DbusNetwork::IPConflict, this, &NetworkItem::ipConfllict);
-    connect(m_detectTimer, &QTimer::timeout, [ & ]() {
-        // 检查所有网卡ip(有线，无线，虚拟)是否与外界ip冲突
-        foreach(const QString ip, currentIpList()) {
-            // 主动检测，如果冲突会触发IPConflict信号
-            m_networkInter->RequestIPConflictCheck(ip, "");
-        }
-
-        // 距离上一次冲突处理3秒内没有触发信号就视为ip冲突已处理
-        if (m_timeElapse.elapsed() > 3000) {
-            m_ipConflict = false;
-            m_detectTimer->stop();
-            updateSelf();
+    connect(m_detectConflictTimer, &QTimer::timeout, [ & ]() {
+        // 冲突的ip拿过来再检测
+        for (auto mac: m_ipAndMacMap.values()) {
+            if (!mac.isEmpty())
+                m_networkInter->RequestIPConflictCheck(m_ipAndMacMap.key(mac), "");
         }
     });
 
@@ -522,23 +516,17 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    // DbusNetwork::IPConflict信号不能保证ip冲突后一直发送信号出来，
-    // 当网络冲突放置很长时间或者进程杀死又重新启动后没有收到ip冲突信号，
     // 用户会鼠标悬浮检查网络状态，此时发起检测，并更新网络状态
+    // 当主机有n张网卡（包含虚拟网卡，无线网卡，有效网卡）时，鼠标移动到网络插件位置，会发起主动ip冲突检测，
     if (obj == this) {
         if (event->type() == QEvent::Enter) {
             foreach(const QString ip, currentIpList()) {
                 // 主动检测，如果冲突会触发IPConflict信号
                 m_networkInter->RequestIPConflictCheck(ip, "");
             }
-
-            if (m_timeElapse.elapsed() > 3000) {
-                m_ipConflict = false;
-                m_detectTimer->stop();
-                updateSelf();
-            }
         }
     }
+
     return false;
 }
 
@@ -597,19 +585,40 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
     refreshIcon();
 }
 
+/**ip冲突以及冲突解除时，更新网络插件显示状态
+ * @brief NetworkItem::ipConfllict
+ * @param in0 本机的ip地址
+ * @param in1 与本机冲突的mac地址，不为空，则冲突，为空则ip冲突解除
+ */
 void NetworkItem::ipConfllict(const QString &in0, const QString &in1)
 {
-    Q_UNUSED(in0);
-    Q_UNUSED(in1);
+    // ip冲突的数据才写入m_ipAndMacMap
+    if (!in1.isEmpty())
+        m_ipAndMacMap.insert(in0, in1);
 
-    m_timeElapse.start();
-    m_detectTimer->start(1000);
-
-    if (m_ipConflict)
+    // 自检为空，则解除ip冲突状态
+    if (in1.isEmpty() && m_ipAndMacMap.keys().contains(in0)) {
+        m_ipAndMacMap.clear();
+        m_ipConflict = false;
+        m_detectConflictTimer->stop();
+        updateSelf();
         return;
+    }
 
-    m_ipConflict = true;
-    updateSelf();
+    for (auto mac: m_ipAndMacMap.values()) {
+        if (!mac.isEmpty()) {
+
+            // 存在冲突
+            if (m_ipConflict)
+                return;
+
+            m_ipConflict = true;
+            updateSelf();
+
+            // 有冲突才开启3秒中ip自检，目的是当其他主机主动解除了冲突，我方不知情
+            m_detectConflictTimer->start(3000);
+        }
+    }
 }
 
 void NetworkItem::getPluginState()
