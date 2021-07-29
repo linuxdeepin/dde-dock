@@ -653,7 +653,9 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, [ = ]() { m_appPreviewTips = nullptr; });
 
     showPopupWindow(m_appPreviewTips, true);
 }
