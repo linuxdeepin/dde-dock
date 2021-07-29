@@ -176,8 +176,16 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if (watched == m_tracked && event->type() == QEvent::Destroy)
-        hide();
+    if (watched == m_tracked) {
+        if (event->type() == QEvent::Destroy) {
+            // 此处需要置空，否则当Destroy事件响应结束后，会在FloatingPreview::hideEvent使用m_tracked野指针
+            m_tracked = nullptr;
+            hide();
+        }
+
+        if (event->type() == QEvent::Resize && m_tracked->width() == SNAP_WIDTH)
+            setGeometry(m_tracked->geometry());
+    }
 
     return QWidget::eventFilter(watched, event);
 }
