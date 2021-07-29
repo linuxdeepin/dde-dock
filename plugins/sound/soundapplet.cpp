@@ -302,8 +302,7 @@ void SoundApplet::onDefaultSinkChanged()
 
 void SoundApplet::onVolumeChanged(double volume)
 {
-    m_volumeSlider->setValue(static_cast<int>(std::min(150.0, volume * 100.0)));
-
+    m_volumeSlider->setValue(std::min(150, qRound(volume * 100.0)));
     m_soundShow->setText(QString::number(volume * 100) + '%');
     emit volumeChanged(m_volumeSlider->value());
     refreshIcon();
