@@ -17,7 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "utils.h"
 #include "dbusadaptors.h"
+
 #include <DDBusSender>
 #include <QDebug>
 
@@ -26,7 +28,8 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
       m_keyboard(new Keyboard("com.deepin.daemon.InputDevices",
                               "/com/deepin/daemon/InputDevice/Keyboard",
                               QDBusConnection::sessionBus(), this)),
-      m_menu(new QMenu())
+    m_menu(new QMenu()), 
+    m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this))
 {
     m_keyboard->setSync(false);
 
@@ -39,6 +42,9 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
     initAllLayoutList();
     onCurrentLayoutChanged(m_keyboard->currentLayout());
     onUserLayoutListChanged(m_keyboard->userLayoutList());
+
+    if (m_gsettings)
+        connect(m_gsettings, &QGSettings::changed, this, &DBusAdaptors::onGSettingsChanged);
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -47,6 +53,9 @@ DBusAdaptors::~DBusAdaptors()
 
 QString DBusAdaptors::layout() const
 {
+    if (m_gsettings && m_gsettings->keys().contains("enable") && !m_gsettings->get("enable").toBool())
+        return QString();
+
     if (m_userLayoutList.size() < 2) {
         // do NOT show keyboard indicator
         return QString();
@@ -177,6 +186,18 @@ void DBusAdaptors::handleActionTriggered(QAction *action)
     const QString layout = action->objectName();
     if (m_userLayoutList.contains(layout)) {
         m_keyboard->setCurrentLayout(layout);
+    }
+}
+
+void DBusAdaptors::onGSettingsChanged(const QString &key)
+{
+    Q_UNUSED(key);
+
+    // 键盘布局插件处显示的内容就是QLabel中的内容，有文字了就显示，没有文字就不显示了
+    if (m_gsettings && m_gsettings->keys().contains("enable")) {
+        const bool enable = m_gsettings->get("enable").toBool();
+        QString layoutStr = getCurrentKeyboard()->currentLayout().split(';').first();
+        setLayout(enable ? layoutStr : "");
     }
 }
 

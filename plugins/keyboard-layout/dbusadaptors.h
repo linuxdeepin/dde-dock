@@ -25,6 +25,7 @@
 #include <com_deepin_daemon_inputdevice_keyboard.h>
 
 using Keyboard = com::deepin::daemon::inputdevice::Keyboard;
+class QGSettings;
 
 class DBusAdaptors : public QDBusAbstractAdaptor
 {
@@ -64,6 +65,9 @@ private slots:
     void refreshMenuSelection();
     void handleActionTriggered(QAction *action);
 
+private slots:
+    void onGSettingsChanged(const QString &key);
+
 private:
     QString duplicateCheck(const QString &kb);
 
@@ -76,6 +80,7 @@ private:
     QString m_currentLayout;
     QStringList m_userLayoutList;
     KeyboardLayoutList m_allLayoutList;
+    const QGSettings *m_gsettings;
 };
 
 #endif
