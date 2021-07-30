@@ -736,6 +736,7 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 #endif
 
     m_dockInter->SetFrontendWindowRect(int(rect.x()), int(rect.y()), uint(rect.width()), uint(rect.height()));
+    qDebug()<<"dock UpdateFrontendGeometry finished "<<rect<<Q_FUNC_INFO;
     emit requestUpdateDockEntry();
 }
 
@@ -1900,6 +1901,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
             displayAnimation(m_ds.current(), AniAction::Show);
         }
     }
+    Q_EMIT requestUpdateFrontendGeometry();
 }
 
 void MultiScreenWorker::onConfigChange(const QString &changeKey)
