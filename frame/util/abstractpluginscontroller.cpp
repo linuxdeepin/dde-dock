@@ -52,7 +52,7 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 
 AbstractPluginsController::~AbstractPluginsController()
 {
-    for (auto inter: m_pluginsMap.keys()) {
+    for (auto inter : m_pluginsMap.keys()) {
         m_pluginsMap.remove(inter);
         delete m_pluginsMap.value(inter).value("pluginloader");
         delete inter;
@@ -150,7 +150,7 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(const QString &it
 }
 
 PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem)
-{    
+{
     QMapIterator<PluginsItemInterface *, QMap<QString, QObject *>> it(m_pluginsMap);
     while (it.hasNext()) {
         it.next();
@@ -165,7 +165,7 @@ PluginsItemInterface *AbstractPluginsController::pluginInterAt(QObject *destItem
 void AbstractPluginsController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile){
+    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile) {
         QPair<QString, PluginsItemInterface *> pair;
         pair.first = pluginFile;
         pair.second = nullptr;
@@ -222,7 +222,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     if (!pluginIsValid) {
-        for (auto &pair: m_pluginLoadMap.keys()) {
+        for (auto &pair : m_pluginLoadMap.keys()) {
             if (pair.first == pluginFile) {
                 m_pluginLoadMap.remove(pair);
             }
@@ -233,8 +233,8 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     if (interface->pluginName() == "multitasking") {
-        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer){
-            for (auto &pair: m_pluginLoadMap.keys()) {
+        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
+            for (auto &pair : m_pluginLoadMap.keys()) {
                 if (pair.first == pluginFile) {
                     m_pluginLoadMap.remove(pair);
                 }
