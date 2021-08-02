@@ -38,6 +38,10 @@ signals:
 protected:
     void run();
 
+    QString dtkCoreFileName();
+    QString libUsedDtkCoreFileName(const QString &fileName);
+    QString realFileName(QString fileName);                 // 获取软连接的真实文件的路径
+
 private:
     QString m_pluginDirPath;
 };
