@@ -592,6 +592,10 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
  */
 void NetworkItem::ipConfllict(const QString &in0, const QString &in1)
 {
+    // 如果不是本机ip，则不进行后面处理
+    if (!currentIpList().contains(in0))
+        return;
+
     // ip冲突的数据才写入m_ipAndMacMap
     if (!in1.isEmpty())
         m_ipAndMacMap.insert(in0, in1);
