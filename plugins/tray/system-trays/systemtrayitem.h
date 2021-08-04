@@ -27,8 +27,13 @@
 #include "util/dockpopupwindow.h"
 #include "pluginsiteminterface.h"
 
+#include <com_deepin_dde_modulevisible.h>
+
 #include <QGestureEvent>
 #include <QMenu>
+
+
+using ModuleVisibleInter = com::deepin::dde::ModuleVisible ;
 
 class QGSettings;
 class SystemTrayItem : public AbstractTrayWidget
@@ -94,6 +99,12 @@ private:
     void onGSettingsChanged(const QString &key);
     bool checkGSettingsControl() const;
     void menuActionClicked(QAction *action);
+    /**
+     * @def permissionRequired
+     * @brief 判断是否需要弹出验证框，并验证
+     * @return 验证成功或者失败
+     */
+    bool permissionRequired();
 
 private:
     bool m_popupShown;
@@ -108,6 +119,7 @@ private:
 
     QPointer<QWidget> m_lastPopupWidget;
     QString m_itemKey;
+    ModuleVisibleInter *m_moduleVisible;
 
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;

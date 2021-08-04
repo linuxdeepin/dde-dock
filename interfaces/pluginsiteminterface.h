@@ -228,6 +228,13 @@ public:
     /// default plugin add dock right,fixed plugin add to dock fixed area
     ///
     virtual PluginType type() { return Normal; }
+    /**
+     * @def isPermissionRequired
+     * @brief 获取是否需要root权限
+     * @return m_root
+     */
+    virtual bool isPermissionRequired() {return m_root;}
+    virtual void setPermissionRequired(const bool enabel){m_root = enabel;}
 
 protected:
     ///
@@ -235,6 +242,12 @@ protected:
     /// NEVER delete this object.
     ///
     PluginProxyInterface *m_proxyInter = nullptr;
+
+    /**
+     * @brief m_root
+     * 是否需要root权限
+     */
+    bool m_root;
 };
 
 QT_BEGIN_NAMESPACE

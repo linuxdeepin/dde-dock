@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QGSettings>
+#include <QSettings>
 
 static const QStringList CompatiblePluginApiList {
     "1.1.1",
@@ -193,7 +194,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer)
             return;
     }
-
+    initPermissionData(interface);
     m_pluginsMap.insert(interface, QMap<QString, QObject *>());
 
     QString dbusService = meta.value("depends-daemon-dbus-service").toString();
@@ -278,6 +279,22 @@ void AbstractPluginsController::refreshPluginSettings()
             itemAdded(it.key(), key);
         }
     }
+}
+
+void AbstractPluginsController::initPermissionData(PluginsItemInterface *interface)
+{
+    QSettings setting("/etc/deepin/ModuleVisible/dde-dock.conf", QSettings::IniFormat);
+    setting.beginGroup("Module");
+
+    bool tmpRoot = false;
+    QStringList settingKeys = setting.allKeys();
+    for (QString key: settingKeys) {
+        if (key == interface->pluginName()) {
+            tmpRoot = setting.value(key, true).toBool();
+            break;
+        }
+    }
+    interface->setPermissionRequired(tmpRoot);
 }
 
 bool AbstractPluginsController::eventFilter(QObject *o, QEvent *e)

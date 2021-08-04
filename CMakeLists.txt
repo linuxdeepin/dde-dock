@@ -56,6 +56,12 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
+
+# install advanced-control settings config
+file(GLOB DOCK_CONF "file/dde-dock.conf")
+install(FILES ${DOCK_CONF}
+        DESTINATION /etc/deepin/ModuleVisible)
+
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}

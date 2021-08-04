@@ -39,6 +39,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
     , m_itemKey(itemKey)
+    , m_moduleVisible(new ModuleVisibleInter("com.deepin.dde.ModuleVisible", "/com/deepin/dde/ModuleVisible", QDBusConnection::sessionBus(), this))
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -238,6 +239,8 @@ void SystemTrayItem::mousePressEvent(QMouseEvent *event)
     hideNonModel();
 
     if (event->button() == Qt::RightButton) {
+        if (!permissionRequired()) return;
+
         if (perfectIconRect().contains(event->pos(), true)) {
             return showContextMenu();
         }
@@ -262,7 +265,9 @@ void SystemTrayItem::mouseReleaseEvent(QMouseEvent *event)
     }
 
     event->accept();
-
+    if (!permissionRequired()) {
+        return;
+    }
     showPopupApplet(trayPopupApplet());
 
     if (!trayClickCommand().isEmpty()) {
@@ -471,6 +476,16 @@ void SystemTrayItem::showContextMenu()
 void SystemTrayItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
+}
+
+bool SystemTrayItem::permissionRequired()
+{
+    if (m_pluginInter->isPermissionRequired()) return true;
+
+    if (m_moduleVisible->isValid()) return true;
+
+    return false;
+    qDebug() << "Control center modules that require root privileges:" << m_pluginInter->pluginDisplayName();
 }
 
 void SystemTrayItem::onContextMenuAccepted()

@@ -62,6 +62,11 @@ private slots:
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
+    /**
+     * @def initPermissionData
+     * @brief 通过QSetting获取需要加入权限的数据
+     */
+    void initPermissionData(PluginsItemInterface *interface);
 
 private:
     bool eventFilter(QObject *o, QEvent *e) override;
