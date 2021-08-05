@@ -86,7 +86,7 @@ private slots:
     void wiredsEnable(bool enable);
     void wirelessEnable(bool enable);
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
-    void ipConfllict(const QString &in0, const QString &in1);
+    void ipConflict(const QString &in0, const QString &in1);
 
 private:
     void getPluginState();

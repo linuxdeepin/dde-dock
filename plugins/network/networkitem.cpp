@@ -161,12 +161,14 @@ NetworkItem::NetworkItem(QWidget *parent)
     connect(m_switchWirelessBtn, &DSwitchButton::toggled, this, &NetworkItem::wirelessEnable);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NetworkItem::onThemeTypeChanged);
 
-    connect(m_networkInter, &DbusNetwork::IPConflict, this, &NetworkItem::ipConfllict);
-    connect(m_detectConflictTimer, &QTimer::timeout, [ & ]() {
+    connect(m_networkInter, &DbusNetwork::IPConflict, this, &NetworkItem::ipConflict);
+    connect(m_detectConflictTimer, &QTimer::timeout, [ = ]() {
         // 冲突的ip拿过来再检测
         for (auto mac: m_ipAndMacMap.values()) {
-            if (!mac.isEmpty())
-                m_networkInter->RequestIPConflictCheck(m_ipAndMacMap.key(mac), "");
+            if (!mac.isEmpty()) {
+                // 主动检测，如果冲突会触发IPConflict信号
+                QTimer::singleShot(500, this, [ = ] { m_networkInter->RequestIPConflictCheck(m_ipAndMacMap.key(mac), ""); });
+            }
         }
     });
 
@@ -518,11 +520,19 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
 
     // 用户会鼠标悬浮检查网络状态，此时发起检测，并更新网络状态
     // 当主机有n张网卡（包含虚拟网卡，无线网卡，有效网卡）时，鼠标移动到网络插件位置，会发起主动ip冲突检测，
+    // 主动检测，如果冲突会触发IPConflict信号
     if (obj == this) {
         if (event->type() == QEvent::Enter) {
-            foreach(const QString ip, currentIpList()) {
-                // 主动检测，如果冲突会触发IPConflict信号
-                m_networkInter->RequestIPConflictCheck(ip, "");
+            foreach(QString ip, currentIpList()) {
+                // 有线网卡关闭时仅有回环地址，主动请求后端不会回包
+                if (ip == "127.0.0.1") {
+                    m_ipConflict = false;
+                    m_detectConflictTimer->stop();
+                    updateSelf();
+                    return false;
+                }
+
+                QTimer::singleShot(500, this, [ = ] { m_networkInter->RequestIPConflictCheck(ip, ""); });
             }
         }
     }
@@ -586,28 +596,40 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 }
 
 /**ip冲突以及冲突解除时，更新网络插件显示状态
- * @brief NetworkItem::ipConfllict
+ * @brief NetworkItem::ipConflict
  * @param in0 本机的ip地址
  * @param in1 与本机冲突的mac地址，不为空，则冲突，为空则ip冲突解除
  */
-void NetworkItem::ipConfllict(const QString &in0, const QString &in1)
+void NetworkItem::ipConflict(const QString &in0, const QString &in1)
 {
-    // 如果不是本机ip，则不进行后面处理
-    if (!currentIpList().contains(in0))
-        return;
+    // 如果不是本机ip
+    if (!currentIpList().contains(in0)) {
+        // 如果冲突的map中包含这个不是本机的ip地址，则移除
+        m_ipAndMacMap.remove(in0);
 
-    // ip冲突的数据才写入m_ipAndMacMap
-    if (!in1.isEmpty())
-        m_ipAndMacMap.insert(in0, in1);
-
-    // 自检为空，则解除ip冲突状态
-    if (in1.isEmpty() && m_ipAndMacMap.keys().contains(in0)) {
-        m_ipAndMacMap.clear();
-        m_ipConflict = false;
-        m_detectConflictTimer->stop();
-        updateSelf();
+        if (m_ipAndMacMap.isEmpty() && m_ipConflict) {
+            m_ipConflict = false;
+            m_detectConflictTimer->stop();
+            updateSelf();
+        }
         return;
     }
+
+    // ip冲突的数据才写入m_ipAndMacMap
+    if (in1.isEmpty()) {
+        // 自检为空，则解除ip冲突状态或者冲突列表为空时，更新状态
+        m_ipAndMacMap.remove(in0);
+
+        if (m_ipAndMacMap.isEmpty() && m_ipConflict) {
+            m_ipConflict = false;
+            m_detectConflictTimer->stop();
+            updateSelf();
+        }
+        return;
+    }
+
+    // 缓存冲突ip
+    m_ipAndMacMap.insert(in0, in1);
 
     for (auto mac: m_ipAndMacMap.values()) {
         if (!mac.isEmpty()) {
