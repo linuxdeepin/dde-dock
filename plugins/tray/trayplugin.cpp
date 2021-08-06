@@ -24,6 +24,7 @@
 #include "fashiontray/fashiontrayitem.h"
 #include "snitraywidget.h"
 #include "utils.h"
+#include "../widgets/tipswidget.h"
 
 #include <QDir>
 #include <QWindow>
@@ -33,8 +34,8 @@
 #include <QFuture>
 #include <QFutureWatcher>
 
-#include "../widgets/tipswidget.h"
-#include "xcb/xcb_icccm.h"
+#include <xcb/xcb_icccm.h>
+#include <X11/Xlib.h>
 
 #define PLUGIN_ENABLED_KEY "enable"
 #define FASHION_MODE_TRAYS_SORTED   "fashion-mode-trays-sorted"
@@ -44,10 +45,18 @@
 
 using org::kde::StatusNotifierWatcher;
 using namespace Dock;
+
 TrayPlugin::TrayPlugin(QObject *parent)
     : QObject(parent)
     , m_pluginLoaded(false)
+    , xcb_connection(nullptr)
+    , m_display(nullptr)
 {
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        int screenp = 0;
+        xcb_connection = xcb_connect(qgetenv("DISPLAY"), &screenp);
+        m_display = XOpenDisplay(nullptr);
+    }
 }
 
 const QString TrayPlugin::pluginName() const
@@ -391,7 +400,7 @@ void TrayPlugin::trayXEmbedAdded(const QString &itemKey, quint32 winId)
     if (!Utils::SettingValue("com.deepin.dde.dock.module.systemtray", QByteArray(), "enable", false).toBool())
         return;
 
-    AbstractTrayWidget *trayWidget = new XEmbedTrayWidget(winId);
+    AbstractTrayWidget *trayWidget = Utils::IS_WAYLAND_DISPLAY ? new XEmbedTrayWidget(winId, xcb_connection, m_display) : new XEmbedTrayWidget(winId);
     if (trayWidget->isValid())
         addTrayWidget(itemKey, trayWidget);
     else {

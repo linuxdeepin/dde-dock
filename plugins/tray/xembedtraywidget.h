@@ -27,12 +27,16 @@
 #include <QWidget>
 #include <QTimer>
 
+#include <xcb/xcb.h>
+
+typedef struct _XDisplay Display;
+
 class XEmbedTrayWidget : public AbstractTrayWidget
 {
     Q_OBJECT
 
 public:
-    explicit XEmbedTrayWidget(quint32 winId, QWidget *parent = nullptr);
+    explicit XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn = nullptr, Display *disp = nullptr, QWidget *parent = nullptr);
     ~XEmbedTrayWidget();
 
     QString itemKeyForConfig() override;
@@ -71,6 +75,8 @@ private:
     QTimer *m_updateTimer;
     QTimer *m_sendHoverEvent;
     bool m_valid;
+    xcb_connection_t *m_xcbCnn;
+    Display* m_display;
 };
 
 #endif // XEMBEDTRAYWIDGET_H

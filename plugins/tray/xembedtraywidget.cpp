@@ -21,6 +21,7 @@
 
 #include "constants.h"
 #include "xembedtraywidget.h"
+#include "utils.h"
 
 #include <QWindow>
 #include <QPainter>
@@ -32,6 +33,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QMap>
+#include <QGuiApplication>
 
 #include <X11/extensions/shape.h>
 #include <X11/extensions/XTest.h>
@@ -39,6 +41,7 @@
 
 #include <xcb/composite.h>
 #include <xcb/xcb_image.h>
+#include <xcb/xproto.h>
 
 #define NORMAL_WINDOW_PROP_NAME "WM_CLASS"
 #define WINE_WINDOW_PROP_NAME "__wine_prefix"
@@ -53,6 +56,8 @@ static const qreal iconSize = PLUGIN_ICON_MAX_SIZE;
 // the first suffix is 1, second is 2, etc.
 // NOTE: the first suffix will be omit when construct the key of tray widget.
 static QMap<QString, QMap<quint32, int>> AppWinidSuffixMap;
+
+using namespace Utils;
 
 const QPoint rawXPosition(const QPoint &scaledPos)
 {
@@ -75,11 +80,13 @@ void sni_cleanup_xcb_image(void *data)
     xcb_image_destroy(static_cast<xcb_image_t*>(data));
 }
 
-XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, QWidget *parent)
+XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn, Display *disp, QWidget *parent)
     : AbstractTrayWidget(parent)
     , m_windowId(winId)
     , m_appName(getAppNameForWindow(winId))
     , m_valid(true)
+    , m_xcbCnn(cnn)
+    , m_display(disp)
 {
     wrapWindow();
 
@@ -148,7 +155,7 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 
 void XEmbedTrayWidget::configContainerPosition()
 {
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
     if (!c) {
         qWarning() << "QX11Info::connection() is " << c;
         return;
@@ -172,7 +179,7 @@ void XEmbedTrayWidget::configContainerPosition()
 
 void XEmbedTrayWidget::wrapWindow()
 {
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
     if (!c) {
         qWarning() << "QX11Info::connection() is " << c;
         return;
@@ -218,8 +225,24 @@ void XEmbedTrayWidget::wrapWindow()
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
 //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 
-    QWindow * win = QWindow::fromWinId(m_containerWid);
-    win->setOpacity(0);
+    if (!IS_WAYLAND_DISPLAY) {
+        QWindow * win = QWindow::fromWinId(m_containerWid);
+        win->setOpacity(0);
+    } else {
+        const char* opacityName = "_NET_WM_WINDOW_OPACITY\0";
+        xcb_intern_atom_cookie_t opacityCookie = xcb_intern_atom(c, false, strlen(opacityName), opacityName);
+        xcb_intern_atom_reply_t *opacityReply = xcb_intern_atom_reply(c, opacityCookie, 0);
+        xcb_atom_t opacityAtom = opacityReply->atom;
+        quint32 opacity = 10;
+        xcb_change_property(c,
+                           XCB_PROP_MODE_REPLACE,
+                           m_containerWid,
+                           opacityAtom,
+                           XCB_ATOM_CARDINAL,
+                           32,
+                           1,
+                           (uchar *)&opacity);
+    }
 
 //    setX11PassMouseEvent(true);
 
@@ -287,8 +310,12 @@ void XEmbedTrayWidget::sendHoverEvent()
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
-    XFlush(QX11Info::display());
+    Display *display = IS_WAYLAND_DISPLAY ? m_display : QX11Info::display();
+    if (display) {
+        XTestFakeMotionEvent(display, 0, p.x(), p.y(), CurrentTime);
+        XFlush(display);
+    }
+
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
@@ -326,19 +353,21 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
-    XFlush(QX11Info::display());
-    XTestFakeButtonEvent(QX11Info::display(), mouseButton, true, CurrentTime);
-    XFlush(QX11Info::display());
-    XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
-    XFlush(QX11Info::display());
+
+    Display *display = IS_WAYLAND_DISPLAY ? m_display : QX11Info::display();
+    XTestFakeMotionEvent(display, 0, p.x(), p.y(), CurrentTime);
+    XFlush(display);
+    XTestFakeButtonEvent(display, mouseButton, true, CurrentTime);
+    XFlush(display);
+    XTestFakeButtonEvent(display, mouseButton, false, CurrentTime);
+    XFlush(display);
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
 // NOTE: WM_NAME may can not obtain successfully
 QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 {
-    const auto display = QX11Info::display();
+    const auto display = IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
         qWarning() << "QX11Info::display() is " << display;
         return QString();
@@ -368,6 +397,8 @@ QString XEmbedTrayWidget::getWindowProperty(quint32 winId, QString propName)
 //             << nitems_return
 //             << bytes_after_return
 //             << QString::fromLocal8Bit((char*)prop_return);
+    if (IS_WAYLAND_DISPLAY)
+        XCloseDisplay(display);
 
     return QString::fromLocal8Bit((char*)prop_return);
 }
@@ -385,7 +416,7 @@ bool XEmbedTrayWidget::isXEmbedKey(const QString &itemKey)
 void XEmbedTrayWidget::refershIconImage()
 {
     const auto ratio = devicePixelRatioF();
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
     if (!c) {
         qWarning() << "QX11Info::connection() is " << c;
         return;
@@ -494,6 +525,11 @@ QString XEmbedTrayWidget::getAppNameForWindow(quint32 winId)
 
 void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 {
+    if (IS_WAYLAND_DISPLAY) {
+        //会导致wayland下鼠标穿透到桌面，所以直接return掉
+        return;
+    }
+
     if (pass)
     {
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeBounding, 0, 0, nullptr, 0, ShapeSet, YXBanded);
@@ -516,7 +552,7 @@ void XEmbedTrayWidget::setX11PassMouseEvent(const bool pass)
 
 void XEmbedTrayWidget::setWindowOnTop(const bool top)
 {
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
     if (!c) {
         qWarning() << "QX11Info::connection() is " << c;
         return;
@@ -528,7 +564,7 @@ void XEmbedTrayWidget::setWindowOnTop(const bool top)
 
 bool XEmbedTrayWidget::isBadWindow()
 {
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
 
     auto cookie = xcb_get_geometry(c, m_windowId);
     xcb_get_geometry_reply_t *clientGeom = xcb_get_geometry_reply(c, cookie, Q_NULLPTR);
