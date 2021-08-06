@@ -70,6 +70,8 @@ public:
     bool isShowControlCenter();
 
     const QStringList currentIpList();
+    const QStringList getActiveWiredList();
+    const QStringList getActiveWirelessList();
 
 public slots:
     void updateSelf();

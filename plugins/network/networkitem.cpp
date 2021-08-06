@@ -20,7 +20,6 @@
 extern const int ItemWidth;
 extern const int ItemMargin;
 extern const int ItemHeight;
-const int SeparatorItemHeight = 2;
 const QString MenueEnable = "enable";
 const QString MenueWiredEnable = "wireEnable";
 const QString MenueWirelessEnable = "wirelessEnable";
@@ -354,7 +353,25 @@ void NetworkItem::refreshIcon()
 
     if (m_ipConflict) {
         stateString = "offline";
-        iconString = QString("network-%1-symbolic").arg(stateString);
+        // 当无线网络和有线网络并存的情况，显示无线网络，因此无线网络后更新状态
+        // 所以先从从有线网络中查找，查找失败，然后再从无线中查找，
+
+        // 有线
+        foreach(auto ip, getActiveWiredList()) {
+            if (m_ipAndMacMap.keys().contains(ip)) {
+                iconString = QString("network-%1-symbolic").arg(stateString);
+                break;
+            }
+        }
+
+        // 无线
+        foreach(auto ip, getActiveWirelessList()) {
+            if (m_ipAndMacMap.keys().contains(ip)) {
+                iconString = QString("network-wireless-%1-symbolic").arg(stateString);
+                break;
+            }
+        }
+
         if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
                 && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
             iconString.append(PLUGIN_MIN_ICON_NAME);
@@ -1484,6 +1501,46 @@ const QStringList NetworkItem::currentIpList()
         strIpAddress.append(QHostAddress(QHostAddress::LocalHost).toString());
 
     return strIpAddress;
+}
+
+const QStringList NetworkItem::getActiveWiredList()
+{
+    QStringList wiredIpList;
+    for (auto wiredItem : m_wiredItems.values()) {
+        if (wiredItem) {
+            auto info = wiredItem->getActiveWiredConnectionInfo();
+            if (!info.contains("Ip4"))
+                continue;
+
+            const QJsonObject ipv4 = info.value("Ip4").toObject();
+            if (!ipv4.contains("Address"))
+                continue;
+
+            if (!wiredIpList.contains(ipv4.value("Address").toString()))
+                wiredIpList.append(ipv4.value("Address").toString());
+        }
+    }
+    return wiredIpList;
+}
+
+const QStringList NetworkItem::getActiveWirelessList()
+{
+    QStringList wirelessIpList;
+    for (auto wirelessItem : m_wirelessItems.values()) {
+        if (wirelessItem) {
+            auto info = wirelessItem->getActiveWirelessConnectionInfo();
+            if (!info.contains("Ip4"))
+                continue;
+
+            const QJsonObject ipv4 = info.value("Ip4").toObject();
+            if (!ipv4.contains("Address"))
+                continue;
+
+            if (!wirelessIpList.contains(ipv4.value("Address").toString()))
+                wirelessIpList.append(ipv4.value("Address").toString());
+        }
+    }
+    return wirelessIpList;
 }
 
 void NetworkItem::wirelessScan()
