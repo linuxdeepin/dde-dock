@@ -84,11 +84,16 @@ protected:
     bool eventFilter(QObject *obj,QEvent *event) override;
     QString getStrengthStateString(int strength = 0);
 
+signals:
+    void sendIpConflictDect(int index);
+
 private slots:
     void wiredsEnable(bool enable);
     void wirelessEnable(bool enable);
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
-    void ipConflict(const QString &in0, const QString &in1);
+    void ipConflict(const QString &ip, const QString &mac);
+    void onSendIpConflictDect(int index = 0);
+    void onDetectConflict();
 
 private:
     void getPluginState();
@@ -132,8 +137,9 @@ private:
     HorizontalSeperator *m_thirdSeparator;
 
     DbusNetwork *m_networkInter;
-    QString m_macAddrStr;
-    QMap<QString, QString> m_ipAndMacMap;  // ip冲突的数据
+    QStringList m_disconflictList;         // 解除冲突数据列表
+    QMap<QString, QString> m_conflictMap;  // 缓存有线和无线冲突的ip列表
+    QMap<QString, QString> m_ipAndMacMap;  // ip冲突的数据,
     QTimer *m_detectConflictTimer;         // 定时器自检,当其他主机主动解除ip冲突，我方需要更新网络状态
     bool m_ipConflict;                     // ip冲突的标识
 };
