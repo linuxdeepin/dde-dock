@@ -36,6 +36,7 @@
 
 #include "../widgets/tipswidget.h"
 #include "dockpopupwindow.h"
+#include "dockitem.h"
 
 class AppGraphicsObject;
 class AppDragWidget : public QGraphicsView
@@ -48,7 +49,12 @@ public:
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
     void setOriginPos(const QPoint position);
+    void setPixmapOpacity(qreal opacity);
     bool isRemoveAble(const QPoint &curPos);
+    void setItem(DockItem *item) { m_item = item; }
+    static bool isRemoveable(const Dock::Position &dockPos, const QRect &doctRect);
+    void showRemoveAnimation();
+    void showGoBackAnimation();
 
 signals:
     void requestRemoveItem();
@@ -64,8 +70,6 @@ protected:
 
 private:
     void initAnimations();
-    void showRemoveAnimation();
-    void showGoBackAnimation();
     void onRemoveAnimationStateChanged(QAbstractAnimation::State newState,
             QAbstractAnimation::State oldState);
     const QPoint popupMarkPoint(Dock::Position pos);
@@ -96,6 +100,7 @@ private:
     double m_distanceMultiple;
 
     bool m_bDragDrop = false; // 图标是否被拖拽
+    DockItem *m_item;
 };
 
 #endif /* APPDRAGWIDGET_H */

@@ -96,6 +96,7 @@ private:
     void removePluginAreaItem(QWidget *wdg);
 
     void startDrag(DockItem *);
+    void startDragWayland(DockItem *item);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);

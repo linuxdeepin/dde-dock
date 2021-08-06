@@ -76,6 +76,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_removeTips(new TipsWidget)
     , m_popupWindow(new DockPopupWindow)
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
+    , m_item(nullptr)
 {
     m_removeTips->setText(tr("Remove"));
     m_removeTips->setObjectName("AppRemoveTips");
@@ -95,6 +96,10 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground);
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Window);
+        setAttribute(Qt::WA_NativeWindow);
+    }
     viewport()->setAutoFillBackground(false);
     setFrameShape(QFrame::NoFrame);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -104,8 +109,8 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     setAcceptDrops(true);
 
     initAnimations();
-
-    m_followMouseTimer->setSingleShot(false);
+    
+    m_followMouseTimer->setSingleShot(Utils::IS_WAYLAND_DISPLAY);
     m_followMouseTimer->setInterval(1);
     connect(m_followMouseTimer, &QTimer::timeout, [this] {
         QPoint destPos = QCursor::pos();
@@ -204,7 +209,7 @@ void AppDragWidget::dropEvent(QDropEvent *event)
         } else {
             hide();
         }
-        AppItem *appItem = static_cast<AppItem *>(event->source());
+        AppItem *appItem = static_cast<AppItem *>((Utils::IS_WAYLAND_DISPLAY && m_item) ? m_item : event->source());
         appItem->undock();
         m_popupWindow->setVisible(false);
     } else {
@@ -219,6 +224,8 @@ void AppDragWidget::dropEvent(QDropEvent *event)
 void AppDragWidget::hideEvent(QHideEvent *event)
 {
     deleteLater();
+    if (Utils::IS_WAYLAND_DISPLAY)
+        QGraphicsView::hideEvent(event);
 }
 
 void AppDragWidget::setAppPixmap(const QPixmap &pix)
@@ -244,6 +251,47 @@ void AppDragWidget::setDockInfo(Dock::Position dockPosition, const QRect &dockGe
 void AppDragWidget::setOriginPos(const QPoint position)
 {
     m_originPoint = position;
+}
+
+void AppDragWidget::setPixmapOpacity(qreal opacity)
+{
+    if (isRemoveAble(QCursor::pos())) {
+        m_object->setOpacity(opacity);
+        m_animOpacity->setStartValue(opacity);
+    } else {
+        m_object->setOpacity(1.0);
+        m_animOpacity->setStartValue(1.0);
+    }
+}
+
+bool AppDragWidget::isRemoveable(const Position &dockPos, const QRect &doctRect)
+{
+    const QPoint &p = QCursor::pos();
+    switch (dockPos) {
+        case Dock::Position::Left:
+            if ((p.x() - doctRect.topRight().x()) > (doctRect.width() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Top:
+            if ((p.y() - doctRect.bottomLeft().y()) > (doctRect.height() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Right:
+            if ((doctRect.topLeft().x() - p.x()) > (doctRect.width() * 3)) {
+                return true;
+            }
+            break;
+        case Dock::Position::Bottom:
+            if ((doctRect.topLeft().y() - p.y()) > (doctRect.height() * 3)) {
+                return true;
+            }
+            break;
+        default:
+            break;
+    }
+    return false;
 }
 
 void AppDragWidget::initAnimations()
