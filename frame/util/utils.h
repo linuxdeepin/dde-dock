@@ -31,6 +31,8 @@ namespace Utils {
 
 #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
 
+const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
+
 /**
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param schema_id The id of the schema

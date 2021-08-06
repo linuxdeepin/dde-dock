@@ -20,6 +20,7 @@
  */
 
 #include "dockpopupwindow.h"
+#include "utils.h"
 
 #include <QScreen>
 #include <QApplication>
@@ -40,7 +41,12 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     compositeChanged();
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
-    setAttribute(Qt::WA_InputMethodEnabled, false);
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        setAttribute(Qt::WA_NativeWindow);
+        windowHandle()->setProperty("_d_dwayland_window-type", "tooltip");
+    }else {
+        setAttribute(Qt::WA_InputMethodEnabled, false);
+    }
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
     connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
