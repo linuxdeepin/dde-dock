@@ -296,8 +296,8 @@ void SoundApplet::onDefaultSinkChanged()
     }
     activePort(portId,cardId);
 
-    emit defaultSinkChanged(m_defSinkInter);
     onVolumeChanged(m_defSinkInter->volume());
+    emit defaultSinkChanged(m_defSinkInter);
 }
 
 void SoundApplet::onVolumeChanged(double volume)
@@ -381,7 +381,15 @@ void SoundApplet::cardsChanged(const QString &cards)
 
 void SoundApplet::increaseVolumeChanged()
 {
+    // 触发VolumeSlider::valueChanged
     m_volumeSlider->setMaximum(m_audioInter->maxUIVolume() * 100.0f);
+
+    // onDefaultSinkChanged()比increaseVolumeChanged()先执行，设置完最大值后需要重新设置当前值
+    if (m_defSinkInter) {
+        //　规避因开启声音增强，声音值超过100后，关闭声音增强后读取到数据为旧数据的问题
+        if (m_audioInter->increaseVolume())
+            m_volumeSlider->setValue(std::min(150, qRound(m_defSinkInter->volume() * 100.0)));
+    }
 }
 
 void SoundApplet::refreshIcon()
