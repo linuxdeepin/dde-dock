@@ -228,7 +228,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
             connect(static_cast<WirelessItem *>(item), &WirelessItem::requestWirelessScan,
                     m_networkItem, &NetworkItem::wirelessScan);
 
-            m_networkWorker->queryAccessPoints(path);
+            //这里如果刷新太快会导致可能没有数据的问题
+            QTimer::singleShot(3000, this, [ = ] {m_networkWorker->queryAccessPoints(path);});
             m_networkWorker->requestWirelessScan();
             break;
         default:
