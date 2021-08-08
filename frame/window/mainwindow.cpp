@@ -23,7 +23,6 @@
 #include "mainwindow.h"
 #include "mainpanelcontrol.h"
 #include "dockitemmanager.h"
-#include "utils.h"
 #include "menuworker.h"
 
 #include <DStyle>
@@ -132,10 +131,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_dragWidget->setMouseTracking(true);
     m_dragWidget->setFocusPolicy(Qt::NoFocus);
 
-    if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {
-        m_dragWidget->setCursor(Qt::SizeVerCursor);
-    } else {
-        m_dragWidget->setCursor(Qt::SizeHorCursor);
+    if (!Utils::IS_WAYLAND_DISPLAY) {
+        if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {
+            m_dragWidget->setCursor(Qt::SizeVerCursor);
+        } else {
+            m_dragWidget->setCursor(Qt::SizeHorCursor);
+        }
     }
 }
 

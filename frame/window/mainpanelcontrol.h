@@ -78,6 +78,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
+    void enterEvent(QEvent *event) override;
 
 private:
     void initUi();
@@ -106,6 +107,8 @@ private:
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
+
+    void updatePanelCursor();
 
 private:
     QBoxLayout *m_mainPanelLayout;

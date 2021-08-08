@@ -62,6 +62,7 @@ public slots:
 private:
     void adjustSize();
     void appendSnapWidget(const WId wid);
+    void updatePreviewCursor();
 
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
