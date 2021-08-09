@@ -65,7 +65,10 @@ SoundItem::SoundItem(QWidget *parent)
 
 QWidget *SoundItem::tipsWidget()
 {
-    refreshTips(m_applet->volumeValue(), true);
+    if (m_sinkInter)
+        refreshTips(std::min(150, qRound(m_sinkInter->volume() * 100.0)), true);
+    else
+        refreshTips(m_applet->volumeValue(), true);
 
     m_tipsLabel->resize(m_tipsLabel->sizeHint().width() + 10,
                         m_tipsLabel->sizeHint().height());
@@ -237,5 +240,9 @@ void SoundItem::refreshTips(const int volume, const bool force)
 void SoundItem::sinkChanged(DBusSink *sink)
 {
     m_sinkInter = sink;
-    refresh(m_applet->volumeValue());
+
+    if (m_sinkInter)
+        refresh(std::min(150, qRound(m_sinkInter->volume() * 100.0)));
+    else
+        refresh(m_applet->volumeValue());
 }
