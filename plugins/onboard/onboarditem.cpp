@@ -21,7 +21,6 @@
 
 #include "onboarditem.h"
 
-#include <QSvgRenderer>
 #include <QPainter>
 #include <QPainterPath>
 #include <QMouseEvent>

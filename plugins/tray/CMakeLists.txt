@@ -23,6 +23,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(DtkWidget REQUIRED)
+find_package(dbusmenu-qt5 REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED xcb-ewmh xcb xcb-image xcb-composite xtst x11 xext xcb-icccm dbusmenu-qt5)
 pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
@@ -35,10 +36,10 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-                                                 ${XCB_LIBS_INCLUDE_DIRS}
                                                  ${DDE-Network-Utils_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
+                                                 ${dbusmenu-qt5_INCLUDE_DIRS}
                                                  ../../interfaces
                                                  ../../frame )
 target_link_libraries(${PLUGIN_NAME} PRIVATE
@@ -48,7 +49,6 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
-    ${XCB_LIBS_LIBRARIES}
     ${DDE-Network-Utils_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
