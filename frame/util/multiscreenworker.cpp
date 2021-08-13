@@ -1074,10 +1074,16 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
         switch (act) {
         case AniAction::Show:
             if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                setStates(ShowAnimationStart);
+                if (m_hideMode == HideMode::KeepShowing || composite)
+                    setStates(ShowAnimationStart);
+                else
+                    setStates(DockIsShowing);
             }
             if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                setStates(ShowAnimationStart, false);
+                if (m_hideMode == HideMode::KeepShowing || composite)
+                    setStates(ShowAnimationStart, false);
+                else // 如果不是一直显示的状态，则让其延时修改状态，防止在resetDock的时候重复改变其高度引起任务栏闪烁导致无法唤醒
+                    QTimer::singleShot(ANIMATIONTIME, [ = ] { setStates(DockIsShowing, false); });
             }
             break;
         case AniAction::Hide:
@@ -1254,7 +1260,8 @@ void MultiScreenWorker::resetDockScreen()
 {
     if (testState(ChangePositionAnimationStart)
             || testState(HideAnimationStart)
-            || testState(ShowAnimationStart))
+            || testState(ShowAnimationStart)
+            || testState(DockIsShowing))
         return;
 
     m_ds.updateDockedScreen(getValidScreen(position()));
