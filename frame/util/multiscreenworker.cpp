@@ -722,7 +722,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     static int lastScreenHeight = 0;
 
     /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
-    if (!isCopyMode() && (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing)) {
+    if ((!isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
         lastRect = QRect();
 
         const auto display = QX11Info::display();
