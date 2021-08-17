@@ -114,6 +114,7 @@ private:
     QScopedPointer<Dock::TipsWidget> m_tipsLabel;
     DBusPowerManager* m_powerManagerInter;
     const QGSettings *m_gsettings;
+    const QGSettings *m_sessionShellGsettings;
 };
 
 #endif // SHUTDOWNPLUGIN_H
