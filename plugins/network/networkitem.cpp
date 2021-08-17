@@ -342,47 +342,6 @@ void NetworkItem::refreshIcon()
     int iconSize = PLUGIN_ICON_MAX_SIZE;
     int strength = 0;
 
-    if (m_ipConflict) {
-        stateString = "offline";
-        // 当无线网络和有线网络并存的情况，显示无线网络，因此无线网络后更新状态
-        // 所以先从从有线网络中查找，查找失败，然后再从无线中查找，
-
-        // 有线
-        foreach(auto ip, getActiveWiredList()) {
-            if (m_conflictMap.keys().contains(ip)) {
-                iconString = QString("network-%1-symbolic").arg(stateString);
-                break;
-            }
-        }
-
-        // 无线
-        foreach(auto ip, getActiveWirelessList()) {
-            if (m_conflictMap.keys().contains(ip)) {
-                iconString = QString("network-wireless-%1-symbolic").arg(stateString);
-                break;
-            }
-        }
-
-        // 从ip冲突到到冲突解除中间过渡的状态图标
-        if (iconString.isEmpty()) {
-            // 存在激活的有线网卡就显示有线的
-           if (getActiveWiredList().size() > 0)
-               iconString = QString("network-%1-symbolic").arg(stateString);
-
-            // 存在激活的无线网卡就显示无线的
-            if (getActiveWirelessList().size() > 0)
-                iconString = QString("network-wireless-%1-symbolic").arg(stateString);
-        }
-
-        if (height() <= PLUGIN_BACKGROUND_MIN_SIZE
-                && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-            iconString.append(PLUGIN_MIN_ICON_NAME);
-
-        m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
-        update();
-        return;
-    }
-
     switch (m_pluginState) {
     case Disabled:
     case Adisabled:
@@ -398,10 +357,34 @@ void NetworkItem::refreshIcon()
         strength = getStrongestAp();
         stateString = getStrengthStateString(strength);
         iconString = QString("wireless-%1-symbolic").arg(stateString);
+
+        //如果无线连接有IP冲突，则显示已连接但是无法访问网络的图标
+        if (m_ipConflict && getActiveWirelessList().size() > 0) {
+            foreach(auto ip, getActiveWirelessList()) {
+                if (m_conflictMap.keys().contains(ip)) {
+                    stateString = "offline";
+                    iconString = QString("network-wireless-%1-symbolic").arg(stateString);
+                    break;
+                }
+            }
+        }
+
         break;
     case Bconnected:
         stateString = "online";
         iconString = QString("network-%1-symbolic").arg(stateString);
+
+        //如果有线连接有IP冲突，则显示有线连接断开的图标
+        if (m_ipConflict && getActiveWiredList().size() > 0) {
+            foreach(auto ip, getActiveWiredList()) {
+                if (m_conflictMap.keys().contains(ip)) {
+                    stateString = "offline";
+                    iconString = QString("network-%1-symbolic").arg(stateString);
+                    break;
+                }
+            }
+        }
+
         break;
     case Disconnected:
     case Adisconnected:
