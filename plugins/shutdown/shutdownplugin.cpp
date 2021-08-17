@@ -46,6 +46,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_tipsLabel(new TipsWidget)
     , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
+    , m_sessionShellGsettings(Utils::SettingsPtr("com.deepin.dde.session-shell", "/com/deepin/dde/session-shell/", this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setAccessibleName("shutdown");
@@ -179,7 +180,21 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(logout);
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
-        if (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer) {
+        // 读取com.deepin.dde.session-shell切换用户配置项
+        enum SwitchUserConfig {
+            AlwaysShow = 0,
+            OnDemand,
+            Disabled
+        } switchUserConfig = OnDemand;
+
+        if (m_sessionShellGsettings && m_sessionShellGsettings->keys().contains("switchuser")) {
+            switchUserConfig = SwitchUserConfig(m_sessionShellGsettings->get("switchuser").toInt());
+        }
+
+        // 和登录锁屏界面的逻辑保持一致
+        if (AlwaysShow == switchUserConfig ||
+                 (OnDemand == switchUserConfig &&
+                 (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer))) {
             QMap<QString, QVariant> switchUser;
             switchUser["itemId"] = "SwitchUser";
             switchUser["itemText"] = tr("Switch account");
@@ -211,7 +226,7 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     // 使得下面逻辑代码延迟200ms执行，保证线程不阻塞
     QTime dieTime = QTime::currentTime().addMSecs(200);
-    while( QTime::currentTime() < dieTime )
+    while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 200);
 
     if (menuId == "power") {
@@ -222,14 +237,13 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .method(QString("ShowModule"))
         .arg(QString("power"))
         .call();
-    }
-    else if (menuId == "Lock") {
+    } else if (menuId == "Lock") {
         if (QFile::exists(ICBC_CONF_FILE)) {
             QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
-            QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus","unix:path=/run/user/1000/bus");
+            QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus", "unix:path=/run/user/1000/bus");
             QDBusMessage reply = conn.call(send);
 #ifdef QT_DEBUG
-            qInfo()<<"----------"<<reply;
+            qInfo() << "----------" << reply;
 #endif
 
         } else {
@@ -240,8 +254,7 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
             .method(QString("Show"))
             .call();
         }
-    }
-    else
+    } else
         DDBusSender()
         .service("com.deepin.dde.shutdownFront")
         .interface("com.deepin.dde.shutdownFront")
