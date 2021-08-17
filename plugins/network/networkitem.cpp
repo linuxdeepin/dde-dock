@@ -596,37 +596,24 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
  */
 void NetworkItem::ipConflict(const QString &ip, const QString &mac)
 {
-    // 如果不是本机ip
-    if (!currentIpList().contains(ip)) {
-        // 如果冲突的map中包含这个不是本机的ip地址，则移除
-        m_ipAndMacMap.remove(ip);
+    QStringList ipList = currentIpList();
 
-        if (m_ipAndMacMap.isEmpty() && m_ipConflict) {
-            static int emptyNums = 0;
-            ++emptyNums;
-            if (emptyNums >= 3) {
-                m_ipConflict = false;
-                m_detectConflictTimer->stop();
-                updateSelf();
-                emptyNums = 0;
-                m_conflictMap.clear();
-            }
+    //判断缓存冲突列表中的IP是否在本机IP列表中
+    foreach (auto tmpIP, m_conflictMap.keys()) {
+        if (!ipList.contains(tmpIP)) {
+            m_conflictMap.remove(tmpIP);
         }
-        return;
     }
+    // 如果不是本机ip
+    if (!ipList.contains(ip))
+        return;
 
-    // 仅缓存冲突ip和mac信息，用于区分在m_ipAndMacMap为空时,更新网络图标状态，避免图标为空
-    if (!mac.isEmpty())
-        m_conflictMap.insert(ip, mac);
-    else
-        m_conflictMap.remove(ip);
-
-    // ip冲突的数据才写入m_ipAndMacMap
+    // mac为空时冲突解除或IP地址不冲突
     if (mac.isEmpty()) {
         // 自检为空，则解除ip冲突状态或者冲突列表为空时，更新状态
-        m_ipAndMacMap.remove(ip);
+        m_conflictMap.remove(ip);
 
-        if (m_ipAndMacMap.isEmpty() && m_ipConflict) {
+        if (m_conflictMap.isEmpty() && m_ipConflict) {
             // 当mac为空且map也为空时，立即更新状态会导致文字显示由'ip地址冲突'变为'已连接网络但无法访问互联网'
             // 因为加了次数判断
             static int emptyNums = 0;
@@ -642,10 +629,10 @@ void NetworkItem::ipConflict(const QString &ip, const QString &mac)
         return;
     }
 
-    // 缓存冲突ip
-    m_ipAndMacMap.insert(ip, mac);
+    // 缓存冲突ip和mac地址
+    m_conflictMap.insert(ip, mac);
 
-    if (m_ipAndMacMap.size()) {
+    if (m_conflictMap.size()) {
         m_ipConflict = true;
         updateSelf();
 
