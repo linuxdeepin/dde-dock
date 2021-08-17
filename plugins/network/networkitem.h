@@ -139,7 +139,6 @@ private:
     DbusNetwork *m_networkInter;
     QStringList m_disconflictList;         // 解除冲突数据列表
     QMap<QString, QString> m_conflictMap;  // 缓存有线和无线冲突的ip列表
-    QMap<QString, QString> m_ipAndMacMap;  // ip冲突的数据,
     QTimer *m_detectConflictTimer;         // 定时器自检,当其他主机主动解除ip冲突，我方需要更新网络状态
     bool m_ipConflict;                     // ip冲突的标识
 };
