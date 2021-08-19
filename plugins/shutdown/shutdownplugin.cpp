@@ -281,49 +281,46 @@ bool ShutdownPlugin::checkSwap()
     //https://pms.uniontech.com/zentao/task-view-43465.html
     //-rw------- 1 root root 8589934592 11\xE6\x9C\x88  2 03:49 /swap_file\n
     bool hasSwap = false;
-    QProcess process;
-    process.start("ls -l /swap_file");
-    process.waitForFinished();
-    QString cmdinfo = QString(process.readAllStandardOutput());
-    qDebug() << "cmd-result :" << cmdinfo;
-    QStringList strList = cmdinfo.split(" ");
-    if (strList.size() < 5) {
-        return false;
-    }
-    qint64 swap_size = strList.at(4).toLongLong();
-    qint64 image_size{ get_power_image_size() };
-    hasSwap = image_size < swap_size;
-    qDebug() << "image_size=" << image_size << ":swap_size=" << swap_size;
-
-    return hasSwap;
-/*
-    bool hasSwap = false;
-    QFile file("/proc/swaps");
-    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        const QString &body = file.readAll();
-        QTextStream    stream(body.toUtf8());
-        while (!stream.atEnd()) {
-            const std::pair<bool, qint64> result =
-                checkIsPartitionType(stream.readLine().simplified().split(
-                                         " ", QString::SplitBehavior::SkipEmptyParts));
-            qint64 image_size{ get_power_image_size() };
-
-            if (result.first) {
-                hasSwap = image_size < result.second;
-            }
-
-            if (hasSwap) {
-                break;
-            }
+    if (QFile::exists("/swap_file")) {
+        QProcess process;
+        process.start("ls -l /swap_file");
+        process.waitForFinished();
+        QString cmdinfo = QString(process.readAllStandardOutput());
+        qDebug() << "cmd-result :" << cmdinfo;
+        QStringList strList = cmdinfo.split(" ");
+        if (strList.size() < 5) {
+            return false;
         }
-
-        file.close();
+        qint64 swap_size = strList.at(4).toLongLong();
+        qint64 image_size{ get_power_image_size() };
+        hasSwap = image_size < swap_size;
+        qDebug() << "image_size=" << image_size << ":swap_size=" << swap_size;
     } else {
-        qWarning() << "open /proc/swaps failed! please check permission!!!";
-    }
+        QFile file("/proc/swaps");
+        if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+            const QString &body = file.readAll();
+            QTextStream    stream(body.toUtf8());
+            while (!stream.atEnd()) {
+                const std::pair<bool, qint64> result =
+                    checkIsPartitionType(stream.readLine().simplified().split(
+                                             " ", QString::SplitBehavior::SkipEmptyParts));
+                qint64 image_size{ get_power_image_size() };
 
+                if (result.first) {
+                    hasSwap = image_size < result.second;
+                }
+
+                if (hasSwap) {
+                    break;
+                }
+            }
+
+            file.close();
+        } else {
+            qWarning() << "open /proc/swaps failed! please check permission!!!";
+        }
+    }
     return hasSwap;
-*/
 }
 
 void ShutdownPlugin::refreshPluginItemsVisible()
