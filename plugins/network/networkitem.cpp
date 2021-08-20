@@ -44,6 +44,7 @@ NetworkItem::NetworkItem(QWidget *parent)
     , m_networkInter(new DbusNetwork("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this))
     , m_detectConflictTimer(new QTimer(this))
     , m_ipConflict(false)
+    , m_ipConflictChecking(false)
 {
     refreshIconTimer->setInterval(100);
 
@@ -525,8 +526,6 @@ bool NetworkItem::eventFilter(QObject *obj, QEvent *event)
     // 主动检测，如果冲突会触发IPConflict信号
     if (obj == this) {
         if (event->type() == QEvent::Enter) {
-            if (m_detectConflictTimer->isActive())
-                m_detectConflictTimer->stop();
             onDetectConflict();
         }
     }
@@ -596,6 +595,8 @@ void NetworkItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
  */
 void NetworkItem::ipConflict(const QString &ip, const QString &mac)
 {
+    static int conflictCount = 0;
+    static int removeCount = 0;
     QStringList ipList = currentIpList();
 
     //判断缓存冲突列表中的IP是否在本机IP列表中
@@ -613,26 +614,41 @@ void NetworkItem::ipConflict(const QString &ip, const QString &mac)
         // 自检为空，则解除ip冲突状态或者冲突列表为空时，更新状态
         m_conflictMap.remove(ip);
 
+        if (m_conflictMap.isEmpty()) {
+            conflictCount = 0;
+        }
+
         if (m_conflictMap.isEmpty() && m_ipConflict) {
+            // 确认1次解除
+            if (removeCount++ < 1) {
+                onDetectConflict();
+                return;
+            }
+
             // 当mac为空且map也为空时，立即更新状态会导致文字显示由'ip地址冲突'变为'已连接网络但无法访问互联网'
             // 因为加了次数判断
-            static int emptyNums = 0;
-            ++emptyNums;
-            if (emptyNums >= 3) {
-                m_ipConflict = false;
-                m_detectConflictTimer->stop();
-                updateSelf();
-                emptyNums = 0;
-                m_conflictMap.clear();
-            }
+            m_ipConflict = false;
+            m_ipConflictChecking = false;
+            m_detectConflictTimer->stop();
+            updateSelf();
+            m_conflictMap.clear();
+            removeCount = 0;
         }
         return;
     }
 
     // 缓存冲突ip和mac地址
     m_conflictMap.insert(ip, mac);
+    removeCount = 0;
 
-    if (m_conflictMap.size()) {
+    if (m_conflictMap.size() && !m_ipConflict) {
+        // 确认2次
+        if (conflictCount++ < 2) {
+            onDetectConflict();
+            return;
+        }
+
+        conflictCount = 0;
         m_ipConflict = true;
         updateSelf();
 
@@ -648,23 +664,30 @@ void NetworkItem::ipConflict(const QString &ip, const QString &mac)
 void NetworkItem::onSendIpConflictDect(int index)
 {
     QTimer::singleShot(500, this, [ = ]() mutable {
-        if (index - 1 > currentIpList().size())
+        if (index - 1 > currentIpList().size()) {
+            m_ipConflictChecking = false;
             return;
+        }
 
         m_networkInter->RequestIPConflictCheck(currentIpList().at(index), "");
 
         ++index;
-        if (currentIpList().size() > index)
+        if (currentIpList().size() > index) {
             emit sendIpConflictDect(index);
+        } else {
+            m_ipConflictChecking = false;
+        }
     });
 }
 
 void NetworkItem::onDetectConflict()
 {
     // ip冲突时发起主动检测，如果解除则更新状态
-    if (currentIpList().size() <= 0)
+    if (currentIpList().size() <= 0 || m_ipConflictChecking) {
         return;
+    }
 
+    m_ipConflictChecking = true;
     onSendIpConflictDect();
 }
 
