@@ -116,6 +116,11 @@ bool DisplayManager::canDock(QScreen *s, Position pos) const
     return s ? m_screenPositionMap[s].value(pos) : false;
 }
 
+bool DisplayManager::onlyInPrimary()
+{
+    return m_onlyInPrimary;
+}
+
 /**
  * @brief DisplayManager::updateScreenDockInfo
  * 更新屏幕停靠信息
