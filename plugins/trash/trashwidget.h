@@ -35,6 +35,9 @@
 #include <QAction>
 #include <QIcon>
 
+#include <org_freedesktop_filemanager1.h>
+using  DBusFileManager1 = org::freedesktop::FileManager1;
+
 class TrashWidget : public QWidget
 {
     Q_OBJECT
@@ -65,6 +68,7 @@ private slots:
 
 private:
     PopupControlWidget *m_popupApplet;
+    DBusFileManager1 *m_fileManagerInter;
 
     QPixmap m_icon;
     QIcon m_defaulticon;

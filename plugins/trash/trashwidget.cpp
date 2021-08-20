@@ -33,10 +33,15 @@
 #include <QDragEnterEvent>
 #include <QJsonDocument>
 #include <QApplication>
+#include <QDBusConnection>
 
 TrashWidget::TrashWidget(QWidget *parent)
     : QWidget(parent)
     , m_popupApplet(new PopupControlWidget(this))
+    , m_fileManagerInter(new DBusFileManager1("org.freedesktop.FileManager1",
+                                              "/org/freedesktop/FileManager1",
+                                              QDBusConnection::sessionBus(),
+                                              this))
 {
     m_popupApplet->setVisible(false);
 
@@ -220,5 +225,8 @@ void TrashWidget::moveToTrash(const QUrl &url)
 {
     const QFileInfo info = url.toLocalFile();
 
-    QProcess::startDetached("gio", QStringList() << "trash" << "-f" << info.absoluteFilePath());
+    QStringList argumentList;
+    argumentList << info.absoluteFilePath();
+
+    m_fileManagerInter->Trash(argumentList);
 }
