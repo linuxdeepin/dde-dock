@@ -141,6 +141,7 @@ private:
     QMap<QString, QString> m_conflictMap;  // 缓存有线和无线冲突的ip列表
     QTimer *m_detectConflictTimer;         // 定时器自检,当其他主机主动解除ip冲突，我方需要更新网络状态
     bool m_ipConflict;                     // ip冲突的标识
+    bool m_ipConflictChecking;             // 标记是否正在检测中
 };
 
 #endif // NETWORKITEM_H
