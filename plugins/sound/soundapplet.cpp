@@ -357,7 +357,9 @@ void SoundApplet::cardsChanged(const QString &cards)
     }
 
     onDefaultSinkChanged();//重新获取切换的设备信息
-    enableDevice(true);
+
+    // 判断是否存在激活的输出设备
+    enableDevice(existActiveOutputDevice());
 
     for (Port *port : m_ports) {
         //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
@@ -645,12 +647,7 @@ bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
 {
     // 当控制中心禁用所有输出设备时，静音按钮置灰，其他情况正常．
     if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
-        if (!existActiveOutputDevice()) {
-            m_volumeIconMin->setEnabled(false);
-        } else {
-            m_volumeIconMin->setEnabled(true);
-            m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
-        }
+        m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
     }
 
     return false;
