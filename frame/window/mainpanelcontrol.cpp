@@ -84,7 +84,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
     m_desktopWidget->installEventFilter(this);
-    m_pluginAreaWidget->installEventFilter(this);
 
     //在设置每条线大小前，应该设置fixedsize(0,0)
     //应为paintEvent函数会先调用设置背景颜色，大小为随机值
@@ -314,9 +313,12 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
+    //先通过消息循环让各部件调整好size后再计算图标大小
+    //避免因为部件size没有调整完导致计算的图标大小不准确
+    //然后重复触发m_pluginAreaWidget的reszie事件并重复计算，造成任务栏图标抖动问题
+    QWidget::resizeEvent(event);
     resizeDesktopWidget();
     resizeDockIcon();
-    return QWidget::resizeEvent(event);
 }
 
 /**根据任务栏所在位置， 设置应用区域控件的大小
@@ -630,17 +632,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             break;
         default:
             moveAppSonWidget();
-            break;
-        }
-    }
-
-    // fix:88133 在计算icon大小时m_pluginAreaWidget的数据错误
-    if (watched == m_pluginAreaWidget) {
-        switch (event->type()) {
-        case QEvent::Resize:
-            resizeDockIcon();
-            break;
-        default:
             break;
         }
     }
