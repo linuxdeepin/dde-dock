@@ -6,7 +6,7 @@ Release:        1
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
 URL:            http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/RERFNS4wLjAuNjU3NQ/pool/main/d/dde-dock/
-Source0:        %{name}-%{version}.orig.tar.xz	
+Source0:        %{name}-%{version}.orig.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -75,7 +75,7 @@ sed -i 's|local/lib/dde-dock/plugins|local/%{_lib}/dde-dock/plugins|' plugins/pl
 
 %build
 export PATH=%{_qt5_bindir}:$PATH
-%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DARCHITECTURE=%{_arch} .
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPLUGIN_INSTALL_DIR=%{_prefix}/lib64 -DARCHITECTURE=%{_arch} .
 %make_build
 
 %install
@@ -102,4 +102,3 @@ export PATH=%{_qt5_bindir}:$PATH
 %changelog
 * Thu Mar 23 2021 uoser <uoser@uniontech.com> - 5.4.9-1
 - Update to 5.4.9
-

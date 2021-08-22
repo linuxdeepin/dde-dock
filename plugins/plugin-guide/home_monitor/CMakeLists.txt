@@ -98,4 +98,4 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
 set(CMAKE_INSTALL_PREFIX "/usr")
 
 # 设置执行 make install 时哪个目标应该被 install 到哪个位置
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}/dde-dock/plugins)

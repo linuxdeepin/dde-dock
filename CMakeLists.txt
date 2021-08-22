@@ -45,6 +45,19 @@ if (${EXIT_CODE} EQUAL 0)
     endif()
 endif()
 
+# Install settings
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif ()
+
+if (NOT DEFINED PLUGIN_INSTALL_DIR)
+    set(PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+else()
+    set(PLUGIN_INSTALL_DIR "${PLUGIN_INSTALL_DIR}")
+endif()
+
+add_definitions(-DPLUGIN_INSTALL_DIR=\"${PLUGIN_INSTALL_DIR}\")
+
 file(GLOB INTERFACES "interfaces/*.h")
 
 #因为单元测试需要直接测试源代码，而主程序代码中include的单元使用了相对路径
@@ -93,11 +106,6 @@ file(GLOB SRC_PATH
 add_subdirectory("frame")
 add_subdirectory("plugins")
 add_subdirectory("tests")
-
-# Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
