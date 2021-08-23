@@ -121,6 +121,27 @@ bool DisplayManager::onlyInPrimary()
     return m_onlyInPrimary;
 }
 
+/**判断屏幕是否为复制模式的依据，第一个屏幕的X和Y值是否和其他的屏幕的X和Y值相等
+ * 对于复制模式，这两个值肯定是相等的，如果不是复制模式，这两个值肯定不等，目前支持双屏
+ * @brief DisplayManager::isCopyMode
+ * @return
+ */
+bool DisplayManager::isCopyMode()
+{
+    if (m_screens.size() < 2)
+        return false;
+
+    // 在多个屏幕的情况下，如果所有屏幕的位置的X和Y值都相等，则认为是复制模式
+    QRect screenRect = m_screens[0]->availableGeometry();
+    for (int i = 1; i < m_screens.size(); i++) {
+        QRect rect = m_screens[i]->availableGeometry();
+        if (screenRect.x() != rect.x() || screenRect.y() != rect.y())
+            return false;
+    }
+
+    return true;
+}
+
 /**
  * @brief DisplayManager::updateScreenDockInfo
  * 更新屏幕停靠信息

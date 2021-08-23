@@ -731,34 +731,13 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 }
 
 /**
- * @brief 判断屏幕是否为复制模式的依据，第一个屏幕的X和Y值是否和其他的屏幕的X和Y值相等
- * 对于复制模式，这两个值肯定是相等的，如果不是复制模式，这两个值肯定不等，目前支持双屏
- */
-static bool isCopyMode()
-{
-    QList<QScreen *> screens = DIS_INS->screens();
-    if (screens.size() < 2)
-        return false;
-
-    // 在多个屏幕的情况下，如果所有屏幕的位置的X和Y值都相等，则认为是复制模式
-    QRect rect0 = screens[0]->availableGeometry();
-    for (int i = 1; i < screens.size(); i++) {
-        QRect rect = screens[i]->availableGeometry();
-        if (rect0.x() != rect.x() || rect0.y() != rect.y())
-            return false;
-    }
-
-    return true;
-}
-
-/**
  * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
  * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
  */
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
     /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
-    if ((!isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
+    if ((!DIS_INS->isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
         m_lastRect = QRect();
 
         const auto display = QX11Info::display();
