@@ -42,8 +42,9 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     , m_standarditem(new DStandardItem())
     , m_loading(new DSpinner(parent))
 {
-    initActionList();
+    //此处需要先连接信号和槽函数，不然updateDeviceState时无法接收deviceStateChanged信号
     initConnect();
+    initActionList();
 }
 
 BluetoothDeviceItem::~BluetoothDeviceItem()

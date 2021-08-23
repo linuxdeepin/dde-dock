@@ -66,7 +66,6 @@ private:
     BluetoothApplet *m_applet;
 
     QPixmap m_iconPixmap;
-    Device::State m_devState;
     bool m_adapterPowered;
 };
 

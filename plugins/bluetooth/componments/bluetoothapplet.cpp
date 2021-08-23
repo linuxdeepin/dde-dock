@@ -21,7 +21,6 @@
  */
 
 #include "bluetoothapplet.h"
-#include "device.h"
 #include "bluetoothconstants.h"
 #include "adaptersmanager.h"
 #include "adapter.h"
@@ -137,6 +136,30 @@ QStringList BluetoothApplet::connectedDevicesName()
     }
 
     return deviceList;
+}
+
+Device::State BluetoothApplet::getAllBlueDeviceState()
+{
+    //任务栏图标状态需要根据所有设备的连接状态来确定，而不是某一个设备的状态
+    Device::State deviceState = Device::State::StateUnavailable;
+
+    foreach (auto adapterItem, m_adapterItems) {
+        if (adapterItem->adapter()->powered()) {
+            foreach (auto device, adapterItem->adapter()->devices()) {
+                if (device->state() == Device::State::StateConnected) {
+                    deviceState = Device::State::StateConnected;
+                    break;
+                } else if (device->state() == Device::State::StateAvailable) {
+                    deviceState = Device::State::StateAvailable;
+                }
+            }
+
+            if (deviceState == Device::StateConnected)
+                break;
+        }
+    }
+
+    return deviceState;
 }
 
 void BluetoothApplet::onAdapterAdded(Adapter *adapter)

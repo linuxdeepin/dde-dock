@@ -25,6 +25,7 @@
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
 #include "componments/bluetoothapplet.h"
+#include "componments/device.h"
 
 #include <DApplication>
 #include <DDBusSender>
@@ -45,7 +46,6 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
     , m_applet(new BluetoothApplet(this))
-    , m_devState(Device::State::StateUnavailable)
     , m_adapterPowered(m_applet->poweredInitState())
 {
     setAccessibleName("BluetoothPluginItem");
@@ -58,7 +58,8 @@ BluetoothItem::BluetoothItem(QWidget *parent)
         refreshIcon();
     });
     connect(m_applet, &BluetoothApplet::deviceStateChanged, [ & ] (const Device* device) {
-        m_devState = device->state();
+        Q_UNUSED(device);
+        //有设备的连接状态发生改变时刷新图标和提示信息
         refreshIcon();
         refreshTips();
     });
@@ -132,8 +133,11 @@ void BluetoothItem::refreshIcon()
     QString stateString;
     QString iconString;
 
+    //获取所有设备的连接状态
+    Device::State devState = m_applet->getAllBlueDeviceState();
+
     if (m_adapterPowered) {
-        switch (m_devState) {
+        switch (devState) {
             case Device::StateConnected:
                 stateString = "active";
                 break;
@@ -164,8 +168,11 @@ void BluetoothItem::refreshTips()
 {
     QString tipsText;
 
+    //获取所有设备的连接状态
+    Device::State devState = m_applet->getAllBlueDeviceState();
+
     if (m_adapterPowered) {
-        switch (m_devState) {
+        switch (devState) {
         case Device::StateConnected: {
             QStringList textList;
             for (QString devName : m_applet->connectedDevicesName()) {

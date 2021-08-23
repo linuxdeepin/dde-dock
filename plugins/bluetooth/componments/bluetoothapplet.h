@@ -23,6 +23,8 @@
 #ifndef BLUETOOTHAPPLET_H
 #define BLUETOOTHAPPLET_H
 
+#include "componments/device.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -31,7 +33,6 @@
 class QVBoxLayout;
 class QHBoxLayout;
 
-class Device;
 class Adapter;
 class BluetoothAdapterItem;
 class AdaptersManager;
@@ -77,6 +78,8 @@ public:
     void setAdapterPowered(bool state);
     // 已连接蓝牙设备名称列表，用于获取鼠标悬浮在蓝牙插件上时tips显示内容
     QStringList connectedDevicesName();
+    //获取所有蓝牙适配器连接的设备状态
+    Device::State getAllBlueDeviceState();
 
 signals:
     void noAdapter();
