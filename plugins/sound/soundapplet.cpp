@@ -357,7 +357,7 @@ void SoundApplet::cardsChanged(const QString &cards)
     }
 
     onDefaultSinkChanged();//重新获取切换的设备信息
-    enableDevice(true);
+    enableDevice(existActiveOutputDevice());
 
     for (Port *port : m_ports) {
         //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
@@ -397,7 +397,7 @@ void SoundApplet::refreshIcon()
     if (!m_defSinkInter)
         return;
 
-    const bool mute = m_defSinkInter->mute();
+    const bool mute = existActiveOutputDevice() ? m_defSinkInter->mute() : true;
 
     QString volumeString;
 
@@ -652,7 +652,6 @@ bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
             m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
         }
     }
-
     return false;
 }
 

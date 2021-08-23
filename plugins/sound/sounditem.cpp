@@ -183,7 +183,7 @@ void SoundItem::refreshIcon()
 
     const double volmue = m_applet->volumeValue();
     const double maxVolmue = m_applet->maxVolumeValue();
-    const bool mute = m_sinkInter->mute();
+    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
