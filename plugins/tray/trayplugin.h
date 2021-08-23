@@ -34,6 +34,7 @@
 
 #include <QSettings>
 #include <QLabel>
+#include <mutex>
 
 class FashionTrayItem;
 namespace Dock {
@@ -96,7 +97,6 @@ private:
     SystemTraysController *m_systemTraysController;
     QTimer *m_refreshXEmbedItemsTimer;
     QTimer *m_refreshSNIItemsTimer;
-    QDBusServiceWatcher *m_sniItemServerWatcher;
 
     QMap<QString, AbstractTrayWidget *> m_trayMap;
     QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;
@@ -104,6 +104,7 @@ private:
 
     Dock::TipsWidget *m_tipsLabel;
     bool m_pluginLoaded;
+    std::mutex        m_sniMutex;
 };
 
 #endif // TRAYPLUGIN_H

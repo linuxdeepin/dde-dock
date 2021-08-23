@@ -20,6 +20,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5X11Extras REQUIRED)
+find_package(Qt5Concurrent REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED xcb-ewmh xcb xcb-image xcb-composite xtst x11 xext xcb-icccm dbusmenu-qt5)
@@ -44,6 +45,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5X11Extras_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Qt5Concurrent_LIBRARIES}
     ${XCB_LIBS_LIBRARIES}
     ${DDE-Network-Utils_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
