@@ -38,7 +38,8 @@ namespace Utils {
  * @param parent 创建指针的付对象
  * @return
  */
-inline const QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
+inline QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByteArray(), QObject *parent = nullptr)
+{
     if (QGSettings::isSchemaInstalled(schema_id.toUtf8())) {
         QGSettings *settings = new QGSettings(schema_id.toUtf8(), path, parent);
         return settings;
@@ -54,7 +55,8 @@ inline const QGSettings *SettingsPtr(const QString &schema_id, const QByteArray 
  * @param parent 创建指针的付对象
  * @return
  */
-inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr) {
+inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr)
+{
     return SettingsPtr("com.deepin.dde.dock.module." + module, path, parent);
 }
 
@@ -90,7 +92,8 @@ inline QString qtify_name(const char *name)
  * @param fallback 如果找不到信息，返回此默认值
  * @return
  */
-inline const QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant()){
+inline const QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant())
+{
     const QGSettings *settings = SettingsPtr(schema_id, path);
 
     if (settings && ((settings->keys().contains(key)) || settings->keys().contains(qtify_name(key.toUtf8().data())))) {
@@ -101,11 +104,34 @@ inline const QVariant SettingValue(const QString &schema_id, const QByteArray &p
         qDebug() << "Cannot find gsettings, schema_id:" << schema_id
                  << " path:" << path << " key:" << key
                  << "Use fallback value:" << fallback;
+        // 如果settings->keys()不包含key则会存在内存泄露，所以需要释放
+        if (settings)
+            delete settings;
+
         return fallback;
     }
 }
 
-inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio) {
+inline bool SettingSaveValue(const QString &schema_id, const QByteArray &path, const QString &key, const QVariant &value)
+{
+    QGSettings *settings = SettingsPtr(schema_id, path);
+
+    if (settings && ((settings->keys().contains(key)) || settings->keys().contains(qtify_name(key.toUtf8().data())))) {
+        settings->set(key, value);
+        delete settings;
+        return true;
+    } else{
+        qDebug() << "Cannot find gsettings, schema_id:" << schema_id
+                 << " path:" << path << " key:" << key;
+        if (settings)
+            delete settings;
+
+        return false;
+    }
+}
+
+inline QPixmap renderSVG(const QString &path, const QSize &size, const qreal devicePixelRatio)
+{
     QImageReader reader;
     QPixmap pixmap;
     reader.setFileName(path);
@@ -146,7 +172,8 @@ inline QScreen *screenAtByScaled(const QPoint &point) {
     return nullptr;
 }
 
-inline bool isSettingConfigured(const QString& id, const QString& path, const QString& keyName) {
+inline bool isSettingConfigured(const QString& id, const QString& path, const QString& keyName)
+{
     if (!QGSettings::isSchemaInstalled(id.toUtf8())) {
         return false;
     }
@@ -164,7 +191,8 @@ inline bool isSettingConfigured(const QString& id, const QString& path, const QS
 * @param pluginApi2 第二个插件版本号
 * @return 0:两个版本号相等,1:第一个版本号大,-1:第二个版本号大
 */
-inline int comparePluginApi(const QString &pluginApi1, const QString &pluginApi2) {
+inline int comparePluginApi(const QString &pluginApi1, const QString &pluginApi2)
+{
     // 版本号相同
     if (pluginApi1 == pluginApi2)
         return 0;

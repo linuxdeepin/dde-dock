@@ -410,6 +410,13 @@
           Control Module Visible
       </description>
     </key>
+    <key type="b" name="multiscreen-visible">
+      <default>true</default>
+      <summary>Multiscreen Visible</summary>
+      <description>
+          Control Multiscreen Visible
+      </description>
+    </key>
 
   </schema>
  <schema path="/com/deepin/dde/dock/module/AiAssistant/" id="com.deepin.dde.dock.module.AiAssistant" gettext-domain="DDE">

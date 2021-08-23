@@ -21,12 +21,15 @@
 #include "menuworker.h"
 #include "dockitemmanager.h"
 #include "utils.h"
+#include "displaymanager.h"
 
 #include <QAction>
 #include <QMenu>
 #include <QGSettings>
 
 #include <DApplication>
+
+#define DIS_INS DisplayManager::instance()
 
 MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
     : QObject (parent)
@@ -206,6 +209,39 @@ QMenu *MenuWorker::createMenu()
 
         // add plugins menu
         settingsMenu->addAction(hideSubMenuAct);
+    }
+
+    // 多屏显示设置 仅多屏扩展模式显示菜单
+    if ((!menuSettings || !menuSettings->keys().contains("multiscreenVisible") || menuSettings->get("multiscreenVisible").toBool())
+            && !DIS_INS->isCopyMode()) {
+        bool onlyShowPrimary = Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool();
+
+        QMenu *displaySubMenu = new QMenu(settingsMenu);
+        displaySubMenu->setAccessibleName("displaysubmenu");
+
+        QAction *onlyPrimaryScreenModeAct = new QAction(tr("Only on main screen"), this);
+        QAction *followMouseModeAct = new QAction(tr("On screen where the cursor is"), this);
+
+        onlyPrimaryScreenModeAct->setCheckable(true);
+        followMouseModeAct->setCheckable(true);
+
+        onlyPrimaryScreenModeAct->setChecked(onlyShowPrimary);
+        followMouseModeAct->setChecked(!onlyShowPrimary);
+
+        connect(onlyPrimaryScreenModeAct, &QAction::triggered, this, [ = ]{
+            Utils::SettingSaveValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", true);
+        });
+        connect(followMouseModeAct, &QAction::triggered, this, [ = ]{
+            Utils::SettingSaveValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false);
+        });
+
+        displaySubMenu->addAction(onlyPrimaryScreenModeAct);
+        displaySubMenu->addAction(followMouseModeAct);
+
+        QAction *act = new QAction(tr("Show the Dock"), this);
+        act->setMenu(displaySubMenu);
+
+        settingsMenu->addAction(act);
     }
 
     delete menuSettings;
