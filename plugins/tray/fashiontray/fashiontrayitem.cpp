@@ -96,18 +96,15 @@ void FashionTrayItem::trayWidgetAdded(const QString &itemKey, AbstractTrayWidget
 
     FashionTrayWidgetWrapper *wrapper = new FashionTrayWidgetWrapper(itemKey, trayWidget);
 
-    do {
-        if (m_holdContainer->acceptWrapper(wrapper)) {
-            m_holdContainer->addWrapper(wrapper);
-            break;
-        }
-        if (m_normalContainer->acceptWrapper(wrapper)) {
-            m_normalContainer->addWrapper(wrapper);
-            break;
-        }
-    } while (false);
+    // 每个托盘图标的itemKeyForConfig不为空，针对SNI托盘图标做处理，异步id变更后再行显示
+    if (wrapper->absTrayWidget()->itemKeyForConfig().isEmpty()) {
+        connect(trayWidget, &AbstractTrayWidget::idChanged, this, [ = ] {
+            trayWidgetAdded(wrapper);
+        });
+        return;
+    }
 
-    requestResize();
+    trayWidgetAdded(wrapper);
 }
 
 void FashionTrayItem::trayWidgetRemoved(AbstractTrayWidget *trayWidget)
@@ -356,7 +353,7 @@ void FashionTrayItem::resizeTray()
         return;
 
     if (m_dockpos == Dock::Position::Top || m_dockpos == Dock::Position::Bottom) {
-        if (m_attentionContainer->itemCount() != 0){
+        if (m_attentionContainer->itemCount() != 0) {
             m_mainBoxLayout->setContentsMargins(0, 0, TraySpace, 0);
         } else {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -370,18 +367,34 @@ void FashionTrayItem::resizeTray()
         m_controlWidget->setFixedSize(m_iconSize, QWIDGETSIZE_MAX);
     } else {
         m_holdContainer->setFixedWidth(QWIDGETSIZE_MAX);
-        if (m_attentionContainer->itemCount() != 0){
+        if (m_attentionContainer->itemCount() != 0) {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, TraySpace);
         } else {
             m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
         }
 
-         m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
+        m_holdContainer->setFixedHeight((m_iconSize + TraySpace) * m_holdContainer->itemCount() + TraySpace);
         m_attentionContainer->setFixedWidth(QWIDGETSIZE_MAX);
         m_attentionContainer->setFixedHeight(m_iconSize * m_attentionContainer->itemCount());
 
         m_controlWidget->setFixedSize(QWIDGETSIZE_MAX, m_iconSize);
-    }    
+    }
 
     m_normalContainer->updateSize();
+}
+
+void FashionTrayItem::trayWidgetAdded(FashionTrayWidgetWrapper *wrapper)
+{
+    do {
+        if (m_holdContainer->acceptWrapper(wrapper)) {
+            m_holdContainer->addWrapper(wrapper);
+            break;
+        }
+        if (m_normalContainer->acceptWrapper(wrapper)) {
+            m_normalContainer->addWrapper(wrapper);
+            break;
+        }
+    } while (false);
+
+    requestResize();
 }

@@ -159,13 +159,11 @@ QString SNITrayWidget::itemKeyForConfig()
             break;
         }
 
-        key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
-              .property("Id").toString();
+        key = m_sniInter->id();
         if (!key.isEmpty()) {
             break;
         }
-
-        key = m_sniServicePath;
+        return key;
     } while (false);
 
     return QString("sni:%1").arg(key);
@@ -411,6 +409,7 @@ void SNITrayWidget::onSNIIconThemePathChanged(const QString &value)
 void SNITrayWidget::onSNIIdChanged(const QString &value)
 {
     m_sniId = value;
+    Q_EMIT idChanged();
 }
 
 void SNITrayWidget::onSNIMenuChanged(const QDBusObjectPath &value)

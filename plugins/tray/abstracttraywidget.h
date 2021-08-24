@@ -52,6 +52,7 @@ Q_SIGNALS:
     void needAttention();
     void requestWindowAutoHide(const bool autoHide);
     void requestRefershWindowVisible();
+    void idChanged();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

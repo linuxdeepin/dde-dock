@@ -71,6 +71,7 @@ protected:
 private:
     void init();
     void resizeTray();
+    void trayWidgetAdded(FashionTrayWidgetWrapper *wrapper);
 
 private Q_SLOTS:
     void onWrapperAttentionChanged(FashionTrayWidgetWrapper *wrapper, const bool attention);
