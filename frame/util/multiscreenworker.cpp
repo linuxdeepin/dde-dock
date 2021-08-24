@@ -1107,8 +1107,8 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
     QVariantAnimation *ani = new QVariantAnimation(this);
     ani->setEasingCurve(QEasingCurve::InOutCubic);
 
-    const bool composite = m_wmHelper->hasComposite(); // 判断是否开启特效模式
 #ifndef DISABLE_SHOW_ANIMATION
+    const bool composite = m_wmHelper->hasComposite(); // 判断是否开启特效模式
     const int duration = composite ? ANIMATIONTIME : 0;
 #else
     const int duration = 0;
@@ -1139,13 +1139,13 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
         switch (act) {
         case AniAction::Show:
             if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                if (m_hideMode == HideMode::KeepShowing || composite)
+                if (m_hideMode == HideMode::KeepShowing || duration)
                     setStates(ShowAnimationStart);
                 else
                     setStates(DockIsShowing);
             }
             if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                if (m_hideMode == HideMode::KeepShowing || composite)
+                if (m_hideMode == HideMode::KeepShowing || duration)
                     setStates(ShowAnimationStart, false);
                 else // 如果不是一直显示的状态，则让其延时修改状态，防止在resetDock的时候重复改变其高度引起任务栏闪烁导致无法唤醒
                     QTimer::singleShot(ANIMATIONTIME, [ = ] { setStates(DockIsShowing, false); });
