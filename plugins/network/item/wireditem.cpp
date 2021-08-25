@@ -31,6 +31,7 @@
 #include <DGuiApplicationHelper>
 
 #include <QLabel>
+#include <QPainter>
 #include <QVBoxLayout>
 
 #include <NetworkModel>
@@ -44,6 +45,8 @@ extern const QString LightType = ".svg";
 WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *parent)
     : DeviceItem(device, parent)
     , m_deviceName(deviceName)
+    , m_uuid(QString())
+    , m_oldUUID(QString())
     , m_connectedName(new QLabel(this))
     , m_wiredIcon(new QLabel(this))
     , m_stateButton(new StateButton(this))
@@ -246,6 +249,54 @@ QSize WiredItem::sizeHint() const
     return QSize(DeviceItem::sizeHint().width(), ItemHeight);
 }
 
+void WiredItem::enterEvent(QEvent *event)
+{
+    m_isEnter = true;
+    update();
+    DeviceItem::enterEvent(event);
+}
+
+void WiredItem::leaveEvent(QEvent *event)
+{
+    m_isEnter = false;
+    update();
+    DeviceItem::leaveEvent(event);
+}
+
+void WiredItem::paintEvent(QPaintEvent *event)
+{
+    DeviceItem::paintEvent(event);
+
+    QPainter painter(this);
+    painter.setPen(Qt::NoPen);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        if (m_isEnter) {
+            painter.setBrush(QColor(0, 0, 0, 0.12*255));
+        } else {
+            painter.setBrush(Qt::transparent);
+        }
+    } else {
+        if (m_isEnter) {
+            painter.setBrush(QColor(255, 255, 255, 0.12*255));
+        } else {
+            painter.setBrush(Qt::transparent);
+        }
+    }
+
+    painter.drawRect(rect());
+}
+
+void WiredItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    // 如果网络是连接状态，则不需要重新连接
+    if (m_deviceState == NetworkDevice::Activated)
+        return;
+
+    emit requestActiveConnection(path(), m_oldUUID);
+
+    DeviceItem::mouseReleaseEvent(event);
+}
+
 void WiredItem::deviceStateChanged(NetworkDevice::DeviceStatus state)
 {
     m_deviceState = state;
@@ -296,6 +347,12 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
     }
 
     auto strTitle = connInfo.value("ConnectionName").toString();
+
+    if (!m_uuid.isEmpty()) {
+        m_oldUUID = m_uuid;
+    }
+
+    m_uuid = connInfo.value("ConnectionUuid").toString();
     m_connectedName->setText(strTitle);
     QFontMetrics fontMetrics(m_connectedName->font());
     if (fontMetrics.width(strTitle) > m_connectedName->width()) {

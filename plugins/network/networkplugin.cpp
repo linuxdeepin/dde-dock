@@ -200,6 +200,8 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
                     m_networkItem.data(), &NetworkItem::updateSelf);
             connect(static_cast<WiredItem *>(item), &WiredItem::activeConnectionChanged,
                     m_networkItem.data(), &NetworkItem::updateSelf);
+            connect(static_cast<WiredItem *>(item), &WiredItem::requestActiveConnection,
+                    this, &NetworkPlugin::onActivateConnection);
             break;
         case NetworkDevice::Wireless:
             item = new WirelessItem(static_cast<WirelessDevice *>(device));
@@ -241,6 +243,69 @@ void NetworkPlugin::onDeviceListChanged(const QList<NetworkDevice *> devices)
 
     m_hasDevice = wiredItems.size() || wirelessItems.size();
     m_networkItem->updateDeviceItems(wiredItems, wirelessItems);
+}
+
+void NetworkPlugin::onActivateConnection(const QString &path, const QString &uuid)
+{
+    const auto wiredConns = m_networkModel->wireds();
+
+    // 查询所有所有备用网络连接
+    QList<QString> availableWiredConns;
+    availableWiredConns.reserve(wiredConns.size());
+
+    for (const auto &wiredConn : wiredConns) {
+        const QString path = wiredConn.value("Path").toString();
+        if (!path.isEmpty())
+            availableWiredConns << path;
+    }
+
+    WiredDevice *currentDevices = nullptr;
+    QSet<QString> connPaths;
+
+    // 查询其他网卡已经连接的网络，若网络已被使用从备用网络中移除
+    auto devices = m_networkModel->devices();
+    foreach (auto device, devices) {
+        if (device->type() != NetworkDevice::Wired)
+            continue;
+
+        if (device->path() == path) {
+            currentDevices = static_cast<WiredDevice *>(device);;
+            continue;
+        }
+
+        WiredDevice *wiredDevice = static_cast<WiredDevice *>(device);
+        if (wiredDevice == nullptr)
+            continue;
+
+        auto activedPath = wiredDevice->activeWiredConnSettingPath();
+
+        if (availableWiredConns.contains(activedPath))
+            availableWiredConns.removeAll(activedPath);
+    }
+
+    // 如果无可用的网络，则退出
+    if (availableWiredConns.size() <= 0)
+        return;
+
+    // 未查找到当前设备，则退出
+    if (currentDevices == nullptr)
+        return;
+
+    // 根据uuid查找旧网络
+    QJsonObject connObj = m_networkModel->connectionByUuid(uuid);
+    QString currentPath = connObj.value("Path").toString();
+
+    // 如果准备连接的旧网络不存在或被其他网卡占用，则使用备用网络中的第一个
+    if (currentPath.isEmpty())
+        currentPath = availableWiredConns.at(0);
+
+    // 如果网卡准备连接的网络和当前已连接的是同一个，则不需要连接
+    if (currentDevices->activeWiredConnSettingPath() == currentPath)
+         return;
+
+    // 根据path查找uuid并连接
+    QString currentUUID = m_networkModel->connectionUuidByPath(currentPath);
+    m_networkWorker->activateConnection(path, currentUUID);
 }
 
 void NetworkPlugin::loadPlugin()

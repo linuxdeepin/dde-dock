@@ -63,6 +63,7 @@ public:
 
 private slots:
     void onDeviceListChanged(const QList<dde::network::NetworkDevice *> devices);
+    void onActivateConnection(const QString &path, const QString &uuid);
 
 private:
     void loadPlugin();

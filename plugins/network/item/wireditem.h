@@ -72,6 +72,10 @@ public:
 
 protected:
     QSize sizeHint() const;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 signals:
     void requestActiveConnection(const QString &devPath, const QString &uuid);
@@ -84,7 +88,10 @@ private slots:
     void changedActiveWiredConnectionInfo(const QJsonObject &connInfo);
 
 private:
+    bool m_isEnter = false;
     QString m_deviceName;
+    QString m_uuid;
+    QString m_oldUUID;
     QLabel *m_connectedName;
     QLabel *m_wiredIcon;
     StateButton *m_stateButton;

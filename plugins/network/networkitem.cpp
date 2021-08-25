@@ -551,14 +551,11 @@ QString NetworkItem::getStrengthStateString(int strength)
 
 void NetworkItem::wiredsEnable(bool enable)
 {
+    // 刷新有线连接,不管是否禁用均显示
     for (auto wiredItem : m_wiredItems) {
         if (wiredItem) {
             wiredItem->setDeviceEnabled(enable);
-            wiredItem->setVisible(enable);
-            if (enable)
-                m_wiredLayout->addWidget(wiredItem);
-            else
-                m_wiredLayout->removeWidget(wiredItem);
+            m_wiredLayout->addWidget(wiredItem);
         }
     }
 
@@ -1296,17 +1293,12 @@ void NetworkItem::updateMasterControlSwitch()
     m_switchWiredBtn->setChecked(m_switchWiredBtnState);
     m_thirdSeparator->setVisible(m_switchWiredBtnState);
     m_switchWiredBtn->blockSignals(false);
-    /* 根据有线适配器启用状态增/删布局中的组件 */
+    // 刷新有线连接,不管是否禁用均显示
     for (WiredItem *wiredItem : m_wiredItems) {
         if (!wiredItem)
             continue;
 
-        // wiredItem->itemApplet()->setVisible(m_switchWiredBtnState); // TODO
-        wiredItem->setVisible(m_switchWiredBtnState);
-        if (wiredItem->deviceEabled())
-            m_wiredLayout->addWidget(wiredItem);
-        else
-            m_wiredLayout->removeWidget(wiredItem);
+        m_wiredLayout->addWidget(wiredItem);
     }
 
     /* 获取无线适配器启用状态 */
