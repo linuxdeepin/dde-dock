@@ -38,7 +38,6 @@
 #include "shutdownwidget.h"
 #include "multitaskingwidget.h"
 #include "overlaywarningwidget.h"
-#include "networkpanel.h"
 
 // 这部分由sound插件单独维护,这样做是因为在标记volumeslider这个类时,需要用到其setValue的实现,
 // 但插件的源文件dock这边并没有包含,不想引入复杂的包含关系,其实最好的做法就是像sound插件这样,谁维护谁的
@@ -114,7 +113,6 @@ SET_FORM_ACCESSIBLE(QScrollArea, "QScrollArea")
 SET_FORM_ACCESSIBLE(QFrame, "QFrame")
 SET_FORM_ACCESSIBLE(QGraphicsView, "QGraphicsView")
 SET_FORM_ACCESSIBLE(DragWidget, "DragWidget")
-SET_FORM_ACCESSIBLE(NetworkPanel, "NetworkPanel")
 SET_FORM_ACCESSIBLE(StateButton, "StateButton")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
@@ -180,7 +178,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
             ELSE_USE_ACCESSIBLE(classname, QFrame)
             ELSE_USE_ACCESSIBLE(classname, QGraphicsView)
             ELSE_USE_ACCESSIBLE(classname, DragWidget)
-            ELSE_USE_ACCESSIBLE(classname, NetworkPanel)
             ELSE_USE_ACCESSIBLE(classname, StateButton)
             ELSE_USE_ACCESSIBLE(classname, HorizontalSeperator);
 

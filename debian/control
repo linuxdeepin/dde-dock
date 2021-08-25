@@ -24,8 +24,7 @@ Build-Depends: debhelper (>= 8.0.0),
  libdbusmenu-qt5-dev,
  libdtkgui-dev,
  libgtest-dev,
- libgmock-dev,
- dde-network-core-dev
+ libgmock-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
