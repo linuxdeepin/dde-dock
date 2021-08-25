@@ -21,10 +21,10 @@
  */
 
 #include "bluetoothadapteritem.h"
-#include "componments/adapter.h"
+#include "adapter.h"
 #include "bluetoothconstants.h"
 #include "refreshbutton.h"
-#include "util/horizontalseperator.h"
+#include "horizontalseperator.h"
 
 #include <DFontSizeManager>
 #include <DLabel>

@@ -172,19 +172,6 @@ inline QScreen *screenAtByScaled(const QPoint &point) {
     return nullptr;
 }
 
-inline bool isSettingConfigured(const QString& id, const QString& path, const QString& keyName)
-{
-    if (!QGSettings::isSchemaInstalled(id.toUtf8())) {
-        return false;
-    }
-    QGSettings setting(id.toUtf8(), path.toUtf8());
-    QVariant v = setting.get(keyName);
-    if (!v.isValid()) {
-        return false;
-    }
-    return v.toBool();
-}
-
 /**
 * @brief 比较两个插件版本号的大小
 * @param pluginApi1 第一个插件版本号

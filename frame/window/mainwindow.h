@@ -59,6 +59,23 @@ public:
         m_dragStatus = false;
     }
 
+public slots:
+    void onTouchMove(double scaleX, double scaleY)
+    {
+        Q_UNUSED(scaleX);
+        Q_UNUSED(scaleY);
+
+        static QPoint lastPos;
+        QPoint curPos = QCursor::pos();
+        if (lastPos == curPos) {
+            return;
+        }
+        lastPos = curPos;
+        qApp->postEvent(this, new QMouseEvent(QEvent::MouseMove, mapFromGlobal(curPos)
+                                                      , QPoint(), curPos, Qt::LeftButton, Qt::LeftButton
+                                                      , Qt::NoModifier, Qt::MouseEventSynthesizedByApplication));
+    }
+
 signals:
     void dragPointOffset(QPoint);
     void dragFinished();
@@ -112,7 +129,7 @@ class MainWindow : public DBlurEffectWidget
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() override;
+
     void setEffectEnabled(const bool enabled);
     void setComposite(const bool hasComposite);
     void setGeometry(const QRect &rect);
@@ -148,6 +165,7 @@ signals:
     void panelGeometryChanged();
 
 public slots:
+    void RegisterDdeSession();
     void resetDragWindow(); // 任务栏调整高度或宽度后需调用此函数
 
 private slots:

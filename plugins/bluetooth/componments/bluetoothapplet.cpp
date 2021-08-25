@@ -26,7 +26,7 @@
 #include "adaptersmanager.h"
 #include "adapter.h"
 #include "bluetoothadapteritem.h"
-#include "util/horizontalseperator.h"
+#include "horizontalseperator.h"
 
 #include <DApplicationHelper>
 #include <DDBusSender>

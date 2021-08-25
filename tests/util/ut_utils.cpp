@@ -52,12 +52,6 @@ TEST_F(Ut_Utils, comparePluginApi_test)
     QCOMPARE(Utils::comparePluginApi(v3, v1), 1);
 }
 
-TEST_F(Ut_Utils, isSettingConfigured_test)
-{
-//    Utils::isSettingConfigured("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "only-show-primary");
-    ASSERT_FALSE(Utils::isSettingConfigured("", "", ""));
-}
-
 TEST_F(Ut_Utils, screenAt_test)
 {
     Utils::screenAt(QPoint(0, 0));
@@ -79,4 +73,9 @@ TEST_F(Ut_Utils, renderSVG_test)
     QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", size, 1.0).size(), size);
     QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 1.0).size(), QSize(50, 50));
     QCOMPARE(Utils::renderSVG(":/res/all_settings_on.png", QSize(50, 50), 0.5).size(), QSize(25, 25));
+}
+
+TEST_F(Ut_Utils, gsettings_test)
+{
+    ASSERT_FALSE(Utils::SettingValue("", "").isValid());
 }

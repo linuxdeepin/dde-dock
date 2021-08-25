@@ -39,10 +39,6 @@ MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
 
 }
 
-MenuWorker::~MenuWorker()
-{
-}
-
 QMenu *MenuWorker::createMenu()
 {
     QMenu *settingsMenu = new QMenu;
@@ -246,7 +242,6 @@ QMenu *MenuWorker::createMenu()
 
     delete menuSettings;
     menuSettings = nullptr;
-
     return settingsMenu;
 }
 

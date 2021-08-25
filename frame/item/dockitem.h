@@ -55,7 +55,7 @@ public:
     static void setDockPosition(const Position side);
     static void setDockDisplayMode(const DisplayMode mode);
 
-    inline virtual ItemType itemType() const {Q_UNREACHABLE(); return App;}
+    inline virtual ItemType itemType() const {return App;}
 
     QSize sizeHint() const override;
     virtual QString accessibleName();

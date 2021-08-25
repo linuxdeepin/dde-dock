@@ -56,7 +56,8 @@ TEST_F(Test_DockItemManager, appIsOnDock_test)
 {
     manager->appIsOnDock("test");
 
-    //    manager->startLoadPlugins();
+    manager->startLoadPlugins();
+    QTest::qWait(10);
 }
 
 TEST_F(Test_DockItemManager, get_method_test)
@@ -64,7 +65,6 @@ TEST_F(Test_DockItemManager, get_method_test)
     manager->itemList();
     manager->pluginList();
 
-    qDebug() << manager->m_itemList.size();
     for (auto item: manager->m_itemList)
         qDebug() << item->itemType();
 }
@@ -74,7 +74,7 @@ TEST_F(Test_DockItemManager, refreshItemsIcon_test)
     manager->refreshItemsIcon();
 }
 
-TEST_F(Test_DockItemManager, cover_test)
+TEST_F(Test_DockItemManager, coverage_test)
 {
     manager->updatePluginsItemOrderKey();
     manager->itemAdded("", 0);
@@ -85,6 +85,9 @@ TEST_F(Test_DockItemManager, cover_test)
     QScopedPointer<TestPlugin> testPlugin(new TestPlugin);
     TrayPluginItem item(testPlugin.get(), "", "");
     manager->pluginItemInserted(&item);
+
+    manager->itemMoved(manager->itemList().first(), &item);
+
     manager->pluginItemRemoved(&item);
 
     manager->appItemRemoved("");

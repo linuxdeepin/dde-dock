@@ -60,7 +60,7 @@ public slots:
     void prepareHide();
 
 private:
-    void adjustSize();
+    void adjustSize(const bool composite);
     void appendSnapWidget(const WId wid);
 
     void enterEvent(QEvent *e);
@@ -72,6 +72,7 @@ private slots:
     void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
     void previewFloating();
+    void onRequestCloseAppSnapshot();
 
 private:
     bool m_needActivate;

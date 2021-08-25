@@ -23,7 +23,7 @@ void Ut_TrayPluginItem::TearDown()
 {
 }
 
-TEST_F(Ut_TrayPluginItem, all_test)
+TEST_F(Ut_TrayPluginItem, coverage_test)
 {
     TestPlugin plugin;
     TrayPluginItem item(&plugin, "", "");

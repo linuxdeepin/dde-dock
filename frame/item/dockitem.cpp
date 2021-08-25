@@ -42,7 +42,6 @@ DockItem::DockItem(QWidget *parent)
     , m_draging(false)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
-
 {
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
@@ -62,8 +61,6 @@ DockItem::DockItem(QWidget *parent)
 
     m_popupAdjustDelayTimer->setInterval(10);
     m_popupAdjustDelayTimer->setSingleShot(true);
-//FIXME: 可能是qt的bug，概率性导致崩溃，待修复
-//    setGraphicsEffect(m_hoverEffect);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
@@ -74,11 +71,15 @@ DockItem::DockItem(QWidget *parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
+DockItem::~DockItem()
+{
+    if (m_popupShown)
+        popupWindowAccept();
+}
+
 QSize DockItem::sizeHint() const
 {
-    int size = qMin(maximumWidth(), maximumHeight());
-    if (size > ITEM_MAXSIZE)
-        size = ITEM_MAXSIZE;
+    int size = qMin(qMin(maximumWidth(), maximumHeight()), ITEM_MAXSIZE);
 
     return QSize(size, size);
 }
@@ -86,12 +87,6 @@ QSize DockItem::sizeHint() const
 QString DockItem::accessibleName()
 {
     return QString();
-}
-
-DockItem::~DockItem()
-{
-    if (m_popupShown)
-        popupWindowAccept();
 }
 
 void DockItem::setDockPosition(const Position side)

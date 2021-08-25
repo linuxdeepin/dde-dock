@@ -26,39 +26,35 @@
 #include <gtest/gtest.h>
 #define private public
 #include "menuworker.h"
+#include "dockitemmanager.h"
 #undef private
 
 class Test_MenuWorker : public ::testing::Test
-{
-public:
-    virtual void SetUp() override;
-    virtual void TearDown() override;
-};
-
-void Test_MenuWorker::SetUp()
-{
-}
-
-void Test_MenuWorker::TearDown()
-{
-}
+{};
 
 TEST_F(Test_MenuWorker, coverage_test)
 {
     MenuWorker *worker = new MenuWorker(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus()));
-
+    DockItemManager::instance()->m_pluginsInter->m_pluginsMap.clear();
     QMenu *menu = worker->createMenu();
     ASSERT_FALSE(menu->isEmpty());
 
+//    worker->showDockSettingsMenu();
+
     delete menu;
-    menu = nullptr;
-
-    ASSERT_TRUE(worker->m_autoHide);
-    worker->setAutoHide(false);
-    ASSERT_FALSE(worker->m_autoHide);
-    worker->setAutoHide(true);
-    ASSERT_TRUE(worker->m_autoHide);
-
     delete worker;
-    worker = nullptr;
+}
+
+TEST_F(Test_MenuWorker, setAutoHide)
+{
+   MenuWorker *worker = new MenuWorker(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus()));
+
+   ASSERT_TRUE(worker->m_autoHide);
+   worker->setAutoHide(false);
+
+   ASSERT_FALSE(worker->m_autoHide);
+   worker->setAutoHide(true);
+   ASSERT_TRUE(worker->m_autoHide);
+
+   delete worker;
 }

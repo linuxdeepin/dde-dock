@@ -36,6 +36,11 @@ QWidget *TestPlugin::itemWidget(const QString &)
     return m_widget;
 }
 
+const QString TestPlugin::itemContextMenu(const QString &itemKey)
+{
+    return QString("test plugin menu: " + itemKey);
+}
+
 int TestPlugin::itemSortKey(const QString &)
 {
     return m_sortKey;

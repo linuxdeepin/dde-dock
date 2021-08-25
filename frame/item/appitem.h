@@ -101,6 +101,9 @@ private slots:
     bool checkGSettingsControl() const;
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
+    void onRefreshIcon();
+    void onResetPreview();
+
 private:
     const QGSettings *m_appSettings;
     const QGSettings *m_activeAppSettings;

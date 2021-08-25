@@ -68,6 +68,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
+    , m_trayIconCount(0)
     , m_tray(nullptr)
     , m_isHover(false)
     , m_needRecoveryWin(false)
@@ -90,10 +91,6 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_fixedSpliter->setFixedSize(0,0);
     m_appSpliter ->setFixedSize(0,0);
     m_traySpliter->setFixedSize(0,0);
-}
-
-MainPanelControl::~MainPanelControl()
-{
 }
 
 void MainPanelControl::initUi()
@@ -349,9 +346,7 @@ void MainPanelControl::setPositonValue(Dock::Position position)
         return;
 
     m_position = position;
-    QTimer::singleShot(0, this, [=] {
-        updateMainPanelLayout();
-    });
+    QTimer::singleShot(0, this, &MainPanelControl::updateMainPanelLayout);
 }
 
 /**向任务栏插入各类应用,并将属于同一个应用的窗口合并到同一个应用图标
@@ -361,6 +356,9 @@ void MainPanelControl::setPositonValue(Dock::Position position)
  */
 void MainPanelControl::insertItem(int index, DockItem *item)
 {
+    if (!item)
+        return;
+
     item->installEventFilter(this);
 
     switch (item->itemType()) {
@@ -386,10 +384,8 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     if (item->itemType() != DockItem::App)
         resizeDockIcon();
 
-    QTimer::singleShot(0, [ = ] {
-        updatePluginsLayout();
-    });
     item->checkEntry();
+    QTimer::singleShot(0, this, &MainPanelControl::updatePluginsLayout);
 }
 
 /**从任务栏移除某一应用，并更新任务栏图标大小
@@ -1147,7 +1143,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (layout) {
+            if (layout && layout->itemAt(0)) {
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem) {
                     if (pItem->sizeHint().height() == -1) {
@@ -1197,7 +1193,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     //而不对日期时间插件设置边距
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-        if (layout) {
+        if (layout && layout->itemAt(0)) {
             PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
 
             if (pItem && pItem->pluginName() != "datetime") {

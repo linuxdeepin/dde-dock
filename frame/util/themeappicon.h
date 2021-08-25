@@ -23,16 +23,19 @@
 #define THEMEAPPICON_H
 
 #include <QObject>
+#include <QIcon>
 
-class ThemeAppIcon : public QObject
+class ThemeAppIcon
 {
-    Q_OBJECT
 public:
-    explicit ThemeAppIcon(QObject *parent = 0);
+    explicit ThemeAppIcon();
     ~ThemeAppIcon();
 
     static QIcon getIcon(const QString &name);
     static bool getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain = false);
+
+private:
+    static bool createCalendarIcon(const QString &fileName);
 };
 
 #endif // THEMEAPPICON_H

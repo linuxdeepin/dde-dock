@@ -23,58 +23,19 @@
 #include "appdragwidget.h"
 #include "utils.h"
 
-class AppGraphicsObject : public QGraphicsObject
-{
-public:
-    explicit AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR) : QGraphicsObject(parent) {}
-    ~AppGraphicsObject() override { }
-
-    void setAppPixmap(QPixmap pix)
-    {
-        m_appPixmap = pix;
-        resetProperty();
-        update();
-    }
-
-    void resetProperty()
-    {
-        setScale(1.0);
-        setRotation(0);
-        setOpacity(1.0);
-        update();
-    }
-
-    QRectF boundingRect() const override
-    {
-        return m_appPixmap.rect();
-    }
-
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) override {
-        Q_UNUSED(option);
-        Q_UNUSED(widget);
-
-        Q_ASSERT(!m_appPixmap.isNull());
-
-        painter->drawPixmap(QPoint(0, 0), m_appPixmap);
-    }
-
-private:
-    QPixmap m_appPixmap;
-};
-
 AppDragWidget::AppDragWidget(QWidget *parent)
     : QGraphicsView(parent)
     , m_object(new AppGraphicsObject)
     , m_scene(new QGraphicsScene(this))
     , m_followMouseTimer(new QTimer(this))
-    , m_animScale(new QPropertyAnimation(m_object, "scale", this))
-    , m_animRotation(new QPropertyAnimation(m_object, "rotation", this))
-    , m_animOpacity(new QPropertyAnimation(m_object, "opacity", this))
+    , m_animScale(new QPropertyAnimation(m_object.get(), "scale", this))
+    , m_animRotation(new QPropertyAnimation(m_object.get(), "rotation", this))
+    , m_animOpacity(new QPropertyAnimation(m_object.get(), "opacity", this))
     , m_animGroup(new QParallelAnimationGroup(this))
     , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
     , m_dockPosition(Dock::Position::Bottom)
-    , m_removeTips(new TipsWidget)
-    , m_popupWindow(new DockPopupWindow)
+    , m_removeTips(new TipsWidget(this))
+    , m_popupWindow(new DockPopupWindow(this))
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
 {
     m_removeTips->setText(tr("Remove"));
@@ -90,7 +51,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     m_popupWindow->setArrowHeight(10);
     m_popupWindow->setRadius(18);
 
-    m_scene->addItem(m_object);
+    m_scene->addItem(m_object.get());
     setScene(m_scene);
 
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
@@ -107,22 +68,8 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
     m_followMouseTimer->setSingleShot(false);
     m_followMouseTimer->setInterval(1);
-    connect(m_followMouseTimer, &QTimer::timeout, [this] {
-        QPoint destPos = QCursor::pos();
-        if (DWindowManagerHelper::instance()->hasComposite()) {
-            move(destPos.x() - width() / 2, destPos.y() - height() / 2);
-        } else {
-            move(destPos.x(), destPos.y()); //窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
-        }
-    });
+    connect(m_followMouseTimer, &QTimer::timeout, this, &AppDragWidget::onFollowMouse);
     m_followMouseTimer->start();
-}
-
-AppDragWidget::~AppDragWidget()
-{
-    delete m_removeTips;
-    delete m_popupWindow;
-    delete m_object;
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
@@ -373,6 +320,16 @@ bool AppDragWidget::isRemoveItem()
         break;
     }
     return false;
+}
+
+void AppDragWidget::onFollowMouse()
+{
+    QPoint destPos = QCursor::pos();
+    if (DWindowManagerHelper::instance()->hasComposite()) {
+        move(destPos.x() - width() / 2, destPos.y() - height() / 2);
+    } else {
+        move(destPos.x(), destPos.y()); //窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
+    }
 }
 
 void AppDragWidget::enterEvent(QEvent *event)

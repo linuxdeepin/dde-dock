@@ -114,19 +114,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
 
     /** 日历 1S定时判断是否刷新icon的处理 */
-    connect(m_refershIconTimer, &QTimer::timeout, this, [ = ]() {
-        if (QDate::currentDate() != m_curDate) {
-            m_curDate = QDate::currentDate();
-            refreshIcon();
-        }
-    });
-}
-
-AppItem::~AppItem()
-{
-    stopSwingEffect();
-
-    m_appNameTips->deleteLater();
+    connect(m_refershIconTimer, &QTimer::timeout, this, &AppItem::onRefreshIcon);
 }
 
 /**将属于同一个应用的窗口合并到同一个应用图标
@@ -304,7 +292,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    int curTimestamp = QX11Info::getTimestamp();
+    int curTimestamp = QDateTime::currentSecsSinceEpoch();
     if ((curTimestamp - m_lastclickTimes) < 300)
         return;
 
@@ -450,17 +438,6 @@ void AppItem::leaveEvent(QEvent *e)
             m_appPreviewTips->prepareHide();
         }
     }
-}
-
-void AppItem::showEvent(QShowEvent *e)
-{
-    DockItem::showEvent(e);
-
-    QTimer::singleShot(0, this, [ = ] {
-        onGSettingsChanged("enable");
-    });
-
-    refreshIcon();
 }
 
 void AppItem::showHoverTips()
@@ -641,6 +618,20 @@ void AppItem::refreshIcon()
     m_updateIconGeometryTimer->start();
 }
 
+void AppItem::onRefreshIcon()
+{
+    if (QDate::currentDate() == m_curDate)
+        return;
+
+    m_curDate = QDate::currentDate();
+    refreshIcon();
+}
+
+void AppItem::onResetPreview()
+{
+    m_appPreviewTips = nullptr;
+}
+
 void AppItem::activeChanged()
 {
     m_active = !m_active;
@@ -659,9 +650,9 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
     connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
 
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
-    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, [ = ]() { m_appPreviewTips = nullptr; });
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::onResetPreview);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::onResetPreview);
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
     showPopupWindow(m_appPreviewTips, true);
 }
@@ -681,7 +672,7 @@ void AppItem::playSwingEffect()
     m_itemAnimation = pair.second;
 
     QTimeLine *tl = m_itemAnimation->timeLine();
-    connect(tl, &QTimeLine::stateChanged, [ = ](QTimeLine::State newState) {
+    connect(tl, &QTimeLine::stateChanged, this, [ = ](QTimeLine::State newState) {
         if (newState == QTimeLine::NotRunning) {
             m_swingEffectView->hide();
             layout()->removeWidget(m_swingEffectView);
@@ -745,4 +736,22 @@ void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     m_themeType = themeType;
     update();
+}
+
+// 放到最下面是因为析构函数和匿名函数会影响lcov统计单元测试的覆盖率
+AppItem::~AppItem()
+{
+    stopSwingEffect();
+    m_appNameTips->deleteLater();
+}
+
+void AppItem::showEvent(QShowEvent *e)
+{
+    DockItem::showEvent(e);
+
+    QTimer::singleShot(0, this, [ = ] {
+        onGSettingsChanged("enable");
+    });
+
+    refreshIcon();
 }

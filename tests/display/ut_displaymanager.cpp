@@ -54,7 +54,7 @@ TEST_F(Test_DisplayManager, method_test)
     ASSERT_EQ(spy.count(), 1);
 }
 
-TEST_F(Test_DisplayManager, coverage_test) // 提高覆盖率,还没想好怎么做这种
+TEST_F(Test_DisplayManager, coverage_test)
 {
     DisplayManager::instance()->onGSettingsChanged("onlyShowPrimary");
 }

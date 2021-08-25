@@ -23,7 +23,7 @@
 #ifndef BLUETOOTHADAPTERITEM_H
 #define BLUETOOTHADAPTERITEM_H
 
-#include "componments/device.h"
+#include "device.h"
 #include "bluetoothapplet.h"
 
 #include <QWidget>

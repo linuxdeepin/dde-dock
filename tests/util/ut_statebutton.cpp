@@ -31,43 +31,46 @@
 #include "statebutton.h"
 
 class Test_StateButton : public QObject, public ::testing::Test
-{
-public:
-    virtual void SetUp() override;
-    virtual void TearDown() override;
-
-public:
-    StateButton *stateButton = nullptr;
-};
-
-void Test_StateButton::SetUp()
-{
-    stateButton = new StateButton();
-}
-
-void Test_StateButton::TearDown()
-{
-    delete stateButton;
-    stateButton = nullptr;
-}
+{};
 
 TEST_F(Test_StateButton, statebutton_clicked_test)
 {
-    QSignalSpy spy(stateButton, SIGNAL(click()));
-    QTest::mousePress(stateButton, Qt::LeftButton, Qt::NoModifier);
+    StateButton button;
+    QSignalSpy spy(&button, SIGNAL(click()));
+    QTest::mousePress(&button, Qt::LeftButton, Qt::NoModifier);
     ASSERT_EQ(spy.count(), 1);
+}
+
+TEST_F(Test_StateButton, event_test)
+{
+    StateButton button;
 
     QEvent event(QEvent::Enter);
-    qApp->sendEvent(stateButton, &event);
+    button.enterEvent(&event);
 
     QEvent event2(QEvent::Leave);
-    qApp->sendEvent(stateButton, &event2);
+    button.leaveEvent(&event2);
 
-    stateButton->show();
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_StateButton, paintEvent)
+{
+    StateButton button;
+
+    QRect rect(0, 0, 10, 10);
+    QPaintEvent e(rect);
+    button.setType(StateButton::Check);
+    button.paintEvent(&e);
+
+    button.setType(StateButton::Fork);
+    button.paintEvent(&e);
 
     QTest::qWait(10);
-    stateButton->setType(StateButton::Fork);
+    button.setType(StateButton::Fork);
+    ASSERT_EQ(button.m_type, StateButton::Fork);
 
     QTest::qWait(10);
-    stateButton->setType(StateButton::Check);
+    button.setType(StateButton::Check);
+    ASSERT_EQ(button.m_type, StateButton::Check);
 }

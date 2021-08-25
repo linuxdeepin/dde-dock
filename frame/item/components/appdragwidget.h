@@ -37,13 +37,51 @@
 #include "../widgets/tipswidget.h"
 #include "dockpopupwindow.h"
 
-class AppGraphicsObject;
+class AppGraphicsObject : public QGraphicsObject
+{
+public:
+    explicit AppGraphicsObject(QGraphicsItem *parent = Q_NULLPTR)
+        : QGraphicsObject(parent) {}
+    ~AppGraphicsObject() override {}
+
+    void setAppPixmap(QPixmap pix)
+    {
+        m_appPixmap = pix;
+        resetProperty();
+        update();
+    }
+
+    void resetProperty()
+    {
+        setScale(1.0);
+        setRotation(0);
+        setOpacity(1.0);
+        update();
+    }
+
+    QRectF boundingRect() const override
+    {
+        return m_appPixmap.rect();
+    }
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) override {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+
+        Q_ASSERT(!m_appPixmap.isNull());
+
+        painter->drawPixmap(QPoint(0, 0), m_appPixmap);
+    }
+
+private:
+    QPixmap m_appPixmap;
+};
+
 class AppDragWidget : public QGraphicsView
 {
     Q_OBJECT
 public:
     explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
-    virtual ~AppDragWidget() override;
 
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
@@ -73,8 +111,11 @@ private:
     void showRemoveTips();
     bool isRemoveItem();
 
+private Q_SLOTS:
+    void onFollowMouse();
+
 private:
-    QPointer<AppGraphicsObject> m_object;
+    QScopedPointer<AppGraphicsObject> m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;
     QPropertyAnimation *m_animScale;
