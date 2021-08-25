@@ -133,7 +133,6 @@ public:
     typedef QFlags<RunState> RunStates;
 
     MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
-    ~MultiScreenWorker();
 
     void initShow();
 
@@ -186,28 +185,34 @@ private slots:
     void showAniFinished();
     void hideAniFinished();
 
+    void updateDisplay();
+
     void onWindowSizeChanged(uint value);
     void primaryScreenChanged();
     void updateParentGeometry(const QVariant &value, const Position &pos);
     void updateParentGeometry(const QVariant &value);
 
     // 任务栏属性变化
-    void onPositionChanged();
-    void onDisplayModeChanged();
-    void onHideModeChanged();
-    void onHideStateChanged();
+    void onPositionChanged(const Position &position);
+    void onDisplayModeChanged(const DisplayMode &displayMode);
+    void onHideModeChanged(const HideMode &hideMode);
+    void onHideStateChanged(const Dock::HideState &state);
     void onOpacityChanged(const double value);
 
     // 通知后端任务栏所在位置
     void onRequestUpdateFrontendGeometry();
 
+    void onRequestUpdateLayout();
     void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
     void onRequestUpdateMonitorInfo();
     void onRequestDelayShowDock();
 
+    // 触摸手势操作
     void onTouchPress(int type, int x, int y, const QString &key);
     void onTouchRelease(int type, int x, int y, const QString &key);
+
+    void onDelayAutoHideChanged();
 
 private:
     MainWindow *parent();
@@ -239,6 +244,7 @@ private:
     QScreen *screenByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
+    static bool isCopyMode();
 
     void updateDockScreen();
     void updatePrimaryScreenDockStatus();

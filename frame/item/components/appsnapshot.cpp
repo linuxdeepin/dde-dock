@@ -289,6 +289,7 @@ void AppSnapshot::mousePressEvent(QMouseEvent *e)
 bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == m_closeBtn2D) {
+        // TODO 判断条件重复
         if (watched == m_closeBtn2D && (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverMove)) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
         } else if (watched == m_closeBtn2D && e->type() == QEvent::HoverLeave) {

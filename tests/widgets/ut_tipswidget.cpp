@@ -22,11 +22,14 @@
 #include <QObject>
 #include <QDebug>
 #include <QApplication>
+#include <QPaintEvent>
 #include <QTest>
 
 #include <gtest/gtest.h>
 
+#define protected public
 #include "../widgets/tipswidget.h"
+#undef protected
 
 using namespace ::testing;
 using namespace Dock;
@@ -52,7 +55,7 @@ void Test_TipsWidget::TearDown()
     tipsWidget = nullptr;
 }
 
-TEST_F(Test_TipsWidget, setText_test)
+TEST_F(Test_TipsWidget, setText)
 {
     const QString text = "hello dde dock";
     tipsWidget->setText(text);
@@ -66,7 +69,7 @@ TEST_F(Test_TipsWidget, setText_test)
     QTest::qWait(10);
 }
 
-TEST_F(Test_TipsWidget, setTextList_test)
+TEST_F(Test_TipsWidget, setTextList)
 {
     const QStringList textList = {
         "hello",
@@ -81,5 +84,13 @@ TEST_F(Test_TipsWidget, setTextList_test)
 
     QEvent event(QEvent::FontChange);
     qApp->sendEvent(tipsWidget, &event);
+    QTest::qWait(10);
+}
+
+TEST_F(Test_TipsWidget, paintEvent)
+{
+    QPaintEvent paintEvent((QRect()));
+    tipsWidget->paintEvent(&paintEvent);
+
     QTest::qWait(10);
 }

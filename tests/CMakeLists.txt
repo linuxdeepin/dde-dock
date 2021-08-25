@@ -1,3 +1,5 @@
+ADD_COMPILE_OPTIONS(-fno-access-control)
+
 cmake_minimum_required(VERSION 3.7)
 
 set(BIN_NAME dde_dock_unit_test)
@@ -6,7 +8,20 @@ set(BIN_NAME dde_dock_unit_test)
 set(CMAKE_AUTOMOC ON)
 
 # 源文件
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../widgets/*.h" "../widgets/*.cpp")
+file(GLOB_RECURSE SRCS
+    "*.h"
+    "*.cpp"
+    "../widgets/*.h"
+    "../widgets/*.cpp")
+
+# Sources files
+file(GLOB_RECURSE PLUGIN_SRCS
+    "../plugins/bluetooth/*.h"
+    "../plugins/bluetooth/*.cpp"
+    "../plugins/bluetooth/componments/*.h"
+    "../plugins/bluetooth/componments/*.cpp"
+    "../frame/util/horizontalseperator.h"
+    "../frame/util/horizontalseperator.cpp")
 
 # 用于测试覆盖率的编译条件
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
@@ -36,7 +51,13 @@ pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 
 # 添加执行文件信息
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} ${SRC_PATH} ../frame/item/item.qrc ut_res.qrc)
+add_executable(${BIN_NAME}
+    ${SRCS}
+    ${INTERFACES}
+    ${SRC_PATH}
+    ${PLUGIN_SRCS}
+    ../frame/item/item.qrc
+    ut_res.qrc)
 
 # 包含路径
 target_include_directories(${BIN_NAME} PUBLIC
@@ -47,6 +68,8 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${QGSettings_INCLUDE_DIRS}
     ../interfaces
     fakedbus
+    ../plugins/bluetooth
+    ../plugins/bluetooth/componments
 )
 
 # 链接库

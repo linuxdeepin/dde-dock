@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QTest>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -57,7 +58,7 @@ TEST_F(Test_DockItem, dockitem_test)
     ASSERT_NE(dockItem, nullptr);
 }
 
-TEST_F(Test_DockItem, dockitem_show_test)
+TEST_F(Test_DockItem, show_test)
 {
     dockItem->show();
 
@@ -66,7 +67,7 @@ TEST_F(Test_DockItem, dockitem_show_test)
     ASSERT_EQ(dockItem->isVisible(), true);
 }
 
-TEST_F(Test_DockItem, dockitem_hide_test)
+TEST_F(Test_DockItem, hide_test)
 {
     dockItem->hide();
 
@@ -80,31 +81,54 @@ TEST_F(Test_DockItem, cover_test)
     DockItem::setDockPosition(Dock::Top);
     DockItem::setDockDisplayMode(Dock::Fashion);
 
-//    ASSERT_EQ(dockItem->itemType(), DockItem::App);
+    ASSERT_EQ(dockItem->itemType(), DockItem::App);
     dockItem->sizeHint();
-    ASSERT_EQ(dockItem->accessibleName(), "");
+
     dockItem->refreshIcon();
     dockItem->contextMenu();
     dockItem->popupTips();
     dockItem->popupWindowAccept();
-//    dockItem->showPopupApplet(new QWidget);
+    dockItem->showPopupApplet(new QWidget);
     dockItem->invokedMenuItem("", true);
     dockItem->checkAndResetTapHoldGestureState();
+
+    ASSERT_EQ(dockItem->accessibleName(), "");
 }
 
 TEST_F(Test_DockItem, event_test)
 {
-    dockItem->m_popupShown = true;
-    dockItem->update();
+    DockItem *item = new DockItem;
+    item->m_popupShown = true;
+    item->update();
 
     QMouseEvent event(QEvent::MouseButtonPress, QPointF(0.0, 0.0), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    qApp->sendEvent(dockItem, &event);
+    qApp->sendEvent(item, &event);
 
     QEnterEvent event1(QPointF(0.0, 0.0), QPointF(0.0, 0.0), QPointF(0.0, 0.0));
-    qApp->sendEvent(dockItem, &event1);
+    qApp->sendEvent(item, &event1);
 
     QEvent event2(QEvent::Leave);
-    qApp->sendEvent(dockItem, &event2);
+    qApp->sendEvent(item, &event2);
+
+    QTest::qWait(10);
+
+    QEvent e(QEvent::Enter);
+    item->enterEvent(&e);
+
+    item->menuActionClicked(new QAction());
+
+    item->onContextMenuAccepted();
+
+    item->showHoverTips();
+
+    QTimer::singleShot(10, [ &item ] {
+        delete item;
+        item = nullptr;
+    });
+    item->showContextMenu();
+
+    QTest::qWait(1000);
+    ASSERT_TRUE(true);
 }
 
 TEST_F(Test_DockItem, topleftPoint_test)
@@ -121,4 +145,6 @@ TEST_F(Test_DockItem, topleftPoint_test)
     DockItem::setDockPosition(Dock::Left);
     dockItem->popupMarkPoint();
     dockItem->topleftPoint();
+
+    ASSERT_TRUE(true);
 }

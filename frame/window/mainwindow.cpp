@@ -59,7 +59,7 @@ using org::kde::StatusNotifierWatcher;
 using DBusDock = com::deepin::dde::daemon::Dock;
 
 // let startdde know that we've already started.
-void RegisterDdeSession()
+void MainWindow::RegisterDdeSession()
 {
     QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
 
@@ -139,11 +139,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
-MainWindow::~MainWindow()
-{
-
-}
-
 /**
  * @brief MainWindow::launch
  * 任务栏初次启动时调用此方法，里面是做了一些初始化操作
@@ -180,10 +175,7 @@ void MainWindow::callShow()
     launch();
 
     // 预留200ms提供给窗口初始化再通知startdde，不影响启动速度
-    QTimer::singleShot(200, this, []{
-        qDebug() << "\n\ndde-dock startup RegisterDdeSession";
-        RegisterDdeSession();
-    });
+    QTimer::singleShot(200, this, &MainWindow::RegisterDdeSession);
 }
 
 /**
@@ -350,17 +342,7 @@ void MainWindow::initConnections()
 
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
-    connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, [ this ]() {
-        static QPoint lastPos;
-        QPoint curPos = QCursor::pos();
-        if (lastPos == curPos) {
-            return;
-        }
-        lastPos = curPos;
-        qApp->postEvent(m_dragWidget, new QMouseEvent(QEvent::MouseMove, m_dragWidget->mapFromGlobal(curPos)
-                                                      , QPoint(), curPos, Qt::LeftButton, Qt::LeftButton
-                                                      , Qt::NoModifier, Qt::MouseEventSynthesizedByApplication));
-    });
+    connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, &DragWidget::onTouchMove);
 }
 
 /**

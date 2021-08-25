@@ -59,14 +59,6 @@ void LauncherItem::refreshIcon()
     update();
 }
 
-void LauncherItem::showEvent(QShowEvent* event) {
-    QTimer::singleShot(0, this, [=] {
-        onGSettingsChanged("enable");
-    });
-
-    return DockItem::showEvent(event);
-}
-
 void LauncherItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
@@ -139,4 +131,12 @@ bool LauncherItem::checkGSettingsControl() const
 {
     return m_gsettings && m_gsettings->keys().contains("control")
             && m_gsettings->get("control").toBool();
+}
+
+void LauncherItem::showEvent(QShowEvent* event) {
+    QTimer::singleShot(0, this, [=] {
+        onGSettingsChanged("enable");
+    });
+
+    return DockItem::showEvent(event);
 }

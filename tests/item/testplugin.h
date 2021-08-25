@@ -17,6 +17,7 @@ public:
     virtual const QString pluginDisplayName() const override;
     virtual void init(PluginProxyInterface *proxyInter) override;
     virtual QWidget *itemWidget(const QString &itemKey) override;
+    virtual const QString itemContextMenu(const QString &itemKey) override;
     virtual int itemSortKey(const QString &itemKey) override;
     virtual void setSortKey(const QString &itemKey, const int order) override;
     virtual PluginSizePolicy pluginSizePolicy() const override;

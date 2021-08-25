@@ -54,7 +54,6 @@ class MainPanelControl : public QWidget
     Q_OBJECT
 public:
     explicit MainPanelControl(QWidget *parent = nullptr);
-    ~MainPanelControl() override;
 
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);

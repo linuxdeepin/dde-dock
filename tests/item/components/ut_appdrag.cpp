@@ -40,17 +40,15 @@ void Test_AppDrag::TearDown()
 {
 }
 
-TEST_F(Test_AppDrag, drag_test)
+TEST_F(Test_AppDrag, coverage_test)
 {
-    QWidget *w = new QWidget;
-    AppDrag *drag = new AppDrag(w);
+    QWidget w;
+    AppDrag drag(&w);
     QPixmap pix(":/res/all_settings_on.png");
-    drag->setPixmap(pix);
+    drag.setPixmap(pix);
 
-    ASSERT_TRUE(drag->appDragWidget());
+    ASSERT_TRUE(drag.appDragWidget());
 
-    drag->exec();
-
-    delete w;
-    w = nullptr;
+//    drag->exec();
+//    drag->exec(Qt::MoveAction, Qt::IgnoreAction);
 }

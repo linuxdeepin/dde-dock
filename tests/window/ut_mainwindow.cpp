@@ -34,60 +34,226 @@ using namespace ::testing;
 
 class Test_MainWindow : public ::testing::Test
 {
-public:
-    virtual void SetUp() override;
-    virtual void TearDown() override;
-
-public:
-    MainWindow *m_window = nullptr;
 };
 
-void Test_MainWindow::SetUp()
+TEST_F(Test_MainWindow, onDbusNameOwnerChanged)
 {
-    m_window = new MainWindow;
+    MainWindow window;
+    window.onDbusNameOwnerChanged("org.kde.StatusNotifierWatcher", "old", "new");
 }
 
-void Test_MainWindow::TearDown()
+TEST_F(Test_MainWindow, compositeChanged)
 {
-    delete m_window;
-    m_window = nullptr;
+    MainWindow window;
+    window.compositeChanged();
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_MainWindow, moveEvent)
+{
+    MainWindow window;
+    QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    window.mouseMoveEvent(&moveEvent);
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_MainWindow, mousePressEvent)
+{
+    // 显示菜单会阻塞住
+//    MainWindow window;
+//    QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+//    window.mousePressEvent(&mousePressEvent);
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_MainWindow, launch)
+{
+    MainWindow window;
+
+    qApp->setProperty("CANSHOW", false);
+    window.launch();
+
+    qApp->setProperty("CANSHOW", true);
+    window.launch();
+
+    window.callShow();
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_MainWindow, RegisterDdeSession)
+{
+    MainWindow window;
+    window.RegisterDdeSession();
+
+    qputenv("DDE_SESSION_PROCESS_COOKIE_ID", "111");
+    window.RegisterDdeSession();
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_MainWindow, resetDragWindow_test)
+{
+    MainWindow window;
+    window.m_multiScreenWorker->m_position = Position::Top;
+    window.resetDragWindow();
+    window.onMainWindowSizeChanged(QPoint(10, 10));
+    window.touchRequestResizeDock();
+
+    window.m_multiScreenWorker->m_position = Position::Bottom;
+    window.resetDragWindow();
+    window.onMainWindowSizeChanged(QPoint(10, 10));
+    window.touchRequestResizeDock();
+
+    window.m_multiScreenWorker->m_position = Position::Left;
+    window.resetDragWindow();
+    window.onMainWindowSizeChanged(QPoint(10, 10));
+    window.touchRequestResizeDock();
+
+    window.m_multiScreenWorker->m_position = Position::Right;
+    window.resetDragWindow();
+    window.onMainWindowSizeChanged(QPoint(10, 10));
+    window.touchRequestResizeDock();
+}
+
+TEST_F(Test_MainWindow, adjustShadowMask)
+{
+    MainWindow *window = new MainWindow;
+
+    window->RegisterDdeSession();
+
+    window->m_launched = true;
+    window->adjustShadowMask();
+
+//        window->onDbusNameOwnerChanged(SNI_WATCHER_SERVICE, "old", "new");
+    delete window;
+}
+
+TEST_F(Test_MainWindow, event_test)
+{
+    MainWindow *window = new MainWindow;
+
+    QMouseEvent event4(QEvent::MouseMove, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+    window->mouseMoveEvent(&event4);
+
+    QResizeEvent event5((QSize()), QSize());
+    window->resizeEvent(&event5);
+
+    QMimeData *data = new QMimeData;
+    data->setText("test");
+
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    window->dragEnterEvent(&event9);
+
+    QKeyEvent event11(QEvent::Type::KeyPress, Qt::Key_Escape, Qt::ControlModifier);
+    window->keyPressEvent(&event11);
+
+    QEnterEvent event12(QPointF(0.0, 0.0), QPointF(0.0, 0.0), QPointF(0.0, 0.0));
+    window->enterEvent(&event12);
+
+    delete window;
 }
 
 TEST_F(Test_MainWindow, coverage_test)
 {
-    ASSERT_TRUE(m_window);
+    MainWindow *window = new MainWindow;
 
-    m_window->getTrayVisableItemCount();
-    m_window->adjustShadowMask();
-    m_window->resetDragWindow();
-    m_window->onMainWindowSizeChanged(QPoint(10, 10));
-    m_window->touchRequestResizeDock();
-    m_window->sendNotifications();
+    window->getTrayVisableItemCount();
+    window->adjustShadowMask();
+    window->resetDragWindow();
+    window->onMainWindowSizeChanged(QPoint(10, 10));
+    window->touchRequestResizeDock();
+    window->sendNotifications();
 
-    m_window->callShow();
-    QTest::qWait(450);
+    window->m_multiScreenWorker->m_hideMode = HideMode::SmartHide;
+    window->m_multiScreenWorker->m_hideState = HideState::Hide;
 
-    //TODO 这里无论输入什么，均返回true
-    //    ASSERT_FALSE(m_window->appIsOnDock("testname"));
+//    window->callShow();
+
+//    window->m_multiScreenWorker->m_hideState = HideState::Show;
+//    window->callShow();
+
+//    window->m_multiScreenWorker->m_hideMode = HideMode::KeepShowing;
+//    window->callShow();
+
+//    window->m_multiScreenWorker->m_hideMode = HideMode::KeepHidden;
+//    window->callShow();
+
+    delete window;
+}
+
+TEST_F(Test_MainWindow, dragWidget_test)
+{
+    DragWidget w;
+
+    ASSERT_FALSE(w.m_dragStatus);
+    QTest::mousePress(&w, Qt::LeftButton);
+    ASSERT_TRUE(w.m_dragStatus);
+
+    QMouseEvent event(QEvent::MouseMove, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    w.mouseMoveEvent(&event);
+
+    QTest::mouseRelease(&w, Qt::LeftButton);
+    ASSERT_FALSE(w.m_dragStatus);
+
+    ASSERT_EQ(w.objectName(), "DragWidget");
+
+    w.onTouchMove(1.0, 1.0);
 
     QEvent enterEvent(QEvent::Enter);
-    qApp->sendEvent(m_window, &enterEvent);
-    QTest::qWait(10);
+    w.enterEvent(&enterEvent);
 
-    QEvent dragEnterEvent(QEvent::Enter);
-    qApp->sendEvent(m_window->m_dragWidget, &dragEnterEvent);
-    QTest::qWait(10);
-    ASSERT_EQ(QApplication::overrideCursor()->shape(), m_window->m_dragWidget->cursor().shape());
+    QEvent leaveEvent(QEvent::Leave);
+    w.leaveEvent(&leaveEvent);
+}
 
-    QEvent dragLeaveEvent(QEvent::Leave);
-    qApp->sendEvent(m_window->m_dragWidget, &dragLeaveEvent);
-    QTest::qWait(10);
-    ASSERT_EQ(QApplication::overrideCursor()->shape(), Qt::ArrowCursor);
+TEST_F(Test_MainWindow, test4)
+{
+    MainWindow *window = new MainWindow;
+    MultiScreenWorker *worker = window->m_multiScreenWorker;
 
-    // 测试窗口大小变化时是否发出panelGeometryChanged信号
-    QEvent resizeEvent(QEvent::Resize);
-    QSignalSpy signal(m_window, &MainWindow::panelGeometryChanged);
-    qApp->sendEvent(m_window, &resizeEvent);
-    QTest::qWait(10);
-    ASSERT_EQ(signal.count(), 1);
+    worker->reInitDisplayData();
+
+    worker->setStates(MultiScreenWorker::AutoHide, true);
+    worker->onAutoHideChanged(true);
+    QTest::qWait(510);
+
+    worker->dockRectWithoutScale("", Position::Top, HideMode::KeepShowing, DisplayMode::Fashion);
+    worker->dockRectWithoutScale("", Position::Top, HideMode::KeepHidden, DisplayMode::Fashion);
+    worker->dockRectWithoutScale("", Position::Top, HideMode::SmartHide, DisplayMode::Fashion);
+
+    worker->onWindowSizeChanged(1);
+    worker->onRequestUpdateMonitorInfo();
+
+    worker->setStates(MultiScreenWorker::LauncherDisplay, false);
+    worker->onRequestDelayShowDock();
+
+    worker->updateParentGeometry(QRect(), Position::Top);
+    worker->updateParentGeometry(QRect(), Position::Bottom);
+    worker->updateParentGeometry(QRect(), Position::Left);
+    worker->updateParentGeometry(QRect(), Position::Right);
+
+    worker->m_position = Position::Top;
+    worker->onRequestNotifyWindowManager();
+    worker->m_position = Position::Bottom;
+    worker->onRequestNotifyWindowManager();
+    worker->m_position = Position::Left;
+    worker->onRequestNotifyWindowManager();
+    worker->m_position = Position::Right;
+    worker->onRequestNotifyWindowManager();
+
+    worker->m_hideMode = HideMode::SmartHide;
+    worker->onExtralRegionMonitorChanged(0, 0, worker->m_registerKey);
+
+    worker->m_hideMode = HideMode::KeepHidden;
+    worker->onExtralRegionMonitorChanged(0, 0, worker->m_registerKey);
+
+    worker->m_hideMode = HideMode::KeepShowing;
+    worker->onExtralRegionMonitorChanged(0, 0, worker->m_registerKey);
+
+    ASSERT_TRUE(true);
+    delete window;
 }

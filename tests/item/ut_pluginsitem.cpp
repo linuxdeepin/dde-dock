@@ -4,9 +4,7 @@
 
 #include "testplugin.h"
 
-#define private public
 #include "pluginsitem.h"
-#undef private
 
 using namespace ::testing;
 
@@ -67,16 +65,18 @@ TEST_F(Ut_PluginsItem, cover)
 {
     TestPlugin plugin;
     PluginsItem item(&plugin, "", "");
-
     item.sizeHint();
-
-    ASSERT_TRUE(item.centralWidget());
-
     item.setDraging(true);
     item.refreshIcon();
     item.onGSettingsChanged("");
     item.startDrag();
     item.mouseClicked();
+
+    QWidget widget;
+    item.showPopupWindow(&widget);
+    ASSERT_FALSE(item.contextMenu().isEmpty());
+
+    ASSERT_TRUE(item.centralWidget());
 }
 
 TEST_F(Ut_PluginsItem, event_test)
@@ -87,4 +87,28 @@ TEST_F(Ut_PluginsItem, event_test)
     QTest::mousePress(&item, Qt::LeftButton, Qt::NoModifier);
     QTest::mousePress(&item, Qt::RightButton, Qt::NoModifier);
     QTest::mouseMove(&item, QPoint());
+
+    QMouseEvent event1(QEvent::MouseMove, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    item.mouseMoveEvent(&event1);
+
+    QMouseEvent event2(QEvent::MouseMove, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+    item.mouseMoveEvent(&event2);
+
+    QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), Qt::LeftButton, Qt::RightButton, Qt::ControlModifier);
+    item.mouseReleaseEvent(&event3);
+
+    QMouseEvent event4(QEvent::MouseButtonRelease, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+    item.mouseReleaseEvent(&event4);
+
+    QPointF p;
+    QEnterEvent event5(p, p, p);
+    item.enterEvent(&event5);
+
+    QEvent event6(QEvent::Leave);
+    item.leaveEvent(&event6);
+
+    QShowEvent event7;
+    item.showEvent(&event7);
+
+    ASSERT_TRUE(true);
 }

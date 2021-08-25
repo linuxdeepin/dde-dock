@@ -20,21 +20,46 @@
  */
 
 #include <QObject>
-#include <QApplication>
-#include <QSignalSpy>
-#include <QTest>
+#include <QPaintEvent>
 
 #include <gtest/gtest.h>
 
-#include "imageutil.h"
+#include "horizontalseperator.h"
 
-class Test_ImageUtil : public QObject, public ::testing::Test
-{};
-
-TEST_F(Test_ImageUtil, coverage_test)
+class Test_HorizontalSeperator : public QObject, public ::testing::Test
 {
-    ASSERT_TRUE(ImageUtil::loadSvg("test", QSize(100, 100), 1.5).isNull());
-    ASSERT_FALSE(ImageUtil::loadSvg(":/res/dde-calendar.svg", QSize(100, 100), 1.5).isNull());
-    ASSERT_EQ(ImageUtil::loadSvg(":/res/dde-calendar.svg", "dde-printer", 100, 1.25).size(), QSize(125, 125));
-    ASSERT_EQ(ImageUtil::loadSvg("123", "456", 100, 1.25).size(), QSize(125, 125));
+public:
+    virtual void SetUp() override;
+    virtual void TearDown() override;
+
+};
+
+void Test_HorizontalSeperator::SetUp()
+{
+}
+
+void Test_HorizontalSeperator::TearDown()
+{
+}
+
+TEST_F(Test_HorizontalSeperator, coverage_test)
+{
+    HorizontalSeperator seperator;
+    ASSERT_EQ(seperator.sizeHint().height(), 2);
+
+    seperator.show();
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_HorizontalSeperator, paintEvent)
+{
+    HorizontalSeperator seperator;
+
+    QRect rect(0, 0, 10, 10);
+    QPaintEvent e(rect);
+    seperator.paintEvent(&e);
+
+    ASSERT_TRUE(true);
+
 }

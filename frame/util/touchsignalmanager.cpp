@@ -22,13 +22,6 @@ TouchSignalManager::TouchSignalManager(QObject *parent)
     connect(m_gestureInter, &Gesture::TouchMoving, this, &TouchSignalManager::touchMove);
 }
 
-TouchSignalManager::~TouchSignalManager()
-{
-    if (!m_touchManager) {
-        m_touchManager->deleteLater();
-    }
-}
-
 TouchSignalManager *TouchSignalManager::instance()
 {
     if (!m_touchManager) {

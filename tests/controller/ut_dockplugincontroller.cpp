@@ -18,23 +18,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <QObject>
-#include <QApplication>
-#include <QSignalSpy>
+#include <QDebug>
 #include <QTest>
+
+#include <DWindowManagerHelper>
 
 #include <gtest/gtest.h>
 
-#include "imageutil.h"
+#include "dockpluginscontroller.h"
+#include "abstractpluginscontroller.h"
+#include "../../plugins/bluetooth/bluetoothplugin.h"
 
-class Test_ImageUtil : public QObject, public ::testing::Test
-{};
-
-TEST_F(Test_ImageUtil, coverage_test)
+class Test_DockPluginsController : public ::testing::Test
 {
-    ASSERT_TRUE(ImageUtil::loadSvg("test", QSize(100, 100), 1.5).isNull());
-    ASSERT_FALSE(ImageUtil::loadSvg(":/res/dde-calendar.svg", QSize(100, 100), 1.5).isNull());
-    ASSERT_EQ(ImageUtil::loadSvg(":/res/dde-calendar.svg", "dde-printer", 100, 1.25).size(), QSize(125, 125));
-    ASSERT_EQ(ImageUtil::loadSvg("123", "456", 100, 1.25).size(), QSize(125, 125));
+public:
+    virtual void SetUp() override;
+    virtual void TearDown() override;
+
+public:
+    DockPluginsController *controller = nullptr;
+};
+
+void Test_DockPluginsController::SetUp()
+{
+    controller = new DockPluginsController();
+}
+
+void Test_DockPluginsController::TearDown()
+{
+    delete controller;
+}
+
+TEST_F(Test_DockPluginsController, test)
+{
+    controller->loadPlugin("/usr/lib/dde-dock/plugins/libtray.so");
+//    BluetoothPlugin * const p = new BluetoothPlugin;
+//    p->init(controller);
 }

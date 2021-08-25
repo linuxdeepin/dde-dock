@@ -121,7 +121,6 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
         return;
 
     const QImage &snapshot = m_tracked->snapshot();
-    const QRectF &snapshot_geometry = m_tracked->snapshotGeometry();
 
     if (snapshot.isNull())
         return;
@@ -130,10 +129,6 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
 
     const QRectF r = rect().marginsRemoved(QMargins(BORDER_MARGIN, BORDER_MARGIN, BORDER_MARGIN, BORDER_MARGIN));
-    const auto ratio = devicePixelRatioF();
-
-    const qreal offset_x = width() / 2.0 - snapshot_geometry.width() / ratio / 2 - snapshot_geometry.left() / ratio;
-    const qreal offset_y = height() / 2.0 - snapshot_geometry.height() / ratio / 2 - snapshot_geometry.top() / ratio;
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);

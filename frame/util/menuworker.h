@@ -37,7 +37,6 @@ class MenuWorker : public QObject
     Q_OBJECT
 public:
     explicit MenuWorker(DBusDock *dockInter,QWidget *parent = nullptr);
-    ~ MenuWorker();
 
     void showDockSettingsMenu();
 

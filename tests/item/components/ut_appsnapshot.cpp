@@ -32,22 +32,97 @@
 #undef private
 
 class Test_AppSnapshot : public ::testing::Test
-{
-public:
-    virtual void SetUp() override;
-    virtual void TearDown() override;
+{};
 
-public:
-    AppSnapshot *shot = nullptr;
-};
-
-void Test_AppSnapshot::SetUp()
+TEST_F(Test_AppSnapshot, eventFilter)
 {
-    shot = new AppSnapshot(1000000);
+    AppSnapshot snapShot(1000000);
+
+    QEvent hoverEnterEvent(QEvent::HoverEnter);
+    snapShot.eventFilter(snapShot.m_closeBtn2D, &hoverEnterEvent);
+
+    QEvent hoverMoveEvent(QEvent::HoverMove);
+    snapShot.eventFilter(snapShot.m_closeBtn2D, &hoverMoveEvent);
+
+    QEvent hoverLeaveEvent(QEvent::HoverLeave);
+    snapShot.eventFilter(snapShot.m_closeBtn2D, &hoverLeaveEvent);
+
+    QEvent mousePressEvent(QEvent::MouseButtonPress);
+    snapShot.eventFilter(snapShot.m_closeBtn2D, &mousePressEvent);
 }
 
-void Test_AppSnapshot::TearDown()
+TEST_F(Test_AppSnapshot, paintEvent)
 {
-    delete shot;
-    shot = nullptr;
+    AppSnapshot snapShot(1000000);
+    QRect rect(0, 0, 10, 10);
+    QPaintEvent paintEvent(rect);
+    snapShot.paintEvent(&paintEvent);
+}
+
+TEST_F(Test_AppSnapshot, enterEvent)
+{
+    AppSnapshot snapShot(1000000);
+    QEvent enterEvent(QEvent::Enter);
+    snapShot.enterEvent(&enterEvent);
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_AppSnapshot, event_test)
+{
+    AppSnapshot snapShot(1000000);
+
+    QMouseEvent event1(QEvent::MouseButtonPress, QPointF(0, 0), Qt::LeftButton, Qt::RightButton, Qt::ControlModifier);
+    snapShot.mousePressEvent(&event1);
+
+    QMouseEvent event2(QEvent::MouseButtonRelease, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+    snapShot.mouseReleaseEvent(&event2);
+
+    QMouseEvent event3(QEvent::MouseMove, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);
+    snapShot.mouseMoveEvent(&event3);
+
+    QMouseEvent event4(QEvent::MouseMove, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
+    snapShot.mouseMoveEvent(&event4);
+
+    QResizeEvent event5((QSize()), QSize());
+    snapShot.resizeEvent(&event5);
+
+    QEvent event6(QEvent::Leave);
+    snapShot.leaveEvent(&event6);
+
+    QShowEvent event7;
+    snapShot.showEvent(&event7);
+
+    QMimeData *data = new QMimeData;
+    data->setText("test");
+    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::ControlModifier);
+    snapShot.dropEvent(&event8);
+
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    snapShot.dragEnterEvent(&event9);
+
+    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    snapShot.dragMoveEvent(&event10);
+}
+
+TEST_F(Test_AppSnapshot, setWindowState)
+{
+    AppSnapshot snapShot(1000000);
+
+    snapShot.m_isWidowHidden = true;
+    snapShot.setWindowState();
+
+    snapShot.m_isWidowHidden = false;
+    snapShot.setWindowState();
+
+    ASSERT_TRUE(true);
+}
+
+TEST_F(Test_AppSnapshot, coverage_test)
+{
+    AppSnapshot snapShot(1000000);
+    snapShot.closeWindow();
+
+    QImage img;
+    snapShot.rectRemovedShadow(img, nullptr);
 }

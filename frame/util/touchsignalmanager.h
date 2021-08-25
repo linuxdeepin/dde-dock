@@ -33,7 +33,6 @@ class TouchSignalManager : public QObject
     Q_OBJECT
 
 public:
-    virtual ~TouchSignalManager();
     static TouchSignalManager *instance();
     bool isDragIconPress() const;
 
