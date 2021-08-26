@@ -142,10 +142,10 @@ TEST_F(Test_MainWindow, event_test)
     QResizeEvent event5((QSize()), QSize());
     window->resizeEvent(&event5);
 
-    QMimeData *data = new QMimeData;
-    data->setText("test");
+    QMimeData data;
+    data.setText("test");
 
-    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     window->dragEnterEvent(&event9);
 
     QKeyEvent event11(QEvent::Type::KeyPress, Qt::Key_Escape, Qt::ControlModifier);

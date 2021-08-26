@@ -97,35 +97,31 @@ TEST_F(Test_DockItem, cover_test)
 
 TEST_F(Test_DockItem, event_test)
 {
-    DockItem *item = new DockItem;
-    item->m_popupShown = true;
-    item->update();
+    DockItem item;
+    item.m_popupShown = true;
+    item.update();
 
     QMouseEvent event(QEvent::MouseButtonPress, QPointF(0.0, 0.0), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    qApp->sendEvent(item, &event);
+    qApp->sendEvent(&item, &event);
 
     QEnterEvent event1(QPointF(0.0, 0.0), QPointF(0.0, 0.0), QPointF(0.0, 0.0));
-    qApp->sendEvent(item, &event1);
+    qApp->sendEvent(&item, &event1);
 
     QEvent event2(QEvent::Leave);
-    qApp->sendEvent(item, &event2);
+    qApp->sendEvent(&item, &event2);
 
     QTest::qWait(10);
 
     QEvent e(QEvent::Enter);
-    item->enterEvent(&e);
+    item.enterEvent(&e);
 
-    item->menuActionClicked(new QAction());
+    QAction action(&item);
+    item.menuActionClicked(&action);
 
-    item->onContextMenuAccepted();
+    item.onContextMenuAccepted();
 
-    item->showHoverTips();
-
-    QTimer::singleShot(10, [ &item ] {
-        delete item;
-        item = nullptr;
-    });
-    item->showContextMenu();
+    item.showHoverTips();
+    item.showContextMenu();
 
     QTest::qWait(1000);
     ASSERT_TRUE(true);

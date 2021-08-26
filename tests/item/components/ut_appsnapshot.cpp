@@ -93,15 +93,15 @@ TEST_F(Test_AppSnapshot, event_test)
     QShowEvent event7;
     snapShot.showEvent(&event7);
 
-    QMimeData *data = new QMimeData;
-    data->setText("test");
-    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::ControlModifier);
+    QMimeData data;
+    data.setText("test");
+    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::ControlModifier);
     snapShot.dropEvent(&event8);
 
-    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     snapShot.dragEnterEvent(&event9);
 
-    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     snapShot.dragMoveEvent(&event10);
 }
 

@@ -70,15 +70,15 @@ TEST_F(Test_LauncherItem, event_test)
     QShowEvent event7;
     launcherItem->showEvent(&event7);
 
-    QMimeData *data = new QMimeData;
-    data->setText("test");
-    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::ControlModifier);
+    QMimeData data;
+    data.setText("test");
+    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::ControlModifier);
     launcherItem->dropEvent(&event8);
 
-    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     launcherItem->dragEnterEvent(&event9);
 
-    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     launcherItem->dragMoveEvent(&event10);
 
     delete launcherItem;

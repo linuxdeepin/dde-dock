@@ -288,15 +288,15 @@ TEST_F(Test_MainPanelControl, event_test)
     QShowEvent event7;
     panel.showEvent(&event7);
 
-    QMimeData *data = new QMimeData;
-    data->setText("test");
-    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::ControlModifier);
+    QMimeData data;
+    data.setText("test");
+    QDropEvent event8(QPointF(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::ControlModifier);
     panel.dropEvent(&event8);
 
-    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent event9(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     panel.dragEnterEvent(&event9);
 
-    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     panel.dragMoveEvent(&event10);
 }
 

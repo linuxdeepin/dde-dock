@@ -18,12 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "appdragwidget.h"
+
 #include <QObject>
 #include <QTest>
 
 #include <gtest/gtest.h>
-
-#include "appdragwidget.h"
 
 class Test_AppDragWidget : public ::testing::Test
 {};
@@ -107,15 +108,15 @@ TEST_F(Test_AppDragWidget, event_test)
     QMouseEvent mouseMoveEvent_(QEvent::MouseMove, QPointF(0, 0), Qt::RightButton, Qt::RightButton, Qt::ControlModifier);
     dragWidget.mouseMoveEvent(&mouseMoveEvent_);
 
-    QMimeData *data = new QMimeData;
-    data->setText("test");
-    QDropEvent dropEvent_(QPointF(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::ControlModifier);
+    QMimeData data;
+    data.setText("test");
+    QDropEvent dropEvent_(QPointF(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::ControlModifier);
     dragWidget.dropEvent(&dropEvent_);
 
-    QDragEnterEvent dragEnterEvent_(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent dragEnterEvent_(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     dragWidget.dragEnterEvent(&dragEnterEvent_);
 
-    QDragMoveEvent dragMoveEvent_(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent dragMoveEvent_(QPoint(), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     dragWidget.dragMoveEvent(&dragMoveEvent_);
 
     QHideEvent hideEvent_;
