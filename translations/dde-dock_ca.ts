@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Surt del mode segur</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Acoblador - Mode segur</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;acoblador és en mode segur. Si us plau, sortiu-ne perquè es mostri adequadament.</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Connectors</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Només a la pantalla principal</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>A la pantalla on hi ha el cursor</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Mostra l&apos;acoblador</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Ha fallat la connexió.</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>Conflicte d&apos;IP</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Es carrega %1, %2 h %3 min per completar-la.</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Carregada</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Buit</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Safata del sistema</translation>
     </message>
 </context>
 <context>

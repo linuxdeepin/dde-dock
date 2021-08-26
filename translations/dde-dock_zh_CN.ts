@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>仅主屏显示</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>跟随鼠标位置显示</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>多屏显示设置</translation>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>连接失败</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP地址冲突</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>正在充电%1，还需%2小时%3分钟</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>已充满</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>清空</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>系统托盘</translation>
     </message>
 </context>
 <context>

@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>De invoegtoepassing &apos;%1&apos; is niet compatibel met het systeem.</translation>
+        <translation>‘%1’ is niet compatibel met het systeem.</translation>
     </message>
 </context>
 <context>
@@ -40,7 +40,7 @@
     </message>
     <message>
         <source>Connecting...</source>
-        <translation>Bezig met verbinden...</translation>
+        <translation>Bezig met verbinden…</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Veilige modus afsluiten</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Veilige modus</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Het dock draait in de veilige modus. Sluit af om het dock correct te tonen.</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Invoegtoepassingen</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Alleen op hoofdscherm</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Op het scherm waar de cursor is</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Dock tonen</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Verbinding mislukt</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP-conflict</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -356,10 +372,6 @@
         <translation>%1 opgeladen - klaar over %2 uur en %3 min</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Opgeladen</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capaciteit: %1</translation>
     </message>
@@ -369,7 +381,7 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation>Capaciteit: %1 ...</translation>
+        <translation>Capaciteit: %1 …</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Leeg</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Systeemvak</translation>
     </message>
 </context>
 <context>

@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Выйти из Безопасного Режима</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Безопасный Режим</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dock находится в безопасном режиме, пожалуйста, выйдите, чтобы показать ее нормально</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Плагины</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Ошибка подключения</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Зарядка %1, %2 час. %3 мин. до полной зарядки</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Заряжен</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Очистить</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Системный Лоток</translation>
     </message>
 </context>
 <context>

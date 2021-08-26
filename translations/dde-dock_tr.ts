@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Güvenli Kipten Çık</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Rıhtım - Güvenli Kip</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Rıhtım güvenli kipte, düzgün şekilde göstermek için lütfen çıkın</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Eklentiler</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Sadece ana ekranda</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>İmlecin bulunduğu ekranda</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Görev Çubuğunu Göster</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Bağlantı başarısız</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP çakışması</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>%1 ve doluyor, tam dolmaya %2 saat %3 dakika kaldı</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Şarj edildi</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Boşalt</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Sistem Tepsisi</translation>
     </message>
 </context>
 <context>

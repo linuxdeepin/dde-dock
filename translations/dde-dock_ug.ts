@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>بىخەتەر ھالەتتىن چېكىنىش</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>ۋەزىپە ئىستونى بىخەتەرلىك ھالىتى</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>ۋەزىپە ئىستونى بىخەتەر ھالەتكە كىردى، چېكىنگەندىن كېيىن نورمال كۆرۈنىدۇ</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>قىستۇرما</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>ئاساسىي ئېكراندىلا كۆرۈنسۇن</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>مائۇسنىڭ ئورنىغا ئەگىشىپ كۆرۈنسۇن</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>كۆپ ئېكران تەڭشىكى</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>ئۇلىنىش مەغلۇپ بولدى</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP ئادرېس توقۇنۇشۇپ قالدى</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>زەرەتلىنىۋاتىدۇ%1، يەنە %2 سائەت %3 مىنۇتتا توشىدۇ</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>توشتى</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>قۇرۇق</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>سىستېما يۈكلەنگەن دىسكا</translation>
     </message>
 </context>
 <context>

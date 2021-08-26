@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dil nga Mënyra e Parrezik</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Panel - Mënyra e Parrezik</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Paneli gjendet nën Mënyrën e Parrezik, ju lutemi, dilni prej saj, që të shfaqet si duhet</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Shtojca</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Vetëm në ekranin kryesor</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Në ekranin ku është kursori</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Shfaqe Panelin</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Lidhja dështoi</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>Përplasje IP-sh</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Po ngarkohet %1, edhe %2 hr e %3 min deri sa të jetë plot</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>E ngarkuar</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>E zbrazët</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Shtyllë Sistemi</translation>
     </message>
 </context>
 <context>

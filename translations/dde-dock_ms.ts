@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Pemalam</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Mengecas %1, %2 j %3 min sehingga penuh</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Dicas</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Kosong</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Talam Sistem</translation>
     </message>
 </context>
 <context>

@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Salir del modo seguro</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Muelle - Modo seguro</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>El muelle está en modo seguro, por favor salga para verlo correctamente</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Complementos</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Solo en la pantalla principal</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>En la pantalla donde está el cursor</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Mostrar el muelle</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Conexión fallida</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -356,10 +372,6 @@
         <translation>Cargando %1, %2 h %3 min para completarse</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Cargada</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation>Capacidad %1</translation>
     </message>
@@ -373,7 +385,7 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Capacidad% 1, completamente cargada</translation>
+        <translation>Capacidad %1, completamente cargada</translation>
     </message>
 </context>
 <context>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Vaciar</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Bandeja de sistema</translation>
     </message>
 </context>
 <context>

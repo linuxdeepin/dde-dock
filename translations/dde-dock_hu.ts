@@ -155,15 +155,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Kilépés a biztonságos módból</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dokkoló - Biztonságos mód</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>A Dokkoló biztonságos módban van. Kérjük lépjen ki a megfelelő megjelenítéshez</translation>
     </message>
 </context>
 <context>
@@ -219,6 +219,18 @@
     <message>
         <source>Plugins</source>
         <translation>Bővítmények</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Csak a főképernyőn</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>A képernyőn, ahol a kurzor található</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Dokk mutatása</translation>
     </message>
 </context>
 <context>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>A kapcsolódás sikertelen</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>IP cím ütközés</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -322,7 +338,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Virtuális billentyűzet</translation>
+        <translation>Képernyő billentyűzet</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Töltés %1, %2 óra %3 perc van a feltöltés befejezéséig</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Feltöltve</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Ürítés</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Rendszertálca</translation>
     </message>
 </context>
 <context>

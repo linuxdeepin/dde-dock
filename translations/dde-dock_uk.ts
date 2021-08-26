@@ -220,6 +220,18 @@
         <source>Plugins</source>
         <translation>Додатки</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Лише на головному екрані</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>На екрані, де перебуває вказівник</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Показувати панель</translation>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -302,6 +314,10 @@
         <source>Connection failed</source>
         <translation>Не вдалося встановити з&apos;єднання</translation>
     </message>
+    <message>
+        <source>IP conflict</source>
+        <translation>Конфлікт IP</translation>
+    </message>
 </context>
 <context>
     <name>NetworkPlugin</name>
@@ -354,10 +370,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>Зарядка %1, %2 год %3 хв до повної</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation>Заряджено</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -483,13 +495,6 @@
     <message>
         <source>Empty</source>
         <translation>Пусто</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Системний трей</translation>
     </message>
 </context>
 <context>
