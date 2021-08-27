@@ -27,6 +27,7 @@
 
 #include <QMouseEvent>
 #include <QTouchEvent>
+#include <QProcess>
 
 #include <DLog>
 
@@ -44,5 +45,10 @@ int main(int argc, char **argv)
     __sanitizer_set_report_path("asan.log");
 #endif
 
-    return RUN_ALL_TESTS();
+    int ret = RUN_ALL_TESTS();
+
+    // 重启一下任务栏,算是默认恢复一下吧
+    QProcess::startDetached("bash -c \"pkill dde-dock; /usr/bin/dde-dock\"");
+
+    return ret;
 }
