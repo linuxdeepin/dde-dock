@@ -293,7 +293,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     }
 
     int curTimestamp = QDateTime::currentSecsSinceEpoch();
-    if ((curTimestamp - m_lastclickTimes) < 300)
+    if ((curTimestamp - m_lastclickTimes) < 1)
         return;
 
     m_lastclickTimes = curTimestamp;
