@@ -41,25 +41,7 @@
 using namespace ::testing;
 
 class Test_MainPanelControl : public ::testing::Test
-{
-public:
-    virtual void SetUp() override;
-    virtual void TearDown() override;
-
-public:
-    MainPanelControl *mainPanel;
-};
-
-void Test_MainPanelControl::SetUp()
-{
-    mainPanel = new MainPanelControl();
-}
-
-void Test_MainPanelControl::TearDown()
-{
-    delete mainPanel;
-    mainPanel = nullptr;
-}
+{};
 
 TEST_F(Test_MainPanelControl, getTrayVisableItemCount)
 {
@@ -132,11 +114,11 @@ TEST_F(Test_MainPanelControl, startDrag)
     panel.startDrag(&appItem);
 
     LauncherItem launcherItem;
-    mainPanel->addFixedAreaItem(0, &launcherItem);
+    panel.addFixedAreaItem(0, &launcherItem);
     panel.startDrag(&launcherItem);
 
     PluginsItem pluginItem(&plugin, "monitor", "1.2.1");
-    mainPanel->addPluginAreaItem(0, &pluginItem);
+    panel.addPluginAreaItem(0, &pluginItem);
     panel.startDrag(&pluginItem);
 }
 
@@ -144,20 +126,20 @@ TEST_F(Test_MainPanelControl, eventFilter)
 {
     MainPanelControl panel;
     QResizeEvent event((QSize()), QSize());
-    panel.eventFilter(mainPanel->m_appAreaSonWidget, &event);
-    panel.eventFilter(mainPanel->m_appAreaWidget, &event);
+    panel.eventFilter(panel.m_appAreaSonWidget, &event);
+    panel.eventFilter(panel.m_appAreaWidget, &event);
 
     QEvent enterEvent(QEvent::Enter);
-    panel.eventFilter(mainPanel->m_desktopWidget, &enterEvent);
+    panel.eventFilter(panel.m_desktopWidget, &enterEvent);
 
     QEvent leaveEvent(QEvent::Leave);
-    panel.eventFilter(mainPanel->m_desktopWidget, &leaveEvent);
+    panel.eventFilter(panel.m_desktopWidget, &leaveEvent);
 
     QEvent moveEvent(QEvent::Move);
-    panel.eventFilter(mainPanel->m_appAreaWidget, &moveEvent);
+    panel.eventFilter(panel.m_appAreaWidget, &moveEvent);
 
     QMouseEvent mouseMoveEvent(QEvent::MouseMove, QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    panel.eventFilter(mainPanel, &mouseMoveEvent);
+    panel.eventFilter(&panel, &mouseMoveEvent);
 
     //    QEvent dragMoveEvent(QEvent::DragMove);
     //    mainPanel->eventFilter(static_cast<QGraphicsView *>(mainPanel->m_appDragWidget), &dragMoveEvent);

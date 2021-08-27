@@ -222,7 +222,7 @@ void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
     //因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
     //因此在处理插件图标时，需要通过两层布局判断是否为需要的插件，例如拖动插件位置等判断
-    QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
     boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
     m_pluginLayout->insertLayout(index, boxLayout, 0);
 
@@ -262,6 +262,8 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
         if (boxLayout && boxLayout->itemAt(0)->widget() == wdg) {
             boxLayout->removeWidget(wdg);
             m_pluginLayout->removeItem(layoutItem);
+            delete layoutItem;
+            layoutItem = nullptr;
         }
     }
 }
