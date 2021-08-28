@@ -33,6 +33,7 @@ DisplayManager::DisplayManager(QObject *parent)
     , m_onlyInPrimary(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool())
 {
     connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::primaryScreenChanged);
+    connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::dockInfoChanged);
     connect(qApp, &QGuiApplication::screenAdded, this, &DisplayManager::screenCountChanged);
     connect(qApp, &QGuiApplication::screenRemoved, this, &DisplayManager::screenCountChanged);
 
