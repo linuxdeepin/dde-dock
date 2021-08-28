@@ -50,7 +50,6 @@ public:
     int screenRawHeight() const;
     bool canDock(QScreen *s, Position pos) const;
     bool isCopyMode();
-    bool onlyInPrimary();
 
 private:
     void updateScreenDockInfo();

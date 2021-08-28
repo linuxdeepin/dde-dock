@@ -138,11 +138,6 @@ bool DisplayManager::isCopyMode()
     return true;
 }
 
-bool DisplayManager::onlyInPrimary()
-{
-    return m_onlyInPrimary;
-}
-
 /**
  * @brief DisplayManager::updateScreenDockInfo
  * 更新屏幕停靠信息
