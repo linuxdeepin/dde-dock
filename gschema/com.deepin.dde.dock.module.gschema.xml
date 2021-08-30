@@ -265,6 +265,34 @@
           Control Module Enable
       </description>
     </key>
+    <key type="b" name="mode-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Module Visible
+      </description>
+    </key>
+    <key type="b" name="hide-visible">
+      <default>false</default>
+      <summary>Plugin Visible</summary>
+      <description>
+          Plugin hidden switch
+      </description>
+    </key>
+    <key type="b" name="location-visible">
+      <default>true</default>
+      <summary>Location Visible</summary>
+      <description>
+          Location hidden switch
+      </description>
+    </key>
+    <key type="b" name="status-visible">
+      <default>true</default>
+      <summary>Status Visible</summary>
+      <description>
+          Status hidden switch
+      </description>
+    </key>
   </schema>
  <schema path="/com/deepin/dde/dock/module/AiAssistant/" id="com.deepin.dde.dock.module.AiAssistant" gettext-domain="DDE">
     <key type="b" name="control">

@@ -87,40 +87,38 @@ void MenuWorker::initMember()
 
 void MenuWorker::initUI()
 {
-    QMenu *modeSubMenu = new QMenu(m_settingsMenu);
-    modeSubMenu->setAccessibleName("modesubmenu");
-    modeSubMenu->addAction(m_fashionModeAct);
-    modeSubMenu->addAction(m_efficientModeAct);
-    QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
-    modeSubMenuAct->setMenu(modeSubMenu);
+    m_modeSubMenu = new QMenu(m_settingsMenu);
+    m_modeSubMenu->setAccessibleName("modesubmenu");
+    m_modeSubMenu->addAction(m_fashionModeAct);
+    m_modeSubMenu->addAction(m_efficientModeAct);
+    m_modeSubMenuAct = new QAction(tr("Mode"), this);
+    m_modeSubMenuAct->setMenu(m_modeSubMenu);
 
-    QMenu *locationSubMenu = new QMenu(m_settingsMenu);
-    locationSubMenu->setAccessibleName("locationsubmenu");
-    locationSubMenu->addAction(m_topPosAct);
-    locationSubMenu->addAction(m_bottomPosAct);
-    locationSubMenu->addAction(m_leftPosAct);
-    locationSubMenu->addAction(m_rightPosAct);
-    QAction *locationSubMenuAct = new QAction(tr("Location"), this);
-    locationSubMenuAct->setMenu(locationSubMenu);
+    m_locationSubMenu = new QMenu(m_settingsMenu);
+    m_locationSubMenu->setAccessibleName("locationsubmenu");
+    m_locationSubMenu->addAction(m_topPosAct);
+    m_locationSubMenu->addAction(m_bottomPosAct);
+    m_locationSubMenu->addAction(m_leftPosAct);
+    m_locationSubMenu->addAction(m_rightPosAct);
+    m_locationSubMenuAct = new QAction(tr("Location"), this);
+    m_locationSubMenuAct->setMenu(m_locationSubMenu);
 
-    QMenu *statusSubMenu = new QMenu(m_settingsMenu);
-    statusSubMenu->setAccessibleName("statussubmenu");
-    statusSubMenu->addAction(m_keepShownAct);
-    statusSubMenu->addAction(m_keepHiddenAct);
-    statusSubMenu->addAction(m_smartHideAct);
-    QAction *statusSubMenuAct = new QAction(tr("Status"), this);
-    statusSubMenuAct->setMenu(statusSubMenu);
+    m_statusSubMenu = new QMenu(m_settingsMenu);
+    m_statusSubMenu->setAccessibleName("statussubmenu");
+    m_statusSubMenu->addAction(m_keepShownAct);
+    m_statusSubMenu->addAction(m_keepHiddenAct);
+    m_statusSubMenu->addAction(m_smartHideAct);
+    m_statusSubMenuAct = new QAction(tr("Status"), this);
+    m_statusSubMenuAct->setMenu(m_statusSubMenu);
 
     m_hideSubMenu = new QMenu(m_settingsMenu);
     m_hideSubMenu->setAccessibleName("pluginsmenu");
-    QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
-    hideSubMenuAct->setMenu(m_hideSubMenu);
+    m_hideSubMenuAct= new QAction(tr("Plugins"), this);
+    m_hideSubMenuAct->setMenu(m_hideSubMenu);
 
-    m_settingsMenu->addAction(modeSubMenuAct);
-    m_settingsMenu->addAction(locationSubMenuAct);
-    m_settingsMenu->addAction(statusSubMenuAct);
-    m_settingsMenu->addAction(hideSubMenuAct);
     m_settingsMenu->setTitle("Settings Menu");
+    onMenuVisibleChange();
+
 }
 
 void MenuWorker::initConnection()
@@ -206,6 +204,7 @@ void MenuWorker::showDockSettingsMenu()
 void MenuWorker::onGSettingsChanged(const QString &key)
 {
     if (key != "enable") {
+        onMenuVisibleChange();
         return;
     }
 
@@ -213,7 +212,7 @@ void MenuWorker::onGSettingsChanged(const QString &key)
 
     if (setting->keys().contains("enable")) {
         const bool isEnable = GSettingsByMenu()->keys().contains("enable") && GSettingsByMenu()->get("enable").toBool();
-        m_menuEnable=isEnable && setting->get("enable").toBool();
+        m_menuEnable =isEnable && setting->get("enable").toBool();
     }
 }
 
@@ -275,6 +274,25 @@ void MenuWorker::trayVisableCountChanged(const int &count)
 void MenuWorker::gtkIconThemeChanged()
 {
     m_itemManager->refershItemsIcon();
+}
+
+void MenuWorker::onMenuVisibleChange()
+{
+    QList<QAction *> actList;
+    m_settingsMenu->clear();
+    if (GSettingsByMenu()->keys().contains("modeVisible") && GSettingsByMenu()->get("modeVisible").toBool()) {
+        actList << m_modeSubMenuAct;
+    }
+    if (GSettingsByMenu()->keys().contains("locationVisible") && GSettingsByMenu()->get("locationVisible").toBool()) {
+        actList << m_locationSubMenuAct;
+    }
+    if (GSettingsByMenu()->keys().contains("statusVisible") && GSettingsByMenu()->get("statusVisible").toBool()) {
+        actList << m_statusSubMenuAct;
+    }
+    if (GSettingsByMenu()->keys().contains("hideVisible") && GSettingsByMenu()->get("hideVisible").toBool()) {
+        actList << m_hideSubMenuAct;
+    }
+    m_settingsMenu->addActions(actList);
 }
 
 void MenuWorker::setAutoHide(const bool autoHide)

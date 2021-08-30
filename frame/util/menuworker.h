@@ -61,6 +61,7 @@ private slots:
     void menuActionClicked(QAction *action);
     void trayVisableCountChanged(const int &count);
     void gtkIconThemeChanged();
+    void onMenuVisibleChange();
 
 public slots:
     void setAutoHide(const bool autoHide);
@@ -71,6 +72,10 @@ private:
 
     QMenu *m_settingsMenu;
     QMenu *m_hideSubMenu;
+    QMenu *m_modeSubMenu;
+    QMenu *m_locationSubMenu;
+    QMenu *m_statusSubMenu;
+
     QAction *m_fashionModeAct;
     QAction *m_efficientModeAct;
     QAction *m_topPosAct;
@@ -80,6 +85,11 @@ private:
     QAction *m_keepShownAct;
     QAction *m_keepHiddenAct;
     QAction *m_smartHideAct;
+
+    QAction *m_hideSubMenuAct;
+    QAction *m_statusSubMenuAct;
+    QAction *m_locationSubMenuAct;
+    QAction *m_modeSubMenuAct;
 
     bool m_menuEnable;
     bool m_autoHide;
