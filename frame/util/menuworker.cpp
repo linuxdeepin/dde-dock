@@ -209,7 +209,7 @@ QMenu *MenuWorker::createMenu()
 
     // 多屏显示设置 仅多屏扩展模式显示菜单
     if ((!menuSettings || !menuSettings->keys().contains("multiscreenVisible") || menuSettings->get("multiscreenVisible").toBool())
-            && !DIS_INS->isCopyMode()) {
+            && (QApplication::screens().size() > 1) && !DIS_INS->isCopyMode()) {
         bool onlyShowPrimary = Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool();
 
         QMenu *displaySubMenu = new QMenu(settingsMenu);
