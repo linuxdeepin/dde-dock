@@ -31,6 +31,18 @@
 
 #include <QDBusConnection>
 
+#include <QGSettings>
+
+static bool GSettingsByMouseActivationHide()
+{
+    static QGSettings settings("com.deepin.dde.dock");
+
+    if (settings.keys().contains("mouseActivationHide"))
+        return settings.get("mouseActivationHide").toBool();
+    return true;
+
+}
+
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
 
@@ -204,6 +216,8 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
     if (m_registerKey != key || m_btnPress)
         return;
+    //这里加上智能模式的判断。保证在智能模式下鼠标不会让dock显示出来，满足实达需求：https://pms.uniontech.com/zentao/task-view-82752.html
+    if (m_mouseActivation &&  m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide) return;
 
     tryToShowDock(x, y);
 }
@@ -967,6 +981,7 @@ void MultiScreenWorker::initGSettingConfig()
     } else {
         qDebug() << "com.deepin.dde.dock is uninstalled.";
     }
+    m_mouseActivation = !GSettingsByMouseActivationHide();
 }
 
 void MultiScreenWorker::initConnection()

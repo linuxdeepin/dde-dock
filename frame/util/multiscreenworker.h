@@ -472,6 +472,8 @@ private:
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
+    //在智能模式下，是否能用鼠标让dock显示出来
+    bool m_mouseActivation;
 
     //当前屏幕的方向
     int m_monitorRotation;
