@@ -56,6 +56,12 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
             emit requestUpdateGeometry();
         }
     });
+
+    // 连接时区变更信号，更新日期时间插件的布局
+    connect(m_timedateInter, &Timedate::TimezoneChanged, this, [ = ](const QString & value){
+        Q_UNUSED(value);
+        emit requestUpdateGeometry();
+    });
 }
 
 void DatetimeWidget::set24HourFormat(const bool value)

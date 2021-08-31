@@ -286,9 +286,10 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
 {
+    // 先通过消息循环让各部件尺寸调整完毕，然后再计算图标大小
+    QWidget::resizeEvent(event);
     resizeDesktopWidget();
     resizeDockIcon();
-    return QWidget::resizeEvent(event);
 }
 
 void MainPanelControl::updateAppAreaSonWidgetSize()
