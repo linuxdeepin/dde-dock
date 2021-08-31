@@ -125,7 +125,7 @@ void MultiScreenWorker::setStates(RunStates state, bool on)
  */
 QRect MultiScreenWorker::dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
 {
-    if (hideMode == HideMode::KeepShowing)
+    if (hideMode == HideMode::KeepShowing || (hideMode == HideMode::SmartHide && m_hideState == HideState::Show))
         return getDockShowGeometry(screenName, pos, displayMode);
     else
         return getDockHideGeometry(screenName, pos, displayMode);
