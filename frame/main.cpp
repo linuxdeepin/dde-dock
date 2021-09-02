@@ -192,11 +192,6 @@ int main(int argc, char *argv[])
     // 自动化标记由此开始
     QAccessible::installFactory(accessibleFactory);
 
-    // load dde-network-utils translator
-    QTranslator translator;
-    translator.load("/usr/share/dde-network-utils/translations/dde-network-utils_" + QLocale::system().name());
-    app.installTranslator(&translator);
-
     // 设置日志输出到控制台以及文件
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();

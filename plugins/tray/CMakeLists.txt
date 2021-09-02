@@ -26,7 +26,6 @@ find_package(DtkWidget REQUIRED)
 find_package(dbusmenu-qt5 REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED xcb-ewmh xcb xcb-image xcb-composite xtst x11 xext xcb-icccm dbusmenu-qt5)
-pkg_check_modules(DDE-Network-Utils REQUIRED dde-network-utils)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
@@ -37,7 +36,6 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
                                                  ${XCB_LIBS_INCLUDE_DIRS}
-                                                 ${DDE-Network-Utils_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
                                                  ${dbusmenu-qt5_INCLUDE_DIRS}
@@ -51,7 +49,6 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5Svg_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${XCB_LIBS_LIBRARIES}
-    ${DDE-Network-Utils_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
     pthread

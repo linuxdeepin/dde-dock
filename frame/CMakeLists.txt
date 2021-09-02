@@ -52,7 +52,6 @@ target_include_directories(${BIN_NAME} PUBLIC
     xcb
     ../plugins/tray
     ../plugins/show-desktop
-    ../plugins/network
     ../plugins/datetime
     ../plugins/onboard
     ../plugins/trash
