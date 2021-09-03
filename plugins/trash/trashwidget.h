@@ -52,6 +52,8 @@ public:
     void invokeMenuItem(const QString &menuId, const bool checked);
     void updateIcon();
     void updateIconAndRefresh();
+    bool getDragging() const;
+    void setDragging(bool state);
 
 signals:
     void requestContextMenu() const;
@@ -59,6 +61,7 @@ signals:
 protected:
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
 
@@ -69,6 +72,8 @@ private slots:
 private:
     PopupControlWidget *m_popupApplet;
     DBusFileManager1 *m_fileManagerInter;
+
+    bool m_dragging; // item是否被拖入回收站
 
     QPixmap m_icon;
     QIcon m_defaulticon;

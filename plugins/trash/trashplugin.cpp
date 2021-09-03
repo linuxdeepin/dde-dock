@@ -90,6 +90,11 @@ QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
+    if (m_trashWidget->getDragging()) {
+        m_tipsLabel->setText(tr("Move to trash"));
+        return m_tipsLabel.data();
+    }
+
     const int count = m_trashWidget->trashItemCount();
     if (count < 2)
         m_tipsLabel->setText(tr("Trash - %1 file").arg(count));

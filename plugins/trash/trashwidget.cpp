@@ -42,6 +42,7 @@ TrashWidget::TrashWidget(QWidget *parent)
                                               "/org/freedesktop/FileManager1",
                                               QDBusConnection::sessionBus(),
                                               this))
+    , m_dragging(false)
 {
     m_popupApplet->setVisible(false);
 
@@ -126,6 +127,9 @@ void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
     if (e->dropAction() != Qt::MoveAction) {
         e->ignore();
     } else {
+        // 设置item是否拖入回收站的状态，给DockItem发送鼠标进入事件
+        setDragging(true);
+        qApp->postEvent(this->parent(), new QEnterEvent(e->pos(), mapToParent(e->pos()), mapToGlobal(e->pos())));
         e->accept();
     }
 }
@@ -144,6 +148,15 @@ void TrashWidget::dragMoveEvent(QDragMoveEvent *e)
     }
 }
 
+void TrashWidget::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    Q_UNUSED(e);
+
+    // 设置item是否拖入回收站的状态，给DockItem发送鼠标离开事件
+    setDragging(false);
+    qApp->postEvent(this->parent(), new QEvent(QEvent::Leave));
+}
+
 void TrashWidget::dropEvent(QDropEvent *e)
 {
     if (e->mimeData()->hasFormat("RequestDock"))
@@ -158,6 +171,10 @@ void TrashWidget::dropEvent(QDropEvent *e)
     if (e->dropAction() != Qt::MoveAction) {
         return e->ignore();
     }
+
+    // 设置item是否拖入回收站的状态，给DockItem发送鼠标离开事件
+    setDragging(false);
+    qApp->postEvent(this->parent(), new QEvent(QEvent::Leave));
 
     const QMimeData *mime = e->mimeData();
     for (auto url : mime->urls())
@@ -208,6 +225,16 @@ void TrashWidget::updateIconAndRefresh()
 {
     updateIcon();
     update();
+}
+
+bool TrashWidget::getDragging() const
+{
+    return m_dragging;
+}
+
+void TrashWidget::setDragging(bool state)
+{
+    m_dragging = state;
 }
 
 void TrashWidget::removeApp(const QString &appKey)
