@@ -85,6 +85,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
     m_desktopWidget->installEventFilter(this);
+    m_pluginAreaWidget->installEventFilter(this);
 
     //在设置每条线大小前，应该设置fixedsize(0,0)
     //应为paintEvent函数会先调用设置背景颜色，大小为随机值
@@ -632,6 +633,17 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
+    // fix:88133 在计算icon大小时m_pluginAreaWidget的数据错误
+    if (watched == m_pluginAreaWidget) {
+        switch (event->type()) {
+        case QEvent::Resize:
+            resizeDockIcon();
+            break;
+        default:
+            break;
+        }
+    }
+
     // 高效模式下，鼠标移入移出＇显示桌面＇区域的处理
     if (watched == m_desktopWidget) {
         if (event->type() == QEvent::Enter) {
@@ -1074,6 +1086,10 @@ void MainPanelControl::resizeDockIcon()
         tray_item_size = qMin(tray_item_size,width());
         tray_item_size = std::min(tray_item_size, width() - 20);
     }
+
+    if (tray_item_size < 20)
+        tray_item_size = 20;
+
     //减去插件图标的大小后重新计算固定图标和应用图标的平均大小
     totalLength -= tray_item_size * pluginCount;
     iconCount -= pluginCount;
@@ -1084,20 +1100,20 @@ void MainPanelControl::resizeDockIcon()
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         if (iconSize >= height()) {
-            calcuDockIconSize(height(), height(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
+            calcuDockIconSize(height(), height(), tray_item_size, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         } else {
-            calcuDockIconSize(iconSize, height(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
+            calcuDockIconSize(iconSize, height(), tray_item_size, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         }
     } else {
         if (iconSize >= width()) {
-            calcuDockIconSize(width(), width(), trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
+            calcuDockIconSize(width(), width(), tray_item_size, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         } else {
-            calcuDockIconSize(width(), iconSize, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
+            calcuDockIconSize(width(), iconSize, tray_item_size, trashPlugin, shutdownPlugin, keyboardPlugin, notificationPlugin);
         }
     }
 }
 
-void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin)
+void MainPanelControl::calcuDockIconSize(int w, int h, int traySize, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin)
 {
     int appItemSize = qMin(w, h);
 
@@ -1119,22 +1135,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
     }
 
-    // 托盘上每个图标大小
-    int tray_item_size = 20;
-
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        w = qBound(20, w, 40);
-        tray_item_size = std::min(w, h - 20);
-    } else {
-        h = qBound(20, h, 40);
-        tray_item_size = std::min(w - 20, h);
-    }
-
-    if (tray_item_size < 20)
-        return;
-
     if (m_tray) {
-        m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
+        m_tray->centralWidget()->setProperty("iconSize", traySize);
     }
 
     //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
@@ -1147,7 +1149,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem) {
                     if (pItem->sizeHint().height() == -1) {
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                        pItem->setFixedSize(traySize, traySize);
                     } else if (pItem->sizeHint().height() > height()) {
                         pItem->resize(pItem->width(), height());
                     }
@@ -1162,7 +1164,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
                 PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
                 if (pItem) {
                     if (pItem->sizeHint().width() == -1) {
-                        pItem->setFixedSize(tray_item_size, tray_item_size);
+                        pItem->setFixedSize(traySize, traySize);
                     } else if (pItem->sizeHint().width() > width()) {
                         pItem->resize(width(), pItem->height());
                     }
@@ -1179,10 +1181,10 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
 
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         appTopAndBottomMargin = (m_fixedAreaWidget->height() - appItemSize) / 2;
-        trayTopAndBottomMargin = (m_trayAreaWidget->height() - tray_item_size) / 2;
+        trayTopAndBottomMargin = (m_trayAreaWidget->height() - traySize) / 2;
     } else {
         appLeftAndRightMargin = (m_fixedAreaWidget->width() - appItemSize) / 2;
-        trayLeftAndRightMargin = (m_trayAreaWidget->width() - tray_item_size) / 2;
+        trayLeftAndRightMargin = (m_trayAreaWidget->width() - traySize) / 2;
     }
 
     m_fixedAreaLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
