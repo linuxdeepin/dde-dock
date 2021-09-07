@@ -1276,6 +1276,17 @@ int NetworkItem::getStrongestAp()
     return retStrength;
 }
 
+// check if exist at least one available network
+// if exist, open dock pannel instead of control center
+bool NetworkItem::isExistAvailableNetwork()
+{
+    for (auto item : m_wirelessItems) {
+        if (item->APcount() > 0)
+            return true;
+    }
+    return false;
+}
+
 /**
  * @brief 更新有线（无线）适配器的开关状态，并根据开关状态显示设备列表。
  */
@@ -1476,6 +1487,10 @@ bool NetworkItem::isShowControlCenter()
             || (m_wiredItems.size() > 0 && m_wirelessItems.size() == 0))
         onlyOneTypeDevice = true;
 
+    // if exist at least one available network
+    if (isExistAvailableNetwork())
+        return false;
+
     if (onlyOneTypeDevice) {
         switch (m_pluginState) {
         case Unknow:
@@ -1496,6 +1511,9 @@ bool NetworkItem::isShowControlCenter()
         case Unknow:
         case Nocable:
         case Bfailed:
+        // if has both type device, wired device is disconned
+        // and wireless has no ap, should also show control center
+        case Adisconnected:
         case ConnectNoInternet:
         case Disconnected:
         case Disabled:
