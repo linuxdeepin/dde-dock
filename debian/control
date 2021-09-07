@@ -43,7 +43,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  qtxdg-dev-tools
 Recommends:
  dde-disk-mount-plugin,
- dde-dock-onboard-plugin
+ dde-dock-onboard-plugin,
+ dde-dock-network-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
