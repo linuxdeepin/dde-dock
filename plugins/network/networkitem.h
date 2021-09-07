@@ -100,6 +100,7 @@ private:
     void updateMasterControlSwitch();
     void updateView();
     int getStrongestAp();
+    bool isExistAvailableNetwork();
 
 private:
     Dock::TipsWidget *m_tipsWidget;
