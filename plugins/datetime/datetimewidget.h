@@ -38,6 +38,10 @@ public:
     bool is24HourFormat() const { return m_24HourFormat; }
     QSize sizeHint() const;
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *e);
+
 signals:
     void requestUpdateGeometry() const;
 
@@ -49,7 +53,6 @@ private Q_SLOTS:
     void setShortTimeFormat(int type);
 
 private:
-    void paintEvent(QPaintEvent *e);
     QSize curTimeSize() const;
 
 private:
@@ -60,7 +63,6 @@ private:
     Timedate *m_timedateInter;
     QString m_shortDateFormat;
     QString m_shortTimeFormat;
-
 };
 
 #endif // DATETIMEWIDGET_H

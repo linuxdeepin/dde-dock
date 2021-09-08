@@ -176,6 +176,14 @@ QSize DatetimeWidget::sizeHint() const
     return curTimeSize();
 }
 
+void DatetimeWidget::resizeEvent(QResizeEvent *event)
+{
+    if (isVisible())
+        emit requestUpdateGeometry();
+
+    QWidget::resizeEvent(event);
+}
+
 /**
  * @brief DatetimeWidget::paintEvent 绘制任务栏时间日期
  * @param e
