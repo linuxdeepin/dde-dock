@@ -129,7 +129,7 @@ private:
     QPoint m_originPoint;
     QSize m_iconSize;
     Dock::TipsWidget *m_removeTips;
-    QPointer<DockPopupWindow> m_popupWindow;
+    QScopedPointer<DockPopupWindow> m_popupWindow;
     /**
      * @brief m_distanceMultiple: 倍数
      * dock栏上应用区驻留应用被拖拽远离dock的距离除以dock的宽或者高（更小的一个）的比值

@@ -35,7 +35,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_goBackAnim(new QPropertyAnimation(this, "pos", this))
     , m_dockPosition(Dock::Position::Bottom)
     , m_removeTips(new TipsWidget(this))
-    , m_popupWindow(new DockPopupWindow(this))
+    , m_popupWindow(new DockPopupWindow(nullptr))
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
 {
     m_removeTips->setText(tr("Remove"));
@@ -349,7 +349,7 @@ void AppDragWidget::showRemoveTips()
 {
     Dock::Position pos = Dock::Position::Bottom;
 
-    DockPopupWindow *popup = m_popupWindow;
+    DockPopupWindow *popup = m_popupWindow.data();
     if (isRemoveAble(QCursor::pos())) {
         QWidget *lastContent = popup->getContent();
         if (lastContent)
