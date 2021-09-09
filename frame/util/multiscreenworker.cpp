@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
  *
  * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
@@ -55,7 +55,6 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_delayWakeTimer(new QTimer(this))
     , m_ds(DIS_INS->primary())
     , m_state(AutoHide)
-    , m_lastRect(QRect())
 {
     qInfo() << "init dock screen: " << m_ds.current();
 
@@ -238,32 +237,12 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     tryToShowDock(x, y);
 }
 
-bool MultiScreenWorker::mouseInCurrentScreen()
-{
-    QScreen *currentScreen = DIS_INS->screen(m_ds.current());
-    QScreen *mouseScreen = DIS_INS->screen(getValidScreen(position()));
-    return (currentScreen == mouseScreen);
-}
-
 // 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
 void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString &key)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
     if (m_extralRegisterKey != key || testState(MousePress))
-        return;
-
-    // 如果当前正在移动鼠标，无需检测
-    if (testState(ChangePositionAnimationStart)
-            || testState(HideAnimationStart)
-            || testState(ShowAnimationStart)
-            || testState(DockIsShowing)
-            || testState(PrimaryScreenChangedForShowing))
-        return;
-
-    // 当双屏幕为扩展模式的时候，屏幕模式设置为一直显示，此时调整主屏，如果鼠标不在调整后的主屏上的时候，这个函数会触发一次(具体原因待查)
-    // 因此，需要在此处判断当前鼠标的位置是否在主屏，否则就会出现任务栏在调整前的屏幕上闪一下又回到调整后的主屏幕的bug
-    if (!mouseInCurrentScreen())
         return;
 
     // FIXME:每次都要重置一下，是因为qt中的QScreen类缺少nameChanged信号，后面会给上游提交patch修复
@@ -335,24 +314,7 @@ void MultiScreenWorker::primaryScreenChanged()
         return;
     }
 
-    // 如果当前任务栏是跟随主屏的模式，则先更新任务栏的所在的屏幕
-    if (DIS_INS->onlyInPrimary()) {
-        QTimer::singleShot(100, [ = ] {
-            resetDockScreen();
-
-            setStates(PrimaryScreenChangedForShowing);
-            // 通知后端
-            onRequestUpdateFrontendGeometry();
-            // 通知窗管
-            updateDockScreen();
-            // 更新当前屏幕
-            m_ds.updateDockedScreen(m_ds.primary());
-            // 更新主屏幕的锁定状态
-            updatePrimaryScreenDockStatus();
-        });
-    } else {
-        m_monitorUpdateTimer->start();
-    }
+    m_monitorUpdateTimer->start();
 }
 
 void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Position &pos)
@@ -736,9 +698,13 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
  */
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
+    static QRect lastRect = QRect();
+    static int lastScreenWidth = 0;
+    static int lastScreenHeight = 0;
+
     /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
     if ((!DIS_INS->isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
-        m_lastRect = QRect();
+        lastRect = QRect();
 
         const auto display = QX11Info::display();
         if (!display) {
@@ -750,22 +716,14 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         return;
     }
 
-    updateDockScreen();
-}
-
-void MultiScreenWorker::updateDockScreen()
-{
-    static int lastScreenWidth = 0;
-    static int lastScreenHeight = 0;
-
     QRect dockGeometry = getDockShowGeometry(m_ds.current(), m_position, m_displayMode, true);
-    if (m_lastRect == dockGeometry
+    if (lastRect == dockGeometry
             && lastScreenWidth == DIS_INS->screenRawWidth()
             && lastScreenHeight == DIS_INS->screenRawHeight()) {
         return;
     }
 
-    m_lastRect = dockGeometry;
+    lastRect = dockGeometry;
     lastScreenWidth = DIS_INS->screenRawWidth();
     lastScreenHeight = DIS_INS->screenRawHeight();
     qDebug() << "dock real geometry:" << dockGeometry;
@@ -817,26 +775,6 @@ void MultiScreenWorker::updateDockScreen()
                                            static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
                                            static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
                                            static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
-}
-
-void MultiScreenWorker::updatePrimaryScreenDockStatus()
-{
-    const Dock::HideState state = Dock::HideState(m_dockInter->hideState());
-
-    if (state == Dock::Unknown)
-        return;
-
-    if (m_hideMode == HideMode::KeepShowing
-            || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
-        displayAnimation(m_ds.primary(), AniAction::Show);
-    } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
-        if (getDockShowGeometry(m_ds.primary(), m_position, m_displayMode).contains(QCursor::pos()))
-            return;
-
-        displayAnimation(m_ds.primary(), AniAction::Hide);
-    } else {
-        Q_UNREACHABLE();
-    }
 }
 
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
@@ -1058,7 +996,6 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
      * 也就是在实际值基础上下浮动1像素的误差范围
      * 正常屏幕情况下是没有这个问题的
      */
-
     switch (act) {
     case AniAction::Show:
         if (pos == Position::Top || pos == Position::Bottom) {
@@ -1128,12 +1065,6 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
                     setStates(ShowAnimationStart, false);
                 else // 如果不是一直显示的状态，则让其延时修改状态，防止在resetDock的时候重复改变其高度引起任务栏闪烁导致无法唤醒
                     QTimer::singleShot(ANIMATIONTIME, [ = ] { setStates(DockIsShowing, false); });
-
-                QTimer::singleShot(ANIMATIONTIME, [ = ] {
-                    // 如果当前是切换屏幕后，任务栏显示结束，则让这个标记移除
-                    if (testState(PrimaryScreenChangedForShowing))
-                        setStates(PrimaryScreenChangedForShowing, false);
-                });
             }
             break;
         case AniAction::Hide:
@@ -1311,8 +1242,7 @@ void MultiScreenWorker::resetDockScreen()
     if (testState(ChangePositionAnimationStart)
             || testState(HideAnimationStart)
             || testState(ShowAnimationStart)
-            || testState(DockIsShowing)
-            || testState(PrimaryScreenChangedForShowing))
+            || testState(DockIsShowing))
         return;
 
     m_ds.updateDockedScreen(getValidScreen(position()));

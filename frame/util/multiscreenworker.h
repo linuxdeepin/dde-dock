@@ -124,7 +124,6 @@ public:
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
         DockIsShowing = 0x80,               // 任务栏正在显示
-        PrimaryScreenChangedForShowing = 0x100,       // 切换了主屏幕
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -240,10 +239,6 @@ private:
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
 
-    void updateDockScreen();
-    void updatePrimaryScreenDockStatus();
-    bool mouseInCurrentScreen();
-
 private:
     QWidget *m_parent;
     DWindowManagerHelper *m_wmHelper;
@@ -281,7 +276,6 @@ private:
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
     RunStates m_state;
     /*****************************************************************/
-    QRect m_lastRect;
 };
 
 #endif // MULTISCREENWORKER_H
