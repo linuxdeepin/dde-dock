@@ -1,3 +1,4 @@
+
 Source: dde-dock
 Section: x11
 Priority: optional
@@ -27,7 +28,6 @@ Build-Depends: debhelper (>= 8.0.0),
  libdtkgui-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
-
 Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -39,17 +39,17 @@ Conflicts:
 Replaces:
  dde-dock-applets,
  dde-trash-plugin
-Description: deepin desktop-environment - dock module
- Deepin desktop environment - dock module.
+Description: this dde-dock deepin desktop-environment-dde-dock
+ Dock module development files of deepin desktop-environment
 
 Package: dde-dock-dev
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: deepin desktop-environment - dock module development files
+Description: this dde-dock-dev deepin desktop-environment - dock module development files
  Deepin desktop environment - dock module development files.
-
+ 
 Package: dde-dock-onboard-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin
- Deepin desktop environment - dock plugin for onboard
+ this dde-dock-onbard-plugin Deepin desktop environment - dock plugin for onboard
