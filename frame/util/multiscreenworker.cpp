@@ -744,6 +744,8 @@ void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 void MultiScreenWorker::onRequestNotifyWindowManager()
 {
     static QRect lastRect = QRect();
+    static int lastScreenWith = 0;
+    static int lastScreenHeight = 0;
 
     const auto ratio = qApp->devicePixelRatio();
     const QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
@@ -761,9 +763,12 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     }
 
     // 已经设置过了，避免重复设置
-    if (rect == lastRect)
+    if (lastRect == rect && lastScreenWith == m_screenRawWidth && lastScreenHeight == m_screenRawHeight) {
         return;
+    }
     lastRect = rect;
+    lastScreenWith = m_screenRawWidth;
+    lastScreenHeight = m_screenRawHeight;
 
     qDebug() <<"Update Window WorkArea:" << rect;
 
