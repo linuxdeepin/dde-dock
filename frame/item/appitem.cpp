@@ -24,6 +24,7 @@
 
 #include "util/themeappicon.h"
 #include "util/imagefactory.h"
+#include "util/utils.h"
 #include "xcb/xcb_misc.h"
 #include "components/appswingeffectbuilder.h"
 #include "components/appspreviewprovider.h"
@@ -66,6 +67,7 @@ static QGSettings *GSettingsByDockApp()
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
+    , m_activeAppSettings(Utils::ModuleSettingsPtr("activeapp"))
     , m_appNameTips(new TipsWidget(this))
     , m_appPreviewTips(nullptr)
     , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
@@ -646,6 +648,11 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, [ = ]() { m_appPreviewTips = nullptr; });
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, [ = ]() { m_appPreviewTips = nullptr; });
+
+    // 预览标题显示方式的配置
+    if (m_activeAppSettings->keys().contains("previewTitle")) {
+        m_appPreviewTips->setTitleDisplayMode(m_activeAppSettings->get("previewTitle").toInt());
+    }
 
     showPopupWindow(m_appPreviewTips, true);
 }

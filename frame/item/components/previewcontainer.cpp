@@ -31,12 +31,12 @@
 #define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
 
 PreviewContainer::PreviewContainer(QWidget *parent)
-    : QWidget(parent),
-      m_needActivate(false),
-
-      m_floatingPreview(new FloatingPreview(this)),
-      m_mouseLeaveTimer(new QTimer(this)),
-      m_wmHelper(DWindowManagerHelper::instance())
+    : QWidget(parent)
+    , m_needActivate(false)
+    , m_floatingPreview(new FloatingPreview(this))
+    , m_mouseLeaveTimer(new QTimer(this))
+    , m_wmHelper(DWindowManagerHelper::instance())
+    , m_titleMode(HoverShow)
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
     m_windowListLayout->setSpacing(SPACING);
@@ -94,6 +94,20 @@ void PreviewContainer::updateSnapshots()
 {
     for (AppSnapshot *snap : m_snapshots)
         snap->fetchSnapshot();
+}
+
+void PreviewContainer::setTitleDisplayMode(int mode)
+{
+    m_titleMode = static_cast<TitleDisplayMode>(mode);
+
+    if (!m_wmHelper->hasComposite())
+        return;
+
+    m_floatingPreview->setFloatingTitleVisible(m_titleMode == HoverShow);
+
+    for (AppSnapshot *snap : m_snapshots) {
+        snap->setTitleVisible(m_titleMode == AlwaysShow);
+    }
 }
 
 void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)

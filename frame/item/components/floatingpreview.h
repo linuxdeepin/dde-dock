@@ -40,6 +40,7 @@ public:
 
     WId trackedWid() const;
     AppSnapshot *trackedWindow();
+    void setFloatingTitleVisible(bool bVisible);
 
 public slots:
     void trackWindow(AppSnapshot *const snap);

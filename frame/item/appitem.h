@@ -38,6 +38,7 @@
 
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
+class QGSettings;
 class AppItem : public DockItem
 {
     Q_OBJECT
@@ -102,6 +103,7 @@ private slots:
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
+    const QGSettings *m_activeAppSettings;
     TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;
