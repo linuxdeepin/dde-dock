@@ -37,6 +37,7 @@ PreviewContainer::PreviewContainer(QWidget *parent)
     , m_floatingPreview(new FloatingPreview(this))
     , m_mouseLeaveTimer(new QTimer(this))
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_titleMode(HoverShow)
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
     m_windowListLayout->setSpacing(SPACING);
@@ -94,6 +95,20 @@ void PreviewContainer::updateSnapshots()
 {
     for (AppSnapshot *snap : m_snapshots)
         snap->fetchSnapshot();
+}
+
+void PreviewContainer::setTitleDisplayMode(int mode)
+{
+    m_titleMode = static_cast<TitleDisplayMode>(mode);
+
+    if (!m_wmHelper->hasComposite())
+        return;
+
+    m_floatingPreview->setFloatingTitleVisible(m_titleMode == HoverShow);
+
+    for (AppSnapshot *snap : m_snapshots) {
+        snap->setTitleVisible(m_titleMode == AlwaysShow);
+    }
 }
 
 void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)

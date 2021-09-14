@@ -29,10 +29,6 @@
 #include <QPainter>
 #include <QVBoxLayout>
 
-#define BORDER_MARGIN 8
-#define TITLE_MARGIN 20
-#define BTN_TITLE_MARGIN 6
-
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent)
     , m_closeBtn3D(new DIconButton(this))
@@ -77,6 +73,11 @@ AppSnapshot *FloatingPreview::trackedWindow()
     return m_tracked;
 }
 
+void FloatingPreview::setFloatingTitleVisible(bool bVisible)
+{
+    m_titleBtn->setVisible(bVisible);
+}
+
 void FloatingPreview::trackWindow(AppSnapshot *const snap)
 {
     if (!snap)
@@ -90,21 +91,9 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
 
     m_closeBtn3D->setVisible(m_tracked->closeAble());
 
-    QFontMetrics fm(m_titleBtn->font());
-    int textWidth = fm.width(m_tracked->title()) + 10 + BTN_TITLE_MARGIN;
-    int titleWidth = width() - (TITLE_MARGIN * 2  + BORDER_MARGIN);
-
-    if (textWidth  < titleWidth) {
-        m_titleBtn->setFixedWidth(textWidth);
-        m_titleBtn->setText(m_tracked->title());
-    } else {
-        QString str = m_tracked->title();
-        /*某些特殊字符只显示一半 如"Q"," W"，所以加一个空格保证字符显示完整,*/
-        str.insert(0, " ");
-        QString strTtile = m_titleBtn->fontMetrics().elidedText(str, Qt::ElideRight, titleWidth - BTN_TITLE_MARGIN);
-        m_titleBtn->setText(strTtile);
-        m_titleBtn->setFixedWidth(titleWidth + BTN_TITLE_MARGIN);
-    }
+    // 显示此标题的前提条件：配置了标题跟随鼠标显示
+    // 此对象是共用的，鼠标移动到哪个预览图，title就移动到哪里显示，所以他的text统一snap获取，不再重复计算显示长度
+    m_titleBtn->setText(snap->appTitle());
 
     QTimer::singleShot(0, this, [ = ] {
         // 此处获取的snap->geometry()有可能是错误的，所以做个判断并且在resizeEvent中也做处理

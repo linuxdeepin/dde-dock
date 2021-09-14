@@ -28,6 +28,7 @@
 
 #include <DIconButton>
 #include <DWindowManagerHelper>
+#include <DPushButton>
 
 #include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_dde_daemon_dock_entry.h>
@@ -40,6 +41,14 @@ DGUI_USE_NAMESPACE
 
 #define SNAP_CLOSE_BTN_WIDTH     (24)
 #define SNAP_CLOSE_BTN_MARGIN    (5)
+// 标题到左右两边的距离
+#define TITLE_MARGIN    (20)
+
+// 标题的文本到标题背景两边的距离
+#define BTN_TITLE_MARGIN (6)
+
+// 高亮框边距
+#define BORDER_MARGIN (8)
 
 struct SHMInfo;
 struct _XImage;
@@ -66,6 +75,8 @@ public:
     inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
     inline const QString title() const { return m_windowInfo.title; }
     void setWindowState();
+    void setTitleVisible(bool bVisible);
+    QString appTitle() { return m_3DtitleBtn ? m_3DtitleBtn->text() : QString(); }
 
 signals:
     void entered(const WId wid) const;
@@ -91,6 +102,7 @@ private:
     XImage *getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);
     void getWindowState();
+    void updateTitle();
 
 private:
     const WId m_wid;
@@ -102,6 +114,8 @@ private:
     QRectF m_snapshotSrcRect;
 
     Dock::TipsWidget *m_title;
+    DPushButton *m_3DtitleBtn;
+
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;

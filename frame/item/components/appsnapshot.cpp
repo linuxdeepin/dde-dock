@@ -60,6 +60,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_closeAble(false)
     , m_isWidowHidden(false)
     , m_title(new TipsWidget(this))
+    , m_3DtitleBtn(nullptr)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DIconButton(this))
     , m_wmHelper(DWindowManagerHelper::instance())
@@ -93,6 +94,50 @@ void AppSnapshot::setWindowState()
     if (m_isWidowHidden) {
         m_dockDaemonInter->MinimizeWindow(m_wid);
     }
+}
+
+// 每次更新窗口信息时更新标题
+void AppSnapshot::updateTitle()
+{
+    // 2D不显示
+    if (!m_wmHelper->hasComposite())
+        return;
+
+    if (!m_3DtitleBtn) {
+        m_3DtitleBtn = new DPushButton(this);
+        m_3DtitleBtn->setAccessibleName("AppPreviewTitle");
+        m_3DtitleBtn->setBackgroundRole(QPalette::Base);
+        m_3DtitleBtn->setForegroundRole(QPalette::Text);
+        m_3DtitleBtn->setFocusPolicy(Qt::NoFocus);
+        m_3DtitleBtn->setAttribute(Qt::WA_TransparentForMouseEvents);
+        m_3DtitleBtn->setFixedHeight(36);
+        m_3DtitleBtn->setVisible(false);
+    }
+
+    QFontMetrics fm(m_3DtitleBtn->font());
+    int textWidth = fm.width(title()) + 10 + BTN_TITLE_MARGIN;
+    int titleWidth = SNAP_WIDTH - (TITLE_MARGIN * 2  + BORDER_MARGIN);
+
+    if (textWidth  < titleWidth) {
+        m_3DtitleBtn->setFixedWidth(textWidth);
+        m_3DtitleBtn->setText(title());
+    } else {
+        QString str = title();
+        /*某些特殊字符只显示一半 如"Q"," W"，所以加一个空格保证字符显示完整,*/
+        str.insert(0, " ");
+        QString strTtile = m_3DtitleBtn->fontMetrics().elidedText(str, Qt::ElideRight, titleWidth - BTN_TITLE_MARGIN);
+        m_3DtitleBtn->setText(strTtile);
+        m_3DtitleBtn->setFixedWidth(titleWidth + BTN_TITLE_MARGIN);
+    }
+
+    // 移动到预览图中下
+    m_3DtitleBtn->move(QPoint(SNAP_WIDTH / 2, SNAP_HEIGHT - m_3DtitleBtn->height() / 2 - TITLE_MARGIN) - m_3DtitleBtn->rect().center());
+}
+
+void AppSnapshot::setTitleVisible(bool bVisible)
+{
+    if (m_3DtitleBtn)
+        m_3DtitleBtn->setVisible(bVisible && m_wmHelper->hasComposite());
 }
 
 void AppSnapshot::closeWindow() const
@@ -135,6 +180,7 @@ void AppSnapshot::setWindowInfo(const WindowInfo &info)
     QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, width() - m_closeBtn2D->width());
     m_title->setText(strTtile);
     getWindowState();
+    updateTitle();
 }
 
 void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)

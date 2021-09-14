@@ -654,6 +654,11 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::onResetPreview);
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
+    // 预览标题显示方式的配置
+    if (m_activeAppSettings->keys().contains("previewTitle")) {
+        m_appPreviewTips->setTitleDisplayMode(m_activeAppSettings->get("previewTitle").toInt());
+    }
+
     showPopupWindow(m_appPreviewTips, true);
 }
 

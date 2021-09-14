@@ -43,6 +43,12 @@ class PreviewContainer : public QWidget
 public:
     explicit PreviewContainer(QWidget *parent = 0);
 
+    enum TitleDisplayMode {
+        HoverShow       = 0,
+        AlwaysShow      = 1,
+        AlwaysHide      = 2,
+    };
+
 signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
@@ -53,6 +59,7 @@ signals:
 public:
     void setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose);
     void updateSnapshots();
+    void setTitleDisplayMode(int mode);
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
@@ -85,6 +92,7 @@ private:
     DWindowManagerHelper *m_wmHelper;
     QTimer *m_waitForShowPreviewTimer;
     WId m_currentWId;
+    TitleDisplayMode m_titleMode;
 };
 
 #endif // PREVIEWCONTAINER_H
