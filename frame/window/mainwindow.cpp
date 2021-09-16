@@ -95,15 +95,18 @@ MainWindow::MainWindow(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_X11DoNotAcceptFocus);
 
+    Qt::WindowFlags flags = Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Window;
     //1 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
-    setWindowFlags(Qt::WindowDoesNotAcceptFocus);
+    setWindowFlags(windowFlags() | flags | Qt::WindowDoesNotAcceptFocus);
 
-    const auto display = QX11Info::display();
-    if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
-    } else {
-        //2 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
-        XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
+    if (QApplication::platformName() != "wayland") {
+        const auto display = QX11Info::display();
+        if (!display) {
+            qWarning() << "QX11Info::display() is " << display;
+        } else {
+            //2 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
+            XcbMisc::instance()->set_window_type(xcb_window_t(this->winId()), XcbMisc::Dock);
+        }
     }
 
     setMouseTracking(true);

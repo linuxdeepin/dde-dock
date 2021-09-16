@@ -731,7 +731,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
             return;
         }
 
-        XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
+        //XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
         return;
     }
 
@@ -790,10 +790,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         return;
     }
 
-    XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
-                                           static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
-                                           static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
-                                           static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
+    // XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
+    //                                        static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
+    //                                        static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
+    //                                        static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
 }
 
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
@@ -1203,7 +1203,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
                 qWarning() << "QX11Info::display() is " << display;
             } else {
                 // 先清除原先的窗管任务栏区域
-                XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
+                //XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
             }
 
             // 隐藏后需要通知界面更新布局方向
