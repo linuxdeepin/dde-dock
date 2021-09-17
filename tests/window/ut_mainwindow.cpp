@@ -95,30 +95,6 @@ TEST_F(Test_MainWindow, RegisterDdeSession)
     ASSERT_TRUE(true);
 }
 
-TEST_F(Test_MainWindow, resetDragWindow_test)
-{
-    MainWindow window;
-    window.m_multiScreenWorker->m_position = Position::Top;
-    window.resetDragWindow();
-    window.onMainWindowSizeChanged(QPoint(10, 10));
-    window.touchRequestResizeDock();
-
-    window.m_multiScreenWorker->m_position = Position::Bottom;
-    window.resetDragWindow();
-    window.onMainWindowSizeChanged(QPoint(10, 10));
-    window.touchRequestResizeDock();
-
-    window.m_multiScreenWorker->m_position = Position::Left;
-    window.resetDragWindow();
-    window.onMainWindowSizeChanged(QPoint(10, 10));
-    window.touchRequestResizeDock();
-
-    window.m_multiScreenWorker->m_position = Position::Right;
-    window.resetDragWindow();
-    window.onMainWindowSizeChanged(QPoint(10, 10));
-    window.touchRequestResizeDock();
-}
-
 TEST_F(Test_MainWindow, adjustShadowMask)
 {
     MainWindow *window = new MainWindow;
