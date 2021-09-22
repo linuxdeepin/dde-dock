@@ -137,7 +137,7 @@ TEST_F(Test_MainWindow, coverage_test)
 {
     MainWindow *window = new MainWindow;
 
-    window->getTrayVisableItemCount();
+    window->resizeDockIcon();
     window->adjustShadowMask();
     window->resetDragWindow();
     window->onMainWindowSizeChanged(QPoint(10, 10));

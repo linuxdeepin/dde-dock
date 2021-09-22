@@ -2,9 +2,9 @@
 
 #include "mainwindow.h"
 #include "mainpanelcontrol.h"
+#include "desktop_widget.h"
 #include "tipswidget.h"
 #include "dockpopupwindow.h"
-#include "statebutton.h"
 
 #include "launcheritem.h"
 #include "appitem.h"
@@ -113,7 +113,6 @@ SET_FORM_ACCESSIBLE(QScrollArea, "QScrollArea")
 SET_FORM_ACCESSIBLE(QFrame, "QFrame")
 SET_FORM_ACCESSIBLE(QGraphicsView, "QGraphicsView")
 SET_FORM_ACCESSIBLE(DragWidget, "DragWidget")
-SET_FORM_ACCESSIBLE(StateButton, "StateButton")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -178,7 +177,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
             ELSE_USE_ACCESSIBLE(classname, QFrame)
             ELSE_USE_ACCESSIBLE(classname, QGraphicsView)
             ELSE_USE_ACCESSIBLE(classname, DragWidget)
-            ELSE_USE_ACCESSIBLE(classname, StateButton)
             ELSE_USE_ACCESSIBLE(classname, HorizontalSeperator);
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {

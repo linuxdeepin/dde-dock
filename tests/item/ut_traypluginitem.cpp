@@ -33,7 +33,7 @@ TEST_F(Ut_TrayPluginItem, coverage_test)
     item.setSuggestIconSize(QSize());
     item.setRightSplitVisible(true);
 
-    ASSERT_EQ(item.trayVisableItemCount(), 0);
+    ASSERT_EQ(item.trayVisibleItemCount(), 0);
 
     QMouseEvent event(QEvent::MouseButtonPress, QPointF(), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     qApp->sendEvent(item.centralWidget(), &event);

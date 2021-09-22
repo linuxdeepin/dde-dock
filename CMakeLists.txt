@@ -61,6 +61,7 @@ include_directories(
     frame/item/resources
     frame/util
     frame/window
+    frame/window/components
     frame/xcb
     ../widgets
     ../interfaces
@@ -71,10 +72,11 @@ aux_source_directory(frame/dbus DBUS)
 aux_source_directory(frame/dbus/sni SNI)
 aux_source_directory(frame/display DISPLAY)
 aux_source_directory(frame/item ITEM)
-aux_source_directory(frame/item/components COMPONENTS)
+aux_source_directory(frame/item/components ITEMCOMPONENTS)
 aux_source_directory(frame/item/resources RESOURCES)
 aux_source_directory(frame/util UTIL)
 aux_source_directory(frame/window WINDOW)
+aux_source_directory(frame/window/components WINDOWCOMPONENTS)
 aux_source_directory(frame/xcb XCB)
 
 file(GLOB SRC_PATH
@@ -84,9 +86,10 @@ file(GLOB SRC_PATH
     ${SNI}
     ${DISPLAY}
     ${ITEM}
-    ${COMPONENTS}
+    ${ITEMCOMPONENTS}
     ${UTIL}
     ${WINDOW}
+    ${WINDOWCOMPONENTS}
     ${XCB}
     )
 

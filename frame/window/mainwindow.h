@@ -159,7 +159,7 @@ private:
     void initComponents();
     void initConnections();
 
-    void getTrayVisableItemCount();
+    void resizeDockIcon();
 
 signals:
     void panelGeometryChanged();

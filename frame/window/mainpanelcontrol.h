@@ -25,30 +25,20 @@
 #include "constants.h"
 
 #include <QWidget>
-#include <QBoxLayout>
-#include <QLabel>
 
 #include <com_deepin_daemon_gesture.h>
 
 using namespace Dock;
 using Gesture = com::deepin::daemon::Gesture;
 
+class QBoxLayout;
+class QLabel;
 class TrayPluginItem;
 class PluginsItem;
-
-class DesktopWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit DesktopWidget(QWidget *parent) : QWidget(parent)
-    {
-    }
-};
-
 class DockItem;
 class PlaceholderItem;
 class AppDragWidget;
+class DesktopWidget;
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -57,7 +47,7 @@ public:
 
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);
-    void getTrayVisableItemCount();
+    void resizeDockIcon();
     void updatePluginsLayout();
 
 public slots:
@@ -69,17 +59,8 @@ signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 
-protected:
-    void dragMoveEvent(QDragMoveEvent *e) override;
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragLeaveEvent(QDragLeaveEvent *e) override;
-    void dropEvent(QDropEvent *) override;
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    void mousePressEvent(QMouseEvent *e) override;
-    void resizeEvent(QResizeEvent *event) override;
-
 private:
-    void initUi();
+    void initUI();
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
     void updateDisplayMode();
@@ -94,16 +75,26 @@ private:
     void addPluginAreaItem(int index, QWidget *wdg);
     void removePluginAreaItem(QWidget *wdg);
 
+    // 拖拽相关
     void startDrag(DockItem *);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
-    void paintEvent(QPaintEvent *event) override;
-    void resizeDockIcon();
+
     void calcuDockIconSize(int w, int h, int traySize, PluginsItem *trashPlugin, PluginsItem *shutdownPlugin, PluginsItem *keyboardPlugin, PluginsItem *notificationPlugin);
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
+
+protected:
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    void dropEvent(QDropEvent *) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QBoxLayout *m_mainPanelLayout;
@@ -128,10 +119,7 @@ private:
     AppDragWidget *m_appDragWidget;
     DisplayMode m_dislayMode;
     QPoint m_mousePressPos;
-    int m_trayIconCount;
     TrayPluginItem *m_tray;
-    bool m_isHover;         // 判断鼠标是否移到desktop区域
-    bool m_needRecoveryWin; // 判断鼠标移出desktop区域是否恢复之前窗口
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
 
     PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）

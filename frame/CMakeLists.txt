@@ -28,7 +28,11 @@ pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DtkGUI REQUIRED dtkgui)
 
 # driver-manager
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} ${SRC_PATH} item/item.qrc)
+add_executable(${BIN_NAME}
+    ${SRCS}
+    ${INTERFACES}
+    ${SRC_PATH}
+    item/item.qrc)
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
@@ -49,6 +53,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     item/components
     util
     window
+    window/components
     xcb
     ../plugins/tray
     ../plugins/show-desktop

@@ -61,30 +61,12 @@ void Test_MainPanelControl::TearDown()
     mainPanel = nullptr;
 }
 
-TEST_F(Test_MainPanelControl, getTrayVisableItemCount)
-{
-    MainPanelControl panel;
-    TestPlugin plugin;
-
-    ASSERT_EQ(panel.m_trayIconCount, 0);
-    panel.getTrayVisableItemCount();
-    ASSERT_EQ(panel.m_trayIconCount, 0);
-
-    TrayPluginItem trayPluginItem(&plugin, "tray", "1.2.0");
-    panel.addTrayAreaItem(0, &trayPluginItem);
-    panel.getTrayVisableItemCount();
-}
-
 TEST_F(Test_MainPanelControl, paintEvent)
 {
     MainPanelControl panel;
     QRect paintRect(0, 0, 10, 10);
     QPaintEvent event(paintRect);
 
-    panel.m_isHover = true;
-    panel.paintEvent(&event);
-
-    panel.m_isHover = false;
     panel.paintEvent(&event);
 
     ASSERT_TRUE(true);
@@ -146,12 +128,6 @@ TEST_F(Test_MainPanelControl, eventFilter)
     QResizeEvent event((QSize()), QSize());
     panel.eventFilter(mainPanel->m_appAreaSonWidget, &event);
     panel.eventFilter(mainPanel->m_appAreaWidget, &event);
-
-    QEvent enterEvent(QEvent::Enter);
-    panel.eventFilter(mainPanel->m_desktopWidget, &enterEvent);
-
-    QEvent leaveEvent(QEvent::Leave);
-    panel.eventFilter(mainPanel->m_desktopWidget, &leaveEvent);
 
     QEvent moveEvent(QEvent::Move);
     panel.eventFilter(mainPanel->m_appAreaWidget, &moveEvent);

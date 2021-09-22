@@ -29,6 +29,7 @@
 #include "dockitemmanager.h"
 #include "touchsignalmanager.h"
 #include "utils.h"
+#include "desktop_widget.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -36,6 +37,8 @@
 #include <QString>
 #include <QApplication>
 #include <QPointer>
+#include <QBoxLayout>
+#include <QLabel>
 
 #include <DGuiApplicationHelper>
 #include <DWindowManagerHelper>
@@ -68,23 +71,17 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_dislayMode(Efficient)
-    , m_trayIconCount(0)
     , m_tray(nullptr)
-    , m_isHover(false)
-    , m_needRecoveryWin(false)
     , m_trashItem(nullptr)
 {
-    initUi();
+    initUI();
     updateMainPanelLayout();
     setAcceptDrops(true);
     setMouseTracking(true);
-    m_desktopWidget->setMouseTracking(true);
-    m_desktopWidget->setObjectName("showdesktoparea");
 
     m_appAreaWidget->installEventFilter(this);
     m_appAreaSonWidget->installEventFilter(this);
     m_trayAreaWidget->installEventFilter(this);
-    m_desktopWidget->installEventFilter(this);
     m_pluginAreaWidget->installEventFilter(this);
 
     //在设置每条线大小前，应该设置fixedsize(0,0)
@@ -94,7 +91,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_traySpliter->setFixedSize(0,0);
 }
 
-void MainPanelControl::initUi()
+void MainPanelControl::initUI()
 {
     /* 固定区域 */
     m_fixedAreaWidget->setObjectName("fixedarea");
@@ -644,25 +641,6 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    // 高效模式下，鼠标移入移出＇显示桌面＇区域的处理
-    if (watched == m_desktopWidget) {
-        if (event->type() == QEvent::Enter) {
-            if (checkNeedShowDesktop()) {
-                m_needRecoveryWin = true;
-                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-            }
-            m_isHover = true;
-            update();
-        } else if (event->type() == QEvent::Leave) {
-            // 鼠标移入时隐藏了窗口，移出时恢复
-            if (m_needRecoveryWin) {
-                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-            }
-            m_isHover = false;
-            update();
-        }
-    }
-
     // 更新应用区域子控件大小以及位置
     if (watched == m_appAreaWidget) {
         if (event->type() == QEvent::Resize)
@@ -721,17 +699,6 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_mousePressPos = e->globalPos();
-
-        QRect rect(m_desktopWidget->pos(), m_desktopWidget->size());
-        if (rect.contains(e->pos())) {
-            if (m_needRecoveryWin) {
-                // 手动点击 显示桌面窗口 后，鼠标移出时不再调用显/隐窗口进程，以手动点击设置为准
-                m_needRecoveryWin = false;
-            } else {
-                // 需求调整，鼠标移入，预览桌面时再点击显示桌面保持显示桌面状态，再点击才切换桌面显、隐状态
-                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-            }
-        }
     }
 
     QWidget::mousePressEvent(e);
@@ -984,20 +951,6 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     painter.fillRect(m_fixedSpliter->geometry(), color);
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
-
-    //描绘桌面区域的颜色
-    painter.setOpacity(1);
-    QPen pen;
-    QColor penColor(0, 0, 0, 25);
-    pen.setWidth(2);
-    pen.setColor(penColor);
-    painter.setPen(pen);
-    painter.drawRect(m_desktopWidget->geometry());
-    if (m_isHover) {
-        painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 51));
-        return;
-    }
-    painter.fillRect(m_desktopWidget->geometry(), QColor(255, 255, 255, 25));
 }
 
 /**重新计算任务栏上应用图标、插件图标的大小，并设置
@@ -1036,7 +989,7 @@ void MainPanelControl::resizeDockIcon()
     int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
     // 减去托盘间隔区域
     if (m_tray) {
-        totalLength -= (m_tray->trayVisableItemCount() + 1) * 10;
+        totalLength -= (m_tray->trayVisibleItemCount() + 1) * 10;
     }
     // 减去3个分割线的宽度
     totalLength -= 3 * SPLITER_SIZE;
@@ -1064,7 +1017,7 @@ void MainPanelControl::resizeDockIcon()
     // 参与计算的插件的个数（包含托盘和插件，垃圾桶，关机，屏幕键盘）
     int pluginCount = 0;
     if (m_tray) {
-        pluginCount = m_tray->trayVisableItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
+        pluginCount = m_tray->trayVisibleItemCount() + (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
     } else {
         pluginCount = (trashPlugin ? 1 : 0) + (shutdownPlugin ? 1 : 0) + (keyboardPlugin ? 1 : 0) + (notificationPlugin ? 1 : 0);
     }
@@ -1203,21 +1156,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize, PluginsItem
             }
         }
     }
-}
-
-/**获取托盘插件的个数并更新任务栏图标大小
- * @brief MainPanelControl::getTrayVisableItemCount
- */
-void MainPanelControl::getTrayVisableItemCount()
-{
-    if (m_trayAreaLayout->count() > 0) {
-        TrayPluginItem *w = static_cast<TrayPluginItem *>(m_trayAreaLayout->itemAt(0)->widget());
-        m_trayIconCount = w->trayVisableItemCount();
-    } else {
-        m_trayIconCount = 0;
-    }
-
-    resizeDockIcon();
 }
 
 /**时尚模式没有‘显示桌面’区域

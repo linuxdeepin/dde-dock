@@ -42,7 +42,7 @@ void TrayPluginItem::setRightSplitVisible(const bool visible)
     QMetaObject::invokeMethod(centralWidget(), "setRightSplitVisible", Qt::QueuedConnection, Q_ARG(bool, visible));
 }
 
-int TrayPluginItem::trayVisableItemCount()
+int TrayPluginItem::trayVisibleItemCount()
 {
     return m_trayVisableItemCount;
 }

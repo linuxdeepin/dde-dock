@@ -314,7 +314,7 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::insertItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::removeItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemUpdated, m_mainPanel, &MainPanelControl::itemUpdated, Qt::DirectConnection);
-    connect(DockItemManager::instance(), &DockItemManager::trayVisableCountChanged, this, &MainWindow::getTrayVisableItemCount, Qt::QueuedConnection);
+    connect(DockItemManager::instance(), &DockItemManager::trayVisableCountChanged, this, &MainWindow::resizeDockIcon, Qt::QueuedConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_menuWorker, &MenuWorker::setAutoHide);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
     connect(m_mainPanel, &MainPanelControl::itemAdded, DockItemManager::instance(), &DockItemManager::itemAdded, Qt::DirectConnection);
@@ -349,9 +349,9 @@ void MainWindow::initConnections()
  * @brief MainWindow::getTrayVisableItemCount
  * 重新获取以下当前托盘区域有多少个可见的图标，并更新图标的大小
  */
-void MainWindow::getTrayVisableItemCount()
+void MainWindow::resizeDockIcon()
 {
-    m_mainPanel->getTrayVisableItemCount();
+    m_mainPanel->resizeDockIcon();
 }
 
 /**

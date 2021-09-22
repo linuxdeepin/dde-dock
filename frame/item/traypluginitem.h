@@ -35,7 +35,7 @@ public:
 
     void setSuggestIconSize(QSize size);
     void setRightSplitVisible(const bool visible);
-    int trayVisableItemCount();
+    int trayVisibleItemCount();
 
 Q_SIGNALS:
     void trayVisableCountChanged(const int &count) const;
