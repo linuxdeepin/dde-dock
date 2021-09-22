@@ -661,15 +661,16 @@ void NetworkItem::ipConflict(const QString &ip, const QString &mac)
 void NetworkItem::onSendIpConflictDect(int index)
 {
     QTimer::singleShot(500, this, [ = ]() mutable {
-        if (index - 1 > currentIpList().size()) {
+        const QStringList& ipList = currentIpList();
+        if (index >= ipList.size()) {
             m_ipConflictChecking = false;
             return;
         }
 
-        m_networkInter->RequestIPConflictCheck(currentIpList().at(index), "");
+        m_networkInter->RequestIPConflictCheck(ipList.at(index), "");
 
         ++index;
-        if (currentIpList().size() > index) {
+        if (ipList.size() > index) {
             emit sendIpConflictDect(index);
         } else {
             m_ipConflictChecking = false;
