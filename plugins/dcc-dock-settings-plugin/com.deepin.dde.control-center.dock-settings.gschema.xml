@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <enum id="com.deepin.dde.control-center.personalization.StatusMode">
+        <value value="0" nick="Enabled" />
+        <value value="1" nick="Disabled" />
+        <value value="2" nick="Hidden" />
+    </enum>
+    <schema path="/com/deepin/dde/control-center/personalization/" id="com.deepin.dde.control-center.personalization">
+        <key name="display-mode" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+        <key name="position" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+        <key name="hide-mode" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+        <key name="size-slider" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+        <key name="multi-screen-area" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+        <key name="plugin-area" enum="com.deepin.dde.control-center.personalization.StatusMode">
+            <default>'Enabled'</default>
+            <summary></summary>
+        </key>
+    </schema>
+</schemalist>
