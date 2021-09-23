@@ -149,6 +149,10 @@ bool AppItem::isValid() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
+    // wayland没做处理
+    if (QApplication::platformName() == "wayland")
+        return;
+
     const QRect r(mapToGlobal(QPoint(0, 0)),
                   mapToGlobal(QPoint(width(), height())));
     if (!QX11Info::connection()) {

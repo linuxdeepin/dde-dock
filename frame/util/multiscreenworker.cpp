@@ -32,7 +32,10 @@
 #include <QVariantAnimation>
 #include <QX11Info>
 #include <QDBusConnection>
+#include <QGuiApplication>
+
 #include <qpa/qplatformscreen.h>
+#include <qpa/qplatformnativeinterface.h>
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
@@ -329,16 +332,16 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Positi
     case Position::Top: {
         parent()->panel()->move(0, rect.height() - panelSize);
     }
-    break;
+        break;
     case Position::Left: {
         parent()->panel()->move(rect.width() - panelSize, 0);
     }
-    break;
+        break;
     case Position::Bottom:
     case Position::Right: {
         parent()->panel()->move(0, 0);
     }
-    break;
+        break;
     }
 }
 
@@ -536,28 +539,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + monitorHeight;
         }
-        break;
+            break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y() + screenRect.height() - monitorHeight;
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Left: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + monitorHeight;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Right: {
             monitorRect.x1 = screenRect.x() + screenRect.width() - monitorHeight;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         }
 
         if (!m_monitorRectList.contains(monitorRect)) {
@@ -585,28 +588,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height() - realDockSize;
         }
-        break;
+            break;
         case Left: {
             monitorRect.x1 = screenRect.x() + realDockSize;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Right: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width() - realDockSize;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         }
 
         if (!m_extralRectList.contains(monitorRect)) {
@@ -638,28 +641,28 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + monitHeight;
         }
-        break;
+            break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y() + screenRect.height() - monitHeight;
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Left: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + monitHeight;
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         case Right: {
             monitorRect.x1 = screenRect.x() + screenRect.width() - monitHeight;
             monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
-        break;
+            break;
         }
 
 
@@ -725,13 +728,25 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     if (!isCopyMode() && (m_ds.current() != m_ds.primary() || m_hideMode != HideMode::KeepShowing)) {
         lastRect = QRect();
 
-        const auto display = QX11Info::display();
-        if (!display) {
-            qWarning() << "QX11Info::display() is " << display;
-            return;
+        if (QApplication::platformName() == "wayland") {
+            QList<QVariant> varList;
+            varList.append(0);//dock位置
+            varList.append(0);//dock高度/宽度
+            varList.append(0);//start值
+            varList.append(0);//end值
+            if (parent()->windowHandle()->handle()) {
+                QGuiApplication::platformNativeInterface()->setWindowProperty(parent()->windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
+            }
+        } else {
+            const auto display = QX11Info::display();
+            if (!display) {
+                qWarning() << "QX11Info::display() is " << display;
+                return;
+            }
+
+            XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
         }
 
-        //XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
         return;
     }
 
@@ -748,52 +763,87 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     qDebug() << "dock real geometry:" << dockGeometry;
     qDebug() << "screen width:" << DIS_INS->screenRawWidth() << ", height:" << DIS_INS->screenRawHeight();
 
-    const qreal ratio = qApp->devicePixelRatio();
+    const qreal &ratio = qApp->devicePixelRatio();
+    if (QApplication::platformName() == "wayland") {
+        // TODO 下面可能是问题的代码
+        // TODO 未计算时尚模式的边距
+        QList<QVariant> varList = {0, 0, 0, 0};
+        switch (m_position) {
+        case Position::Top:
+            varList[0] = 1;
+            varList[1] = dockGeometry.height() * ratio;
+            varList[2] = dockGeometry.x() * ratio;
+            varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
+            break;
+        case Position::Bottom:
+            varList[0] = 3;
+            varList[1] = dockGeometry.height() * ratio;
+            varList[2] = dockGeometry.x() * ratio;
+            varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
+            break;
+        case Position::Left:
+            varList[0] = 0;
+            varList[1] = dockGeometry.width() * ratio;
+            varList[2] = dockGeometry.x() * ratio;
+            varList[3] = dockGeometry.height() * ratio;
+            break;
+        case Position::Right:
+            varList[0] = 2;
+            varList[1] = dockGeometry.width() * ratio;
+            varList[2] = dockGeometry.x() * ratio;
+            varList[3] = dockGeometry.height() * ratio;
+            break;
+        }
 
-    XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
-    double strut = 0;
-    double strutStart = 0;
-    double strutEnd = 0;
+        if (parent()->windowHandle()->handle()) {
+            QGuiApplication::platformNativeInterface()->setWindowProperty(parent()->windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
+        }
+    } else {
+        XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
+        double strut = 0;
+        double strutStart = 0;
+        double strutEnd = 0;
 
-    switch (m_position) {
-    case Position::Top:
-        orientation = XcbMisc::OrientationTop;
-        strut = dockGeometry.y() + dockGeometry.height();
-        strutStart = dockGeometry.x();
-        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
-        break;
-    case Position::Bottom:
-        orientation = XcbMisc::OrientationBottom;
-        strut = DIS_INS->screenRawHeight() - dockGeometry.y();
-        strutStart = dockGeometry.x();
-        strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
-        break;
-    case Position::Left:
-        orientation = XcbMisc::OrientationLeft;
-        strut = dockGeometry.x() + dockGeometry.width();
-        strutStart = dockGeometry.y();
-        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
-        break;
-    case Position::Right:
-        orientation = XcbMisc::OrientationRight;
-        strut = DIS_INS->screenRawWidth() - dockGeometry.x();
-        strutStart = dockGeometry.y();
-        strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
-        break;
+        switch (m_position) {
+        case Position::Top:
+            orientation = XcbMisc::OrientationTop;
+            strut = dockGeometry.y() + dockGeometry.height();
+            strutStart = dockGeometry.x();
+            strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
+            break;
+        case Position::Bottom:
+            orientation = XcbMisc::OrientationBottom;
+            strut = DIS_INS->screenRawHeight() - dockGeometry.y();
+            strutStart = dockGeometry.x();
+            strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
+            break;
+        case Position::Left:
+            orientation = XcbMisc::OrientationLeft;
+            strut = dockGeometry.x() + dockGeometry.width();
+            strutStart = dockGeometry.y();
+            strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
+            break;
+        case Position::Right:
+            orientation = XcbMisc::OrientationRight;
+            strut = DIS_INS->screenRawWidth() - dockGeometry.x();
+            strutStart = dockGeometry.y();
+            strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
+            break;
+        }
+
+        qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
+
+        const auto display = QX11Info::display();
+        if (!display) {
+            qWarning() << "QX11Info::display() is " << display;
+            return;
+        }
+
+        XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
+                                               static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
+                                               static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
+                                               static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
     }
-
-    qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
-
-    const auto display = QX11Info::display();
-    if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
-        return;
-    }
-
-    // XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
-    //                                        static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
-    //                                        static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
-    //                                        static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
 }
 
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
@@ -1208,7 +1258,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
 
             // 隐藏后需要通知界面更新布局方向
             emit requestUpdateLayout();
-    });
+        });
 
     connect(group, &QVariantAnimation::finished, this, [ = ] {
         setStates(ChangePositionAnimationStart, false);
@@ -1502,9 +1552,9 @@ const QPoint MultiScreenWorker::rawXPosition(const QPoint &scaledPos)
     QScreen const *screen = Utils::screenAtByScaled(scaledPos);
 
     return screen ? screen->geometry().topLeft() +
-           (scaledPos - screen->geometry().topLeft()) *
-           screen->devicePixelRatio()
-           : scaledPos;
+                    (scaledPos - screen->geometry().topLeft()) *
+                    screen->devicePixelRatio()
+                  : scaledPos;
 }
 
 void MultiScreenWorker::onTouchPress(int type, int x, int y, const QString &key)

@@ -126,6 +126,9 @@ private:
             lastCursorSize = cursorSize;
             const char* cursorName = (position == Bottom || position == Top) ? "v_double_arrow" : "h_double_arrow";
             QCursor *newCursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), cursorName, cursorSize);
+            if (!newCursor)
+                return;
+
             setCursor(*newCursor);
             if (lastCursor)
                 delete lastCursor;

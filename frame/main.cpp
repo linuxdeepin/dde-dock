@@ -226,6 +226,8 @@ int main(int argc, char *argv[])
     // 注册任务栏的DBus服务
     MainWindow mw;
     DBusDockAdaptors adaptor(&mw);
+    mw.setAttribute(Qt::WA_NativeWindow);
+    mw.windowHandle()->setProperty("_d_dwayland_window-type", "dock");
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
 
