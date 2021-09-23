@@ -221,5 +221,7 @@ void ModuleWidget::updateSliderValue(int displayMode)
         m_sizeSlider->setValueLiteral(QString::number(m_daemonDockInter->windowSizeFashion()));
     } else if (displayMode == DisplayMode::Efficient) {
         m_sizeSlider->setValueLiteral(QString::number(m_daemonDockInter->windowSizeEfficient()));
+    } else {
+        Q_ASSERT_X(false, __FILE__, "not supported");
     }
 }
