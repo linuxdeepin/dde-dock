@@ -1470,13 +1470,13 @@ bool MultiScreenWorker::onScreenEdge(const QString &screenName, const QPoint &po
         // 除了要判断鼠标的x坐标和当前区域的位置外，还需要判断当前的坐标的y坐标是否在任务栏的区域内
         // 因为有如下场景：任务栏在左侧，双屏幕屏幕上下拼接，此时鼠标沿着最左侧x=0的位置移动到另外一个屏幕
         // 如果不判断y坐标的话，此时就认为鼠标在当前任务栏的边缘，导致任务栏在这种状况下没有跟随鼠标
-        if ((rect.x() == point.x() || rect.right() == point.x())
+        if ((rect.x() == point.x() || rect.x() + rect.width() == point.x())
                 && point.y() >= rect.top() && point.y() <= rect.bottom()) {
             return true;
         }
 
         // 同上，不过此时屏幕是左右拼接，任务栏位于上方或者下方
-        if ((rect.y() == point.y() || rect.bottom() == point.y())
+        if ((rect.y() == point.y() || rect.y() + rect.height() == point.y())
                 && point.x() >= rect.left() && point.x() <= rect.right()) {
             return true;
         }
