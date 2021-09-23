@@ -28,6 +28,7 @@ Build-Depends: debhelper (>= 8.0.0),
  libdtkgui-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
+
 Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
