@@ -121,7 +121,7 @@ private:
     bool m_active;
     int m_retryTimes;
     bool m_iconValid;
-    unsigned long m_lastclickTimes;
+    quint64 m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
     QString m_id;
