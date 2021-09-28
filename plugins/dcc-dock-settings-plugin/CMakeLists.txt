@@ -19,7 +19,7 @@ pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
 add_library(${PLUGIN_NAME} SHARED ${SRCS})
-set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
+set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ./)
 target_include_directories(${PLUGIN_NAME} PUBLIC
     ../src
     ${Qt5Widgets_INCLUDE_DIRS}
