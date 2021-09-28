@@ -33,7 +33,7 @@ SettingsModule::SettingsModule()
 
 SettingsModule::~SettingsModule()
 {
-    delete m_moduleWidget;
+
 }
 
 void SettingsModule::initialize()

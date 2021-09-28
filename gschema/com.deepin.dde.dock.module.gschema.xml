@@ -426,6 +426,14 @@
           Control Module Visible
       </description>
     </key>
+    <key type="b" name="setting-visible">
+      <default>true</default>
+      <summary>Module Visible</summary>
+      <description>
+          Control Setting Menu Visible
+      </description>
+    </key>
+    <!-- start 以下配置不再起作用，对应的菜单已经被删除，为了防止定制化场景调用出错，暂时保留-->
     <key type="b" name="hide-visible">
       <default>true</default>
       <summary>Module Visible</summary>
@@ -440,7 +448,7 @@
           Control Multiscreen Visible
       </description>
     </key>
-
+    <!-- end -->
   </schema>
  <schema path="/com/deepin/dde/dock/module/AiAssistant/" id="com.deepin.dde.dock.module.AiAssistant" gettext-domain="DDE">
     <key type="b" name="control">

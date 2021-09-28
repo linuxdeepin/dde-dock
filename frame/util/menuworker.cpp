@@ -28,6 +28,7 @@
 #include <QGSettings>
 
 #include <DApplication>
+#include <DDBusSender>
 
 #define DIS_INS DisplayManager::instance()
 
@@ -145,104 +146,27 @@ QMenu *MenuWorker::createMenu()
         settingsMenu->addAction(act);
     }
 
-    // 插件
-    if (!menuSettings || !menuSettings->keys().contains("hideVisible") || menuSettings->get("hideVisible").toBool()) {
-        QMenu *hideSubMenu = new QMenu(settingsMenu);
-        hideSubMenu->setAccessibleName("pluginsmenu");
-
-        QAction *hideSubMenuAct = new QAction(tr("Plugins"), this);
-        hideSubMenuAct->setMenu(hideSubMenu);
-
-        // create actions
-        QList<QAction *> actions;
-        for (auto *p : DockItemManager::instance()->pluginList()) {
-            if (!p->pluginIsAllowDisable())
-                continue;
-
-            const bool enable = !p->pluginIsDisable();
-            const QString &name = p->pluginName();
-            const QString &display = p->pluginDisplayName();
-
-            // 模块和菜单均需要响应enable配置的变化
-            const QGSettings *setting = Utils::ModuleSettingsPtr(name);
-            if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
-                continue;
-            }
-            delete setting;
-            setting = nullptr;
-
-            // 未开启窗口特效时，同样不显示多任务视图插件
-            if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite()) {
-                continue;
-            }
-
-            if (name == "deepin-screen-recorder-plugin") {
-                continue;
-            }
-
-            QAction *act = new QAction(display, this);
-            act->setCheckable(true);
-            act->setChecked(enable);
-            act->setData(name);
-
-            connect(act, &QAction::triggered, this, [ p ]{p->pluginStateSwitched();});
-
-            // check plugin hide menu.
-            const QGSettings *pluginSettings = Utils::ModuleSettingsPtr(name);
-            if (pluginSettings && (!pluginSettings->keys().contains("visible") || pluginSettings->get("visible").toBool()))
-                actions << act;
-        }
-
-        // sort by name
-        std::sort(actions.begin(), actions.end(), [](QAction * a, QAction * b) -> bool {
-            return a->data().toString() > b->data().toString();
-        });
-
-        // add plugins actions
-        qDeleteAll(hideSubMenu->actions());
-        for (auto act : actions)
-            hideSubMenu->addAction(act);
-
-        // add plugins menu
-        settingsMenu->addAction(hideSubMenuAct);
-    }
-
-    // 多屏显示设置 仅多屏扩展模式显示菜单
-    if ((!menuSettings || !menuSettings->keys().contains("multiscreenVisible") || menuSettings->get("multiscreenVisible").toBool())
-            && (QApplication::screens().size() > 1) && !DIS_INS->isCopyMode()) {
-        bool onlyShowPrimary = Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool();
-
-        QMenu *displaySubMenu = new QMenu(settingsMenu);
-        displaySubMenu->setAccessibleName("displaysubmenu");
-
-        QAction *onlyPrimaryScreenModeAct = new QAction(tr("Only on main screen"), this);
-        QAction *followMouseModeAct = new QAction(tr("On screen where the cursor is"), this);
-
-        onlyPrimaryScreenModeAct->setCheckable(true);
-        followMouseModeAct->setCheckable(true);
-
-        onlyPrimaryScreenModeAct->setChecked(onlyShowPrimary);
-        followMouseModeAct->setChecked(!onlyShowPrimary);
-
-        connect(onlyPrimaryScreenModeAct, &QAction::triggered, this, [ = ]{
-            Utils::SettingSaveValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", true);
-        });
-        connect(followMouseModeAct, &QAction::triggered, this, [ = ]{
-            Utils::SettingSaveValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false);
-        });
-
-        displaySubMenu->addAction(onlyPrimaryScreenModeAct);
-        displaySubMenu->addAction(followMouseModeAct);
-
-        QAction *act = new QAction(tr("Show the Dock"), this);
-        act->setMenu(displaySubMenu);
-
+    // 任务栏配置
+    if (!menuSettings || !menuSettings->keys().contains("settingVisible") || menuSettings->get("settingVisible").toBool()) {
+        QAction *act = new QAction(tr("Dock setting"), this);
+        connect(act, &QAction::triggered, this, &MenuWorker::onDockSettingsTriggered);
         settingsMenu->addAction(act);
     }
 
     delete menuSettings;
     menuSettings = nullptr;
     return settingsMenu;
+}
+
+void MenuWorker::onDockSettingsTriggered()
+{
+    DDBusSender().service("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .method("ShowPage")
+            .arg(QString("personalization"))
+            .arg(QString("Dock"))
+            .call();
 }
 
 void MenuWorker::showDockSettingsMenu()
