@@ -292,7 +292,7 @@ void WiredItem::mouseReleaseEvent(QMouseEvent *event)
     if (m_deviceState == NetworkDevice::Activated)
         return;
 
-    emit requestActiveConnection(path(), m_oldUUID);
+    emit requestActiveConnection(path(), m_uuid);
 
     DeviceItem::mouseReleaseEvent(event);
 }
