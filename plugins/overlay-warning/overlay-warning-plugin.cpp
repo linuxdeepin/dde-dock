@@ -154,6 +154,8 @@ void OverlayWarningPlugin::loadPlugin()
 
 bool OverlayWarningPlugin::isOverlayRoot()
 {
+    // TODO: 项目要求屏蔽该控件,由于这个控件未知什么作用,其中提供的点击命令也不能运行
+    return false;
     // ignore live/recovery mode
     QFile cmdline("/proc/cmdline");
     cmdline.open(QFile::ReadOnly);

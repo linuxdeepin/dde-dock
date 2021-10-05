@@ -43,6 +43,7 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
     , m_itemKey(itemKey)
     , m_dragging(false)
     , m_gsettings(nullptr)
+    , m_moduleVisible(new ModuleVisibleInter("com.deepin.dde.ModuleVisible", "/com/deepin/dde/ModuleVisible", QDBusConnection::sessionBus(), this))
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
@@ -140,6 +141,10 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
+    if (!permissionRequired()) {
+        return;
+    }
+
     m_hover = false;
     update();
 
@@ -172,6 +177,11 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 {
     if (checkGSettingsControl()) {
+        return;
+    }
+
+
+    if (!permissionRequired()) {
         return;
     }
 
@@ -320,7 +330,19 @@ bool PluginsItem::checkGSettingsControl() const
 {
     return m_gsettings ? m_gsettings->keys().contains("control") &&
            m_gsettings->get("control").toBool()
-           : false;
+                       : false;
+}
+
+bool PluginsItem::permissionRequired()
+{
+
+    if (m_pluginInter->isPermissionRequired()) return true;
+
+       if (m_moduleVisible->isValid()) return true;
+
+       return false;
+       qDebug() << "Control center modules that require root privileges:" << m_pluginInter->pluginDisplayName();
+
 }
 
 void PluginsItem::resizeEvent(QResizeEvent *event)

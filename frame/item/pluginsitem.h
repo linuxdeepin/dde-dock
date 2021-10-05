@@ -25,6 +25,10 @@
 #include "dockitem.h"
 #include "pluginsiteminterface.h"
 
+#include <com_deepin_dde_modulevisible.h>
+
+using ModuleVisibleInter = com::deepin::dde::ModuleVisible ;
+
 class QGSettings;
 class PluginsItem : public DockItem
 {
@@ -75,6 +79,12 @@ private:
     void startDrag();
     void mouseClicked();
     bool checkGSettingsControl() const;
+    /**
+     * @def permissionRequired
+     * @brief 判断是否需要弹出验证框，并验证
+     * @return 验证成功或者失败
+     */
+    bool permissionRequired();
 
 private:
     PluginsItemInterface *const m_pluginInter;
@@ -85,6 +95,7 @@ private:
 
     static QPoint MousePressPoint;
     QGSettings *m_gsettings;
+    ModuleVisibleInter *m_moduleVisible;
 };
 
 #endif // PLUGINSITEM_H
