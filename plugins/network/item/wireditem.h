@@ -86,6 +86,7 @@ signals:
 private slots:
     void deviceStateChanged(NetworkDevice::DeviceStatus state);
     void changedActiveWiredConnectionInfo(const QJsonObject &connInfo);
+    void changedConnections(const QList<QJsonObject> &connInfos);
 
 private:
     bool m_isEnter = false;
