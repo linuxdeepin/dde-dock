@@ -33,6 +33,7 @@
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
+const QString OnlyShowByWin = "onlyShowByWin";
 
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
 // Monitor数据－＞屏幕是否可停靠更新－＞监视唤醒区域更新，任务栏显示区域更新－＞拖拽区域更新－＞通知后端接口，通知窗管
@@ -60,6 +61,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_draging(false)
     , m_autoHide(true)
     , m_btnPress(false)
+    , m_onlyShowByWin(false)
 {
     qDebug() << "init dock screen: " << m_ds.current();
     initMembers();
@@ -204,7 +206,8 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
     if (m_registerKey != key || m_btnPress)
         return;
-
+    if (m_onlyShowByWin)
+        return;
     tryToShowDock(x, y);
 }
 
@@ -963,6 +966,11 @@ void MultiScreenWorker::initGSettingConfig()
             m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
         } else {
             qDebug() << "can not find key:" << OnlyShowPrimary;
+        }
+        if (m_monitorSetting->keys().contains(OnlyShowByWin)) {
+            m_onlyShowByWin = m_monitorSetting->get(OnlyShowByWin).toBool();
+        } else {
+            qDebug() << "can not find key:" << OnlyShowByWin;
         }
     } else {
         qDebug() << "com.deepin.dde.dock is uninstalled.";
@@ -1795,7 +1803,8 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
         return;
     }
     m_touchPress = false;
-
+    if (m_onlyShowByWin)
+        return;
     // 不从指定方向划入，不进行任务栏唤醒；如当任务栏在下，需从下往上划
     switch (m_position) {
     case Top:
@@ -1895,5 +1904,7 @@ void MultiScreenWorker::onConfigChange(const QString &changeKey)
         m_mtrInfo.setShowInPrimary(m_monitorSetting->get(OnlyShowPrimary).toBool());
         // 每次切换都更新一下屏幕显示的信息
         emit requestUpdateMonitorInfo();
+    } else if (changeKey == OnlyShowByWin) {
+        m_onlyShowByWin = m_monitorSetting->get(OnlyShowByWin).toBool();
     }
 }

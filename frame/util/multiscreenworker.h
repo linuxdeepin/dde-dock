@@ -478,6 +478,9 @@ private:
     //当前屏幕的所有方向
     RotationList m_rotations;
 
+    // 是否忽略对触控屏和鼠标显示任务栏的响应
+    bool m_onlyShowByWin;
+
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     int m_screenRawHeight;
     int m_screenRawWidth;
