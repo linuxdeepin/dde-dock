@@ -173,9 +173,9 @@ TEST_F(Test_MainPanelControl, moveItem)
 
     PluginsItem fixedPluginItem1(&fixedPlugin, "monitor", "1.2.1");
     PluginsItem fixedPluginItem2(&fixedPlugin, "monitor", "1.2.1");
-    panel.addPluginAreaItem(0, &fixedPluginItem1);
-    panel.addPluginAreaItem(0, &fixedPluginItem2);
-    panel.moveItem(&fixedPluginItem1, &fixedPluginItem1);
+    panel.addFixedAreaItem(0, &fixedPluginItem1);
+    panel.addFixedAreaItem(0, &fixedPluginItem2);
+    panel.moveItem(&fixedPluginItem1, &fixedPluginItem2);
 
     // dropTargetItem test
     panel.dropTargetItem(&dockItem1, QPoint(0, 0));
