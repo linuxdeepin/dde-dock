@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>네트워크 사용</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>네트워크 사용안함</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>네트워크 설정</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>도구집 해제</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>유선 연결 사용안함</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>유선 연결 사용가능</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>무선 연결 사용안함</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>무선 연결 사용가능</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>네트워크 사용안함</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>네트워크 사용</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>네트워크 설정</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>디바이스 사용해제됨</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>무선 연결: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>유선 연결: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>연결되지 않음</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>연결 중</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>연결됨, 인터넷 없음</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>네트워크 케이블 제거됨</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>무선 네트워크</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>유선 네트워크</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>네트워크</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>유선 네트워크</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>유선 네트워크 %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>휴지통 - %1 파일</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>비우기</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>무선 네트워크</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>무선 네트워크 %1</translation>
     </message>
 </context>
 </TS>

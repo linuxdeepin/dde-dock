@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Włącz sieć</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Wyłącz sieć</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ustawienia sieci</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -155,15 +140,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Wyjdź z trybu bezpiecznego</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Tryb bezpieczny</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dock jest w trybie bezpiecznym, wyjdź z niego aby wyświetlić ten tryb poprawnie</translation>
     </message>
 </context>
 <context>
@@ -222,15 +207,15 @@
     </message>
     <message>
         <source>Only on main screen</source>
-        <translation type="unfinished"/>
+        <translation>Tylko na głównym ekranie</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>Na ekranie gdzie znajduje się kursor</translation>
     </message>
     <message>
         <source>Show the Dock</source>
-        <translation type="unfinished"/>
+        <translation>Pokaż Dock</translation>
     </message>
 </context>
 <context>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Odepnij</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Wyłącz połączenie przewodowe</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Włącz połączenie przewodowe</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Wyłącz połączenie bezprzewodowe</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Włącz połączenie bezprzewodowe</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Wyłącz sieć</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Włącz sieć</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ustawienia sieci</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Urządzenie jest wyłączone</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Połączenie bezprzewodowe: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Połączenie przewodowe: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Brak połączenia</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Łączenie</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Połączono, ale brak dostępu do Internetu</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Kabel sieciowy jest odłączony</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Sieć bezprzewodowa</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Sieć przewodowa</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Połączenie nieudane</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Sieć</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Sieć przewodowa</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Sieć przewodowa %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Kosz - %1 pliki</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Przenieś do kosza</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Opróżnij</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Sieć bezprzewodowa</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Sieć bezprzewodowa %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>تورنى قوزغىتىش </translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>تورنى تاقاش</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>تور تەڭشىكى </translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>چىقىرىۋېتىش</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>سىملىق تورنى تاقاش</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>سىملىق تورنى ئېچىش</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>سىمسىز تورنى تاقاش</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>سىمسىز تورنى ئېچىش</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>تورنى تاقاش</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>تورنى قوزغىتىش </translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>تور تەڭشىكى </translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>ئۈسكىنە چەكلەش</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>سىمسىز تور:  %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>سىملىق تور:  %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>ئۇلانمىدى</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>ئۇلىنىۋاتىدۇ</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>ئۇلاندى ، لېكىن تورغا چىققىلى بولمايدۇ</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>تور سىمى ئۇلانمىغان </translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>سىمسىز تور</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>سىملىق تور</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>ئۇلىنىش مەغلۇپ بولدى</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP ئادرېس توقۇنۇشۇپ قالدى</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>تور</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>سىملىق تور</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>سىملىق تور%1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>ئەخلەت ساندۇقى - %1ھۆججەت</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>ئەخلەت ساندۇقىغا يۆتكەش</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>قۇرۇق</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>سىمسىز تور</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>سىمسىز تور%1</translation>
     </message>
 </context>
 </TS>

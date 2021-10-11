@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Omogući mrežu</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Onemogući mrežu</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Mrežne postavke</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Onemogući žično povezivanje</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Omogući žično povezivanje</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Onemogući bežično povezivaqnje</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Omogući bežično povezivanje</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Onemogući mrežu</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Omogući mrežu</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Mrežne postavke</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Uređaj je onemogućen</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Bežična veza: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Žična  veza: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Nije spojeno</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Povezujem se</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Spojen ali nema pristupa internetu</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Mrežni kabel je isključen</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Bežična mreža</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Žična mreža</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Mreža</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Žična mreža</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Žična mreža %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Smeće - %1 datoteke</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Prazno</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Bežična mreža</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Bežična mreža %1</translation>
     </message>
 </context>
 </TS>

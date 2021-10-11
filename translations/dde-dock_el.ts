@@ -7,6 +7,58 @@
     </message>
 </context>
 <context>
+    <name>AppDragWidget</name>
+    <message>
+        <source>Remove</source>
+        <translation>Αφαίρεση</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Ρυθμίσεις Bluetooth</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation>Απενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation>Ρυθμίσεις Bluetooth</translation>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation>%1 συνδέθηκε</translation>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation>Σύνδεση...</translation>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation>Απενεργοποιήθηκε</translation>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
@@ -21,30 +73,15 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12-ωρη ώρα</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24-ωρη ώρα</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Ενεργοποίηση δικτύου </translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Απενεργοποίηση δικτύου</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ρυθμίσεις δικτύου </translation>
+        <translation>Ρυθμίσεις ώρας </translation>
     </message>
 </context>
 <context>
@@ -93,7 +130,29 @@
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Πρόγραμμα εκκίνησης</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Έξοδος Ασφαλής Λειτουργίας</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Γραμμή Εργασιών - Ασφαλής Λειτουργία</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Η Γραμμή Εργασιών είναι σε ασφαλή λειτουργία, παρακαλώ αποχωρήστε για να εμφανιστεί σωστά</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Μοντέρνα λειτουργία</translation>
@@ -146,30 +205,28 @@
         <source>Plugins</source>
         <translation>Πρόσθετα</translation>
     </message>
-</context>
-<context>
-    <name>LauncherItem</name>
     <message>
-        <source>Launcher</source>
-        <translation>Πρόγραμμα εκκίνησης</translation>
+        <source>Only on main screen</source>
+        <translation>Μόνο στην κύρια οθόνη</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>Στην οθόνη όπου βρίσκεται ο κέρσορας</translation>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation>Εμφάνιση Γραμμής Εργασιών</translation>
     </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation type="unfinished"/>
+        <translation>Λειτουργία Multitasking</translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Δίκτυο</translation>
+        <translation>Αφαίρεση από την γραμμή εργασιών</translation>
     </message>
 </context>
 <context>
@@ -210,12 +267,8 @@
         <translation>Φόρτιση %1, 2% ώρες και %3 λεπτά μέχρι να γεμίσει</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation>Πλήρη Φόρτιση</translation>
-    </message>
-    <message>
         <source>Capacity %1</source>
-        <translation type="unfinished"/>
+        <translation>Χωρητικότητα %1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -223,11 +276,11 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation type="unfinished"/>
+        <translation>Χωρητικότητα %1 ...</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation type="unfinished"/>
+        <translation>Χωρητικότητα %1, πλήρης φόρτιση</translation>
     </message>
 </context>
 <context>
@@ -238,7 +291,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Αφαίρεση από την γραμμή εργασιών</translation>
     </message>
 </context>
 <context>
@@ -286,10 +339,6 @@
         <source>Device</source>
         <translation>Συσκευή</translation>
     </message>
-    <message>
-        <source>Application</source>
-        <translation>Εφαρμογή</translation>
-    </message>
 </context>
 <context>
     <name>SoundItem</name>
@@ -303,11 +352,11 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Ρυθμίσεις ήχου</translation>
     </message>
     <message>
         <source>Volume %1</source>
-        <translation type="unfinished"/>
+        <translation>Ένταση %1</translation>
     </message>
 </context>
 <context>
@@ -331,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Κάδος απορριμμάτων - %1 αρχεία</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -341,50 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Κενό</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>Tray Συστήματος</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Άγνωστο</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Ενσύρματη Σύνδεση: %1 </translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Χωρίς δίκτυο  </translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Συνδεδεμένο αλλά χωρίς πρόσβαση στο διαδίκτυο</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Ασύρματο Δίκτυο</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Ασύρματο Δίκτυο %1</translation>
     </message>
 </context>
 </TS>

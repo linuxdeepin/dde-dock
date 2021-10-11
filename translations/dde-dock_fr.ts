@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Activer le réseau</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Désactiver le réseau</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Paramètres réseau</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Détacher du dock</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Désactiver la connexion filaire</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Activer la connexion filaire</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Désactiver la connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Activer la connexion sans fil</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Désactiver le réseau</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Activer le réseau</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Paramètres réseau</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Périphérique désactivé </translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Connexion sans fil : %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Connexion filaire : %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Non connecté</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Connexion</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connecté mais pas d’accès internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Câble réseau débranché</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Réseau sans fil</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Réseau filaire</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>La connexion a échoué</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Réseau</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Réseau filaire</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Réseau filaire %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Corbeille - %1 fichiers</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Vide</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Réseau sans fil</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Réseau sans fil %1</translation>
     </message>
 </context>
 </TS>

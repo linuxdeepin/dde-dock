@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Habilitar red</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Deshabilitar red</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ajustes de red</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -226,7 +211,7 @@
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation>En la pantalla donde está el cursor</translation>
+        <translation>En la pantalla donde está el puntero</translation>
     </message>
     <message>
         <source>Show the Dock</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Desanclar</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Deshabilitar conexión cableada</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Habilitar conexión cableada</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Deshabilitar conexión inalámbrica</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Habilitar conexión inalámbrica</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Deshabilitar red</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Habilitar red</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ajustes de red</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispositivo deshabilitado</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexión inalámbrica: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexión cableada: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>No conectado</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Conectando</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectado pero sin acceso a internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Cable de red desconectado</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Red inalámbrica</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Red cableada</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Conexión fallida</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Red</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Red cableada</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Red cableada %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Papelera - %1 archivos</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Mover a la papelera</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Vaciar</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Red inalámbrica</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Red inalámbrica %1</translation>
     </message>
 </context>
 </TS>

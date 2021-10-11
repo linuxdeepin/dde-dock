@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Netwerk inschakelen</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Netwerk uitschakelen</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Netwerkinstellingen</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Losmaken</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Bekabelde verbinding uitschakelen</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Bekabelde verbinding inschakelen</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Draadloze verbinding uitschakelen</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Draadloze verbinding inschakelen</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Netwerk uitschakelen</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Netwerk inschakelen</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Netwerkinstellingen</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Apparaat uitgeschakeld</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Draadloze verbinding: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Bekabelde verbinding: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Niet verbonden</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Bezig met verbinden</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Verbonden, maar geen internettoegang</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Netwerkkabel is niet aangesloten</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Draadloos netwerk</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Bekabeld netwerk</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Verbinding mislukt</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP-conflict</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Netwerk</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Bekabeld netwerk</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Bekabeld netwerk: %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Prullenbak - %1 bestanden</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Verplaatsen naar prullenbak</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Leeg</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Draadloos netwerk</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Draadloos netwerk: %1</translation>
     </message>
 </context>
 </TS>

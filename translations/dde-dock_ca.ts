@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Habilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Inhabilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configuració de la xarxa</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Treu de l&apos;acoblador</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Inhabilita la connexió amb fil</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Habilita la connexió amb fil</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Inhabilita la connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Habilita la connexió sense fil</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Inhabilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Habilita la xarxa</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configuració de la xarxa</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispositiu inhabilitat</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Connexió sense fil: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Connexió amb fil: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>No connectat</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Es connecta</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connectat però sense accés a Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>El cable de xarxa està desendollat.</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Xarxa sense fil</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Xarxa amb fil</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Ha fallat la connexió.</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>Conflicte d&apos;IP</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Xarxa</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Xarxa amb fil</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Xarxa amb fil: %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Paperera: %1 fitxers</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Buit</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Xarxa sense fil</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Xarxa sense fil: %1</translation>
     </message>
 </context>
 </TS>

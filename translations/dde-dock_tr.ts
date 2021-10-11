@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Ağı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Ağı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ay ayarları</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -230,7 +215,7 @@
     </message>
     <message>
         <source>Show the Dock</source>
-        <translation>Görev Çubuğunu Göster</translation>
+        <translation>Rıhtımda Göster</translation>
     </message>
 </context>
 <context>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Ayır</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Kablolu bağlantıyı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Kablolu bağlantıyı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Kablosuz bağlantıyı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Kablosuz bağlantıyı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Ağı devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Ağı etkinleştir</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Ay ayarları</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Aygıt devre dışı</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Kablosuz bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablolu bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Bağlı değil</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Bağlanıyor</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Bağlı ancak İnternet erişimi yok</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Ağ kablosu takılı değil</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Kablosuz Ağ</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kablolu Ağ</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Bağlantı başarısız</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP çakışması</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Ağ</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kablolu Ağ</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Kablolu Ağ %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Çöp Kutusu - %1 dosya</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Çöp kutusuna taşı</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Boşalt</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Kablosuz Ağ</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Kablosuz Ağ %1</translation>
     </message>
 </context>
 </TS>

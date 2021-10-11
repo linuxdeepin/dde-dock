@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Ativar rede</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Desativar rede</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configurações de rede</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -163,7 +148,7 @@
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>A Dock está em modo de segurança; saia para exibi-la corretamente</translation>
+        <translation>O Dock está em modo de segurança; saia para exibi-lo corretamente</translation>
     </message>
 </context>
 <context>
@@ -202,7 +187,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Ocultar inteligente</translation>
+        <translation>Ocultar automaticamente</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Remover da Dock</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Desativar a conexão cabeada</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Ativar a conexão cabeada</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Desativar a conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Ativar a conexão Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Desativar rede</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Ativar rede</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configurações de rede</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispositivo desativado</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexão Wi-Fi: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexão Cabeada: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Não conectado</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Conectando</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectado, sem Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Cabo de rede desconectado</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rede Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rede Cabeada</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>A conexão falhou</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>Conflito de IP</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Rede</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rede Cabeada</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Rede Cabeada %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Lixeira - %1 arquivos</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Mover para a lixeira</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Esvaziar</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rede Wi-Fi</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Rede Wi-Fi %1</translation>
     </message>
 </context>
 </TS>

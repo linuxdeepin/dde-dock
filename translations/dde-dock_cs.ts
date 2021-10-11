@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Povolit síť</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Zakázat síť</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Nastavení sítě</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -107,7 +92,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -155,15 +140,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Ukončit náhradní režim</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dok – náhradní režim</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dok je v náhradním režimu – ukončete, aby se zobrazil správně</translation>
     </message>
 </context>
 <context>
@@ -222,15 +207,15 @@
     </message>
     <message>
         <source>Only on main screen</source>
-        <translation type="unfinished"/>
+        <translation>Pouze na hlavní obrazovce</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>Na obrazovce, na které se nachází kurzor</translation>
     </message>
     <message>
         <source>Show the Dock</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit panel</translation>
     </message>
 </context>
 <context>
@@ -241,97 +226,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Zrušit ukotvení</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Vypnout drátové připojení</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Zapnout drátové připojení</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Vypnout bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Zapnout bezdrátové připojení</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Zakázat síť</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Povolit síť</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Nastavení sítě</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Zařízení zakázáno</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Bezdrátové připojení: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Drátové připojení: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Nepřipojeno</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Připojuje se</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Připojeno, ale bez přístupu k Internetu</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Síťový kabel odpojen</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Bezdrátová síť</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Drátová síť</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Připojení se nezdařilo</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Síť</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Drátová síť</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Drátová síť %1</translation>
+        <translation>Storno ukotvení</translation>
     </message>
 </context>
 <context>
@@ -396,7 +291,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Zrušit ukotvení</translation>
+        <translation>Storno ukotvení</translation>
     </message>
 </context>
 <context>
@@ -449,7 +344,7 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Zrušit ztlumení</translation>
+        <translation>Storno ztlumení</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Koš – %1 souborů</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Přesunout do koše</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Prázdný</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Bezdrátová síť</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Bezdrátová síť %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Activar a rede</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Desactivar a rede</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Axustes da rede</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Desbordar</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Desactivar a conexión con fíos</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Activa a conexión con fíos</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Desactivar a conexión sen fíos</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Activar a conexión sen fíos</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Desactivar a rede</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Activar a rede</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Axustes da rede</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispositivo desactivado</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexión sen fíos:% 1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexión con fíos: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Sen conexión</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Conectando</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectado pero sen acceso a internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Cabo de rede desconectado</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rede sen fíos</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rede con fíos</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Rede</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rede con fíos</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Rede con fíos % 1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Lixo - %1 ficheiros</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Baleirar</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rede sen fíos</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Rede sen fíos %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Cho phép mạng</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Vô hiệu hóa mạng</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Thiết lập mạng</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Gỡ khỏi dock</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Tắt kết nối mạng dây</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Mở kết nối mạng dây</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Tắt kết nối wifi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Bật kết nối wifi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Vô hiệu hóa mạng</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Cho phép mạng</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Thiết lập mạng</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Thiết bị bị vô hiệu hóa</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Kết nối không dây: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kết nối Có dây: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Không được kết nối</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Đang kết nối</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Đã kết nối nhưng không có truy cập Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Mạng dây đã ngắt</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Mạng không dây</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Mạng kết nối dây</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Mạng</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Mạng kết nối dây</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Mạng kết nối dây %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Rác - %1 tập tin</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Làm sạch</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Mạng không dây</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Mạng Không dây %1</translation>
     </message>
 </context>
 </TS>

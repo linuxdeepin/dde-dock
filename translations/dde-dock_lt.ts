@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Įjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Išjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Tinklo nustatymai</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Atskirti nuo doko</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Išjungti laidinį ryšį</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Įjungti laidinį ryšį</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Išjungti belaidį ryšį</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Įjungti belaidį ryšį</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Išjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Įjungti tinklą</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Tinklo nustatymai</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Įrenginys išjungtas</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Belaidis ryšys: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Laidinis ryšys: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Neprijungta</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Jungiamasi</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Prisijungta, bet nėra prieigos prie interneto</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Atjungtas tinklo laidas</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Belaidis tinklas</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Laidinis tinklas</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Tinklas</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Laidinis tinklas</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Laidinis tinklas %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Šiukšlinė - %1 failų</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Išvalyti</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Belaidis tinklas</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Belaidis tinklas %1</translation>
     </message>
 </context>
 </TS>

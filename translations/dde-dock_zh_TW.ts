@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>啟用網路</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>停用網路</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>網路設定</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>解除駐停</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>關閉有線網路</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>啟用有線網路</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>關閉無線網路</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>啟用有線網路</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>停用網路</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>啟用網路</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>網路設定</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>已停用裝置</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>無線連接：%1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>有線網路：%1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>未連線</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>正在連線</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>已連線但不能存取網路</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>已拔除網路線</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>無線網路</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>有線網路</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>連線失敗</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP位址衝突</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>網路</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>有線網路</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>有線網路 %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>回收桶－%1 個檔案</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>移動到回收站</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>清空</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>無線網路</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>無線網路 %1</translation>
     </message>
 </context>
 </TS>

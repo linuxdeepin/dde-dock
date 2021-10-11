@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Enable network</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Disable network</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Network settings</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Undock</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Disable wired connection</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Enable wired connection</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Disable wireless connection</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Enable wireless connection</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Disable network</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Enable network</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Network settings</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Device disabled</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Wireless connection: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Wired connection: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Not connected</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Connecting</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connected but no Internet access</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Network cable unplugged</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Wireless Network</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Wired Network</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Connection failed</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP conflict</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Network</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Wired Network</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Wired Network %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Trash - %1 files</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Move to trash</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Empty</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Wireless Network</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Wireless Network %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Aktivér netværk</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Deaktivér netværk</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Netværksindstillinger</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Fjern fra dok</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Deaktivér kablet forbindelse</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Aktivér kablet forbindelse</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Deaktivér trådløs forbindelse</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Aktivér trådløs forbindelse</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Deaktivér netværk</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Aktivér netværk</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Netværksindstillinger</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Enhed deaktiveret</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Trådløs forbindelse: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Kablet forbindelse: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Ikke tilsluttet</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Opretter forbindelse</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Tilsluttet men ingen internetadgang</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Netværkskablet er frakoblet</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Trådløst netværk</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kablet netværk</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Netværk</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kablet netværk</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Kablet netværk %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Papirkurv - %1 filer</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Tomt</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Trådløst netværk</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Trådløst netværk %1</translation>
     </message>
 </context>
 </TS>

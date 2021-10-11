@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>नेटवर्क सक्रिय करें</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>नेटवर्क निष्क्रिय करें</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>नेटवर्क सेटिंग्स</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>डॉक से हटाएँ</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>केबल कनेक्शन निष्क्रिय करें</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>केबल कनेक्शन सक्रिय करें</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>केबल रहित कनेक्शन निष्क्रिय करें</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>केबल रहित कनेक्शन सक्रिय करें</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>नेटवर्क निष्क्रिय करें</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>नेटवर्क सक्रिय करें</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>नेटवर्क सेटिंग्स</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>डिवाइस डिसेबल्ड</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>केबल रहित कनेक्शन : %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>तार वाला कनेक्शन : %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>कनेक्ट नहीं है</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>कनेक्ट हो रहा है </translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>कनेक्टेड लेकिन इंटरनेट आक्सेस नही है</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>नेटवर्क केबल अनप्लग है </translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>बेतार नेटवर्क</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>तार वाला नेटवर्क</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>नेटवर्क </translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>तार वाला नेटवर्क</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>केबल नेटवर्क %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>कचरा - %1 फ़ाइलें</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>खाली </translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>बेतार नेटवर्क</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>बेतार नेटवर्क %1</translation>
     </message>
 </context>
 </TS>

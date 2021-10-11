@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>ජාලය සක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>ජාලය අක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>ජාල සැකසුම්</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>අහෝසි කරන්න</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>රැහැන් සම්බන්ධතාවය අක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>රැහැන් සම්බන්ධතාවය සක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය අක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය සක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>ජාලය අක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>ජාලය සක්‍රීය කරන්න</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>ජාල සැකසුම්</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>උපාංගය අක්‍රීය කර ඇත</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>රැහැන් සම්බන්ධතාවය: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>සම්බන්ධතා නොමැත</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>සම්බන්ධ වෙමින් පවතී</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>ජාලගතව ඇතත් අන්තර්ජාල ප්‍රවේශය නොමැත</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>ජාල කේබලය විසන්ධි කර ඇත</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>රැහැන් රහිත ජාලය</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>රැහැන්ගත ජාලය</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>ජාලය</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>රැහැන්ගත ජාලය</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>රැහැන්ගත ජාලය %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>අපද්‍රව්‍ය - ගොනු %1 </translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>හිස්</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>රැහැන් රහිත සම්බන්ධතාවය</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>රැහැන් රහිත ජාලය %1</translation>
     </message>
 </context>
 </TS>

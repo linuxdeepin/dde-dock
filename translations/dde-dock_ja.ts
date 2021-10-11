@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>ネットワークを有効にする</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>ネットワークを無効にする</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>ネットワーク設定</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>ドックから外す</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>有線接続を無効にする</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>有線接続を有効にする</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>無線接続を無効にする</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>無線接続を有効にする</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>ネットワークを無効にする</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>ネットワークを有効にする</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>ネットワーク設定</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>デバイスが無効</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>無線接続: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>有線接続: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>未接続</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>接続試行中</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>接続済み、インターネットアクセスなし</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>ネットワークケーブル未接続</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>無線ネットワーク</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>有線ネットワーク</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>ネットワーク</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>有線ネットワーク</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>有線ネットワーク %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>ゴミ箱 - %1 ファイル</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>空</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>無線ネットワーク</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>無線接続 %1</translation>
     </message>
 </context>
 </TS>

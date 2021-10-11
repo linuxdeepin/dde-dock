@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>غیر فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>تنظیمات شبکه</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -220,6 +205,18 @@
         <source>Plugins</source>
         <translation>پلاگین ها</translation>
     </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show the Dock</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -230,92 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>باز کردن از داک</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>غیر فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>فعال کردن شبکه</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>تنظیمات شبکه</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>دستگاه غیرفعال است</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>اتصال سیمی %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>متصل نیست</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>در حال اتصال</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>متصل است اما دسترسی به اینترنت ندارد</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>کابل شبکه وصل نشده است</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>شبکه بیسیم</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>شبکه کابلی</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>شبکه</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>شبکه کابلی</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>شبکه سیمی %1</translation>
     </message>
 </context>
 <context>
@@ -354,10 +265,6 @@
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
         <translation>درحال شارژ %1 ، %2 ساعت و  %3 دقیقه تا شارژ کامل</translation>
-    </message>
-    <message>
-        <source>Charged</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -473,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>سطل زباله - %1 فایل</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -483,24 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>خالی</translation>
-    </message>
-</context>
-<context>
-    <name>TrayPlugin</name>
-    <message>
-        <source>System Tray</source>
-        <translation>سینی سیستم</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>شبکه بیسیم</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>شبکه بی سیم %1</translation>
     </message>
 </context>
 </TS>

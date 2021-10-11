@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Benarkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Lumpuhkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Tetapan rangkaian</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -155,15 +140,15 @@
     <name>MainWindow</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Keluar dari Mod Selamat</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Labuh - Mod Selamat</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Labuh dalam mod selamat, sila keluar dahulu supaya dapat dipaparkan dengan baik</translation>
     </message>
 </context>
 <context>
@@ -222,15 +207,15 @@
     </message>
     <message>
         <source>Only on main screen</source>
-        <translation type="unfinished"/>
+        <translation>Hanya dalam skrin utama</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>Atas skrin yang mana kursor berada</translation>
     </message>
     <message>
         <source>Show the Dock</source>
-        <translation type="unfinished"/>
+        <translation>Tunjuk Labuh</translation>
     </message>
 </context>
 <context>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Tanggal</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Lumpuhkan sambungan berwayar</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Benarkan sambungan berwayar</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Lumpuhkan sambungan tanpa wayar</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Benarkan sambungan tanpa wayar</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Lumpuhkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Benarkan rangkaian</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Tetapan rangkaian</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Peranti dilumpuhkan</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Sambungan tanpa wayar: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Sambungan berwayar: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Tidak bersambung</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Menyambung</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Bersambung tetapi tiada capaian Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Kabel rangkaian telah dicabut</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rangkaian Tanpa Wayar</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rangkaian Berwayar</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Rangkaian</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rangkaian Berwayar</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Rangkaian Berwayar %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Fail %1- disampahkan</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Kosong</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rangkaian Tanpa Wayar</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Sambungan Tanpa Wayar %1</translation>
     </message>
 </context>
 </TS>

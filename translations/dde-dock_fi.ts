@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Kytke verkko käyttöön</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Poista verkko käytöstä</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Verkon asetukset</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -241,97 +226,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Irrota</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Poista kiinteä yhteys</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Kytke kiinteä yhteys</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Poista langaton käytöstä</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Kytke langaton käyttöön</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Poista verkko käytöstä</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Kytke verkko käyttöön</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Verkon asetukset</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Laite suljettu</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Langaton: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Verkkokaapeli: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Ei yhteyttä</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Yhdistää</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Yhdistetty, mutta ei internet osoitetta</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Verkkokaapeli irrotettu</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Langaton verkko</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kaapeli</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Yhteys epäonnistui</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP ristiriita</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Verkko</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Kaapeli</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Kaapeli %1</translation>
+        <translation>Poista</translation>
     </message>
 </context>
 <context>
@@ -396,7 +291,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Irrota</translation>
+        <translation>Poista</translation>
     </message>
 </context>
 <context>
@@ -431,7 +326,7 @@
     </message>
     <message>
         <source>Power settings</source>
-        <translation>Asetukset virta</translation>
+        <translation>Virta-asetukset</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Roskakori - %1 tiedostoa</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Roskakoriin</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Tyhjennä</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Langaton verkko</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Langaton verkko: %1</translation>
     </message>
 </context>
 </TS>

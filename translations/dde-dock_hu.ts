@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Hálózat engedélyezése</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Hálózat letiltása</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Hálózati beállítások</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Eltávolítás a Dokkolóról</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Vezetékes kapcsolat megszüntetése</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Vezetékes kapcsolat engedélyezése</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Vezeték nélküli kapcsolat megszüntetése</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Vezeték nélküli kapcsolat engedélyezése</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Hálózat letiltása</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Hálózat engedélyezése</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Hálózati beállítások</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Eszköz letiltva</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Vezeték nélküli kapcsolat: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Vezetékes kapcsolat: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Nincs csatlakozva</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Csatlakozás</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Csatlakoztatva, de nincs internet hozzáférés</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Hálózati kábel kihúzva</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Vezeték nélküli hálózat</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Vezetékes hálózat </translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>A kapcsolódás sikertelen</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IP cím ütközés</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Hálózat</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Vezetékes hálózat </translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Vezetékes hálózat %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Kukában: %1 fájl</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Áthelyezés a Kukába</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Ürítés</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Vezeték nélküli hálózat</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Vezeték nélküli hálózat %1 </translation>
     </message>
 </context>
 </TS>

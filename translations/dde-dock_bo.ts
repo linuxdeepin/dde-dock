@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>དྲ་རྒྱ་སྤྱོད་པ།</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>དྲ་རྒྱ་ཁ་རྒྱོབ།</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>དྲ་རྒྱ་སྒྲིག་འགོད།</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>བསྡད་པ་གཙང་སེལ།</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ་ཁ་རྒྱོབ།</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ་སྤྱོད་པ།</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ་ཁ་རྒྱོབ།</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ་སྤྱོད་པ།</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>དྲ་རྒྱ་ཁ་རྒྱོབ།</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>དྲ་རྒྱ་སྤྱོད་པ།</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>དྲ་རྒྱ་སྒྲིག་འགོད།</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>སྒྲིག་ཆས་སྤྱོད་མི་ཆོག</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ། %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ། %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>སྦྲེལ་མེད་པ། </translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>སྦྲེལ་བཞིན་པ། </translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>དྲ་རྒྱ་དང་འབྲེལ་ཟིན་ཡང་མཉམ་སྦྲེལ་དྲ་རྒྱར་འཛུལ་མི་ཐུབ།</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>དྲ་སྐུད་མཐུད་མི་འདུག</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ།</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ།</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>འབྲེལ་མཐུད་བྱེད་མ་ཐུབ།</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>IPགནས་ཡུལ་འགལ་ཟླ་བྱུང་བ།</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>དྲ་རྒྱ། </translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ།</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>སྐུད་ཡོད་དྲ་རྒྱ་%1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>སྙིགས་སྣོད་ཀྱི་ཡིག་ཆ་%1</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>སྙིགས་སྣོད་ནང་བླུགས་པ།</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>གསལ་ཐོ་གཙང་སེལ།</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ།</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>སྐུད་མེད་དྲ་རྒྱ་%1</translation>
     </message>
 </context>
 </TS>

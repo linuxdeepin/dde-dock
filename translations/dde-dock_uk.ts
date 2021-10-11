@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Увімкнути мережу</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Вимкнути мережу</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Налаштування Інтернет-мережі</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Розстикуватись</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Вимкнути дротове з&apos;єднання</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Увімкнути дротове з&apos;єднання</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Вимкнути бездротове з&apos;єднання</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Увімкнути бездротове з&apos;єднання</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Вимкнути мережу</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Увімкнути мережу</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Налаштування Інтернет-мережі</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Пристрій вимкнено</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Бездротове з&apos;єднання: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Дротове з&apos;єднання %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Не підключено</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>З&apos;єднання</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>З&apos;єднано, але доступу до інтернету немає</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Вийнято інтернет-кабель</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Бездротова мережа</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Провідна мережа</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Не вдалося встановити з&apos;єднання</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>Конфлікт IP</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Мережа</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Провідна мережа</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Дротова мережа %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Смітник - %1 файлів</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Пересунути до смітника</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Пусто</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Бездротова мережа</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Бездротова мережа %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Включить сеть</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Отключить сеть</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Настройки сети</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Открепить</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Отключить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Включить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Отключить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Включить проводное соединение</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Отключить сеть</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Включить сеть</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Настройки сети</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Устройство отключено</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Беспроводное соединение: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Проводное подключение к: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Не подключено</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Соединение</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Подключено, без доступа к Интернету</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Сетевой кабель отключен</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Беспроводная Сеть</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Проводная Сеть</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Ошибка подключения</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Сеть</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Проводная Сеть</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Проводная Сеть %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Корзина - %1 файлов</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Очистить</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Беспроводная Сеть</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Беспроводная Сеть %1</translation>
     </message>
 </context>
 </TS>

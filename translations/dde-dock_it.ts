@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Abilita Rete</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Disabilita Rete</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Impostazioni Rete</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Sgancia</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Disattiva connessione cablata</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Attiva connessione cablata</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Disattiva connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Attiva connessione WiFi</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Disabilita Rete</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Abilita Rete</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Impostazioni Rete</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispositivo disattivato</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Connessione WiFi: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Connessione cablata: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Non connesso</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Connessione in corso</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Connesso senza accesso ad internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Cavo di rete scollegato</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rete wireless</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Connessione cablata</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Connessione fallita</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>Conflitto IP</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Rete</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Connessione cablata</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Connessione cablata %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Cestino - %1 file</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Svuota</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rete wireless</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Rete wireless %1</translation>
     </message>
 </context>
 </TS>

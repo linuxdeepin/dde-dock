@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Şəbəkəni açmaq</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Şəbəkəni söndürmək</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Şəbəkə ayarları</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Ayırmaq</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Simli bağlantını söndürmək</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Simli bağlantını qoşmaq</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Simsiz bağlantını söndürmək</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Simsiz bağlantını qoşmaq</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Şəbəkəni söndürmək</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Şəbəkəni qoşmaq</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Şəbəkə ayarları</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Cihaz söndürülüb</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Simsiz bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Simli bağlantı: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Qoşulmayıb</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Bağlanılır</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Qoşulub, lakin internetə giriş yoxdur</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Şəbəkə kabeli çıxarılıb</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Simsiz şəbəkə</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Simli şəbəkə</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Qoşulma alınmadı</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>İP ziddiyyəti</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Şəbəkə</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Simli şəbəkə</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>%1 Simli şəbəkəsi</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Səbət - %1 fayl</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Səbətə atın</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Boş</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Simsiz şəbəkə</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Simsiz şəbəkə %1</translation>
     </message>
 </context>
 </TS>

@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Aktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Çaktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Rregullime rrjeti</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Hiqe nga paneli</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Çaktivizo lidhje me fill</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Aktivizo lidhje me fill</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Çaktivizo lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Aktivizo lidhje pa fill</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Çaktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Aktivizo rrjetin</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Rregullime rrjeti</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Pajisje e çaktivizuar</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Lidhje pa fill: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Lidhje me fill: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Jo e lidhur</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Po bëhet lidhja</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>I lidhur, por pa hyrje Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Kablloja e rrjetit është e hequr</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rrjet Pa Fill</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rrjet Me Fill</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation>Lidhja dështoi</translation>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation>Përplasje IP-sh</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Rrjet</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rrjet Me Fill</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Rrjet Me Fill %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Hedhurina - %1 kartela</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation>Shpjere te hedhurinat</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>E zbrazët</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rrjet Pa Fill</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Rrjet Pa Fill %1</translation>
     </message>
 </context>
 </TS>

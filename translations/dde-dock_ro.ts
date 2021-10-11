@@ -85,21 +85,6 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
-    <message>
-        <source>Enable network</source>
-        <translation>Activați rețeaua</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Dezactivați conexiunea la rețea</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configurări de rețea</translation>
-    </message>
-</context>
-<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -242,96 +227,6 @@
     <message>
         <source>Undock</source>
         <translation>Detaşaţi</translation>
-    </message>
-</context>
-<context>
-    <name>NetworkItem</name>
-    <message>
-        <source>Disable wired connection</source>
-        <translation>Dezactivați conexiunea prin cablu</translation>
-    </message>
-    <message>
-        <source>Enable wired connection</source>
-        <translation>Activați conexiunea prin cablu</translation>
-    </message>
-    <message>
-        <source>Disable wireless connection</source>
-        <translation>Dezactivați conexiunea fără fir</translation>
-    </message>
-    <message>
-        <source>Enable wireless connection</source>
-        <translation>Activați conexiunea fără fir</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Dezactivați conexiunea la rețea</translation>
-    </message>
-    <message>
-        <source>Enable network</source>
-        <translation>Activați rețeaua</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Configurări de rețea</translation>
-    </message>
-    <message>
-        <source>Device disabled</source>
-        <translation>Dispozitiv Dezactivat</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
-        <translation>Conexiune fără fir: %1</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>Conexiune prin cablu: %1</translation>
-    </message>
-    <message>
-        <source>Not connected</source>
-        <translation>Neconectat</translation>
-    </message>
-    <message>
-        <source>Connecting</source>
-        <translation>Conectare</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Conectat dar fară acces Internet</translation>
-    </message>
-    <message>
-        <source>Network cable unplugged</source>
-        <translation>Cablu Reţea Deconectat</translation>
-    </message>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rețea fără fir</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rețea conectată</translation>
-    </message>
-    <message>
-        <source>Connection failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>IP conflict</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Reţea</translation>
-    </message>
-    <message>
-        <source>Wired Network</source>
-        <translation>Rețea conectată</translation>
-    </message>
-    <message>
-        <source>Wired Network %1</source>
-        <translation>Rețea Cablu %1</translation>
     </message>
 </context>
 <context>
@@ -485,6 +380,10 @@
         <source>Trash - %1 files</source>
         <translation>Coș de reciclare - %1 fișiere</translation>
     </message>
+    <message>
+        <source>Move to trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -495,17 +394,6 @@
     <message>
         <source>Empty</source>
         <translation>Gol</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Rețea fără fir</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Rețea fără fir %1</translation>
     </message>
 </context>
 </TS>
