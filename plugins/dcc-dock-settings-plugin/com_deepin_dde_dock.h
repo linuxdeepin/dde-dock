@@ -54,6 +54,12 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("GetLoadedPlugins"), argumentList);
     }
 
+    inline QDBusPendingReply<QString> getPluginKey(const QString &pluginName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(pluginName);
+        return asyncCallWithArgumentList(QStringLiteral("getPluginKey"), argumentList);
+    }
 
 
     inline QDBusPendingReply<> ReloadPlugins()

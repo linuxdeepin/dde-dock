@@ -23,6 +23,8 @@
 
 #include <QScrollArea>
 
+#include <dtkwidget_global.h>
+
 #include <com_deepin_dde_daemon_dock.h>
 
 #include "com_deepin_dde_dock.h"
@@ -31,12 +33,18 @@ namespace dcc {
 namespace widgets {
 class ComboxWidget;
 class TitledSliderItem;
-class SwitchWidget;
 }
 }
 
+DWIDGET_BEGIN_NAMESPACE
+class DListView;
+class DTipLabel;
+DWIDGET_END_NAMESPACE
+
 class TitleLabel;
 class GSettingWatcher;
+class QStandardItemModel;
+
 using namespace dcc::widgets;
 using DBusDock = com::deepin::dde::daemon::Dock;
 using DBusInter = com::deepin::dde::Dock;
@@ -48,10 +56,12 @@ public:
     explicit ModuleWidget(QWidget *parent = nullptr);
     ~ ModuleWidget();
 
+private:
     void initUI();
 
 private Q_SLOTS:
-    void updateSliderValue(int displayMode);
+    void updateSliderValue();
+    void updateItemCheckStatus(const QString &name, bool visible);
 
 private:
     ComboxWidget *m_modeComboxWidget;
@@ -64,7 +74,9 @@ private:
     ComboxWidget *m_screenSettingComboxWidget;
 
     TitleLabel *m_pluginAreaTitle;
-    QList<SwitchWidget *> m_pluginWidgetList;
+    DTK_WIDGET_NAMESPACE::DTipLabel *m_pluginTips;
+    DTK_WIDGET_NAMESPACE::DListView *m_pluginView;
+    QStandardItemModel *m_pluginModel;
 
     DBusDock *m_daemonDockInter;
     DBusInter *m_dockInter;

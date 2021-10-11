@@ -61,7 +61,7 @@ const QString SettingsModule::displayName() const
 
 QIcon SettingsModule::icon() const
 {
-    return QIcon::fromTheme("unknown");
+    return QIcon::fromTheme("icon_dock");
 }
 
 QString SettingsModule::translationPath() const

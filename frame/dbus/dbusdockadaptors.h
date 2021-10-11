@@ -43,6 +43,9 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "    <method name=\"GetLoadedPlugins\">"
                                        "        <arg name=\"list\" type=\"as\" direction=\"out\"/>"
                                        "    </method>"
+                                       "    <method name=\"getPluginKey\">"
+                                       "        <arg name=\"pluginName\" type=\"s\" direction=\"in\"/>"
+                                       "    </method>"
                                        "    <method name=\"getPluginVisible\">"
                                        "        <arg name=\"pluginName\" type=\"s\" direction=\"in\"/>"
                                        "        <arg name=\"visible\" type=\"b\" direction=\"out\"/>"
@@ -71,6 +74,8 @@ public Q_SLOTS: // METHODS
     void ReloadPlugins();
 
     QStringList GetLoadedPlugins();
+
+    QString getPluginKey(const QString &pluginName);
 
     bool getPluginVisible(const QString &pluginName);
     void setPluginVisible(const QString &pluginName, bool visible);

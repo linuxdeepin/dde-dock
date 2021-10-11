@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/dock/time</title>
+    <g id="icon/dock/time" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ICON-/-Place-/-Recent" transform="translate(1.000000, 1.000000)" fill="#536076">
+            <path d="M7,0 C10.8659932,0 14,3.13400675 14,7 C14,10.8659932 10.8659932,14 7,14 C3.13400675,14 0,10.8659932 0,7 C0,3.13400675 3.13400675,0 7,0 Z M6.5,2.5 C6.22385763,2.5 6,2.72385763 6,3 L6,7.5 C6,7.77614237 6.22385763,8 6.5,8 L11,8 C11.2761424,8 11.5,7.77614237 11.5,7.5 C11.5,7.22385763 11.2761424,7 11,7 L7,7 L7,3 C7,2.72385763 6.77614237,2.5 6.5,2.5 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

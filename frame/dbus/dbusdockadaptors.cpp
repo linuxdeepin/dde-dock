@@ -118,6 +118,17 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
     return newList;
 }
 
+// 返回每个插件的识别Key(所以此值应始终不变)，供个性化插件根据key去匹配每个插件对应的图标
+QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
+{
+    for (auto plugin : DockItemManager::instance()->pluginList()) {
+        if (plugin->pluginDisplayName() == pluginName)
+            return plugin->pluginName();
+    }
+
+    return QString();
+}
+
 bool DBusDockAdaptors::getPluginVisible(const QString &pluginName)
 {
     for (auto *p : DockItemManager::instance()->pluginList()) {
@@ -191,11 +202,11 @@ bool DBusDockAdaptors::isPluginValid(const QString &name)
 
     // 未开启窗口特效时，不显示多任务视图插件
     if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite())
-         return false;
+        return false;
 
     // 录屏插件不显示,插件名如果有变化，建议发需求，避免任务栏反复适配
     if (name == "deepin-screen-recorder-plugin")
-         return false;
+        return false;
 
     return true;
 }

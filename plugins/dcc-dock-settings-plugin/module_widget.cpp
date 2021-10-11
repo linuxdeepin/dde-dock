@@ -25,9 +25,10 @@
 #include <widgets/titledslideritem.h>
 #include <widgets/dccslider.h>
 #include <widgets/titlelabel.h>
-#include <widgets/switchwidget.h>
 
 #include <DSlider>
+#include <DListView>
+#include <DTipLabel>
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -36,6 +37,7 @@
 #include <QDBusError>
 #include <QMap>
 #include <QScrollArea>
+#include <QScroller>
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,11 +68,16 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_screenSettingTitle(new TitleLabel(tr("Multi screen config")))
     , m_screenSettingComboxWidget(new ComboxWidget)
     , m_pluginAreaTitle(new TitleLabel(tr("Plugin area")))
+    , m_pluginTips(new DTipLabel(tr("Select the icon that needs to be displayed in the plug-in area of the taskbar")))
+    , m_pluginView(new DListView(this))
+    , m_pluginModel(new QStandardItemModel(this))
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
     , m_gsettingsWatcher(new GSettingWatcher("com.deepin.dde.control-center", "personalization", this))
 {
     initUI();
+
+    connect(m_dockInter, &DBusInter::pluginVisibleChanged, this, &ModuleWidget::updateItemCheckStatus);
 }
 
 ModuleWidget::~ModuleWidget()
@@ -82,6 +89,7 @@ ModuleWidget::~ModuleWidget()
     delete m_screenSettingTitle;
     delete m_screenSettingComboxWidget;
     delete m_pluginAreaTitle;
+    delete m_pluginTips;
 }
 
 void ModuleWidget::initUI()
@@ -140,17 +148,21 @@ void ModuleWidget::initUI()
     m_sizeSlider->addBackground();
     m_sizeSlider->slider()->setRange(40, 100);
     QStringList ranges;
-    ranges << tr("Small") << tr("Big");
+    ranges << tr("Small") << "" << tr("Big");
     m_sizeSlider->setAnnotations(ranges);
     connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, &ModuleWidget::updateSliderValue);
+    connect(m_daemonDockInter, &DBusDock::WindowSizeFashionChanged, this, &ModuleWidget::updateSliderValue);
+    connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_sizeSlider->slider(), &DSlider::valueChanged, this, [ = ] (int value) {
         if (m_daemonDockInter->displayMode() == DisplayMode::Fashion) {
             m_daemonDockInter->setWindowSizeFashion(uint(value));
         } else if (m_daemonDockInter->displayMode() == DisplayMode::Efficient) {
             m_daemonDockInter->setWindowSizeEfficient(uint(value));
         }
+        updateSliderValue();
     });
-    updateSliderValue(m_daemonDockInter->displayMode());
+
+    updateSliderValue();
     m_gsettingsWatcher->bind("sizeSlider", m_sizeSlider);
 
     layout->addWidget(m_sizeSlider);
@@ -158,7 +170,7 @@ void ModuleWidget::initUI()
     // 多屏显示设置
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.dde.Dock")) {
         static QMap<QString, bool> g_screenSettingMap = {{tr("Follow the mouse"), false}
-                                                        , {tr("Only show in primary"), true}};
+                                                         , {tr("Only show in primary"), true}};
 
         layout->addSpacing(10);
         layout->addWidget(m_screenSettingTitle);
@@ -181,28 +193,76 @@ void ModuleWidget::initUI()
     if (reply.error().type() != QDBusError::ErrorType::NoError) {
         qWarning() << "dbus call failed, method: 'GetLoadedPlugins()'";
     } else {
+        const QMap<QString, QString> &pluginIconMap = {{"assistant",        ":/icons/plugins/assistant.svg"}
+                                                       , {"show-desktop",   ":/icons/plugins/desktop.svg"}
+                                                       , {"onboard",        ":/icons/plugins/keyboard.svg"}
+                                                       , {"notifications",  ":/icons/plugins/notify.svg"}
+                                                       , {"shutdown",       ":/icons/plugins/power.svg"}
+                                                       , {"multitasking",   ":/icons/plugins/task.svg"}
+                                                       , {"datetime",       ":/icons/plugins/time.svg"}
+                                                       , {"trash",          ":/icons/plugins/trash.svg"}};
         if (plugins.size() != 0) {
             layout->addSpacing(10);
             layout->addWidget(m_pluginAreaTitle);
             m_gsettingsWatcher->bind("pluginArea", m_pluginAreaTitle);
-            for (auto name : plugins) {
-                SwitchWidget *widget = new SwitchWidget(this);
-                widget->setTitle(name);
-                widget->addBackground();
-                widget->setChecked(m_dockInter->getPluginVisible(name));
-                connect(widget, &SwitchWidget::checkedChanged, this, [ = ] (const bool checked) {
-                    m_dockInter->setPluginVisible(widget->title(), checked);
-                });
-                connect(m_dockInter, &DBusInter::pluginVisibleChanged, this, [ = ] (const QString &pluginName, bool visible) {
-                    if (pluginName == widget->title()) {
-                        widget->setChecked(visible);
-                    }
-                });
 
-                layout->addWidget(widget);
-                m_gsettingsWatcher->bind("pluginArea", widget);
-                m_pluginWidgetList.append(widget);
+            DFontSizeManager::instance()->bind(m_pluginTips, DFontSizeManager::T8);
+            m_pluginTips->adjustSize();
+            m_pluginTips->setWordWrap(true);
+            m_pluginTips->setContentsMargins(10, 5, 10, 5);
+            m_pluginTips->setAlignment(Qt::AlignLeft);
+            layout->addWidget(m_pluginTips);
+
+            m_pluginView->setAccessibleName("pluginList");
+            m_pluginView->setBackgroundType(DStyledItemDelegate::BackgroundType::ClipCornerBackground);
+            m_pluginView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            m_pluginView->setSelectionMode(QListView::SelectionMode::NoSelection);
+            m_pluginView->setEditTriggers(DListView::NoEditTriggers);
+            m_pluginView->setFrameShape(DListView::NoFrame);
+            m_pluginView->setViewportMargins(0, 0, 0, 0);
+            m_pluginView->setItemSpacing(1);
+
+            QMargins itemMargins(m_pluginView->itemMargins());
+            itemMargins.setLeft(14);
+            m_pluginView->setItemMargins(itemMargins);
+
+            m_pluginView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+            QScroller *scroller = QScroller::scroller(m_pluginView->viewport());
+            QScrollerProperties sp;
+            sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+            scroller->setScrollerProperties(sp);
+
+            m_pluginView->setModel(m_pluginModel);
+
+            layout->addWidget(m_pluginView);
+            m_gsettingsWatcher->bind("pluginArea", m_pluginView);
+            for (auto name : plugins) {
+                DStandardItem *item = new DStandardItem(name);
+                item->setFontSize(DFontSizeManager::T8);
+                QSize size(16, 16);
+
+                // 插件图标
+                auto leftAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);
+                leftAction->setIcon(QIcon::fromTheme(pluginIconMap.value(m_dockInter->getPluginKey(name), ":/icons/plugins/plug-in2.svg")));
+                item->setActionList(Qt::Edge::LeftEdge, {leftAction});
+
+                auto rightAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);
+                bool visible = m_dockInter->getPluginVisible(name);
+                auto checkstatus = visible ? DStyle::SP_IndicatorChecked : DStyle::SP_IndicatorUnchecked ;
+                auto checkIcon = qobject_cast<DStyle *>(style())->standardIcon(checkstatus);
+                rightAction->setIcon(checkIcon);
+                item->setActionList(Qt::Edge::RightEdge, {rightAction});
+                m_pluginModel->appendRow(item);
+
+                connect(rightAction, &DViewItemAction::triggered, this, [ = ] {
+                    bool checked = m_dockInter->getPluginVisible(name);
+                    m_dockInter->setPluginVisible(name, !checked);
+                    updateItemCheckStatus(name, !checked);
+                });
             }
+            // 固定大小,防止滚动
+            int lineHeight = m_pluginView->visualRect(m_pluginView->indexAt(QPoint(0, 0))).height();
+            m_pluginView->setMinimumHeight(lineHeight * plugins.size() + 10);
         }
     }
 
@@ -215,13 +275,32 @@ void ModuleWidget::initUI()
     setWidget(widget);
 }
 
-void ModuleWidget::updateSliderValue(int displayMode)
+void ModuleWidget::updateSliderValue()
 {
+    auto displayMode = m_daemonDockInter->displayMode();
+    m_sizeSlider->blockSignals(true);
     if (displayMode == DisplayMode::Fashion) {
-        m_sizeSlider->setValueLiteral(QString::number(m_daemonDockInter->windowSizeFashion()));
+        m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeFashion()));
     } else if (displayMode == DisplayMode::Efficient) {
-        m_sizeSlider->setValueLiteral(QString::number(m_daemonDockInter->windowSizeEfficient()));
+        m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeEfficient()));
     } else {
         Q_ASSERT_X(false, __FILE__, "not supported");
+    }
+    m_sizeSlider->blockSignals(false);
+}
+
+void ModuleWidget::updateItemCheckStatus(const QString &name, bool visible)
+{
+    for (int i = 0; i < m_pluginModel->rowCount(); ++i) {
+        auto item = static_cast<DStandardItem *>(m_pluginModel->item(i));
+        if (item->text() != name || item->actionList(Qt::Edge::RightEdge).size() < 1)
+            continue;
+
+        auto action = item->actionList(Qt::Edge::RightEdge).first();
+        auto checkstatus = visible ? DStyle::SP_IndicatorChecked : DStyle::SP_IndicatorUnchecked ;
+        auto icon = qobject_cast<DStyle *>(style())->standardIcon(checkstatus);
+        action->setIcon(icon);
+        m_pluginView->update(item->index());
+        break;
     }
 }

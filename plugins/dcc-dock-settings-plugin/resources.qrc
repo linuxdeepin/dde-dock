@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/icons/deepin/builtin">
+        <file>actions/icon_dock_32px.svg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>icons/plugins/time.svg</file>
+        <file>icons/plugins/assistant.svg</file>
+        <file>icons/plugins/desktop.svg</file>
+        <file>icons/plugins/keyboard.svg</file>
+        <file>icons/plugins/notify.svg</file>
+        <file>icons/plugins/plug-in2.svg</file>
+        <file>icons/plugins/power.svg</file>
+        <file>icons/plugins/task.svg</file>
+        <file>icons/plugins/trash.svg</file>
+    </qresource>
+</RCC>
