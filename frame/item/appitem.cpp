@@ -41,6 +41,8 @@
 
 #include <DGuiApplicationHelper>
 
+DGUI_USE_NAMESPACE
+
 #define APP_DRAG_THRESHOLD      20
 
 QPoint AppItem::MousePressPos;
@@ -322,7 +324,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
         // play launch effect
-        if (m_windowInfos.isEmpty())
+        if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())  
             playSwingEffect();
     }
 }
