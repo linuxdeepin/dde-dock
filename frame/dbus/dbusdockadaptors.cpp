@@ -118,6 +118,11 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
     return newList;
 }
 
+void DBusDockAdaptors::resizeDock(int offset)
+{
+    parent()->resizeDock(offset);
+}
+
 // 返回每个插件的识别Key(所以此值应始终不变)，供个性化插件根据key去匹配每个插件对应的图标
 QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
 {

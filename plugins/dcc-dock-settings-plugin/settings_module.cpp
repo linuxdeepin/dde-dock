@@ -51,7 +51,7 @@ void SettingsModule::active()
 
 QStringList SettingsModule::availPage() const
 {
-    return QStringList() << tr("Dock");
+    return QStringList() << "Dock";
 }
 
 const QString SettingsModule::displayName() const

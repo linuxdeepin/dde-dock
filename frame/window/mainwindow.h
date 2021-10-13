@@ -166,6 +166,7 @@ signals:
 
 public slots:
     void RegisterDdeSession();
+    void resizeDock(int offset);
     void resetDragWindow(); // 任务栏调整高度或宽度后需调用此函数
 
 private slots:

@@ -43,8 +43,12 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "    <method name=\"GetLoadedPlugins\">"
                                        "        <arg name=\"list\" type=\"as\" direction=\"out\"/>"
                                        "    </method>"
+                                       "    <method name=\"resizeDock\">"
+                                       "        <arg name=\"offset\" type=\"i\" direction=\"in\"/>"
+                                       "    </method>"
                                        "    <method name=\"getPluginKey\">"
                                        "        <arg name=\"pluginName\" type=\"s\" direction=\"in\"/>"
+                                       "        <arg name=\"key\" type=\"s\" direction=\"out\"/>"
                                        "    </method>"
                                        "    <method name=\"getPluginVisible\">"
                                        "        <arg name=\"pluginName\" type=\"s\" direction=\"in\"/>"
@@ -74,6 +78,8 @@ public Q_SLOTS: // METHODS
     void ReloadPlugins();
 
     QStringList GetLoadedPlugins();
+
+    void resizeDock(int offset);
 
     QString getPluginKey(const QString &pluginName);
 

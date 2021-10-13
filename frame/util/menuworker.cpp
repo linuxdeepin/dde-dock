@@ -148,7 +148,7 @@ QMenu *MenuWorker::createMenu()
 
     // 任务栏配置
     if (!menuSettings || !menuSettings->keys().contains("settingVisible") || menuSettings->get("settingVisible").toBool()) {
-        QAction *act = new QAction(tr("Dock setting"), this);
+        QAction *act = new QAction(tr("Dock settings"), this);
         connect(act, &QAction::triggered, this, &MenuWorker::onDockSettingsTriggered);
         settingsMenu->addAction(act);
     }

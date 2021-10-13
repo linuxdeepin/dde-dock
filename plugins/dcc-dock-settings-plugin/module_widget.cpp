@@ -38,6 +38,7 @@
 #include <QMap>
 #include <QScrollArea>
 #include <QScroller>
+#include <QComboBox>
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,10 +66,10 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_positionComboxWidget(new ComboxWidget)
     , m_stateComboxWidget(new ComboxWidget)
     , m_sizeSlider(new TitledSliderItem(tr("Size")))
-    , m_screenSettingTitle(new TitleLabel(tr("Multi screen config")))
+    , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays")))
     , m_screenSettingComboxWidget(new ComboxWidget)
-    , m_pluginAreaTitle(new TitleLabel(tr("Plugin area")))
-    , m_pluginTips(new DTipLabel(tr("Select the icon that needs to be displayed in the plug-in area of the taskbar")))
+    , m_pluginAreaTitle(new TitleLabel(tr("Plugin Area")))
+    , m_pluginTips(new DTipLabel(tr("Select which icons appear in the Dock")))
     , m_pluginView(new DListView(this))
     , m_pluginModel(new QStandardItemModel(this))
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
@@ -112,6 +113,13 @@ void ModuleWidget::initUI()
     connect(m_modeComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
         m_daemonDockInter->setDisplayMode(g_modeMap.value(text));
     });
+    connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, [ = ] (int value) {
+        DisplayMode mode = static_cast<DisplayMode>(value);
+        if (g_modeMap.key(mode) == m_modeComboxWidget->comboBox()->currentText())
+            return;
+
+        m_modeComboxWidget->setCurrentText(g_modeMap.key(mode));
+    });
     layout->addWidget(m_modeComboxWidget);
     m_gsettingsWatcher->bind("displayMode", m_modeComboxWidget);// 转换settingName?
 
@@ -120,26 +128,40 @@ void ModuleWidget::initUI()
                                                , {tr("Left"), Left}
                                                , {tr("Right"), Right}};
     // 位置
-    m_positionComboxWidget->setTitle(tr("Position"));
+    m_positionComboxWidget->setTitle(tr("Location"));
     m_positionComboxWidget->addBackground();
     m_positionComboxWidget->setComboxOption(QStringList() << tr("Top") << tr("Bottom") << tr("Left") << tr("Right"));
     m_positionComboxWidget->setCurrentText(g_positionMap.key(m_daemonDockInter->position()));
     connect(m_positionComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
         m_daemonDockInter->setPosition(g_positionMap.value(text));
     });
+    connect(m_daemonDockInter, &DBusDock::PositionChanged, this, [ = ] (int position) {
+        Position pos = static_cast<Position>(position);
+        if (g_positionMap.key(pos) == m_positionComboxWidget->comboBox()->currentText())
+            return;
+
+        m_positionComboxWidget->setCurrentText(g_positionMap.key(pos));
+    });
     layout->addWidget(m_positionComboxWidget);
     m_gsettingsWatcher->bind("position", m_positionComboxWidget);
 
-    static QMap<QString, int> g_stateMap = {{tr("Always show"), KeepShowing}
-                                            , {tr("Always hide"), KeepHidden}
+    static QMap<QString, int> g_stateMap = {{tr("Keep shown"), KeepShowing}
+                                            , {tr("Keep hidden"), KeepHidden}
                                             , {tr("Smart hide"), SmartHide}};
     // 状态
-    m_stateComboxWidget->setTitle(tr("State"));
+    m_stateComboxWidget->setTitle(tr("Status"));
     m_stateComboxWidget->addBackground();
-    m_stateComboxWidget->setComboxOption(QStringList() << tr("Always show") << tr("Always hide") << tr("Smart hide"));
+    m_stateComboxWidget->setComboxOption(QStringList() << tr("Keep shown") << tr("Keep hidden") << tr("Smart hide"));
     m_stateComboxWidget->setCurrentText(g_stateMap.key(m_daemonDockInter->hideMode()));
     connect(m_stateComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
         m_daemonDockInter->setHideMode(g_stateMap.value(text));
+    });
+    connect(m_daemonDockInter, &DBusDock::HideModeChanged, this, [ = ] (int value) {
+        HideMode mode = static_cast<HideMode>(value);
+        if (g_stateMap.key(mode) == m_stateComboxWidget->comboBox()->currentText())
+            return;
+
+        m_stateComboxWidget->setCurrentText(g_stateMap.key(mode));
     });
     layout->addWidget(m_stateComboxWidget);
     m_gsettingsWatcher->bind("hideMode", m_stateComboxWidget);
@@ -148,18 +170,26 @@ void ModuleWidget::initUI()
     m_sizeSlider->addBackground();
     m_sizeSlider->slider()->setRange(40, 100);
     QStringList ranges;
-    ranges << tr("Small") << "" << tr("Big");
+    ranges << tr("Small") << "" << tr("Large");
     m_sizeSlider->setAnnotations(ranges);
     connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeFashionChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
-    connect(m_sizeSlider->slider(), &DSlider::valueChanged, this, [ = ] (int value) {
+    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_sizeSlider->slider(), &DSlider::sliderMoved);
+    connect(m_sizeSlider->slider(), &DSlider::sliderMoved, this, [ = ] (int value) {
+        int lastValue = 0;
         if (m_daemonDockInter->displayMode() == DisplayMode::Fashion) {
-            m_daemonDockInter->setWindowSizeFashion(uint(value));
+            lastValue = int(m_daemonDockInter->windowSizeFashion());
         } else if (m_daemonDockInter->displayMode() == DisplayMode::Efficient) {
-            m_daemonDockInter->setWindowSizeEfficient(uint(value));
+            lastValue = int(m_daemonDockInter->windowSizeEfficient());
+        } else {
+            Q_ASSERT_X(false, __FILE__, "not supported");
         }
-        updateSliderValue();
+
+        // 得到绝对偏移值
+        int offset = value - lastValue;
+
+        m_dockInter->resizeDock(offset);
     });
 
     updateSliderValue();
@@ -174,14 +204,22 @@ void ModuleWidget::initUI()
 
         layout->addSpacing(10);
         layout->addWidget(m_screenSettingTitle);
-        m_screenSettingComboxWidget->setTitle(tr("Dock position"));
+        m_screenSettingComboxWidget->setTitle(tr("Show Dock"));
         m_screenSettingComboxWidget->addBackground();
-        m_screenSettingComboxWidget->setComboxOption(QStringList() << tr("Follow the mouse") << tr("Only show in primary"));
+        m_screenSettingComboxWidget->setComboxOption(QStringList() << tr("On screen where the cursor is") << tr("Only on main screen"));
         m_screenSettingComboxWidget->setCurrentText(g_screenSettingMap.key(m_dockInter->showInPrimary()));
         connect(m_screenSettingComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
             m_dockInter->setShowInPrimary(g_screenSettingMap.value(text));
         });
-        connect(m_dockInter, &DBusInter::ShowInPrimaryChanged, m_screenSettingComboxWidget, &ComboxWidget::setCurrentIndex);
+        // 这里不会生效，但实际场景中也不存在有其他可配置的地方，可以不用处理
+        connect(m_dockInter, &DBusInter::ShowInPrimaryChanged, this, [ = ] (bool showInPrimary) {
+            if (m_screenSettingComboxWidget->comboBox()->currentText() == g_screenSettingMap.key(showInPrimary))
+                return;
+
+            m_screenSettingComboxWidget->blockSignals(true);
+            m_screenSettingComboxWidget->setCurrentText(g_screenSettingMap.key(showInPrimary));
+            m_screenSettingComboxWidget->blockSignals(false);
+        });
         layout->addWidget(m_screenSettingComboxWidget);
         m_gsettingsWatcher->bind("multiScreenArea", m_screenSettingTitle);
         m_gsettingsWatcher->bind("multiScreenArea", m_screenSettingComboxWidget);
@@ -278,15 +316,18 @@ void ModuleWidget::initUI()
 void ModuleWidget::updateSliderValue()
 {
     auto displayMode = m_daemonDockInter->displayMode();
-    m_sizeSlider->blockSignals(true);
+
+    m_sizeSlider->slider()->blockSignals(true);
     if (displayMode == DisplayMode::Fashion) {
-        m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeFashion()));
+        if (int(m_daemonDockInter->windowSizeFashion()) != m_sizeSlider->slider()->value())
+            m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeFashion()));
     } else if (displayMode == DisplayMode::Efficient) {
-        m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeEfficient()));
+        if (int(m_daemonDockInter->windowSizeEfficient()) != m_sizeSlider->slider()->value())
+            m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeEfficient()));
     } else {
         Q_ASSERT_X(false, __FILE__, "not supported");
     }
-    m_sizeSlider->blockSignals(false);
+    m_sizeSlider->slider()->blockSignals(false);
 }
 
 void ModuleWidget::updateItemCheckStatus(const QString &name, bool visible)
