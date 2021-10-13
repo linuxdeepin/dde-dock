@@ -381,8 +381,8 @@
         <translation>Lixo - %1 ficheiros</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Mover para o lixo</translation>
+        <source>Move to Trash</source>
+        <translation>Mover para Lixo</translation>
     </message>
 </context>
 <context>

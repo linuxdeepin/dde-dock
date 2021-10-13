@@ -381,8 +381,8 @@
         <translation>Kukában: %1 fájl</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Áthelyezés a Kukába</translation>
+        <source>Move to Trash</source>
+        <translation>Áthelyezés a lomtárba</translation>
     </message>
 </context>
 <context>

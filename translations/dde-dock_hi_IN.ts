@@ -381,8 +381,8 @@
         <translation>कचरा - %1 फ़ाइलें</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>ट्रैश में ले जाएं </translation>
     </message>
 </context>
 <context>

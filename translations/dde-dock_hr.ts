@@ -381,8 +381,8 @@
         <translation>Smeće - %1 datoteke</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Premjesti u smeće</translation>
     </message>
 </context>
 <context>

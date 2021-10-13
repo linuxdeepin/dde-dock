@@ -381,8 +381,8 @@
         <translation>Fail %1- disampahkan</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Alih ke Tong Sampah</translation>
     </message>
 </context>
 <context>

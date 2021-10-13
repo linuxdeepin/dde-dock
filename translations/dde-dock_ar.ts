@@ -381,8 +381,8 @@
         <translation>نقل  %1 من الملفات إلى المحذوفات </translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>نقل إلى سلة المحذوفات</translation>
     </message>
 </context>
 <context>

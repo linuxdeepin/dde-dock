@@ -381,8 +381,8 @@
         <translation>Papierkorb - %1 Dateien</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>In den Mull verschieben</translation>
     </message>
 </context>
 <context>

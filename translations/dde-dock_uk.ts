@@ -381,8 +381,8 @@
         <translation>Смітник - %1 файлів</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Пересунути до смітника</translation>
+        <source>Move to Trash</source>
+        <translation>Перемістити в кошик для сміття</translation>
     </message>
 </context>
 <context>

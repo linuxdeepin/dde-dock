@@ -381,8 +381,8 @@
         <translation>ゴミ箱 - %1 ファイル</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>ゴミ箱へ移動</translation>
     </message>
 </context>
 <context>

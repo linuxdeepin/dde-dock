@@ -381,8 +381,8 @@
         <translation>Corbeille - %1 fichiers</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Déplacer dans la corbeille</translation>
     </message>
 </context>
 <context>

@@ -381,7 +381,7 @@
         <translation>回收站 - %1個文件</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation>移動到回收站</translation>
     </message>
 </context>

@@ -381,8 +381,8 @@
         <translation>Kôš - %1 súbory/súborov</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Presunúť do koša</translation>
     </message>
 </context>
 <context>

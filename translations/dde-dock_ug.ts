@@ -381,8 +381,8 @@
         <translation>ئەخلەت ساندۇقى - %1ھۆججەت</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>ئەخلەت ساندۇقىغا يۆتكەش</translation>
+        <source>Move to Trash</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

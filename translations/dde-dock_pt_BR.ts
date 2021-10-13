@@ -381,8 +381,8 @@
         <translation>Lixeira - %1 arquivos</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Mover para a lixeira</translation>
+        <source>Move to Trash</source>
+        <translation>Enviar para Lixeira</translation>
     </message>
 </context>
 <context>

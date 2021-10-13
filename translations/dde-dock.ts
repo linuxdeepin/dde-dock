@@ -381,8 +381,8 @@
         <translation>Trash - %1 files</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Move to trash</translation>
+        <source>Move to Trash</source>
+        <translation>Move to Trash</translation>
     </message>
 </context>
 <context>

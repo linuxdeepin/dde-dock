@@ -91,7 +91,7 @@ QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     if (m_trashWidget->getDragging()) {
-        m_tipsLabel->setText(tr("Move to trash"));
+        m_tipsLabel->setText(tr("Move to Trash"));
         return m_tipsLabel.data();
     }
 

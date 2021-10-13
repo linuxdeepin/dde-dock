@@ -381,8 +381,8 @@
         <translation>Κάδος απορριμμάτων - %1 αρχεία</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Μετακίνηση στα Απορρίμματα</translation>
     </message>
 </context>
 <context>

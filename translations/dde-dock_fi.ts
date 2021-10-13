@@ -381,8 +381,8 @@
         <translation>Roskakori - %1 tiedostoa</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Roskakoriin</translation>
+        <source>Move to Trash</source>
+        <translation>Siirrä roskakoriin</translation>
     </message>
 </context>
 <context>

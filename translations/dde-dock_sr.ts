@@ -381,8 +381,8 @@
         <translation>Смеће - %1 ставки/е</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Премести у смеће</translation>
+        <source>Move to Trash</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

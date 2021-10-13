@@ -381,8 +381,8 @@
         <translation>Papirkurv - %1 filer</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Flyt til papirkurv</translation>
     </message>
 </context>
 <context>

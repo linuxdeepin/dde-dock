@@ -381,7 +381,7 @@
         <translation>අපද්‍රව්‍ය - ගොනු %1 </translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation type="unfinished"/>
     </message>
 </context>

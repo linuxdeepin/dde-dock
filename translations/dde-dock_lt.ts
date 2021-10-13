@@ -381,8 +381,8 @@
         <translation>Šiukšlinė - %1 failų</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Perkelti į šiukšlinę</translation>
     </message>
 </context>
 <context>

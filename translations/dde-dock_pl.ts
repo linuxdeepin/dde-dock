@@ -381,7 +381,7 @@
         <translation>Kosz - %1 pliki</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation>Przenieś do kosza</translation>
     </message>
 </context>

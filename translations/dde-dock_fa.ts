@@ -381,7 +381,7 @@
         <translation>سطل زباله - %1 فایل</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation type="unfinished"/>
     </message>
 </context>

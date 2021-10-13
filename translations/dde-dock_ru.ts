@@ -381,8 +381,8 @@
         <translation>Корзина - %1 файлов</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Удалить в корзину</translation>
     </message>
 </context>
 <context>

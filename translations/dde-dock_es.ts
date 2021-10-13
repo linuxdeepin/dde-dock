@@ -381,8 +381,8 @@
         <translation>Papelera - %1 archivos</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Mover a la papelera</translation>
+        <source>Move to Trash</source>
+        <translation>Mover a la Papelera</translation>
     </message>
 </context>
 <context>

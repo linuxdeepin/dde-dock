@@ -381,8 +381,8 @@
         <translation>Səbət - %1 fayl</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Səbətə atın</translation>
+        <source>Move to Trash</source>
+        <translation>Zibil qutusuna daşı</translation>
     </message>
 </context>
 <context>

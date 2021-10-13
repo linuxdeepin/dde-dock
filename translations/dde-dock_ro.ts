@@ -10,7 +10,7 @@
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Elimină</translation>
     </message>
 </context>
 <context>
@@ -381,8 +381,8 @@
         <translation>Coș de reciclare - %1 fișiere</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>La gunoi</translation>
     </message>
 </context>
 <context>

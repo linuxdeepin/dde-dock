@@ -381,7 +381,7 @@
         <translation>སྙིགས་སྣོད་ཀྱི་ཡིག་ཆ་%1</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation>སྙིགས་སྣོད་ནང་བླུགས་པ།</translation>
     </message>
 </context>

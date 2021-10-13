@@ -381,8 +381,8 @@
         <translation>Zavrzi - %1 datoteke</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Premakni v koš</translation>
     </message>
 </context>
 <context>

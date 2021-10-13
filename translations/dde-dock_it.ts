@@ -381,8 +381,8 @@
         <translation>Cestino - %1 file</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>Muovi nel cestino</translation>
     </message>
 </context>
 <context>

@@ -381,8 +381,8 @@
         <translation>휴지통 - %1 파일</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation type="unfinished"/>
+        <source>Move to Trash</source>
+        <translation>휴지통으로 이동</translation>
     </message>
 </context>
 <context>

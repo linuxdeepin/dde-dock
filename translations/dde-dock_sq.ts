@@ -381,8 +381,8 @@
         <translation>Hedhurina - %1 kartela</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Shpjere te hedhurinat</translation>
+        <source>Move to Trash</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

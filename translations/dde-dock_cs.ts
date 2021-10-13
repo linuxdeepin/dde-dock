@@ -381,7 +381,7 @@
         <translation>Koš – %1 souborů</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation>Přesunout do koše</translation>
     </message>
 </context>

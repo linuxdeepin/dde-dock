@@ -381,7 +381,7 @@
         <translation>Prullenbak - %1 bestanden</translation>
     </message>
     <message>
-        <source>Move to trash</source>
+        <source>Move to Trash</source>
         <translation>Verplaatsen naar prullenbak</translation>
     </message>
 </context>

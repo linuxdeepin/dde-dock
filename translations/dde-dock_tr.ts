@@ -381,8 +381,8 @@
         <translation>Çöp Kutusu - %1 dosya</translation>
     </message>
     <message>
-        <source>Move to trash</source>
-        <translation>Çöp kutusuna taşı</translation>
+        <source>Move to Trash</source>
+        <translation>Çöp Kutusuna Taşı</translation>
     </message>
 </context>
 <context>
