@@ -23,7 +23,7 @@
 #ifndef BLUETOOTHADAPTERITEM_H
 #define BLUETOOTHADAPTERITEM_H
 
-#include "componments/device.h"
+#include "device.h"
 #include "bluetoothapplet.h"
 
 #include <QWidget>
@@ -50,6 +50,7 @@ class SettingLabel;
 class QStandardItemModel;
 class RefreshButton;
 class HorizontalSeperator;
+class StateButton;
 
 const QString LightString = QString(":/light/buletooth_%1_light.svg");
 const QString DarkString = QString(":/dark/buletooth_%1_dark.svg");
@@ -85,7 +86,11 @@ private:
     DStandardItem *m_standarditem;
     DViewItemAction *m_labelAction;
     DViewItemAction *m_stateAction;
+    DViewItemAction *m_connAction;
     DSpinner *m_loading;
+
+    QWidget *m_iconWidget;
+    StateButton *m_connButton;
 };
 
 class BluetoothAdapterItem : public QWidget

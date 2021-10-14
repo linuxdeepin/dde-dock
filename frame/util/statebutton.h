@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     chenwei <chenwei@uniontech.com>
+ *
+ * Maintainer: chenwei <chenwei@uniontech.com>
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef STATEBUTTON_H
 #define STATEBUTTON_H
 
@@ -16,6 +38,7 @@ public:
 public:
     explicit StateButton(QWidget *parent = nullptr);
     void setType(Type type);
+    void setSwitchFork(bool switchFork);
 
 signals:
     void click();
@@ -32,6 +55,7 @@ private:
 
 private:
     Type m_type;
+    bool m_switchFork;
 };
 
 #endif // STATEBUTTON_H
