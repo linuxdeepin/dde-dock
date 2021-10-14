@@ -25,6 +25,7 @@
 #include "bluetoothconstants.h"
 #include "refreshbutton.h"
 #include "horizontalseperator.h"
+#include "statebutton.h"
 
 #include <DFontSizeManager>
 #include <DLabel>
@@ -42,7 +43,10 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     , m_standarditem(new DStandardItem())
     , m_labelAction(nullptr)
     , m_stateAction(nullptr)
+    , m_connAction(nullptr)
     , m_loading(new DSpinner(parent))
+    , m_iconWidget(new QWidget(parent->viewport()))
+    , m_connButton(new StateButton(m_iconWidget))
 {
     initActionList();
     initConnect();
@@ -54,19 +58,35 @@ BluetoothDeviceItem::~BluetoothDeviceItem()
         delete m_loading;
         m_loading = nullptr;
     }
+    if (m_iconWidget != nullptr) {
+        delete m_iconWidget;
+        m_iconWidget = nullptr;
+        m_connButton = nullptr;
+    }
 }
 
 void BluetoothDeviceItem::initActionList()
 {
     m_labelAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), false);
     m_stateAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), true);
+    m_connAction = new DViewItemAction(Qt::AlignRight | Qt::AlignVCenter, QSize(16, 16), QSize(16, 16), false);
+
+    m_connButton->setType(StateButton::Check);
+    m_connButton->setSwitchFork(false);
+    m_connButton->setFixedSize(16, 16);
+    m_iconWidget->setFixedSize(20, 16);
+    QHBoxLayout *layout = new QHBoxLayout(m_iconWidget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(m_connButton);
+    layout->addStretch();
 
     m_loading->setFixedSize(QSize(24, 24));
     m_stateAction->setWidget(m_loading);
+    m_connAction->setWidget(m_iconWidget);
 
     m_standarditem->setAccessibleText(m_device->alias());
-    m_standarditem->setActionList(Qt::RightEdge, {m_stateAction});
-    m_standarditem->setActionList(Qt::LeftEdge, {m_labelAction});
+    m_standarditem->setActionList(Qt::RightEdge, { m_stateAction, m_connAction });
+    m_standarditem->setActionList(Qt::LeftEdge, { m_labelAction });
 
     //蓝牙列表可用蓝牙设备信息文字显示高亮
     m_labelAction->setTextColorRole(DPalette::BrightText);
@@ -79,6 +99,7 @@ void BluetoothDeviceItem::initConnect()
 {
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothDeviceItem::updateIconTheme);
     connect(m_device, &Device::stateChanged, this, &BluetoothDeviceItem::updateDeviceState);
+    connect(m_iconWidget, &QWidget::destroyed, [ this ] { this->m_iconWidget = nullptr; });
 }
 
 void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
@@ -105,16 +126,16 @@ void BluetoothDeviceItem::updateDeviceState(Device::State state)
     if (state == Device::StateAvailable) {
         m_loading->start();
         m_stateAction->setVisible(true);
-        m_standarditem->setCheckState(Qt::Unchecked);
+        m_connAction->setVisible(false);
     } else if (state == Device::StateConnected) {
         m_loading->stop();
         m_stateAction->setVisible(false);
-        m_standarditem->setCheckState(Qt::Checked);
+        m_connAction->setVisible(true);
         emit requestTopDeviceItem(m_standarditem);
     } else {
         m_loading->stop();
         m_stateAction->setVisible(false);
-        m_standarditem->setCheckState(Qt::Unchecked);
+        m_connAction->setVisible(false);
     }
     emit deviceStateChanged(m_device);
 }
