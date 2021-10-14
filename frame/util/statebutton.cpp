@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     chenwei <chenwei@uniontech.com>
+ *
+ * Maintainer: chenwei <chenwei@uniontech.com>
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "statebutton.h"
 
 #include <QIcon>
@@ -7,6 +29,7 @@
 StateButton::StateButton(QWidget *parent)
     : QWidget(parent)
     , m_type(Check)
+    , m_switchFork(true)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
 }
@@ -15,6 +38,11 @@ void StateButton::setType(StateButton::Type type)
 {
     m_type =  type;
     update();
+}
+
+void StateButton::setSwitchFork(bool switchFork)
+{
+    m_switchFork = switchFork;
 }
 
 void StateButton::paintEvent(QPaintEvent *event)
@@ -38,19 +66,22 @@ void StateButton::paintEvent(QPaintEvent *event)
 void StateButton::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
-    emit click();
+    if (m_switchFork)
+        emit click();
 }
 
 void StateButton::enterEvent(QEvent *event)
 {
     QWidget::enterEvent(event);
-    setType(Fork);
+    if (m_switchFork)
+        setType(Fork);
 }
 
 void StateButton::leaveEvent(QEvent *event)
 {
     QWidget::leaveEvent(event);
-    setType(Check);
+    if (m_switchFork)
+        setType(Check);
 }
 
 void StateButton::drawCheck(QPainter &painter, QPen &pen, int radius)
