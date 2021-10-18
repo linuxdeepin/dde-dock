@@ -51,8 +51,8 @@ TEST_F(Test_PreviewContainer, coverage_test)
     snap->requestCloseAppSnapshot();
     container->setWindowInfos(map, QList<quint32> () << 1 << 2 << 3 << 4);
 
-    for (const WId id: map.keys()) {
-        container->appendSnapWidget(id);
+    for (const WId snapId: map.keys()) {
+        container->appendSnapWidget(snapId);
     }
 
     container->previewEntered(id);

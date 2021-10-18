@@ -155,9 +155,6 @@ bool ThemeAppIcon::getIcon(QPixmap &pix, const QString iconName, const int size,
         // fallback to a Default pixmap
         pix = QPixmap(":/icons/resources/application-x-desktop.svg");
         break;
-
-        Q_UNREACHABLE();
-
     } while (false);
 
     if (!key.isEmpty()) {

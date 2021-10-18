@@ -100,7 +100,6 @@ public:
     explicit BluetoothAdapterItem(Adapter *adapter, QWidget *parent = nullptr);
     ~BluetoothAdapterItem();
     Adapter *adapter() { return m_adapter; }
-    int currentDeviceCount();
     QStringList connectedDevicesName();
 
 public slots:

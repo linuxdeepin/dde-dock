@@ -121,14 +121,10 @@ TEST_F(Test_DockItem, event_test)
 
     item->showHoverTips();
 
-    QTimer::singleShot(10, [ &item ] {
-        delete item;
-        item = nullptr;
-    });
-    item->showContextMenu();
+    QEvent *deleteEvent = new QEvent(QEvent::DeferredDelete);
+    qApp->postEvent(item, deleteEvent);
 
-    QTest::qWait(1000);
-    ASSERT_TRUE(true);
+    item->showContextMenu();
 }
 
 TEST_F(Test_DockItem, topleftPoint_test)

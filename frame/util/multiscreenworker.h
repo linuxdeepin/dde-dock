@@ -227,7 +227,7 @@ private:
     void displayAnimation(const QString &screen, AniAction act);
 
     void tryToShowDock(int eventX, int eventY);
-    void changeDockPosition(QString lastScreen, QString deskScreen, const Position &fromPos, const Position &toPos);
+    void changeDockPosition(QString fromScreen, QString toScreen, const Position &fromPos, const Position &toPos);
 
     QString getValidScreen(const Position &pos);
     void resetDockScreen();

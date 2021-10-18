@@ -214,11 +214,6 @@ QSize BluetoothAdapterItem::sizeHint() const
     return QSize(ItemWidth, m_adapterLabel->height() + (m_adapter->powered() ? m_seperator->sizeHint().height() + viewHeight : 0));// 加上分割线的高度
 }
 
-int BluetoothAdapterItem::currentDeviceCount()
-{
-    return m_deviceItems.size();
-}
-
 QStringList BluetoothAdapterItem::connectedDevicesName()
 {
     QStringList devsName;
