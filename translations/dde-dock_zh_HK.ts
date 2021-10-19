@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.0">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -217,6 +217,97 @@
         <source>Show the Dock</source>
         <translation>多屏顯示設置</translation>
     </message>
+    <message>
+        <source>Dock settings</source>
+        <translation>任務欄設置</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <source>Multiple Displays</source>
+        <translation>多屏顯示設置</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>插件區域</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>選擇顯示在任務欄插件區域的圖標</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>時尚模式</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>高效模式</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>模式</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>頂</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>底</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>左</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>右</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>一直顯示</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>一直隱藏</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>智能隱藏</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>狀態</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>小</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>大</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>任務欄位置</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>跟隨鼠標位置顯示</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>僅主屏顯示</translation>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -281,6 +372,13 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>電量%1，已充滿</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>任務欄</translation>
     </message>
 </context>
 <context>

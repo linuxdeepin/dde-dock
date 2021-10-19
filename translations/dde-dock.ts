@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -217,6 +217,97 @@
         <source>Show the Dock</source>
         <translation>Show the Dock</translation>
     </message>
+    <message>
+        <source>Dock settings</source>
+        <translation>Dock settings</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Size</translation>
+    </message>
+    <message>
+        <source>Multiple Displays</source>
+        <translation>Multiple Displays</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Plugin Area</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Select which icons appear in the Dock</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Fashion mode</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Efficient mode</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Top</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Bottom</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Left</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Right</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Location</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Keep shown</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Keep hidden</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Smart hide</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Small</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Large</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Show Dock</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>On screen where the cursor is</translation>
+    </message>
+    <message>
+        <source>Only on main screen</source>
+        <translation>Only on main screen</translation>
+    </message>
 </context>
 <context>
     <name>MultitaskingPlugin</name>
@@ -281,6 +372,13 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Capacity %1, fully charged</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
     </message>
 </context>
 <context>
