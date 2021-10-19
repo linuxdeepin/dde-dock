@@ -210,6 +210,7 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 // 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
 void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString &key)
 {
+    // TODO 后续可以考虑去掉这部分的处理，不用一直监听外部区域的移动，xeventmonitor有一个CursorInto和CursorOut的信号，使用这个也可以替代，但要做好测试工作
     Q_UNUSED(x);
     Q_UNUSED(y);
     if (m_extralRegisterKey != key || testState(MousePress))

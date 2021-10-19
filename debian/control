@@ -24,7 +24,8 @@ Build-Depends: debhelper (>= 8.0.0),
  libgsettings-qt-dev,
  libdbusmenu-qt5-dev,
  libgtest-dev,
- libgmock-dev
+ libgmock-dev,
+ dde-control-center-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
@@ -44,7 +45,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
 Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,
- dde-dock-network-plugin
+ dde-dock-network-plugin,
+ dcc-dock-settings-plugin
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
@@ -66,3 +68,9 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin for onboard
  Dock plugin for onboard of deepin desktop-environment
+
+Package: dcc-dock-settings-plugin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
+Description: deepin desktop-environment - dcc plugin for dock settings
+ Dcc plugin for dock settings of deepin desktop-environment

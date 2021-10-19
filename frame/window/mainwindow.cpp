@@ -465,6 +465,38 @@ void MainWindow::resetDragWindow()
     }
 }
 
+void MainWindow::resizeDock(int offset)
+{
+    const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
+                                                      , m_multiScreenWorker->position()
+                                                      , HideMode::KeepShowing,
+                                                      m_multiScreenWorker->displayMode());
+    QRect newRect;
+    switch (m_multiScreenWorker->position()) {
+    case Top:
+    case Bottom: {
+        newRect.setX(rect.x());
+        newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset, MAINWINDOW_MAX_SIZE));
+        newRect.setWidth(rect.width());
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset, MAINWINDOW_MAX_SIZE));
+    }
+        break;
+    case Left:
+    case Right: {
+        newRect.setX(rect.x() + rect.width() - qBound(MAINWINDOW_MIN_SIZE, rect.width() + offset, MAINWINDOW_MAX_SIZE));
+        newRect.setY(rect.y());
+        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset, MAINWINDOW_MAX_SIZE));
+        newRect.setHeight(rect.height());
+    }
+        break;
+    }
+
+    // 更新界面大小
+    m_mainPanel->setFixedSize(newRect.size());
+    setFixedSize(newRect.size());
+    move(newRect.topLeft());
+}
+
 /**
  * @brief MainWindow::onMainWindowSizeChanged 任务栏拖拽过程中会不听调用此方法更新自身大小
  * @param offset 拖拽时的坐标偏移量

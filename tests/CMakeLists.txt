@@ -20,8 +20,13 @@ file(GLOB_RECURSE PLUGIN_SRCS
     "../plugins/bluetooth/*.cpp"
     "../plugins/bluetooth/componments/*.h"
     "../plugins/bluetooth/componments/*.cpp"
+    "../plugins/dcc-dock-settings-plugin/*.h"
+    "../plugins/dcc-dock-settings-plugin/*.cpp"
     "../frame/util/horizontalseperator.h"
     "../frame/util/horizontalseperator.cpp")
+
+# 其包含的"interface/moduleinterface.h"文件中定义了ModuleInterface_iid，任务栏插件框架的interface文件中也有定义
+list(FILTER PLUGIN_SRCS EXCLUDE REGEX "../plugins/dcc-dock-settings-plugin/settings_module.*")
 
 # 用于测试覆盖率的编译条件
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
@@ -43,6 +48,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5 COMPONENTS Test REQUIRED)
+find_package(DdeControlCenter REQUIRED)
 find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
 
@@ -66,10 +72,12 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${DFrameworkDBus_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${QGSettings_INCLUDE_DIRS}
+    ${DdeControlCenter_INCLUDE_DIR}
     ../interfaces
     fakedbus
     ../plugins/bluetooth
     ../plugins/bluetooth/componments
+    ../plugins/dcc-dock-settings-plugin
 )
 
 # 链接库
@@ -84,6 +92,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${DdeControlCenter_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GMOCK_LIBRARIES}
     -lpthread

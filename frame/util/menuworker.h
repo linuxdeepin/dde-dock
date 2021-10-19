@@ -49,6 +49,9 @@ public slots:
 private:
     QMenu *createMenu();
 
+private slots:
+    void onDockSettingsTriggered();
+
 private:
     DBusDock *m_dockInter;
     bool m_autoHide;
