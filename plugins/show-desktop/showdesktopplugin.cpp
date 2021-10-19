@@ -24,6 +24,9 @@
 
 #include <QIcon>
 
+#include <com_deepin_dde_modulevisible.h>
+
+
 #define PLUGIN_STATE_KEY    "enable"
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
@@ -96,6 +99,8 @@ const QString ShowDesktopPlugin::itemContextMenu(const QString &itemKey)
         return QString();
     }
 
+    com::deepin::dde::ModuleVisible moduleVisibleInter("com.deepin.dde.ModuleVisible", "/com/deepin/dde/ModuleVisible", QDBusConnection::sessionBus(), this);
+
     QList<QVariant> items;
     items.reserve(6);
 
@@ -105,11 +110,13 @@ const QString ShowDesktopPlugin::itemContextMenu(const QString &itemKey)
     desktop["isActive"] = true;
     items.push_back(desktop);
 
-    QMap<QString, QVariant> power;
-    power["itemId"] = "remove";
-    power["itemText"] = tr("Undock");
-    power["isActive"] = true;
-    items.push_back(power);
+    if (moduleVisibleInter.isValid()) {
+        QMap<QString, QVariant> power;
+        power["itemId"] = "remove";
+        power["itemText"] = tr("Undock");
+        power["isActive"] = true;
+        items.push_back(power);
+    }
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;

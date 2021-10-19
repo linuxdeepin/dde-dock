@@ -340,9 +340,9 @@ bool PluginsItem::permissionRequired()
 
        if (m_moduleVisible->isValid()) return true;
 
-       return false;
-       qDebug() << "Control center modules that require root privileges:" << m_pluginInter->pluginDisplayName();
-
+       
+        qDebug() << "Control center modules that require root privileges:" << m_pluginInter->pluginDisplayName();
+        return false;
 }
 
 void PluginsItem::resizeEvent(QResizeEvent *event)
