@@ -23,12 +23,20 @@
 
 #include <QLayout>
 
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
+
 SettingsModule::SettingsModule()
     : QObject()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
 {
-
+    const QString &appName = qApp->applicationName();
+    // 加载任务栏的翻译文件
+    qApp->setApplicationName("dde-dock");
+    qApp->loadTranslator();
+    qApp->setApplicationName(appName);
 }
 
 SettingsModule::~SettingsModule()
