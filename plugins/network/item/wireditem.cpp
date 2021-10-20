@@ -94,8 +94,6 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
 
     connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::activeWiredConnectionInfoChanged,
             this, &WiredItem::changedActiveWiredConnectionInfo);
-    connect(static_cast<WiredDevice *>(m_device.data()), &WiredDevice::connectionsChanged,
-            this, &WiredItem::changedConnections);
 
     connect(m_stateButton, &StateButton::click, this, [&] {
         auto enableState = m_device->enabled();
@@ -108,8 +106,7 @@ WiredItem::WiredItem(WiredDevice *device, const QString &deviceName, QWidget *pa
 
 void WiredItem::setTitle(const QString &name)
 {
-    if (m_device->status() != NetworkDevice::Activated)
-        m_connectedName->setText(name);
+    m_connectedName->setText(name);
     m_deviceName = name;
 }
 
@@ -348,26 +345,11 @@ void WiredItem::changedActiveWiredConnectionInfo(const QJsonObject &connInfo)
         m_loadingStat->setVisible(false);
     }
 
-    emit activeConnectionChanged();
-}
-
-void WiredItem::changedConnections(const QList<QJsonObject> &connInfos)
-{
-    for (auto connInfo : connInfos) {
-        QString uuid = connInfo.value("ConnectionUuid").toString();
-        if (uuid == m_uuid ) {
-            auto strTitle = connInfo.value("Id").toString();
-            m_connectedName->setText(strTitle);
-            QFontMetrics fontMetrics(m_connectedName->font());
-            if (fontMetrics.width(strTitle) > m_connectedName->width()) {
-                strTitle = QFontMetrics(m_connectedName->font()).elidedText(strTitle, Qt::ElideRight, m_connectedName->width());
-            }
-            if (strTitle.isEmpty())
-                m_connectedName->setText(m_deviceName);
-            else
-                m_connectedName->setText(strTitle);
-        }
+    if (!m_uuid.isEmpty()) {
+        m_oldUUID = m_uuid;
     }
+
+    m_uuid = connInfo.value("ConnectionUuid").toString();
 
     emit activeConnectionChanged();
 }
