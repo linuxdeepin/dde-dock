@@ -115,7 +115,8 @@ TEST_F(Test_DockItem, event_test)
     QEvent e(QEvent::Enter);
     item->enterEvent(&e);
 
-    item->menuActionClicked(new QAction());
+    QAction *action = new QAction();
+    item->menuActionClicked(action);
 
     item->onContextMenuAccepted();
 
@@ -123,6 +124,8 @@ TEST_F(Test_DockItem, event_test)
 
     QEvent *deleteEvent = new QEvent(QEvent::DeferredDelete);
     qApp->postEvent(item, deleteEvent);
+    deleteEvent = new QEvent(QEvent::DeferredDelete);
+    qApp->postEvent(action, deleteEvent);
 
     item->showContextMenu();
 }

@@ -81,6 +81,7 @@ TEST_F(Test_LauncherItem, event_test)
     QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     launcherItem->dragMoveEvent(&event10);
 
+    data->deleteLater();
     delete launcherItem;
 }
 

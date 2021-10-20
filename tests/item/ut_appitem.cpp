@@ -178,6 +178,8 @@ TEST_F(Test_AppItem, event_test)
 
     QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     appItem->dragMoveEvent(&event10);
+
+    data->deleteLater();
 }
 
 TEST_F(Test_AppItem, checkEntry)

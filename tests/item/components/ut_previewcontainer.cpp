@@ -147,6 +147,7 @@ TEST_F(Test_PreviewContainer, event_test)
     container->dragMoveEvent(&event10);
 
     delete container;
+    data->deleteLater();
     ASSERT_TRUE(true);
 }
 

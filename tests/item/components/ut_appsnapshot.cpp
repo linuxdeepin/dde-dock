@@ -103,6 +103,8 @@ TEST_F(Test_AppSnapshot, event_test)
 
     QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     snapShot.dragMoveEvent(&event10);
+
+    data->deleteLater();
 }
 
 TEST_F(Test_AppSnapshot, setWindowState)

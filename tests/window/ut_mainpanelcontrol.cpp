@@ -274,6 +274,8 @@ TEST_F(Test_MainPanelControl, event_test)
 
     QDragMoveEvent event10(QPoint(), Qt::DropAction::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     panel.dragMoveEvent(&event10);
+
+    data->deleteLater();
 }
 
 TEST_F(Test_MainPanelControl, dragLeaveEvent)

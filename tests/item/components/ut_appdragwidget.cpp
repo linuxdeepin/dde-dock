@@ -124,5 +124,6 @@ TEST_F(Test_AppDragWidget, event_test)
     QEvent enterEvent_(QEvent::Enter);
     dragWidget.enterEvent(&enterEvent_);
 
+    data->deleteLater();
     ASSERT_TRUE(true);
 }

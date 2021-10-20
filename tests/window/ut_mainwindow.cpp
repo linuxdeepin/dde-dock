@@ -130,6 +130,7 @@ TEST_F(Test_MainWindow, event_test)
     QEnterEvent event12(QPointF(0.0, 0.0), QPointF(0.0, 0.0), QPointF(0.0, 0.0));
     window->enterEvent(&event12);
 
+    data->deleteLater();
     delete window;
 }
 
