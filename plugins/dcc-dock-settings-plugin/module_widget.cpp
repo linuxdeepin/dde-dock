@@ -191,8 +191,8 @@ void ModuleWidget::initUI()
 
     // 多屏显示设置
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.dde.Dock")) {
-        static QMap<QString, bool> g_screenSettingMap = {{tr("Follow the mouse"), false}
-                                                         , {tr("Only show in primary"), true}};
+        static QMap<QString, bool> g_screenSettingMap = {{tr("On screen where the cursor is"), false}
+                                                         , {tr("Only on main screen"), true}};
 
         layout->addSpacing(10);
         layout->addWidget(m_screenSettingTitle);
