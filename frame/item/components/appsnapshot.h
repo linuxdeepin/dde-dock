@@ -66,6 +66,7 @@ public:
     inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
     inline const QString title() const { return m_windowInfo.title; }
     void setWindowState();
+    bool isKWinAvailable();
 
 signals:
     void entered(const WId wid) const;
