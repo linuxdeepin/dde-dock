@@ -231,7 +231,7 @@ void ModuleWidget::initUI()
     if (reply.error().type() != QDBusError::ErrorType::NoError) {
         qWarning() << "dbus call failed, method: 'GetLoadedPlugins()'";
     } else {
-        const QMap<QString, QString> &pluginIconMap = {{"assistant",        ":/icons/plugins/assistant.svg"}
+        const QMap<QString, QString> &pluginIconMap = {{"AiAssistant",      ":/icons/plugins/assistant.svg"}
                                                        , {"show-desktop",   ":/icons/plugins/desktop.svg"}
                                                        , {"onboard",        ":/icons/plugins/keyboard.svg"}
                                                        , {"notifications",  ":/icons/plugins/notify.svg"}
