@@ -62,14 +62,14 @@ enum Position {
 
 ModuleWidget::ModuleWidget(QWidget *parent)
     : QScrollArea(parent)
-    , m_modeComboxWidget(new ComboxWidget)
-    , m_positionComboxWidget(new ComboxWidget)
-    , m_stateComboxWidget(new ComboxWidget)
-    , m_sizeSlider(new TitledSliderItem(tr("Size")))
-    , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays")))
-    , m_screenSettingComboxWidget(new ComboxWidget)
-    , m_pluginAreaTitle(new TitleLabel(tr("Plugin Area")))
-    , m_pluginTips(new DTipLabel(tr("Select which icons appear in the Dock")))
+    , m_modeComboxWidget(new ComboxWidget(this))
+    , m_positionComboxWidget(new ComboxWidget(this))
+    , m_stateComboxWidget(new ComboxWidget(this))
+    , m_sizeSlider(new TitledSliderItem(tr("Size"), this))
+    , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays"), this))
+    , m_screenSettingComboxWidget(new ComboxWidget(this))
+    , m_pluginAreaTitle(new TitleLabel(tr("Plugin Area"), this))
+    , m_pluginTips(new DTipLabel(tr("Select which icons appear in the Dock"), this))
     , m_pluginView(new DListView(this))
     , m_pluginModel(new QStandardItemModel(this))
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
@@ -83,14 +83,6 @@ ModuleWidget::ModuleWidget(QWidget *parent)
 
 ModuleWidget::~ModuleWidget()
 {
-    delete m_modeComboxWidget;
-    delete m_positionComboxWidget;
-    delete m_stateComboxWidget;
-    delete m_sizeSlider;
-    delete m_screenSettingTitle;
-    delete m_screenSettingComboxWidget;
-    delete m_pluginAreaTitle;
-    delete m_pluginTips;
 }
 
 void ModuleWidget::initUI()
