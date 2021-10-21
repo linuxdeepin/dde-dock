@@ -74,6 +74,7 @@ private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     DockDaemonInter *m_dockDaemonInter;
 
+    // interface,  "pluginloader", PluginLoader指针对象
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;
 
     // filepath, interface, loaded

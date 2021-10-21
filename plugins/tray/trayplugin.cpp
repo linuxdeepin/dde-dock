@@ -98,6 +98,7 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     switchToMode(displayMode());
 
+    // 加载sni，xem，自定义indicator协议以及其他托盘插件
     QTimer::singleShot(0, this, &TrayPlugin::loadIndicator);
     QTimer::singleShot(0, m_systemTraysController, &SystemTraysController::startLoader);
     QTimer::singleShot(0, this, &TrayPlugin::initSNI);
