@@ -70,6 +70,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 protected:
     const QPoint popupMarkPoint() const;
@@ -96,7 +97,7 @@ private:
 private:
     bool m_popupShown;
     bool m_tapAndHold;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
     QWidget *m_centralWidget;

@@ -24,6 +24,7 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <QObject>
 
 #include <xcb/xproto.h>
 
@@ -34,6 +35,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     : AbstractTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
+    , m_contextMenu(new QMenu)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -82,18 +84,24 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
+    connect(m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
 
     grabGesture(Qt::TapAndHoldGesture);
+
+    m_contextMenu->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
+    m_contextMenu->setObjectName("trayMenu");
+    qApp->installEventFilter(m_contextMenu);
 }
 
 SystemTrayItem::~SystemTrayItem()
 {
     if (m_popupShown)
         popupWindowAccept();
+
+    delete m_contextMenu;
 }
 
 QString SystemTrayItem::itemKeyForConfig()
@@ -259,6 +267,37 @@ void SystemTrayItem::showEvent(QShowEvent *event)
     });
 
     return AbstractTrayWidget::showEvent(event);
+}
+
+bool SystemTrayItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (!watched->objectName().startsWith("trayMenu")) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            if (mouseEvent->button() == Qt::LeftButton)
+                m_contextMenu->hide();
+        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move || event->type() == QEvent::Leave) {
+            m_contextMenu->hide();
+        }
+
+        // 让click无效,避免点击到插件上
+        if (event->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt && isVisible())
+                return true;
+        }
+
+        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Escape && isVisible()) {
+                m_contextMenu->hide();
+                return true;
+            }
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const
@@ -427,7 +466,7 @@ void SystemTrayItem::showContextMenu()
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -437,13 +476,13 @@ void SystemTrayItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu->popup(QCursor::pos());
 
     onContextMenuAccepted();
 }

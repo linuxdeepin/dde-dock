@@ -74,6 +74,13 @@ public:
 
     static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+
 Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
 
@@ -100,10 +107,6 @@ private Q_SLOTS:
     void hidePopup();
     void hideNonModel();
     void popupWindowAccept();
-    void enterEvent(QEvent *event) override;
-    void leaveEvent(QEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
     void paintEvent(QPaintEvent *e) override;
