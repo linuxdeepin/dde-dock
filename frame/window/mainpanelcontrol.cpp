@@ -96,8 +96,8 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_desktopWidget->installEventFilter(this);
     m_pluginAreaWidget->installEventFilter(this);
 
-    //在设置每条线大小前，应该设置fixedsize(0,0)
-    //应为paintEvent函数会先调用设置背景颜色，大小为随机值
+    // 在设置每条线大小前，应该设置fixedsize(0,0)
+    // 应为paintEvent函数会先调用设置背景颜色，大小为随机值
     m_fixedSpliter->setFixedSize(0,0);
     m_appSpliter ->setFixedSize(0,0);
     m_traySpliter->setFixedSize(0,0);
@@ -234,8 +234,8 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 
 void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 {
-    //因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
-    //因此在处理插件图标时，需要通过两层布局判断是否为需要的插件，例如拖动插件位置等判断
+    // 因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
+    // 因此在处理插件图标时，需要通过两层布局判断是否为需要的插件，例如拖动插件位置等判断
     QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
     m_pluginLayout->insertLayout(index, boxLayout, 0);
@@ -263,8 +263,8 @@ void MainPanelControl::removeTrayAreaItem(QWidget *wdg)
 
 void MainPanelControl::removePluginAreaItem(QWidget *wdg)
 {
-    //因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
-    //因此remove插件图标时，需要从多的一层布局中取widget进行判断是否需要移除的插件
+    // 因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
+    // 因此remove插件图标时，需要从多的一层布局中取widget进行判断是否需要移除的插件
     // 清空保存的垃圾箱插件指针
     PluginsItem *pluginsItem = qobject_cast<PluginsItem *>(wdg);
     if (pluginsItem && pluginsItem->pluginName() == "trash")
@@ -388,8 +388,8 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
     if (targetItem->itemType() == DockItem::App)
         idx = m_appAreaSonLayout->indexOf(targetItem);
     else if (targetItem->itemType() == DockItem::Plugins){
-        //因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-        //因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
+        // 因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+        // 因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
         for (int i = 0; i < m_pluginLayout->count(); ++i) {
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
             if (layout && layout->itemAt(0)->widget() == targetItem) {
@@ -414,9 +414,9 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
 {
-    //拖拽图标到任务栏时，如果拖拽到垃圾箱插件图标widget上，则默认不允许拖拽，其他位置默认为允许拖拽
+    // 拖拽图标到任务栏时，如果拖拽到垃圾箱插件图标widget上，则默认不允许拖拽，其他位置默认为允许拖拽
     QWidget *widget = QApplication::widgetAt(QCursor::pos());
-    //"trash-centralwidget"名称是在PluginsItem类中m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
+    // "trash-centralwidget"名称是在PluginsItem类中m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
     if (widget && widget->objectName() == "trash-centralwidget") {
         return;
     }
@@ -554,9 +554,9 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         return;
     }
 
-    //如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
+    // 如果当前从桌面拖拽的的app是trash，则不能放入app任务栏中
     QString str = "file://";
-    //启动器
+    // 启动器
     QString str_t = "";
 
     str.append(QStandardPaths::locate(QStandardPaths::DesktopLocation, "dde-trash.desktop"));
@@ -577,6 +577,7 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    // 更新应用区域大小和任务栏图标大小
     if (watched == m_appAreaSonWidget) {
         switch (event->type()) {
         case QEvent::LayoutRequest:
@@ -598,27 +599,12 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
         case QEvent::Resize:
             resizeDockIcon();
             break;
+        default:
+            break;
         }
     }
 
-    if (watched == m_desktopWidget) {
-        if (event->type() == QEvent::Enter) {
-            if (checkNeedShowDesktop()) {
-                m_needRecoveryWin = true;
-                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-            }
-            m_isHover = true;
-            update();
-        } else if (event->type() == QEvent::Leave) {
-            // 鼠标移入时隐藏了窗口，移出时恢复
-            if (m_needRecoveryWin) {
-                QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-            }
-            m_isHover = false;
-            update();
-        }
-    }
-
+    // 更新应用区域子控件大小以及位置
     if (watched == m_appAreaWidget) {
         if (event->type() == QEvent::Resize)
             updateAppAreaSonWidgetSize();
@@ -627,7 +613,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             moveAppSonWidget();
     }
 
-    if (Utils::IS_WAYLAND_DISPLAY && m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+    if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         bool isContains = rect().contains(mapFromGlobal(QCursor::pos()));
         if (isContains) {
             if (event->type() == QEvent::DragMove) {
@@ -666,8 +652,12 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     }
 
     static const QGSettings *g_settings = Utils::ModuleSettingsPtr("app");
-    if (!g_settings || !g_settings->keys().contains("removeable") || g_settings->get("removeable").toBool())
-        Utils::IS_WAYLAND_DISPLAY ? startDragWayland(item) : startDrag(item);
+    if (!g_settings || !g_settings->keys().contains("removeable") || g_settings->get("removeable").toBool()) {
+        if (Utils::IS_WAYLAND_DISPLAY)
+            startDragWayland(item);
+        else
+            startDrag(item);
+    }
 
     return QWidget::eventFilter(watched, event);
 }
@@ -779,25 +769,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 void MainPanelControl::startDragWayland(DockItem *item)
 {
     QPixmap pixmap = item->grab();
-
-    /*TODO: pixmap半透明处理
-    QPixmap pixmap1;
-    {
-        QPixmap temp(pixmap.size());
-        temp.fill(Qt::transparent);
-
-        QPainter p1(&temp);
-        p1.setCompositionMode(QPainter::CompositionMode_Source);
-        p1.drawPixmap(0, 0, pixmap);
-        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-
-        //根据QColor中第四个参数设置透明度，0～255
-        p1.fillRect(temp.rect(), QColor(0, 0, 0, 125));
-        p1.end();
-
-        pixmap1 = temp;
-    }*/
-
     item->setDraging(true);
     item->update();
 
@@ -806,62 +777,44 @@ void MainPanelControl::startDragWayland(DockItem *item)
 
     drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
-
-    /*TODO: 开启线程，在移动中设置图片是否为半透明, 当前接口调用QShapedPixmapWindow找不到动态库的实现
-    bool isRun = true;
-    QtConcurrent::run([&isRun, &pixmap, &pixmap1, this]{
-        while (isRun) {
-            QPlatformDrag *platformDrag = QGuiApplicationPrivate::platformIntegration()->drag();
-            QShapedPixmapWindow *dragIconWindow = nullptr;
-            if (platformDrag)
-                dragIconWindow = static_cast<QSimpleDrag *>(platformDrag)->shapedPixmapWindow();
-
-            if (!dragIconWindow)
-                continue;
-
-            if (AppDragWidget::isRemoveable(m_position, QRect(mapToGlobal(pos()), size()))) {
-                //                dragIconWindow->setPixmap(pixmap1);
-            } else {
-                //                dragIconWindow->setPixmap(pixmap);
-            }
-
-        }
-    });*/
-
     drag->exec(Qt::MoveAction);
 
-    //isRun = false;
-
-    if (drag->target() == this) {
+    // 如果item不是app类型，不需要开启动画效果
+    if (drag->target() == this || item->itemType() != DockItem::App) {
         item->setDraging(false);
         item->update();
         return;
     }
 
-    //开启动画效果
-    auto appDragWidget = new AppDragWidget();
-    appDragWidget->setAppPixmap(pixmap);
-    appDragWidget->setItem(item);
-    appDragWidget->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
-    appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
-    appDragWidget->setPixmapOpacity(0.5);
-    appDragWidget->show();
-    QGuiApplication::platformNativeInterface()->setWindowProperty(appDragWidget->windowHandle()->handle(),
-                                                                  "_d_dwayland_window-type" , "menu");
+    // 初始化动画窗口
+    if (m_appDragWidget) {
+        delete m_appDragWidget;
+        m_appDragWidget = nullptr;
+    }
 
-    QTimer::singleShot(10, [item, appDragWidget]{
-        if (appDragWidget->isRemoveAble(QCursor::pos())) {
-            appDragWidget->showRemoveAnimation();
-            AppItem *appItem = static_cast<AppItem *>(item);
-            appItem->undock();
-            item->setDraging(false);
-            item->update();
-        } else {
-            appDragWidget->showGoBackAnimation();
-            item->setDraging(false);
-            item->update();
-        }
+    m_appDragWidget = new AppDragWidget();
+
+    connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ & ] {
+        m_appDragWidget->deleteLater();
+        m_appDragWidget = nullptr;
     });
+
+    m_appDragWidget->setAppPixmap(pixmap);
+    m_appDragWidget->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
+    m_appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
+    m_appDragWidget->setPixmapOpacity(0.5);
+    m_appDragWidget->show();
+
+    // 开启动画效果
+    if (m_appDragWidget->isRemoveAble(QCursor::pos())) {
+        m_appDragWidget->showRemoveAnimation();
+        AppItem *appItem = static_cast<AppItem *>(item);
+        appItem->undock();
+    } else {
+        m_appDragWidget->showGoBackAnimation();
+    }
+    item->setDraging(false);
+    item->update();
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
@@ -1030,7 +983,7 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
     painter.fillRect(m_appSpliter->geometry(), color);
     painter.fillRect(m_traySpliter->geometry(), color);
 
-    //描绘桌面区域的颜色
+    // 描绘桌面区域的颜色
     painter.setOpacity(1);
     QPen pen;
     QColor penColor(0, 0, 0, 25);
@@ -1054,8 +1007,8 @@ void MainPanelControl::resizeDockIcon()
     PluginsItem *keyboardPlugin = nullptr;
     PluginsItem *notificationPlugin = nullptr;
 
-    //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-    //因此需要通过多一层布局来获取各插件
+    // 因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+    // 因此需要通过多一层布局来获取各插件
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         QLayout *layout = m_pluginLayout->itemAt(i)->layout();
         if (layout) {
@@ -1119,7 +1072,7 @@ void MainPanelControl::resizeDockIcon()
     int yu = (totalLength % iconCount);
     // icon宽度 = (总宽度-余数)/icon个数
     int iconSize = (totalLength - yu) / iconCount;
-    //计算插件图标的最大或最小值
+    // 计算插件图标的最大或最小值
     int tray_item_size = qBound(20, iconSize, 40);
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         tray_item_size = qMin(tray_item_size,height());
@@ -1128,7 +1081,7 @@ void MainPanelControl::resizeDockIcon()
         tray_item_size = qMin(tray_item_size,width());
         tray_item_size = std::min(tray_item_size, width() - 20);
     }
-    //减去插件图标的大小后重新计算固定图标和应用图标的平均大小
+    // 减去插件图标的大小后重新计算固定图标和应用图标的平均大小
     totalLength -= tray_item_size * pluginCount;
     iconCount -= pluginCount;
     // 余数
@@ -1191,8 +1144,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
         m_tray->centralWidget()->setProperty("iconSize", tray_item_size);
     }
 
-    //因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-    //因此需要通过多一层布局来获取各插件
+    // 因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+    // 因此需要通过多一层布局来获取各插件
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
@@ -1243,8 +1196,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, PluginsItem *trashPlugin,
     m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
     m_trayAreaLayout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
 
-    //因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
-    //而不对日期时间插件设置边距
+    // 因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
+    // 而不对日期时间插件设置边距
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         QLayout *layout = m_pluginLayout->itemAt(i)->layout();
         if (layout) {

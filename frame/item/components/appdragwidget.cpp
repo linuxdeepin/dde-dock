@@ -117,7 +117,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
         if (DWindowManagerHelper::instance()->hasComposite()) {
             move(destPos.x() - width() / 2, destPos.y() - height() / 2);
         } else {
-            move(destPos.x(), destPos.y()); //窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
+            move(destPos.x(), destPos.y()); // 窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
         }
     });
     m_followMouseTimer->start();
@@ -171,7 +171,7 @@ const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
 {
     QPoint p(topleftPoint());
     QRect r = rect();
-    //关闭特效,原本的图标设置小,然后隐藏,需要手动设置大小保证tips位置正确
+    // 关闭特效,原本的图标设置小,然后隐藏,需要手动设置大小保证tips位置正确
     if (!DWindowManagerHelper::instance()->hasComposite()) {
         r.setWidth(m_iconSize.width() + 3);
         r.setHeight(m_iconSize.height() + 3);
