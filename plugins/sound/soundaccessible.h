@@ -14,9 +14,9 @@ QAccessibleInterface *soundAccessibleFactory(const QString &classname, QObject *
 {
     QAccessibleInterface *interface = nullptr;
 
-    USE_ACCESSIBLE(classname, SoundItem);
-    USE_ACCESSIBLE(classname, SoundApplet);
-    USE_ACCESSIBLE(classname, VolumeSlider);
+    USE_ACCESSIBLE(classname, SoundItem)
+    ELSE_USE_ACCESSIBLE(classname, SoundApplet)
+    ELSE_USE_ACCESSIBLE(classname, VolumeSlider);
 
     return interface;
 }

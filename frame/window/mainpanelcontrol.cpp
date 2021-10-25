@@ -302,6 +302,8 @@ void MainPanelControl::removePluginAreaItem(QWidget *wdg)
         if (boxLayout && boxLayout->itemAt(0)->widget() == wdg) {
             boxLayout->removeWidget(wdg);
             m_pluginLayout->removeItem(layoutItem);
+            delete layoutItem;
+            layoutItem = nullptr;
         }
     }
 }
