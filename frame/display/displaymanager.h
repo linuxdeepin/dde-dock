@@ -64,8 +64,8 @@ Q_SIGNALS:
     void screenInfoChanged();       // 屏幕信息发生变化，需要调整任务栏显示，只需要这一个信号，其他的都不要，简化流程
 
 private:
-    QList <QScreen *> m_screens;
-    QMap <QScreen *, QMap <Position, bool>> m_screenPositionMap;
+    QList<QScreen *> m_screens;
+    QMap<QScreen *, QMap<Position, bool>> m_screenPositionMap;
     const QGSettings *m_gsettings;              // 多屏配置控制
     bool m_onlyInPrimary;
 };

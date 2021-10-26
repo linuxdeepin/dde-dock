@@ -182,132 +182,79 @@ void DisplayManager::updateScreenDockInfo()
         return;
     }
 
-    // 最多支持双屏,这里只计算双屏,单屏默认四边均可停靠任务栏
-    if (m_screens.size() == 2) {
-        QRect s0 = m_screens.at(0)->geometry();
-        s0.setSize(s0.size() * m_screens.at(0)->devicePixelRatio());
-        QRect s1 = m_screens.at(1)->geometry();
-        s1.setSize(s1.size() * m_screens.at(1)->devicePixelRatio());
+    // 适配多个屏幕的情况
+    for(auto s : m_screens) {
+        QList<QScreen *> otherScreens = m_screens;
+        otherScreens.removeAll(s);
+        for (auto other : otherScreens) {
+            QRect ourRect = QRect(s->geometry().topLeft(), s->geometry().size() * s->devicePixelRatio());
+            int ourBottom = ourRect.top() + ourRect.height();
+            int ourTop = ourRect.top();
+            int ourLeft = ourRect.left();
+            int ourRight = ourRect.left() + ourRect.width();
+            QPoint ourLeftBottom = QPoint(ourLeft, ourBottom);
+            QPoint ourRightBottom = QPoint(ourRight, ourBottom);
+            QPoint ourRightTop = QPoint(ourRight, ourTop);
 
-        qInfo() << "monitor info changed" << m_screens.at(0)->name() << s0 << m_screens.at(1)->name() << s1;
+            QRect otherRect = QRect(other->geometry().topLeft(), other->geometry().size() * other->devicePixelRatio());
+            int otherBottom = otherRect.top() + otherRect.height();
+            int otherTop = otherRect.top();
+            int otherLeft = otherRect.left();
+            int otherRight = otherRect.left() + otherRect.width();
+            QPoint otherLeftBottom = QPoint(otherLeft, otherBottom);
+            QPoint otherLeftTop = QPoint(otherLeft, otherTop);
+            QPoint otherRightTop = QPoint(otherRight, otherTop);
 
-        int s0top = s0.y();
-        int s0bottom = s0.y() + s0.height();
-        int s0left = s0.x();
-        int s0Right = s0.x() + s0.width();
+            /*
+                     * 上下拼接，our屏幕左右移动。
+                     * our屏幕从other屏幕对角的左上侧向右移动，至other屏幕对角的右上侧位置
+              ---------                                   ---------
+              |       |                                   |       |
+              |  our  |           ======>>>>>             |  our  |
+              |       |                                   |       |
+              ---------------                       ---------------
+                    |       |                       |       |
+                    | other |                       | other |
+                    |       |                       |       |
+                    ---------                       ---------
+            */
+            // 上下拼接
+            if (ourBottom == otherTop
+                    && (ourRight >= otherLeft)
+                    && (ourLeft <= otherRight)) {
+                // 排除对角排列
+                if (ourLeftBottom == otherRightTop
+                        || ourRightBottom == otherLeftTop)
+                    continue;
+                m_screenPositionMap[s][Position::Bottom] = false;
+                m_screenPositionMap[other][Position::Top] = false;
+            }
 
-        int s1top = s1.y();
-        int s1bottom = s1.y() + s1.height();
-        int s1left = s1.x();
-        int s1Right = s1.x() + s1.width();
-
-        QPoint s0topLeft = QPoint(s0.x(), s0.y());
-        QPoint s0topRight = QPoint(s0.x()+ s0.width(), s0.y());
-        QPoint s0bottomRight = QPoint(s0.x()+ s0.width(), s0.y() + s0.height());
-        QPoint s0bottomLeft = QPoint(s0.x(), s0.y() + s0.height());
-
-        QPoint s1topLeft = QPoint(s1.x(), s1.y());
-        QPoint s1topRight = QPoint(s1.x() + s1.width(), s1.y());
-        QPoint s1bottomRight = QPoint(s1.x() + s1.width(), s1.y() + s1.height());
-        QPoint s1bottomLeft = QPoint(s1.x(), s1.y() + s1.height());
-
-        /*
-         * 对角拼接，重置，默认均可停靠
----------                       ---------
-|       |                       |       |
-|   s0  |                       |   s1  |
-|       |                       |       |
------------------               -----------------
-        |       |                       |       |
-        |   s1  |                           s0  |
-        |       |                       |       |
-        ---------                       ---------
-*/
-        if (s0bottomRight == s1topLeft
-                || s0topLeft == s1bottomRight) {
-            return;
+            /*
+                     * 左右拼接，our屏幕上下移动。
+                     * our屏幕从other屏幕对角的左上侧向下移动，至other屏幕对角的最左下侧位置
+              ---------                                          ---------
+              |       |                                          |       |
+              |  our  |              ======>>>>>        ---------| other |
+              |       |--------                         |        |       |
+              --------|       |                         |  our   |--------
+                      | other |                         |        |
+                      |       |                         ----------
+                      ---------
+            */
+            // 左右拼接
+            if (otherLeft == ourRight
+                    && (ourTop <= otherBottom)
+                    && (ourBottom >= otherTop)) {
+                // 排除对角排列
+                if (ourRightTop == otherLeftBottom
+                        || ourRightBottom == otherLeftTop)
+                    continue;
+                m_screenPositionMap[s][Position::Right] = false;
+                m_screenPositionMap[other][Position::Left] = false;
+            }
         }
-
-        /*
-         * 左右拼接，s0左，s1右
----------------------               -------------
-|           |       |               |           |
-|           |  s1   |               |           |--------
-|     s0    |       |               |     s0    |       |
-|           |--------               |           |  s1   |
-|           |                       |           |       |
--------------                       ---------------------
-*/
-        if (s0Right == s1left
-                && (s0topRight == s1topLeft || s0bottomRight == s1bottomLeft)) {
-            m_screenPositionMap[m_screens.at(0)].insert(Position::Right, false);
-            m_screenPositionMap[m_screens.at(1)].insert(Position::Left, false);
-            return;
-        }
-
-        /*
-         * 左右拼接，s1左，s0右
----------------------               -------------
-|           |       |               |           |
-|           |  s0   |               |           |--------
-|     s1    |       |               |     s1    |       |
-|           |--------               |           |  s0   |
-|           |                       |           |       |
--------------                       ---------------------
-*/
-        if (s0left== s1Right
-                && (s0topLeft == s1topRight || s0bottomLeft == s1bottomRight)) {
-            m_screenPositionMap[m_screens.at(0)].insert(Position::Left, false);
-            m_screenPositionMap[m_screens.at(1)].insert(Position::Right, false);
-            return;
-        }
-
-        /*
-         * 上下拼接，s0上，s1下
----------                           ---------
-|       |                           |       |
-|   s0  |                           |   s0  |
-|       |                           |       |
--------------                   -------------
-|           |                   |           |
-|           |                   |           |
-|     s1    |                   |     s1    |
-|           |                   |           |
-|           |                   |           |
--------------                   -------------
-*/
-        if (s0bottom == s1top
-                && (s0bottomLeft == s1topLeft || s0bottomRight == s1topRight)) {
-            m_screenPositionMap[m_screens.at(0)].insert(Position::Bottom, false);
-            m_screenPositionMap[m_screens.at(1)].insert(Position::Top, false);
-            return;
-        }
-
-        /*
-         * 上下拼接，s1上，s0下
----------                   ---------
-|       |                   |       |
-|   s1  |                   |   s1  |
-|       |                   |       |
--------------           -------------
-|           |           |           |
-|           |           |           |
-|     s0    |           |     s0    |
-|           |           |           |
-|           |           |           |
--------------           -------------
-*/
-        if (s0top == s1bottom
-                && (s0topLeft == s1bottomLeft || s0topRight == s1bottomRight)) {
-            m_screenPositionMap[m_screens.at(0)].insert(Position::Top, false);
-            m_screenPositionMap[m_screens.at(1)].insert(Position::Bottom, false);
-            return;
-        }
-        return;
     }
-
-    // 目前不支持链接超过两个以上的显示器
-    Q_UNREACHABLE();
 }
 
 /**
