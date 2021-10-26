@@ -247,7 +247,7 @@ protected:
      * @brief m_root
      * 是否需要root权限
      */
-    bool m_root;
+    bool m_root = false;
 };
 
 QT_BEGIN_NAMESPACE

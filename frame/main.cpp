@@ -180,12 +180,12 @@ int main(int argc, char *argv[])
     DockApplication app(argc, argv);
 
     //崩溃信号
-    signal(SIGTERM, sig_crash);
-    signal(SIGSEGV, sig_crash);
-    signal(SIGILL,  sig_crash);
-    signal(SIGINT,  sig_crash);
-    signal(SIGABRT, sig_crash);
-    signal(SIGFPE,  sig_crash);
+     signal(SIGTERM, sig_crash);
+     signal(SIGSEGV, sig_crash);
+     signal(SIGILL,  sig_crash);
+     signal(SIGINT,  sig_crash);
+     signal(SIGABRT, sig_crash);
+     signal(SIGFPE,  sig_crash);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");

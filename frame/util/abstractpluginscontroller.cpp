@@ -283,6 +283,11 @@ void AbstractPluginsController::refreshPluginSettings()
 
 void AbstractPluginsController::initPermissionData(PluginsItemInterface *interface)
 {
+    if (!QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) {
+        qDebug()<<"the dde-dock.conf not exists";
+        return;
+    }
+
     QSettings setting("/etc/deepin/ModuleVisible/dde-dock.conf", QSettings::IniFormat);
     setting.beginGroup("Module");
 

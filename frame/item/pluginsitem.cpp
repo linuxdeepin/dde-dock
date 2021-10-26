@@ -141,8 +141,10 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    if (!permissionRequired()) {
-        return;
+    if (QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) {
+        if (!permissionRequired()) {
+            return;
+        }
     }
 
     m_hover = false;
@@ -180,9 +182,10 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-
-    if (!permissionRequired()) {
-        return;
+    if (QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) {
+        if (!permissionRequired()) {
+            return;
+        }
     }
 
     DockItem::mouseReleaseEvent(e);
