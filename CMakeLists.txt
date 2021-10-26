@@ -58,9 +58,9 @@ endif ()
 
 
 # install advanced-control settings config
-file(GLOB DOCK_CONF "file/dde-dock.conf")
-install(FILES ${DOCK_CONF}
-        DESTINATION /etc/deepin/ModuleVisible)
+# file(GLOB DOCK_CONF "file/dde-dock.conf")
+# install(FILES ${DOCK_CONF}
+#         DESTINATION /etc/deepin/ModuleVisible)
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")

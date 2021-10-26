@@ -11,4 +11,3 @@ usr/lib/dde-dock/plugins/libmultitasking.so
 usr/lib/dde-dock/plugins/libshow-desktop.so
 usr/share
 etc/dde-dock
-etc/deepin/ModuleVisible
