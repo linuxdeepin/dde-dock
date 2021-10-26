@@ -89,7 +89,7 @@ QString SettingsModule::follow() const
 
 const QString SettingsModule::name() const
 {
-    return tr("Dock");
+    return QStringLiteral("Dock");
 }
 
 void SettingsModule::showPage(const QString &pageName)
