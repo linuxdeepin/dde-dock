@@ -1334,6 +1334,49 @@ void MultiScreenWorker::checkXEventMonitorService()
     }
 }
 
+QRect MultiScreenWorker::getDockShowMinGeometry(const QString &screenName, bool withoutScale)
+{
+    QRect rect;
+    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
+    const int margin = static_cast<int>((m_displayMode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
+    const int dockSize = 40;
+
+    for (auto s : DIS_INS->screens()) {
+        if (s->name() == screenName) {
+            // 拿到当前显示器缩放之前的分辨率
+            QRect screenRect = s->handle()->geometry();
+
+            switch (m_position) {
+            case Position::Top:
+                rect.setX(static_cast<int>(screenRect.x() + margin));
+                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
+                rect.setHeight(dockSize);
+                break;
+            case Position::Bottom:
+                rect.setX(static_cast<int>(screenRect.x() + margin));
+                rect.setY(static_cast<int>(screenRect.y() + screenRect.height() / ratio - margin - dockSize));
+                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
+                rect.setHeight(dockSize);
+                break;
+            case Position::Left:
+                rect.setX(static_cast<int>(screenRect.x() + margin));
+                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setWidth(dockSize);
+                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
+                break;
+            case Position::Right:
+                rect.setX(static_cast<int>(screenRect.x() + screenRect.width() / ratio - margin - dockSize));
+                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setWidth(dockSize);
+                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
+                break;
+            }
+        }
+    }
+    return rect;
+}
+
 /**
  * @brief 获取任务栏显示时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
  *

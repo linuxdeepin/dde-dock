@@ -467,25 +467,34 @@ void MainWindow::resetDragWindow()
 
 void MainWindow::resizeDock(int offset)
 {
-    const QRect &rect = m_multiScreenWorker->dockRect(m_multiScreenWorker->deskScreen()
-                                                      , m_multiScreenWorker->position()
-                                                      , HideMode::KeepShowing,
-                                                      m_multiScreenWorker->displayMode());
+    const QRect &rect = m_multiScreenWorker->getDockShowMinGeometry(m_multiScreenWorker->deskScreen());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
-    case Top:
+    case Top: {
+       newRect.setX(rect.x());
+       newRect.setY(rect.y());
+       newRect.setWidth(rect.width());
+       newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
+   }
+        break;
     case Bottom: {
         newRect.setX(rect.x());
-        newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset, MAINWINDOW_MAX_SIZE));
+        newRect.setY(rect.y() + rect.height() - qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
         newRect.setWidth(rect.width());
-        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, rect.height() + offset, MAINWINDOW_MAX_SIZE));
+        newRect.setHeight(qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
     }
         break;
-    case Left:
-    case Right: {
-        newRect.setX(rect.x() + rect.width() - qBound(MAINWINDOW_MIN_SIZE, rect.width() + offset, MAINWINDOW_MAX_SIZE));
+    case Left: {
+        newRect.setX(rect.x());
         newRect.setY(rect.y());
-        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, rect.width() - offset, MAINWINDOW_MAX_SIZE));
+        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
+        newRect.setHeight(rect.height());
+    }
+        break;
+    case Right: {
+        newRect.setX(rect.x() + rect.width() - qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
+        newRect.setY(rect.y());
+        newRect.setWidth(qBound(MAINWINDOW_MIN_SIZE, offset, MAINWINDOW_MAX_SIZE));
         newRect.setHeight(rect.height());
     }
         break;
@@ -493,7 +502,12 @@ void MainWindow::resizeDock(int offset)
 
     // 更新界面大小
     m_mainPanel->setFixedSize(newRect.size());
+    QEvent event(QEvent::LayoutRequest);
+    qApp->sendEvent(m_mainPanel, &event);
+    m_mainPanel->repaint();
     setFixedSize(newRect.size());
+    qApp->sendEvent(this, &event);
+    this->repaint();
     move(newRect.topLeft());
 }
 

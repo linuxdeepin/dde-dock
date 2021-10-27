@@ -150,6 +150,7 @@ public:
 
     QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
     QRect dockRect(const QString &screenName);
+    QRect getDockShowMinGeometry(const QString &screenName, bool withoutScale = false);
 
 signals:
     void opacityChanged(const quint8 value) const;

@@ -76,6 +76,8 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
     , m_gsettingsWatcher(new GSettingWatcher("com.deepin.dde.control-center", "personalization", this))
 {
+    // 异步，否则频繁调用可能会导致卡顿
+    m_daemonDockInter->setSync(false);
     initUI();
 
     connect(m_dockInter, &DBusInter::pluginVisibleChanged, this, &ModuleWidget::updateItemCheckStatus);
@@ -167,22 +169,8 @@ void ModuleWidget::initUI()
     connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeFashionChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
-    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_sizeSlider->slider(), &DSlider::sliderMoved);
-    connect(m_sizeSlider->slider(), &DSlider::sliderMoved, this, [ = ] (int value) {
-        int lastValue = 0;
-        if (m_daemonDockInter->displayMode() == DisplayMode::Fashion) {
-            lastValue = int(m_daemonDockInter->windowSizeFashion());
-        } else if (m_daemonDockInter->displayMode() == DisplayMode::Efficient) {
-            lastValue = int(m_daemonDockInter->windowSizeEfficient());
-        } else {
-            Q_ASSERT_X(false, __FILE__, "not supported");
-        }
-
-        // 得到绝对偏移值
-        int offset = value - lastValue;
-
-        m_dockInter->resizeDock(offset);
-    });
+    connect(m_sizeSlider->slider(), &DSlider::sliderMoved, m_sizeSlider->slider(), &DSlider::valueChanged);
+    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_dockInter, &DBusInter::resizeDock);
 
     updateSliderValue();
     m_gsettingsWatcher->bind("sizeSlider", m_sizeSlider);
@@ -320,8 +308,6 @@ void ModuleWidget::updateSliderValue()
     } else if (displayMode == DisplayMode::Efficient) {
         if (int(m_daemonDockInter->windowSizeEfficient()) != m_sizeSlider->slider()->value())
             m_sizeSlider->slider()->setValue(int(m_daemonDockInter->windowSizeEfficient()));
-    } else {
-        Q_ASSERT_X(false, __FILE__, "not supported");
     }
     m_sizeSlider->slider()->blockSignals(false);
 }
