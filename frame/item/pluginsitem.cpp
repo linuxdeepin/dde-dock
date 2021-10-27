@@ -141,10 +141,8 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    if (QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) {
-        if (!permissionRequired()) {
-            return;
-        }
+    if (!permissionRequired()) {
+        return;
     }
 
     m_hover = false;
@@ -182,11 +180,10 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    if (QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) {
-        if (!permissionRequired()) {
-            return;
-        }
+    if (!permissionRequired()) {
+         return;
     }
+
 
     DockItem::mouseReleaseEvent(e);
 
@@ -339,9 +336,11 @@ bool PluginsItem::checkGSettingsControl() const
 bool PluginsItem::permissionRequired()
 {
 
+    if (!QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) return true;
+
     if (m_pluginInter->isPermissionRequired()) return true;
 
-       if (m_moduleVisible->isValid()) return true;
+    if (m_moduleVisible->isValid()) return true;
 
        
         qDebug() << "Control center modules that require root privileges:" << m_pluginInter->pluginDisplayName();

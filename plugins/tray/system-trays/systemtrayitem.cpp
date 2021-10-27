@@ -480,6 +480,8 @@ void SystemTrayItem::menuActionClicked(QAction *action)
 
 bool SystemTrayItem::permissionRequired()
 {
+    if (!QFileInfo::exists("/etc/deepin/ModuleVisible/dde-dock.conf")) return true;
+
     if (m_pluginInter->isPermissionRequired()) return true;
 
     if (m_moduleVisible->isValid()) return true;
