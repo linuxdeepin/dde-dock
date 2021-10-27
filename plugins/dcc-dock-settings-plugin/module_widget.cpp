@@ -293,6 +293,10 @@ void ModuleWidget::initUI()
             // 固定大小,防止滚动
             int lineHeight = m_pluginView->visualRect(m_pluginView->indexAt(QPoint(0, 0))).height();
             m_pluginView->setMinimumHeight(lineHeight * plugins.size() + 10);
+        } else {
+            m_pluginAreaTitle->setVisible(false);
+            m_pluginTips->setVisible(false);
+            m_pluginView->setVisible(false);
         }
     }
 
