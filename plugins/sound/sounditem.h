@@ -65,7 +65,7 @@ private slots:
 
 private:
     Dock::TipsWidget *m_tipsLabel;
-    SoundApplet *m_applet;
+    QScopedPointer<SoundApplet> m_applet;
     DBusSink *m_sinkInter;
     QPixmap m_iconPixmap;
 };
