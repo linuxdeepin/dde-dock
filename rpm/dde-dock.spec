@@ -64,7 +64,7 @@ sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt \
 sed -i -E '30,39d' CMakeLists.txt
 
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginscontroller.cpp \
-                          frame/panel/mainpanelcontrol.cpp \
+                          frame/window/mainpanelcontrol.cpp \
                           plugins/tray/system-trays/systemtrayscontroller.cpp
 
 
