@@ -85,6 +85,7 @@ export PATH=%{_qt5_bindir}:$PATH
 
 %files
 %license LICENSE
+%config %{_sysconfdir}/dde-dock/indicator/keybord_layout.json
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
 %{_datarootdir}/glib-2.0/schemas/com.deepin.dde.dock.module.gschema.xml
