@@ -132,6 +132,7 @@ void MainPanelControl::initUI()
     m_mainPanelLayout->addWidget(m_pluginAreaWidget);
 
     /* 桌面预览 */
+    m_desktopWidget->setObjectName("showdesktoparea");
     m_mainPanelLayout->addWidget(m_desktopWidget);
 
     m_mainPanelLayout->setSpacing(0);
