@@ -509,6 +509,8 @@ void MainWindow::resizeDock(int offset)
     qApp->sendEvent(this, &event);
     this->repaint();
     move(newRect.topLeft());
+
+    m_multiScreenWorker->updateDaemonDockSize(offset);
 }
 
 /**

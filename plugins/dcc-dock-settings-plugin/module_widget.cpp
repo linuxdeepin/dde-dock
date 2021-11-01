@@ -171,6 +171,12 @@ void ModuleWidget::initUI()
     connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_sizeSlider->slider(), &DSlider::sliderMoved, m_sizeSlider->slider(), &DSlider::valueChanged);
     connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_dockInter, &DBusInter::resizeDock);
+    connect(m_sizeSlider->slider(), &DSlider::sliderPressed, m_dockInter, [ = ] {
+        m_daemonDockInter->blockSignals(true);
+    });
+    connect(m_sizeSlider->slider(), &DSlider::sliderReleased, m_dockInter, [ = ] {
+        m_daemonDockInter->blockSignals(false);
+    });
 
     updateSliderValue();
     m_gsettingsWatcher->bind("sizeSlider", m_sizeSlider);
