@@ -40,8 +40,8 @@ Menu::Menu(QWidget *dockItem, QWidget *parent)
     qApp->installEventFilter(this);
     m_dockItem->installEventFilter(this);
 
-    // 点击任务栏以外区域时，关闭右键菜单
-    connect(m_eventInter, &XEventMonitor::ButtonPress, this, &Menu::onButtonPress);
+    // 按下任务栏以外区域释放鼠标时，关闭右键菜单，否则会导致点击菜单项后无响应
+    connect(m_eventInter, &XEventMonitor::ButtonRelease, this, &Menu::onButtonPress);
 }
 
 void Menu::onButtonPress()
@@ -69,27 +69,6 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
         } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel || event->type() == QEvent::Move) {
             // 按下应用拖动，按下应用从菜单上方移动时，鼠标滚轮滚动时，隐藏右键菜单
             hide();
-        }
-
-        // 当右键菜单显示时捕获鼠标的release事件,click=press+release，
-        // 让click无效，从而让启动器窗口不关闭
-        if (event->type() == QEvent::MouseButtonRelease) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-             if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-                 if (isVisible())
-                     return true;
-             }
-        }
-
-        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Escape) {
-                if (isVisible()) {
-                    hide();
-                    return true;
-                }
-            }
         }
     }
 

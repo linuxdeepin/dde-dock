@@ -94,6 +94,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     m_contextMenu->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
     m_contextMenu->setObjectName("trayMenu");
     qApp->installEventFilter(m_contextMenu);
+    qApp->installEventFilter(this);
 }
 
 SystemTrayItem::~SystemTrayItem()
@@ -276,24 +277,8 @@ bool SystemTrayItem::eventFilter(QObject *watched, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton)
                 m_contextMenu->hide();
-        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move || event->type() == QEvent::Leave) {
+        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move) {
             m_contextMenu->hide();
-        }
-
-        // 让click无效,避免点击到插件上
-        if (event->type() == QEvent::MouseButtonRelease) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt && isVisible())
-                return true;
-        }
-
-        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Escape && isVisible()) {
-                m_contextMenu->hide();
-                return true;
-            }
         }
     }
 
@@ -490,6 +475,7 @@ void SystemTrayItem::showContextMenu()
 void SystemTrayItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
+    m_contextMenu->hide();
 }
 
 void SystemTrayItem::onContextMenuAccepted()
