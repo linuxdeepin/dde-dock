@@ -39,6 +39,7 @@
 #include <QScrollArea>
 #include <QScroller>
 #include <QComboBox>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,6 +66,7 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_modeComboxWidget(new ComboxWidget(this))
     , m_positionComboxWidget(new ComboxWidget(this))
     , m_stateComboxWidget(new ComboxWidget(this))
+    , m_delayTimer(new QTimer(this))
     , m_sizeSlider(new TitledSliderItem(tr("Size"), this))
     , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays"), this))
     , m_screenSettingComboxWidget(new ComboxWidget(this))
@@ -80,7 +82,11 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     m_daemonDockInter->setSync(false);
     initUI();
 
+    m_delayTimer->setInterval(100);
+    m_delayTimer->setSingleShot(true);
+
     connect(m_dockInter, &DBusInter::pluginVisibleChanged, this, &ModuleWidget::updateItemCheckStatus);
+    connect(m_delayTimer, &QTimer::timeout, this, &ModuleWidget::onResizeDock);
 }
 
 ModuleWidget::~ModuleWidget()
@@ -170,7 +176,7 @@ void ModuleWidget::initUI()
     connect(m_daemonDockInter, &DBusDock::WindowSizeFashionChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_sizeSlider->slider(), &DSlider::sliderMoved, m_sizeSlider->slider(), &DSlider::valueChanged);
-    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_dockInter, &DBusInter::resizeDock);
+    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_sizeSlider->slider(), &DSlider::sliderPressed, m_dockInter, [ = ] {
         m_daemonDockInter->blockSignals(true);
     });
@@ -332,4 +338,10 @@ void ModuleWidget::updateItemCheckStatus(const QString &name, bool visible)
         m_pluginView->update(item->index());
         break;
     }
+}
+
+void ModuleWidget::onResizeDock()
+{
+    int offset = m_sizeSlider->slider()->value();
+    m_dockInter->resizeDock(offset);
 }

@@ -44,6 +44,7 @@ DWIDGET_END_NAMESPACE
 class TitleLabel;
 class GSettingWatcher;
 class QStandardItemModel;
+class QTimer;
 
 using namespace dcc::widgets;
 using DBusDock = com::deepin::dde::daemon::Dock;
@@ -62,12 +63,14 @@ private:
 private Q_SLOTS:
     void updateSliderValue();
     void updateItemCheckStatus(const QString &name, bool visible);
+    void onResizeDock();
 
 private:
     ComboxWidget *m_modeComboxWidget;
     ComboxWidget *m_positionComboxWidget;
     ComboxWidget *m_stateComboxWidget;
 
+    QTimer *m_delayTimer;
     TitledSliderItem *m_sizeSlider;
 
     TitleLabel *m_screenSettingTitle;

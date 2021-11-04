@@ -10,7 +10,7 @@ file(GLOB_RECURSE SRCS
     "*.h"
     "*.cpp")
 
-find_package(Qt5 COMPONENTS Core Widgets DBus REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets DBus LinguistTools REQUIRED)
 find_package(DdeControlCenter REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(DtkWidget REQUIRED)
@@ -38,7 +38,10 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
     )
 
-set(CMAKE_INSTALL_PREFIX "/usr")
+file(GLOB TS_FILES "translations/*.ts")
+qt5_add_translation(QM_FILES ${TS_FILES})
+add_custom_target(translations ALL DEPENDS ${QM_FILES})
+install(FILES ${QM_FILES} DESTINATION share/${PLUGIN_NAME}/translations)
 
 install(FILES com.deepin.dde.control-center.dock-settings.gschema.xml
     DESTINATION share/glib-2.0/schemas)

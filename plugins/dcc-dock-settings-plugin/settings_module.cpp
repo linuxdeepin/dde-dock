@@ -64,6 +64,7 @@ QStringList SettingsModule::availPage() const
 
 const QString SettingsModule::displayName() const
 {
+    //~ contents_path /personalization/Dock
     return tr("Dock");
 }
 
@@ -74,7 +75,7 @@ QIcon SettingsModule::icon() const
 
 QString SettingsModule::translationPath() const
 {
-    return QString("/usr/share/dde-dock/translations");
+    return QString(":/translations/dcc-dock-settings-plugin_%1.ts");
 }
 
 QString SettingsModule::path() const

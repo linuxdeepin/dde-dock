@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+minimum_perc = 80
+mode = developer
+
+[deepin-desktop-environment.dcc-dock-settings-plugin]
+file_filter = translations/dcc-dock-settings-plugin_<lang>.ts
+source_file = translations/dcc-dock-settings-plugin.ts
+source_lang = en
+type = QT

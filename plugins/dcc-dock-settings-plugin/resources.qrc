@@ -12,5 +12,6 @@
         <file>icons/plugins/power.svg</file>
         <file>icons/plugins/task.svg</file>
         <file>icons/plugins/trash.svg</file>
+        <file>translations/dcc-dock-settings-plugin.ts</file>
     </qresource>
 </RCC>
