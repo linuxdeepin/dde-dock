@@ -151,6 +151,9 @@ private:
     static QPointer<DockPopupWindow> PopupWindow;
     Dock::TipsWidget *m_tipsLabel;
     bool m_popupShown;
+
+    // qt右键菜单: true, 外部菜单: false
+    bool m_menuState;
 };
 
 #endif /* SNIWIDGET_H */

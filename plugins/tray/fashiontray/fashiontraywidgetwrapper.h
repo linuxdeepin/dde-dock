@@ -71,9 +71,9 @@ private:
     void onTrayWidgetClicked();
 
 private:
-    // 动态加载的插件内存空间与dock进程内存空间相互独立，创建手势服务，监听触摸按下动作
     QPointer<AbstractTrayWidget> m_absTrayWidget;
 
+    // 动态加载的插件内存空间与dock进程内存空间相互独立，创建手势服务，监听触摸按下动作
     QPointer<TouchSignalManager> m_touchSignalManager;
     QVBoxLayout *m_layout;
 
