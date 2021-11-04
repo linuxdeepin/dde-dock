@@ -28,6 +28,7 @@
 #include <com_deepin_dde_daemon_dock.h>
 
 #include "com_deepin_dde_dock.h"
+#include "gsetting_watcher.h"
 
 namespace dcc {
 namespace widgets {
@@ -42,11 +43,11 @@ class DTipLabel;
 DWIDGET_END_NAMESPACE
 
 class TitleLabel;
-class GSettingWatcher;
 class QStandardItemModel;
 class QTimer;
 
 using namespace dcc::widgets;
+using namespace dcc_dock_plugin;
 using DBusDock = com::deepin::dde::daemon::Dock;
 using DBusInter = com::deepin::dde::Dock;
 

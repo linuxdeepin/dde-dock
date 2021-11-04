@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 #include <QVariant>
 #include <QWidget>
+using namespace dcc_dock_plugin;
 
 /**
  * @brief GSettingWatcher::GSettingWatcher 用于监听处于 \a baseSchemasId + "." + \a module 配置下的配置项内容变化，并将变化应用到绑定的控件上

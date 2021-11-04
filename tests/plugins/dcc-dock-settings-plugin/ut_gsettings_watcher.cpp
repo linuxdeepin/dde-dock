@@ -4,6 +4,8 @@
 
 #include <gtest/gtest.h>
 
+using namespace dcc_dock_plugin;
+
 class Test_GSettingWatcher : public QObject, public ::testing::Test
 {};
 

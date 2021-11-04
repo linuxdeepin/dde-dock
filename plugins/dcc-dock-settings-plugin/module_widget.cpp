@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "module_widget.h"
-#include "gsetting_watcher.h"
 
 #include <widgets/comboxwidget.h>
 #include <widgets/titledslideritem.h>

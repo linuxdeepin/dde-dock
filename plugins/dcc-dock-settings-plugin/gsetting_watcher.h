@@ -28,9 +28,12 @@
 class QGSettings;
 class QListView;
 class QStandardItem;
+
+namespace dcc_dock_plugin {
 class GSettingWatcher : public QObject
 {
     Q_OBJECT
+
 public:
     GSettingWatcher(const QString &baseSchemasId, const QString &module, QObject *parent = nullptr);
     ~GSettingWatcher();
@@ -45,5 +48,6 @@ private:
     QMultiHash<QString, QWidget *> m_map;
     QGSettings *m_gsettings;
 };
+}
 
 #endif // GSETTINGWATCHER_H
