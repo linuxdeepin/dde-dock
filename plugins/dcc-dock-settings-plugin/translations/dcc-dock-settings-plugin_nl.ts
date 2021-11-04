@@ -1,89 +1,89 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.0">
 <context>
     <name>ModuleWidget</name>
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Size</translation>
+        <translation>Grootte</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation>Multiple Displays</translation>
+        <translation>Meerdere beeldschermen</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>
         <source>Plugin Area</source>
-        <translation>Plugin Area</translation>
+        <translation>Invoegtoepassingsgebied</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Select which icons appear in the Dock</translation>
+        <translation>Geef aan welke pictogrammen moeten worden getoond op het dock</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="100"/>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Fashion mode</source>
-        <translation>Fashion mode</translation>
+        <translation>Moderne modus</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="101"/>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Efficient mode</source>
-        <translation>Efficient mode</translation>
+        <translation>Efficiënte modus</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation>Modus</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="120"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Bovenaan</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="121"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Bottom</source>
-        <translation>Bottom</translation>
+        <translation>Onderaan</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="122"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="123"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="125"/>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>Locatie</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="142"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Keep shown</source>
-        <translation>Keep shown</translation>
+        <translation>Altijd tonen</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="143"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Keep hidden</source>
-        <translation>Keep hidden</translation>
+        <translation>Altijd verbergen</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="144"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Smart hide</source>
-        <translation>Smart hide</translation>
+        <translation>Slim verbergen</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="146"/>
@@ -93,29 +93,29 @@
     <message>
         <location filename="../module_widget.cpp" line="167"/>
         <source>Small</source>
-        <translation>Small</translation>
+        <translation>Klein</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="167"/>
         <source>Large</source>
-        <translation>Large</translation>
+        <translation>Groot</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="188"/>
         <location filename="../module_widget.cpp" line="195"/>
         <source>On screen where the cursor is</source>
-        <translation>On screen where the cursor is</translation>
+        <translation>Op het scherm waar de cursor is</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="189"/>
         <location filename="../module_widget.cpp" line="195"/>
         <source>Only on main screen</source>
-        <translation>Only on main screen</translation>
+        <translation>Alleen op hoofdscherm</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="193"/>
         <source>Show Dock</source>
-        <translation>Show Dock</translation>
+        <translation>Dock tonen</translation>
     </message>
 </context>
 <context>

@@ -13,5 +13,18 @@
         <file>icons/plugins/task.svg</file>
         <file>icons/plugins/trash.svg</file>
         <file>translations/dcc-dock-settings-plugin.ts</file>
+        <file>translations/dcc-dock-settings-plugin_bo.ts</file>
+        <file>translations/dcc-dock-settings-plugin_az.ts</file>
+        <file>translations/dcc-dock-settings-plugin_cs.ts</file>
+        <file>translations/dcc-dock-settings-plugin_fi.ts</file>
+        <file>translations/dcc-dock-settings-plugin_hu.ts</file>
+        <file>translations/dcc-dock-settings-plugin_nl.ts</file>
+        <file>translations/dcc-dock-settings-plugin_pt.ts</file>
+        <file>translations/dcc-dock-settings-plugin_sq.ts</file>
+        <file>translations/dcc-dock-settings-plugin_ug.ts</file>
+        <file>translations/dcc-dock-settings-plugin_uk.ts</file>
+        <file>translations/dcc-dock-settings-plugin_zh_CN.ts</file>
+        <file>translations/dcc-dock-settings-plugin_zh_HK.ts</file>
+        <file>translations/dcc-dock-settings-plugin_zh_TW.ts</file>
     </qresource>
 </RCC>

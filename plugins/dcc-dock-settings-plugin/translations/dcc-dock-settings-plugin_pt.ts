@@ -1,121 +1,121 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.0">
 <context>
     <name>ModuleWidget</name>
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Size</translation>
+        <translation>Tamanho</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation>Multiple Displays</translation>
+        <translation>Vários ecrãs</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>
         <source>Plugin Area</source>
-        <translation>Plugin Area</translation>
+        <translation>Área de plugins</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Select which icons appear in the Dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="100"/>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Fashion mode</source>
-        <translation>Fashion mode</translation>
+        <translation>Modo Elegante</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="101"/>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Efficient mode</source>
-        <translation>Efficient mode</translation>
+        <translation>Modo eficiente</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation>Modo</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="120"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Superior</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="121"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Bottom</source>
-        <translation>Bottom</translation>
+        <translation>Inferior</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="122"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="123"/>
         <location filename="../module_widget.cpp" line="127"/>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>Direita</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="125"/>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>Localização</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="142"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Keep shown</source>
-        <translation>Keep shown</translation>
+        <translation>Manter visível</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="143"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Keep hidden</source>
-        <translation>Keep hidden</translation>
+        <translation>Manter ocultada</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="144"/>
         <location filename="../module_widget.cpp" line="148"/>
         <source>Smart hide</source>
-        <translation>Smart hide</translation>
+        <translation>Ocultação inteligente</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="146"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="167"/>
         <source>Small</source>
-        <translation>Small</translation>
+        <translation>Pequeno</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="167"/>
         <source>Large</source>
-        <translation>Large</translation>
+        <translation>Grande</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="188"/>
         <location filename="../module_widget.cpp" line="195"/>
         <source>On screen where the cursor is</source>
-        <translation>On screen where the cursor is</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="189"/>
         <location filename="../module_widget.cpp" line="195"/>
         <source>Only on main screen</source>
-        <translation>Only on main screen</translation>
+        <translation>Apenas no ecrã principal</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="193"/>
         <source>Show Dock</source>
-        <translation>Show Dock</translation>
+        <translation>Mostrar Doca</translation>
     </message>
 </context>
 <context>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../settings_module.cpp" line="68"/>
         <source>Dock</source>
-        <translation>Dock</translation>
+        <translation>Doca</translation>
         <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
