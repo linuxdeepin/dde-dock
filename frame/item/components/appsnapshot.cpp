@@ -22,6 +22,7 @@
 #include "appsnapshot.h"
 #include "previewcontainer.h"
 #include "../widgets/tipswidget.h"
+#include "utils.h"
 
 #include <DStyle>
 
@@ -142,9 +143,9 @@ void AppSnapshot::setTitleVisible(bool bVisible)
 
 void AppSnapshot::closeWindow() const
 {
-    const auto display = QX11Info::display();
+    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
+        qWarning() << "Error: get display failed!";
         return;
     }
 
@@ -350,9 +351,9 @@ bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
 
 SHMInfo *AppSnapshot::getImageDSHM()
 {
-    const auto display = QX11Info::display();
+    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
-        qWarning("QX11Info::display() is 0x0");
+        qWarning() << "Error: get display failed!";
         return nullptr;
     }
 
@@ -378,9 +379,9 @@ SHMInfo *AppSnapshot::getImageDSHM()
 
 XImage *AppSnapshot::getImageXlib()
 {
-    const auto display = QX11Info::display();
+    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
+        qWarning() << "Error: get display failed!";
         return nullptr;
     }
 
@@ -393,9 +394,9 @@ XImage *AppSnapshot::getImageXlib()
 
 QRect AppSnapshot::rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk)
 {
-    const auto display = QX11Info::display();
+    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
+        qWarning() << "Error: get display failed!";
         return QRect();
     }
 
@@ -432,9 +433,9 @@ void AppSnapshot::getWindowState()
 
     m_isWidowHidden = false;
 
-    const auto display = QX11Info::display();
+    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
+        qWarning() << "Error: get display failed!";
         return;
     }
     Atom atom_prop = XInternAtom(display, "_NET_WM_STATE", true);
