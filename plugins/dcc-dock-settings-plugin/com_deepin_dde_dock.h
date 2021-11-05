@@ -99,17 +99,17 @@ public Q_SLOTS: // METHODS
 
 
 
-    inline QDBusPendingReply<> resizeDock(int offset)
+    inline QDBusPendingReply<> resizeDock(int offset, bool dragging)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(offset);
+        argumentList << QVariant::fromValue(offset) << QVariant::fromValue(dragging);
         return asyncCallWithArgumentList(QStringLiteral("resizeDock"), argumentList);
     }
 
-    inline void resizeDockQueued(int offset)
+    inline void resizeDockQueued(int offset, bool dragging)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(offset);
+        argumentList << QVariant::fromValue(offset) << QVariant::fromValue(dragging);
 
         CallQueued(QStringLiteral("resizeDock"), argumentList);
     }

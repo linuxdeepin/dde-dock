@@ -469,8 +469,10 @@ void MainWindow::resetDragWindow()
     }
 }
 
-void MainWindow::resizeDock(int offset)
+void MainWindow::resizeDock(int offset, bool dragging)
 {
+    qApp->setProperty(DRAG_STATE_PROP, dragging);
+
     const QRect &rect = m_multiScreenWorker->getDockShowMinGeometry(m_multiScreenWorker->deskScreen());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
@@ -506,15 +508,11 @@ void MainWindow::resizeDock(int offset)
 
     // 更新界面大小
     m_mainPanel->setFixedSize(newRect.size());
-    QEvent event(QEvent::LayoutRequest);
-    qApp->sendEvent(m_mainPanel, &event);
-    m_mainPanel->repaint();
     setFixedSize(newRect.size());
-    qApp->sendEvent(this, &event);
-    this->repaint();
     move(newRect.topLeft());
 
-    m_multiScreenWorker->updateDaemonDockSize(offset);
+    if (!dragging)
+        resetDragWindow();
 }
 
 /**

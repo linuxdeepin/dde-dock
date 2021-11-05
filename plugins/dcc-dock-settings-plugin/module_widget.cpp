@@ -65,7 +65,6 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_modeComboxWidget(new ComboxWidget(this))
     , m_positionComboxWidget(new ComboxWidget(this))
     , m_stateComboxWidget(new ComboxWidget(this))
-    , m_delayTimer(new QTimer(this))
     , m_sizeSlider(new TitledSliderItem(tr("Size"), this))
     , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays"), this))
     , m_screenSettingComboxWidget(new ComboxWidget(this))
@@ -76,16 +75,13 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
     , m_gsettingsWatcher(new GSettingWatcher("com.deepin.dde.control-center", "personalization", this))
+    , m_sliderPressed(false)
 {
     // 异步，否则频繁调用可能会导致卡顿
     m_daemonDockInter->setSync(false);
     initUI();
 
-    m_delayTimer->setInterval(100);
-    m_delayTimer->setSingleShot(true);
-
     connect(m_dockInter, &DBusInter::pluginVisibleChanged, this, &ModuleWidget::updateItemCheckStatus);
-    connect(m_delayTimer, &QTimer::timeout, this, &ModuleWidget::onResizeDock);
 }
 
 ModuleWidget::~ModuleWidget()
@@ -175,12 +171,22 @@ void ModuleWidget::initUI()
     connect(m_daemonDockInter, &DBusDock::WindowSizeFashionChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_daemonDockInter, &DBusDock::WindowSizeEfficientChanged, this, &ModuleWidget::updateSliderValue);
     connect(m_sizeSlider->slider(), &DSlider::sliderMoved, m_sizeSlider->slider(), &DSlider::valueChanged);
-    connect(m_sizeSlider->slider(), &DSlider::valueChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_sizeSlider->slider(), &DSlider::valueChanged, this, [ = ] (int value) {
+        m_dockInter->resizeDock(value, true);
+    });
     connect(m_sizeSlider->slider(), &DSlider::sliderPressed, m_dockInter, [ = ] {
         m_daemonDockInter->blockSignals(true);
+        m_sliderPressed = true;
     });
     connect(m_sizeSlider->slider(), &DSlider::sliderReleased, m_dockInter, [ = ] {
         m_daemonDockInter->blockSignals(false);
+        m_sliderPressed = false;
+
+        // 松开手后通知dock拖拽状态接触
+        QTimer::singleShot(0, this, [ = ] {
+            int offset = m_sizeSlider->slider()->value();
+            m_dockInter->resizeDock(offset, false);
+        });
     });
 
     updateSliderValue();
@@ -337,10 +343,4 @@ void ModuleWidget::updateItemCheckStatus(const QString &name, bool visible)
         m_pluginView->update(item->index());
         break;
     }
-}
-
-void ModuleWidget::onResizeDock()
-{
-    int offset = m_sizeSlider->slider()->value();
-    m_dockInter->resizeDock(offset);
 }
