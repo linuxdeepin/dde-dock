@@ -34,12 +34,17 @@
 
 #include <QSettings>
 #include <QLabel>
+
 #include <mutex>
+#include <xcb/xcb.h>
 
 class FashionTrayItem;
 namespace Dock {
 class TipsWidget;
 }
+
+typedef struct _XDisplay Display;
+
 class TrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -103,6 +108,9 @@ private:
 
     bool m_pluginLoaded;
     std::mutex m_sniMutex;
+
+    xcb_connection_t *xcb_connection;
+    Display *m_display;
 };
 
 #endif // TRAYPLUGIN_H
