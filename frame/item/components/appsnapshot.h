@@ -77,6 +77,7 @@ public:
     void setWindowState();
     void setTitleVisible(bool bVisible);
     QString appTitle() { return m_3DtitleBtn ? m_3DtitleBtn->text() : QString(); }
+    bool isKWinAvailable();
 
 signals:
     void entered(const WId wid) const;
