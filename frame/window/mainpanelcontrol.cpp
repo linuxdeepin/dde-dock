@@ -30,6 +30,7 @@
 #include "touchsignalmanager.h"
 #include "utils.h"
 #include "desktop_widget.h"
+#include "imageutil.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -711,6 +712,14 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void MainPanelControl::enterEvent(QEvent *event)
+{
+    if (Utils::IS_WAYLAND_DISPLAY)
+        updatePanelCursor();
+
+    QWidget::enterEvent(event);
+}
+
 void MainPanelControl::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
@@ -1292,4 +1301,24 @@ bool MainPanelControl::checkNeedShowDesktop()
 bool MainPanelControl::appIsOnDock(const QString &appDesktop)
 {
     return DockItemManager::instance()->appIsOnDock(appDesktop);
+}
+
+// TODO: 多处使用类似方法，可尝试提取公共函数
+void MainPanelControl::updatePanelCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
+    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }

@@ -85,16 +85,18 @@ private:
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
-
+    
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void enterEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+    void updatePanelCursor();
 
 private:
     QBoxLayout *m_mainPanelLayout;

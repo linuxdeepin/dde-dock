@@ -63,6 +63,7 @@ private slots:
     void onGlobMouseRelease(const QPoint &mousePos, const int flag);
     void compositeChanged();
     void ensureRaised();
+    void updatePopupWindowCursor();
 
 private:
     bool m_model;

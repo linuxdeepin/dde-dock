@@ -26,7 +26,8 @@ Build-Depends: debhelper (>= 8.0.0),
  libgtest-dev,
  libgmock-dev,
  qttools5-dev,
- dde-control-center-dev
+ dde-control-center-dev,
+ libxcursor-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

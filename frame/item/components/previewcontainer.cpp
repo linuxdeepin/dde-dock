@@ -20,12 +20,16 @@
  */
 
 #include "previewcontainer.h"
+#include "imageutil.h"
+#include "utils.h"
 
 #include <QDesktopWidget>
 #include <QScreen>
 #include <QApplication>
 #include <QDragEnterEvent>
 #include <QDesktopWidget>
+#include <QCursor>
+#include <QGSettings>
 
 #define SPACING           0
 #define MARGIN            0
@@ -211,8 +215,29 @@ void PreviewContainer::appendSnapWidget(const WId wid)
         snap->fetchSnapshot();
 }
 
+void PreviewContainer::updatePreviewCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
+    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
+}
+
 void PreviewContainer::enterEvent(QEvent *e)
 {
+    if (Utils::IS_WAYLAND_DISPLAY)
+        updatePreviewCursor();
     QWidget::enterEvent(e);
 
     m_needActivate = false;

@@ -28,6 +28,8 @@
 #include "mainpanelcontrol.h"
 #include "multiscreenworker.h"
 #include "touchsignalmanager.h"
+#include "imageutil.h"
+#include "utils.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -114,12 +116,39 @@ private:
 
     void enterEvent(QEvent *) override
     {
+        if (Utils::IS_WAYLAND_DISPLAY)
+            updateCursor();
+
         QApplication::setOverrideCursor(cursor());
     }
 
     void leaveEvent(QEvent *) override
     {
         QApplication::setOverrideCursor(Qt::ArrowCursor);
+    }
+
+    void updateCursor()
+    {
+        QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
+        int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
+        Position position = static_cast<Dock::Position>(qApp->property("position").toInt());
+
+        static QCursor *lastCursor = nullptr;
+        static QString lastTheme;
+        static int lastPosition = -1;
+        static int lastCursorSize = -1;
+        if (theme != lastTheme || position != lastPosition || cursorSize != lastCursorSize) {
+            lastTheme = theme;
+            lastPosition = position;
+            lastCursorSize = cursorSize;
+            const char* cursorName = (position == Bottom || position == Top) ? "v_double_arrow" : "h_double_arrow";
+            QCursor *newCursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), cursorName, cursorSize);
+            setCursor(*newCursor);
+            if (lastCursor)
+                delete lastCursor;
+
+            lastCursor = newCursor;
+        }
     }
 };
 

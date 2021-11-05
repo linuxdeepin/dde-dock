@@ -43,6 +43,9 @@ public:
     AppDragWidget *appDragWidget();
 
 private:
+    void setDragMoveCursor();
+
+private:
     QPointer<AppDragWidget> m_appDragWidget;
 };
 
