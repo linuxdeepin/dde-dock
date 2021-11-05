@@ -233,7 +233,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     if (interface->pluginName() == "multitasking") {
-        if (qEnvironmentVariable("XDG_SESSION_TYPE").contains("wayland") or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
+        if (Utils::IS_WAYLAND_DISPLAY or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
             for (auto &pair : m_pluginLoadMap.keys()) {
                 if (pair.first == pluginFile) {
                     m_pluginLoadMap.remove(pair);

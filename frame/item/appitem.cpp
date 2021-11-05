@@ -25,6 +25,7 @@
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "appspreviewprovider.h"
+#include "utils.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -142,6 +143,10 @@ bool AppItem::isValid() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
+    // wayland没做处理
+    if (Utils::IS_WAYLAND_DISPLAY)
+        return;
+
     const QRect r(mapToGlobal(QPoint(0, 0)),
                   mapToGlobal(QPoint(width(), height())));
     if (!QX11Info::connection()) {

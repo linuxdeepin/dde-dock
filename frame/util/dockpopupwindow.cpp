@@ -138,6 +138,8 @@ void DockPopupWindow::updatePopupWindowCursor()
     int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
     if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
         QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        if (!cursor)
+            return;
         lastCursorTheme = theme;
         lastCursorSize = cursorSize;
         setCursor(*cursor);
