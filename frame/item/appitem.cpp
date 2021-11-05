@@ -299,8 +299,9 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    int curTimestamp = QDateTime::currentSecsSinceEpoch();
-    if ((curTimestamp - m_lastclickTimes) < 1)
+    // 获取时间戳qint64转quint64，是不存在任何问题的
+    quint64 curTimestamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    if ((curTimestamp - m_lastclickTimes) < 300)
         return;
 
     m_lastclickTimes = curTimestamp;
