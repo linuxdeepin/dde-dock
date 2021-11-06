@@ -367,6 +367,22 @@
       </description>
     </key>
   </schema>
+  <schema path="/com/deepin/dde/dock/module/airplane-mode/" id="com.deepin.dde.dock.module.airplane-mode" gettext-domain="DDE">
+    <key type="b" name="control">
+      <default>false</default>
+      <summary>Blocking event</summary>
+      <description>
+          Blocking mouse events
+      </description>
+    </key>
+    <key type="b" name="enable">
+      <default>false</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+  </schema>
   <schema path="/com/deepin/dde/dock/module/tray/" id="com.deepin.dde.dock.module.tray" gettext-domain="DDE">
     <key type="b" name="control">
       <default>false</default>
@@ -519,7 +535,7 @@
       </description>
     </key>
   </schema>
- <schema path="/com/deepin/dde/dock/touch/" id="com.deepin.dde.dock.touch" gettext-domain="DDE">
+  <schema path="/com/deepin/dde/dock/touch/" id="com.deepin.dde.dock.touch" gettext-domain="DDE">
     <key type="i" name="resize-height">
       <default>7</default>
       <summary>Controling the drag height of touch screen</summary>
