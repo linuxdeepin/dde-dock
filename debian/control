@@ -47,9 +47,9 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
 Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,
- dde-dock-network-plugin,
+ dock-network-plugin,
  dcc-dock-settings-plugin,
- dde-network-list
+ dde-network-dialog
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
