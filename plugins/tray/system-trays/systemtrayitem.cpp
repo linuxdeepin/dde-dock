@@ -21,6 +21,7 @@
 
 #include "systemtrayitem.h"
 #include "utils.h"
+#include "menudialog.h"
 
 #include <QProcess>
 #include <QDebug>
@@ -35,9 +36,9 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     : AbstractTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
-    , m_contextMenu(new QMenu)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
+    , m_contextMenu(new Menu)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
     , m_itemKey(itemKey)
@@ -90,11 +91,6 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
         connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
 
     grabGesture(Qt::TapAndHoldGesture);
-
-    m_contextMenu->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
-    m_contextMenu->setObjectName("trayMenu");
-    qApp->installEventFilter(m_contextMenu);
-    qApp->installEventFilter(this);
 }
 
 SystemTrayItem::~SystemTrayItem()
@@ -268,21 +264,6 @@ void SystemTrayItem::showEvent(QShowEvent *event)
     });
 
     return AbstractTrayWidget::showEvent(event);
-}
-
-bool SystemTrayItem::eventFilter(QObject *watched, QEvent *event)
-{
-    if (!watched->objectName().startsWith("trayMenu")) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->button() == Qt::LeftButton)
-                m_contextMenu->hide();
-        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move) {
-            m_contextMenu->hide();
-        }
-    }
-
-    return QWidget::eventFilter(watched, event);
 }
 
 const QPoint SystemTrayItem::popupMarkPoint() const

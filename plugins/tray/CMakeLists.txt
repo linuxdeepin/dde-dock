@@ -14,6 +14,7 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
     "../../frame/dbus/dbusmenumanager.h" "../../frame/dbus/dbusmenumanager.cpp"
     "../../widgets/*.h" "../../widgets/*.cpp"
     "../../frame/util/imageutil.h" "../../frame/util/imageutil.cpp"
+    "../../frame/util/menudialog.h" "../../frame/util/menudialog.cpp"
     "../../frame/util/touchsignalmanager.h" "../../frame/util/touchsignalmanager.cpp")
 
 find_package(PkgConfig REQUIRED)

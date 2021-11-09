@@ -38,7 +38,9 @@ Menu::Menu(QWidget *dockItem, QWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
     setObjectName("rightMenu");
     qApp->installEventFilter(this);
-    m_dockItem->installEventFilter(this);
+
+    if (m_dockItem)
+        m_dockItem->installEventFilter(this);
 
     // 按下任务栏以外区域释放鼠标时，关闭右键菜单，否则会导致点击菜单项后无响应
     connect(m_eventInter, &XEventMonitor::ButtonRelease, this, &Menu::onButtonPress);
