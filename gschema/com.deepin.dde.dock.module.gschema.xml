@@ -319,7 +319,32 @@
       </description>
     </key>
   </schema>
- <schema path="/com/deepin/dde/dock/mainwindow/" id="com.deepin.dde.dock.mainwindow" gettext-domain="DDE">
+
+  <schema path="/com/deepin/dde/dock/module/multitasking/" id="com.deepin.dde.dock.module.multitasking" gettext-domain="DDE">
+    <key type="b" name="enable">
+      <default>false</default>
+      <summary>Module Enable</summary>
+      <description>
+          Control Module Enable
+      </description>
+    </key>
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+    <key type="b" name="visible">
+      <default>true</default>
+      <summary>Module visible</summary>
+      <description>
+          Control Menu pluginsettings visible
+      </description>
+    </key>
+  </schema>
+
+  <schema path="/com/deepin/dde/dock/mainwindow/" id="com.deepin.dde.dock.mainwindow" gettext-domain="DDE">
     <key type="u" name="monitors-switch-time">
       <default>2000</default>
       <summary>Unit: ms</summary>
