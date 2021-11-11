@@ -589,9 +589,6 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
         return;
     }
 
-    if (Utils::IS_WAYLAND_DISPLAY)
-        return;
-
     // 拖app到dock上
     const char *RequestDockKey = "RequestDock";
     const char *RequestDockKeyFallback = "text/plain";
