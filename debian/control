@@ -72,7 +72,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin for onboard
  Dock plugin for onboard of deepin desktop-environment
 
-Package: dcc-dock-settings-plugin
+Package: dcc-dock-plugin
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dcc plugin for dock settings

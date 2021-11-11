@@ -75,7 +75,7 @@ QIcon SettingsModule::icon() const
 
 QString SettingsModule::translationPath() const
 {
-    return QString(":/translations/dcc-dock-settings-plugin_%1.ts");
+    return QString(":/translations/dcc-dock-plugin_%1.ts");
 }
 
 QString SettingsModule::path() const

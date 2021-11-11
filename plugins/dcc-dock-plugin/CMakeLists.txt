@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(PLUGIN_NAME "dcc-dock-settings-plugin")
+set(PLUGIN_NAME "dcc-dock-plugin")
 
 project(${PLUGIN_NAME})
 
@@ -43,7 +43,7 @@ qt5_add_translation(QM_FILES ${TS_FILES})
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 install(FILES ${QM_FILES} DESTINATION share/${PLUGIN_NAME}/translations)
 
-install(FILES com.deepin.dde.control-center.dock-settings.gschema.xml
+install(FILES com.deepin.dde.control-center.dock-plugin.gschema.xml
     DESTINATION share/glib-2.0/schemas)
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-control-center/modules)

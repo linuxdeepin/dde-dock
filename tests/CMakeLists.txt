@@ -20,13 +20,13 @@ file(GLOB_RECURSE PLUGIN_SRCS
     "../plugins/bluetooth/*.cpp"
     "../plugins/bluetooth/componments/*.h"
     "../plugins/bluetooth/componments/*.cpp"
-    "../plugins/dcc-dock-settings-plugin/*.h"
-    "../plugins/dcc-dock-settings-plugin/*.cpp"
+    "../plugins/dcc-dock-plugin/*.h"
+    "../plugins/dcc-dock-plugin/*.cpp"
     "../frame/util/horizontalseperator.h"
     "../frame/util/horizontalseperator.cpp")
 
 # 其包含的"interface/moduleinterface.h"文件中定义了ModuleInterface_iid，任务栏插件框架的interface文件中也有定义
-list(FILTER PLUGIN_SRCS EXCLUDE REGEX "../plugins/dcc-dock-settings-plugin/settings_module.*")
+list(FILTER PLUGIN_SRCS EXCLUDE REGEX "../plugins/dcc-dock-plugin/settings_module.*")
 
 # 用于测试覆盖率的编译条件
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
@@ -77,7 +77,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     fakedbus
     ../plugins/bluetooth
     ../plugins/bluetooth/componments
-    ../plugins/dcc-dock-settings-plugin
+    ../plugins/dcc-dock-plugin
 )
 
 # 链接库
