@@ -74,7 +74,7 @@ void BluetoothDeviceItem::initActionList()
     m_connButton->setType(StateButton::Check);
     m_connButton->setSwitchFork(false);
     m_connButton->setFixedSize(16, 16);
-    m_iconWidget->setFixedSize(20, 16);
+    m_iconWidget->setFixedSize(18, 16);
     QHBoxLayout *layout = new QHBoxLayout(m_iconWidget);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(m_connButton);
