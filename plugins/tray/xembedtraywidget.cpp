@@ -87,6 +87,11 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn, Display
     , m_valid(true)
     , m_xcbCnn(cnn)
     , m_display(disp)
+    , m_gestureInter(new Gesture("com.deepin.daemon.Gesture"
+                                 , "/com/deepin/daemon/Gesture"
+                                 , QDBusConnection::systemBus()
+                                 , nullptr))
+    , m_longPress(false)
 {
     wrapWindow();
 
@@ -102,6 +107,10 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn, Display
 
     setMouseTracking(true);
     connect(m_sendHoverEvent, &QTimer::timeout, this, &XEmbedTrayWidget::sendHoverEvent);
+
+    // 不能使用手势服务监听触摸按下事件来处理触摸屏下的拖动业务，因为会影响其他托盘插件右键菜单显示和隐藏的功能
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, this, &XEmbedTrayWidget::setTouchDown, Qt::UniqueConnection);
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, &XEmbedTrayWidget::setTouchEnd, Qt::UniqueConnection);
 
     m_updateTimer->start();
 }
@@ -143,13 +152,12 @@ void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
 
 void XEmbedTrayWidget::mousePressEvent(QMouseEvent *e)
 {
-    // 支持触摸屏触摸按下，显示右键菜单
+    AbstractTrayWidget::mousePressEvent(e);
+
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        QTimer::singleShot(100, this, [ & ] {
-            // 右键
-            sendClick(XCB_BUTTON_INDEX_3, QCursor::pos().x(), QCursor::pos().y());
-        });
-        return;
+        // 右键-出现
+        m_startPos = e->pos();
+        sendClick(XCB_BUTTON_INDEX_3, QCursor::pos().x(), QCursor::pos().y());
     }
 }
 
@@ -157,15 +165,21 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     AbstractTrayWidget::mouseMoveEvent(e);
 
-    // ignore the touchEvent
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        // 临时方案隐藏微信等应用的右键菜单
-        // 左键
-        sendClick(XCB_BUTTON_INDEX_2, QCursor::pos().x(), QCursor::pos().y());
-        return;
+    if (e->source() == Qt::MouseEventSynthesizedByQt && m_longPress) {
+        // 模拟拖动时隐藏右键菜单效果, 所以间距设置为5个像素值
+        if (qAbs(e->pos().x() - m_startPos.x()) > 5 || qAbs(e->pos().y() - m_startPos.y()) > 5) {
+            sendClick(XCB_BUTTON_INDEX_2, QCursor::pos().x(), QCursor::pos().y());
+            return;
+        }
     }
 
     m_sendHoverEvent->start();
+}
+
+void XEmbedTrayWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+    // 鼠标释放事件不往父类传递
+    QWidget::mouseReleaseEvent(e);
 }
 
 void XEmbedTrayWidget::configContainerPosition()
@@ -588,4 +602,14 @@ bool XEmbedTrayWidget::isBadWindow()
     free(clientGeom);
 
     return result;
+}
+
+void XEmbedTrayWidget::setTouchDown()
+{
+    m_longPress = true;
+}
+
+void XEmbedTrayWidget::setTouchEnd()
+{
+    m_longPress = false;
 }

@@ -23,6 +23,7 @@
 #define XEMBEDTRAYWIDGET_H
 
 #include "abstracttraywidget.h"
+#include <com_deepin_daemon_gesture.h>
 
 #include <QWidget>
 #include <QTimer>
@@ -30,6 +31,7 @@
 #include <xcb/xcb.h>
 
 typedef struct _XDisplay Display;
+using Gesture = com::deepin::daemon::Gesture;
 
 class XEmbedTrayWidget : public AbstractTrayWidget
 {
@@ -53,6 +55,7 @@ private:
     void paintEvent(QPaintEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
     void configContainerPosition();
 
     void wrapWindow();
@@ -65,6 +68,8 @@ private slots:
     void setX11PassMouseEvent(const bool pass);
     void setWindowOnTop(const bool top);
     bool isBadWindow();
+    void setTouchDown();
+    void setTouchEnd();
 
 private:
     bool m_active = false;
@@ -78,6 +83,10 @@ private:
     bool m_valid;
     xcb_connection_t *m_xcbCnn;
     Display* m_display;
+
+    Gesture *m_gestureInter;
+    QPoint m_startPos;
+    bool m_longPress;
 };
 
 #endif // XEMBEDTRAYWIDGET_H
