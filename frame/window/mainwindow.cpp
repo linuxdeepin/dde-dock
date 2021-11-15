@@ -213,7 +213,9 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
     if (e->button() == Qt::RightButton) {
-        m_menuWorker->showDockSettingsMenu();
+        QTimer::singleShot(10, this, [this]{
+            m_menuWorker->showDockSettingsMenu();
+        });
         return;
     }
 }
