@@ -90,6 +90,7 @@ ModuleWidget::~ModuleWidget()
 
 void ModuleWidget::initUI()
 {
+    setBackgroundRole(QPalette::Base);
     setFrameShape(QFrame::NoFrame);
     setWidgetResizable(true);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
