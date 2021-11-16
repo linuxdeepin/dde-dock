@@ -74,6 +74,7 @@ public slots:
 signals:
     void requestTopDeviceItem(DStandardItem *item);
     void deviceStateChanged(const Device *device);
+    void disconnectDevice();
 
 private:
     void initActionList();

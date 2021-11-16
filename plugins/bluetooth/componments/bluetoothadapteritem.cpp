@@ -72,8 +72,9 @@ void BluetoothDeviceItem::initActionList()
     m_connAction = new DViewItemAction(Qt::AlignRight | Qt::AlignVCenter, QSize(16, 16), QSize(16, 16), false);
 
     m_connButton->setType(StateButton::Check);
-    m_connButton->setSwitchFork(false);
+    m_connButton->setSwitchFork(true);
     m_connButton->setFixedSize(16, 16);
+    connect(m_connButton, &StateButton::click, this, &BluetoothDeviceItem::disconnectDevice);
     m_iconWidget->setFixedSize(18, 16);
     QHBoxLayout *layout = new QHBoxLayout(m_iconWidget);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -171,6 +172,10 @@ void BluetoothAdapterItem::onConnectDevice(const QModelIndex &index)
     DStandardItem *deviceitem = dynamic_cast<DStandardItem *>(deviceModel->item(index.row()));
 
     foreach (const auto item, m_deviceItems) {
+        // 只有非连接状态才发送connectDevice信号（connectDevice信号连接的槽为取反操作，而非仅仅连接）
+        if (!(item->device()->state() == Device::StateUnavailable))
+            continue;
+
         if (item->standardItem() == deviceitem) {
             emit connectDevice(item->device(), m_adapter);
         }
@@ -252,6 +257,12 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
     BluetoothDeviceItem *item = new BluetoothDeviceItem(style(), device, m_deviceListview);
     connect(item, &BluetoothDeviceItem::requestTopDeviceItem, this, &BluetoothAdapterItem::onTopDeviceItem);
     connect(item, &BluetoothDeviceItem::deviceStateChanged, this, &BluetoothAdapterItem::deviceStateChanged);
+    connect(item, &BluetoothDeviceItem::disconnectDevice, this, [this, item](){
+        // 只有已连接状态才发送connectDevice信号（connectDevice信号连接的槽为取反操作，而非仅仅连接）
+        if (item->device()->state() == Device::StateConnected) {
+            emit connectDevice(item->device(), m_adapter);
+        }
+    });
 
     m_deviceItems.insert(device->id(), item);
     if (!m_showUnnamedDevices && device->name().isEmpty() && Device::StateConnected != device->state())
