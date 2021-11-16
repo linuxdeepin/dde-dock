@@ -56,6 +56,7 @@ private:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
     void configContainerPosition();
 
     void wrapWindow();

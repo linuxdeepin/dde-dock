@@ -152,13 +152,8 @@ void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
 
 void XEmbedTrayWidget::mousePressEvent(QMouseEvent *e)
 {
+    m_startPos = e->pos();
     AbstractTrayWidget::mousePressEvent(e);
-
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        // 右键-出现
-        m_startPos = e->pos();
-        sendClick(XCB_BUTTON_INDEX_3, QCursor::pos().x(), QCursor::pos().y());
-    }
 }
 
 void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
@@ -178,8 +173,18 @@ void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 
 void XEmbedTrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    // 鼠标释放事件不往父类传递
-    QWidget::mouseReleaseEvent(e);
+    // 触摸按下且长按
+    if (e->source() == Qt::MouseEventSynthesizedByQt && m_longPress)
+        return;
+
+    AbstractTrayWidget::mouseReleaseEvent(e);
+}
+
+void XEmbedTrayWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+    Q_UNUSED(event);
+
+    sendClick(XCB_BUTTON_INDEX_3, QCursor::pos().x(), QCursor::pos().y());
 }
 
 void XEmbedTrayWidget::configContainerPosition()
