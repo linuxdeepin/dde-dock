@@ -531,5 +531,10 @@
       <summary></summary>
       <description>Determine to show dock only in primary monitor</description>
     </key>
+    <key type="b" name="only-show-by-win">
+      <default>false</default>
+      <summary></summary>
+      <description>show dock only by win</description>
+    </key>
   </schema>
 </schemalist>

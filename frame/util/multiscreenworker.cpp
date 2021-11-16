@@ -36,6 +36,7 @@
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
+const QString OnlyShowByWin = "onlyShowByWin";
 
 #define DIS_INS DisplayManager::instance()
 
@@ -55,8 +56,32 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_delayWakeTimer(new QTimer(this))
     , m_ds(DIS_INS->primary())
     , m_state(AutoHide)
+    , m_onlyShowByWin(false)
+    , m_monitorSetting(nullptr)
 {
     qInfo() << "init dock screen: " << m_ds.current();
+
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.mainwindow")) {
+        m_monitorSetting = new QGSettings("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this);
+        connect(m_monitorSetting, &QGSettings::changed, this, [=](const QString &key) {
+            if (OnlyShowByWin != key) {
+                return;
+            }
+            bool value = m_monitorSetting->get(OnlyShowByWin).toBool();
+            qInfo() << " [GSettings dock] changed key :" << key << value;
+            if (m_onlyShowByWin != value) {
+                m_onlyShowByWin = value;
+            }
+        });
+
+        if (m_monitorSetting->keys().contains(OnlyShowByWin)) {
+            m_onlyShowByWin = m_monitorSetting->get(OnlyShowByWin).toBool();
+        } else {
+            qDebug() << "can not find key:" << OnlyShowByWin;
+        }
+    } else {
+        qDebug() << "com.deepin.dde.dock is uninstalled.";
+    }
 
     initConnection();
     initMembers();
@@ -232,6 +257,9 @@ void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
     if (m_registerKey != key || testState(MousePress))
+        return;
+
+    if (m_onlyShowByWin)
         return;
 
     tryToShowDock(x, y);
@@ -1531,6 +1559,9 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
         return;
     }
     setStates(TouchPress, false);
+
+    if (m_onlyShowByWin)
+        return;
 
     // 不从指定方向划入，不进行任务栏唤醒；如当任务栏在下，需从下往上划
     switch (m_position) {
