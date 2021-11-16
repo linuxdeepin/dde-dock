@@ -276,6 +276,10 @@ private:
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
     RunStates m_state;
     /*****************************************************************/
+
+    // 是否忽略对触控屏和鼠标显示任务栏的响应
+    bool m_onlyShowByWin;
+    QGSettings *m_monitorSetting;
 };
 
 #endif // MULTISCREENWORKER_H
