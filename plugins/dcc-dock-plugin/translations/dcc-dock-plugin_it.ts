@@ -1,121 +1,121 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.0">
 <context>
     <name>ModuleWidget</name>
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Ölçü</translation>
+        <translation>Dimensioni</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation>Çoxsaylı ekran</translation>
+        <translation>Display multipli</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>
         <source>Plugin Area</source>
-        <translation>Plaqin sahəsi</translation>
+        <translation>Area plugin</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Dok paneldə görünəcək nişanları seçin</translation>
+        <translation>Seleziona quali icone appaiono nel Dock</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="102"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Fashion mode</source>
-        <translation>Müasir rejim</translation>
+        <translation>Modalità Fashion</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Efficient mode</source>
-        <translation>Səmərəli rejim</translation>
+        <translation>Modalità Efficient</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Mode</source>
-        <translation>Rejim</translation>
+        <translation>Modalità</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="123"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Top</source>
-        <translation>Yuxarıda</translation>
+        <translation>Sopra</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="124"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Bottom</source>
-        <translation>Aşağıda</translation>
+        <translation>Sotto</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="125"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Left</source>
-        <translation>Sol</translation>
+        <translation>Sinistra</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="126"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Right</source>
-        <translation>Sağ</translation>
+        <translation>Destra</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="128"/>
         <source>Location</source>
-        <translation>Yerləşmə</translation>
+        <translation>Posizione</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="145"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep shown</source>
-        <translation>Görünsün</translation>
+        <translation>Mostra sempre</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="146"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep hidden</source>
-        <translation>Gizli qalsın</translation>
+        <translation>Lascia nascosta</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="147"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Smart hide</source>
-        <translation>Ağıllı gizlənmə</translation>
+        <translation>Nascondi automaticamente</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="149"/>
         <source>Status</source>
-        <translation>Vəziyyəti</translation>
+        <translation>Comportamento</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Small</source>
-        <translation>Kiçik</translation>
+        <translation>Piccolo</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Large</source>
-        <translation>Geniş</translation>
+        <translation>Grande</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="201"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
-        <translation>Kursorun olduğu ekranda</translation>
+        <translation>Sullo schermo dove è presente il cursore</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="202"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>Only on main screen</source>
-        <translation>Yalnız əsas ekranda</translation>
+        <translation>Solo sullo schermo principale</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="206"/>
         <source>Show Dock</source>
-        <translation>Dok paneli göstərmək</translation>
+        <translation>Mostra la Dock</translation>
     </message>
 </context>
 <context>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../settings_module.cpp" line="68"/>
         <source>Dock</source>
-        <translation>Dok panel</translation>
+        <translation>Dock</translation>
         <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>

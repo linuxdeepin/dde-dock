@@ -22,98 +22,98 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="100"/>
-        <location filename="../module_widget.cpp" line="105"/>
+        <location filename="../module_widget.cpp" line="102"/>
+        <location filename="../module_widget.cpp" line="107"/>
         <source>Fashion mode</source>
         <translation>Modo Elegante</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="101"/>
-        <location filename="../module_widget.cpp" line="105"/>
+        <location filename="../module_widget.cpp" line="103"/>
+        <location filename="../module_widget.cpp" line="107"/>
         <source>Efficient mode</source>
         <translation>Modo eficiente</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="103"/>
+        <location filename="../module_widget.cpp" line="105"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="120"/>
-        <location filename="../module_widget.cpp" line="127"/>
+        <location filename="../module_widget.cpp" line="123"/>
+        <location filename="../module_widget.cpp" line="130"/>
         <source>Top</source>
         <translation>Superior</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="121"/>
-        <location filename="../module_widget.cpp" line="127"/>
+        <location filename="../module_widget.cpp" line="124"/>
+        <location filename="../module_widget.cpp" line="130"/>
         <source>Bottom</source>
         <translation>Inferior</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="122"/>
-        <location filename="../module_widget.cpp" line="127"/>
+        <location filename="../module_widget.cpp" line="125"/>
+        <location filename="../module_widget.cpp" line="130"/>
         <source>Left</source>
         <translation>Esquerda</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="123"/>
-        <location filename="../module_widget.cpp" line="127"/>
+        <location filename="../module_widget.cpp" line="126"/>
+        <location filename="../module_widget.cpp" line="130"/>
         <source>Right</source>
         <translation>Direita</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="125"/>
+        <location filename="../module_widget.cpp" line="128"/>
         <source>Location</source>
         <translation>Localização</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="142"/>
-        <location filename="../module_widget.cpp" line="148"/>
+        <location filename="../module_widget.cpp" line="145"/>
+        <location filename="../module_widget.cpp" line="151"/>
         <source>Keep shown</source>
         <translation>Manter visível</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="143"/>
-        <location filename="../module_widget.cpp" line="148"/>
+        <location filename="../module_widget.cpp" line="146"/>
+        <location filename="../module_widget.cpp" line="151"/>
         <source>Keep hidden</source>
         <translation>Manter ocultada</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="144"/>
-        <location filename="../module_widget.cpp" line="148"/>
+        <location filename="../module_widget.cpp" line="147"/>
+        <location filename="../module_widget.cpp" line="151"/>
         <source>Smart hide</source>
         <translation>Ocultação inteligente</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="146"/>
+        <location filename="../module_widget.cpp" line="149"/>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="167"/>
+        <location filename="../module_widget.cpp" line="170"/>
         <source>Small</source>
         <translation>Pequeno</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="167"/>
+        <location filename="../module_widget.cpp" line="170"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="188"/>
-        <location filename="../module_widget.cpp" line="195"/>
+        <location filename="../module_widget.cpp" line="201"/>
+        <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="189"/>
-        <location filename="../module_widget.cpp" line="195"/>
+        <location filename="../module_widget.cpp" line="202"/>
+        <location filename="../module_widget.cpp" line="208"/>
         <source>Only on main screen</source>
         <translation>Apenas no ecrã principal</translation>
     </message>
     <message>
-        <location filename="../module_widget.cpp" line="193"/>
+        <location filename="../module_widget.cpp" line="206"/>
         <source>Show Dock</source>
         <translation>Mostrar Doca</translation>
     </message>
