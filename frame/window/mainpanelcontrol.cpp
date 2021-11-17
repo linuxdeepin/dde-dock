@@ -804,8 +804,12 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
 void MainPanelControl::startDragWayland(DockItem *item)
 {
-    QPixmap pixmap = item->grab();
-
+    QPixmap pixmap;
+    if (item->itemType() == DockItem::App) {
+        pixmap = qobject_cast<AppItem *>(item)->appIcon();
+    } else {
+        pixmap = item->grab();
+    }
     /*TODO: pixmap半透明处理
     QPixmap pixmap1;
     {
