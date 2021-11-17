@@ -229,14 +229,14 @@ void ModuleWidget::initUI()
     if (reply.error().type() != QDBusError::ErrorType::NoError) {
         qWarning() << "dbus call failed, method: 'GetLoadedPlugins()'";
     } else {
-        const QMap<QString, QString> &pluginIconMap = {{"AiAssistant",      ":/icons/plugins/assistant.svg"}
-                                                       , {"show-desktop",   ":/icons/plugins/desktop.svg"}
-                                                       , {"onboard",        ":/icons/plugins/keyboard.svg"}
-                                                       , {"notifications",  ":/icons/plugins/notify.svg"}
-                                                       , {"shutdown",       ":/icons/plugins/power.svg"}
-                                                       , {"multitasking",   ":/icons/plugins/task.svg"}
-                                                       , {"datetime",       ":/icons/plugins/time.svg"}
-                                                       , {"trash",          ":/icons/plugins/trash.svg"}};
+        const QMap<QString, QString> &pluginIconMap = {{"AiAssistant",      "dcc_dock_assistant"}
+                                                       , {"show-desktop",   "dcc_dock_desktop"}
+                                                       , {"onboard",        "dcc_dock_keyboard"}
+                                                       , {"notifications",  "dcc_dock_notify"}
+                                                       , {"shutdown",       "dcc_dock_power"}
+                                                       , {"multitasking",   "dcc_dock_task"}
+                                                       , {"datetime",       "dcc_dock_time"}
+                                                       , {"trash",          "dcc_dock_trash"}};
         if (plugins.size() != 0) {
             layout->addSpacing(10);
             layout->addWidget(m_pluginAreaTitle);
@@ -279,7 +279,7 @@ void ModuleWidget::initUI()
 
                 // 插件图标
                 auto leftAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);
-                leftAction->setIcon(QIcon::fromTheme(pluginIconMap.value(m_dockInter->getPluginKey(name), ":/icons/plugins/plug-in2.svg")));
+                leftAction->setIcon(QIcon::fromTheme(pluginIconMap.value(m_dockInter->getPluginKey(name), "dcc_dock_plug_in")));
                 item->setActionList(Qt::Edge::LeftEdge, {leftAction});
 
                 auto rightAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);

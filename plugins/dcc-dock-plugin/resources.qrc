@@ -1,17 +1,17 @@
 <RCC>
     <qresource prefix="/icons/deepin/builtin">
         <file>actions/icon_dock_32px.svg</file>
+        <file>texts/dcc_dock_time_16px.svg</file>
+        <file>texts/dcc_dock_assistant_16px.svg</file>
+        <file>texts/dcc_dock_desktop_16px.svg</file>
+        <file>texts/dcc_dock_keyboard_16px.svg</file>
+        <file>texts/dcc_dock_notify_16px.svg</file>
+        <file>texts/dcc_dock_plug_in_16px.svg</file>
+        <file>texts/dcc_dock_power_16px.svg</file>
+        <file>texts/dcc_dock_task_16px.svg</file>
+        <file>texts/dcc_dock_trash_16px.svg</file>
     </qresource>
     <qresource prefix="/">
-        <file>icons/plugins/time.svg</file>
-        <file>icons/plugins/assistant.svg</file>
-        <file>icons/plugins/desktop.svg</file>
-        <file>icons/plugins/keyboard.svg</file>
-        <file>icons/plugins/notify.svg</file>
-        <file>icons/plugins/plug-in2.svg</file>
-        <file>icons/plugins/power.svg</file>
-        <file>icons/plugins/task.svg</file>
-        <file>icons/plugins/trash.svg</file>
         <file>translations/dcc-dock-plugin.ts</file>
         <file>translations/dcc-dock-plugin_bo.ts</file>
         <file>translations/dcc-dock-plugin_az.ts</file>
