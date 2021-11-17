@@ -74,7 +74,7 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_pluginModel(new QStandardItemModel(this))
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
-    , m_gsettingsWatcher(new GSettingWatcher("com.deepin.dde.control-center", "personalization", this))
+    , m_dconfigWatcher(new ConfigWatcher("dde.dock.plugin.dconfig", this))
     , m_sliderPressed(false)
 {
     // 异步，否则频繁调用可能会导致卡顿
@@ -117,7 +117,7 @@ void ModuleWidget::initUI()
         m_modeComboxWidget->setCurrentText(g_modeMap.key(mode));
     });
     layout->addWidget(m_modeComboxWidget);
-    m_gsettingsWatcher->bind("displayMode", m_modeComboxWidget);// 转换settingName?
+    m_dconfigWatcher->bind("Control-Center_Dock_Model", m_modeComboxWidget);
 
     static QMap<QString, int> g_positionMap = {{tr("Top"), Top}
                                                , {tr("Bottom"), Bottom}
@@ -139,7 +139,7 @@ void ModuleWidget::initUI()
         m_positionComboxWidget->setCurrentText(g_positionMap.key(pos));
     });
     layout->addWidget(m_positionComboxWidget);
-    m_gsettingsWatcher->bind("position", m_positionComboxWidget);
+    m_dconfigWatcher->bind("Control-Center_Dock_Location", m_positionComboxWidget);
 
     static QMap<QString, int> g_stateMap = {{tr("Keep shown"), KeepShowing}
                                             , {tr("Keep hidden"), KeepHidden}
@@ -160,7 +160,7 @@ void ModuleWidget::initUI()
         m_stateComboxWidget->setCurrentText(g_stateMap.key(mode));
     });
     layout->addWidget(m_stateComboxWidget);
-    m_gsettingsWatcher->bind("hideMode", m_stateComboxWidget);
+    m_dconfigWatcher->bind("Control-Center_Dock_State", m_stateComboxWidget);
 
     // 高度调整控件
     m_sizeSlider->addBackground();
@@ -191,7 +191,7 @@ void ModuleWidget::initUI()
     });
 
     updateSliderValue();
-    m_gsettingsWatcher->bind("sizeSlider", m_sizeSlider);
+    m_dconfigWatcher->bind("Control-Center_Dock_Size", m_sizeSlider);
 
     layout->addWidget(m_sizeSlider);
 
@@ -219,14 +219,20 @@ void ModuleWidget::initUI()
             m_screenSettingComboxWidget->blockSignals(false);
         });
         layout->addWidget(m_screenSettingComboxWidget);
-        m_gsettingsWatcher->bind("multiScreenArea", m_screenSettingTitle);
-        m_gsettingsWatcher->bind("multiScreenArea", m_screenSettingComboxWidget);
+        m_dconfigWatcher->bind("Control-Center_Dock_Multi-screen", m_screenSettingTitle);
+        m_dconfigWatcher->bind("Control-Center_Dock_Multi-screen", m_screenSettingComboxWidget);
+    } else {
+        m_screenSettingTitle->setVisible(false);
+        m_screenSettingComboxWidget->setVisible(false);
     }
 
     // 插件区域
     QDBusPendingReply<QStringList> reply = m_dockInter->GetLoadedPlugins();
     QStringList plugins = reply.value();
     if (reply.error().type() != QDBusError::ErrorType::NoError) {
+        m_pluginAreaTitle->setVisible(false);
+        m_pluginTips->setVisible(false);
+        m_pluginView->setVisible(false);
         qWarning() << "dbus call failed, method: 'GetLoadedPlugins()'";
     } else {
         const QMap<QString, QString> &pluginIconMap = {{"AiAssistant",      "dcc_dock_assistant"}
@@ -240,7 +246,7 @@ void ModuleWidget::initUI()
         if (plugins.size() != 0) {
             layout->addSpacing(10);
             layout->addWidget(m_pluginAreaTitle);
-            m_gsettingsWatcher->bind("pluginArea", m_pluginAreaTitle);
+            m_dconfigWatcher->bind("Control-Center_Dock_Plugins", m_pluginAreaTitle);
 
             DFontSizeManager::instance()->bind(m_pluginTips, DFontSizeManager::T8);
             m_pluginTips->adjustSize();
@@ -248,6 +254,7 @@ void ModuleWidget::initUI()
             m_pluginTips->setContentsMargins(10, 5, 10, 5);
             m_pluginTips->setAlignment(Qt::AlignLeft);
             layout->addWidget(m_pluginTips);
+            m_dconfigWatcher->bind("Control-Center_Dock_Plugins", m_pluginTips);
 
             m_pluginView->setAccessibleName("pluginList");
             m_pluginView->setBackgroundType(DStyledItemDelegate::BackgroundType::ClipCornerBackground);
@@ -271,7 +278,8 @@ void ModuleWidget::initUI()
             m_pluginView->setModel(m_pluginModel);
 
             layout->addWidget(m_pluginView);
-            m_gsettingsWatcher->bind("pluginArea", m_pluginView);
+            m_dconfigWatcher->bind("Control-Center_Dock_Plugins", m_pluginView);
+
             for (auto name : plugins) {
                 DStandardItem *item = new DStandardItem(name);
                 item->setFontSize(DFontSizeManager::T8);

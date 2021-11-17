@@ -28,7 +28,7 @@
 #include <com_deepin_dde_daemon_dock.h>
 
 #include "com_deepin_dde_dock.h"
-#include "gsetting_watcher.h"
+#include "config_watcher.h"
 
 namespace dcc {
 namespace widgets {
@@ -81,7 +81,7 @@ private:
 
     DBusDock *m_daemonDockInter;
     DBusInter *m_dockInter;
-    GSettingWatcher *m_gsettingsWatcher;
+    ConfigWatcher *m_dconfigWatcher;
 
     bool m_sliderPressed;
 };

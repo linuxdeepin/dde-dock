@@ -43,7 +43,8 @@ qt5_add_translation(QM_FILES ${TS_FILES})
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 install(FILES ${QM_FILES} DESTINATION share/${PLUGIN_NAME}/translations)
 
-install(FILES com.deepin.dde.control-center.dock-plugin.gschema.xml
-    DESTINATION share/glib-2.0/schemas)
+# dconfig
+file(GLOB DCONFIG_FILES "dde.dock.plugin.dconfig.json")
+dconfig_meta_files(APPID dde-control-center FILES ${DCONFIG_FILES})
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-control-center/modules)

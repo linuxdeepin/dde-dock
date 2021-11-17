@@ -21,6 +21,8 @@
 #ifndef GSETTINGWATCHER_H
 #define GSETTINGWATCHER_H
 
+#include <dtkcore_global.h>
+
 #include <QObject>
 #include <QHash>
 #include <QMap>
@@ -29,14 +31,18 @@ class QGSettings;
 class QListView;
 class QStandardItem;
 
+DCORE_BEGIN_NAMESPACE
+class DConfig;
+DCORE_END_NAMESPACE
+
 namespace dcc_dock_plugin {
-class GSettingWatcher : public QObject
+class ConfigWatcher : public QObject
 {
     Q_OBJECT
 
 public:
-    GSettingWatcher(const QString &baseSchemasId, const QString &module, QObject *parent = nullptr);
-    ~GSettingWatcher();
+    ConfigWatcher(const QString &fileName, QObject *parent = nullptr);
+    ~ConfigWatcher();
 
     void bind(const QString &key, QWidget *binder);
 
@@ -46,7 +52,7 @@ private:
 
 private:
     QMultiHash<QString, QWidget *> m_map;
-    QGSettings *m_gsettings;
+    DTK_CORE_NAMESPACE::DConfig *m_config;
 };
 }
 
