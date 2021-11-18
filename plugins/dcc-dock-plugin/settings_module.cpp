@@ -34,7 +34,7 @@ SettingsModule::SettingsModule()
 {
     const QString &appName = qApp->applicationName();
     // 加载任务栏的翻译文件
-    qApp->setApplicationName("dde-dock");
+    qApp->setApplicationName("dcc-dock-plugin");
     qApp->loadTranslator();
     qApp->setApplicationName(appName);
 }
