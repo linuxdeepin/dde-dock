@@ -48,7 +48,7 @@ Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,
  dock-network-plugin,
- dcc-dock-settings-plugin,
+ dcc-dock-plugin,
  dde-network-dialog
 Conflicts:
  dde-workspace (<< 2.90.5),
