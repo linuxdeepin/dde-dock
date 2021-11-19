@@ -20,8 +20,6 @@
 #ifndef DBUSADAPTORS_H
 #define DBUSADAPTORS_H
 
-#include "menudialog.h"
-
 #include <QMenu>
 #include <QtDBus/QtDBus>
 #include <com_deepin_daemon_inputdevice_keyboard.h>
@@ -75,7 +73,7 @@ private:
 
 private:
     Keyboard *m_keyboard;
-    Menu *m_menu;
+    QMenu *m_menu;
     QAction *m_addLayoutAction;
 
     QString m_currentLayoutRaw;

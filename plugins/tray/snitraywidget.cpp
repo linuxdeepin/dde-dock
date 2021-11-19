@@ -39,10 +39,10 @@ QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 using namespace Dock;
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
-    : AbstractTrayWidget(parent)
-    , m_dbusMenuImporter(nullptr)
-    , m_menu(nullptr)
-    , m_updateIconTimer(new QTimer(this))
+    : AbstractTrayWidget(parent),
+      m_dbusMenuImporter(nullptr),
+      m_menu(nullptr),
+      m_updateIconTimer(new QTimer(this))
     , m_updateOverlayIconTimer(new QTimer(this))
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
@@ -181,7 +181,6 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         if (LeftClickInvalidIdList.contains(m_sniId)) {
             showContextMenu(x, y);
         } else {
-            // 输入法切换等功能入口
             m_sniInter->Activate(x, y);
         }
         break;
@@ -192,6 +191,7 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         showContextMenu(x, y);
         break;
     default:
+        qDebug() << "unknown mouse button key";
         break;
     }
 }
@@ -272,13 +272,15 @@ void SNITrayWidget::initMenu()
         return;
     }
 
+    qDebug() << "using sni service path:" << m_dbusService << "menu path:" << sniMenuPath;
+
     m_dbusMenuImporter = new DBusMenuImporter(m_dbusService, sniMenuPath, ASYNCHRONOUS, this);
 
-    // 创建sni协议插件的右键菜单
+    qDebug() << "generate the sni menu object";
+
     m_menu = m_dbusMenuImporter->menu();
-    m_menu->setObjectName("sniMenu");
-    m_menu->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
-    qApp->installEventFilter(this);
+
+    qDebug() << "the sni menu obect is:" << m_menu;
 }
 
 void SNITrayWidget::refreshIcon()
@@ -335,7 +337,7 @@ void SNITrayWidget::showContextMenu(int x, int y)
     // 这里的PopupWindow属性是置顶的,如果不隐藏,会导致菜单显示不出来
     hidePopup();
 
-    // 第三方的右键菜单，事件过滤方式无法捕获，修改x,y值不能改变菜单弹出位置
+    // ContextMenu does not work
     if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
     } else {
@@ -728,66 +730,6 @@ const QPoint SNITrayWidget::popupMarkPoint() const
     }
 
     return p;
-}
-
-bool SNITrayWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (!m_menu)
-        return QWidget::eventFilter(watched, event);
-
-    QPoint startPos = QPoint();
-    if (!watched->objectName().startsWith("sniMenu")) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->button() == Qt::LeftButton) {
-                if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
-                    // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
-                    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                    qApp->postEvent(this->parentWidget(), pressEvent);
-                } else {
-                    m_menu->hide();
-                }
-            }
-            startPos = mouseEvent->pos();
-        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move) {
-            if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
-                // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
-                QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                qApp->postEvent(this->parentWidget(), pressEvent);
-            } else {
-                m_menu->hide();
-            }
-        }
-
-        // 让click无效,避免点击到插件上
-        if (event->type() == QEvent::MouseButtonRelease) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-                if (isVisible())
-                    return true;
-            }
-        }
-
-        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Escape) {
-                if (!isVisible())
-                    return false;
-
-                if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
-                    // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
-                    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                    qApp->postEvent(this->parentWidget(), pressEvent);
-                } else {
-                    m_menu->hide();
-                }
-                return true;
-            }
-        }
-    }
-
-    return QWidget::eventFilter(watched, event);
 }
 
 void SNITrayWidget::showPopupWindow(QWidget *const content, const bool model)

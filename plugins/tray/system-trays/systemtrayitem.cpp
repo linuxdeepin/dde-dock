@@ -21,11 +21,9 @@
 
 #include "systemtrayitem.h"
 #include "utils.h"
-#include "menudialog.h"
 
 #include <QProcess>
 #include <QDebug>
-#include <QObject>
 
 #include <xcb/xproto.h>
 
@@ -38,7 +36,6 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     , m_tapAndHold(false)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
-    , m_contextMenu(new Menu)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
     , m_itemKey(itemKey)
@@ -85,7 +82,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
+    connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
@@ -97,8 +94,6 @@ SystemTrayItem::~SystemTrayItem()
 {
     if (m_popupShown)
         popupWindowAccept();
-
-    delete m_contextMenu;
 }
 
 QString SystemTrayItem::itemKeyForConfig()
@@ -432,7 +427,7 @@ void SystemTrayItem::showContextMenu()
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu->actions());
+    qDeleteAll(m_contextMenu.actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -442,13 +437,13 @@ void SystemTrayItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu->addAction(action);
+        m_contextMenu.addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu->popup(QCursor::pos());
+    m_contextMenu.exec(QCursor::pos());
 
     onContextMenuAccepted();
 }

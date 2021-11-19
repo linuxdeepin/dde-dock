@@ -141,27 +141,12 @@ void XEmbedTrayWidget::paintEvent(QPaintEvent *e)
     painter.end();
 }
 
-void XEmbedTrayWidget::mousePressEvent(QMouseEvent *e)
-{
-    // 支持触摸屏触摸按下，显示右键菜单
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        QTimer::singleShot(100, this, [ & ] {
-            // 右键
-            sendClick(XCB_BUTTON_INDEX_3, QCursor::pos().x(), QCursor::pos().y());
-        });
-        return;
-    }
-}
-
 void XEmbedTrayWidget::mouseMoveEvent(QMouseEvent *e)
 {
     AbstractTrayWidget::mouseMoveEvent(e);
 
     // ignore the touchEvent
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        // 临时方案隐藏微信等应用的右键菜单
-        // 左键
-        sendClick(XCB_BUTTON_INDEX_2, QCursor::pos().x(), QCursor::pos().y());
         return;
     }
 

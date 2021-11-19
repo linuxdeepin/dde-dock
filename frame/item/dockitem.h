@@ -24,7 +24,6 @@
 
 #include "constants.h"
 #include "dockpopupwindow.h"
-#include "menudialog.h"
 
 #include <QFrame>
 #include <QPointer>
@@ -111,12 +110,12 @@ protected:
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
+    QMenu m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
 
     QTimer *m_popupTipsDelayTimer;
     QTimer *m_popupAdjustDelayTimer;
-    Menu *m_contextMenu;
 
     static Position DockPosition;
     static DisplayMode DockDisplayMode;

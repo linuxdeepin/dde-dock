@@ -28,7 +28,7 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
       m_keyboard(new Keyboard("com.deepin.daemon.InputDevices",
                               "/com/deepin/daemon/InputDevice/Keyboard",
                               QDBusConnection::sessionBus(), this)),
-    m_menu(new Menu()),
+    m_menu(new QMenu()), 
     m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this))
 {
     m_keyboard->setSync(false);
@@ -36,7 +36,7 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
     connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onCurrentLayoutChanged);
     connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onUserLayoutListChanged);
 
-    connect(m_menu, &Menu::triggered, this, &DBusAdaptors::handleActionTriggered);
+    connect(m_menu, &QMenu::triggered, this, &DBusAdaptors::handleActionTriggered);
 
     // init data
     initAllLayoutList();
