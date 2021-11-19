@@ -456,7 +456,6 @@ void SystemTrayItem::showContextMenu()
 void SystemTrayItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
-    m_contextMenu->hide();
 }
 
 void SystemTrayItem::onContextMenuAccepted()

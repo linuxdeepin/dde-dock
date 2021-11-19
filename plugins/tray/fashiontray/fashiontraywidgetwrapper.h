@@ -31,7 +31,6 @@
 #include <com_deepin_daemon_gesture.h>
 
 using Gesture = com::deepin::daemon::Gesture;
-class TouchSignalManager;
 
 #define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 
@@ -71,10 +70,7 @@ private:
     void onTrayWidgetClicked();
 
 private:
-    // 动态加载的插件内存空间与dock进程内存空间相互独立，创建手势服务，监听触摸按下动作
     QPointer<AbstractTrayWidget> m_absTrayWidget;
-
-    QPointer<TouchSignalManager> m_touchSignalManager;
     QVBoxLayout *m_layout;
 
     bool m_attention;

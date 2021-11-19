@@ -258,7 +258,6 @@ void DockItem::showContextMenu()
 void DockItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
-    m_contextMenu->hide();
 }
 
 void DockItem::onContextMenuAccepted()
