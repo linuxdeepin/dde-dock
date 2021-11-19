@@ -384,6 +384,8 @@ void AbstractContainer::onWrapperDragStop()
 
     if (m_currentDraggingWrapper == wrapper) {
         m_currentDraggingWrapper = nullptr;
+    } else {
+        Q_UNREACHABLE();
     }
 
     saveCurrentOrderToConfig();
