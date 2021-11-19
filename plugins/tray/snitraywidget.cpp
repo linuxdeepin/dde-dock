@@ -49,7 +49,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_handleMouseReleaseTimer(new QTimer(this))
     , m_tipsLabel(new TipsWidget(this))
-    , m_menuState(false)
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
@@ -339,13 +338,12 @@ void SNITrayWidget::showContextMenu(int x, int y)
     // 第三方的右键菜单，事件过滤方式无法捕获，修改x,y值不能改变菜单弹出位置
     if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
         m_sniInter->ContextMenu(x, y);
-        m_menuState = false;
     } else {
-        m_menuState = true;
         if (!m_menu) {
             qDebug() << "context menu has not be ready, init menu";
             initMenu();
         }
+
         if (m_menu)
             m_menu->popup(QPoint(x, y));
     }
@@ -737,17 +735,55 @@ bool SNITrayWidget::eventFilter(QObject *watched, QEvent *event)
     if (!m_menu)
         return QWidget::eventFilter(watched, event);
 
+    QPoint startPos = QPoint();
     if (!watched->objectName().startsWith("sniMenu")) {
         if (event->type() == QEvent::MouseButtonPress) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton) {
-                // 只处理qt右键菜单，外部菜单无法处理
-                if (m_menuState)
+                if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
+                    // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
+                    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                    qApp->postEvent(this->parentWidget(), pressEvent);
+                } else {
                     m_menu->hide();
+                }
             }
-        } else if (event->type() == QEvent::DragMove) {
-            if (m_menuState)
+            startPos = mouseEvent->pos();
+        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Move) {
+            if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
+                // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
+                QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                qApp->postEvent(this->parentWidget(), pressEvent);
+            } else {
                 m_menu->hide();
+            }
+        }
+
+        // 让click无效,避免点击到插件上
+        if (event->type() == QEvent::MouseButtonRelease) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+                if (isVisible())
+                    return true;
+            }
+        }
+
+        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                if (!isVisible())
+                    return false;
+
+                if (m_sniMenuPath.path().startsWith("/NO_DBUSMENU")) {
+                    // 关闭中文输入法或者五笔输入法,当前的关闭方式无效
+                    QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress, mapToGlobal(this->pos()), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                    qApp->postEvent(this->parentWidget(), pressEvent);
+                } else {
+                    m_menu->hide();
+                }
+                return true;
+            }
         }
     }
 
