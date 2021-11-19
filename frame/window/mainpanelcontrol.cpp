@@ -664,7 +664,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             moveAppSonWidget();
     }
 
-    if (!Utils::IS_WAYLAND_DISPLAY && m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+    if (Utils::IS_WAYLAND_DISPLAY && m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         bool isContains = rect().contains(mapFromGlobal(QCursor::pos()));
         if (isContains) {
             if (event->type() == QEvent::DragMove) {
