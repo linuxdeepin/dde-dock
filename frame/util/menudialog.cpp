@@ -48,8 +48,7 @@ Menu::Menu(QWidget *dockItem, QWidget *parent)
 
 void Menu::onButtonPress()
 {
-    QPoint curPos = QCursor::pos() * qApp->devicePixelRatio();
-    if (!QRect(m_dockInter->frontendWindowRect()).contains(curPos))
+    if (!QRect(m_dockInter->frontendWindowRect()).contains(QCursor::pos()))
         this->hide();
 }
 
