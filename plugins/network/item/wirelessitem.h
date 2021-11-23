@@ -81,6 +81,7 @@ Q_SIGNALS:
     void createApConfig(const QString &devPath, const QString &apPath);
     void queryConnectionSession(const QString &devPath, const QString &uuid);
     void deviceStateChanged();
+    void apInfoChanged();
 
 protected:
     bool eventFilter(QObject *o, QEvent *e) override;

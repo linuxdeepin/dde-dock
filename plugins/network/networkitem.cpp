@@ -236,6 +236,7 @@ void NetworkItem::updateDeviceItems(QMap<QString, WiredItem *> &wiredItems, QMap
             m_connectedWirelessDevice.remove(path);
             wirelessItem->itemApplet()->setVisible(false);
             m_wirelessLayout->removeWidget(wirelessItem->itemApplet());
+            disconnect(wirelessItem, &WirelessItem::apInfoChanged, this, &NetworkItem::refreshIcon);
             delete wirelessItem;
         }
     }
@@ -705,8 +706,11 @@ void NetworkItem::getPluginState()
             state |= temp;
             if ((temp & WirelessItem::Connected) >> 18) {
                 m_connectedWirelessDevice.insert(iwireless.key(), wirelessItem);
+                connect(wirelessItem, &WirelessItem::apInfoChanged, this, &NetworkItem::refreshIcon);
             } else {
+                disconnect(wirelessItem, &WirelessItem::apInfoChanged, this, &NetworkItem::refreshIcon);
                 m_connectedWirelessDevice.remove(iwireless.key());
+
             }
         }
     }

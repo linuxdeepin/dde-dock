@@ -88,6 +88,7 @@ WirelessItem::WirelessItem(WirelessDevice *device)
     connect(static_cast<WirelessDevice *>(m_device.data()), &WirelessDevice::activeApInfoChanged, this, [ = ](QJsonObject activeApInfo) {
         m_activeApInfo = activeApInfo;
         update();
+        emit apInfoChanged();
     });
     connect(m_refreshLimitTimer, &QTimer::timeout, m_refreshTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
