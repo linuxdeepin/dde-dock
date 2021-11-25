@@ -26,7 +26,6 @@
 #include <gtest/gtest.h>
 
 #include "previewcontainer.h"
-#include "appspreviewprovider.h"
 
 class Test_PreviewContainer : public ::testing::Test
 {};
@@ -149,14 +148,4 @@ TEST_F(Test_PreviewContainer, event_test)
     delete container;
     data->deleteLater();
     ASSERT_TRUE(true);
-}
-
-TEST_F(Test_PreviewContainer, PreviewWindow)
-{
-    WindowList list;
-    PreviewContainer *preview = PreviewWindow(WindowInfoMap(), list, Dock::Position::Top);
-
-    ASSERT_TRUE(preview);
-
-    delete preview;
 }

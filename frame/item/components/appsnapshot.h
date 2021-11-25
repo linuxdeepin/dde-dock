@@ -96,7 +96,6 @@ private:
     void enterEvent(QEvent *e) override;
     void leaveEvent(QEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     bool eventFilter(QObject *watched, QEvent *e) override;
     SHMInfo *getImageDSHM();

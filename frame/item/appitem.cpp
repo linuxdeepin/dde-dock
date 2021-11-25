@@ -24,7 +24,6 @@
 #include "themeappicon.h"
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
-#include "appspreviewprovider.h"
 #include "utils.h"
 
 #include <X11/X.h>
@@ -333,7 +332,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         m_itemEntryInter->Activate(QX11Info::getTimestamp());
 
         // play launch effect
-        if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())  
+        if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
             playSwingEffect();
     }
 }
@@ -640,7 +639,10 @@ void AppItem::onRefreshIcon()
 
 void AppItem::onResetPreview()
 {
-    m_appPreviewTips = nullptr;
+    if (m_appPreviewTips != nullptr) {
+        m_appPreviewTips->deleteLater();
+        m_appPreviewTips = nullptr;
+    }
 }
 
 void AppItem::activeChanged()
@@ -653,7 +655,11 @@ void AppItem::showPreview()
     if (m_windowInfos.isEmpty())
         return;
 
-    m_appPreviewTips = PreviewWindow(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value(), DockPosition);
+    m_appPreviewTips = new PreviewContainer;
+
+    m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
+    m_appPreviewTips->updateSnapshots();
+    m_appPreviewTips->updateLayoutDirection(DockPosition);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);

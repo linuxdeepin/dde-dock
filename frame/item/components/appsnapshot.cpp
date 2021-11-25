@@ -206,8 +206,8 @@ void AppSnapshot::fetchSnapshot()
     uchar *image_data = nullptr;
     XImage *ximage = nullptr;
 
-    // wayland环境下，使用KWin提供的接口
-    if (isKWinAvailable() && Utils::IS_WAYLAND_DISPLAY) {
+    // 优先使用窗管进行窗口截图
+    if (isKWinAvailable()) {
         QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
         qDebug() << "windowsID:"<< m_wid;
 
@@ -244,6 +244,7 @@ void AppSnapshot::fetchSnapshot()
                 // get window image from XGetImage(a little slow)
                 qDebug() << "get Image from dxcbplugin SHM failed!";
                 qDebug() << "get Image from Xlib...";
+                // guoyao note：这里会造成内存泄漏，而且是通过demo在X环境经过验证，改用xcb库同样会有内存泄漏，这里暂时未找到解决方案，所以优先使用kwin提供的接口
                 ximage = getImageXlib();
                 if (!ximage) {
                     qDebug() << "get Image from Xlib failed! giving up...";
@@ -340,13 +341,6 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     painter.scale(1 / ratio, 1 / ratio);
     painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
     painter.drawRoundedRect(m_snapshotSrcRect, radius * ratio, radius * ratio);
-}
-
-void AppSnapshot::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-
-    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)
