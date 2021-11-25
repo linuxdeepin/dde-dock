@@ -94,7 +94,6 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
             if (!call.isError()) {
                 QDBusObjectPath dPath(adapter->id());
                 m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
-                m_bluetoothInter->RequestDiscovery(dPath);
             } else {
                 qWarning() << call.error().message();
             }
