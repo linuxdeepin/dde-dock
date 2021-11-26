@@ -344,7 +344,11 @@ void TrayPlugin::sniItemsChanged()
         }
     }
 
+    m_registerSNIPID.clear();
+    QDBusConnection conn = QDBusConnection::connectToBus(QDBusConnection::SessionBus, "org.freedesktop.DBus");
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
+        QString dbusName = SNITrayWidget::serviceAndPath(itemServicePaths.at(i)).first;
+        m_registerSNIPID.insert(conn.interface()->servicePid(dbusName));
         traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
     }
 }
@@ -353,8 +357,15 @@ void TrayPlugin::xembedItemsChanged()
 {
     QList<quint32> winidList = m_trayInter->trayIcons();
     QStringList trayKeyList;
+    QList<quint32> xembedOnlyWinIdList;
 
     for (auto winid : winidList) {
+        if (!m_registerSNIPID.contains(XEmbedTrayWidget::getWindowPID(winid))) {
+            xembedOnlyWinIdList.append(winid);
+        }
+    }
+
+    for (auto winid : xembedOnlyWinIdList) {
         trayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
     }
 
@@ -365,7 +376,7 @@ void TrayPlugin::xembedItemsChanged()
     }
 
     for (int i = 0; i < trayKeyList.size(); ++i) {
-        trayXEmbedAdded(trayKeyList.at(i), winidList.at(i));
+        trayXEmbedAdded(trayKeyList.at(i), xembedOnlyWinIdList.at(i));
     }
 }
 

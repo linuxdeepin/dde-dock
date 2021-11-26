@@ -574,3 +574,31 @@ bool XEmbedTrayWidget::isBadWindow()
 
     return result;
 }
+
+long XEmbedTrayWidget::getWindowPID(uint winId)
+{
+    long pid = -1;
+    const auto display = IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::connection() is " << display;
+        return pid;
+    }
+
+    Atom nameAtom = XInternAtom(display, "_NET_WM_PID", 1);
+    Atom type;
+    int format, status;
+
+    unsigned long nitems, after;
+    unsigned char *data;
+
+    status = XGetWindowProperty(display, winId, nameAtom, 0, 1024, 0,
+            XInternAtom(display, "CARDINAL", 0), &type, &format, &nitems, &after, &data);
+    if (status == Success && data) {
+        pid = *((long*)data);
+        XFree(data);
+        qDebug() << "_NET_WM_PID = " << pid;
+    }
+    else
+        qDebug() << "_NET_WM_PID not found";
+    return pid;
+}
