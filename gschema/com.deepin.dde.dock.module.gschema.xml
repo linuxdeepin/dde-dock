@@ -178,6 +178,15 @@
           Blocking mouse events
       </description>
     </key>
+
+    <key type="b" name="menu-enable">
+      <default>true</default>
+      <summary>Menu Enable</summary>
+      <description>
+          Control Menu Enable
+      </description>
+    </key>
+
     <key type="b" name="enable">
       <default>true</default>
       <summary>Module Enable</summary>
@@ -185,6 +194,7 @@
           Control Module Enable
       </description>
     </key>
+
   </schema>
   <schema path="/com/deepin/dde/dock/module/sound/" id="com.deepin.dde.dock.module.sound" gettext-domain="DDE">
     <key type="b" name="control">
