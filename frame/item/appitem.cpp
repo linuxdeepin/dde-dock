@@ -41,8 +41,10 @@
 #include <QGSettings>
 
 #include <DGuiApplicationHelper>
+#include <DConfig>
 
 DGUI_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -69,6 +71,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
+    , m_config(new DConfig(QString("com.deepin.dde.dock.dconfig"), QString(), this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -663,9 +666,8 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
     // 预览标题显示方式的配置
-    if (m_activeAppSettings->keys().contains("previewTitle")) {
-        m_appPreviewTips->setTitleDisplayMode(m_activeAppSettings->get("previewTitle").toInt());
-    }
+    if (m_config->isValid() && m_config->keyList().contains("Dock_Show_Window_name"))
+        m_appPreviewTips->setTitleDisplayMode(m_config->value("Dock_Show_Window_name").toInt());
 
     showPopupWindow(m_appPreviewTips, true);
 }
