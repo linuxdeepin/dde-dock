@@ -107,6 +107,9 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 
 const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 {
+    //根据深信服要求，暂时屏蔽右键菜单
+    return "";
+
     QList<QVariant> items;
     items.reserve(6);
 
