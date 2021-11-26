@@ -100,6 +100,8 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
     , m_seperator(new HorizontalSeperator(this))
+    , m_airPlaneModeInter(new DBusAirplaneMode("com.deepin.daemon.AirplaneMode", "/com/deepin/daemon/AirplaneMode", QDBusConnection::systemBus(), this))
+    , m_airplaneModeEnable(false)
 {
     initUi();
     initConnect();
@@ -235,6 +237,9 @@ void BluetoothApplet::initUi()
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->addWidget(m_scroarea);
     updateSize();
+
+    setAirplaneModeEnabled(m_airPlaneModeInter->enabled());
+    setDisabled(m_airPlaneModeInter->enabled());
 }
 
 void BluetoothApplet::initConnect()
@@ -252,6 +257,8 @@ void BluetoothApplet::initConnect()
         .call();
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
+    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
+    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setDisabled);
 }
 
 /**
@@ -271,6 +278,14 @@ void BluetoothApplet::updateIconTheme()
     scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);
     m_scroarea->setAutoFillBackground(true);
     m_scroarea->setPalette(scroareaBackgroud);
+}
+
+void BluetoothApplet::setAirplaneModeEnabled(bool enable)
+{
+    if (m_airplaneModeEnable == enable)
+        return;
+
+    m_airplaneModeEnable = enable;
 }
 
 void BluetoothApplet::updateSize()

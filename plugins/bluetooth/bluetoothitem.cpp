@@ -92,7 +92,7 @@ const QString BluetoothItem::contextMenu() const
             shift["itemText"] = tr("Turn off");
         else
             shift["itemText"] = tr("Turn on");
-        shift["isActive"] = true;
+        shift["isActive"] = !m_applet->airplaneModeEnable();
         items.push_back(shift);
 
         QMap<QString, QVariant> settings;

@@ -29,6 +29,8 @@
 
 #include <dtkwidget_global.h>
 
+#include <com_deepin_daemon_airplanemode.h>
+
 class QVBoxLayout;
 class QHBoxLayout;
 
@@ -45,6 +47,8 @@ class DListView;
 DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
+
+using DBusAirplaneMode = com::deepin::daemon::AirplaneMode;
 
 class SettingLabel : public QWidget
 {
@@ -82,6 +86,8 @@ public:
     // 已连接蓝牙设备名称列表，用于获取鼠标悬浮在蓝牙插件上时tips显示内容
     QStringList connectedDevicesName();
 
+    inline bool airplaneModeEnable() const { return m_airplaneModeEnable;}
+
 signals:
     void noAdapter();
     void justHasAdapter();
@@ -97,6 +103,7 @@ public slots:
     void onSetAdapterPower(Adapter *adapter, bool state);
     // 更新蓝牙适配器电源状态，用于更新任务栏蓝牙插件图标的显示状态
     void updateBluetoothPowerState();
+    void setAirplaneModeEnabled(bool enable);
 
 private:
     void initUi();
@@ -116,6 +123,8 @@ private:
 
     QStringList m_connectDeviceName;
     QMap<QString, BluetoothAdapterItem *> m_adapterItems;           // 所有蓝牙适配器
+    DBusAirplaneMode *m_airPlaneModeInter;
+    bool m_airplaneModeEnable;
 };
 
 #endif // BLUETOOTHAPPLET_H
