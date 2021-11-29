@@ -32,11 +32,9 @@ SettingsModule::SettingsModule()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
 {
-    const QString &appName = qApp->applicationName();
-    // 加载任务栏的翻译文件
-    qApp->setApplicationName("dcc-dock-plugin");
-    qApp->loadTranslator();
-    qApp->setApplicationName(appName);
+    QTranslator *translator = new QTranslator(this);
+    translator->load(QString("/usr/share/dcc-dock-plugin/translations/dcc-dock-plugin_%1.qm").arg(QLocale::system().name()));
+    QCoreApplication::installTranslator(translator);
 }
 
 SettingsModule::~SettingsModule()

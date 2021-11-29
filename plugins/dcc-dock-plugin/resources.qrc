@@ -26,5 +26,13 @@
         <file>translations/dcc-dock-plugin_zh_CN.ts</file>
         <file>translations/dcc-dock-plugin_zh_HK.ts</file>
         <file>translations/dcc-dock-plugin_zh_TW.ts</file>
+        <file>translations/dcc-dock-plugin_de.ts</file>
+        <file>translations/dcc-dock-plugin_ca.ts</file>
+        <file>translations/dcc-dock-plugin_es.ts</file>
+        <file>translations/dcc-dock-plugin_hr.ts</file>
+        <file>translations/dcc-dock-plugin_it.ts</file>
+        <file>translations/dcc-dock-plugin_pl.ts</file>
+        <file>translations/dcc-dock-plugin_pt_BR.ts</file>
+        <file>translations/dcc-dock-plugin_ru.ts</file>
     </qresource>
 </RCC>
