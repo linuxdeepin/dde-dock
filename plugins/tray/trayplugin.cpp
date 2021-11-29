@@ -334,6 +334,7 @@ void TrayPlugin::sniItemsChanged()
     }
     for (auto itemKey : m_trayMap.keys()) {
         if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
+            m_registertedPID.remove(m_trayMap[itemKey]->getOwnerPID());
             trayRemoved(itemKey);
         }
     }
@@ -343,29 +344,42 @@ void TrayPlugin::sniItemsChanged()
             m_passiveSNITrayMap.take(itemKey)->deleteLater();
         }
     }
-
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
-        traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
+        uint pid = SNITrayWidget::servicePID(itemServicePaths.at(i));
+        if (!m_registertedPID.contains(pid)) {
+            traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
+            m_registertedPID.insert(pid);
+        }
     }
 }
 
 void TrayPlugin::xembedItemsChanged()
 {
     QList<quint32> winidList = m_trayInter->trayIcons();
-    QStringList trayKeyList;
+    QStringList newlyAddedTrayKeyList;
+    QStringList allKeytary;
+    QList<quint32> newlyAddedWindowID;
 
     for (auto winid : winidList) {
-        trayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
+        uint pid = XEmbedTrayWidget::getWindowPID(winid);
+        allKeytary << XEmbedTrayWidget::toXEmbedKey(winid);
+
+        if (!m_registertedPID.contains(pid)) {
+            m_registertedPID.insert(pid);
+            newlyAddedWindowID << winid;
+            newlyAddedTrayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
+        }
     }
 
     for (auto tray : m_trayMap.keys()) {
-        if (!trayKeyList.contains(tray) && XEmbedTrayWidget::isXEmbedKey(tray)) {
+        if (!allKeytary.contains(tray) && XEmbedTrayWidget::isXEmbedKey(tray)) {
+            m_registertedPID.remove(m_trayMap[tray]->getOwnerPID());
             trayRemoved(tray);
         }
     }
 
-    for (int i = 0; i < trayKeyList.size(); ++i) {
-        trayXEmbedAdded(trayKeyList.at(i), winidList.at(i));
+    for (int i = 0; i < newlyAddedTrayKeyList.size(); ++i) {
+        trayXEmbedAdded(newlyAddedTrayKeyList.at(i), newlyAddedWindowID.at(i));
     }
 }
 
