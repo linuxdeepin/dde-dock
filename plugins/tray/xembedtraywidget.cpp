@@ -90,6 +90,8 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn, Display
 {
     wrapWindow();
 
+    m_ownerPID = getWindowPID(winId);
+
     m_updateTimer = new QTimer(this);
     m_updateTimer->setInterval(100);
     m_updateTimer->setSingleShot(true);
@@ -575,9 +577,9 @@ bool XEmbedTrayWidget::isBadWindow()
     return result;
 }
 
-long XEmbedTrayWidget::getWindowPID(uint winId)
+uint XEmbedTrayWidget::getWindowPID(uint winId)
 {
-    long pid = -1;
+    uint pid = 0;
     const auto display = IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
         qWarning() << "QX11Info::connection() is " << display;
@@ -594,11 +596,12 @@ long XEmbedTrayWidget::getWindowPID(uint winId)
     status = XGetWindowProperty(display, winId, nameAtom, 0, 1024, 0,
             XInternAtom(display, "CARDINAL", 0), &type, &format, &nitems, &after, &data);
     if (status == Success && data) {
-        pid = *((long*)data);
+        pid = *((uint*)data);
         XFree(data);
-        qDebug() << "_NET_WM_PID = " << pid;
     }
-    else
-        qDebug() << "_NET_WM_PID not found";
+
+    if (IS_WAYLAND_DISPLAY)
+        XCloseDisplay(display);
+
     return pid;
 }

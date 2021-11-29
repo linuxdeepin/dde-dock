@@ -132,3 +132,8 @@ void AbstractTrayWidget::resizeEvent(QResizeEvent *event)
         setMaximumWidth(QWIDGETSIZE_MAX);
     }
 }
+
+uint AbstractTrayWidget::getOwnerPID()
+{
+    return this->m_ownerPID;
+}
