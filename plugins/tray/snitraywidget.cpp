@@ -247,9 +247,11 @@ QPair<QString, QString> SNITrayWidget::serviceAndPath(const QString &servicePath
     return pair;
 }
 
-QString SNITrayWidget::serviceName(const QString &servicePath)
+uint SNITrayWidget::servicePID(const QString &servicePath)
 {
-    return serviceAndPath(servicePath).first;
+    QString serviceName = serviceAndPath(servicePath).first;
+    QDBusConnection conn = QDBusConnection::sessionBus();
+    return conn.interface()->servicePid(serviceName);
 }
 
 void SNITrayWidget::initSNIPropertys()

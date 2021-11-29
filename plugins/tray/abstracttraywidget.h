@@ -66,6 +66,6 @@ private:
 
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
 
-    uint m_ownerPID;
+    uint m_ownerPID = 0;
 };
 

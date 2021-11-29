@@ -346,8 +346,8 @@ void TrayPlugin::sniItemsChanged()
     }
     QDBusConnection conn = QDBusConnection::sessionBus();
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
-        QString dbusName = SNITrayWidget::serviceName(itemServicePaths.at(i));
-        uint pid = conn.interface()->servicePid(dbusName);
+        uint pid = SNITrayWidget::servicePID(itemServicePaths.at(i));
+        // uint pid = conn.interface()->servicePid(dbusName);
 
         if (!m_registertedPID.contains(pid)) {
             traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));

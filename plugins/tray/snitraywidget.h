@@ -66,7 +66,7 @@ public:
     static QString toSNIKey(const QString &sniServicePath);
     static bool isSNIKey(const QString &itemKey);
     static QPair<QString, QString> serviceAndPath(const QString &servicePath);
-    static QString serviceName(const QString &servicePath);
+    static uint servicePID(const QString &servicePath);
 
     void showHoverTips();
     const QPoint topleftPoint() const;
