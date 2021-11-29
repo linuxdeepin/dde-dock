@@ -327,7 +327,6 @@ void TrayPlugin::initSNI()
 void TrayPlugin::sniItemsChanged()
 {
     const QStringList &itemServicePaths = m_sniWatcher->registeredStatusNotifierItems();
-    QDBusConnection conn = QDBusConnection::sessionBus();
     QStringList sinTrayKeyList;
 
     for (auto item : itemServicePaths) {
@@ -335,7 +334,7 @@ void TrayPlugin::sniItemsChanged()
     }
     for (auto itemKey : m_trayMap.keys()) {
         if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
-            m_registedPID.remove(m_trayMap[itemKey]->getOwnerPID());
+            m_registertedPID.remove(m_trayMap[itemKey]->getOwnerPID());
             trayRemoved(itemKey);
         }
     }
@@ -345,13 +344,14 @@ void TrayPlugin::sniItemsChanged()
             m_passiveSNITrayMap.take(itemKey)->deleteLater();
         }
     }
+    QDBusConnection conn = QDBusConnection::sessionBus();
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
-        QString dbusName = SNITrayWidget::serviceAndPath(itemServicePaths.at(i)).first;
+        QString dbusName = SNITrayWidget::serviceName(itemServicePaths.at(i));
         uint pid = conn.interface()->servicePid(dbusName);
 
-        if (!m_registedPID.contains(pid)) {
+        if (!m_registertedPID.contains(pid)) {
             traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
-            m_registedPID.insert(pid);
+            m_registertedPID.insert(pid);
         }
     }
 }
@@ -361,28 +361,28 @@ void TrayPlugin::xembedItemsChanged()
     QList<quint32> winidList = m_trayInter->trayIcons();
     QStringList newlyAddedTrayKeyList;
     QStringList allKeytary;
-    QList<quint32> newlyAdded;
+    QList<quint32> newlyAddedWindowID;
 
     for (auto winid : winidList) {
         uint pid = XEmbedTrayWidget::getWindowPID(winid);
         allKeytary << XEmbedTrayWidget::toXEmbedKey(winid);
 
-        if (!m_registedPID.contains(pid)) {
-            m_registedPID.insert(pid);
-            newlyAdded << winid;
+        if (!m_registertedPID.contains(pid)) {
+            m_registertedPID.insert(pid);
+            newlyAddedWindowID << winid;
             newlyAddedTrayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
         }
     }
 
     for (auto tray : m_trayMap.keys()) {
         if (!allKeytary.contains(tray) && XEmbedTrayWidget::isXEmbedKey(tray)) {
-            m_registedPID.remove(m_trayMap[tray]->getOwnerPID());
+            m_registertedPID.remove(m_trayMap[tray]->getOwnerPID());
             trayRemoved(tray);
         }
     }
 
     for (int i = 0; i < newlyAddedTrayKeyList.size(); ++i) {
-        trayXEmbedAdded(newlyAddedTrayKeyList.at(i), newlyAdded.at(i));
+        trayXEmbedAdded(newlyAddedTrayKeyList.at(i), newlyAddedWindowID.at(i));
     }
 }
 

@@ -81,7 +81,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     m_dbusPath = pair.second;
 
     QDBusConnection conn = QDBusConnection::sessionBus();
-    m_ownerPID = conn.interface()->servicePid(m_dbusService);
+    setOwnerPID(conn.interface()->servicePid(m_dbusService));
 
     m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
     m_sniInter->setSync(false);
@@ -245,6 +245,11 @@ QPair<QString, QString> SNITrayWidget::serviceAndPath(const QString &servicePath
     }
 
     return pair;
+}
+
+QString SNITrayWidget::serviceName(const QString &servicePath)
+{
+    return serviceAndPath(servicePath).first;
 }
 
 void SNITrayWidget::initSNIPropertys()

@@ -137,3 +137,8 @@ uint AbstractTrayWidget::getOwnerPID()
 {
     return this->m_ownerPID;
 }
+
+void AbstractTrayWidget::setOwnerPID(uint PID)
+{
+    this->m_ownerPID = PID;
+}

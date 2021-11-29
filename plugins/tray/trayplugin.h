@@ -105,7 +105,7 @@ private:
     QMap<QString, AbstractTrayWidget *> m_trayMap;
     QMap<QString, SNITrayWidget *> m_passiveSNITrayMap;     //这个目前好像无用了
     QMap<QString, IndicatorTray*> m_indicatorMap;           //这个有键盘跟license
-    QSet<uint> m_registedPID;
+    QSet<uint> m_registertedPID;
 
     bool m_pluginLoaded;
     std::mutex m_sniMutex;

@@ -45,7 +45,6 @@ public:
 
     static QString getWindowProperty(quint32 winId, QString propName);
     static QString toXEmbedKey(quint32 winId);
-    static quint32 getWinidFromXEmbedKey(const QString &itemkey);
     static uint getWindowPID(quint32 winId);
     static bool isXEmbedKey(const QString &itemKey);
     virtual bool isValid() override {return m_valid;}

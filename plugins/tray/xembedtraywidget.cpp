@@ -90,7 +90,7 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, xcb_connection_t *cnn, Display
 {
     wrapWindow();
 
-    m_ownerPID = getWindowPID(winId);
+    setOwnerPID(getWindowPID(winId));
 
     m_updateTimer = new QTimer(this);
     m_updateTimer->setInterval(100);

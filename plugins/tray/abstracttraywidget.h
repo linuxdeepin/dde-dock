@@ -59,12 +59,13 @@ protected:
     void handleMouseRelease();
     const QRect perfectIconRect() const;
     void resizeEvent(QResizeEvent *event) override;
-
-    uint m_ownerPID;
+    void setOwnerPID(uint PID);
 
 private:
     QTimer *m_handleMouseReleaseTimer;
 
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
+
+    uint m_ownerPID;
 };
 
