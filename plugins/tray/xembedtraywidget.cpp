@@ -82,6 +82,7 @@ XEmbedTrayWidget::XEmbedTrayWidget(quint32 winId, QWidget *parent)
     , m_valid(true)
 {
     wrapWindow();
+    setOwnerPID(getWindowPID(winId));
 
     m_updateTimer = new QTimer(this);
     m_updateTimer->setInterval(100);
@@ -537,4 +538,30 @@ bool XEmbedTrayWidget::isBadWindow()
     free(clientGeom);
 
     return result;
+}
+
+uint XEmbedTrayWidget::getWindowPID(uint winId)
+{
+    uint pid = 0;
+    const auto display =QX11Info::display();
+    if (!display) {
+        qWarning() << "QX11Info::connection() is " << display;
+        return pid;
+    }
+
+    Atom nameAtom = XInternAtom(display, "_NET_WM_PID", 1);
+    Atom type;
+    int format, status;
+
+    unsigned long nitems, after;
+    unsigned char *data;
+
+    status = XGetWindowProperty(display, winId, nameAtom, 0, 1024, 0,
+            XInternAtom(display, "CARDINAL", 0), &type, &format, &nitems, &after, &data);
+    if (status == Success && data) {
+        pid = *((uint*)data);
+        XFree(data);
+    }
+
+    return pid;
 }
