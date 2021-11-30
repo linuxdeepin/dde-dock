@@ -253,10 +253,8 @@ void MultiScreenWorker::hideAniFinished()
     emit requestUpdateLayout();
 
     const QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepHidden, m_displayMode);
-
     parent()->setFixedSize(rect.size());
     parent()->setGeometry(rect);
-
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
 

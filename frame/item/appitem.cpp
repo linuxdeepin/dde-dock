@@ -684,6 +684,9 @@ void AppItem::playSwingEffect()
     if (m_swingEffectView != nullptr)
         return;
 
+    if (rect().isEmpty())
+        return checkAttentionEffect();
+
     stopSwingEffect();
 
     QPair<QGraphicsView *, QGraphicsItemAnimation *> pair =  SwingEffect(
