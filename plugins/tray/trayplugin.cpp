@@ -43,6 +43,9 @@
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
 
+#define REGISTERTED_WAY_IS_SNI 1
+#define REGISTERTED_WAY_IS_XEMBED 2
+
 using org::kde::StatusNotifierWatcher;
 using namespace Dock;
 
@@ -334,7 +337,7 @@ void TrayPlugin::sniItemsChanged()
     }
     for (auto itemKey : m_trayMap.keys()) {
         if (!sinTrayKeyList.contains(itemKey) && SNITrayWidget::isSNIKey(itemKey)) {
-            m_registertedPID.remove(m_trayMap[itemKey]->getOwnerPID());
+            m_registertedPID.take(m_trayMap[itemKey]->getOwnerPID());
             trayRemoved(itemKey);
         }
     }
@@ -346,9 +349,9 @@ void TrayPlugin::sniItemsChanged()
     }
     for (int i = 0; i < sinTrayKeyList.size(); ++i) {
         uint pid = SNITrayWidget::servicePID(itemServicePaths.at(i));
-        if (!m_registertedPID.contains(pid)) {
+        if (m_registertedPID.value(pid, REGISTERTED_WAY_IS_SNI) == REGISTERTED_WAY_IS_SNI) {
             traySNIAdded(sinTrayKeyList.at(i), itemServicePaths.at(i));
-            m_registertedPID.insert(pid);
+            m_registertedPID.insert(pid, REGISTERTED_WAY_IS_SNI);
         }
     }
 }
@@ -364,8 +367,8 @@ void TrayPlugin::xembedItemsChanged()
         uint pid = XEmbedTrayWidget::getWindowPID(winid);
         allKeytary << XEmbedTrayWidget::toXEmbedKey(winid);
 
-        if (!m_registertedPID.contains(pid)) {
-            m_registertedPID.insert(pid);
+        if (m_registertedPID.value(pid, REGISTERTED_WAY_IS_XEMBED) == REGISTERTED_WAY_IS_XEMBED) {
+            m_registertedPID.insert(pid, REGISTERTED_WAY_IS_XEMBED);
             newlyAddedWindowID << winid;
             newlyAddedTrayKeyList << XEmbedTrayWidget::toXEmbedKey(winid);
         }
@@ -373,7 +376,7 @@ void TrayPlugin::xembedItemsChanged()
 
     for (auto tray : m_trayMap.keys()) {
         if (!allKeytary.contains(tray) && XEmbedTrayWidget::isXEmbedKey(tray)) {
-            m_registertedPID.remove(m_trayMap[tray]->getOwnerPID());
+            m_registertedPID.take(m_trayMap[tray]->getOwnerPID());
             trayRemoved(tray);
         }
     }

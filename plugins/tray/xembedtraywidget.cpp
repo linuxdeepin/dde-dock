@@ -578,11 +578,10 @@ bool XEmbedTrayWidget::isBadWindow()
 
 uint XEmbedTrayWidget::getWindowPID(uint winId)
 {
-    uint pid = 0;
     const auto display = IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
     if (!display) {
         qWarning() << "QX11Info::connection() is " << display;
-        return pid;
+        return 0;
     }
 
     Atom nameAtom = XInternAtom(display, "_NET_WM_PID", 1);
@@ -591,6 +590,7 @@ uint XEmbedTrayWidget::getWindowPID(uint winId)
 
     unsigned long nitems, after;
     unsigned char *data;
+    unsigned int pid = 0;
 
     status = XGetWindowProperty(display, winId, nameAtom, 0, 1024, 0,
             XInternAtom(display, "CARDINAL", 0), &type, &format, &nitems, &after, &data);
