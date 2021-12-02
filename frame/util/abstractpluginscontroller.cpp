@@ -353,10 +353,14 @@ void AbstractPluginsController::refreshPluginSettings()
     for (auto it = pluginsMapTemp.constBegin(); it != pluginsMapTemp.constEnd(); ++it) {
         const QList<QString> &itemKeyList = it.value().keys();
         for (auto key : itemKeyList) {
-            itemRemoved(it.key(), key);
+            if (key != "pluginloader") {
+                itemRemoved(it.key(), key);
+            }
         }
         for (auto key : itemKeyList) {
-            itemAdded(it.key(), key);
+            if (key != "pluginloader") {
+                itemAdded(it.key(), key);
+            }
         }
     }
 }
