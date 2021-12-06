@@ -329,7 +329,7 @@ void PreviewContainer::onRequestCloseAppSnapshot()
     if (!m_wmHelper->hasComposite())
         return ;
 
-    if (m_currentWId != m_snapshots.lastKey()) {
+    if (m_snapshots.keys().isEmpty()) {
         Q_EMIT requestHidePopup();
         Q_EMIT requestCancelPreviewWindow();
     }
