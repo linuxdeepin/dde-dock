@@ -184,15 +184,7 @@ void PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, [this]() {
-        if (!m_wmHelper->hasComposite())
-            return ;
-
-        if (m_currentWId != m_snapshots.lastKey()) {
-            Q_EMIT requestHidePopup();
-            Q_EMIT requestCancelPreviewWindow();
-        }
-    });
+    connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, &PreviewContainer::onRequestCloseAppSnapshot);
 
     m_windowListLayout->addWidget(snap);
     if (m_snapshots.size() >= (QDesktopWidget().screenGeometry(this).width() / (SNAP_WIDTH / 2)))
@@ -289,4 +281,15 @@ void PreviewContainer::previewFloating()
         requestPreviewWindow(m_currentWId);
     }
     return;
+}
+
+void PreviewContainer::onRequestCloseAppSnapshot()
+{
+    if (!m_wmHelper->hasComposite())
+        return;
+
+    if (m_snapshots.keys().isEmpty()) {
+        Q_EMIT requestHidePopup();
+        Q_EMIT requestCancelPreviewWindow();
+    }
 }

@@ -72,6 +72,7 @@ private slots:
     void onSnapshotClicked(const WId wid);
     void previewEntered(const WId wid);
     void previewFloating();
+    void onRequestCloseAppSnapshot();
 
 private:
     bool m_needActivate;
