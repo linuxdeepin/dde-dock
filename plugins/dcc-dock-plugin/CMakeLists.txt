@@ -22,6 +22,7 @@ add_library(${PLUGIN_NAME} SHARED ${SRCS} resources.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ./)
 target_include_directories(${PLUGIN_NAME} PUBLIC
     ../src
+    ../../frame/util
     ${Qt5Widgets_INCLUDE_DIRS}
     ${DtkWidget_INCLUDE_DIRS}
     ${DdeControlCenter_INCLUDE_DIR}

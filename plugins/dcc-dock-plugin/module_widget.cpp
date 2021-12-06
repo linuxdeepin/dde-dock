@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "module_widget.h"
+#include "utils.h"
 
 #include <widgets/comboxwidget.h>
 #include <widgets/titledslideritem.h>
@@ -29,6 +30,8 @@
 #include <DListView>
 #include <DTipLabel>
 
+#include <QApplication>
+#include <QScreen>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDBusConnection>
@@ -102,65 +105,79 @@ void ModuleWidget::initUI()
     static QMap<QString, int> g_modeMap = {{tr("Fashion mode"), Fashion}
                                            , {tr("Efficient mode"), Efficient}};
     // 模式
-    m_modeComboxWidget->setTitle(tr("Mode"));
-    m_modeComboxWidget->addBackground();
-    m_modeComboxWidget->setComboxOption(QStringList() << tr("Fashion mode") << tr("Efficient mode"));
-    m_modeComboxWidget->setCurrentText(g_modeMap.key(m_daemonDockInter->displayMode()));
-    connect(m_modeComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
-        m_daemonDockInter->setDisplayMode(g_modeMap.value(text));
-    });
-    connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, [ = ] (int value) {
-        DisplayMode mode = static_cast<DisplayMode>(value);
-        if (g_modeMap.key(mode) == m_modeComboxWidget->comboBox()->currentText())
-            return;
+    if (Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "modeVisible", true).toBool()) {
+        m_modeComboxWidget->setTitle(tr("Mode"));
+        m_modeComboxWidget->addBackground();
+        m_modeComboxWidget->setComboxOption(QStringList() << tr("Fashion mode") << tr("Efficient mode"));
+        m_modeComboxWidget->setCurrentText(g_modeMap.key(m_daemonDockInter->displayMode()));
+        connect(m_modeComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
+            m_daemonDockInter->setDisplayMode(g_modeMap.value(text));
+        });
+        connect(m_daemonDockInter, &DBusDock::DisplayModeChanged, this, [ = ] (int value) {
+            DisplayMode mode = static_cast<DisplayMode>(value);
+            if (g_modeMap.key(mode) == m_modeComboxWidget->comboBox()->currentText())
+                return;
 
-        m_modeComboxWidget->setCurrentText(g_modeMap.key(mode));
-    });
-    layout->addWidget(m_modeComboxWidget);
-    m_dconfigWatcher->bind("Control-Center_Dock_Model", m_modeComboxWidget);
+            m_modeComboxWidget->setCurrentText(g_modeMap.key(mode));
+        });
+        layout->addWidget(m_modeComboxWidget);
+        m_dconfigWatcher->bind("Control-Center_Dock_Model", m_modeComboxWidget);
+    } else {
+        m_modeComboxWidget->setVisible(false);
+    }
 
-    static QMap<QString, int> g_positionMap = {{tr("Top"), Top}
-                                               , {tr("Bottom"), Bottom}
-                                               , {tr("Left"), Left}
-                                               , {tr("Right"), Right}};
-    // 位置
-    m_positionComboxWidget->setTitle(tr("Location"));
-    m_positionComboxWidget->addBackground();
-    m_positionComboxWidget->setComboxOption(QStringList() << tr("Top") << tr("Bottom") << tr("Left") << tr("Right"));
-    m_positionComboxWidget->setCurrentText(g_positionMap.key(m_daemonDockInter->position()));
-    connect(m_positionComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
-        m_daemonDockInter->setPosition(g_positionMap.value(text));
-    });
-    connect(m_daemonDockInter, &DBusDock::PositionChanged, this, [ = ] (int position) {
-        Position pos = static_cast<Position>(position);
-        if (g_positionMap.key(pos) == m_positionComboxWidget->comboBox()->currentText())
-            return;
+    if (Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "locationVisible", true).toBool()) {
+        // 位置
+        static QMap<QString, int> g_positionMap = {{tr("Top"), Top}
+                                                   , {tr("Bottom"), Bottom}
+                                                   , {tr("Left"), Left}
+                                                   , {tr("Right"), Right}};
 
-        m_positionComboxWidget->setCurrentText(g_positionMap.key(pos));
-    });
-    layout->addWidget(m_positionComboxWidget);
-    m_dconfigWatcher->bind("Control-Center_Dock_Location", m_positionComboxWidget);
+        m_positionComboxWidget->setTitle(tr("Location"));
+        m_positionComboxWidget->addBackground();
+        m_positionComboxWidget->setComboxOption(QStringList() << tr("Top") << tr("Bottom") << tr("Left") << tr("Right"));
+        m_positionComboxWidget->setCurrentText(g_positionMap.key(m_daemonDockInter->position()));
+        connect(m_positionComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
+            m_daemonDockInter->setPosition(g_positionMap.value(text));
+        });
+        connect(m_daemonDockInter, &DBusDock::PositionChanged, this, [ = ] (int position) {
+            Position pos = static_cast<Position>(position);
+            if (g_positionMap.key(pos) == m_positionComboxWidget->comboBox()->currentText())
+                return;
 
-    static QMap<QString, int> g_stateMap = {{tr("Keep shown"), KeepShowing}
-                                            , {tr("Keep hidden"), KeepHidden}
-                                            , {tr("Smart hide"), SmartHide}};
+            m_positionComboxWidget->setCurrentText(g_positionMap.key(pos));
+        });
+        layout->addWidget(m_positionComboxWidget);
+        m_dconfigWatcher->bind("Control-Center_Dock_Location", m_positionComboxWidget);
+    } else {
+        m_positionComboxWidget->setVisible(false);
+    }
+
     // 状态
-    m_stateComboxWidget->setTitle(tr("Status"));
-    m_stateComboxWidget->addBackground();
-    m_stateComboxWidget->setComboxOption(QStringList() << tr("Keep shown") << tr("Keep hidden") << tr("Smart hide"));
-    m_stateComboxWidget->setCurrentText(g_stateMap.key(m_daemonDockInter->hideMode()));
-    connect(m_stateComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
-        m_daemonDockInter->setHideMode(g_stateMap.value(text));
-    });
-    connect(m_daemonDockInter, &DBusDock::HideModeChanged, this, [ = ] (int value) {
-        HideMode mode = static_cast<HideMode>(value);
-        if (g_stateMap.key(mode) == m_stateComboxWidget->comboBox()->currentText())
-            return;
+    if (Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "statusVisible", true).toBool()) {
+        static QMap<QString, int> g_stateMap = {{tr("Keep shown"), KeepShowing}
+                                                , {tr("Keep hidden"), KeepHidden}
+                                                , {tr("Smart hide"), SmartHide}};
 
-        m_stateComboxWidget->setCurrentText(g_stateMap.key(mode));
-    });
-    layout->addWidget(m_stateComboxWidget);
-    m_dconfigWatcher->bind("Control-Center_Dock_State", m_stateComboxWidget);
+        m_stateComboxWidget->setTitle(tr("Status"));
+        m_stateComboxWidget->addBackground();
+        m_stateComboxWidget->setComboxOption(QStringList() << tr("Keep shown") << tr("Keep hidden") << tr("Smart hide"));
+        m_stateComboxWidget->setCurrentText(g_stateMap.key(m_daemonDockInter->hideMode()));
+        connect(m_stateComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
+            m_daemonDockInter->setHideMode(g_stateMap.value(text));
+        });
+        connect(m_daemonDockInter, &DBusDock::HideModeChanged, this, [ = ] (int value) {
+            HideMode mode = static_cast<HideMode>(value);
+            if (g_stateMap.key(mode) == m_stateComboxWidget->comboBox()->currentText())
+                return;
+
+            m_stateComboxWidget->setCurrentText(g_stateMap.key(mode));
+        });
+        layout->addWidget(m_stateComboxWidget);
+        m_dconfigWatcher->bind("Control-Center_Dock_State", m_stateComboxWidget);
+    } else {
+        m_stateComboxWidget->setVisible(false);
+    }
 
     // 高度调整控件
     m_sizeSlider->addBackground();
@@ -196,7 +213,10 @@ void ModuleWidget::initUI()
     layout->addWidget(m_sizeSlider);
 
     // 多屏显示设置
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.dde.Dock")) {
+    if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.dde.Dock")
+            && QApplication::screens().size() > 1
+            && !isCopyMode()
+            && Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "multiscreenVisible", true).toBool()) {
         static QMap<QString, bool> g_screenSettingMap = {{tr("On screen where the cursor is"), false}
                                                          , {tr("Only on main screen"), true}};
 
@@ -229,7 +249,8 @@ void ModuleWidget::initUI()
     // 插件区域
     QDBusPendingReply<QStringList> reply = m_dockInter->GetLoadedPlugins();
     QStringList plugins = reply.value();
-    if (reply.error().type() != QDBusError::ErrorType::NoError) {
+    if (reply.error().type() != QDBusError::ErrorType::NoError
+            || !Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "hideVisible", true).toBool()) {
         m_pluginAreaTitle->setVisible(false);
         m_pluginTips->setVisible(false);
         m_pluginView->setVisible(false);
@@ -321,6 +342,28 @@ void ModuleWidget::initUI()
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
     setWidget(widget);
+}
+
+/**判断屏幕是否为复制模式的依据，第一个屏幕的X和Y值是否和其他的屏幕的X和Y值相等
+ * 对于复制模式，这两个值肯定是相等的，如果不是复制模式，这两个值肯定不等，目前支持双屏
+ * @brief DisplayManager::isCopyMode
+ * @return
+ */
+bool ModuleWidget::isCopyMode()
+{
+    QList<QScreen *> screens = qApp->screens();
+    if (screens.size() < 2)
+        return false;
+
+    // 在多个屏幕的情况下，如果所有屏幕的位置的X和Y值都相等，则认为是复制模式
+    QRect screenRect = screens[0]->availableGeometry();
+    for (int i = 1; i < screens.size(); i++) {
+        QRect rect = screens[i]->availableGeometry();
+        if (screenRect.x() != rect.x() || screenRect.y() != rect.y())
+            return false;
+    }
+
+    return true;
 }
 
 void ModuleWidget::updateSliderValue()

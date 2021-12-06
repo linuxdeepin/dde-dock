@@ -59,6 +59,7 @@ public:
 
 private:
     void initUI();
+    bool isCopyMode();
 
 private Q_SLOTS:
     void updateSliderValue();
