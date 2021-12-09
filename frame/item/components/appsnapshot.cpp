@@ -143,26 +143,30 @@ void AppSnapshot::setTitleVisible(bool bVisible)
 
 void AppSnapshot::closeWindow() const
 {
-    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
-    if (!display) {
-        qWarning() << "Error: get display failed!";
-        return;
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        m_dockDaemonInter->CloseWindow(static_cast<uint>(m_wid));
+    } else {
+        const auto display = QX11Info::display();
+        if (!display) {
+            qWarning() << "Error: get display failed!";
+            return;
+        }
+
+        XEvent e;
+
+        memset(&e, 0, sizeof(e));
+        e.xclient.type = ClientMessage;
+        e.xclient.window = m_wid;
+        e.xclient.message_type = XInternAtom(display, "WM_PROTOCOLS", true);
+        e.xclient.format = 32;
+        e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
+        e.xclient.data.l[1] = CurrentTime;
+
+        Q_EMIT requestCloseAppSnapshot();
+
+        XSendEvent(display, m_wid, false, NoEventMask, &e);
+        XFlush(display);
     }
-
-    XEvent e;
-
-    memset(&e, 0, sizeof(e));
-    e.xclient.type = ClientMessage;
-    e.xclient.window = m_wid;
-    e.xclient.message_type = XInternAtom(display, "WM_PROTOCOLS", true);
-    e.xclient.format = 32;
-    e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
-    e.xclient.data.l[1] = CurrentTime;
-
-    Q_EMIT requestCloseAppSnapshot();
-
-    XSendEvent(display, m_wid, false, NoEventMask, &e);
-    XFlush(display);
 }
 
 void AppSnapshot::compositeChanged() const
