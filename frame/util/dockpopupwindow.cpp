@@ -43,7 +43,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     setAttribute(Qt::WA_InputMethodEnabled, false);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
