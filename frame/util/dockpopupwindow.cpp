@@ -52,7 +52,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     }
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
