@@ -1,121 +1,121 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.0">
 <context>
     <name>ModuleWidget</name>
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Size</translation>
+        <translation>Μέγεθος</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation>Multiple Displays</translation>
+        <translation>Πολλαπλές Οθόνες</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>
         <source>Plugin Area</source>
-        <translation>Plugin Area</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Select which icons appear in the Dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="102"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Fashion mode</source>
-        <translation>Fashion mode</translation>
+        <translation>Μοντέρνα λειτουργία</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Efficient mode</source>
-        <translation>Efficient mode</translation>
+        <translation>Αποτελεσματική λειτουργία</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="105"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation>Λειτουργία</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="123"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Πάνω μέρος</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="124"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Bottom</source>
-        <translation>Bottom</translation>
+        <translation>Κάτω μέρος</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="125"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Αριστερά</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="126"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>Δεξιά</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="128"/>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>Τοποθεσία</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="145"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep shown</source>
-        <translation>Keep shown</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="146"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep hidden</source>
-        <translation>Keep hidden</translation>
+        <translation>Κρατήστε κρυφό</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="147"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Smart hide</source>
-        <translation>Smart hide</translation>
+        <translation>Έξυπνη απόκρυψη</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="149"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Κατάσταση</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Small</source>
-        <translation>Small</translation>
+        <translation>Μικρό</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Large</source>
-        <translation>Large</translation>
+        <translation>Μεγάλο</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="201"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
-        <translation>On screen where the cursor is</translation>
+        <translation>Στην οθόνη όπου βρίσκεται ο κέρσορας</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="202"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>Only on main screen</source>
-        <translation>Only on main screen</translation>
+        <translation>Μόνο στην κύρια οθόνη</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="206"/>
         <source>Show Dock</source>
-        <translation>Show Dock</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../settings_module.cpp" line="68"/>
         <source>Dock</source>
-        <translation>Dock</translation>
+        <translation>Προσθήκη στην γραμμή εργασιών</translation>
         <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>

@@ -9,7 +9,7 @@
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation type="unfinished"/>
+        <translation>Несколько Дисплеев</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>

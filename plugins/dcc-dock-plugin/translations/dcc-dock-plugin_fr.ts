@@ -1,37 +1,37 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.0">
 <context>
     <name>ModuleWidget</name>
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Size</translation>
+        <translation>Taille</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>
         <source>Multiple Displays</source>
-        <translation>Multiple Displays</translation>
+        <translation>Affichages multiples</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="71"/>
         <source>Plugin Area</source>
-        <translation>Plugin Area</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Select which icons appear in the Dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="102"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Fashion mode</source>
-        <translation>Fashion mode</translation>
+        <translation>Mode dock</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Efficient mode</source>
-        <translation>Efficient mode</translation>
+        <translation>Mode étendu </translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="105"/>
@@ -42,80 +42,80 @@
         <location filename="../module_widget.cpp" line="123"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Haut</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="124"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Bottom</source>
-        <translation>Bottom</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="125"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="126"/>
         <location filename="../module_widget.cpp" line="130"/>
         <source>Right</source>
-        <translation>Right</translation>
+        <translation>Droite</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="128"/>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>Emplacement</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="145"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep shown</source>
-        <translation>Keep shown</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="146"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Keep hidden</source>
-        <translation>Keep hidden</translation>
+        <translation>Maintenir caché</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="147"/>
         <location filename="../module_widget.cpp" line="151"/>
         <source>Smart hide</source>
-        <translation>Smart hide</translation>
+        <translation>Masquer intelligemment</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="149"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Statut</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Small</source>
-        <translation>Small</translation>
+        <translation>Petit</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="170"/>
         <source>Large</source>
-        <translation>Large</translation>
+        <translation>Grand</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="201"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
-        <translation>On screen where the cursor is</translation>
+        <translation>Sur l&apos;écran où se trouve le curseur</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="202"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>Only on main screen</source>
-        <translation>Only on main screen</translation>
+        <translation>Uniquement sur l&apos;écran principal</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="206"/>
         <source>Show Dock</source>
-        <translation>Show Dock</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

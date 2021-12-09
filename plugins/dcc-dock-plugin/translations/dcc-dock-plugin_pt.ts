@@ -19,7 +19,7 @@
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
+        <translation>Selecione quais os ícones que aparecem na Doca</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="102"/>
@@ -104,7 +104,7 @@
         <location filename="../module_widget.cpp" line="201"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>No ecrã onde se encontra o cursor</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="202"/>

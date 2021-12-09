@@ -19,19 +19,19 @@
     <message>
         <location filename="../module_widget.cpp" line="72"/>
         <source>Select which icons appear in the Dock</source>
-        <translation>Vyberte, které ikony se zobrazí v Docku </translation>
+        <translation>Vyberte, které ikony se zobrazí v panelu</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="102"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Fashion mode</source>
-        <translation>Módní režim </translation>
+        <translation>Líbivý režim</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="103"/>
         <location filename="../module_widget.cpp" line="107"/>
         <source>Efficient mode</source>
-        <translation>Efektivní režim </translation>
+        <translation>Nenáročný režim</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="105"/>
@@ -104,7 +104,7 @@
         <location filename="../module_widget.cpp" line="201"/>
         <location filename="../module_widget.cpp" line="208"/>
         <source>On screen where the cursor is</source>
-        <translation>Na obrazovce, kde je kurzor </translation>
+        <translation>Na obrazovce, kde je ukazovátko</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="202"/>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../module_widget.cpp" line="206"/>
         <source>Show Dock</source>
-        <translation>Zobrazit dok</translation>
+        <translation>Zobrazit panel</translation>
     </message>
 </context>
 <context>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../settings_module.cpp" line="68"/>
         <source>Dock</source>
-        <translation>Dok</translation>
+        <translation>Panel</translation>
         <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
