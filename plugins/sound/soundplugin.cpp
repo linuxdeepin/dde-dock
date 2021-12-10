@@ -48,6 +48,9 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    if (m_soundItem)
+        return;
+
     m_soundItem.reset(new SoundItem);
 
     if (!pluginIsDisable())
