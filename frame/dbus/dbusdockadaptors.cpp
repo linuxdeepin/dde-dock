@@ -202,7 +202,7 @@ void DBusDockAdaptors::setShowInPrimary(bool showInPrimary)
 bool DBusDockAdaptors::isPluginValid(const QString &name)
 {
     // 插件被全局禁用时，理应获取不到此插件的任何信息
-    if (!Utils::SettingValue("com.deepin.dde.dock.module." + name, QByteArray(), "enable", false).toBool())
+    if (!Utils::SettingValue("com.deepin.dde.dock.module." + name, QByteArray(), "enable", true).toBool())
         return false;
 
     // 未开启窗口特效时，不显示多任务视图插件
