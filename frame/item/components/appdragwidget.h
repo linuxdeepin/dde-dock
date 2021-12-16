@@ -53,6 +53,9 @@ public:
 signals:
     void requestRemoveItem();
 
+private slots:
+    void onFollowMouse();
+
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
