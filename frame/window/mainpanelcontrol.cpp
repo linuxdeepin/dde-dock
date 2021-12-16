@@ -552,15 +552,13 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
     DockItem *targetItem = nullptr;
 
     if (isFilter) {
-        if (!Utils::IS_WAYLAND_DISPLAY) {
-            // appItem调整顺序或者移除驻留
-            targetItem = dropTargetItem(sourceItem, mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
+        // appItem调整顺序或者移除驻留
+        targetItem = dropTargetItem(sourceItem, mapFromGlobal(m_appDragWidget->mapToGlobal(e->pos())));
 
-            if (targetItem) {
-                m_appDragWidget->setOriginPos((m_appAreaSonWidget->mapToGlobal(targetItem->pos())));
-            } else {
-                targetItem = sourceItem;
-            }
+        if (targetItem) {
+            m_appDragWidget->setOriginPos((m_appAreaSonWidget->mapToGlobal(targetItem->pos())));
+        } else {
+            targetItem = sourceItem;
         }
     } else {
         // other dockItem调整顺序
@@ -666,7 +664,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
             moveAppSonWidget();
     }
 
-    if (!Utils::IS_WAYLAND_DISPLAY && m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
+    if (m_appDragWidget && watched == static_cast<QGraphicsView *>(m_appDragWidget)->viewport()) {
         bool isContains = rect().contains(mapFromGlobal(QCursor::pos()));
         if (isContains) {
             if (event->type() == QEvent::DragMove) {
@@ -706,7 +704,7 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
     static const QGSettings *g_settings = Utils::ModuleSettingsPtr("app");
     if (!g_settings || !g_settings->keys().contains("removeable") || g_settings->get("removeable").toBool())
-        Utils::IS_WAYLAND_DISPLAY ? startDragWayland(item) : startDrag(item);
+        startDrag(item);
 
     return QWidget::eventFilter(watched, event);
 }

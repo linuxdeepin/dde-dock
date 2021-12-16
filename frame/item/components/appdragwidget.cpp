@@ -71,8 +71,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
     initAnimations();
 
-    m_followMouseTimer->setSingleShot(Utils::IS_WAYLAND_DISPLAY);
-    m_followMouseTimer->setInterval(16);
+    m_followMouseTimer->setInterval(16);    
     connect(m_followMouseTimer, &QTimer::timeout, this, &AppDragWidget::onFollowMouse);
     m_followMouseTimer->start();
 }
