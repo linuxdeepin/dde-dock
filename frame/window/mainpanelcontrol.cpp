@@ -422,6 +422,8 @@ void MainPanelControl::removeItem(DockItem *item)
         break;
     }
 
+    item->removeEventFilter(this);
+
     /** 此处重新计算大小的时候icon的个数在原有个数上减少了一个，导致每个icon的大小跟原来大小不一致，需要重新设置setFixedSize
      *  在龙芯处理器上当app数量过多时，会导致拖动app耗时严重，造成卡顿
      *  注意:不能屏蔽此接口，否则会造成插件移除时无法更新icon大小

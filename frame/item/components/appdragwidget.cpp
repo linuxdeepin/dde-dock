@@ -70,9 +70,9 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     setAcceptDrops(true);
 
     initAnimations();
-    
+
     m_followMouseTimer->setSingleShot(Utils::IS_WAYLAND_DISPLAY);
-    m_followMouseTimer->setInterval(1);
+    m_followMouseTimer->setInterval(16);
     connect(m_followMouseTimer, &QTimer::timeout, this, &AppDragWidget::onFollowMouse);
     m_followMouseTimer->start();
 }
@@ -376,7 +376,7 @@ void AppDragWidget::onFollowMouse()
     if (DWindowManagerHelper::instance()->hasComposite()) {
         move(destPos.x() - width() / 2, destPos.y() - height() / 2);
     } else {
-        move(destPos.x(), destPos.y()); //窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标，大小为(10,10)
+        move(destPos.x(), destPos.y()); // 窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标
     }
 }
 
