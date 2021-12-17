@@ -57,8 +57,6 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     connect(m_airplaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enable) {
         m_applet->setEnabled(enable);
         refreshIcon();
-
-        Utils::SettingSaveValue("com.deepin.dde.dock.module.airplane-mode", QByteArray(), "enable", enable);
     });
 
     m_applet->setEnabled(m_airplaneModeInter->enabled());
@@ -105,6 +103,7 @@ const QString AirplaneModeItem::contextMenu() const
 
 void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
 {
+    Q_UNUSED(menuId);
     Q_UNUSED(checked);
 
     /*  控制中心暂未实现

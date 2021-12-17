@@ -21,6 +21,7 @@
 
 #include "systemtrayscontroller.h"
 #include "pluginsiteminterface.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QDir>
@@ -50,11 +51,11 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
         }
     }, Qt::QueuedConnection);
 
-    item->setVisible(false);
-
     mPluginsMap[itemInter][itemKey] = item;
 
-    emit pluginItemAdded(itemKey, item);
+    // 隐藏的插件不加入到布局中
+    if (Utils::SettingValue(QString("com.deepin.dde.dock.module.") + itemInter->pluginName(), QByteArray(), "enable", true).toBool())
+        emit pluginItemAdded(itemKey, item);
 }
 
 void SystemTraysController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
