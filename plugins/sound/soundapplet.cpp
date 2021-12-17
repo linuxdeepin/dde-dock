@@ -296,7 +296,8 @@ void SoundApplet::onDefaultSinkChanged()
     }
     activePort(portId,cardId);
 
-    onVolumeChanged(m_defSinkInter->volume());
+    //无声卡状态下，会有伪sink设备，显示音量为0
+    onVolumeChanged(findPort(portId, cardId) != nullptr ? m_defSinkInter->volume() : 0);
     emit defaultSinkChanged(m_defSinkInter);
 }
 

@@ -231,8 +231,8 @@ void SoundItem::refreshTips(const int volume, const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    QString value;
-    if (m_sinkInter->mute()) {
+    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
+    if (mute) {
         m_tipsLabel->setText(QString(tr("Mute")));
     } else {
         m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
