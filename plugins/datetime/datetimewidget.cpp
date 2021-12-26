@@ -125,36 +125,46 @@ QSize DatetimeWidget::curTimeSize() const
 
     m_timeFont = TIME_FONT;
     m_dateFont = DATE_FONT;
-    QFontMetrics fm(m_timeFont);
-    QString format = m_shortTimeFormat;
+    QString timeFormat = m_shortTimeFormat;
+    QString dateFormat = m_shortDateFormat;
     if (!m_24HourFormat) {
         if (position == Dock::Top || position == Dock::Bottom)
-            format = format.append(" AP");
+            timeFormat = timeFormat.append(" AP");
         else
-            format = format.append("\nAP");
+            timeFormat = timeFormat.append("\nAP");
     }
 
-    QString timeString = QDateTime::currentDateTime().toString(format);
-    QSize timeSize = fm.boundingRect(timeString).size();
+    QString timeString = QDateTime::currentDateTime().toString(timeFormat);
+    QString dateString = QDateTime::currentDateTime().toString(dateFormat);
+
+    QSize timeSize = QFontMetrics(m_timeFont).boundingRect(timeString).size();
+    int maxWidth = std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_timeFont).horizontalAdvance(timeString));
+    timeSize.setWidth(maxWidth);
+
     if (timeString.contains("\n")) {
         QStringList SL = timeString.split("\n");
-        timeSize = QSize(fm.boundingRect(SL.at(0)).width(), fm.boundingRect(SL.at(0)).height() + fm.boundingRect(SL.at(1)).height());
+        maxWidth = std::max(QFontMetrics(m_timeFont).boundingRect(SL.at(0)).size().width(), QFontMetrics(m_timeFont).horizontalAdvance(SL.at(0)));
+        timeSize = QSize(maxWidth, QFontMetrics(m_timeFont).boundingRect(SL.at(0)).height() + QFontMetrics(m_timeFont).boundingRect(SL.at(1)).height());
     }
 
-    QSize dateSize = QFontMetrics(m_dateFont).boundingRect("0000/00/00").size();
+    QSize dateSize = QFontMetrics(m_dateFont).boundingRect(dateString).size();
+    maxWidth = std::max(QFontMetrics(m_dateFont).boundingRect(dateString).size().width(), QFontMetrics(m_dateFont).horizontalAdvance(dateString));
+    dateSize.setWidth(maxWidth);
 
     if (position == Dock::Bottom || position == Dock::Top) {
-        while (QFontMetrics(m_timeFont).boundingRect(timeString).height() + QFontMetrics(m_dateFont).boundingRect("0000/00/00").height() > height()) {
+        while (QFontMetrics(m_timeFont).boundingRect(timeString).height() + QFontMetrics(m_dateFont).boundingRect(dateString).height() > height()) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
-            timeSize.setWidth(QFontMetrics(m_timeFont).boundingRect(timeString).size().width());
+            maxWidth = std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_timeFont).horizontalAdvance(timeString));
+            timeSize.setWidth(maxWidth);
             if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1) {
                 m_dateFont.setPixelSize(m_dateFont.pixelSize() - 1);
-                dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width());
+                maxWidth = std::max(QFontMetrics(m_dateFont).boundingRect(dateString).size().width(), QFontMetrics(m_dateFont).horizontalAdvance(dateString));
+                dateSize.setWidth(maxWidth);
             }
         }
         return QSize(std::max(timeSize.width(), dateSize.width()), timeSize.height() + dateSize.height());
     } else {
-        while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().width()) > (width() - 4)) {
+        while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect(dateString).size().width()) > (width() - 4)) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             if (m_24HourFormat) {
                 timeSize.setHeight(QFontMetrics(m_timeFont).boundingRect(timeString).size().height());
@@ -163,7 +173,7 @@ QSize DatetimeWidget::curTimeSize() const
             }
             if (m_timeFont.pixelSize() - m_dateFont.pixelSize() == 1) {
                 m_dateFont.setPixelSize(m_dateFont.pixelSize() - 1);
-                dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect("0000/00/00").size().height());
+                dateSize.setWidth(QFontMetrics(m_dateFont).boundingRect(dateString).size().height());
             }
         }
         m_timeOffset = (timeSize.height() - dateSize.height()) / 2 ;
