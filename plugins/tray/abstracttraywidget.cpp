@@ -31,7 +31,7 @@ AbstractTrayWidget::AbstractTrayWidget(QWidget *parent, Qt::WindowFlags f)
     , m_handleMouseReleaseTimer(new QTimer(this))
 {
     m_handleMouseReleaseTimer->setSingleShot(true);
-    m_handleMouseReleaseTimer->setInterval(100);
+    m_handleMouseReleaseTimer->setInterval(10);
 
     connect(m_handleMouseReleaseTimer, &QTimer::timeout, this, &AbstractTrayWidget::handleMouseRelease);
 }
