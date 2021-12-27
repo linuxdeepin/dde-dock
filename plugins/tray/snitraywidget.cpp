@@ -84,7 +84,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     setOwnerPID(conn.interface()->servicePid(m_dbusService));
 
     m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
-    m_sniInter->setSync(false);
 
     if (!m_sniInter->isValid()) {
         qDebug() << "SNI dbus interface is invalid!" << m_dbusService << m_dbusPath << m_sniInter->lastError();
