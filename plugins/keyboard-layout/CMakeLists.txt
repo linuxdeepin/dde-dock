@@ -32,5 +32,5 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
 )
 
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays/)
 install(FILES ./keybord_layout.json DESTINATION /etc/dde-dock/indicator)
