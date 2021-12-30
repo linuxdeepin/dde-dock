@@ -399,7 +399,7 @@ void SoundApplet::refreshIcon()
     if (!m_defSinkInter)
         return;
 
-    const bool mute = existActiveOutputDevice() ? m_defSinkInter->mute() : true;
+    const bool mute = m_defSinkInter->mute();
 
     QString volumeString;
 
@@ -649,6 +649,7 @@ bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
     if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
         m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
     }
+
     return false;
 }
 
