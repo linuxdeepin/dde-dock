@@ -88,14 +88,12 @@ const QString SoundItem::contextMenu()
 
     QMap<QString, QVariant> open;
     open["itemId"] = MUTE;
-
-    // 如果没有可用输出设备，直接显示静音菜单不可用
-    if (!m_applet->existActiveOutputDevice()) {
+    if (m_sinkInter->mute()) {
         open["itemText"] = tr("Unmute");
-        open["isActive"] = false;
-    } else if (m_sinkInter->mute()) {
-        open["itemText"] = tr("Unmute");
-        open["isActive"] = true;
+        if (!m_applet->existActiveOutputDevice())
+            open["isActive"] = false;
+        else
+            open["isActive"] = true;
     } else {
         open["itemText"] = tr("Mute");
         open["isActive"] = true;
