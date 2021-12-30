@@ -647,7 +647,12 @@ bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
 {
     // 当控制中心禁用所有输出设备时，静音按钮置灰，其他情况正常．
     if (watcher == m_volumeIconMin && event->type() == QEvent::MouseButtonRelease) {
-        m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
+        if (!existActiveOutputDevice()) {
+            m_volumeIconMin->setEnabled(false);
+        } else {
+            m_volumeIconMin->setEnabled(true);
+            m_defSinkInter->SetMuteQueued(!m_defSinkInter->mute());
+        }
     }
 
     return false;
