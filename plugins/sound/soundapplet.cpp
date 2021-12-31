@@ -357,9 +357,7 @@ void SoundApplet::cardsChanged(const QString &cards)
     }
 
     onDefaultSinkChanged();//重新获取切换的设备信息
-
-    // 判断是否存在激活的输出设备
-    enableDevice(existActiveOutputDevice());
+    enableDevice(true);
 
     for (Port *port : m_ports) {
         //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
