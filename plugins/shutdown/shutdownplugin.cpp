@@ -116,6 +116,8 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 
 const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 {
+    Q_UNUSED(itemKey);
+
     QList<QVariant> items;
     items.reserve(6);
 

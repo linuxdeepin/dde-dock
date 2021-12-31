@@ -27,6 +27,8 @@
 #include <QGSettings>
 #include <QDebug>
 
+#include "imageutil.h"
+
 namespace Utils {
 
 #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
@@ -215,6 +217,28 @@ inline int comparePluginApi(const QString &pluginApi1, const QString &pluginApi2
         return -1;
     }
 }
+
+inline void updateCursor(QWidget *w)
+{
+    static QString lastCursorTheme;
+    static int lastCursorSize = 0;
+    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
+    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
+        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        if (!cursor)
+            return;
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        w->setCursor(*cursor);
+        static QCursor *lastArrowCursor = nullptr;
+        if (lastArrowCursor)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
+}
+
 }
 
 #endif // UTILS

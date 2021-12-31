@@ -134,6 +134,8 @@ bool TrayPlugin::pluginIsDisable()
 
 void TrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
 {
+    Q_UNUSED(mode);
+
     if (pluginIsDisable()) {
         return;
     }

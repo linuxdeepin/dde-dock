@@ -77,7 +77,6 @@ private:
 
     // 拖拽相关
     void startDrag(DockItem *);
-    void startDragWayland(DockItem *item);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
@@ -96,7 +95,6 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-    void updatePanelCursor();
 
 private:
     QBoxLayout *m_mainPanelLayout;

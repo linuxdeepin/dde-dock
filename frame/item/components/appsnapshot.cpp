@@ -309,6 +309,8 @@ void AppSnapshot::leaveEvent(QEvent *e)
 
 void AppSnapshot::paintEvent(QPaintEvent *e)
 {
+    Q_UNUSED(e);
+
     QPainter painter(this);
 
     if (!m_wmHelper->hasComposite()) {

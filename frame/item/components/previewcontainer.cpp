@@ -215,31 +215,12 @@ void PreviewContainer::appendSnapWidget(const WId wid)
         snap->fetchSnapshot();
 }
 
-void PreviewContainer::updatePreviewCursor()
-{
-    static QCursor *lastArrowCursor = nullptr;
-    static QString  lastCursorTheme;
-    int lastCursorSize = 0;
-    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
-    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
-    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
-        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
-        if (!cursor)
-            return;
-        lastCursorTheme = theme;
-        lastCursorSize = cursorSize;
-        setCursor(*cursor);
-        if (lastArrowCursor)
-            delete lastArrowCursor;
-
-        lastArrowCursor = cursor;
-    }
-}
-
 void PreviewContainer::enterEvent(QEvent *e)
 {
-    if (Utils::IS_WAYLAND_DISPLAY)
-        updatePreviewCursor();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Utils::updateCursor(this);
+    }
+
     QWidget::enterEvent(e);
 
     m_needActivate = false;

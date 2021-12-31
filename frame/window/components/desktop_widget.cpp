@@ -15,6 +15,8 @@ DesktopWidget::DesktopWidget(QWidget *parent)
 
 void DesktopWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     //描绘桌面区域的颜色
     painter.setOpacity(1);

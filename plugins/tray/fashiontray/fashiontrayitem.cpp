@@ -183,6 +183,7 @@ void FashionTrayItem::onExpandChanged(const bool expand)
 
 void FashionTrayItem::setRightSplitVisible(const bool visible)
 {
+    Q_UNUSED(visible);
 }
 
 void FashionTrayItem::onPluginSettingsChanged()

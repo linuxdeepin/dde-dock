@@ -133,7 +133,6 @@ private:
         int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
         Position position = static_cast<Dock::Position>(qApp->property("position").toInt());
 
-        static QCursor *lastCursor = nullptr;
         static QString lastTheme;
         static int lastPosition = -1;
         static int lastCursorSize = -1;
@@ -147,6 +146,7 @@ private:
                 return;
 
             setCursor(*newCursor);
+            static QCursor *lastCursor = nullptr;
             if (lastCursor)
                 delete lastCursor;
 

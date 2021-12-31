@@ -17,6 +17,8 @@ FashionTrayWidgetWrapper *AttentionContainer::takeAttentionWrapper()
 
 bool AttentionContainer::acceptWrapper(FashionTrayWidgetWrapper *wrapper)
 {
+    Q_UNUSED(wrapper);
+
     return true;
 }
 

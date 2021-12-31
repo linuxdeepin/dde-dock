@@ -10,7 +10,7 @@ file(GLOB_RECURSE SRCS
     "*.h"
     "*.cpp")
 
-find_package(Qt5 COMPONENTS Core Widgets DBus LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets DBus Svg LinguistTools REQUIRED)
 find_package(DdeControlCenter REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(DtkWidget REQUIRED)
@@ -24,6 +24,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC
     ../src
     ../../frame/util
     ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Svg_INCLUDE_DIRS}
     ${DtkWidget_INCLUDE_DIRS}
     ${DdeControlCenter_INCLUDE_DIR}
     ${DFrameworkDBus_INCLUDE_DIRS}
@@ -32,6 +33,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC
     )
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Svg_LIBRARIES}
     ${DtkWidget_LIBRARIES}
     ${DdeControlCenter_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}

@@ -94,6 +94,8 @@ const QString OnboardPlugin::itemCommand(const QString &itemKey)
 
 const QString OnboardPlugin::itemContextMenu(const QString &itemKey)
 {
+    Q_UNUSED(itemKey);
+
     QList<QVariant> items;
 
     QMap<QString, QVariant> onboardSettings;

@@ -114,8 +114,9 @@ void DockPopupWindow::hide()
 void DockPopupWindow::showEvent(QShowEvent *e)
 {
     DArrowRectangle::showEvent(e);
-    if (Utils::IS_WAYLAND_DISPLAY)
-        updatePopupWindowCursor();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Utils::updateCursor(this);
+    }
 
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
@@ -123,31 +124,11 @@ void DockPopupWindow::showEvent(QShowEvent *e)
 void DockPopupWindow::enterEvent(QEvent *e)
 {
     DArrowRectangle::enterEvent(e);
-    if (Utils::IS_WAYLAND_DISPLAY)
-        updatePopupWindowCursor();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Utils::updateCursor(this);
+    }
 
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
-}
-
-void DockPopupWindow::updatePopupWindowCursor()
-{
-    static QCursor *lastArrowCursor = nullptr;
-    static QString  lastCursorTheme;
-    int lastCursorSize = 0;
-    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
-    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
-    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
-        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
-        if (!cursor)
-            return;
-        lastCursorTheme = theme;
-        lastCursorSize = cursorSize;
-        setCursor(*cursor);
-        if (lastArrowCursor)
-            delete lastArrowCursor;
-
-        lastArrowCursor = cursor;
-    }
 }
 
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)

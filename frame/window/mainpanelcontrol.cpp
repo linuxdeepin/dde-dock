@@ -711,8 +711,9 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 
 void MainPanelControl::enterEvent(QEvent *event)
 {
-    if (Utils::IS_WAYLAND_DISPLAY)
-        updatePanelCursor();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Utils::updateCursor(this);
+    }
 
     QWidget::enterEvent(event);
 }
@@ -800,98 +801,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
         if (isNeedBack)
             m_trashItem->centralWidget()->setAcceptDrops(true);
     }
-}
-
-void MainPanelControl::startDragWayland(DockItem *item)
-{
-    QPixmap pixmap;
-    if (item->itemType() == DockItem::App) {
-        pixmap = qobject_cast<AppItem *>(item)->appIcon();
-    } else {
-        pixmap = item->grab();
-    }
-    /*TODO: pixmap半透明处理
-    QPixmap pixmap1;
-    {
-        QPixmap temp(pixmap.size());
-        temp.fill(Qt::transparent);
-
-        QPainter p1(&temp);
-        p1.setCompositionMode(QPainter::CompositionMode_Source);
-        p1.drawPixmap(0, 0, pixmap);
-        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-
-        //根据QColor中第四个参数设置透明度，0～255
-        p1.fillRect(temp.rect(), QColor(0, 0, 0, 125));
-        p1.end();
-
-        pixmap1 = temp;
-    }*/
-
-    item->setDraging(true);
-    item->update();
-
-    QDrag *drag = new QDrag(item);
-    drag->setPixmap(pixmap);
-
-    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
-    drag->setMimeData(new QMimeData);
-
-    /*TODO: 开启线程，在移动中设置图片是否为半透明, 当前接口调用QShapedPixmapWindow找不到动态库的实现
-    bool isRun = true;
-    QtConcurrent::run([&isRun, &pixmap, &pixmap1, this]{
-        while (isRun) {
-            QPlatformDrag *platformDrag = QGuiApplicationPrivate::platformIntegration()->drag();
-            QShapedPixmapWindow *dragIconWindow = nullptr;
-            if (platformDrag)
-                dragIconWindow = static_cast<QSimpleDrag *>(platformDrag)->shapedPixmapWindow();
-
-            if (!dragIconWindow)
-                continue;
-
-            if (AppDragWidget::isRemoveable(m_position, QRect(mapToGlobal(pos()), size()))) {
-                //                dragIconWindow->setPixmap(pixmap1);
-            } else {
-                //                dragIconWindow->setPixmap(pixmap);
-            }
-
-        }
-    });*/
-
-    drag->exec(Qt::MoveAction);
-
-    //isRun = false;
-
-    if (drag->target() == this) {
-        item->setDraging(false);
-        item->update();
-        return;
-    }
-
-    //开启动画效果
-    auto appDragWidget = new AppDragWidget();
-    appDragWidget->setAppPixmap(pixmap);
-    appDragWidget->setItem(item);
-    appDragWidget->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
-    appDragWidget->setOriginPos(m_appAreaSonWidget->mapToGlobal(item->pos()));
-    appDragWidget->setPixmapOpacity(0.5);
-    appDragWidget->show();
-    QGuiApplication::platformNativeInterface()->setWindowProperty(appDragWidget->windowHandle()->handle(),
-                                                                  "_d_dwayland_window-type" , "menu");
-
-    QTimer::singleShot(10, [item, appDragWidget]{
-        if (appDragWidget->isRemoveAble(QCursor::pos())) {
-            appDragWidget->showRemoveAnimation();
-            AppItem *appItem = static_cast<AppItem *>(item);
-            appItem->undock();
-            item->setDraging(false);
-            item->update();
-        } else {
-            appDragWidget->showGoBackAnimation();
-            item->setDraging(false);
-            item->update();
-        }
-    });
 }
 
 DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
@@ -1302,26 +1211,4 @@ bool MainPanelControl::checkNeedShowDesktop()
 bool MainPanelControl::appIsOnDock(const QString &appDesktop)
 {
     return DockItemManager::instance()->appIsOnDock(appDesktop);
-}
-
-// TODO: 多处使用类似方法，可尝试提取公共函数
-void MainPanelControl::updatePanelCursor()
-{
-    static QCursor *lastArrowCursor = nullptr;
-    static QString  lastCursorTheme;
-    int lastCursorSize = 0;
-    QString theme = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-name", "bloom").toString();
-    int cursorSize = Utils::SettingValue("com.deepin.xsettings", "/com/deepin/xsettings/", "gtk-cursor-theme-size", 24).toInt();
-    if (theme != lastCursorTheme || cursorSize != lastCursorSize) {
-        QCursor *cursor = ImageUtil::loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
-        if (!cursor)
-            return;
-        lastCursorTheme = theme;
-        lastCursorSize = cursorSize;
-        setCursor(*cursor);
-        if (lastArrowCursor)
-            delete lastArrowCursor;
-
-        lastArrowCursor = cursor;
-    }
 }

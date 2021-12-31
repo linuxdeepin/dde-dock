@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
         setenv("D_DXCB_FORCE_NO_TITLEBAR", "1", 1);
     }
 
-    DGuiApplicationHelper::setUseInactiveColorGroup(false);
+    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
     DockApplication app(argc, argv);
 
     auto configs = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation);

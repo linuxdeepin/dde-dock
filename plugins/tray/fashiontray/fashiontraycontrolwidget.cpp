@@ -81,6 +81,8 @@ void FashionTrayControlWidget::setExpanded(const bool &expanded)
 
 void FashionTrayControlWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
