@@ -216,6 +216,8 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
     // TODO 后续可以考虑去掉这部分的处理，不用一直监听外部区域的移动，xeventmonitor有一个CursorInto和CursorOut的信号，使用这个也可以替代，但要做好测试工作
     Q_UNUSED(x);
     Q_UNUSED(y);
+    Q_UNUSED(key);
+
     if (m_extralRegisterKey != key || testState(MousePress))
         return;
 
@@ -562,29 +564,29 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         switch (m_position) {
         case Top: {
             monitorRect.x1 = screenRect.x();
-            monitorRect.y1 = screenRect.y() + realDockSize;
+            monitorRect.y1 = screenRect.y();
             monitorRect.x2 = screenRect.x() + screenRect.width();
-            monitorRect.y2 = screenRect.y() + screenRect.height();
+            monitorRect.y2 = screenRect.y() + realDockSize;
         }
             break;
         case Bottom: {
             monitorRect.x1 = screenRect.x();
-            monitorRect.y1 = screenRect.y();
-            monitorRect.x2 = screenRect.x() + screenRect.width();
-            monitorRect.y2 = screenRect.y() + screenRect.height() - realDockSize;
-        }
-            break;
-        case Left: {
-            monitorRect.x1 = screenRect.x() + realDockSize;
-            monitorRect.y1 = screenRect.y();
+            monitorRect.y1 = screenRect.y() + screenRect.height() - realDockSize;
             monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
             break;
-        case Right: {
+        case Left: {
             monitorRect.x1 = screenRect.x();
             monitorRect.y1 = screenRect.y();
-            monitorRect.x2 = screenRect.x() + screenRect.width() - realDockSize;
+            monitorRect.x2 = screenRect.x() + realDockSize;
+            monitorRect.y2 = screenRect.y() + screenRect.height();
+        }
+            break;
+        case Right: {
+            monitorRect.x1 = screenRect.x() + screenRect.width() - realDockSize;
+            monitorRect.y1 = screenRect.y();
+            monitorRect.x2 = screenRect.x() + screenRect.width();
             monitorRect.y2 = screenRect.y() + screenRect.height();
         }
             break;
@@ -593,7 +595,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
         if (!m_extralRectList.contains(monitorRect)) {
             m_extralRectList << monitorRect;
 #ifdef QT_DEBUG
-            qDebug() << "任务栏外部区域：" << monitorRect.x1 << monitorRect.y1 << monitorRect.x2 << monitorRect.y2;
+            qDebug() << "任务栏内部区域：" << monitorRect.x1 << monitorRect.y1 << monitorRect.x2 << monitorRect.y2;
 #endif
         }
     }
@@ -1338,6 +1340,53 @@ void MultiScreenWorker::checkDaemonDockService()
     }
 }
 
+bool MultiScreenWorker::isCursorOut(int x, int y)
+{
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10 /*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient()) * qApp->devicePixelRatio());
+    for (auto s : DIS_INS->screens()) {
+        // 屏幕此位置不可停靠时,不用监听这块区域
+        if (!DIS_INS->canDock(s, m_position))
+            continue;
+
+        QRect screenRect = s->geometry();
+        screenRect.setSize(screenRect.size() * s->devicePixelRatio());
+
+        if (m_position == Top) {
+            // 如果任务栏在顶部
+            if (x < screenRect.x() || x > (screenRect.x() + screenRect.width()))
+                continue;
+
+            return (y > (screenRect.y() + realDockSize) || y < screenRect.y());
+        }
+
+        if (m_position == Bottom) {
+            // 如果任务栏在底部
+            if (x < screenRect.x() || x > (screenRect.x() + screenRect.width()))
+                continue;
+
+            return (y < (screenRect.y() + screenRect.height() - realDockSize) || y > (screenRect.y() + screenRect.height()));
+        }
+
+        if (m_position == Left) {
+            // 如果任务栏在左侧
+            if (y < screenRect.y() || y > (screenRect.y() + screenRect.height()))
+                continue;
+
+            return (x > (screenRect.x() + realDockSize) || x < screenRect.x());
+        }
+
+        if (m_position == Right) {
+            // 如果在任务栏右侧
+            if (y < screenRect.y() || y > (screenRect.y() + screenRect.height()))
+                continue;
+
+            return (x < (screenRect.x() + screenRect.width() - realDockSize) || x > (screenRect.x() + screenRect.width()));
+        }
+    }
+
+    return false;
+}
+
 /**
  * @brief checkDaemonXEventMonitorService
  * 避免com.deepin.api.XEventMonitor服务比dock晚启动，导致dock启动后的状态错误
@@ -1349,7 +1398,18 @@ void MultiScreenWorker::checkXEventMonitorService()
         connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
         connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] { setStates(MousePress, false); });
 
-        connect(extralEventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onExtralRegionMonitorChanged);
+        connect(extralEventInter, &XEventMonitor::CursorOut, this, [ = ](int x, int y, const QString &key) {
+            if (isCursorOut(x, y)) {
+                if (testState(ShowAnimationStart)) {
+                    // 在OUT后如果检测到当前的动画正在进行，在out后延迟500毫秒等动画结束再执行移出动画
+                    QTimer::singleShot(500, this, [ = ] {
+                        onExtralRegionMonitorChanged(x, y, key);
+                    });
+                } else {
+                    onExtralRegionMonitorChanged(x, y, key);
+                }
+            }
+        });
 
         // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
         connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] { setStates(TouchPress, false); });

@@ -28,8 +28,6 @@
 #include "xcb_misc.h"
 
 #include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_daemon_display.h>
-#include <com_deepin_daemon_display_monitor.h>
 #include <com_deepin_api_xeventmonitor.h>
 #include <com_deepin_dde_launcher.h>
 
@@ -52,8 +50,6 @@ DGUI_USE_NAMESPACE
  * 任务栏的鼠标唤醒区域或任务栏的大小没更新或者更新时的大小还是按照原来的屏幕信息计算而来的，
  */
 using DBusDock = com::deepin::dde::daemon::Dock;
-using DisplayInter = com::deepin::daemon::Display;
-using MonitorInter = com::deepin::daemon::display::Monitor;
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
 using DBusLuncher = ::com::deepin::dde::Launcher;
 
@@ -240,6 +236,7 @@ private:
 
     QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
+    bool isCursorOut(int x, int y);
 
     QScreen *screenByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
