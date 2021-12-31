@@ -23,11 +23,11 @@
 #define LAUNCHERITEM_H
 
 #include "dockitem.h"
-#include "../widgets/tipswidget.h"
 
-#include <com_deepin_dde_launcher.h>
+namespace Dock {
+class TipsWidget;
+}
 
-using LauncherInter = com::deepin::dde::Launcher;
 class QGSettings;
 class LauncherItem : public DockItem
 {
@@ -57,9 +57,8 @@ private:
 
 private:
     QPixmap m_icon;
-    LauncherInter *m_launcherInter;
-    TipsWidget *m_tips;
     const QGSettings *m_gsettings;
+    QSharedPointer<TipsWidget> m_tips;
 };
 
 #endif // LAUNCHERITEM_H

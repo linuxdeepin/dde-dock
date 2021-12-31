@@ -54,7 +54,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_appSettings(appSettings)
     , m_activeAppSettings(activeAppSettings)
     , m_dockedAppSettings(dockedAppSettings)
-    , m_appNameTips(new TipsWidget(this))
     , m_appPreviewTips(nullptr)
     , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
     , m_swingEffectView(nullptr)
@@ -70,7 +69,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
-    , m_config(new DConfig(QString("com.deepin.dde.dock.dconfig"), QString(), this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -82,10 +80,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
-
-    m_appNameTips->setObjectName(m_itemEntryInter->name());
-    m_appNameTips->setVisible(false);
-    m_appNameTips->installEventFilter(this);
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
@@ -476,22 +470,24 @@ const QString AppItem::contextMenu() const
 
 QWidget *AppItem::popupTips()
 {
-    if (checkGSettingsControl()) {
+    if (checkGSettingsControl())
         return nullptr;
-    }
 
     if (m_dragging)
         return nullptr;
 
+    static TipsWidget appNameTips(topLevelWidget());
+    appNameTips.setVisible(false);
+
     if (!m_windowInfos.isEmpty()) {
         const quint32 currentWindow = m_itemEntryInter->currentWindow();
         Q_ASSERT(m_windowInfos.contains(currentWindow));
-        m_appNameTips->setText(m_windowInfos[currentWindow].title.simplified());
+        appNameTips.setText(m_windowInfos[currentWindow].title.simplified());
     } else {
-        m_appNameTips->setText(m_itemEntryInter->name().simplified());
+        appNameTips.setText(m_itemEntryInter->name().simplified());
     }
 
-    return m_appNameTips;
+    return &appNameTips;
 }
 
 void AppItem::startDrag()
@@ -672,8 +668,9 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
     // 预览标题显示方式的配置
-    if (m_config->isValid() && m_config->keyList().contains("Dock_Show_Window_name"))
-        m_appPreviewTips->setTitleDisplayMode(m_config->value("Dock_Show_Window_name").toInt());
+    DConfig config(QString("com.deepin.dde.dock.dconfig"), QString());
+    if (config.isValid() && config.keyList().contains("Dock_Show_Window_name"))
+        m_appPreviewTips->setTitleDisplayMode(config.value("Dock_Show_Window_name").toInt());
 
     showPopupWindow(m_appPreviewTips, true);
 }
@@ -766,7 +763,6 @@ void AppItem::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 AppItem::~AppItem()
 {
     stopSwingEffect();
-    m_appNameTips->deleteLater();
 }
 
 void AppItem::showEvent(QShowEvent *e)

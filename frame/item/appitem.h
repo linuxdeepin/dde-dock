@@ -39,10 +39,6 @@
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 class QGSettings;
 
-DCORE_BEGIN_NAMESPACE
-class DConfig;
-DCORE_END_NAMESPACE
-
 class AppItem : public DockItem
 {
     Q_OBJECT
@@ -114,7 +110,6 @@ private:
     const QGSettings *m_activeAppSettings;
     const QGSettings *m_dockedAppSettings;
 
-    TipsWidget *m_appNameTips;
     PreviewContainer *m_appPreviewTips;
     DockEntryInter *m_itemEntryInter;
 
@@ -148,7 +143,6 @@ private:
     DGuiApplicationHelper::ColorType m_themeType;
 
     static QPoint MousePressPos;
-    DTK_CORE_NAMESPACE::DConfig *m_config;
 };
 
 #endif // APPITEM_H

@@ -22,26 +22,24 @@
 #include "launcheritem.h"
 #include "themeappicon.h"
 #include "utils.h"
+#include "../widgets/tipswidget.h"
 
 #include <QPainter>
 #include <QProcess>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QGSettings>
+#include <QDBusInterface>
+#include <QDBusPendingCall>
+#include <DDBusSender>
+#include <QDBusPendingReply>
 
 DCORE_USE_NAMESPACE
 
 LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(parent)
-    , m_launcherInter(new LauncherInter("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
-    , m_tips(new TipsWidget(this))
     , m_gsettings(Utils::ModuleSettingsPtr("launcher", QByteArray(), this))
 {
-    m_launcherInter->setSync(true, false);
-
-    m_tips->setVisible(false);
-    m_tips->setObjectName("launcher");
-
     if (m_gsettings) {
         connect(m_gsettings, &QGSettings::changed, this, &LauncherItem::onGSettingsChanged);
     }
@@ -102,9 +100,14 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    if (!m_launcherInter->IsVisible()) {
-        m_launcherInter->Show();
-    }
+    DDBusSender dbusSender = DDBusSender()
+            .service("com.deepin.dde.Launcher")
+            .path("/com/deepin/dde/Launcher")
+            .interface("com.deepin.dde.Launcher");
+
+    QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
+    if (!visibleReply.value())
+       dbusSender.method("Show").call();
 }
 
 QWidget *LauncherItem::popupTips()
@@ -113,8 +116,10 @@ QWidget *LauncherItem::popupTips()
         return nullptr;
     }
 
+    m_tips.reset(new TipsWidget(this));
+    m_tips->setVisible(false);
     m_tips->setText(tr("Launcher"));
-    return m_tips;
+    return m_tips.get();
 }
 
 void LauncherItem::onGSettingsChanged(const QString& key) {
