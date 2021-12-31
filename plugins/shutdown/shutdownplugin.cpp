@@ -23,6 +23,7 @@
 #include "dbus/dbusaccount.h"
 #include "../frame/util/utils.h"
 #include "../widgets/tipswidget.h"
+#include "./dbus/dbuspowermanager.h"
 
 #include <DSysInfo>
 #include <DDBusSender>

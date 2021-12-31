@@ -24,9 +24,10 @@
 
 #include "pluginsiteminterface.h"
 #include "shutdownwidget.h"
-#include "./dbus/dbuspowermanager.h"
 
 #include <QLabel>
+
+class DBusPowerManager;
 
 namespace Dock {
 class TipsWidget;

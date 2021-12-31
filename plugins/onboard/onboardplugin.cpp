@@ -27,6 +27,9 @@
 
 #define PLUGIN_STATE_KEY    "enable"
 
+using DBusDock = com::deepin::dde::daemon::Dock;
+using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
+
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
     : QObject(parent)

@@ -29,7 +29,6 @@
 #include <com_deepin_daemon_gesture.h>
 
 using namespace Dock;
-using Gesture = com::deepin::daemon::Gesture;
 
 class QBoxLayout;
 class QLabel;

@@ -22,11 +22,11 @@
 #ifndef POWERSTATUSWIDGET_H
 #define POWERSTATUSWIDGET_H
 
-#include "dbus/dbuspower.h"
-
 #include <QWidget>
 
 #define POWER_KEY "power"
+
+class DBusPower;
 
 // from https://upower.freedesktop.org/docs/Device.html#Device:State
 enum BatteryState {

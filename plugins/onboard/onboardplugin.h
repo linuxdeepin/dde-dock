@@ -31,8 +31,6 @@
 #include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_dde_daemon_dock_entry.h>
 
-using DBusDock = com::deepin::dde::daemon::Dock;
-using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 namespace Dock {
 class TipsWidget;
 }

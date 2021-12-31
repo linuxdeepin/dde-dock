@@ -32,7 +32,7 @@ class ShutdownWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ShutdownWidget(QWidget *parent = 0);
+    explicit ShutdownWidget(QWidget *parent = Q_NULLPTR);
 
 protected:
     void paintEvent(QPaintEvent *e) override;

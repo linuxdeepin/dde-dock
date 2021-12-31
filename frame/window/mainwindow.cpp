@@ -55,7 +55,6 @@
 #define DRAG_STATE_PROP "DRAG_STATE"
 
 using org::kde::StatusNotifierWatcher;
-using DBusDock = com::deepin::dde::daemon::Dock;
 
 // let startdde know that we've already started.
 void MainWindow::RegisterDdeSession()

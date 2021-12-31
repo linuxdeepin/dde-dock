@@ -40,8 +40,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-using XEventMonitor = ::com::deepin::api::XEventMonitor;
-
 class MainPanelControl;
 class QTimer;
 class MenuWorker;

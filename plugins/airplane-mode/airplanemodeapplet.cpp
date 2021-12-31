@@ -38,7 +38,7 @@ AirplaneModeApplet::AirplaneModeApplet(QWidget *parent)
     setFixedHeight(30);
     QLabel *title = new QLabel(this);
     title->setText(tr("Airplane Mode"));
-    QHBoxLayout *appletlayout = new QHBoxLayout;
+    QHBoxLayout *appletlayout = new QHBoxLayout(this);
     appletlayout->setMargin(0);
     appletlayout->setSpacing(0);
     appletlayout->addSpacing(0);

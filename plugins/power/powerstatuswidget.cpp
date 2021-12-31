@@ -21,6 +21,8 @@
 
 #include "powerstatuswidget.h"
 #include "powerplugin.h"
+#include "dbus/dbuspower.h"
+
 #include <DGuiApplicationHelper>
 
 #include <QPainter>
