@@ -135,8 +135,6 @@ public:
     void setUnchecked(DStandardItem *pi);
     void initUi();
 
-    bool existActiveOutputDevice();
-
 signals:
     void volumeChanged(const int value) const;
     void defaultSinkChanged(DBusSink *sink) const;
