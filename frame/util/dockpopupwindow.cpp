@@ -36,7 +36,8 @@ DWIDGET_USE_NAMESPACE
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DArrowRectangle(ArrowBottom, parent),
       m_model(false),
-      m_regionInter(new DRegionMonitor(this))
+      m_regionInter(new DRegionMonitor(this)),
+      m_enableMouseRelease(true)
 {
     setMargin(0);
     m_wmHelper = DWindowManagerHelper::instance();
@@ -94,13 +95,24 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
     if (m_model) {
         m_regionInter->registerRegion();
     }
+    blockButtonRelease();
 }
 
 void DockPopupWindow::show(const int x, const int y)
 {
     m_lastPoint = QPoint(x, y);
+    blockButtonRelease();
 
     DArrowRectangle::show(x, y);
+}
+
+void DockPopupWindow::blockButtonRelease()
+{
+    // 短暂的不处理鼠标release事件，防止出现刚显示又被隐藏的情况
+    m_enableMouseRelease = false;
+    QTimer::singleShot(10, this, [this] {
+        m_enableMouseRelease = true;
+    });
 }
 
 void DockPopupWindow::hide()
@@ -152,6 +164,9 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
 {
     Q_ASSERT(m_model);
+
+    if (!m_enableMouseRelease)
+        return;
 
     if (!((flag == DRegionMonitor::WatchedFlags::Button_Left) ||
           (flag == DRegionMonitor::WatchedFlags::Button_Right))) {

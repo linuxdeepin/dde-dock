@@ -58,6 +58,7 @@ protected:
     void showEvent(QShowEvent *e);
     void enterEvent(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
+    void blockButtonRelease();
 
 private slots:
     void onGlobMouseRelease(const QPoint &mousePos, const int flag);
@@ -70,6 +71,7 @@ private:
 
     DRegionMonitor *m_regionInter;
     DWindowManagerHelper *m_wmHelper;
+    bool m_enableMouseRelease;
 };
 
 #endif // DOCKPOPUPWINDOW_H
