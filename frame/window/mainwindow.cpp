@@ -114,7 +114,6 @@ MainWindow::MainWindow(QWidget *parent)
     DPlatformWindowHandle::enableDXcbForWindow(this, true);
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
-    m_platformWindowHandle.setWindowRadius(0);
     m_platformWindowHandle.setShadowOffset(QPoint(0, 5));
     m_platformWindowHandle.setShadowColor(QColor(0, 0, 0, 0.3 * 255));
 
@@ -660,4 +659,3 @@ void MainWindow::sendNotifications()
                 .call();
     });
 }
-
