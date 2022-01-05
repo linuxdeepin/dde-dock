@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Das Plugin %1 ist nicht mit dem System kompatibel.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Flugzeugmodus</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Ausschalten</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Einschalten</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Flugzeugmodus-Einstellungen</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Flugzeugmodus</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Status</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Plugins</translation>
+        <source>Dock settings</source>
+        <translation>Dock-Einstellungen</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Größe</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation type="unfinished"/>
+        <source>Multiple Displays</source>
+        <translation>Mehrfachbildschirm</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Pluginbereich</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Wählen Sie aus, welche Symbole im Dock erscheinen sollen</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Design-Modus</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Leistungs-Modus</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Modus</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Oben</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Unten</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Links</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Rechts</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Standort</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Angezeigt lassen</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Ausgeblendet lassen</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Intelligentes Ausblenden</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Klein</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Groß</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Dock anzeigen</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>Auf dem Bildschirm, wo sich der Zeiger befindet</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation type="unfinished"/>
+        <source>Only on main screen</source>
+        <translation>Nur auf dem Hauptbildschirm</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Kapazität %1, voll aufgeladen</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

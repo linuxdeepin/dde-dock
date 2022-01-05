@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>O plugin %1 não é compatível com o sistema.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Modo Avião</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Desativar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ativar</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Configurações do Modo Avião</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Modo Avião</translation>
     </message>
 </context>
 <context>
@@ -148,7 +185,7 @@
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>O Dock está em modo de segurança; saia para exibi-lo corretamente</translation>
+        <translation>A Dock está em modo de segurança; saia para exibi-lo corretamente</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Estado</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Plugins</translation>
+        <source>Dock settings</source>
+        <translation>Configurações da Dock</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Tamanho</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Somente na tela principal</translation>
+        <source>Multiple Displays</source>
+        <translation>Múltiplas telas</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Área de plugins</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Selecione quais ícones aparecem na Dock</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Modo Fashion</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Modo Eficiente</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Modo</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Superior</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Inferior</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Esquerda</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Direita</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Local</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Manter exibindo</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Manter oculta</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Ocultar inteligente</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Estado</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Pequeno</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Grande</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Exibir Dock</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>Na tela onde está o cursor</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Exibir a dock</translation>
+        <source>Only on main screen</source>
+        <translation>Apenas na tela principal</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>%1 Carregado - Bateria Cheia</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

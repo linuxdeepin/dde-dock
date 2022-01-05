@@ -7,6 +7,43 @@
     </message>
 </context>
 <context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>飞行模式</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>飞行模式开启</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>开启</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>飞行模式设置</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>飞行模式关闭</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>飞行模式</translation>
+    </message>
+</context>
+<context>
     <name>AppDragWidget</name>
     <message>
         <source>Remove</source>
@@ -202,22 +239,6 @@
         <translation>状态</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>插件</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>仅主屏显示</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>跟随鼠标位置显示</translation>
-    </message>
-    <message>
-        <source>Show the Dock</source>
-        <translation>多屏显示设置</translation>
-    </message>
-    <message>
         <source>Dock settings</source>
         <translation>任务栏设置</translation>
     </message>
@@ -379,6 +400,7 @@
     <message>
         <source>Dock</source>
         <translation>任务栏</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

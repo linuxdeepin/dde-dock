@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="vi">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Tiện ích %1 không tương thích với hệ thống</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Tắt</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Mở</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,11 +239,86 @@
         <translation>Tình trạng</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Các phần bổ sung</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Kích thước</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
+        <source>Multiple Displays</source>
+        <translation>Nhiều màn hình</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Dạng thời trang</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Dạng hiệu quả</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Chế độ</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Trên đỉnh</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Dưới đáy</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Trái</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Phải</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Nơi chốn</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Tiếp tục ẩn</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Ẩn thông minh</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Tình trạng</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Nhỏ</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Lớn</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -214,7 +326,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Show the Dock</source>
+        <source>Only on main screen</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Công suất 1%, sạc đã đầy</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

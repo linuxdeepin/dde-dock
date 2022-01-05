@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Wtyczka %1 nie jest kompatybilna z systemem.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Tryb samolotowy</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Tryb samolotowy jest aktywny</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Wyłączyć</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Włączyć</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Ustawienia trybu samolotowego</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Tryb samolotowy jest wyłączony</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Tryb samolotowy</translation>
     </message>
 </context>
 <context>
@@ -24,11 +61,11 @@
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation>Wyłączyć</translation>
+        <translation>Wyłącz</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation>Włączyć</translation>
+        <translation>Włącz</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
@@ -73,11 +110,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>Czas 12 godziny</translation>
+        <translation>Format 12-godzinny</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>czas 24 godziny</translation>
+        <translation>Format 24-godzinny</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -88,7 +125,7 @@
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Czy na pewno chcesz opróżnić %1 przedmiotów?</translation>
+        <translation>Czy na pewno chcesz trwale usunąć %1 przedmiotów?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -100,7 +137,7 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>To działanie nie może być cofnięte</translation>
+        <translation>Tej akcji nie można cofnąć</translation>
     </message>
 </context>
 <context>
@@ -144,11 +181,11 @@
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation>Dock - Tryb bezpieczny</translation>
+        <translation>Dok - Tryb bezpieczny</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Dock jest w trybie bezpiecznym, wyjdź z niego aby wyświetlić ten tryb poprawnie</translation>
+        <translation>Dok jest w trybie bezpiecznym, wyjdź z niego aby wyświetlić go poprawnie</translation>
     </message>
 </context>
 <context>
@@ -187,7 +224,7 @@
     </message>
     <message>
         <source>Smart Hide</source>
-        <translation>Mądre ukrywanie</translation>
+        <translation>Inteligentne ukrywanie</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -202,20 +239,95 @@
         <translation>Stan</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Wtyczki</translation>
+        <source>Dock settings</source>
+        <translation>Ustawienia doka</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Rozmiar</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Tylko na głównym ekranie</translation>
+        <source>Multiple Displays</source>
+        <translation>Wiele ekranów</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Strefa wtyczek</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Wybierz, które wtyczki pojawią się w doku</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Tryb modny</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Tryb wydajny</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Tryb</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Góra</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Dół</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Lewo</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Prawo</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Położenie</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Zawsze wyświetlaj</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Zawsze ukrywaj</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Inteligentne ukrywanie</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Mały</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Ogromny</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Pokaż dok</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation>Na ekranie gdzie znajduje się kursor</translation>
+        <translation>Na ekranie, tam gdzie jest kursor</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Pokaż Dock</translation>
+        <source>Only on main screen</source>
+        <translation>Tylko na ekranie głównym</translation>
     </message>
 </context>
 <context>
@@ -233,7 +345,7 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation>Klawiatura ekranowa</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Pojemność %1, w pełni naładowana</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dok</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

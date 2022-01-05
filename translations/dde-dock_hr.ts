@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hr">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Priključak %1 nije kompatibilan sa sustavom.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Isključi</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Uključi</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Status</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Priključci</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Veličina</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
+        <source>Multiple Displays</source>
+        <translation>Višestruki zasloni</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Moderan način</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Učinkoviti način</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Način</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Gore</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Dolje</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Lijevo</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Desno</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Lokacija</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Drži prikazano</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Drži skriveno</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Pametno skrivanje</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Maleno</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Veliko</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
+        <translation>Na zaslon gdje je pokazivač</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation type="unfinished"/>
+        <source>Only on main screen</source>
+        <translation>Samo na glavni zaslon</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Kapacitet %1, potpuno napunjen</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation type="unfinished"/>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

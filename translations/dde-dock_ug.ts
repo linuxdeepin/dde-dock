@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ug">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>قىستۇرما %1 بىلەن سىستېما نەشرى ماسلاشمايدۇ</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>ئۇچۇش ھالىتى</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>ئۇچۇش ھالىتىنى ئېچىش</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>كۆكچىشنى تاقاش</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>كۆكچىشنى ئېچىش</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>ئۇچۇش ھالىتى تەڭشىكى</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation> ئۇچۇش ھالىتىنى تاقاش</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>ئۇچۇش ھالىتى</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>ھالىتى </translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>قىستۇرما</translation>
+        <source>Dock settings</source>
+        <translation>ۋەزىپە ئىستونى تەڭشىكى</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>چوڭلۇقى</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>ئاساسىي ئېكراندىلا كۆرۈنسۇن</translation>
+        <source>Multiple Displays</source>
+        <translation>كۆپ ئېكرانلىق كۆرسىتىش تەڭشىكى</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>قىستۇرما رايونى</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>ۋەزىپە ئىستونى قىستۇرما رايونىدا كۆرسىتىلىدىغان سىنبەلگىنى تاللاڭ</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>مودا ھالەت</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>يۇقىرى ئۈنۈملۈك ھالەت</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>ھالىتى</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>ئۈستى</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>ئاستى</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>سول</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>ئوڭ</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>ئورنى</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>داۋاملىق كۆرسىتىش</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>داۋاملىق يوشۇرۇش</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>ئەقلىي يوشۇرۇش</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>ھالىتى </translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>كىچىك</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>چوڭ</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>ۋەزىپە ئىستونىنىڭ ئورنى</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>مائۇسنىڭ ئورنىغا ئەگىشىپ كۆرۈنسۇن</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>كۆپ ئېكران تەڭشىكى</translation>
+        <source>Only on main screen</source>
+        <translation>ئاساسىي ئېكراندىلا كۆرۈنسۇن</translation>
     </message>
 </context>
 <context>
@@ -226,7 +338,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>چىقىرىۋېتىش</translation>
+        <translation>قالدۇقلىرىنى چىقىرىۋېتىش</translation>
     </message>
 </context>
 <context>
@@ -244,7 +356,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>قۇۋۋەت</translation>
+        <translation>توك مەنبە</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -268,7 +380,7 @@
     </message>
     <message>
         <source>Capacity %1</source>
-        <translation>توك%1</translation>
+        <translation>توكى%1</translation>
     </message>
     <message>
         <source>Charging %1</source>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>توك%1، توشتى</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>ۋەزىپە ئىستونى</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>
@@ -298,7 +418,7 @@
     <name>ShutdownPlugin</name>
     <message>
         <source>Power</source>
-        <translation>قۇۋۋەت</translation>
+        <translation>توك مەنبە</translation>
     </message>
     <message>
         <source>Shut down</source>
@@ -382,7 +502,7 @@
     </message>
     <message>
         <source>Move to Trash</source>
-        <translation type="unfinished"/>
+        <translation>ئەخلەت ساندۇقىغا يۆتكەش</translation>
     </message>
 </context>
 <context>

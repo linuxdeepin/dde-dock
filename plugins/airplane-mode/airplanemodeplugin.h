@@ -50,6 +50,10 @@ public:
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
 
+public slots:
+    void removePlugin();
+    void addPlugin();
+
 private:
     AirplaneModeItem *m_item;
 };

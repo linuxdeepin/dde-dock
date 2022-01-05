@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="el">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Το πρόσθετο %1 δεν είναι συμβατό με το σύστημα.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Απενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Κατάσταση</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Πρόσθετα</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Μέγεθος</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Μόνο στην κύρια οθόνη</translation>
+        <source>Multiple Displays</source>
+        <translation>Πολλαπλές Οθόνες</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Μοντέρνα λειτουργία</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Αποτελεσματική λειτουργία</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Λειτουργία</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Πάνω μέρος</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Κάτω μέρος</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Αριστερά</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Δεξιά</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Τοποθεσία</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Κρατήστε κρυφό</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Έξυπνη απόκρυψη</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Κατάσταση</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Μικρό</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Μεγάλο</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>Στην οθόνη όπου βρίσκεται ο κέρσορας</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Εμφάνιση Γραμμής Εργασιών</translation>
+        <source>Only on main screen</source>
+        <translation>Μόνο στην κύρια οθόνη</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Χωρητικότητα %1, πλήρης φόρτιση</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Προσθήκη στην γραμμή εργασιών</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

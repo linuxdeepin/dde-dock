@@ -46,10 +46,15 @@ public:
     const QString contextMenu() const;
     void invokeMenuItem(const QString menuId, const bool checked);
     void refreshIcon();
+    void updateTips();
 
 protected:
     void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
+
+signals:
+    void removeItem();
+    void addItem();
 
 private:
     Dock::TipsWidget *m_tipsLabel;

@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>%1 eklentisi sistemle uyumlu değil.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Uçak Kipi</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Uçak Kipi ayarları</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Uçak Kipi</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Durum</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Eklentiler</translation>
+        <source>Dock settings</source>
+        <translation>Rıhtım ayarları</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Boyut</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Sadece ana ekranda</translation>
+        <source>Multiple Displays</source>
+        <translation>Çoklu Ekran</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Eklenti Alanı</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Rıhtım&apos;da hangi simgelerin görüneceğini seçin</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Moda Kip</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Verimli Kip</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Kip</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Üst</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Alt</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Sol</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Sağ</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Konum</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Gösterilmeyi sürdür</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Gizli tut</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Akıll gizle</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Durum</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Küçük</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Büyük</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Rıhtımı Göster</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>İmlecin bulunduğu ekranda</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Rıhtımda Göster</translation>
+        <source>Only on main screen</source>
+        <translation>Sadece ana ekranda</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Kapasite %1, tam şarjlı</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Rıhtım</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

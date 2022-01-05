@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="az">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>%1 qoşması sistem ilə uyğun deyil.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Təyyarə rejimi</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Təyyarə rejimi aktiv edildi</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Söndürmək</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Açmaq</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Təyyarə rejimi ayarları</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Təyyarə rejimi söndürülüb</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Təyyarə rejimi</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Vəziyyəti</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Qoşmalar</translation>
+        <source>Dock settings</source>
+        <translation>Dok panel ayarları</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Ölçü</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Yalnız əsas ekranda</translation>
+        <source>Multiple Displays</source>
+        <translation>Çoxsaylı ekran</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Plaqin sahəsi</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Dok paneldə görünəcək nişanları seçin</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Müasir rejim</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Səmərəli rejim</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Rejim</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Yuxarıda</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Aşağıda</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Sol</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Sağ</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Yerləşmə</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Görünsün</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Gizli qalsın</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Ağıllı gizlənmə</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Vəziyyəti</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Kiçik</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Geniş</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Dok paneli göstərmək</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>Kursorun olduğu ekranda</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Dok&apos;da göstərmək</translation>
+        <source>Only on main screen</source>
+        <translation>Yalnız əsas ekranda</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Tutum %1, tam yükləndi</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dok panel</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

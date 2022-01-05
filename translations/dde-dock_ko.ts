@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ko">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>%1 플러그인이 시스템과 호환되지 않습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>비행기 모드</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>끄기</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>켜기</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>비행기 모드 설정</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>비행기 모드</translation>
     </message>
 </context>
 <context>
@@ -202,11 +239,86 @@
         <translation>상태</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>플러그인</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>크기</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
+        <source>Multiple Displays</source>
+        <translation>다중 디스플레이</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>패션(Fashion) 모드</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>효율 모드</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>모드</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>상단</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>하단</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>왼쪽</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>오른쪽</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>위치</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>숨겨두기</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>스마트하이드</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>상태</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>소형</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>대형</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -214,7 +326,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Show the Dock</source>
+        <source>Only on main screen</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>용량 %1, 완전히 충전됨</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>도구집</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

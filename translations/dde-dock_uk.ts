@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="uk">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Плагін %1 не сумісний із системою.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Режим польоту</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Увімкнено режим польоту</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Вимкнути</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Увімкнути</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Параметри режиму польоту</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Вимкнено режим польоту</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Режим польоту</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Статус</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Додатки</translation>
+        <source>Dock settings</source>
+        <translation>Параметри бічної панелі</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Розмір</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Лише на головному екрані</translation>
+        <source>Multiple Displays</source>
+        <translation>Кілька дисплеїв</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Область додатків</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Виберіть, які піктограми буде показано на бічній панелі</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Модний режим</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Ефективний режим</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Вгорі</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Внизу</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Ліворуч</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Праворуч</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Розташування</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Показувати постійно</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Залишати прихованим</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Розумне приховування</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Стан</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Малий</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Великий</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Показувати панель</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>На екрані, де перебуває вказівник</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Показувати панель</translation>
+        <source>Only on main screen</source>
+        <translation>Лише на головному екрані</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Ємність %1, повністю заряджено</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Панель</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

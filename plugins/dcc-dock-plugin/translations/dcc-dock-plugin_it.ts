@@ -4,7 +4,7 @@
     <message>
         <location filename="../module_widget.cpp" line="68"/>
         <source>Size</source>
-        <translation>Dimensioni</translation>
+        <translation>Dimensione</translation>
     </message>
     <message>
         <location filename="../module_widget.cpp" line="69"/>

@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ro">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Pluginul % 1 nu este compatibil cu sistemul.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Oprește</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Pornește</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,11 +239,86 @@
         <translation>Stare</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Extensii</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Dimensiune</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
+        <source>Multiple Displays</source>
+        <translation>Afișaje multiple</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Mod fashion</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Mod eficient</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mod</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Sus</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Jos</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Stânga</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Dreapta</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Locație</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Păstraţi ascuns</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Ascundere inteligentă</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Stare</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Mic</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Mare</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -214,7 +326,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Show the Dock</source>
+        <source>Only on main screen</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Capacitate %1, complet încărcat</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

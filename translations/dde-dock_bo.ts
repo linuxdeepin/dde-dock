@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bo">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>འཇུག་ཆས་%1དང་རྒྱུད་ཁོངས་ཀྱི་པར་གཞི་ཕན་ཚུན་མི་མཐུན་པ།</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>འཕུར་སྐྱོད་དཔེ་རྣམ།</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>འཕུར་བའི་རྣམ་པ་ཕྱེ་བ།</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>སོ་སྔོན་ཁ་རྒྱོབ།</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>སོ་སྔོན་ཁ་ཕྱེ།</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>འཕུར་སྐྱོད་དཔེ་རྣམ་སྒྲིག་འགོད།</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>འཕུར་བའི་རྣམ་པ་ཁ་རྒྱག་པ།</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>འཕུར་སྐྱོད་དཔེ་རྣམ།</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>རྣམ་པ།</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>འཇུག་ཆས།</translation>
+        <source>Dock settings</source>
+        <translation>ལས་འགན་ཚན་བྱང་སྒྲིག་འགོད།</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>ཆེ་ཆུང་།</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>བརྙན་ཡོལ་ཨ་མ་ཁོ་ན་མངོན་པ།</translation>
+        <source>Multiple Displays</source>
+        <translation>བརྙན་མང་མངོན་སྟོན་སྒྲིག་འགོད།</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>ལྷུ་ལག་ཁུལ་ཁོངས།</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>ལས་འགན་ཚན་བྱང་གི་ལྷུ་ལག་ཁུལ་དུ་མངོན་པའི་པར་རིས་འདེམས་པ།</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>དར་སྲོལ་དཔེ་རྣམ།</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>ལས་ཆོད་ཆེ་བའི་དཔེ་རྣམ།</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>དཔེ་རྣམ།</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>གོང་།</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>འོག</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>གཡོན།</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>གཡས།</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>གནས་ས།</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>རྟག་ཏུ་མངོན་པ།</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>རྟག་ཏུ་ཡིབ་པ།</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>རིག་ནུས་གབ་ཡིབ།</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>རྣམ་པ།</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>ཆུང་ངུ།</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>ཆེ་བ།</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>ལས་འགན་ཚན་བྱང་གི་གནས་ས།</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>ཙི་གུའི་གནས་ཡུལ་ལྟར་མངོན་པ།</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>བརྙན་ཡོལ་མང་པོ་འཆར་བའི་སྒྲིག་འགོད།</translation>
+        <source>Only on main screen</source>
+        <translation>བརྙན་ཡོལ་ཨ་མ་ཁོ་ན་མངོན་པ།</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>གློག་ཚད་%1 ཁེངས་ཟིན།</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>ལས་འགན་ཚན་བྱང་།</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hu">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>A %1 bővítmény nem kompatibilis a rendszerrel.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Repülőgép üzemmód</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>A repülőgép üzemmód engedélyezve</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Kikapcsolás</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Bekapcsolás</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Repülőgép üzemmód beállításai</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>A repülőgép üzemmód letiltva</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Repülőgép üzemmód</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Állapot</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Bővítmények</translation>
+        <source>Dock settings</source>
+        <translation>Dokkoló beállításai</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Méret</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Csak a főképernyőn</translation>
+        <source>Multiple Displays</source>
+        <translation>Többképernyős mód</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Bővítmény terület</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Válassza ki, hogy mely ikonok jelenjenek meg a dokkolóban</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Stílusos mód</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Hatékony mód</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mód</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Fent</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Lent</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Bal</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Jobb</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Hely</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Megjelenítve tartás</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Maradjon rejtett</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Intelligens elrejtés</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Állapot</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Kicsi</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Nagy</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Dokkoló mutatása</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>A képernyőn, ahol a kurzor található</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Dokk mutatása</translation>
+        <source>Only on main screen</source>
+        <translation>Csak a főképernyőn</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Akkumulátor töltöttsége %1, teljesen feltöltve</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Dokkoló</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>
@@ -382,7 +502,7 @@
     </message>
     <message>
         <source>Move to Trash</source>
-        <translation>Áthelyezés a lomtárba</translation>
+        <translation>Áthelyezés a Kukába</translation>
     </message>
 </context>
 <context>

@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>O plugin %1 não é compatível com o sistema.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Modo de avião</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Desligar</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ligar</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Definições de modo de avião</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Modo de avião</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Estado</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Plugins</translation>
+        <source>Dock settings</source>
+        <translation>Definições da doca</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Tamanho</translation>
+    </message>
+    <message>
+        <source>Multiple Displays</source>
+        <translation>Vários ecrãs</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Área de plugins</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Selecione quais os ícones que aparecem na Doca</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Modo Elegante</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Modo eficiente</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Modo</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Superior</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Inferior</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Esquerda</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Direita</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Localização</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Manter visível</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Manter ocultada</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Ocultação inteligente</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Estado</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Pequeno</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Grande</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Mostrar Doca</translation>
+    </message>
+    <message>
+        <source>On screen where the cursor is</source>
+        <translation>No ecrã onde está o cursor</translation>
     </message>
     <message>
         <source>Only on main screen</source>
         <translation>Apenas no ecrã principal</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>No ecrã onde o cursor está</translation>
-    </message>
-    <message>
-        <source>Show the Dock</source>
-        <translation>Mostrar a Doca</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Capacidade 1%, totalmente carregada</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Doca</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

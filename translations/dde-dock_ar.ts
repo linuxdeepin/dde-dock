@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>الإضافة 1% غير متوافقة مع النظام.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>ايقاف</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>تشغيل</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,11 +239,86 @@
         <translation>الحالة</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>الإضافات</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>الحجم</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
+        <source>Multiple Displays</source>
+        <translation>شاشات متعددة</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>النمط الحداثي</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>النمط الفعال</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>النمط</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>أعلى</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>أسفل</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>يسار</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>يمين</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>الموقع</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>اﻹبقاء مخفياً</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>الاخفاء الذكي</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>الحالة</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>صغير</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>كبير</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -214,7 +326,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Show the Dock</source>
+        <source>Only on main screen</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>الرف</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

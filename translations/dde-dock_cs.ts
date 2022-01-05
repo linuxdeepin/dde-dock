@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Přídavný modul %1 není slučitelný se systémem.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Režim letadlo</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Režim letadlo zapnut</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Vypnout</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Zapnout</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Nastavení režimu letadlo</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Režim letadlo vypnut</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Režim letadlo</translation>
     </message>
 </context>
 <context>
@@ -92,7 +129,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -144,7 +181,7 @@
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation>Dok – náhradní režim</translation>
+        <translation>Panel – náhradní režim</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
@@ -155,7 +192,7 @@
     <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
-        <translation>Módní režim</translation>
+        <translation>Líbivý režim</translation>
     </message>
     <message>
         <source>Efficient Mode</source>
@@ -202,20 +239,95 @@
         <translation>Stav</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Zásuvné moduly</translation>
+        <source>Dock settings</source>
+        <translation>Nastavení panelu</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Velikost </translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Pouze na hlavní obrazovce</translation>
+        <source>Multiple Displays</source>
+        <translation>Více displejů </translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Oblast pluginu </translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Vyberte, které ikony se zobrazí v Docku </translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Módní režim </translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Efektivní režim </translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Režim </translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Nahoře</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Dole</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Vlevo</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Vpravo</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Umístění </translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Ponechat zobrazený</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Ponechat skrytý</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Chytré skrývání</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Stav</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>Malý</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Velký</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Zobrazit panel</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
-        <translation>Na obrazovce, na které se nachází kurzor</translation>
+        <translation>Na obrazovce, kde je ukazovátko</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Zobrazit panel</translation>
+        <source>Only on main screen</source>
+        <translation>Pouze na hlavní obrazovce </translation>
     </message>
 </context>
 <context>
@@ -226,7 +338,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Storno ukotvení</translation>
+        <translation>Zrušit ukotvení</translation>
     </message>
 </context>
 <context>
@@ -284,6 +396,14 @@
     </message>
 </context>
 <context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Panel</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+</context>
+<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -291,7 +411,7 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Storno ukotvení</translation>
+        <translation>Zrušit ukotvení</translation>
     </message>
 </context>
 <context>

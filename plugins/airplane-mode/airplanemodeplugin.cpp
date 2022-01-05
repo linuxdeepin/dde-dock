@@ -30,6 +30,8 @@ AirplaneModePlugin::AirplaneModePlugin(QObject *parent)
     : QObject(parent)
     , m_item(new AirplaneModeItem)
 {
+    connect(m_item, &AirplaneModeItem::removeItem, this, &AirplaneModePlugin::removePlugin);
+    connect(m_item, &AirplaneModeItem::addItem, this, &AirplaneModePlugin::addPlugin);
 }
 
 const QString AirplaneModePlugin::pluginName() const
@@ -126,6 +128,22 @@ void AirplaneModePlugin::refreshIcon(const QString &itemKey)
     if (itemKey == AIRPLANEMODE_KEY) {
         m_item->refreshIcon();
     }
+}
+
+void AirplaneModePlugin::removePlugin()
+{
+    if (!m_proxyInter)
+        return;
+
+    m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
+}
+
+void AirplaneModePlugin::addPlugin()
+{
+    if (!m_proxyInter)
+        return;
+
+    m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
 }
 
 

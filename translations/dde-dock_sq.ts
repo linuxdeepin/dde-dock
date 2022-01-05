@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>Shtojca %1 s’është e përputhshme me sistemin.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Mënyra Aeroplan</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Mënyra aeroplan është e aktivizuar</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Çaktivizoje</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Aktivizoje</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Rregullime Mënyre Aeroplan</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Mënyra aeroplan është e çaktivizuar</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Mënyra Aeroplan</translation>
     </message>
 </context>
 <context>
@@ -202,20 +239,95 @@
         <translation>Gjendje</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Shtojca</translation>
+        <source>Dock settings</source>
+        <translation>Rregullime paneli</translation>
+    </message>
+</context>
+<context>
+    <name>ModuleWidget</name>
+    <message>
+        <source>Size</source>
+        <translation>Madhësi</translation>
     </message>
     <message>
-        <source>Only on main screen</source>
-        <translation>Vetëm në ekranin kryesor</translation>
+        <source>Multiple Displays</source>
+        <translation>Shumë Ekrane</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Zonë Shtojcash</translation>
+    </message>
+    <message>
+        <source>Select which icons appear in the Dock</source>
+        <translation>Përzgjidhni cilat ikona shfaqen te Paneli</translation>
+    </message>
+    <message>
+        <source>Fashion mode</source>
+        <translation>Mënyra modë</translation>
+    </message>
+    <message>
+        <source>Efficient mode</source>
+        <translation>Mënyra efikasitet</translation>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mënyrë</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>Në Krye</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>Në Fund</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Majtas</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Djathtas</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Vendndodhje</translation>
+    </message>
+    <message>
+        <source>Keep shown</source>
+        <translation>Mbaje të shfaqur</translation>
+    </message>
+    <message>
+        <source>Keep hidden</source>
+        <translation>Mbaje të fshehur</translation>
+    </message>
+    <message>
+        <source>Smart hide</source>
+        <translation>Fshehje e mençur</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Gjendje</translation>
+    </message>
+    <message>
+        <source>Small</source>
+        <translation>I vogël</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>I madh</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Shfaqe Panelin</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
         <translation>Në ekranin ku është kursori</translation>
     </message>
     <message>
-        <source>Show the Dock</source>
-        <translation>Shfaqe Panelin</translation>
+        <source>Only on main screen</source>
+        <translation>Vetëm në ekranin kryesor</translation>
     </message>
 </context>
 <context>
@@ -281,6 +393,14 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Kapacitet 1%, plotësisht e ngarkuar</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsModule</name>
+    <message>
+        <source>Dock</source>
+        <translation>Panel</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>
@@ -382,7 +502,7 @@
     </message>
     <message>
         <source>Move to Trash</source>
-        <translation type="unfinished"/>
+        <translation>Shpjere te Hedhurinat</translation>
     </message>
 </context>
 <context>

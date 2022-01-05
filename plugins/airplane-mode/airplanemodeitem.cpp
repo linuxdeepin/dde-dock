@@ -57,10 +57,18 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     connect(m_airplaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enable) {
         m_applet->setEnabled(enable);
         refreshIcon();
+
+        if (!enable)
+            emit removeItem();
+        else
+            emit addItem();
+
+        updateTips();
     });
 
     m_applet->setEnabled(m_airplaneModeInter->enabled());
     refreshIcon();
+    updateTips();
 }
 
 QWidget *AirplaneModeItem::tipsWidget()
@@ -135,6 +143,14 @@ void AirplaneModeItem::refreshIcon()
         iconString.append(PLUGIN_MIN_ICON_NAME);
     m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
     update();
+}
+
+void AirplaneModeItem::updateTips()
+{
+    if (m_airplaneModeInter->enabled())
+        m_tipsLabel->setText(tr("Airplane mode enabled"));
+    else
+        m_tipsLabel->setText(tr("Airplane mode disabled"));
 }
 
 void AirplaneModeItem::resizeEvent(QResizeEvent *e)

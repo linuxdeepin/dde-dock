@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_HK">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>插件%1和系統版本不兼容。</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>飛行模式</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>飛行模式開啟</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>關閉</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>開啟</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>飛行模式設置</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>飛行模式關閉</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>飛行模式</translation>
     </message>
 </context>
 <context>
@@ -202,22 +239,6 @@
         <translation>狀態</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>外掛</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>僅主屏顯示</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>跟隨鼠標位置顯示</translation>
-    </message>
-    <message>
-        <source>Show the Dock</source>
-        <translation>多屏顯示設置</translation>
-    </message>
-    <message>
         <source>Dock settings</source>
         <translation>任務欄設置</translation>
     </message>
@@ -379,6 +400,7 @@
     <message>
         <source>Dock</source>
         <translation>任務欄</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>

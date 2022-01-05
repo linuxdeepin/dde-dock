@@ -1,9 +1,46 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
         <translation>The plugin %1 is not compatible with the system.</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Airplane Mode</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation>Airplane mode enabled</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Turn off</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Turn on</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation>Airplane Mode settings</translation>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation>Airplane mode disabled</translation>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation>Airplane Mode</translation>
     </message>
 </context>
 <context>
@@ -202,22 +239,6 @@
         <translation>Status</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Plugins</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Only on main screen</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>On screen where the cursor is</translation>
-    </message>
-    <message>
-        <source>Show the Dock</source>
-        <translation>Show the Dock</translation>
-    </message>
-    <message>
         <source>Dock settings</source>
         <translation>Dock settings</translation>
     </message>
@@ -379,6 +400,7 @@
     <message>
         <source>Dock</source>
         <translation>Dock</translation>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
 </context>
 <context>
