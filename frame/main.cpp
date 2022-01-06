@@ -84,14 +84,13 @@ void record_start(const QString &configPath)
     const QString &currentTime = QDateTime::currentDateTime().toString(timeFormat);
 
     int collapseNum = settings.value("collapse").toInt();
-    /* 第一次崩溃或进入安全模式后的第一次崩溃，将时间重置 */
     if (collapseNum == 0) {
         settings.setValue("first_time", currentTime);
     }
     QDateTime lastDate = QDateTime::fromString(settings.value("first_time").toString(), timeFormat);
 
-    /* 将当前崩溃时间与第一次崩溃时间比较，小于9分钟，记录一次崩溃；大于9分钟，覆盖之前的崩溃时间 */
-    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 9 * 60) {
+    /* 两次启动时间相差3秒,认为是异常退出,不在崩溃时做处理,防止异常 */
+    if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 3) {
         settings.setValue("collapse", collapseNum + 1);
         switch (collapseNum) {
         case 0:
