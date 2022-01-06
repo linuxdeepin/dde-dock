@@ -38,7 +38,7 @@ class MenuWorker : public QObject
 public:
     explicit MenuWorker(DBusDock *dockInter,QWidget *parent = nullptr);
 
-    void showDockSettingsMenu();
+    void showDockSettingsMenu(QMenu *menu);
 
 signals:
     void autoHideChanged(const bool autoHide) const;
@@ -47,7 +47,7 @@ public slots:
     void setAutoHide(const bool autoHide);
 
 private:
-    QMenu *createMenu();
+    QMenu *createMenu(QMenu *settingsMenu);
 
 private slots:
     void onDockSettingsTriggered();

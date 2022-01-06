@@ -36,7 +36,8 @@ TEST_F(Test_MenuWorker, coverage_test)
 {
     MenuWorker *worker = new MenuWorker(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus()));
     DockItemManager::instance()->m_pluginsInter->m_pluginsMap.clear();
-    QMenu *menu = worker->createMenu();
+    QMenu *menu = new QMenu();
+    menu = worker->createMenu(menu);
     ASSERT_FALSE(menu->isEmpty());
 
 //    worker->showDockSettingsMenu();

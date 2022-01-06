@@ -40,9 +40,8 @@ MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
 
 }
 
-QMenu *MenuWorker::createMenu()
+QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
 {
-    QMenu *settingsMenu = new QMenu;
     settingsMenu->setAccessibleName("settingsmenu");
     settingsMenu->setTitle("Settings Menu");
 
@@ -169,7 +168,7 @@ void MenuWorker::onDockSettingsTriggered()
             .call();
 }
 
-void MenuWorker::showDockSettingsMenu()
+void MenuWorker::showDockSettingsMenu(QMenu *menu)
 {
     // 菜单功能被禁用
     static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray(), this);
@@ -180,7 +179,7 @@ void MenuWorker::showDockSettingsMenu()
     // 菜单将要被打开
     setAutoHide(false);
 
-    QMenu *menu = createMenu();
+    menu = createMenu(menu);
     menu->exec(QCursor::pos());
 
     // 菜单已经关闭
