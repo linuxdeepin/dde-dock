@@ -477,7 +477,8 @@ QWidget *AppItem::popupTips()
         return nullptr;
 
     static TipsWidget appNameTips(topLevelWidget());
-    appNameTips.setVisible(false);
+    appNameTips.setAccessibleName("tip");
+    appNameTips.setObjectName(m_itemEntryInter->name());
 
     if (!m_windowInfos.isEmpty()) {
         const quint32 currentWindow = m_itemEntryInter->currentWindow();
