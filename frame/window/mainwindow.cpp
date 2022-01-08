@@ -98,6 +98,9 @@ MainWindow::MainWindow(QWidget *parent)
     //1 确保这两行代码的先后顺序，否则会导致任务栏界面不再置顶
     setWindowFlags(windowFlags() | flags | Qt::WindowDoesNotAcceptFocus);
 
+    if (Utils::IS_WAYLAND_DISPLAY)
+        setWindowFlag(Qt::FramelessWindowHint, false); // 会导致设置圆角为0时无效
+
     if (DGuiApplicationHelper::isXWindowPlatform()) {
         const auto display = QX11Info::display();
         if (!display) {
