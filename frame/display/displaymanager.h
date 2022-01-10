@@ -68,6 +68,7 @@ private:
     QMap<QScreen *, QMap<Position, bool>> m_screenPositionMap;
     const QGSettings *m_gsettings;              // 多屏配置控制
     bool m_onlyInPrimary;
+    DisplayInter *m_displayInter;
 };
 
 #endif // DISPLAYMANAGER_H
