@@ -72,6 +72,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     // 必须初始化父窗口，否则当主题切换之后再设置父窗口的时候palette会更改为主题切换前的palette
     if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey)) {
         w->setParent(PopupWindow.data());
+        w->setVisible(false);
     }
 
     m_popupTipsDelayTimer->setInterval(500);
@@ -306,6 +307,12 @@ void SystemTrayItem::hidePopup()
     m_popupShown = false;
     PopupWindow->hide();
 
+    DockPopupWindow *popup = PopupWindow.data();
+    QWidget *content = popup->getContent();
+    if (content) {
+        content->setVisible(false);
+    }
+
     emit PopupWindow->accept();
     emit requestWindowAutoHide(true);
 }
@@ -330,8 +337,10 @@ void SystemTrayItem::popupWindowAccept()
 void SystemTrayItem::showPopupApplet(QWidget *const applet)
 {
     // another model popup window already exists
-    if (PopupWindow->model())
+    if (PopupWindow->model()) {
+        applet->setVisible(false);
         return;
+    }
 
     if (!applet) {
         return;
