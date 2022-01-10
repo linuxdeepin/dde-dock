@@ -31,9 +31,15 @@ DisplayManager::DisplayManager(QObject *parent)
     : QObject(parent)
     , m_gsettings(Utils::SettingsPtr("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", this))
     , m_onlyInPrimary(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", "onlyShowPrimary", false).toBool())
+    , m_displayInter(nullptr)
 {
     connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::primaryScreenChanged);
-    connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::dockInfoChanged);
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        m_displayInter = new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display",QDBusConnection::sessionBus(), this);
+        connect(m_displayInter, &__Display::PrimaryChanged, this, &DisplayManager::dockInfoChanged);
+    } else {
+        connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::dockInfoChanged);
+    }
     connect(qApp, &QGuiApplication::screenAdded, this, &DisplayManager::screenCountChanged);
     connect(qApp, &QGuiApplication::screenRemoved, this, &DisplayManager::screenCountChanged);
 
@@ -166,7 +172,7 @@ void DisplayManager::updateScreenDockInfo()
     // 仅显示在主屏时的处理
     if (m_onlyInPrimary) {
         for (auto s : m_screens) {
-            if (s != qApp->primaryScreen()) {
+            if (Utils::IS_WAYLAND_DISPLAY ? !s->model().contains(m_displayInter->primary()) : s != qApp->primaryScreen()) {
                 QMap <Position, bool> map;
                 map.insert(Position::Top, false);
                 map.insert(Position::Bottom, false);
