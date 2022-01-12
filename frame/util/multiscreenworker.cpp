@@ -898,7 +898,7 @@ void MultiScreenWorker::initMembers()
 
     m_delayWakeTimer->setSingleShot(true);
 
-    setStates(LauncherDisplay, m_launcherInter->visible());
+    setStates(LauncherDisplay, m_launcherInter->isValid() ? m_launcherInter->visible() : false);
 
     // init check
     checkDaemonDockService();
