@@ -119,6 +119,7 @@ QWidget *LauncherItem::popupTips()
     m_tips.reset(new TipsWidget(this));
     m_tips->setVisible(false);
     m_tips->setText(tr("Launcher"));
+    m_tips->setObjectName("launcher");
     return m_tips.get();
 }
 
