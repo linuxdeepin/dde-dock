@@ -53,19 +53,21 @@ DCORE_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #endif
 
+const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
+
 using namespace std;
 
 /**
  * @brief IsSaveMode
  * @return 判断当前是否应该进入安全模式（安全模式下不加载插件）
  */
-bool IsSaveMode(const QString &configPath)
+bool IsSaveMode()
 {
-    QSettings settings(configPath, QSettings::IniFormat);
+    QSettings settings(g_cfgPath, QSettings::IniFormat);
     settings.beginGroup(qApp->applicationName());
     int collapseNum = settings.value("collapse").toInt();
-    // 启动时会记录一次，所以崩溃三次后此数应为4
-    if (collapseNum - 1 >= 3) {
+    /* 崩溃次数达到3次，进入安全模式（不加载插件） */
+    if (collapseNum >= 3) {
         settings.remove(""); // 删除记录的数据
         settings.setValue("collapse", 0);
         settings.endGroup();
@@ -75,33 +77,47 @@ bool IsSaveMode(const QString &configPath)
     return false;
 }
 
-void record_start(const QString &configPath)
+/**
+ * @brief sig_crash
+ * @return 当应用收到对应的退出信号时，会调用此函数，用于保存一下应用崩溃时间，崩溃次数，用以判断是否应该进入安全模式，见IsSaveMode()
+ */
+[[noreturn]] void sig_crash(int sig)
 {
-    QSettings settings(configPath, QSettings::IniFormat);
-    settings.beginGroup(qApp->applicationName());
+    QDir dir(QStandardPaths::standardLocations(QStandardPaths::CacheLocation)[0]);
+    dir.cdUp();
+    QString filePath = dir.path() + "/dde-collapse.log";
 
-    const QString &timeFormat = "yyyy-MM-dd hh:mm:ss:zzz";
-    const QString &currentTime = QDateTime::currentDateTime().toString(timeFormat);
+    QFile *file = new QFile(filePath);
+
+    // 创建默认配置文件,记录段时间内的崩溃次数
+    if (!QFile::exists(g_cfgPath)) {
+        QFile cfgFile(g_cfgPath);
+        if (!cfgFile.open(QIODevice::WriteOnly))
+            exit(0);
+        cfgFile.close();
+    }
+
+    QSettings settings(g_cfgPath, QSettings::IniFormat);
+    settings.beginGroup("dde-dock");
 
     int collapseNum = settings.value("collapse").toInt();
     /* 第一次崩溃或进入安全模式后的第一次崩溃，将时间重置 */
     if (collapseNum == 0) {
-        settings.setValue("first_time", currentTime);
+        settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
     }
-    QDateTime lastDate = QDateTime::fromString(settings.value("first_time").toString(), timeFormat);
-
+    QDateTime lastDate = QDateTime::fromString(settings.value("first_time").toString(), "yyyy-MM-dd hh:mm:ss:zzz");
     /* 将当前崩溃时间与第一次崩溃时间比较，小于9分钟，记录一次崩溃；大于9分钟，覆盖之前的崩溃时间 */
     if (qAbs(lastDate.secsTo(QDateTime::currentDateTime())) < 9 * 60) {
         settings.setValue("collapse", collapseNum + 1);
         switch (collapseNum) {
         case 0:
-            settings.setValue("first_time", currentTime);
+            settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
             break;
         case 1:
-            settings.setValue("second_time", currentTime);
+            settings.setValue("second_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
             break;
         case 2:
-            settings.setValue("third_time", currentTime);
+            settings.setValue("third_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
             break;
         default:
             qDebug() << "Error, the collapse is wrong!";
@@ -110,14 +126,42 @@ void record_start(const QString &configPath)
     } else {
         if (collapseNum == 2){
             settings.setValue("first_time", settings.value("second_time").toString());
-            settings.setValue("second_time", currentTime);
+            settings.setValue("second_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
         } else {
-            settings.setValue("first_time", currentTime);
+            settings.setValue("first_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
         }
     }
 
     settings.endGroup();
     settings.sync();
+
+    if (!file->open(QIODevice::Text | QIODevice::Append)) {
+        qDebug() << file->errorString();
+        exit(0);
+    }
+
+    if (file->size() >= 10 * 1024 * 1024) {
+        // 清空原有内容
+        file->close();
+        if (file->open(QIODevice::Text | QIODevice::Truncate)) {
+            qDebug() << file->errorString();
+            exit(0);
+        }
+    }
+
+    // 捕获异常，打印崩溃日志到配置文件中
+    try {
+        QString head = "\n#####" + qApp->applicationName() + "#####\n"
+                + QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss:zzz]")
+                + "[crash signal number:" + QString::number(sig) + "]\n";
+        file->write(head.toUtf8());
+    } catch (...) {
+        //
+    }
+    file->close();
+    delete file;
+    file = nullptr;
+    exit(0);
 }
 
 int main(int argc, char *argv[])
@@ -130,9 +174,12 @@ int main(int argc, char *argv[])
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
     DockApplication app(argc, argv);
 
-    auto configs = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation);
-    const QString &cfgPath = configs.size() <= 0 ? QString() :configs.first() + "/dde-cfg.ini";
-    record_start(cfgPath);
+    //崩溃信号
+    signal(SIGSEGV, sig_crash);
+    signal(SIGILL,  sig_crash);
+    signal(SIGINT,  sig_crash);
+    signal(SIGABRT, sig_crash);
+    signal(SIGFPE,  sig_crash);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
@@ -189,7 +236,7 @@ int main(int argc, char *argv[])
     mw.launch();
 
     // 判断是否进入安全模式，是否带有入参 -x
-    if (!IsSaveMode(cfgPath) && !parser.isSet(disablePlugOption)) {
+    if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
         DockItemManager::instance()->startLoadPlugins();
         qApp->setProperty("PLUGINSLOADED", true);
     } else {
