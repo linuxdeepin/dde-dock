@@ -67,7 +67,7 @@ public slots:
     void prepareHide();
 
 private:
-    void adjustSize(const bool composite);
+    void adjustSize(bool composite);
     void appendSnapWidget(const WId wid);
 
     void enterEvent(QEvent *e);
