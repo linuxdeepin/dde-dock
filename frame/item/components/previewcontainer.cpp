@@ -133,31 +133,37 @@ void PreviewContainer::prepareHide()
     m_mouseLeaveTimer->start();
 }
 
-void PreviewContainer::adjustSize(const bool composite)
+void PreviewContainer::adjustSize(bool composite)
 {
-    const int count = m_snapshots.size();
+    int count = m_snapshots.size();
+    const int screenWidth = QDesktopWidget().screenGeometry(this).width();
+    const int screenHeight = QDesktopWidget().screenGeometry(this).height();
 
+    //先根据屏幕宽高计算出能预览的最大数量,然后根据数量计算界面宽高
     if (composite) {
         // 3D
-        const QRect r = qApp->primaryScreen() ? qApp->primaryScreen()->geometry() : QRect();
         const int padding = 20;
-
         const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
         if (horizontal) {
+            count = qMin(count, screenWidth *2 / SNAP_WIDTH);
+
             const int h = SNAP_HEIGHT + MARGIN * 2;
             const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
 
             setFixedHeight(h);
-            setFixedWidth(std::min(w, r.width() - padding));
+            setFixedWidth(qMin(w, screenWidth - padding));
         } else {
+            count = qMin(count, screenWidth *2 / SNAP_HEIGHT);
+
             const int w = SNAP_WIDTH + MARGIN * 2;
             const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);
 
             setFixedWidth(w);
-            setFixedHeight(std::min(h, r.height() - padding));
+            setFixedHeight(qMin(h, screenHeight - padding));
         }
     } else if (m_windowListLayout->count()) {
         // 2D
+        count = qMin(count, screenWidth / SNAP_HEIGHT_WITHOUT_COMPOSITE);
         const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
 
         // 根据appitem title 设置自适应宽度
@@ -174,26 +180,30 @@ void PreviewContainer::adjustSize(const bool composite)
             setFixedSize(SNAP_WIDTH, h);
         }
     }
+
+    //根据计算的数量,将相应的预览界面添加到布局并显示,其他的暂时不添加,减少界面刷新次数
+    int i = 0;
+    for (AppSnapshot *snap : m_snapshots) {
+        if (i < count && m_windowListLayout->indexOf(snap) < 0 ) {
+            m_windowListLayout->addWidget(snap);
+        }
+        snap->setVisible(i < count);
+        i++;
+    }
 }
 
 void PreviewContainer::appendSnapWidget(const WId wid)
 {
+    //创建预览界面,默认不显示,等计算出显示数量后再加入布局并显示
     AppSnapshot *snap = new AppSnapshot(wid);
+    snap->setVisible(false);
 
     connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::onSnapshotClicked, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::requestCloseAppSnapshot, this, &PreviewContainer::onRequestCloseAppSnapshot);
 
-    m_windowListLayout->addWidget(snap);
-    if (m_snapshots.size() >= (QDesktopWidget().screenGeometry(this).width() / (SNAP_WIDTH / 2)))
-        snap->setVisible(false);
-
     m_snapshots.insert(wid, snap);
-
-    // refresh if visible
-    if (isVisible())
-        snap->fetchSnapshot();
 }
 
 void PreviewContainer::enterEvent(QEvent *e)
