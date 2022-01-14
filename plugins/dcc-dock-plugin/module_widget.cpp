@@ -229,6 +229,15 @@ void ModuleWidget::initUI()
         connect(m_screenSettingComboxWidget, &ComboxWidget::onSelectChanged, this, [ = ] (const QString &text) {
             m_dockInter->setShowInPrimary(g_screenSettingMap.value(text));
         });
+        connect(qApp, &QApplication::screenAdded, this, [ = ] {
+                m_screenSettingTitle->setVisible(qApp->screens().count() > 1);
+                m_screenSettingComboxWidget->setVisible(qApp->screens().count() > 1);
+        });
+        connect(qApp, &QApplication::screenRemoved, this, [ = ] {
+                m_screenSettingTitle->setVisible(qApp->screens().count() > 1);
+                m_screenSettingComboxWidget->setVisible(qApp->screens().count() > 1);
+        });
+
         // 这里不会生效，但实际场景中也不存在有其他可配置的地方，可以不用处理
         connect(m_dockInter, &DBusInter::ShowInPrimaryChanged, this, [ = ] (bool showInPrimary) {
             if (m_screenSettingComboxWidget->comboBox()->currentText() == g_screenSettingMap.key(showInPrimary))
