@@ -856,28 +856,7 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
 
     if (!targetItem && parentWidget == m_appAreaSonWidget) {
         // appitem调整顺序是，判断是否拖放在两边空白区域
-
-        if (!m_appAreaSonLayout->count())
-            return targetItem;
-
-        DockItem *first = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(0)->widget());
-        DockItem *last = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(m_appAreaSonLayout->count() - 1)->widget());
-
-        if (m_position == Dock::Top || m_position == Dock::Bottom) {
-
-            if (point.x() < 0) {
-                targetItem = first;
-            } else {
-                targetItem = last;
-            }
-        } else {
-
-            if (point.y() < 0) {
-                targetItem = first;
-            } else {
-                targetItem = last;
-            }
-        }
+        targetItem = sourceItem;
     }
 
     return targetItem;

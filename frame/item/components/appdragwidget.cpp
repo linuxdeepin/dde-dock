@@ -243,8 +243,6 @@ bool AppDragWidget::isRemoveable(const Position &dockPos, const QRect &doctRect)
                 return true;
             }
             break;
-        default:
-            break;
     }
     return false;
 }
