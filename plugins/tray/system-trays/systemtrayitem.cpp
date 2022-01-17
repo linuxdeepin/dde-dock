@@ -336,13 +336,12 @@ void SystemTrayItem::popupWindowAccept()
 
 void SystemTrayItem::showPopupApplet(QWidget *const applet)
 {
+    if (!applet)
+        return;
+
     // another model popup window already exists
     if (PopupWindow->model()) {
         applet->setVisible(false);
-        return;
-    }
-
-    if (!applet) {
         return;
     }
 
