@@ -25,10 +25,14 @@
 
 #include <dbusmenu-qt5/dbusmenuimporter.h>
 
+#include <DGuiApplicationHelper>
+
 #include <QPainter>
 #include <QApplication>
 
 #include <xcb/xproto.h>
+
+DGUI_USE_NAMESPACE
 
 #define IconSize 20
 
@@ -97,6 +101,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     m_updateAttentionIconTimer->setInterval(1000);
     m_updateAttentionIconTimer->setSingleShot(true);
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SNITrayWidget::refreshIcon);
     connect(m_updateIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshIcon);
     connect(m_updateOverlayIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshOverlayIcon);
     connect(m_updateAttentionIconTimer, &QTimer::timeout, this, &SNITrayWidget::refreshAttentionIcon);
