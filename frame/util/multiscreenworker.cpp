@@ -754,31 +754,29 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
 
     const qreal &ratio = qApp->devicePixelRatio();
     if (Utils::IS_WAYLAND_DISPLAY) {
-        // TODO 下面可能是问题的代码
-        // TODO 未计算时尚模式的边距
         QList<QVariant> varList = {0, 0, 0, 0};
         switch (m_position) {
         case Position::Top:
             varList[0] = 1;
-            varList[1] = dockGeometry.height() * ratio;
+            varList[1] = (dockGeometry.height() + WINDOWMARGIN * 2) * ratio;
             varList[2] = dockGeometry.x() * ratio;
             varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
             break;
         case Position::Bottom:
             varList[0] = 3;
-            varList[1] = dockGeometry.height() * ratio;
+            varList[1] = (dockGeometry.height() + WINDOWMARGIN * 2) * ratio;
             varList[2] = dockGeometry.x() * ratio;
             varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
             break;
         case Position::Left:
             varList[0] = 0;
-            varList[1] = dockGeometry.width() * ratio;
+            varList[1] = (dockGeometry.width() + WINDOWMARGIN * 2) * ratio;
             varList[2] = dockGeometry.x() * ratio;
             varList[3] = dockGeometry.height() * ratio;
             break;
         case Position::Right:
             varList[0] = 2;
-            varList[1] = dockGeometry.width() * ratio;
+            varList[1] = (dockGeometry.width() + WINDOWMARGIN * 2) * ratio;
             varList[2] = dockGeometry.x() * ratio;
             varList[3] = dockGeometry.height() * ratio;
             break;
