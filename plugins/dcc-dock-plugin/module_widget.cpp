@@ -68,10 +68,7 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_modeComboxWidget(new ComboxWidget(this))
     , m_positionComboxWidget(new ComboxWidget(this))
     , m_stateComboxWidget(new ComboxWidget(this))
-    , m_sizeSlider(new TitledSliderItem(tr("Size"), this))
-    , m_screenSettingTitle(new TitleLabel(tr("Multiple Displays"), this))
     , m_screenSettingComboxWidget(new ComboxWidget(this))
-    , m_pluginAreaTitle(new TitleLabel(tr("Plugin Area"), this))
     , m_pluginTips(new DTipLabel(tr("Select which icons appear in the Dock"), this))
     , m_pluginView(new DListView(this))
     , m_pluginModel(new QStandardItemModel(this))
@@ -80,6 +77,18 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_dconfigWatcher(new ConfigWatcher("dde.dock.plugin.dconfig", this))
     , m_sliderPressed(false)
 {
+    //~ contents_path /personalization/Dock
+    //~ child_page Dock
+    m_pluginAreaTitle = new TitleLabel(tr("Plugin Area"), this);
+
+    //~ contents_path /personalization/Dock
+    //~ child_page Dock
+    m_sizeSlider = new TitledSliderItem(tr("Size"), this);
+
+    //~ contents_path /personalization/Dock
+    //~ child_page Dock
+    m_screenSettingTitle = new TitleLabel(tr("Multiple Displays"), this);
+
     // 异步，否则频繁调用可能会导致卡顿
     m_daemonDockInter->setSync(false);
     initUI();
@@ -106,6 +115,8 @@ void ModuleWidget::initUI()
                                            , {tr("Efficient mode"), Efficient}};
     // 模式
     if (Utils::SettingValue("com.deepin.dde.dock.module.menu", QByteArray(), "modeVisible", true).toBool()) {
+        //~ contents_path /personalization/Dock
+        //~ child_page Dock
         m_modeComboxWidget->setTitle(tr("Mode"));
         m_modeComboxWidget->addBackground();
         m_modeComboxWidget->setComboxOption(QStringList() << tr("Fashion mode") << tr("Efficient mode"));
@@ -133,6 +144,8 @@ void ModuleWidget::initUI()
                                                    , {tr("Left"), Left}
                                                    , {tr("Right"), Right}};
 
+        //~ contents_path /personalization/Dock
+        //~ child_page Dock
         m_positionComboxWidget->setTitle(tr("Location"));
         m_positionComboxWidget->addBackground();
         m_positionComboxWidget->setComboxOption(QStringList() << tr("Top") << tr("Bottom") << tr("Left") << tr("Right"));
@@ -159,6 +172,8 @@ void ModuleWidget::initUI()
                                                 , {tr("Keep hidden"), KeepHidden}
                                                 , {tr("Smart hide"), SmartHide}};
 
+        //~ contents_path /personalization/Dock
+        //~ child_page Dock
         m_stateComboxWidget->setTitle(tr("Status"));
         m_stateComboxWidget->addBackground();
         m_stateComboxWidget->setComboxOption(QStringList() << tr("Keep shown") << tr("Keep hidden") << tr("Smart hide"));

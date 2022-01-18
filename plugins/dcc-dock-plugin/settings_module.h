@@ -21,6 +21,8 @@
 #ifndef SETTINGSMODULE_H
 #define SETTINGSMODULE_H
 
+#include <dtkcore_global.h>
+
 #include <QObject>
 
 #include "interface/namespace.h"
@@ -33,6 +35,10 @@ namespace DCC_NAMESPACE {
 }
 
 using namespace DCC_NAMESPACE;
+
+DCORE_BEGIN_NAMESPACE
+class DConfig;
+DCORE_END_NAMESPACE
 
 class ModuleWidget;
 class SettingsModule : public QObject, public ModuleInterface
@@ -65,11 +71,21 @@ public:
 
     void showPage(const QString &pageName) Q_DECL_OVERRIDE;
 
+    void addChildPageTrans() const Q_DECL_OVERRIDE;
+
+    void initSearchData() Q_DECL_OVERRIDE;
+
+    void preInitialize(bool sync = false,FrameProxyInterface::PushType = FrameProxyInterface::PushType::Normal) Q_DECL_OVERRIDE;
+
+private:
+    void onStatusChanged();
+
 public Q_SLOTS:
     void active() Q_DECL_OVERRIDE;
 
 private:
     ModuleWidget *m_moduleWidget;
+    DTK_CORE_NAMESPACE::DConfig *m_config;
 };
 
 #endif // SETTINGSMODULE_H

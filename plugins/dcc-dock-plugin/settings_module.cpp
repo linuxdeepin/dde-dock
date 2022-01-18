@@ -20,17 +20,21 @@
  */
 #include "settings_module.h"
 #include "module_widget.h"
+#include "config_watcher.h"
 
 #include <QLayout>
 
 #include <DApplication>
+#include <DConfig>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 SettingsModule::SettingsModule()
     : QObject()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
+    , m_config(new DConfig("dde.dock.plugin.dconfig", QString(), this))
 {
     QTranslator *translator = new QTranslator(this);
     translator->load(QString("/usr/share/dcc-dock-plugin/translations/dcc-dock-plugin_%1.qm").arg(QLocale::system().name()));
@@ -62,7 +66,6 @@ QStringList SettingsModule::availPage() const
 
 const QString SettingsModule::displayName() const
 {
-    //~ contents_path /personalization/Dock
     return tr("Dock");
 }
 
@@ -94,4 +97,54 @@ const QString SettingsModule::name() const
 void SettingsModule::showPage(const QString &pageName)
 {
     Q_UNUSED(pageName);
+}
+
+void SettingsModule::addChildPageTrans() const
+{
+    if (!m_frameProxy)
+        return;
+
+    m_frameProxy->addChildPageTrans("Dock", tr("Dock"));
+}
+
+void SettingsModule::initSearchData()
+{
+    onStatusChanged();
+
+    if (m_config->isValid())
+        connect(m_config, &DConfig::valueChanged, this, &SettingsModule::onStatusChanged);
+}
+
+void SettingsModule::preInitialize(bool sync, FrameProxyInterface::PushType)
+{
+    Q_UNUSED(sync);
+    addChildPageTrans();
+    initSearchData();
+}
+
+void SettingsModule::onStatusChanged()
+{
+    if (!m_frameProxy)
+        return;
+
+    // 模块名称
+    const QString &module = m_frameProxy->moduleDisplayName(PERSONALIZATION);
+
+    // 子模块名称
+    const QString &dock = tr("Dock");
+
+    // 二级菜单显示状态设置
+    m_frameProxy->setWidgetVisible(module, dock, true);
+
+    auto visibleState = [ = ](const QString &key) {
+        return (m_config->value(QString("%1").arg(key)).toString() == "Enabled");
+    };
+
+    // 三级菜单显示状态设置
+    m_frameProxy->setDetailVisible(module, dock, tr("Mode"), visibleState("Control-Center_Dock_Model"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Location"), visibleState("Control-Center_Dock_Location"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Status"), visibleState("Control-Center_Dock_State"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Size"), visibleState("Control-Center_Dock_Size"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Show Dock"), visibleState("Control-Center_Dock_Multi-screen"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Plugin Area"), visibleState("Control-Center_Dock_Plugins"));
 }
