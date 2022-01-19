@@ -147,4 +147,5 @@ void SettingsModule::onStatusChanged()
     m_frameProxy->setDetailVisible(module, dock, tr("Size"), visibleState("Control-Center_Dock_Size"));
     m_frameProxy->setDetailVisible(module, dock, tr("Show Dock"), visibleState("Control-Center_Dock_Multi-screen"));
     m_frameProxy->setDetailVisible(module, dock, tr("Plugin Area"), visibleState("Control-Center_Dock_Plugins"));
+    m_frameProxy->updateSearchData(module);
 }
