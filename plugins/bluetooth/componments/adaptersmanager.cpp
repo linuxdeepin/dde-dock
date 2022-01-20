@@ -65,11 +65,11 @@ AdaptersManager::AdaptersManager(QObject *parent)
     });
 #endif
 
-    QDBusInterface *inter = new QDBusInterface("com.deepin.daemon.Bluetooth",
-                                               "/com/deepin/daemon/Bluetooth",
-                                               "com.deepin.daemon.Bluetooth",
-                                               QDBusConnection::sessionBus());
-    QDBusReply<QString> reply = inter->call(QDBus::Block, "GetAdapters");
+    QDBusInterface inter("com.deepin.daemon.Bluetooth",
+                         "/com/deepin/daemon/Bluetooth",
+                         "com.deepin.daemon.Bluetooth",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QString> reply = inter.call(QDBus::Block, "GetAdapters");
     const QString replyStr = reply.value();
     QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
     QJsonArray arr = doc.array();
