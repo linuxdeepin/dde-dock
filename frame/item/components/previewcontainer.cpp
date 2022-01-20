@@ -185,19 +185,23 @@ void PreviewContainer::adjustSize(bool composite)
         count = qMin(count, screenWidth / SNAP_HEIGHT_WITHOUT_COMPOSITE);
         const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
 
-        // 根据appitem title 设置自适应宽度
         auto appSnapshot = static_cast<AppSnapshot *>(m_windowListLayout->itemAt(0)->widget());
-
         auto font = appSnapshot->layout()->itemAt(0)->widget()->font();
         QFontMetrics fontMetrics(font);
-        const int titleWidth = fontMetrics.boundingRect(appSnapshot->title()).width();
+
+        // 获取 appitem title 的最大宽度
+        int titleWidth = fontMetrics.boundingRect(appSnapshot->title()).width();
+        for (int i = 0; i < m_windowListLayout->count(); i++) {
+            auto otherWidget = static_cast<AppSnapshot *>(m_windowListLayout->itemAt(i)->widget());
+            titleWidth = qMax(titleWidth, fontMetrics.boundingRect(otherWidget->title()).width());
+        }
+
         // 关闭按键的宽度和边缘间距的和，调整标题居中
         const int closeBtnMargin = 2 * (SNAP_CLOSE_BTN_WIDTH + SNAP_CLOSE_BTN_MARGIN);
-        if (titleWidth < SNAP_WIDTH - closeBtnMargin) {
+        if (titleWidth < SNAP_WIDTH - closeBtnMargin)
             setFixedSize(titleWidth + closeBtnMargin, h);
-        } else {
+        else
             setFixedSize(SNAP_WIDTH, h);
-        }
     }
 
     //根据计算的数量,将相应的预览界面添加到布局并显示,其他的暂时不添加,减少界面刷新次数

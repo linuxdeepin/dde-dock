@@ -182,7 +182,7 @@ void AppSnapshot::setWindowInfo(const WindowInfo &info)
 {
     m_windowInfo = info;
     QFontMetrics fm(m_title->font());
-    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, width() - m_closeBtn2D->width());
+    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, SNAP_WIDTH - SNAP_CLOSE_BTN_WIDTH - SNAP_CLOSE_BTN_MARGIN);
     m_title->setText(strTtile);
     updateTitle();
 
