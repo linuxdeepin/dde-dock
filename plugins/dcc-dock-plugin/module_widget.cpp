@@ -287,6 +287,8 @@ void ModuleWidget::initUI()
                                                        , {"shutdown",       "dcc_dock_power"}
                                                        , {"multitasking",   "dcc_dock_task"}
                                                        , {"datetime",       "dcc_dock_time"}
+                                                       , {"system-monitor", "dcc_dock_systemmonitor"}
+                                                       , {"grand-search",   "dcc_dock_grandsearch"}
                                                        , {"trash",          "dcc_dock_trash"}};
         if (plugins.size() != 0) {
             layout->addSpacing(10);
