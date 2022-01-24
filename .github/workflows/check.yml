@@ -1,0 +1,16 @@
+name: check
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+jobs:
+  check_job:
+    if: >
+      github.event.action != 'closed' || (
+        github.event.action == 'closed' &&
+        github.event.pull_request.merged == true
+      )
+    uses: peeweep-test/.github/.github/workflows/jenkine-bridge.yml@main
+    secrets:
+      BridgeToken: ${{ secrets.BridgeToken }}
