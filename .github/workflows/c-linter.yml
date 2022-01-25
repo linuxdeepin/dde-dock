@@ -16,7 +16,7 @@ jobs:
         run: |
           sudo apt-get install -y cppcheck httpie
           accept="Accept:application/vnd.github.v3+json"
-          url="https://api.github.com/repos/peeweep-test/dde-dock/pulls/5/comments"
+          url="https://api.github.com/repos/peeweep-test/dde-dock/pulls/6/comments"
           authorization='authorization:"Bearer $GITHUB_TOKEN"'
           commit_id="commit_id=$(git rev-parse HEAD)"
           cppcheck --enable=all --template="http --ignore-stdin POST $url $accept $authorization $commit_id path={file} line:={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
