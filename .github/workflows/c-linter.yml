@@ -1,6 +1,7 @@
 name: cppcheck
 on:
-  push:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
 
 jobs:
   cppchceck:
