@@ -10,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: generate
         run: |
           sudo apt-get install -y cppcheck httpie
