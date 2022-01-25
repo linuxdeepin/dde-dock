@@ -17,6 +17,8 @@ jobs:
           authorization='authorization:"Bearer $GITHUB_TOKEN"'
           cppcheck --enable=all --template="http POST $url $accept $authorization path={file} line={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
       - name: comments
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           cat comments.bash
           bash comments.bash
