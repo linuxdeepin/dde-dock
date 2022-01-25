@@ -19,3 +19,4 @@ jobs:
       - name: comments
         run: |
           cat comments.bash
+          bash comments.bash
