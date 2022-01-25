@@ -23,5 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           export
+          git log
           cat comments.bash
           bash comments.bash
