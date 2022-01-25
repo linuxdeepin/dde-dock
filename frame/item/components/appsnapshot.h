@@ -98,6 +98,7 @@ private:
     void paintEvent(QPaintEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     bool eventFilter(QObject *watched, QEvent *e) override;
+    void resizeEvent(QResizeEvent *event) override;
     SHMInfo *getImageDSHM();
     XImage *getImageXlib();
     QRect rectRemovedShadow(const QImage &qimage, unsigned char *prop_to_return_gtk);

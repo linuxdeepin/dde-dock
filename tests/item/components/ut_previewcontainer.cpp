@@ -57,7 +57,6 @@ TEST_F(Test_PreviewContainer, coverage_test)
     container->previewEntered(id);
     container->m_waitForShowPreviewTimer->start();
 
-    container->updateSnapshots();
     container->updateLayoutDirection(Dock::Position::Bottom);
     ASSERT_EQ(container->m_windowListLayout->direction(), container->m_wmHelper->hasComposite() ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom);
     container->updateLayoutDirection(Dock::Position::Top);

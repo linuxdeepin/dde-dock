@@ -95,12 +95,6 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
     adjustSize(m_wmHelper->hasComposite());
 }
 
-void PreviewContainer::updateSnapshots()
-{
-    for (AppSnapshot *snap : m_snapshots)
-        snap->fetchSnapshot();
-}
-
 void PreviewContainer::setTitleDisplayMode(int mode)
 {
     m_titleMode = static_cast<TitleDisplayMode>(mode);
@@ -164,7 +158,7 @@ void PreviewContainer::adjustSize(bool composite)
         const int padding = 20;
         const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
         if (horizontal) {
-            count = qMin(count, screenWidth *2 / SNAP_WIDTH);
+            count = qMin(count, screenWidth * 2 / SNAP_WIDTH);
 
             const int h = SNAP_HEIGHT + MARGIN * 2;
             const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
@@ -172,7 +166,7 @@ void PreviewContainer::adjustSize(bool composite)
             setFixedHeight(h);
             setFixedWidth(qMin(w, screenWidth - padding));
         } else {
-            count = qMin(count, screenWidth *2 / SNAP_HEIGHT);
+            count = qMin(count, screenWidth * 2 / SNAP_HEIGHT);
 
             const int w = SNAP_WIDTH + MARGIN * 2;
             const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);

@@ -372,6 +372,12 @@ bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
     return false;
 }
 
+void AppSnapshot::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    fetchSnapshot();
+}
+
 SHMInfo *AppSnapshot::getImageDSHM()
 {
     const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();

@@ -58,7 +58,6 @@ signals:
 
 public:
     void setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose);
-    void updateSnapshots();
     void setTitleDisplayMode(int mode);
 
 public slots:

@@ -654,9 +654,8 @@ void AppItem::showPreview()
 
     m_appPreviewTips = new PreviewContainer;
 
-    m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
-    m_appPreviewTips->updateSnapshots();
     m_appPreviewTips->updateLayoutDirection(DockPosition);
+    m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
