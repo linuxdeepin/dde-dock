@@ -376,7 +376,7 @@
       </description>
     </key>
     <key type="b" name="enable">
-      <default>false</default>
+      <default>true</default>
       <summary>Module Enable</summary>
       <description>
           Control Module Enable

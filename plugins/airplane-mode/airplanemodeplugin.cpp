@@ -136,6 +136,7 @@ void AirplaneModePlugin::removePlugin()
         return;
 
     m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
+    m_proxyInter->saveValue(this, STATE_KEY, false);
 }
 
 void AirplaneModePlugin::addPlugin()
@@ -144,6 +145,7 @@ void AirplaneModePlugin::addPlugin()
         return;
 
     m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+    m_proxyInter->saveValue(this, STATE_KEY, true);
 }
 
 
