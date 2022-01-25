@@ -4,6 +4,14 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 jobs:
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-latest
+    steps:
+      - name: clang-tidy check
+        uses: smay1613/clang-tidy-action@master
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   cppchceck:
     name: cppcheck
     runs-on: ubuntu-latest
