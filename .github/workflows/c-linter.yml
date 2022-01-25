@@ -13,7 +13,7 @@ jobs:
         run: |
           sudo apt-get install -y cppcheck httpie
           accept="Accept:application/vnd.github.v3+json"
-          url="https://api.github.com/repos/octocat/hello-world/pulls/42/comments"
+          url="https://api.github.com/repos/peeweep-test/dde-dock/pulls/pull/comments"
           authorization='authorization:"Bearer $GITHUB_TOKEN"'
           cppcheck --enable=all --template="http POST $url $accept $authorization path={file} line={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
       - name: comments
