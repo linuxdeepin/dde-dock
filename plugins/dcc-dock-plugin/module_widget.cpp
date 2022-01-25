@@ -361,6 +361,13 @@ void ModuleWidget::initUI()
         }
     }
 
+    // 支持在触摸屏上滚动
+    QScroller::grabGesture(this->window(), QScroller::LeftMouseButtonGesture);
+    QScroller *scroller = QScroller::scroller(this->window());
+    QScrollerProperties sp;
+    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(sp);
+
     // 保持内容正常铺满
     layout->addStretch();
 
