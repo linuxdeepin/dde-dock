@@ -17,7 +17,7 @@ jobs:
           url="https://api.github.com/repos/peeweep-test/dde-dock/pulls/2/comments"
           authorization='authorization:"Bearer $GITHUB_TOKEN"'
           commit_id='commit_id=$GITHUB_SHA'
-          cppcheck --enable=all --template="http --ignore-stdin POST $url $accept $authorization $commit_id path={file} line:={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
+          cppcheck --enable=all --template="http --ignore-stdin POST $url $accept $authorization body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
       - name: comments
         env:
           GITHUB_TOKEN: ${{ github.token }}
