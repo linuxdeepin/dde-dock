@@ -14,5 +14,4 @@ void init_buffer(void)
     char unused_buffer1[1*1024*1024] = {0};
     
     strcpy(unused_buffer1, "hello");
-    
 }
