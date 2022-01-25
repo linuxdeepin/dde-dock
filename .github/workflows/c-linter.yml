@@ -1,37 +1,20 @@
-name: c-linter
+name: cppcheck
+on:
+  push:
 
-on: [pull_request]
 jobs:
-  c-linter:
-    name: c-linter
-    runs-on: ubuntu-latest
-    steps:
-      - name: c-linter
-        uses: ArtificialAmateur/cpp-linter-action@master
-    env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-  static_analysis:
+  cppchceck:
+    name: cppcheck
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: setup init_script
-      shell: bash
-      run: |
-        echo "#!/bin/bash
-        add-apt-repository ppa:oibaf/graphics-drivers
-        apt update
-        apt upgrade
-        apt install -y libvulkan1 mesa-vulkan-drivers vulkan-utils" > init_script.sh
-
-    - name: Run static analysis
-      uses: JacobDomagala/StaticAnalysis@master
-      with:
-        # Exclude any issues found in ${Project_root_dir}/lib
-        exclude_dir: lib
-        # Additional script that will be run (sourced) AFTER 'apt_pckgs' and before running Cmake
-        init_script: init_script.sh
-        # (Optional) cppcheck args
-        cppcheck_args: --enable=all --suppress=missingInclude
+      - uses: actions/checkout@v2
+      - name: generate
+        run: |
+          sudo apt-get install -y cppcheck httpie
+          accept="Accept:application/vnd.github.v3+json"
+          url="https://api.github.com/repos/octocat/hello-world/pulls/42/comments"
+          cppcheck --enable=all --template="http POST $accept $url path={file} line={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
+      - name: comments
+        run: |
+          cat comments.bash
