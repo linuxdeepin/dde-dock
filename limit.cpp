@@ -13,6 +13,5 @@ void init_buffer(void)
     char unused_buffer[7*1024*1024] = {0};   // 没有使用的缓冲区，超过栈最大值，有coredump。
     char unused_buffer1[1*1024*1024] = {0};
     
-    strcpy(unused_buffer1, "hello");
-    
+    strcpy(unused_buffer1, "hello"); 
 }
