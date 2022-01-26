@@ -1,0 +1,30 @@
+name: cppcheck
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+jobs:
+  cppchceck:
+    name: cppcheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: generate
+        run: |
+          sudo apt-get install -y cppcheck httpie
+          accept="Accept:application/vnd.github.v3+json"
+          url="https://api.github.com/repos/peeweep-test/dde-dock/pulls/5/comments"
+          authorization='authorization:"Bearer $GITHUB_TOKEN"'
+          commit_id="commit_id=$(git rev-parse HEAD)"
+          cppcheck --enable=all --template="http --ignore-stdin POST $url $accept $authorization $commit_id path={file} line:={line} body=\"[{id}]({severity}) {message}\"" test.cpp 2>comments.bash
+      - name: comments
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          export
+          git log
+          cat comments.bash
+          bash comments.bash
