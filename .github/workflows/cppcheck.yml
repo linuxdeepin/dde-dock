@@ -1,5 +1,6 @@
 name: cppcheck
 on:
+  push:
   pull_request:
     types: [opened, reopened, synchronize, closed]
 
@@ -11,7 +12,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: myml/action-cppcheck@main
         with:
-          github_token: ""
-          repository: ""
-          pull_request_id: ""
-          cppcheck_file: ""
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          pull_request_id: ${{ github.event.number }}
