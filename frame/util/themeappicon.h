@@ -35,7 +35,7 @@ public:
     static bool getIcon(QPixmap &pix, const QString iconName, const int size, bool reObtain = false);
 
 private:
-    static bool createCalendarIcon(const QString &fileName);
+    static bool createCalendarIcon(const QDate &date, const QString &fileName);
 };
 
 #endif // THEMEAPPICON_H
