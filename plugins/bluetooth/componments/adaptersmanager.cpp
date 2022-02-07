@@ -282,7 +282,6 @@ void AdaptersManager::inflateAdapter(Adapter *adapter, const QJsonObject &adapte
 void AdaptersManager::adapterRefresh(const Adapter *adapter)
 {
     QDBusObjectPath dPath(adapter->id());
-    m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
     m_bluetoothInter->RequestDiscovery(dPath);
 }
 
