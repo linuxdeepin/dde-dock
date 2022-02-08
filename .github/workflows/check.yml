@@ -1,0 +1,10 @@
+name: check
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+jobs:
+  check_job:
+    uses: peeweep-test/.github/.github/workflows/jenkine-bridge.yml@main
+    secrets:
+      BridgeToken: ${{ secrets.BridgeToken }}
