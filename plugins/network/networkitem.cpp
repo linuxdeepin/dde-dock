@@ -16,6 +16,8 @@
 #include <QNetworkInterface>
 #include <QHostAddress>
 #include <QMap>
+#include <QScroller>
+#include <QMouseEvent>
 
 extern const int ItemWidth;
 extern const int ItemMargin;
@@ -180,6 +182,17 @@ NetworkItem::NetworkItem(QWidget *parent)
     });
 
     m_wirelessScanTimer->setInterval(m_wirelessScanInterval);
+
+    QScroller::grabGesture(m_applet, QScroller::LeftMouseButtonGesture);
+    QScrollerProperties propertiesOne = QScroller::scroller(m_applet)->scrollerProperties();
+    QVariant overshootPolicyOne = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
+    propertiesOne.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, overshootPolicyOne);
+    QScroller::scroller(m_applet)->setScrollerProperties(propertiesOne);
+    //界面滑动时过滤点击事件，防止误触发
+    m_applet->installEventFilter(this);
+    m_switchWiredBtn->installEventFilter(this);
+    m_switchWirelessBtn->installEventFilter(this);
+    installEventFilter(this);
 }
 
 QWidget *NetworkItem::itemApplet()
