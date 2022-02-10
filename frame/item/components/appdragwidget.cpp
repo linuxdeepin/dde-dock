@@ -71,9 +71,10 @@ AppDragWidget::AppDragWidget(QWidget *parent)
 
     initAnimations();
 
-    m_followMouseTimer->setInterval(16);    
+    m_followMouseTimer->setInterval(16);
     connect(m_followMouseTimer, &QTimer::timeout, this, &AppDragWidget::onFollowMouse);
     m_followMouseTimer->start();
+    QTimer::singleShot(0, this, &AppDragWidget::onFollowMouse);
 }
 
 void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
