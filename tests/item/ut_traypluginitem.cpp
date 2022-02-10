@@ -39,5 +39,5 @@ TEST_F(Ut_TrayPluginItem, coverage_test)
     qApp->sendEvent(item.centralWidget(), &event);
 
     QDynamicPropertyChangeEvent event1("TrayVisableItemCount");
-    qApp->sendEvent(item.centralWidget(), &event);
+    qApp->sendEvent(item.centralWidget(), &event1);
 }

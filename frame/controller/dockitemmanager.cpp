@@ -116,6 +116,9 @@ void DockItemManager::startLoadPlugins() const
 void DockItemManager::refreshItemsIcon()
 {
     for (auto item : m_itemList) {
+        if (item.isNull())
+            continue;
+
         item->refreshIcon();
         item->update();
     }
@@ -193,7 +196,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
         insertIndex += index;
     } else {
         for (auto item : m_itemList)
-            if (item->itemType() == DockItem::App)
+            if (!item.isNull() && item->itemType() == DockItem::App)
                 ++insertIndex;
     }
 
@@ -225,13 +228,14 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 void DockItemManager::appItemRemoved(const QString &appId)
 {
     for (int i(0); i != m_itemList.size(); ++i) {
-        if (m_itemList[i]->itemType() != DockItem::App)
-            continue;
-
         AppItem *app = static_cast<AppItem *>(m_itemList[i].data());
         if (!app) {
             continue;
         }
+
+        if (m_itemList[i]->itemType() != DockItem::App)
+            continue;
+
         if (!app->isValid() || app->appId() == appId) {
             appItemRemoved(app);
             break;

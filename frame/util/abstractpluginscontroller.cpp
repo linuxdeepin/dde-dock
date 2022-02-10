@@ -53,9 +53,11 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 AbstractPluginsController::~AbstractPluginsController()
 {
     for (auto inter : m_pluginsMap.keys()) {
-        m_pluginsMap.remove(inter);
         delete m_pluginsMap.value(inter).value("pluginloader");
+        m_pluginsMap[inter]["pluginloader"] = nullptr;
+        m_pluginsMap.remove(inter);
         delete inter;
+        inter = nullptr;
     }
 }
 
@@ -233,7 +235,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     if (interface->pluginName() == "multitasking") {
-        if (Utils::IS_WAYLAND_DISPLAY or Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
+        if (Utils::IS_WAYLAND_DISPLAY || Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
             for (auto &pair : m_pluginLoadMap.keys()) {
                 if (pair.first == pluginFile) {
                     m_pluginLoadMap.remove(pair);
@@ -286,6 +288,9 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
 
 void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
 {
+    if (!interface)
+        return;
+
     qDebug() << objectName() << "init plugin: " << interface->pluginName();
     interface->init(this);
 

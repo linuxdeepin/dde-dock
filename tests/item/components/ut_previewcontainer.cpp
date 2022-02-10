@@ -70,7 +70,7 @@ TEST_F(Test_PreviewContainer, coverage_test)
     qApp->sendEvent(container, &event);
 
     QEvent event2(QEvent::Leave);
-    qApp->sendEvent(container, &event);
+    qApp->sendEvent(container, &event2);
 
     QMimeData mimeData;
     mimeData.setText("test");

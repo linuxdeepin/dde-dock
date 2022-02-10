@@ -35,6 +35,8 @@ int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "offscreen");
 
     DockApplication app(argc, argv);
+    // 设置应用名为dde-dock，否则dconfig相关的配置就读不到了
+    app.setApplicationName("dde-dock");
 
     qApp->setProperty("CANSHOW", true);
 

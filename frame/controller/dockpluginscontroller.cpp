@@ -44,6 +44,9 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
 
     // 取 plugin api
     QPluginLoader *pluginLoader = qobject_cast<QPluginLoader*>(mPluginsMap[itemInter].value("pluginloader"));
+    if (!pluginLoader) {
+        return;
+    }
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
 
