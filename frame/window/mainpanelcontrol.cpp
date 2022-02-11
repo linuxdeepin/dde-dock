@@ -139,7 +139,7 @@ void MainPanelControl::initUI()
     m_pluginAreaWidget->setLayout(m_pluginLayout);
     m_pluginLayout->setSpacing(10);
     m_pluginLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainPanelLayout->addWidget(m_pluginAreaWidget);
+    m_mainPanelLayout->addWidget(m_pluginAreaWidget, 0, Qt::AlignCenter);
 
     /* 桌面预览 */
     m_desktopWidget->setObjectName("showdesktoparea");
