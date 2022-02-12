@@ -39,6 +39,8 @@
 #include <QBoxLayout>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QScroller>
+#include <QMouseEvent>
 
 SettingLabel::SettingLabel(QString text, QWidget *parent)
     : QWidget(parent)
@@ -105,6 +107,13 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 {
     initUi();
     initConnect();
+
+
+    QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
+    QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();
+    QVariant overshootPolicyOne = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
+    propertiesOne.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, overshootPolicyOne);
+    QScroller::scroller(m_scroarea)->setScrollerProperties(propertiesOne);
 }
 
 bool BluetoothApplet::poweredInitState()
