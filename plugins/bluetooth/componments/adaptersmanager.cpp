@@ -88,17 +88,7 @@ void AdaptersManager::setAdapterPowered(const Adapter *adapter, const bool &powe
     QDBusObjectPath path(adapter->id());
     QDBusPendingCall call = m_bluetoothInter->SetAdapterPowered(path, powered);
 
-    if (powered) {
-        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-        connect(watcher, &QDBusPendingCallWatcher::finished, [this, call, adapter] {
-            if (!call.isError()) {
-                QDBusObjectPath dPath(adapter->id());
-                m_bluetoothInter->SetAdapterDiscoverable(dPath, true);
-            } else {
-                qWarning() << call.error().message();
-            }
-        });
-    } else {
+    if (!powered) {
         QDBusPendingCall clearUnpairedCall = m_bluetoothInter->ClearUnpairedDevice();
         QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(clearUnpairedCall, this);
         connect(watcher, &QDBusPendingCallWatcher::finished, [ = ] {
