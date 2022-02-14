@@ -22,11 +22,15 @@
 #include "systemtrayitem.h"
 #include "utils.h"
 
+#include <com_deepin_daemon_airplanemode.h>
+
+
 #include <QProcess>
 #include <QDebug>
 
 #include <xcb/xproto.h>
 
+using DBusAirplaneMode = com::deepin::daemon::AirplaneMode;
 Dock::Position SystemTrayItem::DockPosition = Dock::Position::Top;
 QPointer<DockPopupWindow> SystemTrayItem::PopupWindow = nullptr;
 
@@ -488,6 +492,18 @@ void SystemTrayItem::onGSettingsChanged(const QString &key) {
 
     if (m_gsettings && m_gsettings->keys().contains("enable")) {
         const bool visible = m_gsettings->get("enable").toBool();
+
+        // 飞行模式显示条件： gsettings为true且飞行模式已开启
+        DBusAirplaneMode airplaneBus("com.deepin.daemon.AirplaneMode",
+                                     "/com/deepin/daemon/AirplaneMode",
+                                     QDBusConnection::systemBus(),
+                                     this);
+        if (m_pluginInter && m_pluginInter->pluginName() == "airplane-mode" && !airplaneBus.enabled()) {
+            setVisible(false);
+            emit itemVisibleChanged(false);
+            return;
+        }
+
         setVisible(visible);
         emit itemVisibleChanged(visible);
     }

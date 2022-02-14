@@ -147,5 +147,3 @@ void AirplaneModePlugin::addPlugin()
     m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
     m_proxyInter->saveValue(this, STATE_KEY, true);
 }
-
-

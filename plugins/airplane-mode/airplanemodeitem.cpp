@@ -58,9 +58,9 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
         m_applet->setEnabled(enable);
         refreshIcon();
 
-        if (!enable)
+        if (!enable || !Utils::SettingValue("com.deepin.dde.dock.module.airplane-mode", "/com/deepin/dde/dock/module/airplane-mode/", "enable", true).toBool())
             emit removeItem();
-        else
+        else if (Utils::SettingValue("com.deepin.dde.dock.module.airplane-mode", "/com/deepin/dde/dock/module/airplane-mode/", "enable", true).toBool())
             emit addItem();
 
         updateTips();
