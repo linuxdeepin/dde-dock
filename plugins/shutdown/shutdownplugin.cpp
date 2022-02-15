@@ -339,7 +339,7 @@ qint64 ShutdownPlugin::get_power_image_size()
 
 bool ShutdownPlugin::checkSwap()
 {
-    if (!valueByQSettings<bool>("Power", "hibernate", false))
+    if (!valueByQSettings<bool>("Power", "hibernate", true))
         return false;
 
     bool hasSwap = false;
