@@ -309,9 +309,10 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
         insertIndex ++;
     }
 
-    // 隐藏的插件不加入到布局中
-    if (Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
-        emit itemInserted(insertIndex - firstPluginPosition, item);
+    if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
+        item->setVisible(false);
+
+    emit itemInserted(insertIndex - firstPluginPosition, item);
 }
 
 void DockItemManager::pluginItemRemoved(PluginsItem *item)
