@@ -23,12 +23,8 @@
 #include "pluginsiteminterface.h"
 #include "utils.h"
 
-#include <com_deepin_daemon_airplanemode.h>
-
 #include <QDebug>
 #include <QDir>
-
-using DBusAirplaneMode = com::deepin::daemon::AirplaneMode;
 
 SystemTraysController::SystemTraysController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -40,20 +36,12 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
 {
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
-    SystemTrayItem *item = nullptr;
-
     // check if same item added
     if (mPluginsMap.contains(itemInter))
-        if (mPluginsMap[itemInter].contains(itemKey)) {
-            if (itemKey != "airplane-mode-key")
-                return;
+        if (mPluginsMap[itemInter].contains(itemKey))
+            return;
 
-            item = static_cast<SystemTrayItem *>(pluginItemAt(itemInter, itemKey));
-        }
-
-    if (!item)
-        item = new SystemTrayItem(itemInter, itemKey);
-
+    SystemTrayItem *item = new SystemTrayItem(itemInter, itemKey);
     connect(item, &SystemTrayItem::itemVisibleChanged, this, [=] (bool visible){
         if (visible) {
             emit pluginItemAdded(itemKey, item);
@@ -65,22 +53,9 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
 
     mPluginsMap[itemInter][itemKey] = item;
 
-    if (itemInter->pluginName() == "airplane-mode") {
-        // 飞行模式显示条件： gsettings为true且飞行模式已开启
-        DBusAirplaneMode airplaneBus("com.deepin.daemon.AirplaneMode",
-                                                   "/com/deepin/daemon/AirplaneMode",
-                                                   QDBusConnection::systemBus(),
-                                                   this);
-        if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.airplane-mode"), QByteArray(), "enable", true).toBool() || !airplaneBus.enabled()) {
-            emit pluginItemRemoved(itemKey, item);
-            return;
-        }
-    }
-
     // 隐藏的插件不加入到布局中
-    if (Utils::SettingValue(QString("com.deepin.dde.dock.module.") + itemInter->pluginName(), QByteArray(), "enable", true).toBool()) {
+    if (Utils::SettingValue(QString("com.deepin.dde.dock.module.") + itemInter->pluginName(), QByteArray(), "enable", true).toBool())
         emit pluginItemAdded(itemKey, item);
-    }
 }
 
 void SystemTraysController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)

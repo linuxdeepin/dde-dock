@@ -48,13 +48,14 @@ public:
     void refreshIcon();
     void updateTips();
 
+    bool airplaneEnable();
+
 protected:
     void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
 
 signals:
-    void removeItem();
-    void addItem();
+    void airplaneEnableChanged(bool enable);
 
 private:
     Dock::TipsWidget *m_tipsLabel;

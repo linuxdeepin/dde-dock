@@ -57,12 +57,7 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     connect(m_airplaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enable) {
         m_applet->setEnabled(enable);
         refreshIcon();
-
-        if (!enable || !Utils::SettingValue("com.deepin.dde.dock.module.airplane-mode", "/com/deepin/dde/dock/module/airplane-mode/", "enable", true).toBool())
-            emit removeItem();
-        else if (Utils::SettingValue("com.deepin.dde.dock.module.airplane-mode", "/com/deepin/dde/dock/module/airplane-mode/", "enable", true).toBool())
-            emit addItem();
-
+        Q_EMIT airplaneEnableChanged(enable);
         updateTips();
     });
 
@@ -151,6 +146,11 @@ void AirplaneModeItem::updateTips()
         m_tipsLabel->setText(tr("Airplane mode enabled"));
     else
         m_tipsLabel->setText(tr("Airplane mode disabled"));
+}
+
+bool AirplaneModeItem::airplaneEnable()
+{
+    return m_airplaneModeInter->enabled();
 }
 
 void AirplaneModeItem::resizeEvent(QResizeEvent *e)

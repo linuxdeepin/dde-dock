@@ -30,8 +30,7 @@ AirplaneModePlugin::AirplaneModePlugin(QObject *parent)
     : QObject(parent)
     , m_item(new AirplaneModeItem)
 {
-    connect(m_item, &AirplaneModeItem::removeItem, this, &AirplaneModePlugin::removePlugin);
-    connect(m_item, &AirplaneModeItem::addItem, this, &AirplaneModePlugin::addPlugin);
+    connect(m_item, &AirplaneModeItem::airplaneEnableChanged, this, &AirplaneModePlugin::onAirplaneEnableChanged);
 }
 
 const QString AirplaneModePlugin::pluginName() const
@@ -50,11 +49,15 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 
     if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+
+    refreshAirplaneEnableState();
 }
 
 void AirplaneModePlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
+
+    refreshAirplaneEnableState();
 }
 
 bool AirplaneModePlugin::pluginIsDisable()
@@ -80,35 +83,6 @@ QWidget *AirplaneModePlugin::itemTipsWidget(const QString &itemKey)
     return nullptr;
 }
 
-QWidget *AirplaneModePlugin::itemPopupApplet(const QString &itemKey)
-{
-    return nullptr;  // 禁用左键点击功能
-
-    if (itemKey == AIRPLANEMODE_KEY) {
-        return m_item->popupApplet();
-    }
-
-    return nullptr;
-}
-
-const QString AirplaneModePlugin::itemContextMenu(const QString &itemKey)
-{
-    return QString(); // 禁用右键菜单
-
-    if (itemKey == AIRPLANEMODE_KEY) {
-        return m_item->contextMenu();
-    }
-
-    return QString();
-}
-
-void AirplaneModePlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
-{
-    if (itemKey == AIRPLANEMODE_KEY) {
-        m_item->invokeMenuItem(menuId, checked);
-    }
-}
-
 int AirplaneModePlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
@@ -130,20 +104,24 @@ void AirplaneModePlugin::refreshIcon(const QString &itemKey)
     }
 }
 
-void AirplaneModePlugin::removePlugin()
+void AirplaneModePlugin::refreshAirplaneEnableState()
+{
+    onAirplaneEnableChanged(m_item->airplaneEnable());
+}
+
+void AirplaneModePlugin::onAirplaneEnableChanged(bool enable)
 {
     if (!m_proxyInter)
         return;
 
-    m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
-    m_proxyInter->saveValue(this, STATE_KEY, false);
+    if (enable) {
+        m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+        m_proxyInter->saveValue(this, STATE_KEY, true);
+    }
+    else {
+        m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
+        m_proxyInter->saveValue(this, STATE_KEY, false);
+    }
 }
 
-void AirplaneModePlugin::addPlugin()
-{
-    if (!m_proxyInter)
-        return;
 
-    m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
-    m_proxyInter->saveValue(this, STATE_KEY, true);
-}
