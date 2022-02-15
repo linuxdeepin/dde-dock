@@ -61,12 +61,31 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     this->setPalette(p);
 
     m_label->setForegroundRole(QPalette::BrightText);
+    updateEnabledStatus();
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
 {
     m_layout->addWidget(button, 0, Qt::AlignRight | Qt::AlignHCenter);
     m_layout->addSpacing(space);
+}
+
+void SettingLabel::updateEnabledStatus()
+{
+    QPalette p = m_label->palette();
+    if (m_label->isEnabled())
+        p.setColor(QPalette::BrightText, QColor(0, 0, 0));
+    else
+        p.setColor(QPalette::BrightText, QColor(51, 51, 51));
+    m_label->setPalette(p);
+}
+
+void SettingLabel::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::EnabledChange)
+        updateEnabledStatus();
+
+    QWidget::changeEvent(event);
 }
 
 void SettingLabel::mousePressEvent(QMouseEvent *ev)
