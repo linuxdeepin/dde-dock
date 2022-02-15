@@ -155,9 +155,9 @@ void DockPluginsController::loadLocalPlugins()
 void DockPluginsController::loadSystemPlugins()
 {
     QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
-    if (!QDir(pluginsDir).exists()) {
-        pluginsDir = "/usr/lib/dde-dock/plugins";
-    }
+#ifndef QT_DEBUG
+    pluginsDir = "/usr/lib/dde-dock/plugins";
+#endif
     qDebug() << "using dock plugins dir:" << pluginsDir;
 
     AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
