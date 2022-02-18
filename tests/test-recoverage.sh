@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BUILD_DIR=build
+BUILD_DIR=build-ut
+HTML_DIR=html
 REPORT_DIR=report
 
 cd ../
@@ -15,13 +16,13 @@ make -j 16
 
 cd tests/
 
-./dde_dock_unit_test --gtest_output=xml:dde_test_report_dde_dock.xml
+./dde_dock_unit_test --gtest_output=xml:../$REPORT_DIR/ut-report_dde_dock.xml
 lcov -c -d ./ -o cover.info
 lcov -e cover.info '*/frame/*' '*/dde-dock/widgets/*' -o code.info
 lcov -r code.info '*/dbus/*' '*/xcb/*' -o final.info
 
-rm -rf ../../tests/$REPORT_DIR
-mkdir -p ../../tests/$REPORT_DIR
-genhtml -o ../../tests/$REPORT_DIR final.info
 
-mv asan.log* asan_dde-dock.log
+genhtml -o ../$HTML_DIR final.info
+mv ../$HTML_DIR/index.html ../$HTML_DIR/cov_dde-dock.html
+
+mv asan.log* ../asan_dde-dock.log
