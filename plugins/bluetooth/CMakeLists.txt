@@ -32,6 +32,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
 target_link_libraries(${PLUGIN_NAME} PRIVATE
   ${XCB_EWMH_LIBRARIES}
   ${DtkWidget_LIBRARIES}
+  ${XCB_EWMH_LIBRARIES}
   ${DFrameworkDBus_LIBRARIES}
   ${QGSettings_LIBRARIES}
   ${Qt5DBus_LIBRARIES}
