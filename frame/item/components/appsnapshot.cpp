@@ -222,8 +222,14 @@ void AppSnapshot::fetchSnapshot()
 
         QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block,QStringLiteral("screenshotForWindowExtend"), args);
         if(reply.isValid()){
-            m_snapshot.load(reply.value());
-            qDebug() << "reply: "<<reply.value();
+            const QString tmpFile = reply.value();
+            if (QFile::exists(tmpFile)) {
+                m_snapshot.load(tmpFile);
+                qDebug() << "reply: " << tmpFile;
+                QFile::remove(tmpFile);
+            }  else {
+                qDebug() << "get current workspace bckground error, file does not exist : " << tmpFile;
+            }
         } else {
             qDebug() << "get current workspace bckground error: "<< reply.error().message();
         }
