@@ -15,6 +15,7 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
+pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11 xcursor)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
@@ -29,6 +30,7 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
   componments)
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
+  ${XCB_EWMH_LIBRARIES}
   ${DtkWidget_LIBRARIES}
   ${DFrameworkDBus_LIBRARIES}
   ${QGSettings_LIBRARIES}
