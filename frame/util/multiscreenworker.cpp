@@ -758,27 +758,27 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         switch (m_position) {
         case Position::Top:
             varList[0] = 1;
-            varList[1] = (dockGeometry.height() + WINDOWMARGIN * 2) * ratio;
-            varList[2] = dockGeometry.x() * ratio;
-            varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
+            varList[1] = dockGeometry.y() + dockGeometry.height() + WINDOWMARGIN * ratio;
+            varList[2] = dockGeometry.x();
+            varList[3] = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Bottom:
             varList[0] = 3;
-            varList[1] = (dockGeometry.height() + WINDOWMARGIN * 2) * ratio;
-            varList[2] = dockGeometry.x() * ratio;
-            varList[3] = (dockGeometry.x() + dockGeometry.width()) * ratio;
+            varList[1] = DIS_INS->screenRawHeight() - dockGeometry.y() + WINDOWMARGIN * ratio;
+            varList[2] = dockGeometry.x();
+            varList[3] = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Left:
             varList[0] = 0;
-            varList[1] = (dockGeometry.width() + WINDOWMARGIN * 2) * ratio;
-            varList[2] = dockGeometry.x() * ratio;
-            varList[3] = dockGeometry.height() * ratio;
+            varList[1] = dockGeometry.x() + dockGeometry.width() + WINDOWMARGIN * ratio;
+            varList[2] = dockGeometry.y();
+            varList[3] = dockGeometry.y() + dockGeometry.height();
             break;
         case Position::Right:
             varList[0] = 2;
-            varList[1] = (dockGeometry.width() + WINDOWMARGIN * 2) * ratio;
-            varList[2] = dockGeometry.x() * ratio;
-            varList[3] = dockGeometry.height() * ratio;
+            varList[1] = DIS_INS->screenRawWidth() - dockGeometry.x() + WINDOWMARGIN * ratio;
+            varList[2] = dockGeometry.y();
+            varList[3] = dockGeometry.y() + dockGeometry.height();
             break;
         }
 
