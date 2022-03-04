@@ -572,10 +572,8 @@ void MainPanelControl::handleDragMove(QDragMoveEvent *e, bool isFilter)
 
     e->accept();
 
-    if (targetItem == sourceItem) {
-        m_dragIndex = -1;
+    if (targetItem == sourceItem)
         return;
-    }
 
     moveItem(sourceItem, targetItem);
     emit itemMoved(sourceItem, targetItem);
