@@ -34,7 +34,7 @@ SettingsModule::SettingsModule()
     : QObject()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
-    , m_config(new DConfig("dde.dock.plugin.dconfig", QString(), this))
+    , m_config(new DConfig("org.deepin.dock.plugin", QString(), this))
 {
     QTranslator *translator = new QTranslator(this);
     translator->load(QString("/usr/share/dcc-dock-plugin/translations/dcc-dock-plugin_%1.qm").arg(QLocale::system().name()));
@@ -141,11 +141,11 @@ void SettingsModule::onStatusChanged()
     };
 
     // 三级菜单显示状态设置
-    m_frameProxy->setDetailVisible(module, dock, tr("Mode"), visibleState("Control-Center_Dock_Model"));
-    m_frameProxy->setDetailVisible(module, dock, tr("Location"), visibleState("Control-Center_Dock_Location"));
-    m_frameProxy->setDetailVisible(module, dock, tr("Status"), visibleState("Control-Center_Dock_State"));
-    m_frameProxy->setDetailVisible(module, dock, tr("Size"), visibleState("Control-Center_Dock_Size"));
-    m_frameProxy->setDetailVisible(module, dock, tr("Show Dock"), visibleState("Control-Center_Dock_Multi-screen"));
-    m_frameProxy->setDetailVisible(module, dock, tr("Plugin Area"), visibleState("Control-Center_Dock_Plugins"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Mode"), visibleState("dockModel"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Location"), visibleState("dockLocation"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Status"), visibleState("dockState"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Size"), visibleState("dockSize"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Show Dock"), visibleState("multiscreen"));
+    m_frameProxy->setDetailVisible(module, dock, tr("Plugin Area"), visibleState("dockPlugins"));
     m_frameProxy->updateSearchData(module);
 }
