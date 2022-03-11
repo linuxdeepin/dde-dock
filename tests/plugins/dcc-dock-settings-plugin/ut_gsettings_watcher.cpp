@@ -11,11 +11,11 @@ class Test_GSettingWatcher : public QObject, public ::testing::Test
 
 TEST_F(Test_GSettingWatcher, bind)
 {
-    ConfigWatcher watcher("dde.dock.plugin.dconfig");
+    ConfigWatcher watcher("org.deepin.dock.plugin");
 
     QWidget widget;
-    watcher.bind("Control-Center_Dock_Plugins", &widget);
-    watcher.bind("Control-Center_Dock_Plugins", nullptr);
+    watcher.bind("dockPlugins", &widget);
+    watcher.bind("dockPlugins", nullptr);
     watcher.bind("invalid", &widget);
     watcher.bind("", &widget);
     watcher.bind("", nullptr);
@@ -23,20 +23,20 @@ TEST_F(Test_GSettingWatcher, bind)
 
 TEST_F(Test_GSettingWatcher, setStatus)
 {
-    ConfigWatcher watcher("dde.dock.plugin.dconfig");
+    ConfigWatcher watcher("org.deepin.dock.plugin");
 
     QWidget widget;
-    watcher.bind("Control-Center_Dock_Plugins", &widget);
-    watcher.setStatus("Control-Center_Dock_Plugins", &widget);
+    watcher.bind("dockPlugins", &widget);
+    watcher.setStatus("dockPlugins", &widget);
 }
 
 TEST_F(Test_GSettingWatcher, onStatusModeChanged)
 {
-    ConfigWatcher watcher("dde.dock.plugin.dconfig");
+    ConfigWatcher watcher("org.deepin.dock.plugin");
 
     QWidget widget;
-    watcher.bind("Control-Center_Dock_Plugins", &widget);
-    watcher.onStatusModeChanged("Control-Center_Dock_Plugins");
+    watcher.bind("dockPlugins", &widget);
+    watcher.onStatusModeChanged("dockPlugins");
     watcher.onStatusModeChanged("invalid");
     watcher.onStatusModeChanged("");
 }

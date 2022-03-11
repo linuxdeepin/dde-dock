@@ -47,7 +47,7 @@ add_custom_target(translations ALL DEPENDS ${QM_FILES})
 install(FILES ${QM_FILES} DESTINATION share/${PLUGIN_NAME}/translations)
 
 # dconfig
-file(GLOB DCONFIG_FILES "dde.dock.plugin.dconfig.json")
+file(GLOB DCONFIG_FILES "org.deepin.dock.plugin.json")
 dconfig_meta_files(APPID dde-control-center FILES ${DCONFIG_FILES})
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-control-center/modules)
