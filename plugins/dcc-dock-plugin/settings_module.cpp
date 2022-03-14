@@ -34,7 +34,7 @@ SettingsModule::SettingsModule()
     : QObject()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
-    , m_config(new DConfig("org.deepin.dock.plugin", QString(), this))
+    , m_config(new DConfig("org.deepin.dde.dock.plugin", QString(), this))
 {
     QTranslator *translator = new QTranslator(this);
     translator->load(QString("/usr/share/dcc-dock-plugin/translations/dcc-dock-plugin_%1.qm").arg(QLocale::system().name()));

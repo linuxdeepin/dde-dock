@@ -1,6 +1,7 @@
 #include "config_watcher.h"
 
 #include <QWidget>
+#include <QApplication>
 
 #include <gtest/gtest.h>
 
@@ -11,7 +12,9 @@ class Test_GSettingWatcher : public QObject, public ::testing::Test
 
 TEST_F(Test_GSettingWatcher, bind)
 {
-    ConfigWatcher watcher("org.deepin.dock.plugin");
+    const QString &appName = qApp->applicationName();
+    qApp->setApplicationName("dde-dock");
+    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);
@@ -19,20 +22,24 @@ TEST_F(Test_GSettingWatcher, bind)
     watcher.bind("invalid", &widget);
     watcher.bind("", &widget);
     watcher.bind("", nullptr);
+    qApp->setApplicationName(appName);
 }
 
 TEST_F(Test_GSettingWatcher, setStatus)
 {
-    ConfigWatcher watcher("org.deepin.dock.plugin");
+    const QString &appName = qApp->applicationName();
+    qApp->setApplicationName("dde-control-center");
+    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);
     watcher.setStatus("dockPlugins", &widget);
+    qApp->setApplicationName(appName);
 }
 
 TEST_F(Test_GSettingWatcher, onStatusModeChanged)
 {
-    ConfigWatcher watcher("org.deepin.dock.plugin");
+    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);
