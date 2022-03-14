@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     signal(SIGFPE,  sig_crash);
 
     app.setOrganizationName("deepin");
-    app.setApplicationName("dde-dock");
+    app.setApplicationName("org.deepin.dde.dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
     app.loadTranslator();
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 
     // 任务栏单进程限制
     DGuiApplicationHelper::setSingleInstanceInterval(-1);
-    if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
+    if (!app.setSingleInstance(QString("org.deepin.dde.dock_%1").arg(getuid()))) {
         qDebug() << "set single instance failed!";
         return -1;
     }
