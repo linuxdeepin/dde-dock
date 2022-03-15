@@ -41,7 +41,7 @@ class ConfigWatcher : public QObject
     Q_OBJECT
 
 public:
-    ConfigWatcher(const QString &fileName, QObject *parent = nullptr);
+    ConfigWatcher(const QString &appId, const QString &fileName, QObject *parent = nullptr);
     ~ConfigWatcher();
 
     void bind(const QString &key, QWidget *binder);

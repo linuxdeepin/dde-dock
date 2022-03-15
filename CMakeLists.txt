@@ -110,7 +110,7 @@ endif ()
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
-    DESTINATION share/org.deepin.dde.dock/translations)
+    DESTINATION share/dde-dock/translations)
 
 ## dev files
 install(FILES ${INTERFACES}
@@ -124,9 +124,6 @@ install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
     DESTINATION share/glib-2.0/schemas)
-
-#dconfig
-dconfig_meta_files(APPID org.deepin.dde.dock FILES configs/org.deepin.dde.dock.json)
 
 # Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")

@@ -14,7 +14,7 @@ TEST_F(Test_GSettingWatcher, bind)
 {
     const QString &appName = qApp->applicationName();
     qApp->setApplicationName("dde-dock");
-    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
+    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);
@@ -29,7 +29,7 @@ TEST_F(Test_GSettingWatcher, setStatus)
 {
     const QString &appName = qApp->applicationName();
     qApp->setApplicationName("dde-control-center");
-    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
+    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);
@@ -39,7 +39,7 @@ TEST_F(Test_GSettingWatcher, setStatus)
 
 TEST_F(Test_GSettingWatcher, onStatusModeChanged)
 {
-    ConfigWatcher watcher("org.deepin.dde.dock.plugin");
+    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
 
     QWidget widget;
     watcher.bind("dockPlugins", &widget);

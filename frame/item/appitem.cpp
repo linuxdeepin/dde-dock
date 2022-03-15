@@ -667,9 +667,10 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
     // 预览标题显示方式的配置
-    DConfig config(QString("org.deepin.dde.dock"), QString());
-    if (config.isValid() && config.keyList().contains("showWindowName"))
-        m_appPreviewTips->setTitleDisplayMode(config.value("showWindowName").toInt());
+    DConfig *config = DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock");
+    if (config->isValid() && config->keyList().contains("showWindowName"))
+        m_appPreviewTips->setTitleDisplayMode(config->value("showWindowName").toInt());
+    delete config;
 
     showPopupWindow(m_appPreviewTips, true);
 }

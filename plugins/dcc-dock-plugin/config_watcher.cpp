@@ -36,9 +36,9 @@ DCORE_USE_NAMESPACE
 /**
  * @brief GSettingWatcher::GSettingWatcher 用于监听处于 \a baseSchemasId + "." + \a module 配置下的配置项内容变化，并将变化应用到绑定的控件上
  */
-ConfigWatcher::ConfigWatcher(const QString &fileName, QObject *parent)
+ConfigWatcher::ConfigWatcher(const QString &appId, const QString &fileName, QObject *parent)
     : QObject(parent)
-    , m_config(new DConfig(fileName, QString(), this))
+    , m_config(DConfig::create(appId, fileName, QString(), this))
 {
     if (m_config->isValid()) {
         connect(m_config, &DConfig::valueChanged, this, &ConfigWatcher::onStatusModeChanged);

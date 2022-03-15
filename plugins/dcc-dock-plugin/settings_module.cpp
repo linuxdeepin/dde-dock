@@ -34,7 +34,7 @@ SettingsModule::SettingsModule()
     : QObject()
     , ModuleInterface()
     , m_moduleWidget(nullptr)
-    , m_config(new DConfig("org.deepin.dde.dock.plugin", QString(), this))
+    , m_config(DConfig::create("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin", QString(), this))
 {
     QTranslator *translator = new QTranslator(this);
     translator->load(QString("/usr/share/dcc-dock-plugin/translations/dcc-dock-plugin_%1.qm").arg(QLocale::system().name()));
@@ -137,7 +137,7 @@ void SettingsModule::onStatusChanged()
     m_frameProxy->setWidgetVisible(module, dock, true);
 
     auto visibleState = [ = ](const QString &key) {
-        return (m_config->value(QString("%1").arg(key)).toString() == "Enabled");
+        return (!m_config || !m_config->isValid() || m_config->value(QString("%1").arg(key)).toString() == "Enabled");
     };
 
     // 三级菜单显示状态设置
