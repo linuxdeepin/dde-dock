@@ -48,6 +48,6 @@ install(FILES ${QM_FILES} DESTINATION share/${PLUGIN_NAME}/translations)
 
 # dconfig
 file(GLOB DCONFIG_FILES "org.deepin.dde.dock.plugin.json")
-dconfig_meta_files(APPID dde-control-center FILES ${DCONFIG_FILES})
+dconfig_meta_files(APPID org.deepin.dde.control-center FILES ${DCONFIG_FILES})
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-control-center/modules)

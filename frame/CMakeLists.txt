@@ -93,3 +93,5 @@ endif()
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION bin)
+
+dconfig_meta_files(APPID org.deepin.dde.dock FILES ../configs/org.deepin.dde.dock.json)

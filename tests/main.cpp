@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 
     DockApplication app(argc, argv);
     // 设置应用名为dde-dock，否则dconfig相关的配置就读不到了
+    // TODO dtk已经有相关接口，待下次修改
     app.setApplicationName("dde-dock");
 
     qApp->setProperty("CANSHOW", true);

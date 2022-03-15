@@ -74,7 +74,7 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_pluginModel(new QStandardItemModel(this))
     , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
-    , m_dconfigWatcher(new ConfigWatcher("org.deepin.dde.dock.plugin", this))
+    , m_dconfigWatcher(new ConfigWatcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin", this))
     , m_sliderPressed(false)
 {
     //~ contents_path /personalization/Dock
