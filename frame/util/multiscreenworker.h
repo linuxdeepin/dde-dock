@@ -59,6 +59,7 @@ class QWidget;
 class QTimer;
 class MainWindow;
 class QGSettings;
+class ScreenChangeMonitor;
 
 /**
  * @brief The DockScreen class
@@ -261,6 +262,7 @@ private:
     QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
 
     DockScreen m_ds;                            // 屏幕名称信息
+    ScreenChangeMonitor *m_screenMonitor;       // 用于监视屏幕是否为系统先拔再插
 
     // 任务栏属性
     double m_opacity;
@@ -280,6 +282,37 @@ private:
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
     RunStates m_state;
     /*****************************************************************/
+};
+
+/**
+ * 在控制中心设置了自动关闭显示器，等一段时间后，显示器会自动关闭。在多显示器的情况下，此时系统会自动禁用主屏
+ * 马上又开启主屏（底层系统是这么设计的），唤醒后，在禁用主屏后，后端会改变主屏为另外一个显示器，再开启主屏，
+ * 后端又改变主屏为原来的主屏，这样就会导致的问题是：本来任务栏在主屏，由于瞬间触发了删除主屏幕的操作，引起了
+ * 任务栏显示到副屏的问题，开启主屏后，由于任务栏已经在副屏了，就再也回不到主屏，因此，增加了这个类用于专门来
+ * 处理这种异常情况
+ */
+class ScreenChangeMonitor : public QObject
+{
+    Q_OBJECT
+
+public:
+    ScreenChangeMonitor(DockScreen *ds, QObject *parent);
+    ~ScreenChangeMonitor();
+    bool needUsedLastScreen() const;
+    const QString lastScreen();
+
+private:
+    bool changedInSeconds();
+
+private:
+    QString m_lastScreenName;
+
+    QString m_changePrimaryName;
+    QDateTime m_changeTime;
+    QString m_newScreenName;
+    QDateTime m_newTime;
+    QString m_removeScreenName;
+    QDateTime m_removeTime;
 };
 
 #endif // MULTISCREENWORKER_H

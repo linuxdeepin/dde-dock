@@ -57,6 +57,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
     , m_ds(DIS_INS->primary())
+    , m_screenMonitor(new ScreenChangeMonitor(&m_ds, this))
     , m_state(AutoHide)
 {
     qInfo() << "init dock screen: " << m_ds.current();
@@ -1254,6 +1255,9 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     //TODO 考虑在主屏幕名变化时自动更新，是不是就不需要手动处理了
     m_ds.updatePrimary(DIS_INS->primary());
 
+    if (m_screenMonitor->needUsedLastScreen())
+        return m_screenMonitor->lastScreen();
+
     if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()), pos))
         return m_ds.current();
 
@@ -1769,4 +1773,92 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
             displayAnimation(m_ds.current(), AniAction::Show);
         }
     }
+}
+
+/**
+ * @brief 屏幕监视
+ * @param ds
+ */
+#define TIMESPAN 1500
+ScreenChangeMonitor::ScreenChangeMonitor(DockScreen *ds, QObject *parent)
+    : QObject (parent)
+{
+    connect(qApp, &QApplication::primaryScreenChanged, this, [ this, ds ](QScreen *primaryScreen) {
+        if (!primaryScreen)
+            return;
+
+        // 在screenAdded之后，又会发送一次主屏幕的变更的信息
+        qInfo() << "primary Screen Changed,primary Screen" << primaryScreen->name();
+        if (changedInSeconds())
+            return;
+
+        m_lastScreenName = ds->current();
+        m_changePrimaryName = primaryScreen->name();
+        m_changeTime = QDateTime::currentDateTime();
+        qInfo() << "primary Changed Info:lastScreen:" << m_lastScreenName << "changeTime:" << m_changeTime;
+    });
+    connect(qApp, &QApplication::screenAdded, this, [ this ](QScreen *newScreen) {
+        if (newScreen) {
+            m_newScreenName = newScreen->name();
+            m_newTime = QDateTime::currentDateTime();
+            qInfo() <<"screen added:" << m_newScreenName << ", added time:" << m_newTime;
+        }
+    });
+    connect(qApp, &QApplication::screenRemoved, this, [ this ](QScreen *rmScreen) {
+        if (rmScreen) {
+            m_removeScreenName = rmScreen->name();
+            m_removeTime = QDateTime::currentDateTime();
+            qInfo() <<"screen removed:" << m_removeScreenName << ", removed time:" << m_removeTime;
+        }
+    });
+}
+
+ScreenChangeMonitor::~ScreenChangeMonitor()
+{
+}
+
+bool ScreenChangeMonitor::changedInSeconds()
+{
+    // 如果上一次的主屏幕的名称为空，则认为未发送屏幕变化的信号
+    if (m_changePrimaryName.isEmpty() || !m_changeTime.isValid())
+        return false;
+
+    qint64 nowMsec = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    qint64 preChangeMsec = m_changeTime.toMSecsSinceEpoch();
+    return (nowMsec - preChangeMsec <= TIMESPAN);
+}
+
+bool ScreenChangeMonitor::needUsedLastScreen() const
+{
+    if (m_lastScreenName.isEmpty())
+        return false;
+
+    // 判断是否在关闭显示器的时候由系统发出来的先禁用显示器再开启显示器
+    if (!m_changeTime.isValid() || !m_removeTime.isValid() || !m_newTime.isValid())
+        return false;
+
+    // 如果禁用的掉的显示器和开启的显示器的名称不一样，则认为他们是正常的插拔操作
+    if (m_removeScreenName != m_newScreenName)
+        return false;
+
+    // 如果先插入显示器再拔掉显示器，则认为他们也是正常的插拔操作
+    if (m_removeTime > m_newTime)
+        return false;
+
+    // 只有在remove显示器在add显示器之前且时间小于1.5秒，才认为他们是由关闭显示器引起的
+    qint64 changeMsec = m_changeTime.toMSecsSinceEpoch();
+
+    // 获取现在的时间，如果现在的时间大于这三个时间一定的值，则认为是手动操作
+    qint64 nowMsec = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    if (nowMsec - changeMsec > TIMESPAN)
+        return false;
+
+    qint64 addedMsec = m_newTime.toMSecsSinceEpoch();
+    qint64 removeMsec = m_removeTime.toMSecsSinceEpoch();
+    return ((addedMsec - removeMsec <= TIMESPAN) && qAbs(removeMsec - changeMsec) <= TIMESPAN);
+}
+
+const QString ScreenChangeMonitor::lastScreen()
+{
+    return m_lastScreenName;
 }
