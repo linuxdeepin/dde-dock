@@ -67,7 +67,7 @@ protected:
 
 private slots:
     void removeApp(const QString &appKey);
-    void moveToTrash(const QUrl &url);
+    void moveToTrash(const QList<QUrl> &urlList);
 
 private:
     PopupControlWidget *m_popupApplet;

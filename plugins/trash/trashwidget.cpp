@@ -177,8 +177,8 @@ void TrashWidget::dropEvent(QDropEvent *e)
     qApp->postEvent(this->parent(), new QEvent(QEvent::Leave));
 
     const QMimeData *mime = e->mimeData();
-    for (auto url : mime->urls())
-        moveToTrash(url);
+    // 这里需要取到所有url然后一次性移动到回收站。
+    moveToTrash(mime->urls());
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)
@@ -248,12 +248,13 @@ void TrashWidget::removeApp(const QString &appKey)
     proc->deleteLater();
 }
 
-void TrashWidget::moveToTrash(const QUrl &url)
+void TrashWidget::moveToTrash(const QList<QUrl> &urlList)
 {
-    const QFileInfo info = url.toLocalFile();
-
     QStringList argumentList;
-    argumentList << info.absoluteFilePath();
+    for (const QUrl &url : urlList) {
+        const QFileInfo& info = url.toLocalFile();
+        argumentList << info.absoluteFilePath();
+    }
 
     m_fileManagerInter->Trash(argumentList);
 }
