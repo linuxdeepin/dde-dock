@@ -25,6 +25,9 @@
 #include <QDebug>
 #include <QLibrary>
 #include <QGSettings>
+#include <QProcess>
+#include <QtConcurrent>
+#include <QFuture>
 
 #include <DSysInfo>
 
@@ -56,6 +59,7 @@ void PluginLoader::run()
     QStringList plugins;
 
     // 查找可用插件
+    QList<QString> filePaths;
     for (QString file : files) {
         if (!QLibrary::isLibrary(file))
             continue;
@@ -72,14 +76,26 @@ void PluginLoader::run()
             qDebug() << "disable loading plugin:" << file;
             continue;
         }
-        // 判断当前进程加载的dtkcore库是否和当前库加载的dtkcore的库为同一个，如果不同，则无需加载，
-        // 否则在加载dtkcore的时候会报错（dtkcore内部判断如果加载两次会抛出错误）
-        QString libUsedDtkCore = libUsedDtkCoreFileName(pluginsDir.absoluteFilePath(file));
-        if (!libUsedDtkCore.isEmpty() && libUsedDtkCore != dtkCoreName)
-            continue;
 
-        plugins << file;
+        filePaths.push_back(pluginsDir.absoluteFilePath(file));
     }
+
+    // 由于使用ldd获取.so信息比较耗时，采用并行处理
+    QFuture<QString> f = QtConcurrent::mapped(filePaths, &PluginLoader::libUsedDtkCoreFileName);
+    f.waitForFinished();
+    const QStringList &results = f.results();
+    if (results.size() == filePaths.size()) {
+        for (int i = 0; i < results.size(); ++i) {
+            const QString &libUsedDtkCore = results.at(i);
+            // 判断当前进程加载的dtkcore库是否和当前库加载的dtkcore的库为同一个，如果不同，则无需加载，
+            // 否则在加载dtkcore的时候会报错（dtkcore内部判断如果加载两次会抛出错误
+            if (libUsedDtkCore.isEmpty() || libUsedDtkCore == dtkCoreName)
+                plugins << filePaths.at(i);
+        }
+    } else {
+        plugins.append(filePaths);
+    }
+
     for (auto plugin : plugins) {
         emit pluginFounded(pluginsDir.absoluteFilePath(plugin));
     }
