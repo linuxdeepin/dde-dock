@@ -29,6 +29,7 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QDBusPendingCall>
 
 #include <xcb/xproto.h>
 
@@ -38,7 +39,6 @@ DGUI_USE_NAMESPACE
 
 const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "SystemServices", "Hardware"};
 const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
-const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 using namespace Dock;
@@ -182,13 +182,15 @@ void SNITrayWidget::updateIcon()
 
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
+    QDBusPendingReply<> reply;
     switch (mouseButton) {
     case XCB_BUTTON_INDEX_1:
-        // left button click invalid
-        if (LeftClickInvalidIdList.contains(m_sniId)) {
-            showContextMenu(x, y);
-        } else {
-            m_sniInter->Activate(x, y);
+        reply =  m_sniInter->Activate(x, y);
+        // try to invoke context menu while calling activate get a error.
+        // primarily work for apps using libappindicator.
+        reply.waitForFinished();
+        if (reply.isError()) {
+            showContextMenu(x,y);
         }
         break;
     case XCB_BUTTON_INDEX_2:
