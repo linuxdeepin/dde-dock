@@ -139,7 +139,7 @@ const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
         break;
     case Bottom:
         if (!DWindowManagerHelper::instance()->hasComposite()) {
-            p += QPoint(0 , -r.height() / 2);
+            p += QPoint(size().width() / 2 , -r.height() / 2);
         } else {
             p += QPoint(r.width() / 2, 0);
         }
@@ -371,11 +371,7 @@ bool AppDragWidget::isRemoveItem()
 void AppDragWidget::onFollowMouse()
 {
     QPoint destPos = QCursor::pos();
-    if (DWindowManagerHelper::instance()->hasComposite()) {
-        move(destPos.x() - width() / 2, destPos.y() - height() / 2);
-    } else {
-        move(destPos.x(), destPos.y()); // 窗口特效未开启时会隐藏m_object绘制的图标，移动的图标为QDrag绘制的图标
-    }
+    move(destPos.x() - width() / 2, destPos.y() - height() / 2);
 }
 
 void AppDragWidget::enterEvent(QEvent *event)
