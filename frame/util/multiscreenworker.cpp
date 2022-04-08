@@ -892,6 +892,9 @@ MainWindow *MultiScreenWorker::parent()
 
 void MultiScreenWorker::initMembers()
 {
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        m_parent->createWinId();
+    }
     m_monitorUpdateTimer->setInterval(100);
     m_monitorUpdateTimer->setSingleShot(true);
 
