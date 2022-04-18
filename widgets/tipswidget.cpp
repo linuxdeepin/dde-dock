@@ -46,11 +46,11 @@ void TipsWidget::setTextList(const QStringList &textList)
     int width = 0;
     int height = 0;
     for (QString text : m_textList) {
-        width = qMax(width, fontMetrics().width(text) + 20);
+        width = qMax(width, fontMetrics().width(text));
         height += fontMetrics().boundingRect(text).height();
     }
 
-    setFixedSize(width, height);
+    setFixedSize(width + 20, height);
 
     update();
 }
@@ -75,16 +75,18 @@ void TipsWidget::paintEvent(QPaintEvent *event)
     }
         break;
     case MultiLine: {
-        int y = 0;
-        if (m_textList.size() != 1)
+        int x = rect().x();
+        int y = rect().y();
+        if (m_textList.size() != 1) {
+            x += 10;
             option.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        }
         for (QString text : m_textList) {
             int lineHeight = fontMetrics().boundingRect(text).height();
-            painter.drawText(QRect(0, y, rect().width(), lineHeight), text, option);
+            painter.drawText(QRect(x, y, rect().width(), lineHeight), text, option);
             y += lineHeight;
         }
-    }
-        break;
+    } break;
     }
 }
 
