@@ -234,15 +234,13 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         return;
     }
 
-    if (interface->pluginName() == "multitasking") {
-        if (Utils::IS_WAYLAND_DISPLAY || Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
-            for (auto &pair : m_pluginLoadMap.keys()) {
-                if (pair.first == pluginFile) {
-                    m_pluginLoadMap.remove(pair);
-                }
+    if (interface->pluginName() == "multitasking" && Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
+        for (auto &pair : m_pluginLoadMap.keys()) {
+            if (pair.first == pluginFile) {
+                m_pluginLoadMap.remove(pair);
             }
-            return;
         }
+        return;
     }
 
     QMapIterator<QPair<QString, PluginsItemInterface *>, bool> it(m_pluginLoadMap);

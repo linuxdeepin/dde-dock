@@ -205,8 +205,8 @@ bool DBusDockAdaptors::isPluginValid(const QString &name)
     if (!Utils::SettingValue("com.deepin.dde.dock.module." + name, QByteArray(), "enable", true).toBool())
         return false;
 
-    // 未开启窗口特效时，不显示多任务视图插件
-    if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite())
+    // 在非wayland环境下，未开启窗口特效时，不显示多任务视图插件
+    if (name == "multitasking" && !DWindowManagerHelper::instance()->hasComposite() && !Utils::IS_WAYLAND_DISPLAY)
         return false;
 
     // 录屏插件不显示,插件名如果有变化，建议发需求，避免任务栏反复适配
