@@ -332,7 +332,10 @@ void MainWindow::initConnections()
     connect(m_updateDragAreaTimer, &QTimer::timeout, m_multiScreenWorker, &MultiScreenWorker::onRequestUpdateRegionMonitor);
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, true); });
-    connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, false); });
+    connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] {
+        qApp->setProperty(DRAG_STATE_PROP, false);
+        m_updateDragAreaTimer->start();
+    });
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::resetDragWindow);   //　更新拖拽区域

@@ -1401,7 +1401,10 @@ void MultiScreenWorker::checkXEventMonitorService()
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
         connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
         connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
-        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] { setStates(MousePress, false); });
+        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {
+            setStates(MousePress, false);
+            onExtralRegionMonitorChanged(0, 0, m_extralRegisterKey);
+        });
 
         connect(extralEventInter, &XEventMonitor::CursorOut, this, [ = ](int x, int y, const QString &key) {
             if (isCursorOut(x, y)) {
