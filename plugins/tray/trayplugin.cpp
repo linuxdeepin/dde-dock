@@ -394,7 +394,7 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         return;
     }
 
-    if (m_trayMap.contains(itemKey) || m_trayMap.values().contains(trayWidget)) {
+    if (m_trayMap.values().contains(trayWidget)) {
         return;
     }
 
@@ -438,13 +438,17 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
             return;
         }
 
+        std::lock_guard<std::mutex> lock(m_sniMutex);
+        if (m_trayMap.contains(itemKey) || m_passiveSNITrayMap.contains(itemKey)) {
+            return;
+        }
+
         SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
 
         // TODO(lxz): 在future里已经对dbus进行过检查了，这里应该不需要再次检查。
         if (!trayWidget->isValid())
             return;
 
-        std::lock_guard<std::mutex> lock(m_sniMutex);
         if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
             m_passiveSNITrayMap.insert(itemKey, trayWidget);
         } else {
@@ -541,6 +545,7 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
         widget->setParent(nullptr);
     } else if (deleteObject) {
         widget->deleteLater();
+        widget = nullptr;
     }
 }
 
