@@ -35,10 +35,12 @@
 #include <DWindowManagerHelper>
 #include <DBlurEffectWidget>
 #include <DGuiApplicationHelper>
+#include <DConfig>
 
 #include <QWidget>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 class MainPanelControl;
 class QTimer;
@@ -226,6 +228,7 @@ private:
     QStringList m_registerKeys;
 
     QTimer *m_updateDragAreaTimer;
+    QSharedPointer<DConfig> m_dconfig;
 };
 
 #endif // MAINWINDOW_H

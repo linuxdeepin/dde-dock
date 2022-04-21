@@ -90,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_dragWidget(new DragWidget(this))
     , m_launched(false)
     , m_updateDragAreaTimer(new QTimer(this))
+    , m_dconfig(DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock", QString(), this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_X11DoNotAcceptFocus);
@@ -156,7 +157,12 @@ void MainWindow::launch()
     m_launched = true;
     m_multiScreenWorker->initShow();
     m_shadowMaskOptimizeTimer->start();
-    QTimer::singleShot(0, this, [ this ] { this->setVisible(true); });
+    QTimer::singleShot(0, this, [ this ] {
+        bool showDock = true;
+        if (m_dconfig.data()->isValid())
+            showDock = !m_dconfig.data()->value("alwaysHideDock", false).toBool();
+        setVisible(showDock);
+    });
 }
 
 /**
@@ -298,6 +304,14 @@ void MainWindow::initComponents()
     QTimer::singleShot(1, this, &MainWindow::compositeChanged);
 
     themeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+
+    if (m_dconfig.data()->isValid()) {
+        connect(m_dconfig.data(), &DConfig::valueChanged, this, [this] (const QString &key) {
+            if (key == "alwaysHideDock") {
+                setVisible(!m_dconfig.data()->value(key, false).toBool());
+            }
+        });
+    }
 }
 
 void MainWindow::compositeChanged()

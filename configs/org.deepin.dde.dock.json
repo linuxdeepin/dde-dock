@@ -15,6 +15,17 @@
             "description":"0 Mouse over show;1 Always show; 2 Always hide",
             "permissions":"readwrite",
             "visibility":"private"
+        },
+        "alwaysHideDock":{
+            "value": false,
+            "serial": 0,
+            "flags":[],
+            "name":"alwaysHideDock",
+            "name[zh_CN]":"一直隐藏",
+            "description[zh_CN]":"当设置为true时，即使鼠标放在任务栏区域也不会显示任务栏；配置即时生效",
+            "description":"ture: Dock is hidden all the time, false: Depend on other settings of dock",
+            "permissions":"readwrite",
+            "visibility":"private"
         }
     }
 }

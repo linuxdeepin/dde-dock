@@ -36,6 +36,7 @@
 #include <DApplication>
 #include <DLog>
 #include <DGuiApplicationHelper>
+#include <DConfig>
 
 #include <unistd.h>
 #include <string>
