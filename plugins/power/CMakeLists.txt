@@ -33,3 +33,5 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays)
+
+dconfig_meta_files(APPID org.deepin.dde.dock FILES ../../configs/org.deepin.dde.dock.plugin.power.json)

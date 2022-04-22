@@ -26,6 +26,11 @@
 #include "shutdownwidget.h"
 
 #include <QLabel>
+#include <QSharedPointer>
+
+#include <DConfig>
+
+DCORE_USE_NAMESPACE
 
 class DBusPowerManager;
 
@@ -116,6 +121,7 @@ private:
     DBusPowerManager* m_powerManagerInter;
     const QGSettings *m_gsettings;
     const QGSettings *m_sessionShellGsettings;
+    QSharedPointer<DConfig> m_dconfig;
 };
 
 #endif // SHUTDOWNPLUGIN_H

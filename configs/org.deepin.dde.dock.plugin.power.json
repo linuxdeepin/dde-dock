@@ -1,0 +1,17 @@
+{
+    "magic":"dsg.config.meta",
+    "version":"1.0",
+    "contents":{
+        "contextMenu":{
+            "value": ["Shutdown", "Reboot", "Suspend", "Hibernate", "Lock", "Logout", "SwitchUser", "PowerSettings"],
+            "serial": 0,
+            "flags": [],
+            "name": "ContextMenu",
+            "name[zh_CN]": "电源按钮右键菜单",
+            "description[zh_CN]": "电源界面的右键菜单内容，如需不显示某个选项，移除即可；默认值：\"Shutdown\", \"Reboot\", \"Suspend\", \"Hibernate\", \"Lock\", \"Logout\", \"SwitchUser\", \"PowerSettings\"；",
+            "description":"",
+            "permissions":"readwrite",
+            "visibility":"private"
+        }
+    }
+}

@@ -37,6 +37,15 @@
 #define GSETTING_SHOW_SHUTDOWN "showShutdown"
 #define GSETTING_SHOW_LOCK "showLock"
 
+const QString MENU_SHUTDONW = "Shutdown";
+const QString MENU_REBOOT = "Reboot";
+const QString MENU_SUSPEND = "Suspend";
+const QString MENU_HIBERNATE = "Hibernate";
+const QString MENU_LOCK = "Lock";
+const QString MENU_LOGOUT = "Logout";
+const QString MENU_SWITCH_USER = "SwitchUser";
+const QString MENU_POWER_SETTINGS = "PowerSettings";
+
 DCORE_USE_NAMESPACE
 using namespace Dock;
 
@@ -48,6 +57,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
     , m_sessionShellGsettings(Utils::SettingsPtr("com.deepin.dde.session-shell", "/com/deepin/dde/session-shell/", this))
+    , m_dconfig(DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock.plugin.power", QString(), this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setAccessibleName("shutdown");
@@ -119,22 +129,40 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
+    QStringList contextMenu = {
+        MENU_SHUTDONW,
+        MENU_REBOOT,
+        MENU_SUSPEND,
+        MENU_HIBERNATE,
+        MENU_LOCK,
+        MENU_LOGOUT,
+        MENU_SWITCH_USER,
+        MENU_POWER_SETTINGS
+    };
+
+    if (m_dconfig.data()->isValid()) {
+        contextMenu = m_dconfig.data()->value("contextMenu", contextMenu).toStringList();
+    }
+
     QList<QVariant> items;
     items.reserve(6);
 
     QMap<QString, QVariant> shutdown;
-    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SHUTDOWN) && m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool())) {
+    if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SHUTDOWN) && m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool())) && contextMenu.contains(MENU_SHUTDONW)) {
         shutdown["itemId"] = "Shutdown";
         shutdown["itemText"] = tr("Shut down");
         shutdown["isActive"] = true;
         items.push_back(shutdown);
     }
 
-    QMap<QString, QVariant> reboot;
-    reboot["itemId"] = "Restart";
-    reboot["itemText"] = tr("Reboot");
-    reboot["isActive"] = true;
-    items.push_back(reboot);
+    if (contextMenu.contains(MENU_REBOOT)) {
+        QMap<QString, QVariant> reboot;
+        reboot["itemId"] = "Restart";
+        reboot["itemText"] = tr("Reboot");
+        reboot["isActive"] = true;
+        items.push_back(reboot);
+    }
+
 
 #ifndef DISABLE_POWER_OPTIONS
 
@@ -145,7 +173,9 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     ;
     if (can_sleep) {
         QMap<QString, QVariant> suspend;
-        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SUSPEND) && m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool())) {
+        if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SUSPEND)
+        && m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool()))
+        && contextMenu.contains(MENU_SUSPEND)) {
             suspend["itemId"] = "Suspend";
             suspend["itemText"] = tr("Suspend");
             suspend["isActive"] = true;
@@ -153,12 +183,13 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
     }
 
-    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
-                         : checkSwap() && m_powerManagerInter->CanHibernate();
+    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ?
+        QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool() : checkSwap() && m_powerManagerInter->CanHibernate();
 
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
-        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_HIBERNATE) && m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool())) {
+        if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_HIBERNATE) && m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool()))
+        && contextMenu.contains(MENU_HIBERNATE)) {
             hibernate["itemId"] = "Hibernate";
             hibernate["itemText"] = tr("Hibernate");
             hibernate["isActive"] = true;
@@ -169,18 +200,21 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 #endif
 
     QMap<QString, QVariant> lock;
-    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_LOCK) && m_gsettings->get(GSETTING_SHOW_LOCK).toBool())) {
+    if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_LOCK) && m_gsettings->get(GSETTING_SHOW_LOCK).toBool()))
+    && contextMenu.contains(MENU_LOCK)) {
         lock["itemId"] = "Lock";
         lock["itemText"] = tr("Lock");
         lock["isActive"] = true;
         items.push_back(lock);
     }
 
-    QMap<QString, QVariant> logout;
-    logout["itemId"] = "Logout";
-    logout["itemText"] = tr("Log out");
-    logout["isActive"] = true;
-    items.push_back(logout);
+    if (contextMenu.contains(MENU_LOGOUT)) {
+        QMap<QString, QVariant> logout;
+        logout["itemId"] = "Logout";
+        logout["itemText"] = tr("Log out");
+        logout["isActive"] = true;
+        items.push_back(logout);
+    }
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
         // 读取com.deepin.dde.session-shell切换用户配置项
@@ -195,9 +229,10 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
 
         // 和登录锁屏界面的逻辑保持一致
-        if (AlwaysShow == switchUserConfig ||
+        if ((AlwaysShow == switchUserConfig ||
                  (OnDemand == switchUserConfig &&
-                 (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer))) {
+                 (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer)))
+                 && contextMenu.contains(MENU_SWITCH_USER)) {
             QMap<QString, QVariant> switchUser;
             switchUser["itemId"] = "SwitchUser";
             switchUser["itemText"] = tr("Switch account");
@@ -206,11 +241,13 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
 
 #ifndef DISABLE_POWER_OPTIONS
-        QMap<QString, QVariant> power;
-        power["itemId"] = "power";
-        power["itemText"] = tr("Power settings");
-        power["isActive"] = true;
-        items.push_back(power);
+        if (contextMenu.contains(MENU_POWER_SETTINGS)) {
+            QMap<QString, QVariant> power;
+            power["itemId"] = "power";
+            power["itemText"] = tr("Power settings");
+            power["isActive"] = true;
+            items.push_back(power);
+        }
 #endif
     }
 
