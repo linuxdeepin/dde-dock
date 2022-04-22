@@ -329,7 +329,7 @@ void XEmbedTrayWidget::sendHoverEvent()
     setWindowOnTop(true);
     Display *display = IS_WAYLAND_DISPLAY ? m_display : QX11Info::display();
     if (display) {
-        if (m_injectMode == XTest) {
+        if (m_injectMode == XTest || IS_WAYLAND_DISPLAY) {
             // fake enter event
             XTestFakeMotionEvent(display, 0, p.x(), p.y(), CurrentTime);
             XFlush(display);
@@ -436,7 +436,7 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         xcb_send_event(c, false, m_windowId, XCB_EVENT_MASK_BUTTON_RELEASE, (char*)releaseEvent);
         delete releaseEvent;
     }
- 
+
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
