@@ -38,6 +38,7 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_popupWindow(new DockPopupWindow(nullptr))
     , m_distanceMultiple(Utils::SettingValue("com.deepin.dde.dock.distancemultiple", "/com/deepin/dde/dock/distancemultiple/", "distance-multiple", 1.5).toDouble())
     , m_item(nullptr)
+    , m_cursorPosition(-1, -1)
 {
     m_removeTips->setText(tr("Remove"));
     m_removeTips->setObjectName("AppRemoveTips");
@@ -60,14 +61,14 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     if (Utils::IS_WAYLAND_DISPLAY) {
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Window);
         setAttribute(Qt::WA_NativeWindow);
+    } else {
+        setAcceptDrops(true);
     }
     viewport()->setAutoFillBackground(false);
     setFrameShape(QFrame::NoFrame);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setMouseTracking(true);
-
-    setAcceptDrops(true);
 
     initAnimations();
 
@@ -89,16 +90,23 @@ void AppDragWidget::mouseMoveEvent(QMouseEvent *event)
 
 void AppDragWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    event->accept();
-    m_bDragDrop = true;
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        QGraphicsView::dragEnterEvent(event);
+    } else {
+        event->accept();
+        m_bDragDrop = true;
+    }
 }
 
 void AppDragWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    Q_UNUSED(event);
-    showRemoveTips();
-    if (isRemoveItem() && m_bDragDrop) {
-        emit requestRemoveItem();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        QGraphicsView::dragMoveEvent(event);
+    } else {
+        showRemoveTips();
+        if (isRemoveItem() && m_bDragDrop) {
+            emit requestRemoveItem();
+        }
     }
 }
 
@@ -156,23 +164,27 @@ const QPoint AppDragWidget::popupMarkPoint(Dock::Position pos)
 
 void AppDragWidget::dropEvent(QDropEvent *event)
 {
-    m_followMouseTimer->stop();
-    m_bDragDrop = false;
-
-    if (isRemoveAble(QCursor::pos())) {
-        if (DWindowManagerHelper::instance()->hasComposite()) {
-            showRemoveAnimation();
-        } else {
-            hide();
-        }
-        AppItem *appItem = static_cast<AppItem *>((Utils::IS_WAYLAND_DISPLAY && m_item) ? m_item : event->source());
-        appItem->undock();
-        m_popupWindow->setVisible(false);
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        QGraphicsView::dropEvent(event);
     } else {
-        if (DWindowManagerHelper::instance()->hasComposite()) {
-            showGoBackAnimation();
+        m_followMouseTimer->stop();
+        m_bDragDrop = false;
+
+        if (isRemoveAble(QCursor::pos())) {
+            if (DWindowManagerHelper::instance()->hasComposite()) {
+                showRemoveAnimation();
+            } else {
+                hide();
+            }
+            AppItem *appItem = static_cast<AppItem *>((Utils::IS_WAYLAND_DISPLAY && m_item) ? m_item : event->source());
+            appItem->undock();
+            m_popupWindow->setVisible(false);
         } else {
-            hide();
+            if (DWindowManagerHelper::instance()->hasComposite()) {
+                showGoBackAnimation();
+            } else {
+                hide();
+            }
         }
     }
 }
@@ -384,6 +396,14 @@ void AppDragWidget::enterEvent(QEvent *event)
     }
 }
 
+bool AppDragWidget::event(QEvent *event)
+{
+    if (Utils::IS_WAYLAND_DISPLAY && event->type() == QEvent::DeferredDelete)
+        requestRemoveSelf(isRemoveAble(m_cursorPosition));
+
+    return QGraphicsView::event(event);
+}
+
 /**显示移除应用提示窗口
  * @brief AppDragWidget::showRemoveTips
  */
@@ -426,4 +446,10 @@ void AppDragWidget::moveEvent(QMoveEvent *event)
 {
     Q_UNUSED(event);
     showRemoveTips();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        m_cursorPosition = QCursor::pos();
+        if (isRemoveItem()) {
+            emit requestRemoveItem();
+        }
+    }
 }

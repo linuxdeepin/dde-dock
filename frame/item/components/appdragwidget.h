@@ -81,6 +81,7 @@ private:
 class AppDragWidget : public QGraphicsView
 {
     Q_OBJECT
+
 public:
     explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
 
@@ -96,6 +97,7 @@ public:
 
 signals:
     void requestRemoveItem();
+    void requestRemoveSelf(bool);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -105,6 +107,7 @@ protected:
     void hideEvent(QHideEvent *event) override;
     void moveEvent(QMoveEvent *event) override;
     void enterEvent(QEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     void initAnimations();
@@ -142,6 +145,7 @@ private:
 
     bool m_bDragDrop = false; // 图标是否被拖拽
     DockItem *m_item;
+    QPoint m_cursorPosition;
 };
 
 #endif /* APPDRAGWIDGET_H */

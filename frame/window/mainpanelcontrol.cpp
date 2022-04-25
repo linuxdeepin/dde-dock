@@ -739,17 +739,34 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
         m_appDragWidget = appDrag->appDragWidget();
 
-        connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
-            m_appDragWidget = nullptr;
-            if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
-                if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
-                    insertItem(m_dragIndex, item);
-                    m_dragIndex = -1;
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            connect(m_appDragWidget, &AppDragWidget::requestRemoveSelf, this, [ = ](bool needDelete) {
+                m_appDragWidget = nullptr;
+                if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
+                    if (m_dragIndex > -1 && !needDelete) {
+                        insertItem(m_dragIndex, item);
+                        m_dragIndex = -1;
+                    } else {
+                        AppItem *app = static_cast<AppItem *>(item.data());
+                        app->undock();
+                    }
+                    item->setDraging(false);
+                    item->update();
                 }
-                item->setDraging(false);
-                item->update();
-            }
-        });
+            });
+        } else {
+            connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
+                m_appDragWidget = nullptr;
+                if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
+                    if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
+                        insertItem(m_dragIndex, item);
+                        m_dragIndex = -1;
+                    }
+                    item->setDraging(false);
+                    item->update();
+                }
+            });
+        }
 
         connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
             if (-1 != m_appAreaSonLayout->indexOf(item)) {
