@@ -1401,9 +1401,18 @@ void MultiScreenWorker::checkXEventMonitorService()
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
         connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
         connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
-        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ] {
+        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ](int i, int x, int y, const QString &key) {
+            Q_UNUSED(i);
+            Q_UNUSED(key);
             setStates(MousePress, false);
-            onExtralRegionMonitorChanged(0, 0, m_extralRegisterKey);
+            // 在鼠标拖动任务栏在最大尺寸的时候，如果当前任务栏为隐藏模式（一直隐藏或智能隐藏），在松开鼠标的那一刻，判断当前
+            // 鼠标位置是否在任务栏外面(isCursorOut(x,y)==true)，此时需要触发onExtralRegionMonitorChanged函数，
+            // 目的是为了让其触发隐藏
+            if (isCursorOut(x, y)
+                    && (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)) {
+                qApp->setProperty("DRAG_STATE", false);
+                onExtralRegionMonitorChanged(0, 0, m_extralRegisterKey);
+            }
         });
 
         connect(extralEventInter, &XEventMonitor::CursorOut, this, [ = ](int x, int y, const QString &key) {
