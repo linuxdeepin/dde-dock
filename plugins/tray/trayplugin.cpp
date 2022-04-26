@@ -485,11 +485,21 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
             return false;
         }
 
+        // 1、确保服务有效
         QDBusInterface sniItemDBus(sniServerName, "/" + list.last());
         if (!sniItemDBus.isValid()) {
             qDebug() << "sni dbus service error : " << sniServerName;
             return false;
         }
+
+        // 部分服务虽然有效，但是在dbus总线上只能看到服务，其他信息都无法获取,这里通过Ping进行二次确认
+        // 参考: https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces
+
+        // 2、通过Ping接口确认服务是否正常
+        QDBusInterface peerInter(sniServerName, "/" + list.last(), "org.freedesktop.DBus.Peer");
+        QDBusReply<void> reply = peerInter.call("Ping");
+        if (!reply.isValid())
+            return false;
 
         return true;
     });

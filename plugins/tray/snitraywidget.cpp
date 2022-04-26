@@ -30,6 +30,8 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDBusPendingCall>
+#include <QtConcurrent>
+#include <QFuture>
 
 #include <xcb/xproto.h>
 
@@ -88,7 +90,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     setOwnerPID(conn.interface()->servicePid(m_dbusService));
 
     m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
-
+    m_sniInter->setSync(false);
     if (!m_sniInter->isValid()) {
         qDebug() << "SNI dbus interface is invalid!" << m_dbusService << m_dbusPath << m_sniInter->lastError();
         return;
@@ -155,24 +157,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
 
 QString SNITrayWidget::itemKeyForConfig()
 {
-    QString key;
-
-    do {
-        key = m_sniId;
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
-              .property("Id").toString();
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        key = m_sniServicePath;
-    } while (false);
-
-    return QString("sni:%1").arg(key);
+    return QString("sni:%1").arg(m_sniId.isEmpty() ? m_sniServicePath : m_sniId);
 }
 
 void SNITrayWidget::updateIcon()
@@ -182,16 +167,20 @@ void SNITrayWidget::updateIcon()
 
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
-    QDBusPendingReply<> reply;
     switch (mouseButton) {
     case XCB_BUTTON_INDEX_1:
-        reply =  m_sniInter->Activate(x, y);
-        // try to invoke context menu while calling activate get a error.
-        // primarily work for apps using libappindicator.
-        reply.waitForFinished();
-        if (reply.isError()) {
-            showContextMenu(x,y);
-        }
+    {
+        QFuture<void> future = QtConcurrent::run([ = ] {
+            StatusNotifierItem inter(m_dbusService, m_dbusPath, QDBusConnection::sessionBus());
+            QDBusPendingReply<> reply = inter.Activate(x, y);
+            // try to invoke context menu while calling activate get a error.
+            // primarily work for apps using libappindicator.
+            reply.waitForFinished();
+            if (reply.isError()) {
+                showContextMenu(x,y);
+            }
+        });
+    }
         break;
     case XCB_BUTTON_INDEX_2:
         m_sniInter->SecondaryActivate(x, y);
