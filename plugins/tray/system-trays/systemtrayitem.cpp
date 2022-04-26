@@ -451,6 +451,9 @@ void SystemTrayItem::showContextMenu()
     hidePopup();
     emit requestWindowAutoHide(false);
 
+    if (!m_contextMenu.parentWidget())
+        m_contextMenu.setParent(topLevelWidget(), Qt::Popup);
+
     m_contextMenu.exec(QCursor::pos());
 
     onContextMenuAccepted();

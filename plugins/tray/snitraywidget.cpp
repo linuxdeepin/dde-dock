@@ -284,6 +284,8 @@ void SNITrayWidget::initMenu()
     qDebug() << "generate the sni menu object";
 
     m_menu = m_dbusMenuImporter->menu();
+    if (m_menu && !m_menu->parentWidget())
+        m_menu->setParent(topLevelWidget(), Qt::Popup);
 
     qDebug() << "the sni menu obect is:" << m_menu;
 }
