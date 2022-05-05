@@ -192,6 +192,12 @@ void DockPopupWindow::compositeChanged()
 
 void DockPopupWindow::ensureRaised()
 {
-    if (isVisible())
-        raise();
+    if (isVisible()) {
+        QWidget *content = getContent();
+        if (!content || !content->isVisible()) {
+            this->setVisible(false);
+        } else {
+            raise();
+        }
+    }
 }
