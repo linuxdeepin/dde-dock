@@ -34,10 +34,6 @@ Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
  deepin-desktop-schemas (>=5.9.14),
- libdtkwidget5 (>=5.4.19),
- libdtkcore5 (>=5.4.14),
- libdtkgui5 (>=5.4.13),
- libdframeworkdbus2 (>=5.4.6),
  dde-qt5xcb-plugin (>=5.0.25),
  dde-daemon (>=5.13.12),
  startdde (>=5.8.9),
