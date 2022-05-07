@@ -152,7 +152,7 @@ QSize DatetimeWidget::curTimeSize() const
     dateSize.setWidth(maxWidth);
 
     if (position == Dock::Bottom || position == Dock::Top) {
-        while (QFontMetrics(m_timeFont).boundingRect(timeString).height() + QFontMetrics(m_dateFont).boundingRect(dateString).height() > height()) {
+        while (QFontMetrics(m_timeFont).boundingRect(timeString).height() + QFontMetrics(m_dateFont).boundingRect(dateString).height() > height() && m_timeFont.pixelSize() > 1) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             maxWidth = std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_timeFont).horizontalAdvance(timeString));
             timeSize.setWidth(maxWidth);
@@ -164,7 +164,7 @@ QSize DatetimeWidget::curTimeSize() const
         }
         return QSize(std::max(timeSize.width(), dateSize.width()), timeSize.height() + dateSize.height());
     } else {
-        while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect(dateString).size().width()) > (width() - 4)) {
+        while (std::max(QFontMetrics(m_timeFont).boundingRect(timeString).size().width(), QFontMetrics(m_dateFont).boundingRect(dateString).size().width()) > (width() - 4) && m_timeFont.pixelSize() > 1) {
             m_timeFont.setPixelSize(m_timeFont.pixelSize() - 1);
             if (m_24HourFormat) {
                 timeSize.setHeight(QFontMetrics(m_timeFont).boundingRect(timeString).size().height());
