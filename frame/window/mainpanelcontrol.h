@@ -83,7 +83,9 @@ private:
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
-    
+
+    int getItemIndex(DockItem *targetItem) const;
+
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
