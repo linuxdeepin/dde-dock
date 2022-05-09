@@ -440,22 +440,8 @@ void MainPanelControl::removeItem(DockItem *item)
 void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
 {
     // get target index
-    int idx = -1;
-    if (targetItem->itemType() == DockItem::App)
-        idx = m_appAreaSonLayout->indexOf(targetItem);
-    else if (targetItem->itemType() == DockItem::Plugins){
-        //因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-        //因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
-        for (int i = 0; i < m_pluginLayout->count(); ++i) {
-            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (layout && layout->itemAt(0)->widget() == targetItem) {
-                idx = i;
-                break;
-            }
-        }
-    } else if (targetItem->itemType() == DockItem::FixedPlugin)
-        idx = m_fixedAreaLayout->indexOf(targetItem);
-    else
+    int idx = getItemIndex(targetItem);
+    if (-1 == idx)
         return;
 
     // remove old item
@@ -466,6 +452,31 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
         m_dragIndex = idx;
     }
     insertItem(idx, sourceItem);
+}
+
+int MainPanelControl::getItemIndex(DockItem *targetItem) const
+{
+    if (!targetItem)
+        return -1;
+
+    if (targetItem->itemType() == DockItem::App)
+        return m_appAreaSonLayout->indexOf(targetItem);
+
+    if (targetItem->itemType() == DockItem::Plugins){
+        //因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
+        //因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
+        for (int i = 0; i < m_pluginLayout->count(); ++i) {
+            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
+            if (layout && layout->itemAt(0)->widget() == targetItem) {
+                return i;
+            }
+        }
+    }
+
+    if (targetItem->itemType() == DockItem::FixedPlugin)
+        return m_fixedAreaLayout->indexOf(targetItem);
+
+    return -1;
 }
 
 void MainPanelControl::dragEnterEvent(QDragEnterEvent *e)
@@ -740,6 +751,7 @@ void MainPanelControl::startDrag(DockItem *dockItem)
         m_appDragWidget = appDrag->appDragWidget();
 
         if (Utils::IS_WAYLAND_DISPLAY) {
+            m_dragIndex = getItemIndex(dockItem);
             connect(m_appDragWidget, &AppDragWidget::requestRemoveSelf, this, [ = ](bool needDelete) {
                 m_appDragWidget = nullptr;
                 if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
