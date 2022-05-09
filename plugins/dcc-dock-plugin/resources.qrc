@@ -12,6 +12,7 @@
         <file>texts/dcc_dock_trash_16px.svg</file>
         <file>texts/dcc_dock_grandsearch_16px.svg</file>
         <file>texts/dcc_dock_systemmonitor_16px.svg</file>
+        <file>texts/shot-start-plugin_16px.svg</file>
     </qresource>
     <qresource prefix="/">
         <file>translations/dcc-dock-plugin.ts</file>
