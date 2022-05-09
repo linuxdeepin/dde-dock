@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QFile>
+#include <QDate>
 
 #include <gtest/gtest.h>
 
@@ -86,6 +87,6 @@ TEST_F(Ut_ThemeAppIcon, getIcon_test4)
 TEST_F(Ut_ThemeAppIcon, createCalendarIcon_test)
 {
     const QString &filePath = "/tmp/calendar.svg";
-    ASSERT_TRUE(ThemeAppIcon::createCalendarIcon(filePath));
+    ASSERT_TRUE(ThemeAppIcon::createCalendarIcon(QDate::currentDate(), filePath));
     QFile::remove(filePath);
 }
