@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="13px" viewBox="0 0 14 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/dock-set/task</title>
+    <g id="浅" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="任务栏插件菜单" transform="translate(-793.000000, -605.000000)" fill="#536076">
+            <g id="控制中心-个性化备份" transform="translate(322.000000, 172.000000)">
+                <g id="分组-4" transform="translate(450.000000, 60.000000)">
+                    <g id="编组-2" transform="translate(10.000000, 11.000000)">
+                        <g id="编组" transform="translate(0.000000, 54.000000)">
+                            <g id="list/check-box/top" transform="translate(0.000000, 296.000000)">
+                                <g id="Combined-Shape" transform="translate(10.000000, 10.000000)">
+                                    <path d="M4,2 L4,3.5 L11.5,3.5 C12.6045695,3.5 13.5,4.3954305 13.5,5.5 L13.5,12 L15,12 L15,13.5 L13.5,13.5 L13.5,15 L12,15 L12,13.5 L4.5,13.5 C3.3954305,13.5 2.5,12.6045695 2.5,11.5 L2.5,5 L1,5 L1,3.5 L2.5,3.5 L2.5,2 L4,2 Z M11,5 L4,5 L4,11 C4,11.5128358 4.38604019,11.9355072 4.88337887,11.9932723 L5,12 L12,12 L12,6 C12,5.44771525 11.5522847,5 11,5 Z M11,6 L11,11 L5,11 L5,6 L11,6 Z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
