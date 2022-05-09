@@ -109,7 +109,6 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
     Q_UNUSED(menuId);
     Q_UNUSED(checked);
 
-    /*  控制中心暂未实现
     if (menuId == SHIFT)
         m_airplaneModeInter->Enable(!m_airplaneModeInter->enabled());
     else if (menuId == SETTINGS)
@@ -121,7 +120,6 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
         .arg(QString("network"))
         .arg(QString("Airplane Mode"))
         .call();
-    */
 }
 
 void AirplaneModeItem::refreshIcon()

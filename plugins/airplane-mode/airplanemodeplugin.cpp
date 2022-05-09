@@ -83,6 +83,31 @@ QWidget *AirplaneModePlugin::itemTipsWidget(const QString &itemKey)
     return nullptr;
 }
 
+QWidget *AirplaneModePlugin::itemPopupApplet(const QString &itemKey)
+{
+    if (itemKey == AIRPLANEMODE_KEY) {
+        return m_item->popupApplet();
+    }
+
+    return nullptr;
+}
+
+const QString AirplaneModePlugin::itemContextMenu(const QString &itemKey)
+{
+    if (itemKey == AIRPLANEMODE_KEY) {
+        return m_item->contextMenu();
+    }
+
+    return QString();
+}
+
+void AirplaneModePlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    if (itemKey == AIRPLANEMODE_KEY) {
+        m_item->invokeMenuItem(menuId, checked);
+    }
+}
+
 int AirplaneModePlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
@@ -114,12 +139,11 @@ void AirplaneModePlugin::onAirplaneEnableChanged(bool enable)
     if (!m_proxyInter)
         return;
 
+    m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
     if (enable) {
-        m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
         m_proxyInter->saveValue(this, STATE_KEY, true);
     }
     else {
-        m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
         m_proxyInter->saveValue(this, STATE_KEY, false);
     }
 }
