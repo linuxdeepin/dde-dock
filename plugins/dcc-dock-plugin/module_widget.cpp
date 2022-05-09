@@ -334,7 +334,22 @@ void ModuleWidget::initUI()
 
                 // 插件图标
                 auto leftAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);
-                leftAction->setIcon(QIcon::fromTheme(pluginIconMap.value(m_dockInter->getPluginKey(name), "dcc_dock_plug_in")));
+
+                const QString pluginKey = m_dockInter->getPluginKey(name);
+                QIcon pluginIcon;
+                // 第三方插件通过pluginKey从系统中读取图标
+                if (pluginIconMap.contains(pluginKey)) {
+                    pluginIcon = QIcon::fromTheme(pluginIconMap.value(m_dockInter->getPluginKey(name)));
+                } else {
+                    pluginIcon = QIcon::fromTheme(pluginKey);
+                }
+
+                // 如果获取不到图标则使用默认图标
+                if (pluginIcon.isNull()) {
+                    pluginIcon = QIcon::fromTheme("dcc_dock_plug_in");
+                }
+
+                leftAction->setIcon(pluginIcon);
                 item->setActionList(Qt::Edge::LeftEdge, {leftAction});
 
                 auto rightAction = new DViewItemAction(Qt::AlignVCenter, size, size, true);
