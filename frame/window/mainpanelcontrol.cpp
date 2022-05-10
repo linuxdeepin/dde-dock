@@ -759,6 +759,10 @@ void MainPanelControl::startDrag(DockItem *dockItem)
                         insertItem(m_dragIndex, item);
                         m_dragIndex = -1;
                     } else {
+                        if (-1 == m_appAreaSonLayout->indexOf(item) && m_dragIndex != -1) {
+                            insertItem(m_dragIndex, item);
+                            m_dragIndex = -1;
+                        }
                         AppItem *app = static_cast<AppItem *>(item.data());
                         app->undock();
                     }
