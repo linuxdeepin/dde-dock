@@ -54,10 +54,11 @@ find_package(Qt5 COMPONENTS Test REQUIRED)
 #find_package(DdeControlCenter REQUIRED)
 find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
+find_package(dbusmenu-qt5 REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11 xcursor)
+pkg_check_modules(XCB_EWMH REQUIRED xcb-image xcb-composite xtst xcb-ewmh xext dbusmenu-qt5 x11 xcursor)
 
 # 添加执行文件信息
 add_executable(${BIN_NAME}

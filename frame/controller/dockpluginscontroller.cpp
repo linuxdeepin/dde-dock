@@ -59,12 +59,17 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
         connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::trayVisableCountChanged,
                 this, &DockPluginsController::trayVisableCountChanged, Qt::UniqueConnection);
     } else {
-        item = new PluginsItem(itemInter, itemKey, pluginApi);
+        item = createPluginsItem(itemInter, itemKey, pluginApi);
     }
 
     mPluginsMap[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);
+}
+
+PluginsItem *DockPluginsController::createPluginsItem(PluginsItemInterface *const itemInter, const QString &itemKey, const QString &pluginApi)
+{
+    return new PluginsItem(itemInter, itemKey, pluginApi);
 }
 
 void DockPluginsController::itemUpdate(PluginsItemInterface *const itemInter, const QString &itemKey)

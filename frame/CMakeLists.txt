@@ -21,8 +21,9 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(DtkCMake REQUIRED)
+find_package(dbusmenu-qt5 REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11 xcursor)
+pkg_check_modules(XCB_EWMH REQUIRED xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DtkGUI REQUIRED dtkgui)
@@ -43,6 +44,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${QGSettings_INCLUDE_DIRS}
     ${DtkGUI_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
+    ${dbusmenu-qt5_INCLUDE_DIRS}
     ../interfaces
     ../widgets
     accessible
@@ -55,6 +57,8 @@ target_include_directories(${BIN_NAME} PUBLIC
     util
     window
     window/components
+    window/tray
+    window/tray/widgets
     xcb
     ../plugins/tray
     ../plugins/show-desktop
@@ -78,6 +82,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${DtkGUI_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    -lpthread -lm
 )
 
 if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")

@@ -68,6 +68,8 @@ include_directories(
     frame/util
     frame/window
     frame/window/components
+    frame/window/tray
+    frame/window/tray/widgets
     frame/xcb
     ../widgets
     ../interfaces
@@ -84,6 +86,8 @@ aux_source_directory(frame/item/resources RESOURCES)
 aux_source_directory(frame/util UTIL)
 aux_source_directory(frame/window WINDOW)
 aux_source_directory(frame/window/components WINDOWCOMPONENTS)
+aux_source_directory(frame/window/tray WINDOWTRAY)
+aux_source_directory(frame/window/tray/widgets WINDOWTRAYWIDGET)
 aux_source_directory(frame/xcb XCB)
 
 file(GLOB SRC_PATH
@@ -98,6 +102,8 @@ file(GLOB SRC_PATH
     ${UTIL}
     ${WINDOW}
     ${WINDOWCOMPONENTS}
+    ${WINDOWTRAY}
+    ${WINDOWTRAYWIDGET}
     ${XCB}
     )
 

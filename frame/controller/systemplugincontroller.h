@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DOCKPLUGINSCONTROLLER_H
-#define DOCKPLUGINSCONTROLLER_H
+#ifndef SYSTEMTRAYSCONTROLLER_H
+#define SYSTEMTRAYSCONTROLLER_H
 
-#include "pluginsitem.h"
 #include "pluginproxyinterface.h"
+#include "abstractpluginscontroller.h"
 #include "abstractpluginscontroller.h"
 
 #include <com_deepin_dde_daemon_dock.h>
@@ -34,15 +34,14 @@
 #include <QDBusConnectionInterface>
 
 class PluginsItemInterface;
-class DockPluginsController : public AbstractPluginsController
+class SystemPluginItem;
+
+class SystemPluginController : public AbstractPluginsController
 {
     Q_OBJECT
 
-    friend class DockItemController;
-    friend class DockItemManager;
-
 public:
-    explicit DockPluginsController(QObject *parent = nullptr);
+    explicit SystemPluginController(QObject *parent = nullptr);
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
@@ -52,20 +51,18 @@ public:
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
 
+    int systemTrayItemSortKey(const QString &itemKey);
+    void setSystemTrayItemSortKey(const QString &itemKey, const int order);
+
+    const QVariant getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
+    void saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value);
+
     void startLoader();
 
-protected:
-    virtual PluginsItem *createPluginsItem(PluginsItemInterface *const itemInter, const QString &itemKey, const QString &pluginApi);
-
 signals:
-    void pluginItemInserted(PluginsItem *pluginItem) const;
-    void pluginItemRemoved(PluginsItem *pluginItem) const;
-    void pluginItemUpdated(PluginsItem *pluginItem) const;
-    void trayVisableCountChanged(const int &count) const;
-
-private:
-    void loadLocalPlugins();
-    void loadSystemPlugins();
+    void pluginItemAdded(const QString &itemKey, SystemPluginItem *pluginItem);
+    void pluginItemRemoved(const QString &itemKey, SystemPluginItem *pluginItem);
+    void pluginItemUpdated(const QString &itemKey, SystemPluginItem *pluginItem);
 };
 
-#endif // DOCKPLUGINSCONTROLLER_H
+#endif // SYSTEMTRAYSCONTROLLER_H

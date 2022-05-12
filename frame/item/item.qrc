@@ -13,6 +13,10 @@
         <file>resources/arrow-right.svg</file>
         <file>resources/arrow-left.svg</file>
         <file>resources/arrow-down.svg</file>
+        <file>resources/arrow-up-dark.svg</file>
+        <file>resources/arrow-right-dark.svg</file>
+        <file>resources/arrow-left-dark.svg</file>
+        <file>resources/arrow-down-dark.svg</file>
         <file>resources/application-x-desktop.svg</file>
         <file>resources/close_round_hover.svg</file>
         <file>resources/close_round_press.svg</file>
