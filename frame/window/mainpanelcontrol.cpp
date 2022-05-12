@@ -1151,14 +1151,14 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
     m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
     m_trayAreaLayout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
 
-    //因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
-    //而不对日期时间插件设置边距
+    //因为日期时间插件或第三方插件声明自定义大小
+    //而不对自定义大小插件设置边距
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         QLayout *layout = m_pluginLayout->itemAt(i)->layout();
         if (layout && layout->itemAt(0)) {
             PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
 
-            if (pItem && pItem->pluginName() != "datetime") {
+            if (pItem && pItem->pluginSizePolicy() != PluginsItemInterface::Custom) {
                 layout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
             }
         }
