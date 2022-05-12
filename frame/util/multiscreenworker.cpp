@@ -63,7 +63,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
 
     initConnection();
     initMembers();
-    initDBus();
+    initDockMode();
     initDisplayData();
     initUI();
 }
@@ -150,8 +150,7 @@ QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const P
 {
     if (hideMode == HideMode::KeepShowing)
         return getDockShowGeometry(screenName, pos, displayMode, true);
-    else
-        return getDockHideGeometry(screenName, pos, displayMode, true);
+    return getDockHideGeometry(screenName, pos, displayMode, true);
 }
 
 void MultiScreenWorker::onAutoHideChanged(bool autoHide)
@@ -908,6 +907,7 @@ void MultiScreenWorker::initConnection()
     connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
+    connect(parent()->panel(), &MainPanelControl::sizeChanged, this, [ this ] { resetDockScreen(); });
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
@@ -965,7 +965,7 @@ void MultiScreenWorker::initUI()
     QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
 }
 
-void MultiScreenWorker::initDBus()
+void MultiScreenWorker::initDockMode()
 {
     if (m_dockInter->isValid()) {
         m_position = static_cast<Dock::Position >(m_dockInter->position());
@@ -973,6 +973,8 @@ void MultiScreenWorker::initDBus()
         m_hideState = static_cast<Dock::HideState >(m_dockInter->hideState());
         m_displayMode = static_cast<Dock::DisplayMode >(m_dockInter->displayMode());
         m_opacity = m_dockInter->opacity();
+
+        parent()->panel()->setDisplayMode(m_displayMode);
 
         DockItem::setDockPosition(m_position);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
@@ -1000,7 +1002,7 @@ void MultiScreenWorker::initDisplayData()
  */
 void MultiScreenWorker::reInitDisplayData()
 {
-    initDBus();
+    initDockMode();
     initDisplayData();
 }
 
@@ -1276,7 +1278,8 @@ void MultiScreenWorker::resetDockScreen()
     if (testState(ChangePositionAnimationStart)
             || testState(HideAnimationStart)
             || testState(ShowAnimationStart)
-            || testState(DockIsShowing))
+            || testState(DockIsShowing)
+            || testState(DockIsDraging))
         return;
 
     m_ds.updateDockedScreen(getValidScreen(position()));
@@ -1506,28 +1509,37 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
             switch (pos) {
             case Position::Top:
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
-                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
+                parent()->panel()->setScreenSize(static_cast<int>(screenRect.width()));
+
+                rect.setX((static_cast<int>(screenRect.width() / ratio) - parent()->panel()->suitableSize(ratio).width()) / 2);
+                rect.setY(static_cast<int>((screenRect.y() + margin) / ratio));
+                rect.setWidth(parent()->panel()->suitableSize(ratio).width());
                 rect.setHeight(dockSize);
                 break;
             case Position::Bottom:
-                rect.setX(static_cast<int>(screenRect.x() + margin));
+                // 先用设置屏幕尺寸，理论上不应该在此处设置，因为这是在一个get方法里面，后续改成直接获取，在其他地方设置
+                parent()->panel()->setScreenSize(static_cast<int>(screenRect.width()));
+
+                rect.setX((static_cast<int>(screenRect.width() / ratio) - parent()->panel()->suitableSize(ratio).width()) / 2);
                 rect.setY(static_cast<int>(screenRect.y() + screenRect.height() / ratio - margin - dockSize));
-                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
+                rect.setWidth(parent()->panel()->suitableSize(ratio).width());
                 rect.setHeight(dockSize);
                 break;
             case Position::Left:
+                parent()->panel()->setScreenSize(static_cast<int>(screenRect.height()));
+
                 rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setY((static_cast<int>(screenRect.height() / ratio) - parent()->panel()->suitableSize(ratio).height()) / 2);
                 rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
+                rect.setHeight(parent()->panel()->suitableSize(ratio).height());
                 break;
             case Position::Right:
+                parent()->panel()->setScreenSize(static_cast<int>(screenRect.height()));
+
                 rect.setX(static_cast<int>(screenRect.x() + screenRect.width() / ratio - margin - dockSize));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setY((static_cast<int>(screenRect.height() / ratio) - parent()->panel()->suitableSize(ratio).height()) / 2);
                 rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
+                rect.setHeight(parent()->panel()->suitableSize(ratio).height());
                 break;
             }
         }

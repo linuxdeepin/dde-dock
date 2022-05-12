@@ -120,6 +120,7 @@ public:
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
         DockIsShowing = 0x80,               // 任务栏正在显示
+        DockIsDraging = 0x100,              // 任务栏正在拖拽
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -214,7 +215,7 @@ private:
     MainWindow *parent();
     // 初始化数据信息
     void initMembers();
-    void initDBus();
+    void initDockMode();
     void initConnection();
     void initUI();
     void initDisplayData();

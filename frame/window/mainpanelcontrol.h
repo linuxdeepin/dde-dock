@@ -38,6 +38,8 @@ class DockItem;
 class PlaceholderItem;
 class AppDragWidget;
 class DesktopWidget;
+class TrayManagerWindow;
+
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -48,6 +50,9 @@ public:
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
     void updatePluginsLayout();
+    QPainterPath areaPath();
+    void setScreenSize(int size);
+    QSize suitableSize(double deviceRatio);
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -57,6 +62,7 @@ public slots:
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
+    void sizeChanged();
 
 private:
     void initUI();
@@ -64,6 +70,7 @@ private:
     void updateMainPanelLayout();
     void updateDisplayMode();
     void moveAppSonWidget();
+    void updateModeChange();
 
     void addFixedAreaItem(int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
@@ -109,6 +116,7 @@ private:
     QBoxLayout *m_trayAreaLayout;   //
     QLabel *m_traySpliter;          // 托盘区域与插件区域间的分割线
     QWidget *m_pluginAreaWidget;    // 插件区域
+    TrayManagerWindow *m_trayManagerWidget;
     QBoxLayout *m_pluginLayout;     //
     DesktopWidget *m_desktopWidget; // 桌面预览区域
 
@@ -120,6 +128,7 @@ private:
     QPoint m_mousePressPos;
     TrayPluginItem *m_tray;
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
+    int m_screenSize;
 
     PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
 };

@@ -315,6 +315,7 @@ void MainWindow::initConnections()
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::windowRadiusChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_mainPanel, &MainPanelControl::sizeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 
@@ -332,7 +333,10 @@ void MainWindow::initConnections()
     connect(m_updateDragAreaTimer, &QTimer::timeout, m_multiScreenWorker, &MultiScreenWorker::onRequestUpdateRegionMonitor);
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, true); });
-    connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] { qApp->setProperty(DRAG_STATE_PROP, false); });
+    connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] {
+        m_multiScreenWorker->setStates(MultiScreenWorker::DockIsDraging, false);
+        qApp->setProperty(DRAG_STATE_PROP, false);
+    });
 
     connect(m_dragWidget, &DragWidget::dragPointOffset, this, &MainWindow::onMainWindowSizeChanged);
     connect(m_dragWidget, &DragWidget::dragFinished, this, &MainWindow::resetDragWindow);   //　更新拖拽区域
@@ -382,6 +386,8 @@ void MainWindow::adjustShadowMask()
 
     m_platformWindowHandle.setWindowRadius(radius);
     m_mainPanel->updatePluginsLayout();
+
+    setMaskPath(m_mainPanel->areaPath());
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
@@ -560,6 +566,7 @@ void MainWindow::onMainWindowSizeChanged(QPoint offset)
         break;
     }
 
+    m_multiScreenWorker->setStates(MultiScreenWorker::DockIsDraging, true);
     // 更新界面大小
     m_mainPanel->setFixedSize(newRect.size());
     setFixedSize(newRect.size());
