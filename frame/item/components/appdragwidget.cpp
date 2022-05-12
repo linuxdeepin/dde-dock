@@ -431,3 +431,43 @@ void AppDragWidget::moveEvent(QMoveEvent *event)
     Q_UNUSED(event);
     showRemoveTips();
 }
+
+QuickDragWidget::QuickDragWidget(QWidget *parent)
+    : AppDragWidget(parent)
+{
+
+}
+
+QuickDragWidget::~QuickDragWidget()
+{
+}
+
+void QuickDragWidget::dropEvent(QDropEvent *event)
+{
+    Q_UNUSED(event);
+
+    m_followMouseTimer->stop();
+    m_bDragDrop = false;
+
+    if (isRemoveAble(QCursor::pos())) {
+        if (DWindowManagerHelper::instance()->hasComposite())
+            showRemoveAnimation();
+        else
+            hide();
+
+        m_popupWindow->setVisible(false);
+    } else {
+        if (DWindowManagerHelper::instance()->hasComposite())
+            showGoBackAnimation();
+        else
+            hide();
+
+        Q_EMIT requestDropItem();
+    }
+}
+
+void QuickDragWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    AppDragWidget::dragMoveEvent(event);
+    requestDragMove(event);
+}

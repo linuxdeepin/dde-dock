@@ -1,0 +1,206 @@
+﻿#include "volumedeviceswidget.h"
+#include "customslider.h"
+#include "volumemodel.h"
+#include "settingdelegate.h"
+
+#include <DListView>
+#include <DPushButton>
+#include <DLabel>
+#include <DGuiApplicationHelper>
+
+#include <QVBoxLayout>
+#include <QScrollBar>
+#include <QEvent>
+#include <QProcess>
+#include <QDBusInterface>
+#include <QDBusConnection>
+
+DWIDGET_USE_NAMESPACE
+
+#define HEADERHEIGHT 30
+#define ITEMSPACE 16
+
+VolumeDevicesWidget::VolumeDevicesWidget(VolumeModel *model, QWidget *parent)
+    : QWidget(parent)
+    , m_volumeSlider(new CustomSlider(CustomSlider::Normal, this))
+    , m_descriptionLabel(new QLabel(tr("Output Device"), this))
+    , m_deviceList(new DListView(this))
+    , m_volumeModel(model)
+    , m_audioSink(nullptr)
+    , m_model(new QStandardItemModel(this))
+    , m_delegate(new SettingDelegate(m_deviceList))
+{
+    initUi();
+    initConnection();
+    reloadAudioDevices();
+
+    QMetaObject::invokeMethod(this, [ this ] {
+        resetVolumeInfo();
+        resizeHeight();
+    }, Qt::QueuedConnection);
+}
+
+VolumeDevicesWidget::~VolumeDevicesWidget()
+{
+}
+
+void VolumeDevicesWidget::initUi()
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    m_volumeSlider->setIconSize(QSize(36, 36));
+    m_volumeSlider->setLeftIcon(QIcon(leftIcon()));
+    m_volumeSlider->setRightIcon(QIcon(rightIcon()));
+
+    layout->addWidget(m_volumeSlider);
+    layout->addSpacing(4);
+    layout->addWidget(m_descriptionLabel);
+
+    m_deviceList->setModel(m_model);
+    m_deviceList->setViewMode(QListView::ListMode);
+    m_deviceList->setMovement(QListView::Free);
+    m_deviceList->setItemRadius(12);
+    m_deviceList->setWordWrap(false);
+    m_deviceList->verticalScrollBar()->setVisible(false);
+    m_deviceList->horizontalScrollBar()->setVisible(false);
+    m_deviceList->setOrientation(QListView::Flow::TopToBottom, false);
+    layout->addWidget(m_deviceList);
+    m_deviceList->setSpacing(10);
+
+    m_deviceList->setItemDelegate(m_delegate);
+}
+
+void VolumeDevicesWidget::reloadAudioDevices()
+{
+    QList<AudioPorts *> ports = m_volumeModel->ports();
+    for (AudioPorts *port : ports) {
+        DStandardItem *item = new DStandardItem;
+        item->setText(QString("%1(%2)").arg(port->description()).arg(port->cardName()));
+        item->setIcon(QIcon(soundIconFile(port)));
+        item->setFlags(Qt::NoItemFlags);
+        item->setData(port->isChecked(), itemCheckRole);
+        item->setData(QVariant::fromValue(port), itemDataRole);
+        m_model->appendRow(item);
+        if (port->isChecked())
+            m_deviceList->setCurrentIndex(m_model->indexFromItem(item));
+    }
+
+    DStandardItem *settingItem = new DStandardItem;
+    settingItem->setText(tr("Sound settings"));
+    settingItem->setFlags(Qt::NoItemFlags);
+    settingItem->setData(false, itemCheckRole);
+    m_model->appendRow(settingItem);
+}
+
+void VolumeDevicesWidget::initConnection()
+{
+    m_audioSink = m_volumeModel->defaultSink();
+    auto adjustVolumeSlider = [ this ](int volume) {
+        m_volumeSlider->blockSignals(true);
+        m_volumeSlider->setValue(volume);
+        m_volumeSlider->blockSignals(false);
+    };
+    if (m_audioSink)
+        connect(m_audioSink, &AudioSink::volumeChanged, this, adjustVolumeSlider);
+    connect(m_volumeModel, &VolumeModel::defaultSinkChanged, this, [ this, adjustVolumeSlider ](AudioSink *sink) {
+        if (m_audioSink)
+            disconnect(m_audioSink);
+
+        m_audioSink = sink;
+        if (m_audioSink)
+            connect(m_audioSink, &AudioSink::volumeChanged, this, adjustVolumeSlider);
+
+        resetVolumeInfo();
+        m_deviceList->update();
+    });
+
+    connect(m_volumeSlider, &CustomSlider::valueChanged, this, [ this ](int value) {
+        AudioSink *defSink = m_volumeModel->defaultSink();
+        if (!defSink)
+            return;
+
+        defSink->setVolume(value, true);
+    });
+    connect(m_volumeModel, &VolumeModel::checkPortChanged, this, [ this ] {
+        for (int i = 0; i < m_model->rowCount(); i++) {
+            QModelIndex index = m_model->index(i, 0);
+            AudioPorts *port = index.data(itemDataRole).value<AudioPorts *>();
+            if (port)
+                m_model->setData(index, port->isChecked(), itemCheckRole);
+        }
+        m_deviceList->update();
+    });
+
+    connect(m_delegate, &SettingDelegate::selectIndexChanged, this, [ this ](const QModelIndex &index) {
+        AudioPorts *port = index.data(itemDataRole).value<AudioPorts *>();
+        if (port) {
+            m_volumeModel->setActivePort(port);
+            m_deviceList->update();
+        } else {
+            // 打开控制中心的声音模块
+            QDBusInterface controlcenter("com.deepin.dde.ControlCenter", "/com/deepin/dde/ControlCenter",
+                                         "com.deepin.dde.ControlCenter", QDBusConnection::sessionBus());
+            controlcenter.call("ShowModule", "sound");
+            hide();
+        }
+    });
+}
+
+QString VolumeDevicesWidget::leftIcon()
+{
+    QString iconLeft = QString(":/icons/resources/audio-volume-%1").arg(m_volumeModel->isMute() ? "muted" : "low");
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconLeft.append("-dark");
+
+    return iconLeft;
+}
+
+QString VolumeDevicesWidget::rightIcon()
+{
+    QString iconRight = QString(":/icons/resources/audio-volume-high");
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconRight.append("-dark");
+
+    return iconRight;
+}
+
+const QString VolumeDevicesWidget::soundIconFile(AudioPorts *port) const
+{
+    if (!port)
+        return QString();
+
+    if (port->isHeadPhone()) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            return QString(":/icons/resources/ICON_Device_Headphone_dark.svg");
+
+        return QString(":/icons/resources/ICON_Device_Headphone.svg");
+    }
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        return QString(":/icons/resources/ICON_Device_Laptop_dark.svg");
+
+    return QString(":/icons/resources/ICON_Device_Laptop.svg");
+}
+
+void VolumeDevicesWidget::resizeHeight()
+{
+    m_deviceList->adjustSize();
+    QMargins m = layout()->contentsMargins();
+    int height = m.top() + m.bottom() + HEADERHEIGHT + m_volumeSlider->height() + ITEMSPACE
+            + m_descriptionLabel->height() + m_deviceList->height();
+
+    setFixedHeight(height);
+}
+
+void VolumeDevicesWidget::resetVolumeInfo()
+{
+    AudioSink *defaultSink = m_volumeModel->defaultSink();
+    if (!defaultSink)
+        return;
+
+    m_volumeSlider->blockSignals(true);
+    m_volumeSlider->setValue(defaultSink->volume());
+    m_volumeSlider->blockSignals(false);
+}

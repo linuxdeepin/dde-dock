@@ -46,6 +46,7 @@ public:
         FixedPlugin,
         Placeholder,
         TrayPlugin,
+        QuickSettingPlugin
     };
 
 public:

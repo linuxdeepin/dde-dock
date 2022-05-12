@@ -64,6 +64,7 @@ include_directories(
     frame/item
     frame/item/components
     frame/item/resources
+    frame/model
     frame/util
     frame/window
     frame/window/components
@@ -77,6 +78,7 @@ aux_source_directory(frame/dbus DBUS)
 aux_source_directory(frame/dbus/sni SNI)
 aux_source_directory(frame/display DISPLAY)
 aux_source_directory(frame/item ITEM)
+aux_source_directory(frame/model MODEL)
 aux_source_directory(frame/item/components ITEMCOMPONENTS)
 aux_source_directory(frame/item/resources RESOURCES)
 aux_source_directory(frame/util UTIL)
@@ -91,6 +93,7 @@ file(GLOB SRC_PATH
     ${SNI}
     ${DISPLAY}
     ${ITEM}
+    ${MODEL}
     ${ITEMCOMPONENTS}
     ${UTIL}
     ${WINDOW}

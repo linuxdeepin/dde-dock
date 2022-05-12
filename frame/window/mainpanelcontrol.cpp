@@ -389,6 +389,7 @@ void MainPanelControl::insertItem(int index, DockItem *item)
     case DockItem::Plugins:
         addPluginAreaItem(index, item);
         break;
+    default: break;
     }
 
     // 同removeItem处 注意:不能屏蔽此接口，否则会造成插件插入时无法显示
@@ -420,6 +421,7 @@ void MainPanelControl::removeItem(DockItem *item)
     case DockItem::Plugins:
         removePluginAreaItem(item);
         break;
+    default: break;
     }
 
     item->removeEventFilter(this);

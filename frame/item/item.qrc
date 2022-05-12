@@ -67,5 +67,23 @@
         <file>resources/week5.svg</file>
         <file>resources/week6.svg</file>
         <file>resources/week7.svg</file>
+        <file>resources/brightnesshigh.svg</file>
+        <file>resources/brightnesslow.svg</file>
+        <file>resources/audio-volume-high-dark.svg</file>
+        <file>resources/audio-volume-high.svg</file>
+        <file>resources/audio-volume-low-dark.svg</file>
+        <file>resources/audio-volume-low.svg</file>
+        <file>resources/audio-volume-medium.svg</file>
+        <file>resources/audio-volume-muted-dark.svg</file>
+        <file>resources/audio-volume-muted.svg</file>
+        <file>resources/audio-volume-medium-dark.svg</file>
+        <file>resources/brightness.svg</file>
+        <file>resources/laptop.svg</file>
+        <file>resources/volume.svg</file>
+        <file>resources/broadcast.svg</file>
+        <file>resources/ICON_Device_Headphone_dark.svg</file>
+        <file>resources/ICON_Device_Headphone.svg</file>
+        <file>resources/ICON_Device_Laptop_dark.svg</file>
+        <file>resources/ICON_Device_Laptop.svg</file>
     </qresource>
 </RCC>

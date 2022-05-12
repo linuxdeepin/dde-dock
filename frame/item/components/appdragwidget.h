@@ -81,6 +81,7 @@ private:
 class AppDragWidget : public QGraphicsView
 {
     Q_OBJECT
+
 public:
     explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
 
@@ -118,7 +119,7 @@ private:
 private Q_SLOTS:
     void onFollowMouse();
 
-private:
+protected:
     QScopedPointer<AppGraphicsObject> m_object;
     QGraphicsScene *m_scene;
     QTimer *m_followMouseTimer;
@@ -142,6 +143,23 @@ private:
 
     bool m_bDragDrop = false; // 图标是否被拖拽
     DockItem *m_item;
+};
+
+class QuickDragWidget : public AppDragWidget
+{
+    Q_OBJECT
+
+Q_SIGNALS:
+    void requestDropItem();
+    void requestDragMove(QDragMoveEvent *event);
+
+public:
+    explicit QuickDragWidget(QWidget *parent = Q_NULLPTR);
+    ~QuickDragWidget() override;
+
+protected:
+    void dropEvent(QDropEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
 };
 
 #endif /* APPDRAGWIDGET_H */

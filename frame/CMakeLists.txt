@@ -51,6 +51,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     display
     item
     item/components
+    model
     util
     window
     window/components

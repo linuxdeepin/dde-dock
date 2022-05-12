@@ -27,10 +27,13 @@
 
 #include <X11/Xcursor/Xcursor.h>
 
-AppDrag::AppDrag(QObject *dragSource)
+AppDrag::AppDrag(QObject *dragSource, AppDragWidget *dragWidget)
     : QDrag(dragSource)
-    , m_appDragWidget(new AppDragWidget)
+    , m_appDragWidget(dragWidget)
 {
+    if (!m_appDragWidget)
+        m_appDragWidget = new AppDragWidget;
+
     // delete by itself
     m_appDragWidget->setVisible(false);
 

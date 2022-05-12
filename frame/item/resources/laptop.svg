@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ICON / Device / Laptop</title>
+    <g id="任务栏" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="任务栏-时尚" transform="translate(-990.000000, -916.000000)" fill="#000000" fill-rule="nonzero">
+            <g id="UDE-/-ControlPanel" transform="translate(712.000000, 534.000000)">
+                <g id="编组-5" transform="translate(10.000000, 360.000000)">
+                    <g id="ICON-/-Device-/-Laptop" transform="translate(268.000000, 18.000000)">
+                        <path d="M20,4 C21.1045695,4 22,4.8954305 22,6 L22,18 L23.3125,18 C23.6921958,18 24,18.3078042 24,18.6875 L24,19.3125 C24,19.6921958 23.6921958,20 23.3125,20 L0.6875,20 C0.307804234,20 4.64993204e-17,19.6921958 0,19.3125 L0,18.6875 C-4.64993204e-17,18.3078042 0.307804234,18 0.6875,18 L2,18 L2,6 C2,4.8954305 2.8954305,4 4,4 L20,4 Z M20,5 L4,5 C3.48716416,5 3.06449284,5.35634479 3.00672773,5.81542665 L3,5.92307692 L3,17 L21,17 L21,5.92307692 C21,5.44968999 20.6139598,5.05953185 20.1166211,5.00621021 L20,5 Z" id="形状结合"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

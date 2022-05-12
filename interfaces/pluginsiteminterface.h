@@ -48,6 +48,12 @@ public:
         Custom = 1 << 1  // The custom
     };
 
+    enum PluginStatus {
+        Deactive = 0,
+        Active,
+        Disabled
+    };
+
     ///
     /// \brief ~PluginsItemInterface
     /// DON'T try to delete m_proxyInter.
@@ -242,6 +248,30 @@ public:
     /// default plugin size policy
     ///
     virtual PluginSizePolicy pluginSizePolicy() const { return System; }
+
+    ///
+    /// the icon display on plugin panel
+    ///
+    ///
+    virtual const QIcon *icon() { return nullptr; }
+
+    ///
+    /// the plugin status
+    ///
+    ///
+    virtual PluginStatus status() const { return PluginStatus::Deactive; }
+
+    ///
+    /// return is primary plugin,if true, the plugin will display on top
+    /// the default value is false
+    ///
+    virtual bool isPrimary() const { return false; }
+
+    ///
+    /// return the detail value, it will display in the center
+    ///
+    ///
+    virtual QString description() const { return QString(); }
 
 protected:
     ///
