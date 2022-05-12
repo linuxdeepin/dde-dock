@@ -210,61 +210,62 @@ void AppSnapshot::fetchSnapshot()
     uchar *image_data = nullptr;
     XImage *ximage = nullptr;
 
-    // 优先使用窗管进行窗口截图
-    if (isKWinAvailable()) {
-        QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-        qDebug() << "windowsID:"<< m_wid;
+    do {
+        // 优先使用窗管进行窗口截图
+        if (isKWinAvailable()) {
+            QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+            qDebug() << "windowsID:"<< m_wid;
 
-        QList<QVariant> args;
-        args << QVariant::fromValue(m_wid);
-        args << QVariant::fromValue(quint32(SNAP_WIDTH));
-        args << QVariant::fromValue(quint32(SNAP_HEIGHT));
+            QList<QVariant> args;
+            args << QVariant::fromValue(m_wid);
+            args << QVariant::fromValue(quint32(SNAP_WIDTH));
+            args << QVariant::fromValue(quint32(SNAP_HEIGHT));
 
-        QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block,QStringLiteral("screenshotForWindowExtend"), args);
-        if(reply.isValid()){
-            m_snapshot.load(reply.value());
-            qDebug() << "reply: "<<reply.value();
-        } else {
-            qDebug() << "get current workspace bckground error: "<< reply.error().message();
+            QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block,QStringLiteral("screenshotForWindowExtend"), args);
+            if(reply.isValid()){
+                m_snapshot.load(reply.value());
+                m_snapshotSrcRect = m_snapshot.rect();
+                qDebug() << "reply: "<<reply.value();
+                break;
+            } else {
+                qDebug() << "get current workspace bckground error: "<< reply.error().message();
+            }
         }
-        m_snapshotSrcRect = m_snapshot.rect();
-    } else {
-        do {
-            // get window image from shm(only for deepin app)
-            info = getImageDSHM();
-            if (info) {
-                qDebug() << "get Image from dxcbplugin SHM...";
-                image_data = (uchar *)shmat(info->shmid, 0, 0);
-                if ((qint64)image_data != -1) {
-                    m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-                    m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
-                    break;
-                }
-                qDebug() << "invalid pointer of shm!";
-                image_data = nullptr;
+
+        // get window image from shm(only for deepin app)
+        info = getImageDSHM();
+        if (info) {
+            qDebug() << "get Image from dxcbplugin SHM...";
+            image_data = (uchar *)shmat(info->shmid, 0, 0);
+            if ((qint64)image_data != -1) {
+                m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
+                m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
+                break;
             }
+            qDebug() << "invalid pointer of shm!";
+            image_data = nullptr;
+        }
 
-            if (!image_data || qimage.isNull()) {
-                // get window image from XGetImage(a little slow)
-                qDebug() << "get Image from dxcbplugin SHM failed!";
-                qDebug() << "get Image from Xlib...";
-                // guoyao note：这里会造成内存泄漏，而且是通过demo在X环境经过验证，改用xcb库同样会有内存泄漏，这里暂时未找到解决方案，所以优先使用kwin提供的接口
-                ximage = getImageXlib();
-                if (!ximage) {
-                    qDebug() << "get Image from Xlib failed! giving up...";
-                    emit requestCheckWindow();
-                    return;
-                }
-                qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+        if (!image_data || qimage.isNull()) {
+            // get window image from XGetImage(a little slow)
+            qDebug() << "get Image from dxcbplugin SHM failed!";
+            qDebug() << "get Image from Xlib...";
+            // guoyao note：这里会造成内存泄漏，而且是通过demo在X环境经过验证，改用xcb库同样会有内存泄漏，这里暂时未找到解决方案，所以优先使用kwin提供的接口
+            ximage = getImageXlib();
+            if (!ximage) {
+                qDebug() << "get Image from Xlib failed! giving up...";
+                emit requestCheckWindow();
+                return;
             }
+            qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+        }
 
-            Q_ASSERT(!qimage.isNull());
+        Q_ASSERT(!qimage.isNull());
 
-            // remove shadow frame
-            m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
-            m_snapshot = qimage;
-        } while (false);
-    }
+        // remove shadow frame
+        m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
+        m_snapshot = qimage;
+    } while(false);
 
     QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
     const auto ratio = devicePixelRatioF();
