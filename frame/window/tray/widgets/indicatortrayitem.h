@@ -32,10 +32,6 @@ class IndicatorTrayItem: public BaseTrayWidget
 {
     Q_OBJECT
 
-Q_SIGNALS:
-    void removed();
-    void delayLoaded();
-
 public:
     explicit IndicatorTrayItem(const QString &indicatorName, QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
     ~IndicatorTrayItem() override;
@@ -47,27 +43,20 @@ public:
     static QString toIndicatorKey(const QString &indicatorName) { return QString("indicator:%1").arg(indicatorName); }
     static bool isIndicatorKey(const QString &itemKey) { return itemKey.startsWith("indicator:"); }
     QPixmap icon() override;
+    const QByteArray &pixmapData() const;
+    const QString text() const;
 
 public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapData(const QByteArray &data);
     Q_SCRIPTABLE void setText(const QString &text);
-
-private slots:
-    void onGSettingsChanged(const QString &key);
-
-private:
-    void initDBus(const QString &indicatorName);
-    template<typename Func>
-    void featData(const QString &key, const QJsonObject &data, const char *propertyChangedSlot, Func const &callback);
 
 Q_SIGNALS:
     void clicked(uint8_t, int, int);
 
 private:
     QLabel *m_label;
-
     QString m_indicatorName;
-//    const QGSettings *m_gsettings;
     bool m_enableClick;              // 置灰时设置为false，不触发click信号
+    QByteArray m_pixmapData;
 };
 

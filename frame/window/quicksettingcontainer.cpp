@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "quicksettingcontainer.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
@@ -8,6 +28,7 @@
 #include "volumewidget.h"
 #include "volumedeviceswidget.h"
 #include "brightnessmonitorwidget.h"
+#include "pluginchildpage.h"
 
 #include <DListView>
 #include <DStyle>
@@ -27,6 +48,9 @@ static const int QuickItemRole = Dtk::UserRole + 10;
 #define ITEMSPACE 10
 #define COLUMNCOUNT 4
 
+DockPopupWindow *QuickSettingContainer::m_popWindow = nullptr;
+Dock::Position QuickSettingContainer::m_position = Dock::Position::Bottom;
+
 QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     : QWidget(parent)
     , m_switchLayout(new QStackedLayout(this))
@@ -40,9 +64,12 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumnWidget->model(), this))
     , m_brightSettingWidget(new BrightnessMonitorWidget(m_brihtnessWidget->model(), this))
     , m_childPage(new PluginChildPage(this))
+    , m_dragPluginPosition(QPoint(0, 0))
 {
     initUi();
     initConnection();
+    m_childPage->installEventFilter(this);
+    setMouseTracking(true);
 }
 
 QuickSettingContainer::~QuickSettingContainer()
@@ -54,27 +81,53 @@ void QuickSettingContainer::showHomePage()
     m_switchLayout->setCurrentIndex(0);
 }
 
-DockPopupWindow *QuickSettingContainer::popWindow()
+// 根据位置获取箭头的方向
+static DArrowRectangle::ArrowDirection getDirection(const Dock::Position &position)
 {
-    static DockPopupWindow *popView = nullptr;
-    if (!popView) {
-        popView = new DockPopupWindow;
-        popView->setWindowFlag(Qt::Popup);
-        popView->setShadowBlurRadius(20);
-        popView->setRadius(18);
-        popView->setShadowYOffset(2);
-        popView->setShadowXOffset(0);
-        popView->setArrowWidth(18);
-        popView->setArrowHeight(10);
-
-        QuickSettingContainer *container = new QuickSettingContainer(popView);
-        popView->setContent(container);
-    } else {
-        QuickSettingContainer *container = static_cast<QuickSettingContainer *>(popView->getContent());
-        container->showHomePage();
+    switch (position) {
+    case Dock::Position::Top:
+        return DArrowRectangle::ArrowDirection::ArrowTop;
+    case Dock::Position::Left:
+        return DArrowRectangle::ArrowDirection::ArrowLeft;
+    case Dock::Position::Right:
+        return DArrowRectangle::ArrowDirection::ArrowRight;
+    default:
+        return DArrowRectangle::ArrowDirection::ArrowBottom;
     }
 
-    return popView;
+    return DArrowRectangle::ArrowDirection::ArrowBottom;
+}
+
+DockPopupWindow *QuickSettingContainer::popWindow()
+{
+    if (m_popWindow) {
+        QuickSettingContainer *container = static_cast<QuickSettingContainer *>(m_popWindow->getContent());
+        container->showHomePage();
+        return m_popWindow;
+    }
+
+    m_popWindow = new DockPopupWindow;
+    m_popWindow->setWindowFlag(Qt::Popup);
+    m_popWindow->setShadowBlurRadius(20);
+    m_popWindow->setRadius(18);
+    m_popWindow->setShadowYOffset(2);
+    m_popWindow->setShadowXOffset(0);
+    m_popWindow->setArrowWidth(18);
+    m_popWindow->setArrowHeight(10);
+    m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
+    m_popWindow->setArrowDirection(getDirection(m_position));
+    return m_popWindow;
+}
+
+void QuickSettingContainer::setPosition(Position position)
+{
+    if (m_position == position)
+        return;
+
+    m_position = position;
+
+    if (m_popWindow)
+        m_popWindow->setArrowDirection(getDirection(m_position));
 }
 
 void QuickSettingContainer::initQuickItem(QuickSettingItem *quickItem)
@@ -147,21 +200,51 @@ void QuickSettingContainer::onPluginRemove(QuickSettingItem *quickItem)
 void QuickSettingContainer::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() != Qt::LeftButton)
-        return;
+        return QWidget::mousePressEvent(event);
 
     QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(childAt(event->pos()));
     if (!moveItem || moveItem->pluginItem()->isPrimary())
         return QWidget::mousePressEvent(event);
 
-    QDrag *drag = new QDrag(this);
-    CustomMimeData *mimedata = new CustomMimeData;
-    mimedata->setData(moveItem);
-    drag->setMimeData(mimedata);
-    QPixmap dragPixmap = moveItem->dragPixmap();
-    drag->setPixmap(dragPixmap);
-    drag->setHotSpot(QPoint(dragPixmap.width() / 2, dragPixmap.height() / 2));
+    m_dragPluginPosition = event->pos();
+}
 
-    drag->exec(Qt::MoveAction | Qt::CopyAction);
+void QuickSettingContainer::clearDragPoint()
+{
+    m_dragPluginPosition.setX(0);
+    m_dragPluginPosition.setY(0);
+}
+
+void QuickSettingContainer::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    clearDragPoint();
+}
+
+void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_dragPluginPosition.isNull())
+        return;
+
+    QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(childAt(m_dragPluginPosition));
+    if (!moveItem) {
+        clearDragPoint();
+        return;
+    }
+
+    QPoint pointCurrent = event->pos();
+    if (qAbs(m_dragPluginPosition.x() - pointCurrent.x()) > 5
+            || qAbs(m_dragPluginPosition.y() - pointCurrent.y()) > 5) {
+        clearDragPoint();
+        QDrag *drag = new QDrag(this);
+        QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem);
+        drag->setMimeData(mimedata);
+        QPixmap dragPixmap = moveItem->dragPixmap();
+        drag->setPixmap(dragPixmap);
+        drag->setHotSpot(QPoint(dragPixmap.width() / 2, dragPixmap.height() / 2));
+
+        drag->exec(Qt::MoveAction | Qt::CopyAction);
+    }
 }
 
 void QuickSettingContainer::resetItemPosition()
@@ -183,9 +266,8 @@ void QuickSettingContainer::resetItemPosition()
     qSort(primaryQuickItems.begin(), primaryQuickItems.end(), [ = ](QuickSettingItem *item1, QuickSettingItem *item2) {
         int index1 = existKeys.indexOf(item1->itemKey());
         int index2 = existKeys.indexOf(item2->itemKey());
-        if (index1 >= 0 || index2 >= 0) {
+        if (index1 >= 0 || index2 >= 0)
             return index1 < index2;
-        }
         return true;
     });
     int primaryColumnCount = COLUMNCOUNT / 2;
@@ -265,8 +347,8 @@ void QuickSettingContainer::initUi()
 
 void QuickSettingContainer::initConnection()
 {
-    connect(m_pluginLoader, &QuickSettingController::pluginInsert, this, &QuickSettingContainer::onPluginInsert);
-    connect(m_pluginLoader, &QuickSettingController::pluginRemove, this, &QuickSettingContainer::onPluginRemove);
+    connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, &QuickSettingContainer::onPluginInsert);
+    connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
     connect(m_playerWidget, &MediaWidget::visibleChanged, this, [ this ] { resizeView(); });
     connect(m_volumnWidget, &VolumeWidget::visibleChanged, this, [ this ] { resizeView(); });
     connect(m_volumnWidget, &VolumeWidget::rightIconClick, this, [ this ] {
@@ -285,7 +367,6 @@ void QuickSettingContainer::initConnection()
         if (!m_childPage->isBack())
             topLevelWidget()->hide();
     });
-    m_childPage->installEventFilter(this);
 }
 
 void QuickSettingContainer::resizeView()
@@ -317,99 +398,4 @@ void QuickSettingContainer::resizeView()
     } else if (m_switchLayout->currentWidget() == m_childPage) {
         setFixedHeight(m_childPage->height());
     }
-}
-
-/**
- * @brief PluginChildPage::PluginChildPage
- * @param parent
- */
-PluginChildPage::PluginChildPage(QWidget *parent)
-    : QWidget(parent)
-    , m_headerWidget(new QWidget(this))
-    , m_back(new QLabel(m_headerWidget))
-    , m_title(new QLabel(m_headerWidget))
-    , m_container(new QWidget(this))
-    , m_topWidget(nullptr)
-    , m_containerLayout(new QVBoxLayout(m_container))
-    , m_isBack(false)
-{
-    initUi();
-    m_back->installEventFilter(this);
-}
-
-PluginChildPage::~PluginChildPage()
-{
-}
-
-void PluginChildPage::pushWidget(QWidget *widget)
-{
-    // 首先将界面其他的窗体移除
-    for (int i = m_containerLayout->count() - 1; i >= 0; i--) {
-        QLayoutItem *item = m_containerLayout->itemAt(i);
-        item->widget()->removeEventFilter(this);
-        item->widget()->hide();
-        m_containerLayout->removeItem(item);
-    }
-    m_topWidget = widget;
-    widget->installEventFilter(this);
-    m_containerLayout->addWidget(widget);
-    widget->show();
-    m_isBack = false;
-    QMetaObject::invokeMethod(this, &PluginChildPage::resetHeight, Qt::QueuedConnection);
-}
-
-void PluginChildPage::setTitle(const QString &text)
-{
-    m_title->setText(text);
-}
-
-bool PluginChildPage::isBack()
-{
-    return m_isBack;
-}
-
-void PluginChildPage::initUi()
-{
-    m_back->setFixedWidth(24);
-    m_title->setAlignment(Qt::AlignCenter);
-    QHBoxLayout *headerLayout = new QHBoxLayout(m_headerWidget);
-    headerLayout->setContentsMargins(11, 12, 24 + 11, 12);
-    headerLayout->setSpacing(0);
-    headerLayout->addWidget(m_back);
-    headerLayout->addWidget(m_title);
-    m_headerWidget->setFixedHeight(48);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-
-    mainLayout->addWidget(m_headerWidget);
-    mainLayout->addWidget(m_container);
-    m_containerLayout->setContentsMargins(11, 0, 11, 0);
-    m_containerLayout->setSpacing(0);
-}
-
-bool PluginChildPage::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == m_back && event->type() == QEvent::MouseButtonRelease) {
-        m_isBack = true;
-        Q_EMIT back();
-        return true;
-    }
-    if (watched == m_topWidget) {
-        if (event->type() == QEvent::Hide) {
-            Q_EMIT closeSelf();
-            return true;
-        }
-        if (event->type() == QEvent::Resize)
-            resetHeight();
-    }
-    return QWidget::eventFilter(watched, event);
-}
-
-void PluginChildPage::resetHeight()
-{
-    QMargins m = m_containerLayout->contentsMargins();
-    m_container->setFixedHeight(m.top() + m.bottom() + m_topWidget->height());
-    setFixedHeight(m_headerWidget->height() + m_container->height());
 }

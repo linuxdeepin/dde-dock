@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef TRAYMODEL_H
 #define TRAYMODEL_H
 
@@ -7,6 +27,7 @@
 
 class TrayMonitor;
 class IndicatorPlugin;
+class IndicatorTrayItem;
 
 enum TrayIconType {
     UNKNOW,
@@ -23,13 +44,12 @@ struct WinInfo {
     QString servicePath;
     bool isTypeWriting;
 
-    WinInfo() {
-        type = UNKNOW;
-        key = QString();
-        winId = 0;
-        servicePath = QString();
-        isTypeWriting = false;
-    }
+    WinInfo() : type(UNKNOW)
+      , key(QString())
+      , winId(0)
+      , servicePath(QString())
+      , isTypeWriting(false) {}
+
     bool operator==(const WinInfo &other) {
         return this->type == other.type
                 && this->key == other.key
@@ -67,18 +87,21 @@ public:
 
     bool indexDragging(const QModelIndex &index) const;
 
+    IndicatorTrayItem *indicatorWidget(const QString &indicatorName) const;
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     bool isIconTray();
 
     void clear();
 
-public Q_SLOTS:
-    void removeRow(const QString &itemKey);
-    void addRow(WinInfo info);
-
 Q_SIGNALS:
     void requestUpdateIcon(quint32);
     void requestUpdateWidget(const QList<int> &);
+
+public Q_SLOTS:
+    void removeRow(const QString &itemKey);
+    void addRow(WinInfo info);
+    void insertRow(int index, WinInfo info);
 
 private Q_SLOTS:
     void onXEmbedTrayAdded(quint32 winId);

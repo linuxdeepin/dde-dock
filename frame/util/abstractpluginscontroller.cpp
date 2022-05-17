@@ -234,6 +234,17 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         return;
     }
 
+    if (!needLoad(interface)) {
+        // 对于一些固定的插件是不需要加载的，例如在特效模式下，只需要加载电源插件，其他的是无需加载的
+        for (const QPair<QString, PluginsItemInterface *> &pair : m_pluginLoadMap.keys()) {
+            if (pair.first == pluginFile)
+                m_pluginLoadMap.remove(pair);
+        }
+        pluginLoader->unload();
+        pluginLoader->deleteLater();
+        return;
+    }
+
     if (interface->pluginName() == "multitasking") {
         if (Utils::IS_WAYLAND_DISPLAY || Dtk::Core::DSysInfo::deepinType() == Dtk::Core::DSysInfo::DeepinServer) {
             for (auto &pair : m_pluginLoadMap.keys()) {

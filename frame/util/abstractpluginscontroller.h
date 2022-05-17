@@ -52,6 +52,9 @@ signals:
     void pluginLoaderFinished();
 
 protected:
+    virtual bool needLoad(PluginsItemInterface *) { return true; }
+
+protected:
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
     QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
     PluginsItemInterface *pluginInterAt(const QString &itemKey);

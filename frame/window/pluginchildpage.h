@@ -18,48 +18,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef VOLUMEWIDGET_H
-#define VOLUMEWIDGET_H
+#ifndef PLUGINCHILDPAGE_H
+#define PLUGINCHILDPAGE_H
 
-#include <DBlurEffectWidget>
 #include <QWidget>
 
-class VolumeModel;
-class QDBusMessage;
-class CustomSlider;
 class QLabel;
-class AudioSink;
+class QVBoxLayout;
 
-DWIDGET_USE_NAMESPACE
-
-class VolumeWidget : public DBlurEffectWidget
+class PluginChildPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit VolumeWidget(QWidget *parent = nullptr);
-    ~VolumeWidget() override;
-    VolumeModel *model();
+    explicit PluginChildPage(QWidget *parent);
+    ~PluginChildPage() override;
+    void pushWidget(QWidget *widget);
+    void setTitle(const QString &text);
+    bool isBack();
 
 Q_SIGNALS:
-    void visibleChanged(bool);
-    void rightIconClick();
+    void back();
+    void closeSelf();
 
 protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
     void initUi();
-    void initConnection();
-
-    void showEvent(QShowEvent *event) override;
-    void hideEvent(QHideEvent *event) override;
+    void resetHeight();
 
 private:
-    const QString leftIcon();
-    const QString rightIcon();
-
-private:
-    VolumeModel *m_volumeController;
-    CustomSlider *m_volumnCtrl;
-    AudioSink *m_defaultSink;
+    QWidget *m_headerWidget;
+    QLabel *m_back;
+    QLabel *m_title;
+    QWidget *m_container;
+    QWidget *m_topWidget;
+    QVBoxLayout *m_containerLayout;
+    bool m_isBack;
 };
 
-#endif // VOLUMEWIDGET_H
+#endif // PLUGINCHILDPAGE_H

@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
  *
- * Author:     sbw <sbw@sbw.so>
+ * Author:     donghualin <donghualin@uniontech.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer:  donghualin <donghualin@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "constants.h"
 #include "basetraywidget.h"
 
@@ -40,7 +39,6 @@ BaseTrayWidget::BaseTrayWidget(QWidget *parent, Qt::WindowFlags f)
 
 BaseTrayWidget::~BaseTrayWidget()
 {
-
 }
 
 void BaseTrayWidget::mousePressEvent(QMouseEvent *event)
@@ -60,7 +58,6 @@ void BaseTrayWidget::mousePressEvent(QMouseEvent *event)
 void BaseTrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     //e->accept();
-
     // 由于 XWindowTrayWidget 中对 发送鼠标事件到X窗口的函数, 如 sendClick/sendHoverEvent 中
     // 使用了 setX11PassMouseEvent, 而每次调用 setX11PassMouseEvent 时都会导致产生 mousePress 和 mouseRelease 事件
     // 因此如果直接在这里处理事件会导致一些问题, 所以使用 Timer 来延迟处理 100 毫秒内的最后一个事件

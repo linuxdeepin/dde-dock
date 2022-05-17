@@ -43,10 +43,11 @@ BrightnessModel::BrightnessModel(QObject *parent)
     QDBusInterface dbusInter(serviceName, servicePath, serviceInterface, QDBusConnection::sessionBus());
     if (dbusInter.isValid()) {
         // 读取所有的屏幕的信息
-        QString primaryScreenName = qApp->primaryScreen() ? qApp->primaryScreen()->name() : QString();
+        QString primaryScreenName = dbusInter.property("Primary").value<QString>();
         QList<QDBusObjectPath> paths = dbusInter.property("Monitors").value<QList<QDBusObjectPath>>();
         for (QDBusObjectPath path : paths) {
             BrightMonitor *monitor = new BrightMonitor(path.path(), this);
+            monitor->setPrimary(primaryScreenName == monitor->name());
             m_monitor << monitor;
             connect(monitor, &BrightMonitor::brightnessChanged, this, [ = ] {
                 Q_EMIT brightnessChanged(monitor);
@@ -54,8 +55,7 @@ BrightnessModel::BrightnessModel(QObject *parent)
         }
     }
 
-    QDBusConnection::sessionBus().connect(serviceName, servicePath, propertiesInterface,
-                     "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
+    connect(qApp, &QApplication::primaryScreenChanged, this, &BrightnessModel::primaryScreenChanged);
 }
 
 BrightnessModel::~BrightnessModel()
@@ -65,6 +65,16 @@ BrightnessModel::~BrightnessModel()
 QList<BrightMonitor *> BrightnessModel::monitors()
 {
     return m_monitor;
+}
+
+BrightMonitor *BrightnessModel::primaryMonitor() const
+{
+    for (BrightMonitor *monitor : m_monitor) {
+        if (monitor->isPrimary())
+            return monitor;
+    }
+
+    return nullptr;
 }
 
 void BrightnessModel::setBrightness(BrightMonitor *monitor, int brightness)
@@ -88,19 +98,17 @@ QDBusMessage BrightnessModel::callMethod(const QString &methodName, const QList<
     return QDBusMessage();
 }
 
-void BrightnessModel::onPropertyChanged(const QDBusMessage &msg)
+void BrightnessModel::primaryScreenChanged(QScreen *screen)
 {
-    QList<QVariant> arguments = msg.arguments();
-    if (3 != arguments.count())
-        return;
-
-    QString interfaceName = msg.arguments().at(0).toString();
-    if (interfaceName != serviceInterface)
-        return;
-
-    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    if (changedProps.contains("Brightness")) {
+    BrightMonitor *defaultMonitor = nullptr;
+    for (BrightMonitor *monitor : m_monitor) {
+        monitor->setPrimary(monitor->name() == screen->name());
+        if (monitor->isPrimary())
+            defaultMonitor = monitor;
     }
+
+    if (defaultMonitor)
+        Q_EMIT primaryChanged(defaultMonitor);
 }
 
 /**
@@ -111,6 +119,7 @@ BrightMonitor::BrightMonitor(QString path, QObject *parent)
     , m_path(path)
     , m_brightness(100)
     , m_enabled(false)
+    , m_isPrimary(false)
 {
     QDBusInterface dbusInter(serviceName, path, serviceInterface + QString(".Monitor"), QDBusConnection::sessionBus());
     if (dbusInter.isValid()) {
@@ -128,6 +137,11 @@ BrightMonitor::~BrightMonitor()
 {
 }
 
+void BrightMonitor::setPrimary(bool primary)
+{
+    m_isPrimary = primary;
+}
+
 int BrightMonitor::brihtness()
 {
     return m_brightness;
@@ -141,6 +155,11 @@ bool BrightMonitor::enabled()
 QString BrightMonitor::name()
 {
     return m_name;
+}
+
+bool BrightMonitor::isPrimary()
+{
+    return m_isPrimary;
 }
 
 void BrightMonitor::onPropertyChanged(const QDBusMessage &msg)

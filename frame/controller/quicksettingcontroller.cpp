@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
 
@@ -26,7 +46,7 @@ void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, c
 
     m_quickSettingItems << quickItem;
 
-    emit pluginInsert(quickItem);
+    emit pluginInserted(quickItem);
 }
 
 void QuickSettingController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
@@ -51,7 +71,7 @@ void QuickSettingController::itemRemoved(PluginsItemInterface * const itemInter,
     if (findItemIterator != m_quickSettingItems.end()) {
         QuickSettingItem *quickItem = *findItemIterator;
         m_quickSettingItems.removeOne(quickItem);
-        Q_EMIT pluginRemove(quickItem);
+        Q_EMIT pluginRemoved(quickItem);
         quickItem->deleteLater();
     }
 }

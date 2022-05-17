@@ -1,6 +1,27 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "datetimedisplayer.h"
 
 #include <DFontSizeManager>
+#include <DDBusSender>
 
 #include <QHBoxLayout>
 #include <QPainter>
@@ -9,6 +30,11 @@
 DWIDGET_USE_NAMESPACE
 
 #define DATETIMESIZE 40
+#define ITEMSPACE 8
+
+static QMap<int, QString> dateFormat{{ 0,"yyyy/M/d" }, { 1,"yyyy-M-d" }, { 2,"yyyy.M.d" }, { 3,"yyyy/MM/dd" },
+                                     { 4,"yyyy-MM-dd" }, { 5,"yyyy.MM.dd" }, { 6,"yy/M/d" }, { 7,"yy-M-d" }, { 8,"yy.M.d" }};
+static QMap<int, QString> timeFormat{{0, "h:mm"}, {1, "hh:mm"}};
 
 DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     : QWidget (parent)
@@ -17,15 +43,12 @@ DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     , m_timeFont(DFontSizeManager::instance()->t6())
     , m_dateFont(DFontSizeManager::instance()->t10())
 {
-    initUi();
-    setShortDateFormat(m_timedateInter->shortDateFormat());
-    setShortTimeFormat(m_timedateInter->shortTimeFormat());
-    connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DateTimeDisplayer::setShortDateFormat);
-    connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DateTimeDisplayer::setShortTimeFormat);
+    // 日期格式变化的时候，需要重绘
+    connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, [ this ] { update(); });
+    // 时间格式变化的时候，需要重绘
+    connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, [ this ] { update(); });
     // 连接日期时间修改信号,更新日期时间插件的布局
-    connect(m_timedateInter, &Timedate::TimeUpdate, this, [ this ] {
-        update();
-    });
+    connect(m_timedateInter, &Timedate::TimeUpdate, this, [ this ] { update(); });
 }
 
 DateTimeDisplayer::~DateTimeDisplayer()
@@ -39,6 +62,7 @@ void DateTimeDisplayer::setPositon(Dock::Position position)
 
     m_position = position;
     setCurrentPolicy();
+    update();
 }
 
 void DateTimeDisplayer::setCurrentPolicy()
@@ -57,20 +81,25 @@ void DateTimeDisplayer::setCurrentPolicy()
     }
 }
 
-void DateTimeDisplayer::initUi()
-{
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-}
-
 QSize DateTimeDisplayer::suitableSize()
 {
     DateTimeInfo info = dateTimeInfo();
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        return QSize(info.m_dateRect.right(), height());
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        int width = info.m_timeRect.width() + info.m_dateRect.width() + 16;
+        return QSize(width, height());
+    }
 
-    return QSize(width(), info.m_dateRect.bottom());
+    return QSize(width(), info.m_timeRect.height() + info.m_dateRect.height());
+}
+
+void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+
+    DDBusSender().service("com.deepin.Calendar")
+            .path("/com/deepin/Calendar")
+            .interface("com.deepin.Calendar")
+            .method("RaiseWindow").call();
 }
 
 DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo()
@@ -78,33 +107,65 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo()
     DateTimeInfo info;
     const QDateTime current = QDateTime::currentDateTime();
 
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-
     info.m_timeRect = rect();
     info.m_dateRect = rect();
 
-    QString format = m_shortTimeFormat;
+    QString format = getTimeFormat();
     if (!m_timedateInter->use24HourFormat()) {
-        if (position == Dock::Top || position == Dock::Bottom)
+        if (m_position == Dock::Top || m_position == Dock::Bottom)
             format = format.append(" AP");
         else
             format = format.append("\nAP");
     }
 
     info.m_time = current.toString(format);
-    info.m_date = current.toString(m_shortDateFormat);
-    int timeWidth = QFontMetrics(m_timeFont).boundingRect(info.m_time).width() + 12 * 2;
-    int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
+    info.m_date = current.toString(getDateFormat());
 
-    if (position == Dock::Top || position == Dock::Bottom) {
-        info.m_timeRect = QRect(10, 0, timeWidth, height());
-        int right = rect().width() - QFontMetrics(m_dateFont).width(info.m_date) - 2;
-        info.m_dateRect = QRect(right, 0, dateWidth, height());
+    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+        int timeWidth = QFontMetrics(m_timeFont).boundingRect(info.m_time).width() + 10;
+        int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
+        info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
+        int dateX = rect().width() - QFontMetrics(m_dateFont).width(info.m_date) - 2 - ITEMSPACE;
+        // 如果时间的X坐标小于日期的X坐标，需要手动设置坐标在日期坐标的右侧
+        if (dateX < info.m_timeRect.right())
+            dateX = info.m_timeRect.right();
+        info.m_dateRect = QRect(dateX, 0, dateWidth, height());
     } else {
-        info.m_timeRect = QRect(0, 0, timeWidth, DATETIMESIZE / 2);
-        info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, dateWidth, DATETIMESIZE / 2);
+        int textWidth = rect().width();
+        info.m_timeRect = QRect(0, 0, textWidth, DATETIMESIZE / 2);
+        info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, textWidth, DATETIMESIZE / 2);
     }
     return info;
+}
+
+QString DateTimeDisplayer::getDateFormat() const
+{
+    int type = m_timedateInter->shortDateFormat();
+    QString shortDateFormat = "yyyy-MM-dd";
+    if (dateFormat.contains(type))
+        shortDateFormat = dateFormat.value(type);
+    // 如果是左右方向，则不显示年份
+    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right) {
+        static QStringList yearStrList{"yyyy/", "yyyy-", "yyyy.", "yy/", "yy-", "yy."};
+        for (int i = 0; i < yearStrList.size() ; i++) {
+            const QString &yearStr = yearStrList[i];
+            if (shortDateFormat.contains(yearStr)) {
+                shortDateFormat = shortDateFormat.remove(yearStr);
+                break;
+            }
+        }
+    }
+
+    return shortDateFormat;
+}
+
+QString DateTimeDisplayer::getTimeFormat() const
+{
+    int type = m_timedateInter->shortTimeFormat();
+    if (timeFormat.contains(type))
+        return timeFormat[type];
+
+    return QString("hh:mm");
 }
 
 void DateTimeDisplayer::paintEvent(QPaintEvent *e)
@@ -117,37 +178,14 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(palette().brightText(), 1));
 
-    painter.drawText(info.m_timeRect, Qt::AlignLeft | Qt::AlignVCenter, info.m_time);
-
+    int timeTextFlag = Qt::AlignCenter;
+    int dateTextFlag = Qt::AlignCenter;
+    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+        timeTextFlag = Qt::AlignLeft | Qt::AlignVCenter;
+        dateTextFlag = Qt::AlignRight | Qt::AlignVCenter;
+    }
+    painter.setFont(m_timeFont);
+    painter.drawText(info.m_timeRect, timeTextFlag, info.m_time);
     painter.setFont(m_dateFont);
-    painter.drawText(info.m_dateRect, Qt::AlignLeft | Qt::AlignVCenter, info.m_date);
-}
-
-void DateTimeDisplayer::setShortDateFormat(int type)
-{
-    switch (type) {
-    case 0: m_shortDateFormat = "yyyy/M/d";  break;
-    case 1: m_shortDateFormat = "yyyy-M-d"; break;
-    case 2: m_shortDateFormat = "yyyy.M.d"; break;
-    case 3: m_shortDateFormat = "yyyy/MM/dd"; break;
-    case 4: m_shortDateFormat = "yyyy-MM-dd"; break;
-    case 5: m_shortDateFormat = "yyyy.MM.dd"; break;
-    case 6: m_shortDateFormat = "yy/M/d"; break;
-    case 7: m_shortDateFormat = "yy-M-d"; break;
-    case 8: m_shortDateFormat = "yy.M.d"; break;
-    default: m_shortDateFormat = "yyyy-MM-dd"; break;
-    }
-
-    update();
-}
-
-void DateTimeDisplayer::setShortTimeFormat(int type)
-{
-    switch (type) {
-    case 0: m_shortTimeFormat = "h:mm"; break;
-    case 1: m_shortTimeFormat = "hh:mm"; break;
-    default: m_shortTimeFormat = "hh:mm"; break;
-    }
-
-    update();
+    painter.drawText(info.m_dateRect, dateTextFlag, info.m_date);
 }

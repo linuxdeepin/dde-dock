@@ -24,11 +24,6 @@ public:
         Stop
     };
 
-Q_SIGNALS:
-    void startStop(bool);
-    void statusChanged(const PlayStatus &);
-    void metadataChanged();
-
 public:
     static MediaPlayerModel *instance();
     bool isActived();
@@ -44,6 +39,11 @@ public:
 
     void setStatus(const PlayStatus &stat);
     void playNext();
+
+Q_SIGNALS:
+    void startStop(bool);
+    void statusChanged(const PlayStatus &);
+    void metadataChanged();
 
 protected:
     explicit MediaPlayerModel(QObject *parent = nullptr);

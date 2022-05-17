@@ -976,10 +976,10 @@ QPainterPath MainPanelControl::areaPath()
         return QPainterPath();
 
     QPainterPath path;
-    int leftWidth = m_fixedAreaWidget->width() + m_fixedSpliter->width() + m_appAreaWidget->width() + 10;
+    int leftWidth = m_fixedAreaWidget->width() + m_fixedSpliter->width() + m_appAreaWidget->width();
     int roundHeight = height();
     path.addRoundedRect(QRect(0, 0, leftWidth, roundHeight), 18, 18);
-    path.addRoundedRect(QRect(leftWidth + 10, 0, m_trayManagerWidget->width(), roundHeight), 18, 18);
+    path.addRoundedRect(QRect(m_trayManagerWidget->x(), 0, m_trayManagerWidget->width(), roundHeight), 18, 18);
     return path;
 }
 

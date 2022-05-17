@@ -1,4 +1,24 @@
-﻿#include "tray_model.h"
+﻿/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "tray_model.h"
 #include "tray_monitor.h"
 
 #include "indicatortrayitem.h"
@@ -104,6 +124,16 @@ bool TrayModel::indexDragging(const QModelIndex &index) const
             || (start >= end && current <= start && current >= end);
 }
 
+IndicatorTrayItem *TrayModel::indicatorWidget(const QString &indicatorName) const
+{
+    QString indicatorKey = indicatorName;
+    indicatorKey = indicatorKey.remove(0, QString("indicator:").length());
+    if (m_indicatorMap.contains(indicatorKey))
+        return m_indicatorMap.value(indicatorKey)->widget();
+
+    return nullptr;
+}
+
 QMimeData *TrayModel::mimeData(const QModelIndexList &indexes) const
 {
     Q_ASSERT(indexes.size() == 1);
@@ -132,7 +162,7 @@ QVariant TrayModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     int itemIndex = index.row();
-    auto info = m_winInfos.at(itemIndex);
+    const WinInfo &info = m_winInfos[itemIndex];
 
     switch (role) {
     case Role::TypeRole:
@@ -170,7 +200,10 @@ bool TrayModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, in
     Q_UNUSED(action)
     Q_UNUSED(row)
     Q_UNUSED(column)
-    Q_UNUSED(parent)
+
+    TrayIconType iconType = parent.data(TrayModel::Role::TypeRole).value<TrayIconType>();
+    if (iconType == TrayIconType::EXPANDICON)
+        return false;
 
     return data->formats().contains(TRAY_DRAG_FALG);
 }
@@ -186,7 +219,6 @@ Qt::ItemFlags TrayModel::flags(const QModelIndex &index) const
 int TrayModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-
     return m_winInfos.size();
 }
 
@@ -204,7 +236,7 @@ void TrayModel::clear()
 
 void TrayModel::onXEmbedTrayAdded(quint32 winId)
 {
-    for (auto info : m_winInfos) {
+    for (const WinInfo &info : m_winInfos) {
         if (info.winId == winId)
             return;
     }
@@ -260,7 +292,7 @@ QString TrayModel::fileNameByServiceName(const QString &serviceName)
 bool TrayModel::isTypeWriting(const QString &servicePath)
 {
     const QString appFilePath = fileNameByServiceName(servicePath);
-    return appFilePath.startsWith("/usr/bin/fcitx");
+    return (appFilePath.startsWith("/usr/bin/fcitx") || appFilePath.endsWith("chinime-qim"));
 }
 
 void TrayModel::onSniTrayAdded(const QString &servicePath)
@@ -304,7 +336,7 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
 
 void TrayModel::onSniTrayRemoved(const QString &servicePath)
 {
-    for (WinInfo info : m_winInfos) {
+    for (const WinInfo &info : m_winInfos) {
         if (info.servicePath == servicePath)  {
             int index = m_winInfos.indexOf(info);
 
@@ -356,7 +388,7 @@ void TrayModel::onIndicatorFounded(const QString &indicatorName)
 void TrayModel::onIndicatorAdded(const QString &indicatorName)
 {
     const QString &itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
-    for (auto info : m_winInfos) {
+    for (const WinInfo &info : m_winInfos) {
         if (info.key == itemKey)
             return;
     }
@@ -377,7 +409,7 @@ void TrayModel::onIndicatorRemoved(const QString &indicatorName)
 
 void TrayModel::removeRow(const QString &itemKey)
 {
-    for (auto info : m_winInfos) {
+    for (const WinInfo &info : m_winInfos) {
         if (info.key == itemKey) {
             int index = m_winInfos.indexOf(info);
             beginRemoveRows(QModelIndex(),  index, index);
@@ -390,8 +422,8 @@ void TrayModel::removeRow(const QString &itemKey)
 
 void TrayModel::addRow(WinInfo info)
 {
-    for (auto i : m_winInfos) {
-        if (i.key == info.key)
+    for (const WinInfo &winInfo : m_winInfos) {
+        if (winInfo.key == info.key)
             return;
     }
 
@@ -400,10 +432,26 @@ void TrayModel::addRow(WinInfo info)
     endInsertRows();
 }
 
+void TrayModel::insertRow(int index, WinInfo info)
+{
+    for (int i = 0; i < m_winInfos.size(); i++) {
+        const WinInfo &wininfo = m_winInfos[i];
+        if (wininfo.key == info.key) {
+            beginResetModel();
+            m_winInfos.swap(index, i);
+            endResetModel();
+            return;
+        }
+    }
+    beginInsertRows(QModelIndex(), index, index);
+    m_winInfos.insert(index, info);
+    endInsertRows();
+}
+
 bool TrayModel::exist(const QString &itemKey)
 {
-    for (auto w : m_winInfos) {
-        if (w.key == itemKey)
+    for (const WinInfo &winInfo : m_winInfos) {
+        if (winInfo.key == itemKey)
             return true;
     }
 

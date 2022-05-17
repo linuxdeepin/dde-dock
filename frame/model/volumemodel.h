@@ -3,6 +3,12 @@
 
 #include <QObject>
 
+#include <com_deepin_daemon_audio.h>
+#include <com_deepin_daemon_audio_sink.h>
+
+using DBusAudio = com::deepin::daemon::Audio;
+using DBusSink = com::deepin::daemon::audio::Sink;
+
 class QDBusMessage;
 class AudioSink;
 class AudioPorts;
@@ -10,12 +16,6 @@ class AudioPorts;
 class VolumeModel : public QObject
 {
     Q_OBJECT
-
-Q_SIGNALS:
-    void defaultSinkChanged(AudioSink *);
-    void volumeChanged(int);
-    void muteChanged(bool);
-    void checkPortChanged();
 
 public:
     explicit VolumeModel(QObject *parent);
@@ -35,25 +35,26 @@ public:
     bool isMute();
     bool existActiveOutputDevice();
 
+Q_SIGNALS:
+    void defaultSinkChanged(AudioSink *);
+    void volumeChanged(int);
+    void muteChanged(bool);
+    void checkPortChanged();
+
 private Q_SLOTS:
-    void onPropertyChanged(const QDBusMessage& msg);
+    void onDefaultSinkChanged(const QDBusObjectPath & value);
 
 private:
-    void initService();
     void reloadSinks();
     void reloadPorts();
     void clearSinks();
     void clearPorts();
-    void updateDefaultSink(AudioSink *audioSink);
-
-private:
-    QDBusMessage callMethod(const QString &methodName, const QList<QVariant> &argument);
-    template<typename T>
-    T properties(const QString &propName);
 
 private:
     QList<AudioSink *> m_sinks;
     QList<AudioPorts *> m_ports;
+
+    DBusAudio *m_audio;
 };
 
 class AudioSink : public QObject
@@ -74,7 +75,7 @@ public:
     void setFade(double value);
     void setMute(bool mute);
     void setPort(QString name);
-    void setVolume(double value, bool isPlay);
+    void setVolume(int value, bool isPlay);
 
     bool isMute();
     bool supportBalance();
@@ -85,24 +86,17 @@ public:
     int volume();
     QString description();
     QString name();
-    int cardId();
-
-private Q_SLOTS:
-    void onPropertyChanged(const QDBusMessage& msg);
+    uint cardId();
 
 protected:
-    explicit AudioSink(QString path, QObject *parent = nullptr);
+    explicit AudioSink(QString path, bool isDefault, QObject *parent = nullptr);
     ~AudioSink();
-
-private:
-    QDBusMessage callMethod(const QString &methodName, const QList<QVariant> &argument);
-    template<typename T>
-    T getProperties(const QString &propName);
-
-    QList<QVariant> getPropertiesByFreeDesktop(const QString &propName);
+    void setDefault(bool isDefaultSink);
 
 private:
     QString m_devicePath;
+    DBusSink *m_sink;
+    bool m_isDefault;
 };
 
 class AudioPorts : public QObject
@@ -112,7 +106,7 @@ class AudioPorts : public QObject
     friend class VolumeModel;
 
 public:
-    int cardId() const;
+    uint cardId() const;
     QString cardName() const;
     QString name() const;
     QString description() const;
@@ -121,7 +115,7 @@ public:
     bool isHeadPhone() const;
 
 protected:
-    AudioPorts(int cardId, QString cardName);
+    AudioPorts(uint cardId, QString cardName);
     ~AudioPorts();
     void setName(const QString &name);
     void setDescription(const QString &desc);
@@ -129,7 +123,7 @@ protected:
     void setIsChecked(bool isChecked);
 
 private:
-    int m_cardId;
+    uint m_cardId;
     QString m_cardName;
     QString m_portName;
     QString m_description;

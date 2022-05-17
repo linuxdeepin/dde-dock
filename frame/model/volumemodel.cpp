@@ -1,17 +1,10 @@
 ﻿#include "volumemodel.h"
 
-#include <QDBusArgument>
-#include <QDBusConnection>
-#include <QDBusConnectionInterface>
-#include <QDBusInterface>
-#include <QDBusMessage>
-#include <QDBusObjectPath>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QVariantMap>
 #include <QDebug>
-#include <QDBusMetaType>
 
 /**
  * @brief 声音控制的类
@@ -20,13 +13,14 @@
 
 static const QString serviceName = QString("com.deepin.daemon.Audio");
 static const QString servicePath = QString("/com/deepin/daemon/Audio");
-static const QString interfaceName = QString("com.deepin.daemon.Audio");
-static const QString propertiesInterface = QString("org.freedesktop.DBus.Properties");
 
 VolumeModel::VolumeModel(QObject *parent)
     : QObject(parent)
+    , m_audio(new DBusAudio(serviceName, servicePath, QDBusConnection::sessionBus(), this))
 {
-    initService();
+    reloadSinks();
+    reloadPorts();
+    connect(m_audio, &DBusAudio::DefaultSinkChanged, this, &VolumeModel::onDefaultSinkChanged);
 }
 
 VolumeModel::~VolumeModel()
@@ -37,7 +31,7 @@ VolumeModel::~VolumeModel()
 
 void VolumeModel::setActivePort(AudioPorts *port)
 {
-    callMethod("SetPort", { port->cardId(), port->name(), port->direction() });
+    m_audio->SetPort(port->cardId(), port->name(), port->direction());
 }
 
 QList<AudioSink *> VolumeModel::sinks() const
@@ -110,62 +104,14 @@ bool VolumeModel::existActiveOutputDevice()
     return false;
 }
 
-void VolumeModel::onPropertyChanged(const QDBusMessage &msg)
-{
-    QList<QVariant> arguments = msg.arguments();
-    if (3 != arguments.count())
-        return;
-
-    QString interName = msg.arguments().at(0).toString();
-    if (interName != interfaceName)
-        return;
-
-    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    if (changedProps.contains("DefaultSink")) {
-        QVariant defaultSink = changedProps.value("DefaultSink");
-        QString defaultSinkPath = defaultSink.value<QDBusObjectPath>().path();
-        for (AudioSink *audioSink : m_sinks) {
-            if (audioSink->m_devicePath == defaultSinkPath) {
-                updateDefaultSink(audioSink);
-                Q_EMIT defaultSinkChanged(audioSink);
-                break;
-            }
-        }
-    }
-}
-
-void VolumeModel::initService()
-{
-    QDBusConnection::sessionBus().connect(serviceName, servicePath, propertiesInterface,
-       "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
-
-    reloadSinks();
-    reloadPorts();
-
-    QDBusConnectionInterface *dbusInterface = QDBusConnection::sessionBus().interface();
-    connect(dbusInterface, &QDBusConnectionInterface::serviceOwnerChanged, this,
-            [ = ](const QString &name, const QString &, const QString &newOwner) {
-        if (name == serviceName) {
-            if (newOwner.isEmpty()) {
-                QDBusConnection::sessionBus().disconnect(serviceName, servicePath, propertiesInterface,
-                    "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
-                clearSinks();
-            } else {
-                QDBusConnection::sessionBus().connect(serviceName, servicePath, propertiesInterface,
-                   "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
-                reloadSinks();
-                reloadPorts();
-            }
-        }
-    });
-}
-
 void VolumeModel::reloadSinks()
 {
     clearSinks();
-    QList<QDBusObjectPath> sinkPaths = properties<QList<QDBusObjectPath>>("Sinks");
+    const QString defaultSinkPath = m_audio->defaultSink().path();
+    QList<QDBusObjectPath> sinkPaths = m_audio->sinks();
     for (const QDBusObjectPath &sinkPath : sinkPaths) {
-        AudioSink *sink = new AudioSink(sinkPath.path(), this);
+        const QString path = sinkPath.path();
+        AudioSink *sink = new AudioSink(path, (path == defaultSinkPath), this);
         connect(sink, &AudioSink::volumeChanged, this, [ = ](int volume) {
             if (sink->isDefault())
                 Q_EMIT volumeChanged(volume);
@@ -182,13 +128,13 @@ void VolumeModel::reloadSinks()
 void VolumeModel::reloadPorts()
 {
     clearPorts();
-    QString cards = properties<QString>("CardsWithoutUnavailable");
+    QString cards = m_audio->cardsWithoutUnavailable();
     QJsonParseError error;
     QJsonDocument json = QJsonDocument::fromJson(cards.toLocal8Bit(), &error);
     if (error.error != QJsonParseError::NoError)
         return;
 
-    int sinkCardId = -1;
+    uint sinkCardId = 0;
     QString sinkCardName;
     AudioSink *sink = defaultSink();
     if (sink) {
@@ -199,7 +145,7 @@ void VolumeModel::reloadPorts()
     QJsonArray array = json.array();
     for (const QJsonValue value : array) {
         QJsonObject cardObject = value.toObject();
-        int cardId = cardObject.value("Id").toInt();
+        uint cardId = static_cast<uint>(cardObject.value("Id").toInt());
         QString cardName = cardObject.value("Name").toString();
         QJsonArray jPorts = cardObject.value("Ports").toArray();
         for (const QJsonValue jPortValue : jPorts) {
@@ -223,8 +169,19 @@ void VolumeModel::reloadPorts()
     }
 }
 
-void VolumeModel::updateDefaultSink(AudioSink *audioSink)
+void VolumeModel::onDefaultSinkChanged(const QDBusObjectPath &value)
 {
+    AudioSink *audioSink = nullptr;
+    const QString defaultPath = value.path();
+    for (AudioSink *sink : m_sinks) {
+        sink->setDefault(defaultPath == sink->m_devicePath);
+        if (sink->isDefault())
+            audioSink = sink;
+    }
+
+    if (!audioSink)
+        return;
+
     bool checkChanged = false;
     for (AudioPorts *port : m_ports) {
         bool oldChecked = port->isChecked();
@@ -237,6 +194,8 @@ void VolumeModel::updateDefaultSink(AudioSink *audioSink)
 
     if (checkChanged)
         Q_EMIT checkPortChanged();
+
+    Q_EMIT defaultSinkChanged(audioSink);
 }
 
 void VolumeModel::clearSinks()
@@ -255,56 +214,35 @@ void VolumeModel::clearPorts()
     m_ports.clear();
 }
 
-QDBusMessage VolumeModel::callMethod(const QString &methodName, const QList<QVariant> &argument)
-{
-    QDBusInterface dbusInter(serviceName, servicePath, interfaceName, QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QDBusPendingCall reply = dbusInter.asyncCallWithArgumentList(methodName, argument);
-        reply.waitForFinished();
-        return reply.reply();
-    }
-    return QDBusMessage();
-}
-
-template<typename T>
-T VolumeModel::properties(const QString &propName)
-{
-    QDBusInterface dbusInter(serviceName, servicePath, interfaceName, QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QByteArray ba = propName.toLatin1();
-        const char *prop = ba.data();
-        return dbusInter.property(prop).value<T>();
-    }
-
-    return T();
-}
-
 /**
  * @brief 具体的声音设备
  * @param parent
  */
 
-AudioSink::AudioSink(QString path, QObject *parent)
+AudioSink::AudioSink(QString path, bool isDefault, QObject *parent)
     : QObject(parent)
     , m_devicePath(path)
+    , m_sink(new DBusSink(serviceName, path, QDBusConnection::sessionBus(), this))
+    , m_isDefault(isDefault)
 {
-    QDBusConnection::sessionBus().connect(serviceName, path, propertiesInterface,
-        "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage&)));
+    connect(m_sink, &DBusSink::MuteChanged, this, &AudioSink::muteChanged);
+    connect(m_sink, &DBusSink::VolumeChanged, this, [ this ](double value) {
+        Q_EMIT this->volumeChanged(static_cast<int>(value * 100));
+    });
 }
 
 AudioSink::~AudioSink()
 {
 }
 
+void AudioSink::setDefault(bool isDefaultSink)
+{
+    m_isDefault = isDefaultSink;
+}
+
 bool AudioSink::isDefault()
 {
-    QDBusInterface dbusInter(serviceName, servicePath, interfaceName, QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QString defaultSink = dbusInter.property("DefaultSink").value<QDBusObjectPath>().path();
-        return defaultSink == m_devicePath;
-    }
-
-    return false;
+    return m_isDefault;
 }
 
 bool AudioSink::isHeadPhone()
@@ -314,216 +252,83 @@ bool AudioSink::isHeadPhone()
 
 void AudioSink::setBalance(double value, bool isPlay)
 {
-    callMethod("SetBalance", { value, isPlay });
+    m_sink->SetBalance(value, isPlay);
 }
 
 void AudioSink::setFade(double value)
 {
-    callMethod("SetFade", { value });
+    m_sink->SetFade(value);
 }
 
 void AudioSink::setMute(bool mute)
 {
-    callMethod("SetMute", { mute });
+    m_sink->SetMute(mute);
 }
 
 void AudioSink::setPort(QString name)
 {
-    callMethod("SetPort", { name });
+    m_sink->SetPort(name);
 }
 
-void AudioSink::setVolume(double value, bool isPlay)
+void AudioSink::setVolume(int value, bool isPlay)
 {
-    callMethod("SetVolume", { value * 0.01, isPlay });
+    m_sink->SetVolume((value * 0.01), isPlay);
 }
 
 bool AudioSink::isMute()
 {
-    return getProperties<bool>("Mute");
+    return m_sink->mute();
 }
 
 bool AudioSink::supportBalance()
 {
-    return getProperties<bool>("SupportBalance");
+    return m_sink->supportBalance();
 }
 
 bool AudioSink::suoportFade()
 {
-    return getProperties<bool>("SupportFade");
+    return m_sink->supportFade();
 }
 
 double AudioSink::balance()
 {
-    return getProperties<double>("Balance");
+    return m_sink->balance();
 }
 
 double AudioSink::baseVolume()
 {
-    return getProperties<double>("BaseVolume");
+    return m_sink->baseVolume();
 }
 
 double AudioSink::fade()
 {
-    return getProperties<double>("Fade");
+    return m_sink->fade();
 }
 
 int AudioSink::volume()
 {
-    return static_cast<int>(getProperties<double>("Volume") * 100);
+    return static_cast<int>(m_sink->volume() * 100);
 }
 
 QString AudioSink::description()
 {
-    QVariantList value = getPropertiesByFreeDesktop("ActivePort");
-    if (value.size() >= 2)
-        return value[1].toString();
-
-    return getProperties<QString>("Description");
+    return m_sink->activePort().description;
 }
 
 QString AudioSink::name()
 {
-    QVariantList value = getPropertiesByFreeDesktop("ActivePort");
-    if (value.size() >= 2)
-        return value[0].toString();
-
-    return getProperties<QString>("Name");
+    return m_sink->activePort().name;
 }
 
-int AudioSink::cardId()
+uint AudioSink::cardId()
 {
-    return getProperties<int>("Card");
+    return m_sink->card();
 }
 
-void AudioSink::onPropertyChanged(const QDBusMessage &msg)
-{
-    QList<QVariant> arguments = msg.arguments();
-    if (3 != arguments.count())
-        return;
-
-    QString interfaceName = msg.arguments().at(0).toString();
-    if (interfaceName != propertiesInterface)
-        return;
-
-    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    if (changedProps.contains("Volume"))
-        Q_EMIT volumeChanged(static_cast<int>(changedProps.value("Volume").toDouble() * 100));
-
-    if (changedProps.contains("Mute"))
-        Q_EMIT muteChanged(changedProps.value("Mute").toBool());
-}
-
-template<typename T>
-T AudioSink::getProperties(const QString &propName)
-{
-    QDBusInterface dbusInter(serviceName, m_devicePath, interfaceName + QString(".Sink"), QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QByteArray ba = propName.toLatin1();
-        const char *prop = ba.data();
-        return dbusInter.property(prop).value<T>();
-    }
-
-    return T();
-}
-
-QDBusMessage AudioSink::callMethod(const QString &methodName, const QList<QVariant> &argument)
-{
-    QDBusInterface dbusInter(serviceName, m_devicePath, interfaceName + QString(".Sink"), QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QDBusPendingCall reply = dbusInter.asyncCallWithArgumentList(methodName, argument);
-        reply.waitForFinished();
-        return reply.reply();
-    }
-
-    return QDBusMessage();
-}
-
-static QVariantList argToString(const QDBusArgument &busArg)
-{
-    QVariantList out;
-    QString busSig = busArg.currentSignature();
-    bool doIterate = false;
-    QDBusArgument::ElementType elementType = busArg.currentType();
-
-    switch (elementType) {
-    case QDBusArgument::BasicType:
-    case QDBusArgument::VariantType: {
-        QVariant value = busArg.asVariant();
-        switch (value.type()) {
-        case QVariant::Bool:
-            out << value.toBool();
-            break;
-        case QVariant::Int:
-            out << value.toInt();
-            break;
-        case QVariant::String:
-            out << value.toString();
-            break;
-        case QVariant::UInt:
-            out << value.toUInt();
-            break;
-        case QVariant::ULongLong:
-            out << value.toULongLong();
-            break;
-        case QMetaType::UChar:
-            out << value.toUInt();
-            break;
-        default:
-            out << QVariant();
-            break;
-        }
-        out += busArg.asVariant().toString();
-        break;
-    }
-    case QDBusArgument::StructureType:
-        busArg.beginStructure();
-        doIterate = true;
-        break;
-    case QDBusArgument::ArrayType:
-        busArg.beginArray();
-        doIterate = true;
-        break;
-    case QDBusArgument::MapType:
-        busArg.beginMap();
-        doIterate = true;
-        break;
-    case QDBusArgument::UnknownType:
-    default:
-        out << QVariant();
-        return out;
-    }
-
-    if (doIterate && !busArg.atEnd()) {
-        while (!busArg.atEnd()) {
-            out << argToString(busArg);
-            if (out.isEmpty())
-                break;
-        }
-    }
-
-    return out;
-}
-
-QVariantList AudioSink::getPropertiesByFreeDesktop(const QString &propName)
-{
-    QDBusInterface dbusInter(serviceName, m_devicePath, "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QDBusPendingCall reply = dbusInter.asyncCallWithArgumentList("Get", { interfaceName + ".Sink", propName });
-        reply.waitForFinished();
-        QVariantList lists = reply.reply().arguments();
-        for (QVariantList::ConstIterator it = lists.begin(); it != lists.end(); ++it) {
-            QVariant arg = (*it);
-            const QVariant v = qvariant_cast<QDBusVariant>(arg).variant();
-            return argToString(v.value<QDBusArgument>());
-        }
-    }
-
-    return QVariantList();
-}
-
-AudioPorts::AudioPorts(int cardId, QString cardName)
+AudioPorts::AudioPorts(uint cardId, QString cardName)
     : m_cardId(cardId)
     , m_cardName(cardName)
+    , m_direction(0)
     , m_isCheck(false)
     , m_isHeadPhone(false)
 {
@@ -533,7 +338,7 @@ AudioPorts::~AudioPorts()
 {
 }
 
-int AudioPorts::cardId() const
+uint AudioPorts::cardId() const
 {
     return m_cardId;
 }

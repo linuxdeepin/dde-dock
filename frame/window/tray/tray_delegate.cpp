@@ -28,18 +28,22 @@
 #include "widgets/expandiconwidget.h"
 #include "utils.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QPointer>
 #include <QDebug>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QPainterPath>
 
 #include <xcb/xcb_icccm.h>
 #include <X11/Xlib.h>
 
-TrayDelegate::TrayDelegate(QObject *parent)
+TrayDelegate::TrayDelegate(QListView *view, QObject *parent)
     : QStyledItemDelegate(parent)
     , m_position(Dock::Position::Bottom)
+    , m_listView(view)
 {
 }
 
@@ -65,7 +69,7 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
             int screenp = 0;
             static xcb_connection_t *xcb_connection = xcb_connect(qgetenv("DISPLAY"), &screenp);
             static Display *m_display = XOpenDisplay(nullptr);
-            trayWidget = new XEmbedTrayItemWidget(winId, xcb_connection, m_display, parent) ;
+            trayWidget = new XEmbedTrayItemWidget(winId, xcb_connection, m_display, parent);
         }
 
         const TrayModel *model = qobject_cast<const TrayModel *>(index.model());
@@ -74,38 +78,51 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     } else if (type == TrayIconType::SNI) {
         trayWidget = new SNITrayItemWidget(servicePath, parent);
     } else if (type == TrayIconType::EXPANDICON) {
-        ExpandIconWidget *widget = new ExpandIconWidget(parent);
-        widget->setPositonValue(m_position);
-        connect(widget, &ExpandIconWidget::trayVisbleChanged, this, [ = ](bool visible) {
+        ExpandIconWidget *expandWidget = new ExpandIconWidget(parent);
+        expandWidget->setPositonValue(m_position);
+        connect(expandWidget, &ExpandIconWidget::trayVisbleChanged, this, [ = ](bool visible) {
             Q_EMIT visibleChanged(index, visible);
         });
-        connect(this, &TrayDelegate::requestDrag, this, [ = ](bool on) {
-            if (on) {
-                widget->setTrayPanelVisible(true);
-            } else {
-                // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
-                QPoint currentPoint = QCursor::pos();
-                TrayGridView *view = widget->popupTrayView();
-                if (view->geometry().contains(currentPoint))
-                    widget->setTrayPanelVisible(true);
-                else
-                    widget->setTrayPanelVisible(false);
-            }
-        });
-        trayWidget = widget;
+        connect(this, &TrayDelegate::requestDrag, this, &TrayDelegate::onRequestDrag);
+        trayWidget = expandWidget;
     } else if (type == TrayIconType::INDICATOR) {
         QString indicateName = key;
         int flagIndex = indicateName.indexOf("indicator:");
         if (flagIndex >= 0)
             indicateName = indicateName.right(indicateName.length() - QString("indicator:").length());
         IndicatorTrayItem *indicatorWidget = new IndicatorTrayItem(indicateName, parent);
-        connect(indicatorWidget, &IndicatorTrayItem::removed, this, [ = ]{
-            Q_EMIT removeRow(index);
-        });
+        TrayModel *dataModel = qobject_cast<TrayModel *>(m_listView->model());
+        if (IndicatorTrayItem *sourceIndicatorWidget = dataModel->indicatorWidget(key)) {
+            const QByteArray pixmapData = sourceIndicatorWidget->pixmapData();
+            if (!pixmapData.isEmpty())
+                indicatorWidget->setPixmapData(pixmapData);
+            const QString text = sourceIndicatorWidget->text();
+            if (!text.isEmpty())
+                indicatorWidget->setText(text);
+        }
         trayWidget = indicatorWidget;
     }
 
+    if (trayWidget)
+        trayWidget->setFixedSize(16, 16);
+
     return trayWidget;
+}
+
+void TrayDelegate::onRequestDrag(bool on)
+{
+    ExpandIconWidget *expandwidget = expandWidget();
+    if (!expandwidget)
+        return;
+
+    if (on) {
+        expandwidget->setTrayPanelVisible(true);
+    } else {
+        // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
+        QPoint currentPoint = QCursor::pos();
+        QWidget *view = expandwidget->popupTrayView();
+        expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint));
+    }
 }
 
 void TrayDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
@@ -128,5 +145,67 @@ void TrayDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 {
     Q_UNUSED(index);
     QRect rect = option.rect;
-    editor->setGeometry(rect.x() + ITEM_SPACING, rect.y() + ITEM_SPACING, ITEM_SIZE - (2 * ITEM_SPACING), ITEM_SIZE - 2 * ITEM_SPACING);
+    // 让控件居中显示
+    editor->setGeometry(rect.x() + (rect.width() - ICON_SIZE) / 2,
+                        rect.y() + (rect.height() - ICON_SIZE) / 2,
+                        ICON_SIZE, ICON_SIZE);
+}
+
+void TrayDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (needDrawBackground()) {
+        QColor borderColor;
+        QColor backColor;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            // 白色主题的情况下
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.05));
+            backColor = Qt::white;
+            backColor.setAlpha(static_cast<int>(255 * 0.4));
+        } else {
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.2));
+            backColor = Qt::black;
+            backColor.setAlpha(static_cast<int>(255 * 0.4));
+        }
+        painter->save();
+        QPainterPath path;
+        path.addRoundedRect(option.rect, 8, 8);
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->fillPath(path, backColor);
+        painter->setPen(borderColor);
+        painter->drawPath(path);
+        painter->restore();
+    }
+}
+
+ExpandIconWidget *TrayDelegate::expandWidget()
+{
+    if (!m_listView)
+        return nullptr;
+
+    QAbstractItemModel *dataModel = m_listView->model();
+    if (!dataModel)
+        return nullptr;
+
+    for (int i = 0; i < dataModel->rowCount() - 1; i++) {
+        QModelIndex index = dataModel->index(i, 0);
+        ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_listView->indexWidget(index));
+        if (widget)
+            return widget;
+    }
+
+    return nullptr;
+}
+
+bool TrayDelegate::needDrawBackground() const
+{
+    if (!m_listView)
+        return false;
+
+    TrayModel *dataModel = qobject_cast<TrayModel *>(m_listView->model());
+    if (!dataModel)
+        return false;
+
+    return dataModel->isIconTray();
 }

@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "indicatorplugin.h"
 
 #include <QLabel>
@@ -148,17 +168,11 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
 
         if (data.contains("text")) {
             featData("text", data, SLOT(textPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
-#ifdef QT_DEBUG // TODO
-                if (!v.toString().isEmpty()) {
-#else
                 if (v.toString().isEmpty()) {
-#endif
                     Q_EMIT q->removed();
                     return;
                 }
-                else {
-                    Q_EMIT q->delayLoaded();
-                }
+                Q_EMIT q->delayLoaded();
                 indicatorTrayWidget->setText(v.toString());
                 updateContent();
             });
@@ -170,9 +184,7 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
                     Q_EMIT q->removed();
                     return;
                 }
-                else {
-                    Q_EMIT q->delayLoaded();
-                }
+                Q_EMIT q->delayLoaded();
                 indicatorTrayWidget->setPixmapData(v.toByteArray());
                 updateContent();
             });
@@ -181,7 +193,7 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
         const QJsonObject action = config.value("action").toObject();
         if (!action.isEmpty() && indicatorTrayWidget)
             q->connect(indicatorTrayWidget, &IndicatorTrayItem::clicked, q, [ = ](uint8_t button_index, int x, int y) {
-                /*std::thread t([=]() -> void {
+                std::thread t([ = ] ()-> void {
                     auto triggerConfig = action.value("trigger").toObject();
                     auto dbusService = triggerConfig.value("dbus_service").toString();
                     auto dbusPath = triggerConfig.value("dbus_path").toString();
@@ -192,14 +204,9 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
 
                     QDBusInterface interface(dbusService, dbusPath, dbusInterface, bus);
                     QDBusReply<void> reply = interface.call(methodName, button_index, x, y);
-                    if (!reply.isValid()) {
-                        qDebug() << interface.call(methodName);
-                    }
-                    else {
-                        qDebug() << reply.error();
-                    }
+                    qDebug() << (reply.isValid() ? reply.error() : interface.call(methodName));
                 });
-                t.detach();*/
+                t.detach();
             });
     });
 }

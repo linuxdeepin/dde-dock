@@ -1,9 +1,30 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "brightnessmonitorwidget.h"
 #include "brightnessmodel.h"
 #include "customslider.h"
 #include "settingdelegate.h"
 
 #include <DListView>
+#include <DDBusSender>
 
 #include <QScrollBar>
 #include <QLabel>
@@ -21,7 +42,7 @@ BrightnessMonitorWidget::BrightnessMonitorWidget(BrightnessModel *model, QWidget
     : QWidget(parent)
     , m_sliderWidget(new QWidget(this))
     , m_sliderLayout(new QVBoxLayout(m_sliderWidget))
-    , m_descriptionLabel(new QLabel(tr("Output Device"), this))
+    , m_descriptionLabel(new QLabel(tr("Collaboration"), this))
     , m_deviceList(new DListView(this))
     , m_brightModel(model)
     , m_model(new QStandardItemModel(this))
@@ -92,15 +113,17 @@ void BrightnessMonitorWidget::initConnection()
             // 更新滚动条的内容
             onBrightChanged(monitor);
         } else {
-            QDBusInterface controlcenter("com.deepin.dde.ControlCenter", "/com/deepin/dde/ControlCenter",
-                                         "com.deepin.dde.ControlCenter", QDBusConnection::sessionBus());
-            controlcenter.call("ShowModule", "display");
+            DDBusSender().service("com.deepin.dde.ControlCenter")
+                    .path("/com/deepin/dde/ControlCenter")
+                    .interface("com.deepin.dde.ControlCenter")
+                    .method("ShowModule").arg(QString("display")).call();
             hide();
         }
     });
 
     for (QPair<BrightMonitor *, SliderContainer *> container : m_sliderContainers) {
         SliderContainer *slider = container.second;
+        slider->slider()->setValue(container.first->brihtness());
         connect(slider->slider(), &CustomSlider::valueChanged, this, [ = ](int value) {
             m_brightModel->setBrightness(container.first, value);
         });
@@ -112,16 +135,7 @@ void BrightnessMonitorWidget::initConnection()
 void BrightnessMonitorWidget::reloadMonitor()
 {
     m_model->clear();
-    QList<BrightMonitor *> monitots = m_brightModel->monitors();
-    for (BrightMonitor *monitor : monitots) {
-        DStandardItem *item = new DStandardItem;
-        item->setIcon(QIcon(":/icons/resources/laptop.svg"));
-        item->setText(monitor->name());
-        item->setFlags(Qt::NoItemFlags);
-        item->setData(QVariant::fromValue(monitor), itemDataRole);
-        m_model->appendRow(item);
-        onBrightChanged(monitor);
-    }
+    // 跨端协同列表，后续会新增该功能
     // 显示设置
     DStandardItem *settingItem = new DStandardItem;
     settingItem->setIcon(QIcon(""));

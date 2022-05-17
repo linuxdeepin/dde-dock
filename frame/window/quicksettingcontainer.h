@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef QUICKSETTINGCONTAINER_H
 #define QUICKSETTINGCONTAINER_H
 
@@ -31,9 +51,13 @@ class QuickSettingContainer : public QWidget
 
 public:
     static DockPopupWindow *popWindow();
+    static void setPosition(Dock::Position position);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+
     explicit QuickSettingContainer(QWidget *parent = nullptr);
     ~QuickSettingContainer() override;
     void showHomePage();
@@ -57,8 +81,12 @@ private:
     void initQuickItem(QuickSettingItem *quickItem);
     // 显示具体的窗体
     void showWidget(QWidget *widget, const QString &title);
+    // 清除移动轨迹
+    void clearDragPoint();
 
 private:
+    static DockPopupWindow *m_popWindow;
+    static Dock::Position m_position;
     QStackedLayout *m_switchLayout;
     QWidget *m_mainWidget;
     QWidget *m_pluginWidget;
@@ -71,52 +99,20 @@ private:
     VolumeDevicesWidget *m_volumeSettingWidget;
     BrightnessMonitorWidget *m_brightSettingWidget;
     PluginChildPage *m_childPage;
+    QPoint m_dragPluginPosition;
 };
 
-class CustomMimeData : public QMimeData
+class QuickPluginMimeData : public QMimeData
 {
     Q_OBJECT
 
 public:
-    CustomMimeData() : QMimeData(), m_data(nullptr) {}
-    ~CustomMimeData() {}
-    void setData(void *data) { m_data = data; }
-    void *data() { return m_data; }
+    explicit QuickPluginMimeData(QuickSettingItem *item) : QMimeData(), m_item(item) {}
+    ~QuickPluginMimeData() {}
+    QuickSettingItem *quickSettingItem() const { return m_item; }
 
 private:
-     void *m_data;
-};
-
-class PluginChildPage : public QWidget
-{
-    Q_OBJECT
-
-Q_SIGNALS:
-    void back();
-    void closeSelf();
-
-public:
-    explicit PluginChildPage(QWidget *parent);
-    ~PluginChildPage() override;
-    void pushWidget(QWidget *widget);
-    void setTitle(const QString &text);
-    bool isBack();
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
-private:
-    void initUi();
-    void resetHeight();
-
-private:
-    QWidget *m_headerWidget;
-    QLabel *m_back;
-    QLabel *m_title;
-    QWidget *m_container;
-    QWidget *m_topWidget;
-    QVBoxLayout *m_containerLayout;
-    bool m_isBack;
+     QuickSettingItem *m_item;
 };
 
 #endif // PLUGINCONTAINER_H

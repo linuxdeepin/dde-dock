@@ -24,6 +24,8 @@
 #include "pluginsiteminterface.h"
 #include "utils.h"
 
+#include <DFontSizeManager>
+
 #include <QPainter>
 #include <QBoxLayout>
 #include <QMouseEvent>
@@ -328,10 +330,13 @@ StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter,
     : PluginsItem (pluginInter, itemKey, plginApi, parent)
     , m_nameLabel(new QLabel(this))
 {
+    m_nameLabel->setFont(DFontSizeManager::instance()->t10());
     m_nameLabel->setText(pluginInter->pluginDisplayName());
     m_nameLabel->setAlignment(Qt::AlignCenter);
     QBoxLayout *mainLayout = static_cast<QHBoxLayout *>(layout());
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+    mainLayout->addSpacing(10);
     mainLayout->addWidget(m_nameLabel);
 }
 

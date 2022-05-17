@@ -26,27 +26,30 @@
 
 class BrightMonitor;
 class QDBusMessage;
+class QScreen;
 
 class BrightnessModel : public QObject
 {
     Q_OBJECT
-
-Q_SIGNALS:
-    void brightnessChanged(BrightMonitor *);
 
 public:
     explicit BrightnessModel(QObject *parent = nullptr);
     ~BrightnessModel();
 
     QList<BrightMonitor *> monitors();
+    BrightMonitor *primaryMonitor() const;
     void setBrightness(BrightMonitor *monitor, int brightness);
     void setBrightness(QString name, int brightness);
+
+Q_SIGNALS:
+    void brightnessChanged(BrightMonitor *);
+    void primaryChanged(BrightMonitor *);
 
 protected:
     QDBusMessage callMethod(const QString &methodName, const QList<QVariant> &argument);
 
 protected Q_SLOTS:
-    void onPropertyChanged(const QDBusMessage &msg);
+    void primaryScreenChanged(QScreen *screen);
 
 private:
     QList<BrightMonitor *> m_monitor;
@@ -67,11 +70,13 @@ public:
     int brihtness();
     bool enabled();
     QString name();
-    //bool isDefault();
+    bool isPrimary();
 
 protected:
     explicit BrightMonitor(QString path, QObject *parent);
     ~BrightMonitor();
+
+    void setPrimary(bool primary);
 
 protected Q_SLOTS:
     void onPropertyChanged(const QDBusMessage &msg);
@@ -81,6 +86,7 @@ private:
     QString m_name;
     int m_brightness;
     bool m_enabled;
+    bool m_isPrimary;
 };
 
 #endif // DISPLAYMODEL_H

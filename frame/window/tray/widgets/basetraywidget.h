@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
  *
- * Author:     sbw <sbw@sbw.so>
+ * Author:     donghualin <donghualin@uniontech.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer:  donghualin <donghualin@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include <QWidget>

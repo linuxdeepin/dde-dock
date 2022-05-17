@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+ *
+ * Author:     donghualin <donghualin@uniontech.com>
+ *
+ * Maintainer:  donghualin <donghualin@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef SYSTEMPLUGINWINDOW_H
 #define SYSTEMPLUGINWINDOW_H
 
@@ -18,14 +38,14 @@ class SystemPluginWindow : public DBlurEffectWidget
 {
     Q_OBJECT
 
-Q_SIGNALS:
-    void pluginSizeChanged();
-
 public:
     explicit SystemPluginWindow(QWidget *parent = nullptr);
     ~SystemPluginWindow() override;
     void setPositon(Dock::Position position);
     QSize suitableSize();
+
+Q_SIGNALS:
+    void pluginSizeChanged();
 
 private:
     void initUi();
@@ -49,11 +69,11 @@ class FixedPluginController : public DockPluginsController
     Q_OBJECT
 
 public:
-    FixedPluginController(QObject *parent);
+    explicit FixedPluginController(QObject *parent);
 
 protected:
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
     PluginsItem *createPluginsItem(PluginsItemInterface *const itemInter, const QString &itemKey, const QString &pluginApi) override;
+    bool needLoad(PluginsItemInterface *itemInter) override;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H
