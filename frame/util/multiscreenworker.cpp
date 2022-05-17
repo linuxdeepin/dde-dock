@@ -1408,11 +1408,13 @@ void MultiScreenWorker::checkXEventMonitorService()
             // 在鼠标拖动任务栏在最大尺寸的时候，如果当前任务栏为隐藏模式（一直隐藏或智能隐藏），在松开鼠标的那一刻，判断当前
             // 鼠标位置是否在任务栏外面(isCursorOut(x,y)==true)，此时需要触发onExtralRegionMonitorChanged函数，
             // 目的是为了让其触发隐藏
-            if (isCursorOut(x, y)
-                    && (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)) {
-                qApp->setProperty("DRAG_STATE", false);
-                onExtralRegionMonitorChanged(0, 0, m_extralRegisterKey);
-            }
+            QTimer::singleShot(50, this, [ = ] {
+                if (isCursorOut(x, y)
+                        && (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)) {
+                    qApp->setProperty("DRAG_STATE", false);
+                    onExtralRegionMonitorChanged(0, 0, m_extralRegisterKey);
+                }
+            });
         });
 
         connect(extralEventInter, &XEventMonitor::CursorOut, this, [ = ](int x, int y, const QString &key) {
