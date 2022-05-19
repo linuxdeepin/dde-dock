@@ -61,6 +61,7 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
 
     void pluginSettingsChanged() override;
+    const QIcon *icon() override;
 
     // 休眠待机配置，保持和sessionshell一致
     const QStringList session_ui_configs {

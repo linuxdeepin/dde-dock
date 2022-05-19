@@ -47,6 +47,16 @@ ShutdownWidget::ShutdownWidget(QWidget *parent)
     m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
 }
 
+QPixmap ShutdownWidget::loadPixmap() const
+{
+    QString iconName = "system-shutdown";
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    return loadSvg(iconName, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE));
+}
+
 void ShutdownWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);

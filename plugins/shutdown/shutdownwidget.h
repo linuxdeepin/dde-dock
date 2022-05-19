@@ -33,6 +33,7 @@ class ShutdownWidget : public QWidget
 
 public:
     explicit ShutdownWidget(QWidget *parent = Q_NULLPTR);
+    QPixmap loadPixmap() const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;
