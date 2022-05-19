@@ -111,7 +111,7 @@ QSize SystemPluginWindow::suitableSize()
 void SystemPluginWindow::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    Q_EMIT pluginSizeChanged();
+    Q_EMIT sizeChanged();
 }
 
 void SystemPluginWindow::initUi()
@@ -149,7 +149,7 @@ void SystemPluginWindow::onPluginItemAdded(PluginsItem *pluginItem)
         return;
 
     m_mainLayout->addWidget(pluginItem);
-    Q_EMIT pluginSizeChanged();
+    Q_EMIT sizeChanged();
 }
 
 void SystemPluginWindow::onPluginItemRemoved(PluginsItem *pluginItem)
@@ -158,7 +158,7 @@ void SystemPluginWindow::onPluginItemRemoved(PluginsItem *pluginItem)
         return;
 
     m_mainLayout->removeWidget(pluginItem);
-    Q_EMIT pluginSizeChanged();
+    Q_EMIT sizeChanged();
 }
 
 void SystemPluginWindow::onPluginItemUpdated(PluginsItem *pluginItem)

@@ -45,7 +45,7 @@ public:
     QSize suitableSize();
 
 Q_SIGNALS:
-    void pluginSizeChanged();
+    void sizeChanged();
 
 private:
     void initUi();

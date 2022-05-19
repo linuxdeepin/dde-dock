@@ -242,7 +242,7 @@ void TrayManagerWindow::initConnection()
         Q_EMIT sizeChanged();
     });
 
-    connect(m_systemPluginWidget, &SystemPluginWindow::pluginSizeChanged, this, [ this ] {
+    connect(m_systemPluginWidget, &SystemPluginWindow::sizeChanged, this, [ this ] {
         // 当系统插件发生变化的时候，同样需要调整尺寸
         m_systemPluginWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
@@ -325,6 +325,8 @@ void TrayManagerWindow::resetChildWidgetSize()
             m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), trayHeight);
             m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), trayHeight);
             m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), trayHeight);
+            // 设置右侧的电源按钮的尺寸
+            m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
             m_mainLayout->setContentsMargins(4, 4, 4 ,4);
             m_mainLayout->setSpacing(4);
             m_appDatetimeLayout->setSpacing(4);
@@ -336,6 +338,7 @@ void TrayManagerWindow::resetChildWidgetSize()
             // 因为是两行，所以对于时间控件的尺寸，只能设置最小值
             int dateTimeWidth = qMax(m_appPluginWidget->width(), m_dateTimeWidget->suitableSize().width());
             m_dateTimeWidget->setMinimumSize(dateTimeWidth, QWIDGETSIZE_MAX);
+            m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
 
             int contentSpace = qMin(MAXDIFF, qMax(height() - MINHIGHT, 0)) + MINSPACE;
             m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
@@ -359,6 +362,7 @@ void TrayManagerWindow::resetChildWidgetSize()
         m_dateTimeWidget->setFixedSize(sizeWidth, datetimeHeight);
         m_appPluginWidget->setFixedSize(sizeWidth, trayHeight + quickAreaHeight);
         m_appPluginDatetimeWidget->setFixedHeight(appDatetimeSize());
+        m_systemPluginWidget->setFixedSize(QWIDGETSIZE_MAX, m_systemPluginWidget->suitableSize().height());
 
         int contentSpace = qMin(MAXDIFF, qMax(width() - MINHIGHT, 0)) + MINSPACE;
         m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
