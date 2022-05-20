@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "datetimedisplayer.h"
+#include "tipswidget.h"
+#include "dockpopupwindow.h"
 
 #include <DFontSizeManager>
 #include <DDBusSender>
@@ -28,6 +30,7 @@
 #include <QFont>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 #define DATETIMESIZE 40
 #define ITEMSPACE 8
@@ -40,15 +43,27 @@ DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     : QWidget (parent)
     , m_timedateInter(new Timedate("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", QDBusConnection::sessionBus(), this))
     , m_position(Dock::Position::Bottom)
-    , m_timeFont(DFontSizeManager::instance()->t6())
     , m_dateFont(DFontSizeManager::instance()->t10())
+    , m_tipsWidget(new Dock::TipsWidget(this))
+    , m_tipsTimer(new QTimer(this))
+    , m_currentSize(0)
+    , m_oneRow(false)
 {
+    m_tipPopupWindow.reset(new DockPopupWindow);
     // 日期格式变化的时候，需要重绘
-    connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, [ this ] { update(); });
+    connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DateTimeDisplayer::onDateTimeFormatChanged);
     // 时间格式变化的时候，需要重绘
-    connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, [ this ] { update(); });
+    connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DateTimeDisplayer::onDateTimeFormatChanged);
+    // 是否使用24小时制发生变化的时候，也需要重绘
+    connect(m_timedateInter, &Timedate::Use24HourFormatChanged, this, &DateTimeDisplayer::onDateTimeFormatChanged);
     // 连接日期时间修改信号,更新日期时间插件的布局
-    connect(m_timedateInter, &Timedate::TimeUpdate, this, [ this ] { update(); });
+    connect(m_timedateInter, &Timedate::TimeUpdate, this, static_cast<void (QWidget::*)()>(&DateTimeDisplayer::update));
+    // 连接定时器和时间显示的tips信号,一秒钟触发一次，显示时间
+    connect(m_tipsTimer, &QTimer::timeout, this, &DateTimeDisplayer::onTimeChanged);
+    m_tipsTimer->setInterval(1000);
+    m_tipsTimer->start();
+    updatePolicy();
+    m_tipPopupWindow->hide();
 }
 
 DateTimeDisplayer::~DateTimeDisplayer()
@@ -61,21 +76,41 @@ void DateTimeDisplayer::setPositon(Dock::Position position)
         return;
 
     m_position = position;
-    setCurrentPolicy();
+    updatePolicy();
     update();
 }
 
-void DateTimeDisplayer::setCurrentPolicy()
+void DateTimeDisplayer::setOneRow(bool oneRow)
+{
+    m_oneRow = oneRow;
+    update();
+}
+
+void DateTimeDisplayer::updatePolicy()
 {
     switch (m_position) {
-    case Dock::Position::Top:
-    case Dock::Position::Bottom: {
+    case Dock::Position::Top: {
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowTop);
+        m_tipPopupWindow->setContent(m_tipsWidget);
         break;
     }
-    case Dock::Position::Left:
+    case Dock::Position::Bottom: {
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowBottom);
+        m_tipPopupWindow->setContent(m_tipsWidget);
+        break;
+    }
+    case Dock::Position::Left: {
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowLeft);
+        m_tipPopupWindow->setContent(m_tipsWidget);
+        break;
+    }
     case Dock::Position::Right: {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowRight);
+        m_tipPopupWindow->setContent(m_tipsWidget);
         break;
     }
     }
@@ -102,43 +137,24 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
             .method("RaiseWindow").call();
 }
 
-DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo()
+QString DateTimeDisplayer::getTimeString() const
 {
-    DateTimeInfo info;
-    const QDateTime current = QDateTime::currentDateTime();
+    QString tFormat = QString("hh:mm");
+    int type = m_timedateInter->shortTimeFormat();
+    if (timeFormat.contains(type))
+        tFormat = timeFormat[type];
 
-    info.m_timeRect = rect();
-    info.m_dateRect = rect();
-
-    QString format = getTimeFormat();
     if (!m_timedateInter->use24HourFormat()) {
         if (m_position == Dock::Top || m_position == Dock::Bottom)
-            format = format.append(" AP");
+            tFormat = tFormat.append(" AP");
         else
-            format = format.append("\nAP");
+            tFormat = tFormat.append("\nAP");
     }
 
-    info.m_time = current.toString(format);
-    info.m_date = current.toString(getDateFormat());
-
-    if (m_position == Dock::Top || m_position == Dock::Bottom) {
-        int timeWidth = QFontMetrics(m_timeFont).boundingRect(info.m_time).width() + 10;
-        int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
-        info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
-        int dateX = rect().width() - QFontMetrics(m_dateFont).width(info.m_date) - 2 - ITEMSPACE;
-        // 如果时间的X坐标小于日期的X坐标，需要手动设置坐标在日期坐标的右侧
-        if (dateX < info.m_timeRect.right())
-            dateX = info.m_timeRect.right();
-        info.m_dateRect = QRect(dateX, 0, dateWidth, height());
-    } else {
-        int textWidth = rect().width();
-        info.m_timeRect = QRect(0, 0, textWidth, DATETIMESIZE / 2);
-        info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, textWidth, DATETIMESIZE / 2);
-    }
-    return info;
+    return QDateTime::currentDateTime().toString(tFormat);
 }
 
-QString DateTimeDisplayer::getDateFormat() const
+QString DateTimeDisplayer::getDateString() const
 {
     int type = m_timedateInter->shortDateFormat();
     QString shortDateFormat = "yyyy-MM-dd";
@@ -156,16 +172,57 @@ QString DateTimeDisplayer::getDateFormat() const
         }
     }
 
-    return shortDateFormat;
+    return QDateTime::currentDateTime().toString(shortDateFormat);
 }
 
-QString DateTimeDisplayer::getTimeFormat() const
+DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo()
 {
-    int type = m_timedateInter->shortTimeFormat();
-    if (timeFormat.contains(type))
-        return timeFormat[type];
+    DateTimeInfo info;
+    info.m_timeRect = rect();
+    info.m_dateRect = rect();
 
-    return QString("hh:mm");
+    info.m_time = getTimeString();
+    info.m_date = getDateString();
+
+    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+        int timeWidth = QFontMetrics(timeFont()).boundingRect(info.m_time).width() + 3;
+        int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
+        info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
+        int dateX = rect().width() - QFontMetrics(m_dateFont).width(info.m_date) - 2 - ITEMSPACE;
+        // 如果时间的X坐标小于日期的X坐标，需要手动设置坐标在日期坐标的右侧
+        if (dateX < info.m_timeRect.right())
+            dateX = info.m_timeRect.right();
+        info.m_dateRect = QRect(dateX, 0, dateWidth, height());
+    } else {
+        int textWidth = rect().width();
+        info.m_timeRect = QRect(0, 0, textWidth, DATETIMESIZE / 2);
+        info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, textWidth, DATETIMESIZE / 2);
+    }
+    return info;
+}
+
+void DateTimeDisplayer::onTimeChanged()
+{
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+
+    if (m_timedateInter->use24HourFormat())
+        m_tipsWidget->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
+    else
+        m_tipsWidget->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss AP"));
+
+    // 如果时间和日期有一个不等，则实时刷新界面
+    if (m_lastDateString != getDateString() || m_lastTimeString != getTimeString())
+        update();
+}
+
+void DateTimeDisplayer::onDateTimeFormatChanged()
+{
+    int lastSize = m_currentSize;
+    // 此处需要强制重绘，因为在重绘过程中才会改变m_currentSize信息，方便在后面判断是否需要调整尺寸
+    repaint();
+    // 如果日期时间的格式发生了变化，需要通知外部来调整日期时间的尺寸
+    if (lastSize != m_currentSize)
+        Q_EMIT sizeChanged();
 }
 
 void DateTimeDisplayer::paintEvent(QPaintEvent *e)
@@ -184,8 +241,82 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
         timeTextFlag = Qt::AlignLeft | Qt::AlignVCenter;
         dateTextFlag = Qt::AlignRight | Qt::AlignVCenter;
     }
-    painter.setFont(m_timeFont);
+    painter.setFont(timeFont());
     painter.drawText(info.m_timeRect, timeTextFlag, info.m_time);
     painter.setFont(m_dateFont);
     painter.drawText(info.m_dateRect, dateTextFlag, info.m_date);
+
+    updateLastData(info);
+}
+
+QPoint DateTimeDisplayer::tipsPoint() const
+{
+    QPoint pointInTopWidget = parentWidget()->mapTo(topLevelWidget(), pos());
+    switch (m_position) {
+    case Dock::Position::Left: {
+        pointInTopWidget.setX(topLevelWidget()->x() + topLevelWidget()->width());
+        pointInTopWidget.setY(pointInTopWidget.y() + height() / 2);
+        break;
+    }
+    case Dock::Position::Top: {
+        pointInTopWidget.setY(y() + topLevelWidget()->y() + topLevelWidget()->height());
+        pointInTopWidget.setX(pointInTopWidget.x() + width() / 2);
+        break;
+    }
+    case Dock::Position::Right: {
+        pointInTopWidget.setY(pointInTopWidget.y() + height() / 2);
+        pointInTopWidget.setX(pointInTopWidget.x() - width() / 2);
+        break;
+    }
+    case Dock::Position::Bottom: {
+        pointInTopWidget.setY(0);
+        pointInTopWidget.setX(pointInTopWidget.x() + width() / 2);
+        break;
+    }
+    }
+    return topLevelWidget()->mapToGlobal(pointInTopWidget);
+}
+
+QFont DateTimeDisplayer::timeFont() const
+{
+    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right)
+        return DFontSizeManager::instance()->t6();
+
+    // 如果是上下方向，且当前只有一行，则始终显示小号字体
+    if (m_oneRow)
+        return DFontSizeManager::instance()->t10();
+
+    static QList<QFont> dateFontSize = { DFontSizeManager::instance()->t10(),
+                DFontSizeManager::instance()->t9(),
+                DFontSizeManager::instance()->t8(),
+                DFontSizeManager::instance()->t7(),
+                DFontSizeManager::instance()->t6() };
+
+#define MINHEIGHT 16
+    // 获取最低高度为16，找到对应的索引值
+    int index = qMin(qMax(static_cast<int>((rect().height() - MINHEIGHT) / 3), 0), dateFontSize.size() - 1);
+    return dateFontSize[index];
+}
+
+void DateTimeDisplayer::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    m_tipPopupWindow->show(tipsPoint());
+}
+
+void DateTimeDisplayer::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    m_tipPopupWindow->hide();
+}
+
+void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
+{
+    m_lastDateString = info.m_date;
+    m_lastTimeString = info.m_time;
+    QSize dateTimeSize = suitableSize();
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+        m_currentSize = dateTimeSize.width();
+    else
+        m_currentSize = dateTimeSize.height();
 }
