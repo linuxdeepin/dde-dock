@@ -68,6 +68,7 @@ private:
     void initUi();
     void initConnection();
 
+    void resetDirection();
     void resetChildWidgetSize();
     void resetMultiDirection();
     void resetSingleDirection();

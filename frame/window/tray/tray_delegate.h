@@ -59,7 +59,7 @@ protected:
 
 private:
     ExpandIconWidget *expandWidget();
-    bool needDrawBackground() const;
+    bool isPopupTray() const;
 
 private:
     Dock::Position m_position;

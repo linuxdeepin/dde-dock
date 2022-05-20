@@ -138,7 +138,15 @@ QSize TrayDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(ITEM_SIZE, ITEM_SIZE);
+    // 如果是弹出托盘，则显示正常大小
+    if (isPopupTray())
+        return QSize(ITEM_SIZE, ITEM_SIZE);
+
+    // 如果是任务栏的托盘，则高度显示为listView的高度或宽度
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+        return QSize(ITEM_SIZE, m_listView->height());
+
+    return QSize(m_listView->width(), ITEM_SIZE);
 }
 
 void TrayDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -153,30 +161,34 @@ void TrayDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 
 void TrayDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (needDrawBackground()) {
-        QColor borderColor;
-        QColor backColor;
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-            // 白色主题的情况下
-            borderColor = Qt::black;
-            borderColor.setAlpha(static_cast<int>(255 * 0.05));
-            backColor = Qt::white;
-            backColor.setAlpha(static_cast<int>(255 * 0.4));
-        } else {
-            borderColor = Qt::black;
-            borderColor.setAlpha(static_cast<int>(255 * 0.2));
-            backColor = Qt::black;
-            backColor.setAlpha(static_cast<int>(255 * 0.4));
-        }
-        painter->save();
-        QPainterPath path;
-        path.addRoundedRect(option.rect, 8, 8);
-        painter->setRenderHint(QPainter::Antialiasing);
-        painter->fillPath(path, backColor);
-        painter->setPen(borderColor);
-        painter->drawPath(path);
-        painter->restore();
+    Q_UNUSED(index);
+
+    if (!isPopupTray())
+        return;
+
+    QColor borderColor;
+    QColor backColor;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        // 白色主题的情况下
+        borderColor = Qt::black;
+        borderColor.setAlpha(static_cast<int>(255 * 0.05));
+        backColor = Qt::white;
+        backColor.setAlpha(static_cast<int>(255 * 0.4));
+    } else {
+        borderColor = Qt::black;
+        borderColor.setAlpha(static_cast<int>(255 * 0.2));
+        backColor = Qt::black;
+        backColor.setAlpha(static_cast<int>(255 * 0.4));
     }
+
+    painter->save();
+    QPainterPath path;
+    path.addRoundedRect(option.rect, 8, 8);
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->fillPath(path, backColor);
+    painter->setPen(borderColor);
+    painter->drawPath(path);
+    painter->restore();
 }
 
 ExpandIconWidget *TrayDelegate::expandWidget()
@@ -198,7 +210,7 @@ ExpandIconWidget *TrayDelegate::expandWidget()
     return nullptr;
 }
 
-bool TrayDelegate::needDrawBackground() const
+bool TrayDelegate::isPopupTray() const
 {
     if (!m_listView)
         return false;

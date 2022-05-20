@@ -37,6 +37,7 @@ public:
     explicit TrayGridView(QWidget *parent = Q_NULLPTR);
 
     void setPosition(Dock::Position position);
+    Dock::Position position() const;
     QSize suitableSize() const;
     void setDragDistance(int pixel);
     void setAnimationProperty(const QEasingCurve::Type easing, const int duringTime = 250);

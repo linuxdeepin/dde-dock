@@ -91,14 +91,7 @@ void TrayManagerWindow::setPositon(Dock::Position position)
     m_dateTimeWidget->setPositon(position);
     m_systemPluginWidget->setPositon(position);
 
-    QMetaObject::invokeMethod(this, [ this ]{
-        if (showSingleRow())
-            resetSingleDirection();
-        else
-            resetMultiDirection();
-
-        resetChildWidgetSize();
-    }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &TrayManagerWindow::resetDirection, Qt::QueuedConnection);
 }
 
 int TrayManagerWindow::appDatetimeSize()
@@ -142,12 +135,7 @@ void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 
-    if (showSingleRow())
-        resetSingleDirection();
-    else
-        resetMultiDirection();
-
-    resetChildWidgetSize();
+    resetDirection();
 }
 
 void TrayManagerWindow::initUi()
@@ -267,6 +255,18 @@ void TrayManagerWindow::initConnection()
     QMetaObject::invokeMethod(this, &TrayManagerWindow::resetChildWidgetSize, Qt::QueuedConnection);
 }
 
+void TrayManagerWindow::resetDirection()
+{
+    if (showSingleRow())
+        resetSingleDirection();
+    else
+        resetMultiDirection();
+
+    resetChildWidgetSize();
+    // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
+    Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
+}
+
 bool TrayManagerWindow::showSingleRow()
 {
     if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
@@ -298,10 +298,9 @@ void TrayManagerWindow::resetChildWidgetSize()
             m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), trayHeight);
         } else {
             // 多行显示
-            int trayHeight = m_appPluginDatetimeWidget->height() / 2 - m.top() - m.bottom();
-            m_trayView->setFixedSize(trayWidth, trayHeight);
-            m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), trayHeight);
-            m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), trayHeight);
+            m_trayView->setFixedSize(trayWidth, QWIDGETSIZE_MAX);
+            m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
+            m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
             // 因为是两行，所以对于时间控件的尺寸，只能设置最小值
             int dateTimeWidth = qMax(m_appPluginWidget->width(), m_dateTimeWidget->suitableSize().width());
             m_dateTimeWidget->setMinimumSize(dateTimeWidth, m_appPluginDatetimeWidget->height() / 2);
@@ -347,6 +346,8 @@ void TrayManagerWindow::resetSingleDirection()
         break;
     }
     }
+    m_splitLine->hide();
+    m_dateTimeWidget->setOneRow(true);
 }
 
 void TrayManagerWindow::resetMultiDirection()
@@ -356,12 +357,16 @@ void TrayManagerWindow::resetMultiDirection()
         m_appPluginLayout->setDirection(QBoxLayout::Direction::LeftToRight);
         m_appDatetimeLayout->setDirection(QBoxLayout::Direction::BottomToTop);
         m_mainLayout->setDirection(QBoxLayout::Direction::LeftToRight);
+        m_splitLine->show();
+        m_dateTimeWidget->setOneRow(false);
         break;
     }
     case Dock::Position::Bottom: {
         m_appPluginLayout->setDirection(QBoxLayout::Direction::LeftToRight);
         m_appDatetimeLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_mainLayout->setDirection(QBoxLayout::Direction::LeftToRight);
+        m_splitLine->show();
+        m_dateTimeWidget->setOneRow(false);
         break;
     }
     case Dock::Position::Left:
@@ -369,6 +374,8 @@ void TrayManagerWindow::resetMultiDirection()
         m_appPluginLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_appDatetimeLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+        m_splitLine->hide();
+        m_dateTimeWidget->setOneRow(true);
         break;
     }
     }

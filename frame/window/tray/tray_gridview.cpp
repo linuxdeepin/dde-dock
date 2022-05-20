@@ -53,6 +53,11 @@ void TrayGridView::setPosition(Dock::Position position)
     m_positon = position;
 }
 
+Dock::Position TrayGridView::position() const
+{
+    return m_positon;
+}
+
 QSize TrayGridView::suitableSize() const
 {
     TrayModel *dataModel = qobject_cast<TrayModel *>(model());
