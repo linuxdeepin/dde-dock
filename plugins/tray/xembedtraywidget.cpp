@@ -337,7 +337,7 @@ void XEmbedTrayWidget::sendHoverEvent()
             // 发送 montion notify event到client，实现hover事件
             auto c = QX11Info::connection();
             xcb_motion_notify_event_t* event = new xcb_motion_notify_event_t;
-            memset(event, 0x00, sizeof(xcb_button_press_event_t));
+            memset(event, 0x00, sizeof(xcb_motion_notify_event_t));
             event->response_type = XCB_MOTION_NOTIFY;
             event->event = m_windowId;
             event->same_screen = 1;
@@ -412,8 +412,8 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         pressEvent->same_screen = 1;
         pressEvent->root = QX11Info::appRootWindow();
         pressEvent->time = 0;
-        pressEvent->root_x = x;
-        pressEvent->root_y = y;
+        pressEvent->root_x = p.x();
+        pressEvent->root_y = p.y();
         pressEvent->child = 0;
         pressEvent->state = 0;
         pressEvent->detail = mouseButton;
@@ -428,8 +428,8 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         releaseEvent->same_screen = 1;
         releaseEvent->root = QX11Info::appRootWindow();
         releaseEvent->time = QX11Info::getTimestamp();
-        releaseEvent->root_x = x;
-        releaseEvent->root_y = y;
+        releaseEvent->root_x = p.x();
+        releaseEvent->root_y = p.y();
         releaseEvent->child = 0;
         releaseEvent->state = 0;
         releaseEvent->detail = mouseButton;
