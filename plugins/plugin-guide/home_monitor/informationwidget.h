@@ -14,6 +14,7 @@ public:
     explicit InformationWidget(QWidget *parent = nullptr);
 
     inline QStorageInfo * storageInfo() { return m_storageInfo; }
+    const QString textContent() const;
 
 private slots:
     // 用于更新数据的槽函数

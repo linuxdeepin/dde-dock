@@ -1,5 +1,7 @@
 #include "homemonitorplugin.h"
 
+#include <QPainter>
+
 HomeMonitorPlugin::HomeMonitorPlugin(QObject *parent)
     : QObject(parent)
 {
@@ -132,4 +134,43 @@ void HomeMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     } else if (menuId == "open") {
         QProcess::startDetached("gparted");
     }
+}
+
+const QIcon *HomeMonitorPlugin::icon()
+{
+    static QIcon pixMapIcon;
+    QPixmap pixmap;
+    QPainter painter(&pixmap);
+    painter.begin(&pixmap);
+    QFont font;
+    font.setPixelSize(10);
+    painter.setFont(font);
+    painter.drawText(QPoint(0, 0), m_pluginWidget->textContent());
+    painter.end();
+    pixMapIcon.detach();
+    pixMapIcon.addPixmap(pixmap);
+    return &pixMapIcon;
+}
+
+PluginsItemInterface::PluginStatus HomeMonitorPlugin::status() const
+{
+    return PluginStatus::Active;
+}
+
+bool HomeMonitorPlugin::isPrimary() const
+{
+    // 如果当前插件是在快捷设置区域最上方显示的大图标且可以展开查看详情的，则返回true
+    // 否则，返回false
+    return false;
+}
+
+QString HomeMonitorPlugin::description() const
+{
+    // 当isPrimary()返回值为true的时候，这个值用于返回在大图标下面的状态信息,
+    // 例如，如果当前图标是网络图标，下面则显示连接的网络信息，或者如果是其他的图标，下面显示连接的
+    // 状态等（开启或者关闭）
+    if (status() == PluginStatus::Active)
+        return tr("Enabled");
+
+    return tr("Disabled");
 }

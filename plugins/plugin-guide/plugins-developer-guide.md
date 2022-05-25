@@ -51,6 +51,10 @@ PluginsItemInterface 中定义的接口除了displayMode 和 position（历史�
 |refreshIcon | 当插件控件的图标需要更新时此接口被调用|
 |displayMode | 用于插件主动获取 dde-dock 当前的显示模式|
 |position | 用于插件主动获取 dde-dock 当前的位置|
+|icon | 用于返回当前插件在快捷设置面板上的图标，正常状态下显示的图标即可 |
+|status | 用于返回当前快捷设置插件的状态，激活状态还是禁用状态 |
+|isPrimary | 用于标记当前快捷设置的插件是否为主插件（图标占两个图标位置） |
+|description | 用于返回插件的描述（快捷设置面板中isPrimary为true的时候有用） |
 
 ### PluginProxyInterface
 

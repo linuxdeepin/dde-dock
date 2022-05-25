@@ -31,6 +31,11 @@ public:
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
+    const QIcon *icon() override;
+    PluginStatus status() const override;
+    bool isPrimary() const override;
+    QString description() const override;
+
 private:
     InformationWidget *m_pluginWidget;
     QLabel *m_tipsWidget;
