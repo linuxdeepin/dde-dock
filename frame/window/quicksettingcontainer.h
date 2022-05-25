@@ -90,6 +90,7 @@ private:
     QStackedLayout *m_switchLayout;
     QWidget *m_mainWidget;
     QWidget *m_pluginWidget;
+    QWidget *m_componentWidget;
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;
     MediaWidget *m_playerWidget;

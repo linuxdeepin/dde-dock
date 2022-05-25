@@ -44,7 +44,6 @@ static const int QuickItemRole = Dtk::UserRole + 10;
 
 #define ITEMWIDTH 70
 #define ITEMHEIGHT 60
-#define CTRLHEIGHT 56
 #define ITEMSPACE 10
 #define COLUMNCOUNT 4
 
@@ -56,11 +55,12 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_switchLayout(new QStackedLayout(this))
     , m_mainWidget(new QWidget(this))
     , m_pluginWidget(new QWidget(m_mainWidget))
+    , m_componentWidget(new QWidget(m_mainWidget))
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
-    , m_playerWidget(new MediaWidget(m_mainWidget))
-    , m_volumnWidget(new VolumeWidget(m_mainWidget))
-    , m_brihtnessWidget(new BrightnessWidget(m_mainWidget))
+    , m_playerWidget(new MediaWidget(m_componentWidget))
+    , m_volumnWidget(new VolumeWidget(m_componentWidget))
+    , m_brihtnessWidget(new BrightnessWidget(m_componentWidget))
     , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumnWidget->model(), this))
     , m_brightSettingWidget(new BrightnessMonitorWidget(m_brihtnessWidget->model(), this))
     , m_childPage(new PluginChildPage(this))
@@ -114,8 +114,8 @@ DockPopupWindow *QuickSettingContainer::popWindow()
     m_popWindow->setShadowXOffset(0);
     m_popWindow->setArrowWidth(18);
     m_popWindow->setArrowHeight(10);
-    m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
     m_popWindow->setArrowDirection(getDirection(m_position));
+    m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
     return m_popWindow;
 }
 
@@ -126,8 +126,13 @@ void QuickSettingContainer::setPosition(Position position)
 
     m_position = position;
 
-    if (m_popWindow)
+    if (m_popWindow) {
         m_popWindow->setArrowDirection(getDirection(m_position));
+        // 在任务栏位置发生变化的时候，需要将当前的content获取后，重新调用setContent接口
+        // 如果不调用，那么就会出现内容在容器内部的位置错误，界面上的布局会乱
+        QWidget *widget = m_popWindow->getContent();
+        m_popWindow->setContent(widget);
+    }
 }
 
 void QuickSettingContainer::initQuickItem(QuickSettingItem *quickItem)
@@ -297,31 +302,28 @@ void QuickSettingContainer::initUi()
     };
 
     // 添加音乐播放插件
-    m_playerWidget->setFixedHeight(CTRLHEIGHT);
-    m_volumnWidget->setFixedHeight(CTRLHEIGHT);
-    m_brihtnessWidget->setFixedHeight(CTRLHEIGHT);
+    m_playerWidget->setFixedHeight(ITEMHEIGHT);
+    m_volumnWidget->setFixedHeight(ITEMHEIGHT);
+    m_brihtnessWidget->setFixedHeight(ITEMHEIGHT);
 
     setWidgetStyle(m_playerWidget);
     setWidgetStyle(m_volumnWidget);
     setWidgetStyle(m_brihtnessWidget);
 
-    m_mainlayout->setSpacing(0);
+    m_mainlayout->setSpacing(ITEMSPACE);
     m_mainlayout->setContentsMargins(0, ITEMSPACE, 0, ITEMSPACE);
 
     m_mainlayout->addWidget(m_pluginWidget);
 
-    QWidget *ctrlWidget = new QWidget(m_mainWidget);
-    QVBoxLayout *ctrlLayout = new QVBoxLayout(ctrlWidget);
-    ctrlLayout->setContentsMargins(ITEMSPACE, ITEMSPACE, ITEMSPACE, ITEMSPACE);
+    QVBoxLayout *ctrlLayout = new QVBoxLayout(m_componentWidget);
+    ctrlLayout->setContentsMargins(ITEMSPACE, 0, ITEMSPACE, 0);
+    ctrlLayout->setSpacing(ITEMSPACE);
 
-    ctrlLayout->addSpacing(ITEMSPACE);
     ctrlLayout->addWidget(m_playerWidget);
-    ctrlLayout->setSpacing(ITEMSPACE);
     ctrlLayout->addWidget(m_volumnWidget);
-    ctrlLayout->setSpacing(ITEMSPACE);
     ctrlLayout->addWidget(m_brihtnessWidget);
 
-    m_mainlayout->addWidget(ctrlWidget);
+    m_mainlayout->addWidget(m_componentWidget);
     // 加载所有的插件
     QList<QuickSettingItem *> pluginItems = m_pluginLoader->settingItems();
     for (QuickSettingItem *quickItem: pluginItems)
@@ -393,8 +395,8 @@ void QuickSettingContainer::resizeView()
         if (m_brihtnessWidget->isVisible())
             panelCount++;
 
-        int topHeight = ((ITEMHEIGHT + ITEMSPACE) * rowCount) + ITEMSPACE;
-        setFixedHeight(topHeight + (CTRLHEIGHT + ITEMSPACE) * panelCount + ITEMSPACE);
+        m_componentWidget->setFixedHeight(ITEMHEIGHT * panelCount + ITEMSPACE * (panelCount - 1));
+        setFixedHeight(ITEMSPACE * 3 + m_pluginWidget->height() + m_componentWidget->height());
     } else if (m_switchLayout->currentWidget() == m_childPage) {
         setFixedHeight(m_childPage->height());
     }

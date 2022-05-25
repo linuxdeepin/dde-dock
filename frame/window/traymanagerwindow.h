@@ -59,6 +59,10 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
 
 private:
     void initUi();
@@ -67,11 +71,6 @@ private:
     void resetChildWidgetSize();
     void resetMultiDirection();
     void resetSingleDirection();
-
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragMoveEvent(QDragMoveEvent *e) override;
-    void dropEvent(QDropEvent *e) override;
-    void dragLeaveEvent(QDragLeaveEvent *event) override;
 
     bool showSingleRow();
     int appDatetimeSize();

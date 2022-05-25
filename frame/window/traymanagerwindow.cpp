@@ -259,6 +259,7 @@ void TrayManagerWindow::initConnection()
              }
         }
     });
+    connect(m_dateTimeWidget, &DateTimeDisplayer::sizeChanged, this, &TrayManagerWindow::sizeChanged);
 
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);
@@ -302,7 +303,8 @@ void TrayManagerWindow::resetChildWidgetSize()
             m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), trayHeight);
             m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), trayHeight);
             // 因为是两行，所以对于时间控件的尺寸，只能设置最小值
-            m_dateTimeWidget->setMinimumSize(m_dateTimeWidget->suitableSize().width(), m_appPluginDatetimeWidget->height() / 2);
+            int dateTimeWidth = qMax(m_appPluginWidget->width(), m_dateTimeWidget->suitableSize().width());
+            m_dateTimeWidget->setMinimumSize(dateTimeWidth, m_appPluginDatetimeWidget->height() / 2);
         }
         m_appPluginDatetimeWidget->setFixedWidth(appDatetimeSize());
         break;

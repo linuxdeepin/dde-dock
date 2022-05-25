@@ -37,7 +37,8 @@
 
 #define ITEMSIZE 22
 #define ITEMSPACE 6
-#define ICONSIZE 16
+#define ICONWIDTH 20
+#define ICONHEIGHT 16
 
 static QStringList fixedPluginKeys{ "network-item-key", "sound-item-key", "power" };
 const int itemDataRole = Dtk::UserRole + 1;
@@ -45,7 +46,7 @@ const int itemSortRole = Dtk::UserRole + 2;
 
 QuickPluginWindow::QuickPluginWindow(QWidget *parent)
     : QWidget(parent)
-    , m_mainLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
+    , m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this))
     , m_position(Dock::Position::Bottom)
 {
     initUi();
@@ -63,7 +64,7 @@ void QuickPluginWindow::initUi()
 {
     setAcceptDrops(true);
     m_mainLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_mainLayout->setDirection(QBoxLayout::Direction::RightToLeft);
+    m_mainLayout->setDirection(QBoxLayout::RightToLeft);
     m_mainLayout->setContentsMargins(ITEMSPACE, 0, ITEMSPACE, 0);
     m_mainLayout->setSpacing(ITEMSPACE);
     const QList<QuickSettingItem *> &items = QuickSettingController::instance()->settingItems();
@@ -83,10 +84,13 @@ void QuickPluginWindow::setPositon(Position position)
 
     m_position = position;
     QuickSettingContainer::setPosition(position);
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         m_mainLayout->setDirection(QBoxLayout::RightToLeft);
-    else
+        m_mainLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    } else {
         m_mainLayout->setDirection(QBoxLayout::BottomToTop);
+        m_mainLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    }
 }
 
 int QuickPluginWindow::findActiveTargetIndex(QWidget *widget)
@@ -136,6 +140,7 @@ void QuickPluginWindow::addPlugin(QuickSettingItem *item)
     if (!widget)
         return;
 
+    widget->setFixedSize(ICONWIDTH, ICONHEIGHT);
     widget->installEventFilter(this);
     if (fixedPluginKeys.contains(item->itemKey())) {
         // 新插入的插件如果是固定插件,则将其插入到固定插件列表中，并对其进行排序
@@ -156,13 +161,26 @@ void QuickPluginWindow::addPlugin(QuickSettingItem *item)
 QSize QuickPluginWindow::suitableSize()
 {
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        return QSize((ITEMSPACE + ICONSIZE) * m_mainLayout->count() + ITEMSIZE, ITEMSIZE);
+        return QSize((ITEMSPACE + ICONWIDTH) * m_mainLayout->count() + ITEMSPACE, ITEMSIZE);
 
-    return QSize(ITEMSIZE, (ITEMSIZE + ITEMSPACE) * m_mainLayout->count() + ITEMSPACE);
+    int height = 0;
+    int itemCount = m_mainLayout->count();
+    if (itemCount > 0) {
+        // 每个图标占据的高度
+        height += ICONHEIGHT * itemCount;
+        // 图标间距占据的高度
+        height += ITEMSPACE * itemCount;
+    }
+
+    return QSize(ITEMSIZE, height);
 }
 
 void QuickPluginWindow::removePlugin(QuickSettingItem *item)
 {
+    QWidget *widget = item->pluginItem()->itemWidget(item->itemKey());
+    if (widget)
+        widget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+
     if (m_fixedSettingItems.contains(item))
         m_fixedSettingItems.removeOne(item);
     else if (m_activeSettingItems.contains(item))
@@ -201,6 +219,36 @@ void QuickPluginWindow::mousePressEvent(QMouseEvent *event)
     startDrag(quickItem);
 }
 
+QPoint QuickPluginWindow::popupPoint() const
+{
+    if (!parentWidget())
+        return pos();
+
+    QPoint pointCurrent = parentWidget()->mapToGlobal(pos());
+    switch (m_position) {
+    case Dock::Position::Bottom: {
+        // 在下方的时候，Y坐标设置在顶层窗口的y值，保证下方对齐
+        pointCurrent.setY(topLevelWidget()->y());
+        break;
+    }
+    case Dock::Position::Top: {
+        // 在上面的时候，Y坐标设置为任务栏的下方，保证上方对齐
+        pointCurrent.setY(topLevelWidget()->y() + topLevelWidget()->height());
+        break;
+    }
+    case Dock::Position::Left: {
+        // 在左边的时候，X坐标设置在顶层窗口的最右侧，保证左对齐
+        pointCurrent.setX(topLevelWidget()->x() + topLevelWidget()->width());
+        break;
+    }
+    case Dock::Position::Right: {
+        // 在右边的时候，X坐标设置在顶层窗口的最左侧，保证右对齐
+        pointCurrent.setX(topLevelWidget()->x());
+    }
+    }
+    return pointCurrent;
+}
+
 void QuickPluginWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     // 查找固定团图标，然后点击弹出快捷面板
@@ -208,20 +256,9 @@ void QuickPluginWindow::mouseReleaseEvent(QMouseEvent *event)
     if (!quickItem)
         return;
 
-    // 如果是固定图标，则让其弹出列表
-    QPoint currentPoint = pos();
-    QWidget *callWidget = parentWidget();
-    if (callWidget) {
-        currentPoint = callWidget->mapToGlobal(currentPoint);
-        // 如果是向上的方向，则需要减去高度
-        if (m_position == Dock::Position::Top)
-            currentPoint.setY(currentPoint.y() + callWidget->height());
-        else if (m_position == Dock::Position::Left)
-            currentPoint.setX(currentPoint.x() + callWidget->width());
-    }
-
+    // 弹出快捷设置面板
     DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
-    popWindow->show(currentPoint);
+    popWindow->show(popupPoint());
 }
 
 void QuickPluginWindow::startDrag(QuickSettingItem *moveItem)
@@ -312,8 +349,8 @@ void QuickPluginWindow::resetPluginDisplay()
         }
     };
 
-    addWidget(m_activeSettingItems);
     addWidget(m_fixedSettingItems);
+    addWidget(m_activeSettingItems);
 }
 
 void QuickPluginWindow::initConnection()

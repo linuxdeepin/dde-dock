@@ -72,6 +72,7 @@ private:
     QuickSettingItem *findQuickSettingItem(const QPoint &mousePoint, const QList<QuickSettingItem *> &settingItems);
     int findActiveTargetIndex(QWidget *widget);
     void resetPluginDisplay();
+    QPoint popupPoint() const;
 
 private:
     QBoxLayout *m_mainLayout;
