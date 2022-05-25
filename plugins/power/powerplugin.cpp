@@ -185,6 +185,15 @@ void PowerPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
+const QIcon *PowerPlugin::icon()
+{
+    static QIcon batteryIcon;
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon();
+    batteryIcon.detach();
+    batteryIcon.addPixmap(pixmap);
+    return &batteryIcon;
+}
+
 void PowerPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();
@@ -205,6 +214,11 @@ void PowerPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_powerStatusWidget.reset(new PowerStatusWidget);
+
+    connect(m_powerStatusWidget.get(), &PowerStatusWidget::iconChanged, this, [ this ] {
+        m_proxyInter->itemUpdate(this, POWER_KEY);
+    });
+
     m_powerInter = new DBusPower(this);
 
     m_systemPowerInter = new SystemPowerInter("com.deepin.system.Power", "/com/deepin/system/Power", QDBusConnection::systemBus(), this);

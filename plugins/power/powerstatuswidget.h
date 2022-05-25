@@ -43,18 +43,19 @@ class PowerStatusWidget : public QWidget
 
 public:
     explicit PowerStatusWidget(QWidget *parent = 0);
+    QPixmap getBatteryIcon();
 
+public Q_SLOTS:
     void refreshIcon();
 
 signals:
     void requestContextMenu(const QString &itemKey) const;
+    void iconChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *e);
 
-private:
-    QPixmap getBatteryIcon();
 
 private:
     DBusPower *m_powerInter;

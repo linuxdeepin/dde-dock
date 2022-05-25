@@ -38,17 +38,16 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
 {
 //    QIcon::setThemeName("deepin");
 
-    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(m_powerInter, &DBusPower::OnBatteryChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        refreshIcon();
-    });
+    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(m_powerInter, &DBusPower::OnBatteryChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PowerStatusWidget::refreshIcon);
 }
 
 void PowerStatusWidget::refreshIcon()
 {
     update();
+    Q_EMIT iconChanged();
 }
 
 void PowerStatusWidget::paintEvent(QPaintEvent *e)

@@ -58,6 +58,7 @@ public:
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
     void pluginSettingsChanged() override;
+    const QIcon *icon() override;
 
 private:
     void updateBatteryVisible();
