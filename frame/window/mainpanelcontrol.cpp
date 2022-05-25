@@ -59,6 +59,12 @@
 #define PLUGIN_MAX_SIZE  40
 #define PLUGIN_MIN_SIZE  20
 #define DESKTOP_SIZE  10
+// 任务栏圆角最小的时候，任务栏的高度值
+#define MINRADIUSSIZE 46
+// 任务栏圆角最小值和最大值的差值
+#define MAXDIFFVALUE 6
+// 最小圆角值
+#define MINRADIUS 12
 
 DWIDGET_USE_NAMESPACE
 
@@ -352,6 +358,14 @@ void MainPanelControl::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     resizeDesktopWidget();
     resizeDockIcon();
+    resetRadius();
+}
+
+void MainPanelControl::resetRadius()
+{
+    int size = ((m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) ? height() : width());
+    int radius = qMin(MAXDIFFVALUE, qMax(size - MINRADIUSSIZE, 0)) + MINRADIUS;
+    qApp->setProperty("EffectBorderRadius", radius);
 }
 
 /**根据任务栏所在位置， 设置应用区域控件的大小
@@ -975,11 +989,19 @@ QPainterPath MainPanelControl::areaPath()
     if (m_dislayMode == DisplayMode::Efficient)
         return QPainterPath();
 
+    int radius = qApp->property("EffectBorderRadius").toInt();
     QPainterPath path;
-    int leftWidth = m_fixedAreaWidget->width() + m_fixedSpliter->width() + m_appAreaWidget->width();
-    int roundHeight = height();
-    path.addRoundedRect(QRect(0, 0, leftWidth, roundHeight), 18, 18);
-    path.addRoundedRect(QRect(m_trayManagerWidget->x(), 0, m_trayManagerWidget->width(), roundHeight), 18, 18);
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        int leftWidth = m_fixedAreaWidget->width() + m_fixedSpliter->width() + m_appAreaWidget->width();
+        int roundHeight = height();
+        path.addRoundedRect(QRect(0, 0, leftWidth, roundHeight), radius, radius);
+        path.addRoundedRect(QRect(m_trayManagerWidget->x(), 0, m_trayManagerWidget->width(), roundHeight), radius, radius);
+    } else {
+        int roundWidth = width();
+        int topHeight = m_fixedAreaWidget->height() + m_fixedSpliter->height() + m_appAreaWidget->height();
+        path.addRoundedRect(QRect(0, 0, roundWidth, topHeight), radius, radius);
+        path.addRoundedRect(QRect(0, m_trayManagerWidget->y(), roundWidth, m_trayManagerWidget->height()), radius, radius);
+    }
     return path;
 }
 

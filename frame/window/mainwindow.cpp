@@ -253,6 +253,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
     Q_EMIT panelGeometryChanged();
 
+    setMaskPath(m_mainPanel->areaPath());
     m_mainPanel->updatePluginsLayout();
     m_shadowMaskOptimizeTimer->start();
 
@@ -380,7 +381,11 @@ void MainWindow::adjustShadowMask()
             DPlatformTheme *theme = DGuiApplicationHelper::instance()->systemTheme();
             radius = theme->windowRadius(radius);
         } else {
-            radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+            QVariant vRadius = qApp->property("EffectBorderRadius");
+            if (vRadius.isNull())
+                radius = dstyle.pixelMetric(DStyle::PM_TopLevelWindowRadius);
+            else
+                radius = vRadius.toInt();
         }
     }
 

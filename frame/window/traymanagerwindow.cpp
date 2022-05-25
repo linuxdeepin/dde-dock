@@ -37,13 +37,21 @@
 #include <QMimeData>
 #include <QDBusConnection>
 #include <QPainter>
+#include <QPainterPath>
 
 #define MAXFIXEDSIZE 999999
-#define CRITLCALHEIGHT 56
+#define CRITLCALHEIGHT 42
+#define CONTENTSPACE 7
+// 高度小于等于这个值的时候，间距最小值
+#define MINHIGHT 46
+// 最小值与最大值的差值
+#define MINSPACE 4
+// 当前高度与最小高度差值大于这个值的时候，间距使用最大值
+#define MAXDIFF 3
 
 TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     : QWidget(parent)
-    , m_appPluginDatetimeWidget(new DBlurEffectWidget(this))
+    , m_appPluginDatetimeWidget(new QWidget(this))
     , m_systemPluginWidget(new SystemPluginWindow(this))
     , m_appPluginWidget(new QWidget(m_appPluginDatetimeWidget))
     , m_quickIconWidget(new QuickPluginWindow(m_appPluginWidget))
@@ -90,8 +98,6 @@ void TrayManagerWindow::setPositon(Dock::Position position)
     m_quickIconWidget->setPositon(position);
     m_dateTimeWidget->setPositon(position);
     m_systemPluginWidget->setPositon(position);
-
-    QMetaObject::invokeMethod(this, &TrayManagerWindow::resetDirection, Qt::QueuedConnection);
 }
 
 int TrayManagerWindow::appDatetimeSize()
@@ -100,10 +106,10 @@ int TrayManagerWindow::appDatetimeSize()
         // 如果是一行
         if (m_appDatetimeLayout->direction() == QBoxLayout::Direction::LeftToRight) {
             return m_trayView->suitableSize().width() + m_quickIconWidget->suitableSize().width()
-                    + m_dateTimeWidget->suitableSize().width();
+                    + m_dateTimeWidget->suitableSize().width() + m_appDatetimeLayout->spacing();
         }
         //如果是两行
-        int topWidth = m_trayView->suitableSize().width() + m_quickIconWidget->width();
+        int topWidth = m_trayView->suitableSize().width() + m_appDatetimeLayout->spacing() + m_quickIconWidget->width();
         int bottomWidth = m_dateTimeWidget->suitableSize().width();
         return qMax(topWidth, bottomWidth);
     }
@@ -131,6 +137,37 @@ QSize TrayManagerWindow::suitableSize()
                  m.top() + m.bottom());
 }
 
+// 用于返回需要绘制的圆形区域
+QPainterPath TrayManagerWindow::roundedPaths()
+{
+    int topLevelRadius = qApp->property("EffectBorderRadius").toInt();
+    QMargins mainMargin = m_mainLayout->contentsMargins();
+    int radius = topLevelRadius - mainMargin.top();
+    QPainterPath path;
+    if ((m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
+        && (m_appDatetimeLayout->direction() == QBoxLayout::Direction::LeftToRight)) {
+        // 如果是上下方向，且只有一行
+        // 计算托盘和快捷插件区域
+        QPoint pointPlugin(mainMargin.left(), mainMargin.top());
+        QRect rctPlugin(QPoint(mainMargin.left(), mainMargin.top()), m_appPluginWidget->size());
+        path.addRoundedRect(rctPlugin, radius, radius);
+
+        // 计算日期时间区域
+        QPoint pointDateTime = m_dateTimeWidget->pos();
+        pointDateTime = m_dateTimeWidget->parentWidget()->mapTo(this, pointDateTime);
+        QRect rctDatetime(pointDateTime, m_dateTimeWidget->size());
+        path.addRoundedRect(rctDatetime, radius, radius);
+        // 计算系统插件区域
+        path.addRoundedRect(m_systemPluginWidget->geometry(), radius, radius);
+    } else {
+        // 添加系统插件区域的位置信息
+        path.addRoundedRect(m_appPluginDatetimeWidget->geometry(), radius, radius);
+        path.addRoundedRect(m_systemPluginWidget->geometry(), radius, radius);
+    }
+
+    return path;
+}
+
 void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
@@ -147,7 +184,7 @@ void TrayManagerWindow::initUi()
     m_splitLine->setFixedHeight(1);
     QPalette pal;
     QColor lineColor(Qt::black);
-    lineColor.setAlpha(static_cast<int>(255 * 0.2));
+    lineColor.setAlpha(static_cast<int>(255 * 0.1));
     pal.setColor(QPalette::Background, lineColor);
     m_splitLine->setAutoFillBackground(true);
     m_splitLine->setPalette(pal);
@@ -158,11 +195,6 @@ void TrayManagerWindow::initUi()
     m_trayView->openPersistentEditor(m_model->index(0, 0));
 
     // 左侧的区域，包括应用托盘插件和下方的日期时间区域
-    m_appPluginDatetimeWidget->setBlurRectXRadius(10);
-    m_appPluginDatetimeWidget->setBlurRectYRadius(10);
-    m_appPluginDatetimeWidget->setMaskAlpha(uint8_t(0.1 * 255));
-    m_appPluginDatetimeWidget->installEventFilter(this);
-
     m_appPluginLayout->setContentsMargins(0, 0, 0, 0);
     m_appPluginLayout->setSpacing(0);
     m_appPluginWidget->setLayout(m_appPluginLayout);
@@ -176,14 +208,10 @@ void TrayManagerWindow::initUi()
     m_appDatetimeLayout->addWidget(m_splitLine);
     m_appDatetimeLayout->addWidget(m_dateTimeWidget);
 
-    m_systemPluginWidget->setBlurRectXRadius(10);
-    m_systemPluginWidget->setBlurRectYRadius(10);
-    m_systemPluginWidget->installEventFilter(this);
-    m_systemPluginWidget->setMaskAlpha(uint8_t(0.1 * 255));
-
     setLayout(m_mainLayout);
-    m_mainLayout->setContentsMargins(8, 8, 8, 8);
-    m_mainLayout->setSpacing(7);
+    // 通用情况下，设置边距和间距都为7
+    m_mainLayout->setContentsMargins(CONTENTSPACE, CONTENTSPACE, CONTENTSPACE, CONTENTSPACE);
+    m_mainLayout->setSpacing(CONTENTSPACE);
     m_mainLayout->addWidget(m_appPluginDatetimeWidget);
     m_mainLayout->addWidget(m_systemPluginWidget);
 }
@@ -252,7 +280,7 @@ void TrayManagerWindow::initConnection()
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);
     installEventFilter(this);
-    QMetaObject::invokeMethod(this, &TrayManagerWindow::resetChildWidgetSize, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &TrayManagerWindow::resetDirection, Qt::QueuedConnection);
 }
 
 void TrayManagerWindow::resetDirection()
@@ -265,12 +293,13 @@ void TrayManagerWindow::resetDirection()
     resetChildWidgetSize();
     // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
     Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
+    Q_EMIT sizeChanged();
 }
 
 bool TrayManagerWindow::showSingleRow()
 {
     if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
-        return height() < CRITLCALHEIGHT;
+        return topLevelWidget()->height() <= CRITLCALHEIGHT;
 
     return true;
 }
@@ -296,14 +325,22 @@ void TrayManagerWindow::resetChildWidgetSize()
             m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), trayHeight);
             m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), trayHeight);
             m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), trayHeight);
+            m_mainLayout->setContentsMargins(4, 4, 4 ,4);
+            m_mainLayout->setSpacing(4);
+            m_appDatetimeLayout->setSpacing(4);
         } else {
             // 多行显示
             m_trayView->setFixedSize(trayWidth, QWIDGETSIZE_MAX);
             m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
-            m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
+            m_appPluginWidget->setFixedSize(trayWidth + m_quickIconWidget->suitableSize().width(), m_appPluginDatetimeWidget->height() / 2 + 4);
             // 因为是两行，所以对于时间控件的尺寸，只能设置最小值
             int dateTimeWidth = qMax(m_appPluginWidget->width(), m_dateTimeWidget->suitableSize().width());
-            m_dateTimeWidget->setMinimumSize(dateTimeWidth, m_appPluginDatetimeWidget->height() / 2);
+            m_dateTimeWidget->setMinimumSize(dateTimeWidth, QWIDGETSIZE_MAX);
+
+            int contentSpace = qMin(MAXDIFF, qMax(height() - MINHIGHT, 0)) + MINSPACE;
+            m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
+            m_appDatetimeLayout->setSpacing(0);
+            m_mainLayout->setSpacing(contentSpace);
         }
         m_appPluginDatetimeWidget->setFixedWidth(appDatetimeSize());
         break;
@@ -322,6 +359,11 @@ void TrayManagerWindow::resetChildWidgetSize()
         m_dateTimeWidget->setFixedSize(sizeWidth, datetimeHeight);
         m_appPluginWidget->setFixedSize(sizeWidth, trayHeight + quickAreaHeight);
         m_appPluginDatetimeWidget->setFixedHeight(appDatetimeSize());
+
+        int contentSpace = qMin(MAXDIFF, qMax(width() - MINHIGHT, 0)) + MINSPACE;
+        m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
+        m_appDatetimeLayout->setSpacing(0);
+        m_mainLayout->setSpacing(contentSpace);
         break;
     }
     }
@@ -334,24 +376,28 @@ void TrayManagerWindow::resetSingleDirection()
     case Dock::Position::Bottom: {
         m_appPluginLayout->setDirection(QBoxLayout::Direction::LeftToRight);
         // 应用和时间在一行显示
+        m_appDatetimeLayout->setSpacing(10);
         m_appDatetimeLayout->setDirection(QBoxLayout::Direction::LeftToRight);
         m_mainLayout->setDirection(QBoxLayout::Direction::LeftToRight);
+        m_splitLine->hide();
         break;
     }
     case Dock::Position::Left:
     case Dock::Position::Right:{
+        m_appDatetimeLayout->setSpacing(0);
         m_appPluginLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_appDatetimeLayout->setDirection(QBoxLayout::Direction::TopToBottom);
         m_mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+        m_splitLine->show();
         break;
     }
     }
-    m_splitLine->hide();
     m_dateTimeWidget->setOneRow(true);
 }
 
 void TrayManagerWindow::resetMultiDirection()
 {
+    m_appDatetimeLayout->setSpacing(0);
     switch (m_postion) {
     case Dock::Position::Top: {
         m_appPluginLayout->setDirection(QBoxLayout::Direction::LeftToRight);
@@ -410,4 +456,25 @@ void TrayManagerWindow::dropEvent(QDropEvent *e)
 void TrayManagerWindow::dragLeaveEvent(QDragLeaveEvent *event)
 {
     event->accept();
+}
+
+void TrayManagerWindow::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainterPath path = roundedPaths();
+    QPainter painter(this);
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipPath(path);
+    painter.fillRect(rect().adjusted(1, 1, -1, -1), maskColor(102));
+    painter.setPen(maskColor(110));
+    painter.drawPath(path);
+    painter.restore();
+}
+
+QColor TrayManagerWindow::maskColor(uint8_t alpha) const
+{
+    QColor color = DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::instance()->themeType()).window().color();
+    color.setAlpha(alpha);
+    return color;
 }

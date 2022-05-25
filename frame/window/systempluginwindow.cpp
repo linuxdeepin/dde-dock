@@ -32,7 +32,7 @@
 #define ICONMARGIN 8
 
 SystemPluginWindow::SystemPluginWindow(QWidget *parent)
-    : DBlurEffectWidget(parent)
+    : QWidget(parent)
     , m_pluginController(new FixedPluginController(this))
     , m_listView(new DListView(this))
     , m_position(Dock::Position::Bottom)
@@ -110,7 +110,7 @@ QSize SystemPluginWindow::suitableSize()
 
 void SystemPluginWindow::resizeEvent(QResizeEvent *event)
 {
-    DBlurEffectWidget::resizeEvent(event);
+    QWidget::resizeEvent(event);
     Q_EMIT pluginSizeChanged();
 }
 

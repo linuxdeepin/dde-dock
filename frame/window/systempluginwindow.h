@@ -24,7 +24,7 @@
 #include "constants.h"
 #include "dockpluginscontroller.h"
 
-#include <DBlurEffectWidget>
+#include <QWidget>
 
 class DockPluginsController;
 class PluginsItem;
@@ -34,7 +34,7 @@ namespace Dtk { namespace Widget { class DListView; } }
 
 DWIDGET_USE_NAMESPACE
 
-class SystemPluginWindow : public DBlurEffectWidget
+class SystemPluginWindow : public QWidget
 {
     Q_OBJECT
 

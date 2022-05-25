@@ -48,14 +48,14 @@ class TrayManagerWindow : public QWidget
 {
     Q_OBJECT
 
-Q_SIGNALS:
-    void sizeChanged();
-
 public:
     explicit TrayManagerWindow(QWidget *parent = nullptr);
     ~TrayManagerWindow() override;
     void setPositon(Dock::Position position);
     QSize suitableSize();
+
+Q_SIGNALS:
+    void sizeChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -63,6 +63,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     void initUi();
@@ -72,12 +73,14 @@ private:
     void resetChildWidgetSize();
     void resetMultiDirection();
     void resetSingleDirection();
+    QColor maskColor(uint8_t alpha) const;
 
     bool showSingleRow();
     int appDatetimeSize();
+    QPainterPath roundedPaths();
 
 private:
-    DBlurEffectWidget *m_appPluginDatetimeWidget;
+    QWidget *m_appPluginDatetimeWidget;
     SystemPluginWindow *m_systemPluginWidget;
     QWidget *m_appPluginWidget;
     QuickPluginWindow *m_quickIconWidget;
