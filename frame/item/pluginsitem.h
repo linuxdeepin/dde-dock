@@ -91,19 +91,4 @@ private:
     const QGSettings *m_gsettings;
 };
 
-class StretchPluginsItem : public PluginsItem
-{
-    Q_OBJECT
-
-public:
-    StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent = nullptr);
-    ~StretchPluginsItem() override;
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-private:
-    QLabel *m_nameLabel;
-};
-
 #endif // PLUGINSITEM_H

@@ -54,9 +54,6 @@ public:
 
     void startLoader();
 
-protected:
-    virtual PluginsItem *createPluginsItem(PluginsItemInterface *const itemInter, const QString &itemKey, const QString &pluginApi);
-
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;

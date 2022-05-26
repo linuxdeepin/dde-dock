@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
@@ -25,6 +25,7 @@
 
 #include <DListView>
 #include <QBoxLayout>
+#include <QDir>
 #include <QMetaObject>
 
 #define MAXICONSIZE 48
@@ -39,10 +40,10 @@ SystemPluginWindow::SystemPluginWindow(QWidget *parent)
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
 {
     initUi();
-    connect(m_pluginController, &DockPluginsController::pluginItemInserted, this, &SystemPluginWindow::onPluginItemAdded);
-    connect(m_pluginController, &DockPluginsController::pluginItemRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
-    connect(m_pluginController, &DockPluginsController::pluginItemUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
-    QMetaObject::invokeMethod(m_pluginController, &DockPluginsController::startLoader, Qt::QueuedConnection);
+    connect(m_pluginController, &FixedPluginController::pluginItemInserted, this, &SystemPluginWindow::onPluginItemAdded);
+    connect(m_pluginController, &FixedPluginController::pluginItemRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
+    connect(m_pluginController, &FixedPluginController::pluginItemUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
+    QMetaObject::invokeMethod(m_pluginController, &FixedPluginController::startLoader, Qt::QueuedConnection);
 }
 
 SystemPluginWindow::~SystemPluginWindow()
@@ -60,52 +61,43 @@ void SystemPluginWindow::setPositon(Position position)
         m_mainLayout->setDirection(QBoxLayout::Direction::LeftToRight);
     else
         m_mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
+
+    QObjectList childObjects = children();
+    for (QObject *childObject : childObjects) {
+        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
+        if (!item)
+            continue;
+
+        item->setPosition(m_position);
+    }
 }
 
 QSize SystemPluginWindow::suitableSize()
 {
-    QMargins m = m_mainLayout->contentsMargins();
-    if (m_mainLayout->direction() == QBoxLayout::Direction::LeftToRight) {
-        int itemSize = height() - m_mainLayout->contentsMargins().top() - m_mainLayout->contentsMargins().bottom();
-        int itemWidth = m.left() + m.right();
-        for (int i = 0; i < m_mainLayout->count(); i++) {
-            QWidget *widget = m_mainLayout->itemAt(i)->widget();
-            if (!widget)
+    QObjectList childs = children();
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        int itemWidth = 0;
+        for (QObject *childObject : childs) {
+            StretchPluginsItem *childItem = qobject_cast<StretchPluginsItem *>(childObject);
+            if (!childItem)
                 continue;
 
-            PluginsItem *item = qobject_cast<PluginsItem *>(widget);
-            if (!item)
-                continue;
-
-            // 如果是横向的，则高度是固定，高宽一致，因此读取高度作为它的尺寸值
-            itemWidth += itemSize;
-            if (i < m_mainLayout->count() - 1)
-                itemWidth += m_mainLayout->spacing();
+            itemWidth += childItem->suitableSize().width();
         }
 
-        itemWidth += m.right();
-        return QSize(itemWidth, height());
+        return QSize(itemWidth, QWIDGETSIZE_MAX);
     }
 
-    int itemSize = width() - m_mainLayout->contentsMargins().left() - m_mainLayout->contentsMargins().right();
-    int itemHeight = m.top();
-    for (int i = 0; i < m_mainLayout->count(); i++) {
-        QWidget *widget = m_mainLayout->itemAt(i)->widget();
-        if (!widget)
-            continue;
-
-        PluginsItem *item = qobject_cast<PluginsItem *>(widget);
+    int itemHeight = 0;
+    for (QObject *childObject : childs) {
+        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
         if (!item)
             continue;
 
-        itemHeight += itemSize;
-        if (i < m_mainLayout->count() - 1)
-            itemHeight += m_mainLayout->spacing();
+        itemHeight += item->suitableSize().height();
     }
 
-    itemHeight += m.bottom();
-
-    return QSize(width(), itemHeight);
+    return QSize(QWIDGETSIZE_MAX, itemHeight);
 }
 
 void SystemPluginWindow::resizeEvent(QResizeEvent *event)
@@ -116,68 +108,239 @@ void SystemPluginWindow::resizeEvent(QResizeEvent *event)
 
 void SystemPluginWindow::initUi()
 {
-    m_mainLayout->setContentsMargins(8, 8, 8, 8);
-    m_mainLayout->setSpacing(5);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setSpacing(0);
 }
 
-int SystemPluginWindow::calcIconSize() const
-{
-    switch (m_position) {
-    case Dock::Position::Top:
-    case Dock::Position::Bottom: {
-        if (height() >= 56)
-            return MAXICONSIZE;
-        if (height() <= 40)
-            return MINICONSIZE;
-        return height() - ICONMARGIN * 2;
-    }
-    case Dock::Position::Left:
-    case Dock::Position::Right: {
-        if (width() >= 56)
-            return MAXICONSIZE;
-        if (width() <= 40)
-            return MINICONSIZE;
-        return width() - ICONMARGIN * 2;
-    }
-    }
-    return -1;
-}
-
-void SystemPluginWindow::onPluginItemAdded(PluginsItem *pluginItem)
+void SystemPluginWindow::onPluginItemAdded(StretchPluginsItem *pluginItem)
 {
     if (m_mainLayout->children().contains(pluginItem))
         return;
 
+    pluginItem->setPosition(m_position);
+    pluginItem->setParent(this);
+    pluginItem->show();
     m_mainLayout->addWidget(pluginItem);
     Q_EMIT sizeChanged();
 }
 
-void SystemPluginWindow::onPluginItemRemoved(PluginsItem *pluginItem)
+void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
 {
     if (!m_mainLayout->children().contains(pluginItem))
         return;
 
+    pluginItem->setParent(nullptr);
+    pluginItem->hide();
     m_mainLayout->removeWidget(pluginItem);
     Q_EMIT sizeChanged();
 }
 
-void SystemPluginWindow::onPluginItemUpdated(PluginsItem *pluginItem)
+void SystemPluginWindow::onPluginItemUpdated(StretchPluginsItem *pluginItem)
 {
-    pluginItem->refreshIcon();
+    pluginItem->update();
 }
 
 // can loader plugins
 FixedPluginController::FixedPluginController(QObject *parent)
-    : DockPluginsController(parent)
+    : AbstractPluginsController(parent)
 {
+    setObjectName("FixedPluginController");
 }
 
-PluginsItem *FixedPluginController::createPluginsItem(PluginsItemInterface * const itemInter, const QString &itemKey, const QString &pluginApi)
+void FixedPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    return new StretchPluginsItem(itemInter, itemKey, pluginApi);
+    StretchPluginsItem *item = new StretchPluginsItem(itemInter, itemKey);
+    m_pluginItems << item;
+    Q_EMIT pluginItemInserted(item);
+}
+
+void FixedPluginController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
+{
+    for (StretchPluginsItem *item : m_pluginItems) {
+        if (item->pluginInter() == itemInter) {
+            Q_EMIT pluginItemUpdated(item);
+            break;
+        }
+    }
+}
+
+void FixedPluginController::itemRemoved(PluginsItemInterface * const itemInter, const QString &)
+{
+    for (StretchPluginsItem *item : m_pluginItems) {
+        if (item->pluginInter() == itemInter) {
+            m_pluginItems.removeOne(item);
+            Q_EMIT pluginItemRemoved(item);
+            item->deleteLater();
+            break;
+        }
+    }
 }
 
 bool FixedPluginController::needLoad(PluginsItemInterface *itemInter)
 {
     return (itemInter->pluginName().compare("shutdown") == 0);
+}
+
+void FixedPluginController::startLoader()
+{
+    QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
+    QDir dir(pluginsDir);
+    if (!dir.exists())
+        pluginsDir = "/usr/lib/dde-dock/plugins";
+
+    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
+}
+
+#define ICONSIZE 20
+#define ICONTEXTSPACE 6
+#define PLUGIN_ITEM_DRAG_THRESHOLD 20
+
+StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
+    : DockItem(parent)
+    , m_pluginInter(pluginInter)
+    , m_itemKey(itemKey)
+    , m_position(Dock::Position::Bottom)
+{
+}
+
+StretchPluginsItem::~StretchPluginsItem()
+{
+}
+
+void StretchPluginsItem::setPosition(Position position)
+{
+    m_position = position;
+    update();
+}
+
+QString StretchPluginsItem::itemKey() const
+{
+    return m_itemKey;
+}
+
+PluginsItemInterface *StretchPluginsItem::pluginInter() const
+{
+    return m_pluginInter;
+}
+
+void StretchPluginsItem::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(this);
+    const QIcon *icon = m_pluginInter->icon();
+
+    QRect rctPixmap(rect());
+    if (needShowText()) {
+        int textHeight = QFontMetrics(textFont()).height();
+        // 文本与图标的间距为6
+        int iconTop = (height() - textHeight - ICONSIZE - ICONTEXTSPACE) / 2;
+        rctPixmap.setX((width() - ICONSIZE) / 2);
+        rctPixmap.setY(iconTop);
+        rctPixmap.setWidth(ICONSIZE);
+        rctPixmap.setHeight(ICONSIZE);
+        // 先绘制下面的文本
+        painter.setFont(textFont());
+        painter.drawText(QRect(0, iconTop + ICONSIZE + ICONTEXTSPACE, width(), textHeight), Qt::AlignCenter, m_pluginInter->pluginDisplayName());
+    } else {
+        rctPixmap.setX((width() - ICONSIZE) / 2);
+        rctPixmap.setY((height() - ICONSIZE) / 2);
+        rctPixmap.setWidth(ICONSIZE);
+        rctPixmap.setHeight(ICONSIZE);
+    }
+
+    // 绘制图标
+    if (icon)
+        painter.drawPixmap(rctPixmap, icon->pixmap(ICONSIZE, ICONSIZE));
+}
+
+QSize StretchPluginsItem::suitableSize() const
+{
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        int textWidth = QFontMetrics(textFont()).boundingRect(m_pluginInter->pluginDisplayName()).width();
+        return QSize(qMax(textWidth, ICONSIZE) + 10 * 2, -1);
+    }
+
+    int height = 6;                                 // 图标上边距6
+    height += ICONSIZE;                             // 图标尺寸20
+    height += ICONTEXTSPACE;                        // 图标与文字间距6
+    height += QFontMetrics(textFont()).height();    // 文本高度
+    height += 4;                                    // 下间距4
+    return QSize(-1, height);
+}
+
+QFont StretchPluginsItem::textFont() const
+{
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        static QList<QFont> fonts{ DFontSizeManager::instance()->t9(),
+                              DFontSizeManager::instance()->t8(),
+                              DFontSizeManager::instance()->t7(),
+                              DFontSizeManager::instance()->t6() };
+#define MINHEIGHT 50
+        int index = qMin(qMax((height() - MINHEIGHT) / 2, 0), fonts.size() - 1);
+        return fonts[index];
+    }
+
+    return DFontSizeManager::instance()->t10();
+}
+
+bool StretchPluginsItem::needShowText() const
+{
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+        return height() > (ICONSIZE + QFontMetrics(textFont()).height() + ICONTEXTSPACE);
+
+    return true;
+}
+
+const QString StretchPluginsItem::contextMenu() const
+{
+    return m_pluginInter->itemContextMenu(m_itemKey);
+}
+
+void StretchPluginsItem::mousePressEvent(QMouseEvent *e)
+{
+    m_hover = false;
+    update();
+
+    if (PopupWindow->isVisible())
+        hideNonModel();
+
+    if (e->button() == Qt::LeftButton)
+        m_mousePressPoint = e->pos();
+
+    m_popupTipsDelayTimer->stop();
+    hideNonModel();
+
+    if (e->button() == Qt::RightButton
+        && perfectIconRect().contains(e->pos()))
+            return showContextMenu();
+
+    DockItem::mousePressEvent(e);
+}
+
+void StretchPluginsItem::mouseReleaseEvent(QMouseEvent *e)
+{
+    DockItem::mouseReleaseEvent(e);
+
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    if (checkAndResetTapHoldGestureState() && e->source() == Qt::MouseEventSynthesizedByQt)
+        return;
+
+    const QPoint distance = e->pos() - m_mousePressPoint;
+    if (distance.manhattanLength() < PLUGIN_ITEM_DRAG_THRESHOLD)
+        mouseClick();
+}
+
+void StretchPluginsItem::mouseClick()
+{
+    const QString command = m_pluginInter->itemCommand(m_itemKey);
+    if (!command.isEmpty()) {
+        QProcess::startDetached(command);
+        return;
+    }
+
+    // request popup applet
+    if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
+        showPopupApplet(w);
 }

@@ -26,8 +26,8 @@
 
 #include <QWidget>
 
-class DockPluginsController;
-class PluginsItem;
+class FixedPluginController;
+class StretchPluginsItem;
 class QBoxLayout;
 
 namespace Dtk { namespace Widget { class DListView; } }
@@ -47,33 +47,80 @@ public:
 Q_SIGNALS:
     void sizeChanged();
 
-private:
-    void initUi();
-    int calcIconSize() const;
+protected:
     void resizeEvent(QResizeEvent *event) override;
 
+private:
+    void initUi();
+
 private Q_SLOTS:
-    void onPluginItemAdded(PluginsItem *pluginItem);
-    void onPluginItemRemoved(PluginsItem *pluginItem);
-    void onPluginItemUpdated(PluginsItem *pluginItem);
+    void onPluginItemAdded(StretchPluginsItem *pluginItem);
+    void onPluginItemRemoved(StretchPluginsItem *pluginItem);
+    void onPluginItemUpdated(StretchPluginsItem *pluginItem);
 
 private:
-    DockPluginsController *m_pluginController;
+    FixedPluginController *m_pluginController;
     DListView *m_listView;
     Dock::Position m_position;
     QBoxLayout *m_mainLayout;
 };
 
-class FixedPluginController : public DockPluginsController
+class FixedPluginController : public AbstractPluginsController
 {
     Q_OBJECT
 
 public:
     explicit FixedPluginController(QObject *parent);
+    void startLoader();
+
+Q_SIGNALS:
+    void pluginItemInserted(StretchPluginsItem *);
+    void pluginItemRemoved(StretchPluginsItem *);
+    void pluginItemUpdated(StretchPluginsItem *);
 
 protected:
-    PluginsItem *createPluginsItem(PluginsItemInterface *const itemInter, const QString &itemKey, const QString &pluginApi) override;
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
     bool needLoad(PluginsItemInterface *itemInter) override;
+
+    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
+    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
+    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+
+private:
+    QList<StretchPluginsItem *> m_pluginItems;
+};
+
+class StretchPluginsItem : public DockItem
+{
+    Q_OBJECT
+
+public:
+    StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    ~StretchPluginsItem() override;
+    void setPosition(Dock::Position position);
+    PluginsItemInterface *pluginInter() const;
+    QString itemKey() const;
+    QSize suitableSize() const;
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+
+    const QString contextMenu() const override;
+
+private:
+    void mouseClick();
+    QFont textFont() const;
+    bool needShowText() const;
+
+private:
+    PluginsItemInterface *m_pluginInter;
+    QString m_itemKey;
+    Dock::Position m_position;
+    QPoint m_mousePressPoint;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H

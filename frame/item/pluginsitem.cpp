@@ -325,27 +325,3 @@ PluginsItemInterface *PluginsItem::pluginItem() const
 {
     return m_pluginInter;
 }
-
-StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent)
-    : PluginsItem (pluginInter, itemKey, plginApi, parent)
-    , m_nameLabel(new QLabel(this))
-{
-    m_nameLabel->setFont(DFontSizeManager::instance()->t10());
-    m_nameLabel->setText(pluginInter->pluginDisplayName());
-    m_nameLabel->setAlignment(Qt::AlignCenter);
-    QBoxLayout *mainLayout = static_cast<QHBoxLayout *>(layout());
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
-    mainLayout->addSpacing(10);
-    mainLayout->addWidget(m_nameLabel);
-}
-
-StretchPluginsItem::~StretchPluginsItem()
-{
-}
-
-void StretchPluginsItem::resizeEvent(QResizeEvent *event)
-{
-    m_nameLabel->setVisible(height() >= 30);
-    PluginsItem::resizeEvent(event);
-}

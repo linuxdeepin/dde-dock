@@ -1314,11 +1314,11 @@ void MainPanelControl::resizeDesktopWidget()
 {
     QSize suitableSize = m_trayManagerWidget->suitableSize();
     if (m_position == Position::Right || m_position == Position::Left) {
-        m_desktopWidget->setFixedSize(width(), DESKTOP_SIZE);
-        m_trayManagerWidget->setFixedSize(width(), suitableSize.height());
+        m_desktopWidget->setFixedSize(QWIDGETSIZE_MAX, DESKTOP_SIZE);
+        m_trayManagerWidget->setFixedSize(QWIDGETSIZE_MAX, suitableSize.height());
     } else {
-        m_desktopWidget->setFixedSize(DESKTOP_SIZE, height());
-        m_trayManagerWidget->setFixedSize(suitableSize.width(), height());
+        m_desktopWidget->setFixedSize(DESKTOP_SIZE, QWIDGETSIZE_MAX);
+        m_trayManagerWidget->setFixedSize(suitableSize.width(), QWIDGETSIZE_MAX);
     }
 
     if (DisplayMode::Fashion == m_dislayMode)
