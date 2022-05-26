@@ -1431,7 +1431,9 @@ void MultiScreenWorker::checkXEventMonitorService()
         });
 
         // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
-        connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] { setStates(TouchPress, false); });
+        connect(touchEventInter, &XEventMonitor::CursorMove, this, [ = ] {
+            setStates(Utils::IS_WAYLAND_DISPLAY? MousePress : TouchPress, false);
+        });
         connect(touchEventInter, &XEventMonitor::ButtonPress, this, &MultiScreenWorker::onTouchPress);
         connect(touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
     };
