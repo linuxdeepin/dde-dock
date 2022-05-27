@@ -297,7 +297,8 @@ void PowerPlugin::refreshTipsData()
         if (!m_showTimeToFull) {
             tips = tr("Charging %1").arg(value);
         } else {
-            if (timeToFull == 0) {  // 电量已充満或电量计算中,剩余充满时间会返回0
+            // 充电时间timeToFull可能不为0是一个很小的数值,转换后取的hour和min为0
+            if (timeToFull == 0 || (hour == 0 && min == 0)) {  // 电量已充満或电量计算中,剩余充满时间会返回0
                 tips = tr("Capacity %1 ...").arg(value);
             } else {
                 hour == 0 ? tips = tr("Charging %1, %2 min until full").arg(value).arg(min)
