@@ -22,6 +22,7 @@
 #include "customslider.h"
 #include "imageutil.h"
 #include "volumemodel.h"
+#include "imageutil.h"
 
 #include <DGuiApplicationHelper>
 
@@ -41,6 +42,7 @@
 DGUI_USE_NAMESPACE
 
 #define ICON_SIZE 24
+#define BACKSIZE 36
 
 VolumeWidget::VolumeWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -65,9 +67,16 @@ void VolumeWidget::initUi()
     mainLayout->setContentsMargins(20, 0, 20, 0);
     mainLayout->addWidget(m_volumnCtrl);
 
-    m_volumnCtrl->setIconSize(QSize(36, 36));
-    m_volumnCtrl->setLeftIcon(QIcon(leftIcon()));
-    m_volumnCtrl->setRightIcon(QIcon(rightIcon()));
+    const QString rightIconFile = rightIcon();
+    QIcon rIcon = ImageUtil::getShadowPixmap(QPixmap(rightIconFile), Qt::lightGray, QSize(BACKSIZE, BACKSIZE));
+
+    m_volumnCtrl->setIconSize(QSize(BACKSIZE, BACKSIZE));
+    m_volumnCtrl->setLeftIcon(QIcon(QPixmap(leftIcon())));
+    m_volumnCtrl->setRightIcon(rIcon);
+
+    SliderProxy *proxy = new SliderProxy;
+    proxy->setParent(m_volumnCtrl->qtSlider());
+    m_volumnCtrl->qtSlider()->setStyle(proxy);
 
     bool existActiveOutputDevice = m_volumeController->existActiveOutputDevice();
     setEnabled(existActiveOutputDevice);

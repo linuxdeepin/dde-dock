@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "customslider.h"
 #include "mediawidget.h"
 
 #include <DFontSizeManager>
@@ -151,6 +152,7 @@ void MediaWidget::onUpdateMediaInfo()
  * @brief 音乐播放的相关按钮
  * @param parent
  */
+
 MusicButton::MusicButton(QWidget *parent)
     : QWidget(parent)
 {
@@ -161,14 +163,28 @@ MusicButton::~MusicButton()
 {
 }
 
+int MusicButton::getIconHeight() const
+{
+    switch (m_buttonType) {
+    case ButtonType::Pause:
+        return 21;
+    case ButtonType::Next:
+    case ButtonType::Playing:
+        return 18;
+    }
+
+    return 18;
+}
+
 void MusicButton::paintEvent(QPaintEvent *event)
 {
-#define ICONHEIGHT 20
     Q_UNUSED(event);
+    int ctrlHeight = getIconHeight();
+
     int width = this->width();
     int height = this->height();
     int startX = 2;
-    int startY = (height - ICONHEIGHT) / 2;
+    int startY = (height - ctrlHeight) / 2;
     QColor color(0, 0, 0);
     QPainter painter(this);
     painter.save();
@@ -176,17 +192,17 @@ void MusicButton::paintEvent(QPaintEvent *event)
     painter.setPen(color);
     painter.setBrush(color);
     if (m_buttonType == ButtonType::Pause) {
-        painter.drawRect(QRect(startX, startY, 6, ICONHEIGHT));
-        painter.drawRect(QRect(width - 6 - 2, startY, 6, ICONHEIGHT));
+        painter.drawRect(QRect(startX, startY, 6, ctrlHeight));
+        painter.drawRect(QRect(width - 6 - 2, startY, 6, ctrlHeight));
     } else {
         QPainterPath trianglePath;
         trianglePath.moveTo(startX, startY);
         trianglePath.lineTo(width - 6, height / 2);
-        trianglePath.lineTo(startX, startY + ICONHEIGHT);
+        trianglePath.lineTo(startX, startY + ctrlHeight);
         trianglePath.lineTo(startX, startY);
         painter.drawPath(trianglePath);
         if (m_buttonType == ButtonType::Next)
-            painter.drawRect(width - 6, startY, 2, ICONHEIGHT);
+            painter.drawRect(width - 6, startY, 2, ctrlHeight);
     }
     painter.restore();
 }

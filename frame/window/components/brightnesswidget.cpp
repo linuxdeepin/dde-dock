@@ -22,9 +22,13 @@
 #include "customslider.h"
 #include "brightnessmodel.h"
 #include "brightnessmonitorwidget.h"
+#include "imageutil.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
+
+#define BACKSIZE 36
+#define IMAGESIZE 24
 
 BrightnessWidget::BrightnessWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -63,11 +67,16 @@ void BrightnessWidget::initUi()
     layout->addWidget(m_slider);
 
     m_slider->setPageStep(1);
-    m_slider->setIconSize(QSize(24, 24));
+    m_slider->setIconSize(QSize(BACKSIZE, BACKSIZE));
 
-    m_slider->setLeftIcon(QIcon(":/icons/resources/brightness.svg"));
-    m_slider->setRightIcon(QIcon::fromTheme(":/icons/resources/ICON_Device_Laptop.svg"));
-    m_slider->setTickPosition(QSlider::TicksBelow);
+    QIcon leftIcon(QPixmap(":/icons/resources/brightness.svg").scaled(IMAGESIZE, IMAGESIZE));
+    m_slider->setLeftIcon(leftIcon);
+    QPixmap rightPixmap = ImageUtil::getShadowPixmap(QPixmap(QString(":/icons/resources/ICON_Device_Laptop.svg")).scaled(24, 24), Qt::lightGray, QSize(36, 36));
+    m_slider->setRightIcon(rightPixmap);
+
+    SliderProxy *style = new SliderProxy;
+    style->setParent(m_slider->qtSlider());
+    m_slider->qtSlider()->setStyle(style);
 }
 
 void BrightnessWidget::initConenction()

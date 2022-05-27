@@ -20,6 +20,7 @@
  */
 #include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
+#include "imageutil.h"
 
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
@@ -113,15 +114,8 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         int marginXSpace = xMarginSpace();
         int marginYSpace = yMarginSpace();
         QRect iconBg(marginXSpace, marginYSpace, BGSIZE, BGSIZE);
-        painter.save();
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(shadowColor());
-        painter.drawEllipse(iconBg);
-        painter.restore();
-        QRect rctIcon(iconBg.x() + (iconBg.width() - ICONWIDTH) / 2,
-                      iconBg.y() + (iconBg.height() - ICONHEIGHT) / 2,
-                      ICONWIDTH, ICONHEIGHT);
-        painter.drawPixmap(rctIcon, pm);
+        QPixmap bgPixmap = ImageUtil::getShadowPixmap(pm, shadowColor(), QSize(BGSIZE, BGSIZE));
+        painter.drawPixmap(iconBg, bgPixmap);
         // 绘制文字
         painter.setPen(QColor(0, 0, 0));
 
@@ -148,10 +142,10 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         painter.setPen(pen);
         int iconLeft = rect().width() - marginXSpace - expandSize.width();
         int iconRight = rect().width() - marginXSpace;
-        painter.drawLine(QPoint(iconLeft, (rctIcon.y() + (rctIcon.height() - expandSize.height()) / 2)),
-                         QPoint(iconRight, (rctIcon.y() + rctIcon.height() / 2)));
-        painter.drawLine(QPoint(iconRight, (rctIcon.y() + rctIcon.height() / 2)),
-                         QPoint(iconLeft, (rctIcon.y() + (rctIcon.height() + expandSize.height()) / 2)));
+        painter.drawLine(QPoint(iconLeft, (iconBg.y() + (iconBg.height() - expandSize.height()) / 2)),
+                         QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)));
+        painter.drawLine(QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)),
+                         QPoint(iconLeft, (iconBg.y() + (iconBg.height() + expandSize.height()) / 2)));
     } else {
         // 绘制图标
         QRect rctIcon = iconRect();

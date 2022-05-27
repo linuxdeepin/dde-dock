@@ -88,6 +88,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
+    int getIconHeight() const;
+
+private:
     ButtonType m_buttonType;
 };
 

@@ -23,6 +23,7 @@
 #define CUSTOMCTRL_H
 
 #include <DSlider>
+#include <QProxyStyle>
 #include <QTimer>
 
 class QLabel;
@@ -52,15 +53,12 @@ public:
     void setSliderPosition(int Position);
     void setAnnotations(const QStringList &annotations);
     void setOrientation(Qt::Orientation orientation);
-    //当value大于0时，在slider中插入一条分隔线
-    void setSeparateValue(int value = 0);
 
 protected:
     void wheelEvent(QWheelEvent *e);
-    void paintEvent(QPaintEvent *e);
+
 private:
     QSlider::TickPosition m_tickPosition = QSlider::TicksBelow;
-    int m_separateValue;
 };
 
 class SliderContainer : public QWidget
@@ -77,6 +75,18 @@ public:
 private:
     CustomSlider *m_slider;
     QLabel *m_titleLabel;
+};
+
+class SliderProxy : public QProxyStyle
+{
+    Q_OBJECT
+
+public:
+    explicit SliderProxy(QStyle *style = nullptr);
+    ~SliderProxy() override;
+
+protected:
+    void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 };
 
 #endif // VOLUMESLIDER_H
