@@ -65,33 +65,6 @@ private:
     QBoxLayout *m_mainLayout;
 };
 
-class FixedPluginController : public AbstractPluginsController
-{
-    Q_OBJECT
-
-public:
-    explicit FixedPluginController(QObject *parent);
-    void startLoader();
-
-Q_SIGNALS:
-    void pluginItemInserted(StretchPluginsItem *);
-    void pluginItemRemoved(StretchPluginsItem *);
-    void pluginItemUpdated(StretchPluginsItem *);
-
-protected:
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
-    bool needLoad(PluginsItemInterface *itemInter) override;
-
-    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
-
-private:
-    QList<StretchPluginsItem *> m_pluginItems;
-};
-
 class StretchPluginsItem : public DockItem
 {
     Q_OBJECT

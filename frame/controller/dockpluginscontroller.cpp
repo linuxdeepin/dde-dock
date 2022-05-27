@@ -20,6 +20,7 @@
  */
 
 #include "dockpluginscontroller.h"
+#include "proxyplugincontroller.h"
 #include "pluginsiteminterface.h"
 #include "traypluginitem.h"
 
@@ -31,6 +32,13 @@ DockPluginsController::DockPluginsController(QObject *parent)
     : AbstractPluginsController(parent)
 {
     setObjectName("DockPlugin");
+
+    ProxyPluginController::instance()->addProxyInterface(this);
+}
+
+DockPluginsController::~DockPluginsController()
+{
+    ProxyPluginController::instance()->removeProxyInterface(this);
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, const QString &itemKey)
@@ -43,10 +51,10 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
             return;
 
     // 取 plugin api
-    QPluginLoader *pluginLoader = qobject_cast<QPluginLoader*>(mPluginsMap[itemInter].value("pluginloader"));
-    if (!pluginLoader) {
+    QPluginLoader *pluginLoader = ProxyPluginController::instance()->pluginLoader(itemInter);
+    if (!pluginLoader)
         return;
-    }
+
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
 
@@ -135,30 +143,5 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const 
 
 void DockPluginsController::startLoader()
 {
-    loadLocalPlugins();
-    loadSystemPlugins();
-}
-
-void DockPluginsController::loadLocalPlugins()
-{
-    QString pluginsDir(QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()));
-
-    if (!QDir(pluginsDir).exists()) {
-        return;
-    }
-
-    qDebug() << "using dock local plugins dir:" << pluginsDir;
-
-    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
-}
-
-void DockPluginsController::loadSystemPlugins()
-{
-    QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
-#ifndef QT_DEBUG
-    pluginsDir = "/usr/lib/dde-dock/plugins";
-#endif
-    qDebug() << "using dock plugins dir:" << pluginsDir;
-
-    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
+    ProxyPluginController::instance()->startLoader();
 }

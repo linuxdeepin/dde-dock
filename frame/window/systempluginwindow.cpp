@@ -22,6 +22,7 @@
 #include "systemplugincontroller.h"
 #include "systempluginitem.h"
 #include "dockpluginscontroller.h"
+#include "fixedplugincontroller.h"
 
 #include <DListView>
 #include <QBoxLayout>
@@ -43,7 +44,6 @@ SystemPluginWindow::SystemPluginWindow(QWidget *parent)
     connect(m_pluginController, &FixedPluginController::pluginItemInserted, this, &SystemPluginWindow::onPluginItemAdded);
     connect(m_pluginController, &FixedPluginController::pluginItemRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
     connect(m_pluginController, &FixedPluginController::pluginItemUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
-    QMetaObject::invokeMethod(m_pluginController, &FixedPluginController::startLoader, Qt::QueuedConnection);
 }
 
 SystemPluginWindow::~SystemPluginWindow()
@@ -138,57 +138,6 @@ void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
 void SystemPluginWindow::onPluginItemUpdated(StretchPluginsItem *pluginItem)
 {
     pluginItem->update();
-}
-
-// can loader plugins
-FixedPluginController::FixedPluginController(QObject *parent)
-    : AbstractPluginsController(parent)
-{
-    setObjectName("FixedPluginController");
-}
-
-void FixedPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
-{
-    StretchPluginsItem *item = new StretchPluginsItem(itemInter, itemKey);
-    m_pluginItems << item;
-    Q_EMIT pluginItemInserted(item);
-}
-
-void FixedPluginController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
-{
-    for (StretchPluginsItem *item : m_pluginItems) {
-        if (item->pluginInter() == itemInter) {
-            Q_EMIT pluginItemUpdated(item);
-            break;
-        }
-    }
-}
-
-void FixedPluginController::itemRemoved(PluginsItemInterface * const itemInter, const QString &)
-{
-    for (StretchPluginsItem *item : m_pluginItems) {
-        if (item->pluginInter() == itemInter) {
-            m_pluginItems.removeOne(item);
-            Q_EMIT pluginItemRemoved(item);
-            item->deleteLater();
-            break;
-        }
-    }
-}
-
-bool FixedPluginController::needLoad(PluginsItemInterface *itemInter)
-{
-    return (itemInter->pluginName().compare("shutdown") == 0);
-}
-
-void FixedPluginController::startLoader()
-{
-    QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
-    QDir dir(pluginsDir);
-    if (!dir.exists())
-        pluginsDir = "/usr/lib/dde-dock/plugins";
-
-    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }
 
 #define ICONSIZE 20

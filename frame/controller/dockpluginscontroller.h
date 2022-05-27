@@ -43,6 +43,7 @@ class DockPluginsController : public AbstractPluginsController
 
 public:
     explicit DockPluginsController(QObject *parent = nullptr);
+    ~DockPluginsController() override;
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
@@ -59,10 +60,6 @@ signals:
     void pluginItemRemoved(PluginsItem *pluginItem) const;
     void pluginItemUpdated(PluginsItem *pluginItem) const;
     void trayVisableCountChanged(const int &count) const;
-
-private:
-    void loadLocalPlugins();
-    void loadSystemPlugins();
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

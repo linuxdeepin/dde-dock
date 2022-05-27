@@ -48,6 +48,10 @@ public:
     const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
     void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
 
+    void itemAdded(PluginsItemInterface * const, const QString &) override {}
+    void itemUpdate(PluginsItemInterface * const, const QString &) override {}
+    void itemRemoved(PluginsItemInterface * const, const QString &) override {}
+
 signals:
     void pluginLoaderFinished();
 

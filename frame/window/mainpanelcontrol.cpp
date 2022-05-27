@@ -275,6 +275,8 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_tray = static_cast<TrayPluginItem *>(wdg);
     m_trayAreaLayout->insertWidget(index, wdg);
+    if (m_tray)
+        m_tray->installEventFilter(this);
 }
 
 /**往插件区域添加应用，保存回收站插件指针对象
@@ -670,6 +672,14 @@ void MainPanelControl::dragMoveEvent(QDragMoveEvent *e)
 
 bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
 {
+    // 在从时尚模式切换到高效模式的时候，
+    // m_tray子部件会调整高度，此时会触发m_tray调整尺寸
+    // 但是子部件的模式变化函数在FashionTrayItem部件中的
+    // NormalContainer部件尺寸变化完成之前就已经结束，导致
+    // NormalContainer没有更新自己的尺寸，引起插件区域拥挤
+    if (m_tray && watched == m_tray && event->type() == QEvent::Resize)
+        m_tray->pluginItem()->displayModeChanged(m_dislayMode);
+
     // 更新应用区域大小和任务栏图标大小
     if (watched == m_appAreaSonWidget) {
         switch (event->type()) {
