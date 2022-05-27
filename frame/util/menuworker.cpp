@@ -163,8 +163,7 @@ void MenuWorker::onDockSettingsTriggered()
             .path("/com/deepin/dde/ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .method("ShowPage")
-            .arg(QString("personalization"))
-            .arg(QString("Dock"))
+            .arg(QString("personalization/dock"))
             .call();
 }
 
