@@ -211,6 +211,9 @@ private slots:
 
     void onDelayAutoHideChanged();
 
+    // 子部件尺寸发生变化
+    void onChildSizeChanged();
+
 private:
     MainWindow *parent();
     // 初始化数据信息

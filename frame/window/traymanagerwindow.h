@@ -51,6 +51,8 @@ class TrayManagerWindow : public QWidget
 public:
     explicit TrayManagerWindow(QWidget *parent = nullptr);
     ~TrayManagerWindow() override;
+
+    void updateLayout();
     void setPositon(Dock::Position position);
     QSize suitableSize();
 
@@ -69,13 +71,11 @@ private:
     void initUi();
     void initConnection();
 
-    void resetDirection();
     void resetChildWidgetSize();
     void resetMultiDirection();
     void resetSingleDirection();
     QColor maskColor(uint8_t alpha) const;
 
-    bool showSingleRow();
     int appDatetimeSize();
     QPainterPath roundedPaths();
 

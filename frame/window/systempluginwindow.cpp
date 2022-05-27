@@ -100,12 +100,6 @@ QSize SystemPluginWindow::suitableSize()
     return QSize(QWIDGETSIZE_MAX, itemHeight);
 }
 
-void SystemPluginWindow::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-    Q_EMIT sizeChanged();
-}
-
 void SystemPluginWindow::initUi()
 {
     m_mainLayout->setContentsMargins(0, 0, 0, 0);

@@ -76,6 +76,22 @@ TrayManagerWindow::~TrayManagerWindow()
 {
 }
 
+void TrayManagerWindow::updateLayout()
+{
+    bool showSingle = true;
+    if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
+        showSingle = (topLevelWidget()->height() <= CRITLCALHEIGHT);
+
+    if (showSingle)
+        resetSingleDirection();
+    else
+        resetMultiDirection();
+
+    resetChildWidgetSize();
+    // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
+    Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
+}
+
 void TrayManagerWindow::setPositon(Dock::Position position)
 {
     if (m_postion == position)
@@ -169,7 +185,7 @@ void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 
-    resetDirection();
+    updateLayout();
 }
 
 void TrayManagerWindow::initUi()
@@ -277,28 +293,7 @@ void TrayManagerWindow::initConnection()
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);
     installEventFilter(this);
-    QMetaObject::invokeMethod(this, &TrayManagerWindow::resetDirection, Qt::QueuedConnection);
-}
-
-void TrayManagerWindow::resetDirection()
-{
-    if (showSingleRow())
-        resetSingleDirection();
-    else
-        resetMultiDirection();
-
-    resetChildWidgetSize();
-    // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
-    Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
-    Q_EMIT sizeChanged();
-}
-
-bool TrayManagerWindow::showSingleRow()
-{
-    if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
-        return topLevelWidget()->height() <= CRITLCALHEIGHT;
-
-    return true;
+    QMetaObject::invokeMethod(this, &TrayManagerWindow::sizeChanged, Qt::QueuedConnection);
 }
 
 void TrayManagerWindow::resetChildWidgetSize()

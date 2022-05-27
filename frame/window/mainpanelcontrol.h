@@ -39,6 +39,7 @@ class PlaceholderItem;
 class AppDragWidget;
 class DesktopWidget;
 class TrayManagerWindow;
+class DockScreen;
 
 class MainPanelControl : public QWidget
 {
@@ -50,9 +51,10 @@ public:
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
     void updatePluginsLayout();
+
+    void setDockScreen(DockScreen *dockScreen);
     QPainterPath areaPath();
-    void setScreenSize(int size);
-    QSize suitableSize(double deviceRatio);
+    QSize suitableSize(int screenSize, double deviceRatio) const;
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -80,6 +82,7 @@ private:
     void removeTrayAreaItem(QWidget *wdg);
     void addPluginAreaItem(int index, QWidget *wdg);
     void removePluginAreaItem(QWidget *wdg);
+    int getScreenSize() const;
 
     // 拖拽相关
     void startDrag(DockItem *);
@@ -129,9 +132,9 @@ private:
     QPoint m_mousePressPos;
     TrayPluginItem *m_tray;
     int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
-    int m_screenSize;
 
     PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
+    DockScreen *m_dockScreen;
 };
 
 #endif // MAINPANELCONTROL_H

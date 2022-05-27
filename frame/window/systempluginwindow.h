@@ -47,9 +47,6 @@ public:
 Q_SIGNALS:
     void sizeChanged();
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
 private:
     void initUi();
 
