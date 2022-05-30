@@ -149,7 +149,7 @@ QRect MultiScreenWorker::dockRect(const QString &screenName)
  */
 QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
 {
-    if (hideMode == HideMode::KeepShowing)
+    if (hideMode == HideMode::KeepShowing || m_currentHideState == HideState::Show)
         return getDockShowGeometry(screenName, pos, displayMode, true);
     else
         return getDockHideGeometry(screenName, pos, displayMode, true);
@@ -660,10 +660,10 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 {
-    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
+    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, m_hideMode, m_displayMode);
 
-    //!!! 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
-    if (rect.width() == 0 || rect.height() == 0)
+    //!!! 智能隐藏模式下隐藏之后不需要在设置一次，否则会导致HideState属性循环变化
+    if (m_hideMode == HideMode::SmartHide && m_currentHideState == HideState::Hide)
         return;
 
 #ifdef QT_DEBUG
@@ -1024,6 +1024,7 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
             || testState(ShowAnimationStart))
         return;
 
+    m_currentHideState = act ? HideState::Hide : HideState::Show;
     QRect mainwindowRect = parent()->geometry();
     QRect dockShowRect = getDockShowGeometry(screen, pos, m_displayMode);
     QRect dockHideRect = getDockHideGeometry(screen, pos, m_displayMode);
