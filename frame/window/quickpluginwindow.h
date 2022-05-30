@@ -33,6 +33,7 @@ class QStandardItemModel;
 class QStandardItem;
 class QMouseEvent;
 class QBoxLayout;
+class QuickDockItem;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; }
                 namespace Widget { class DListView; class DStandardItem; } }
@@ -48,7 +49,7 @@ public:
     ~QuickPluginWindow() override;
 
     void setPositon(Dock::Position position);
-    void dragPlugin(QuickSettingItem *item);
+    void dragPlugin(PluginsItemInterface *item);
 
     QSize suitableSize();
 
@@ -56,29 +57,53 @@ Q_SIGNALS:
     void itemCountChanged();
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
     void addPlugin(QuickSettingItem *item);
-    void removePlugin(QuickSettingItem *item);
+    void removePlugin(PluginsItemInterface *item);
+    void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
+    void onFixedClick();
 
 private:
     void initUi();
     void initConnection();
-    void startDrag(QuickSettingItem *moveItem);
-    QList<QuickSettingItem *> settingItems();
-    QuickSettingItem *findQuickSettingItem(const QPoint &mousePoint, const QList<QuickSettingItem *> &settingItems);
-    int findActiveTargetIndex(QWidget *widget);
+    void startDrag(PluginsItemInterface *moveItem);
+    PluginsItemInterface *findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems);
+    int findActiveTargetIndex(QuickDockItem *widget);
+    int getDropIndex(QPoint point);
     void resetPluginDisplay();
     QPoint popupPoint() const;
+    QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
 
 private:
     QBoxLayout *m_mainLayout;
     Dock::Position m_position;
-    QList<QuickSettingItem *> m_activeSettingItems;
-    QList<QuickSettingItem *> m_fixedSettingItems;
+    QList<PluginsItemInterface *> m_activeSettingItems;
+    QList<PluginsItemInterface *> m_fixedSettingItems;
+};
+
+// 用于在任务栏上显示的插件
+class QuickDockItem : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit QuickDockItem(PluginsItemInterface *pluginItem, QWidget *parent = nullptr);
+    ~QuickDockItem();
+
+    PluginsItemInterface *pluginItem();
+
+Q_SIGNALS:
+    void clicked();
+
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+    PluginsItemInterface *m_pluginItem;
 };
 
 #endif // QUICKPLUGINWINDOW_H

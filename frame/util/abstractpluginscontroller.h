@@ -40,7 +40,7 @@ class AbstractPluginsController : public QObject, PluginProxyInterface
     Q_OBJECT
 
 public:
-    explicit AbstractPluginsController(QObject *parent = 0);
+    explicit AbstractPluginsController(QObject *parent = Q_NULLPTR);
     ~ AbstractPluginsController() override;
 
     // implements PluginProxyInterface
@@ -51,6 +51,8 @@ public:
     void itemAdded(PluginsItemInterface * const, const QString &) override {}
     void itemUpdate(PluginsItemInterface * const, const QString &) override {}
     void itemRemoved(PluginsItemInterface * const, const QString &) override {}
+
+    void updateDockInfo(const DockPart &) override {}
 
 signals:
     void pluginLoaderFinished();

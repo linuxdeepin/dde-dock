@@ -185,13 +185,14 @@ void PowerPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-const QIcon *PowerPlugin::icon()
+QIcon PowerPlugin::icon(const DockPart &dockPart)
 {
+    Q_UNUSED(dockPart);
     static QIcon batteryIcon;
     const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon();
     batteryIcon.detach();
     batteryIcon.addPixmap(pixmap);
-    return &batteryIcon;
+    return batteryIcon;
 }
 
 void PowerPlugin::updateBatteryVisible()

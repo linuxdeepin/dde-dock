@@ -31,7 +31,7 @@ public:
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
-    const QIcon *icon() override;
+    QIcon icon(const DockPart &) override;
     PluginStatus status() const override;
     bool isPrimary() const override;
     QString description() const override;

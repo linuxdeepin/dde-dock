@@ -292,12 +292,14 @@ void ShutdownPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-const QIcon *ShutdownPlugin::icon()
+QIcon ShutdownPlugin::icon(const DockPart &dockPart)
 {
+    Q_UNUSED(dockPart);
+
     static QIcon shutdownIcon;
     shutdownIcon.detach();
     shutdownIcon.addPixmap(m_shutdownWidget->loadPixmap());
-    return &shutdownIcon;
+    return shutdownIcon;
 }
 
 void ShutdownPlugin::loadPlugin()

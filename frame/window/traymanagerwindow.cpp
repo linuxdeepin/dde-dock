@@ -446,7 +446,7 @@ void TrayManagerWindow::dropEvent(QDropEvent *e)
     if (e->source() == this)
         return;
 
-    QuickSettingItem *pluginItem = static_cast<QuickSettingItem *>(mimeData->quickSettingItem());
+    PluginsItemInterface *pluginItem = static_cast<PluginsItemInterface *>(mimeData->pluginItemInterface());
     if (pluginItem)
         m_quickIconWidget->dragPlugin(pluginItem);
 }

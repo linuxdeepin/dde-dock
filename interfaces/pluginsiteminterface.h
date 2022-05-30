@@ -27,11 +27,19 @@
 #include <QIcon>
 #include <QtCore>
 
+// 任务栏的部件位置
+enum class DockPart {
+    QuickShow = 0,   // 快捷插件显示区域
+    QuickPanel,      // 快捷面板区域
+    SystemPanel      // 系统插件显示区域
+};
+
 ///
 /// \brief The PluginsItemInterface class
 /// the dock plugins item interface, all dock plugins should
 /// inheirt this class and override all pure virtual function.
 ///
+
 class PluginsItemInterface
 {
 public:
@@ -253,7 +261,7 @@ public:
     /// the icon display on plugin panel
     ///
     ///
-    virtual const QIcon *icon() { return nullptr; }
+    virtual QIcon icon(const DockPart &) { return QIcon(); }
 
     ///
     /// the plugin status

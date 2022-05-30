@@ -64,7 +64,7 @@ DockItem::ItemType QuickSettingItem::itemType() const
 
 const QPixmap QuickSettingItem::dragPixmap()
 {
-    QPixmap pm = m_pluginInter->icon()->pixmap(ICONWIDTH, ICONHEIGHT);
+    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
 
     QPainter pa(&pm);
     pa.setPen(foregroundColor());
@@ -105,7 +105,7 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     // 绘制背景色
     painter.fillRect(rect(), backgroundColor());
     // 让图标填上前景色
-    QPixmap pm = m_pluginInter->icon()->pixmap(ICONWIDTH, ICONHEIGHT);
+    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
     QPainter pa(&pm);
     pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
     pa.fillRect(pm.rect(), painter.pen().brush());

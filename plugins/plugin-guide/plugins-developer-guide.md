@@ -27,6 +27,8 @@ dde-dock 插件是根据 Qt 插件标准所开发的共享库文件(`so`)，通�
 
 PluginsItemInterface 中定义的接口除了displayMode 和 position（历史遗留），从插件的角度来看都是被动的，只能等待被任务栏的插件机制调用。
 
+另外定义了DockPart枚举，用于表示返回图标的位置，分别有快捷插件显示区域，快捷图标区域和系统插件显示区域，主要用于区域插件在不同的位置的显示。
+
 |名称|简介|
 |-|-|
 |pluginName | 返回插件名称，用于在 dde-dock 内部管理插件时使用 `必须实现`|
@@ -51,7 +53,7 @@ PluginsItemInterface 中定义的接口除了displayMode 和 position（历史�
 |refreshIcon | 当插件控件的图标需要更新时此接口被调用|
 |displayMode | 用于插件主动获取 dde-dock 当前的显示模式|
 |position | 用于插件主动获取 dde-dock 当前的位置|
-|icon | 用于返回当前插件在快捷设置面板上的图标，正常状态下显示的图标即可 |
+|icon | 用于返回当前插件在快捷设置面板、快捷设置图标区域，系统插件显示区域等的图标，正常状态下显示的图标即可 |
 |status | 用于返回当前快捷设置插件的状态，激活状态还是禁用状态 |
 |isPrimary | 用于标记当前快捷设置的插件是否为主插件（图标占两个图标位置） |
 |description | 用于返回插件的描述（快捷设置面板中isPrimary为true的时候有用） |
@@ -65,6 +67,7 @@ PluginsItemInterface 中定义的接口除了displayMode 和 position（历史�
 |itemAdded | 向 dde-dock 添加新的主控件（一个插件可以添加多个主控件它们之间使用`ItemKey`区分）|
 |itemUpdate | 通知 dde-dock 有主控件需要更新|
 |itemRemoved | 从 dde-dock 移除主控件|
+|updateDockInfo | 当插件图标发生变化的时候，响应该函数 |
 |requestWindowAutoHide | 设置 dde-dock 是否允许隐藏，通常被用在任务栏被设置为智能隐藏或始终隐藏而插件又需要让 dde-dock 保持显示状态来显示一些重要信息的场景下|
 |requestRefreshWindowVisible |  通知 dde-dock 更新隐藏状态|
 |requestSetAppletVisible |  通知 dde-dock 显示或隐藏插件的弹出面板（鼠标左键点击后弹出的控件）|

@@ -150,8 +150,8 @@ class QuickDragWidget : public AppDragWidget
     Q_OBJECT
 
 Q_SIGNALS:
-    void requestDropItem();
-    void requestDragMove(QDragMoveEvent *event);
+    void requestDropItem(QDropEvent *);
+    void requestDragMove(QDragMoveEvent *);
 
 public:
     explicit QuickDragWidget(QWidget *parent = Q_NULLPTR);

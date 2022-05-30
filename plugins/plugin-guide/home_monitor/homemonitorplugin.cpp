@@ -136,9 +136,9 @@ void HomeMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     }
 }
 
-const QIcon *HomeMonitorPlugin::icon()
+QIcon HomeMonitorPlugin::icon(const DockPart &)
 {
-    static QIcon pixMapIcon;
+    QIcon pixMapIcon;
     QPixmap pixmap;
     QPainter painter(&pixmap);
     painter.begin(&pixmap);
@@ -147,9 +147,8 @@ const QIcon *HomeMonitorPlugin::icon()
     painter.setFont(font);
     painter.drawText(QPoint(0, 0), m_pluginWidget->textContent());
     painter.end();
-    pixMapIcon.detach();
     pixMapIcon.addPixmap(pixmap);
-    return &pixMapIcon;
+    return pixMapIcon;
 }
 
 PluginsItemInterface::PluginStatus HomeMonitorPlugin::status() const

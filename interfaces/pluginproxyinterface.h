@@ -27,6 +27,8 @@
 #include <QtCore>
 
 class PluginsItemInterface;
+enum class DockPart;
+
 class PluginProxyInterface
 {
 public:
@@ -57,6 +59,13 @@ public:
     /// \param itemKey
     ///
     virtual void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
+
+    ///
+    /// update display or information
+    ///
+    ///
+    virtual void updateDockInfo(const DockPart &) = 0;
+
     ///
     /// \brief requestContextMenu
     /// request show context menu

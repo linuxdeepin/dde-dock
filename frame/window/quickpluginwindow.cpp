@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
  *
  * Author:     donghualin <donghualin@uniontech.com>
@@ -37,10 +37,11 @@
 
 #define ITEMSIZE 22
 #define ITEMSPACE 6
-#define ICONWIDTH 20
+#define ICONWIDTH 18
 #define ICONHEIGHT 16
 
-static QStringList fixedPluginKeys{ "network-item-key", "sound-item-key", "power" };
+static QStringList fixedPluginNames{ "network", "sound", "power" };
+
 const int itemDataRole = Dtk::UserRole + 1;
 const int itemSortRole = Dtk::UserRole + 2;
 
@@ -69,8 +70,8 @@ void QuickPluginWindow::initUi()
     m_mainLayout->setSpacing(ITEMSPACE);
     const QList<QuickSettingItem *> &items = QuickSettingController::instance()->settingItems();
     for (QuickSettingItem *settingItem : items) {
-        const QString itemKey = settingItem->itemKey();
-        if (!fixedPluginKeys.contains(itemKey))
+        const QString pluginName = settingItem->pluginItem()->pluginName();
+        if (!fixedPluginNames.contains(pluginName))
             continue;
 
         addPlugin(settingItem);
@@ -93,25 +94,26 @@ void QuickPluginWindow::setPositon(Position position)
     }
 }
 
-int QuickPluginWindow::findActiveTargetIndex(QWidget *widget)
+int QuickPluginWindow::findActiveTargetIndex(QuickDockItem *widget)
 {
     for (int i = 0; i < m_activeSettingItems.size(); i++) {
-        QuickSettingItem *settingItem = m_activeSettingItems[i];
-        if (settingItem->pluginItem()->itemWidget(settingItem->itemKey()) == widget)
+        PluginsItemInterface *settingItem = m_activeSettingItems[i];
+        if (widget->pluginItem() == settingItem)
             return i;
     }
+
     return -1;
 }
 
-void QuickPluginWindow::dragPlugin(QuickSettingItem *item)
+void QuickPluginWindow::dragPlugin(PluginsItemInterface *item)
 {
     // 释放插件，一般是从快捷设置面板区域移动到这里的，固定插件不支持拖动
-    if (fixedPluginKeys.contains(item->itemKey()))
+    if (fixedPluginNames.contains(item->pluginName()))
         return;
 
     QPoint itemPoint = mapFromGlobal(QCursor::pos());
     // 查找移动后的位置，如果移动后的插件找不到，就直接放到最后
-    QWidget *targetWidget = childAt(itemPoint);
+    QuickDockItem *targetWidget = qobject_cast<QuickDockItem *>(childAt(itemPoint));
     if (!targetWidget) {
         m_activeSettingItems << item;
     } else {
@@ -122,6 +124,7 @@ void QuickPluginWindow::dragPlugin(QuickSettingItem *item)
         else
             m_activeSettingItems.insert(targetIndex, item);
     }
+
     //排序插入到当前窗体
     resetPluginDisplay();
     Q_EMIT itemCountChanged();
@@ -130,29 +133,30 @@ void QuickPluginWindow::dragPlugin(QuickSettingItem *item)
 void QuickPluginWindow::addPlugin(QuickSettingItem *item)
 {
     for (int i = 0; i < m_mainLayout->count(); i++) {
-        QWidget *widget = m_mainLayout->itemAt(i)->widget();
-        if (item == widget) {
+        QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+        if (!layoutItem)
+            continue;
+
+        QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+        if (!dockItem)
+            continue;
+
+        if (item->pluginItem() == dockItem->pluginItem()) {
             resetPluginDisplay();
             return;
         }
     }
-    QWidget *widget = item->pluginItem()->itemWidget(item->itemKey());
-    if (!widget)
-        return;
-
-    widget->setFixedSize(ICONWIDTH, ICONHEIGHT);
-    widget->installEventFilter(this);
-    if (fixedPluginKeys.contains(item->itemKey())) {
+    if (fixedPluginNames.contains(item->pluginItem()->pluginName())) {
         // 新插入的插件如果是固定插件,则将其插入到固定插件列表中，并对其进行排序
-        m_fixedSettingItems << item;
-        qSort(m_fixedSettingItems.begin(), m_fixedSettingItems.end(), [](QuickSettingItem *item1, QuickSettingItem *item2) {
-            int index1 = fixedPluginKeys.indexOf(item1->itemKey());
-            int index2 = fixedPluginKeys.indexOf(item2->itemKey());
+        m_fixedSettingItems << item->pluginItem();
+        qSort(m_fixedSettingItems.begin(), m_fixedSettingItems.end(), [](PluginsItemInterface *item1, PluginsItemInterface *item2) {
+            int index1 = fixedPluginNames.indexOf(item1->pluginName());
+            int index2 = fixedPluginNames.indexOf(item2->pluginName());
             return index1 < index2;
         });
     } else {
         // 如果是非固定插件，则直接插入到末尾
-        m_activeSettingItems << item;
+        m_activeSettingItems << item->pluginItem();
     }
     resetPluginDisplay();
     Q_EMIT itemCountChanged();
@@ -175,12 +179,8 @@ QSize QuickPluginWindow::suitableSize()
     return QSize(ITEMSIZE, height);
 }
 
-void QuickPluginWindow::removePlugin(QuickSettingItem *item)
+void QuickPluginWindow::removePlugin(PluginsItemInterface *item)
 {
-    QWidget *widget = item->pluginItem()->itemWidget(item->itemKey());
-    if (widget)
-        widget->setFixedSize(ICONWIDTH, ICONHEIGHT);
-
     if (m_fixedSettingItems.contains(item))
         m_fixedSettingItems.removeOne(item);
     else if (m_activeSettingItems.contains(item))
@@ -192,16 +192,15 @@ void QuickPluginWindow::removePlugin(QuickSettingItem *item)
     Q_EMIT itemCountChanged();
 }
 
-QuickSettingItem *QuickPluginWindow::findQuickSettingItem(const QPoint &mousePoint, const QList<QuickSettingItem *> &settingItems)
+PluginsItemInterface *QuickPluginWindow::findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems)
 {
-    QWidget *selectWidget = childAt(mousePoint);
+    QuickDockItem *selectWidget = qobject_cast<QuickDockItem *>(childAt(mousePoint));
     if (!selectWidget)
         return nullptr;
 
     for (int i = 0; i < settingItems.size(); i++) {
-        QuickSettingItem *settingItem = settingItems[i];
-        QWidget *widget = settingItem->pluginItem()->itemWidget(settingItem->itemKey());
-        if (selectWidget == widget)
+        PluginsItemInterface *settingItem = settingItems[i];
+        if (selectWidget->pluginItem() == settingItem)
             return settingItem;
     }
 
@@ -211,7 +210,7 @@ QuickSettingItem *QuickPluginWindow::findQuickSettingItem(const QPoint &mousePoi
 void QuickPluginWindow::mousePressEvent(QMouseEvent *event)
 {
     // 查找非固定的图标，然后执行拖动
-    QuickSettingItem *quickItem = findQuickSettingItem(event->pos(), m_activeSettingItems);
+    PluginsItemInterface *quickItem = findQuickSettingItem(event->pos(), m_activeSettingItems);
     if (!quickItem)
         return;
 
@@ -249,11 +248,11 @@ QPoint QuickPluginWindow::popupPoint() const
     return pointCurrent;
 }
 
-void QuickPluginWindow::mouseReleaseEvent(QMouseEvent *event)
+void QuickPluginWindow::onFixedClick()
 {
     // 查找固定团图标，然后点击弹出快捷面板
-    QuickSettingItem *quickItem = findQuickSettingItem(event->pos(), m_fixedSettingItems);
-    if (!quickItem)
+    QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(sender());
+    if (!dockItem || !fixedPluginNames.contains(dockItem->pluginItem()->pluginName()))
         return;
 
     // 弹出快捷设置面板
@@ -261,13 +260,13 @@ void QuickPluginWindow::mouseReleaseEvent(QMouseEvent *event)
     popWindow->show(popupPoint());
 }
 
-void QuickPluginWindow::startDrag(QuickSettingItem *moveItem)
+void QuickPluginWindow::startDrag(PluginsItemInterface *moveItem)
 {
     AppDrag *drag = new AppDrag(this, new QuickDragWidget);
     QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem);
     drag->setMimeData(mimedata);
     drag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
-    QPixmap dragPixmap = moveItem->pluginItem()->icon()->pixmap(QSize(ITEMSIZE, ITEMSIZE));
+    QPixmap dragPixmap = moveItem->icon(DockPart::QuickPanel).pixmap(QSize(ITEMSIZE, ITEMSIZE));
     drag->setPixmap(dragPixmap);
     drag->setHotSpot(QPoint(0, 0));
 
@@ -275,13 +274,93 @@ void QuickPluginWindow::startDrag(QuickSettingItem *moveItem)
         removePlugin(moveItem);
     });
 
-    connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDropItem, this, [ this] {
-        resetPluginDisplay();
-        Q_EMIT itemCountChanged();
-    });
+    connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDropItem, this, &QuickPluginWindow::onPluginDropItem);
     connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDragMove, this, &QuickPluginWindow::onPluginDragMove);
 
     drag->exec(Qt::MoveAction | Qt::CopyAction);
+}
+
+QuickDockItem *QuickPluginWindow::getDockItemByPlugin(PluginsItemInterface *item)
+{
+    if (!item)
+        return nullptr;
+
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+        if (!layoutItem)
+            continue;
+
+        QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+        if (!dockItem)
+            continue;
+
+        if (dockItem->pluginItem() == item)
+            return dockItem;
+    }
+
+    return nullptr;
+}
+
+int QuickPluginWindow::getDropIndex(QPoint point)
+{
+    QuickDockItem *targetItem = getDockItemByPlugin(findQuickSettingItem(point, m_activeSettingItems));
+    if (targetItem)
+        return m_activeSettingItems.indexOf(targetItem->pluginItem());
+
+    // 上下方向从右向左排列
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        for (int i = 0; i < m_mainLayout->count() - 1; i++) {
+            QLayoutItem *layoutBefore = m_mainLayout->itemAt(i);
+            QLayoutItem *layoutItem = m_mainLayout->itemAt(i + 1);
+            if (!layoutBefore || !layoutItem)
+                continue;
+
+            QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
+            QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+            if (dockItem->pluginItem()->isPrimary())
+                continue;
+
+            if (dockBeforeItem->geometry().x() > point.x() && dockItem->geometry().right() < point.x())
+                return i;
+        }
+    }
+    for (int i = 0; i < m_mainLayout->count() - 1; i++) {
+        QLayoutItem *layoutBefore = m_mainLayout->itemAt(i);
+        QLayoutItem *layoutItem = m_mainLayout->itemAt(i + 1);
+        if (!layoutBefore || !layoutItem)
+            continue;
+
+        QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
+        if (dockBeforeItem->pluginItem()->isPrimary())
+            break;
+
+        QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+
+        // 从上向下排列
+        if (dockBeforeItem->geometry().bottom() < point.y() && dockItem->geometry().top() > point.y())
+            return i;
+    }
+    // 如果都没有找到，直接插入到最后
+    return -1;
+}
+
+void QuickPluginWindow::onPluginDropItem(QDropEvent *event)
+{
+    const QuickPluginMimeData *data = qobject_cast<const QuickPluginMimeData *>(event->mimeData());
+    if (!data)
+        return;
+
+    // 获取当前鼠标在任务栏快捷图标区域的位置
+    QPoint currentPoint = mapFromGlobal(QCursor::pos());
+    // 获取区域图标插入的位置
+    int dropIndex = getDropIndex(currentPoint);
+    if (dropIndex >= 0)
+        m_activeSettingItems.insert(dropIndex, data->pluginItemInterface());
+    else
+        m_activeSettingItems << data->pluginItemInterface();
+
+    resetPluginDisplay();
+    Q_EMIT itemCountChanged();
 }
 
 void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
@@ -291,14 +370,15 @@ void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
     if (!data)
         return;
 
-    QuickSettingItem *sourceItem = data->quickSettingItem();
+    // 查找移动的
+    PluginsItemInterface *sourceItem = data->pluginItemInterface();
     if (!sourceItem)
         return;
 
-    QWidget *sourceMoveWidget = sourceItem->pluginItem()->itemWidget(sourceItem->itemKey());
-    QuickSettingItem *targetItem = findQuickSettingItem(currentPoint, m_activeSettingItems);
+    QuickDockItem *sourceMoveWidget = getDockItemByPlugin(sourceItem);
+    QuickDockItem *targetItem = getDockItemByPlugin(findQuickSettingItem(currentPoint, m_activeSettingItems));
     // 如果未找到要移动的目标位置，或者移动的目标位置是固定插件，或者原插件和目标插件是同一个插件，则不做任何操作
-    if (!sourceMoveWidget || !targetItem || sourceItem == targetItem)
+    if (!sourceMoveWidget || !targetItem || sourceMoveWidget == targetItem)
         return;
 
     // 重新对所有的插件进行排序
@@ -309,7 +389,7 @@ void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
     }
     // 调整列表中的位置
     int sourceIndex = m_activeSettingItems.indexOf(sourceItem);
-    int targetIndex = m_activeSettingItems.indexOf(targetItem);
+    int targetIndex = m_activeSettingItems.indexOf(targetItem->pluginItem());
     if (sourceIndex >= 0)
         m_activeSettingItems.move(sourceIndex, targetIndex);
     else
@@ -318,32 +398,34 @@ void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
     event->accept();
 }
 
-QList<QuickSettingItem *> QuickPluginWindow::settingItems()
-{
-    QList<QuickSettingItem *> items;
-    for (int i = 0; i < m_mainLayout->count(); i++) {
-        qInfo() << m_mainLayout->itemAt(i)->widget();
-        QuickSettingItem *item = qobject_cast<QuickSettingItem *>(m_mainLayout->itemAt(i)->widget());
-        if (item)
-            items << item;
-    }
-    return items;
-}
-
 void QuickPluginWindow::resetPluginDisplay()
 {
     // 先删除所有的widget
+    QMap<PluginsItemInterface *, QuickDockItem *> pluginItems;
     for (int i = m_mainLayout->count() - 1; i >= 0; i--) {
         QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
-        if (layoutItem) {
-            layoutItem->widget()->setParent(nullptr);
-            m_mainLayout->removeItem(layoutItem);
-        }
+        if (!layoutItem)
+            continue;
+
+        QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+        if (!dockItem)
+            continue;
+
+        dockItem->setParent(nullptr);
+        m_mainLayout->removeItem(layoutItem);
+        pluginItems[dockItem->pluginItem()] = dockItem;
     }
     // 将列表中所有的控件按照顺序添加到布局上
-    auto addWidget = [ this ](const QList<QuickSettingItem *> &items) {
-        for (QuickSettingItem *item : items) {
-            QWidget *itemWidget = item->pluginItem()->itemWidget(item->itemKey());
+    auto addWidget = [ = ](const QList<PluginsItemInterface *> &items) {
+        for (PluginsItemInterface *item : items) {
+            QuickDockItem *itemWidget = nullptr;
+            if (pluginItems.contains(item)) {
+                itemWidget = pluginItems[item];
+            } else {
+                itemWidget = new QuickDockItem(item, this);
+                itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+            }
+            connect(itemWidget, &QuickDockItem::clicked, this, &QuickPluginWindow::onFixedClick);
             itemWidget->setParent(this);
             m_mainLayout->addWidget(itemWidget);
         }
@@ -356,12 +438,52 @@ void QuickPluginWindow::resetPluginDisplay()
 void QuickPluginWindow::initConnection()
 {
     connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ](QuickSettingItem * settingItem) {
-        const QString itemKey = settingItem->itemKey();
-        if (!fixedPluginKeys.contains(itemKey))
+        const QString pluginName = settingItem->pluginItem()->pluginName();
+        if (!fixedPluginNames.contains(pluginName))
             return;
 
         addPlugin(settingItem);
     });
 
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, &QuickPluginWindow::removePlugin);
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, [ this ] (QuickSettingItem *settingItem){
+        removePlugin(settingItem->pluginItem());
+    });
+}
+
+/**
+ * @brief QuickDockItem::QuickDockItem
+ * @param pluginItem
+ * @param parent
+ */
+QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, QWidget *parent)
+    : QWidget(parent)
+    , m_pluginItem(pluginItem)
+{
+}
+
+QuickDockItem::~QuickDockItem()
+{
+}
+
+PluginsItemInterface *QuickDockItem::pluginItem()
+{
+    return m_pluginItem;
+}
+
+void QuickDockItem::paintEvent(QPaintEvent *event)
+{
+    if (!m_pluginItem)
+        return QWidget::paintEvent(event);
+
+    QPixmap pixmap = m_pluginItem->icon(DockPart::QuickPanel).pixmap(ICONHEIGHT, ICONHEIGHT);
+    QRect pixmapRect = QRect((rect().width() - ICONHEIGHT) / 2, (rect().height() - ICONHEIGHT) / 2,
+                             ICONHEIGHT, ICONHEIGHT);
+    QPainter painter(this);
+    painter.drawPixmap(pixmapRect, pixmap);
+}
+
+void QuickDockItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_EMIT clicked();
+    QWidget::mouseReleaseEvent(event);
 }

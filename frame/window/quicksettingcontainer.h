@@ -110,12 +110,12 @@ class QuickPluginMimeData : public QMimeData
     Q_OBJECT
 
 public:
-    explicit QuickPluginMimeData(QuickSettingItem *item) : QMimeData(), m_item(item) {}
+    explicit QuickPluginMimeData(PluginsItemInterface *item) : QMimeData(), m_item(item) {}
     ~QuickPluginMimeData() {}
-    QuickSettingItem *quickSettingItem() const { return m_item; }
+    PluginsItemInterface *pluginItemInterface() const { return m_item; }
 
 private:
-     QuickSettingItem *m_item;
+     PluginsItemInterface *m_item;
 };
 
 #endif // PLUGINCONTAINER_H

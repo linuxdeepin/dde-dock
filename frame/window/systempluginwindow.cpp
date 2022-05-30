@@ -170,7 +170,7 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    const QIcon *icon = m_pluginInter->icon();
+    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel);
 
     QRect rctPixmap(rect());
     if (needShowText()) {
@@ -192,8 +192,7 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
     }
 
     // 绘制图标
-    if (icon)
-        painter.drawPixmap(rctPixmap, icon->pixmap(ICONSIZE, ICONSIZE));
+    painter.drawPixmap(rctPixmap, icon.pixmap(ICONSIZE, ICONSIZE));
 }
 
 QSize StretchPluginsItem::suitableSize() const

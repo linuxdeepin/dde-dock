@@ -231,7 +231,7 @@ void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
             || qAbs(m_dragPluginPosition.y() - pointCurrent.y()) > 5) {
         clearDragPoint();
         QDrag *drag = new QDrag(this);
-        QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem);
+        QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem->pluginItem());
         drag->setMimeData(mimedata);
         QPixmap dragPixmap = moveItem->dragPixmap();
         drag->setPixmap(dragPixmap);

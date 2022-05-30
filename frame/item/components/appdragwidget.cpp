@@ -462,7 +462,7 @@ void QuickDragWidget::dropEvent(QDropEvent *event)
         else
             hide();
 
-        Q_EMIT requestDropItem();
+        Q_EMIT requestDropItem(event);
     }
 }
 
