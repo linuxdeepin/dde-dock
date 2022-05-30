@@ -269,6 +269,7 @@ private:
     Position m_position;
     HideMode m_hideMode;
     HideState m_hideState;
+    HideState m_currentHideState;
     DisplayMode m_displayMode;
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
