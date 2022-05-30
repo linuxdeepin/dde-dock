@@ -289,7 +289,8 @@ void ModuleWidget::initUI()
                                                        , {"datetime",       "dcc_dock_time"}
                                                        , {"system-monitor", "dcc_dock_systemmonitor"}
                                                        , {"grand-search",   "dcc_dock_grandsearch"}
-                                                       , {"trash",          "dcc_dock_trash"}};
+                                                       , {"trash",          "dcc_dock_trash"}
+                                                       , {"shot-start-plugin",  "shot-start-plugin"}};
         if (plugins.size() != 0) {
             layout->addSpacing(10);
             layout->addWidget(m_pluginAreaTitle);
