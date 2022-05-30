@@ -42,6 +42,7 @@ class VolumeDevicesWidget;
 class BrightnessMonitorWidget;
 class QLabel;
 class PluginChildPage;
+class QGridLayout;
 
 DWIDGET_USE_NAMESPACE
 
@@ -76,7 +77,7 @@ private:
     // 调整尺寸
     void resizeView();
     // 调整控件位置
-    void resetItemPosition();
+    void updateItemLayout();
     // 初始化控件项目
     void initQuickItem(QuickSettingItem *quickItem);
     // 显示具体的窗体
@@ -90,6 +91,7 @@ private:
     QStackedLayout *m_switchLayout;
     QWidget *m_mainWidget;
     QWidget *m_pluginWidget;
+    QGridLayout *m_pluginLayout;
     QWidget *m_componentWidget;
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;

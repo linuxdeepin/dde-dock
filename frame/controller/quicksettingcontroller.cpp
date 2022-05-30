@@ -20,6 +20,7 @@
  */
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
+#include "pluginsiteminterface.h"
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -30,6 +31,31 @@ QuickSettingController::QuickSettingController(QObject *parent)
 
 QuickSettingController::~QuickSettingController()
 {
+}
+
+void QuickSettingController::sortPlugins()
+{
+    QList<QuickSettingItem *> primarySettingItems;
+    QList<QuickSettingItem *> quickItems;
+    for (QuickSettingItem *item : m_quickSettingItems) {
+        if (item->pluginItem()->isPrimary())
+            primarySettingItems << item;
+        else
+            quickItems << item;
+    }
+
+    static QStringList existKeys = {"network-item-key", "sound-item-key", "VPN", "PROJECTSCREEN"};
+    qSort(primarySettingItems.begin(), primarySettingItems.end(), [ = ](QuickSettingItem *item1, QuickSettingItem *item2) {
+        int index1 = existKeys.indexOf(item1->itemKey());
+        int index2 = existKeys.indexOf(item2->itemKey());
+        if (index1 >= 0 || index2 >= 0)
+            return index1 < index2;
+
+        return true;
+    });
+
+    m_quickSettingItems.clear();
+    m_quickSettingItems << primarySettingItems << quickItems;
 }
 
 void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -45,6 +71,7 @@ void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, c
     QuickSettingItem *quickItem = new QuickSettingItem(itemInter, itemKey);
 
     m_quickSettingItems << quickItem;
+    sortPlugins();
 
     emit pluginInserted(quickItem);
 }

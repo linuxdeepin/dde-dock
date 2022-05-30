@@ -55,6 +55,7 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_switchLayout(new QStackedLayout(this))
     , m_mainWidget(new QWidget(this))
     , m_pluginWidget(new QWidget(m_mainWidget))
+    , m_pluginLayout(new QGridLayout(m_pluginWidget))
     , m_componentWidget(new QWidget(m_mainWidget))
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
@@ -137,11 +138,6 @@ void QuickSettingContainer::setPosition(Position position)
 
 void QuickSettingContainer::initQuickItem(QuickSettingItem *quickItem)
 {
-    int pluginWidth = ITEMWIDTH;
-    if (quickItem->pluginItem()->isPrimary())
-        pluginWidth = ITEMWIDTH * 2 + ITEMSPACE;
-
-    quickItem->setFixedSize(pluginWidth, ITEMHEIGHT);
     quickItem->setParent(m_pluginWidget);
     quickItem->setMouseTracking(true);
     quickItem->installEventFilter(this);
@@ -179,26 +175,19 @@ void QuickSettingContainer::showWidget(QWidget *widget, const QString &title)
 void QuickSettingContainer::onPluginInsert(QuickSettingItem *quickItem)
 {
     initQuickItem(quickItem);
-    resetItemPosition();
+    updateItemLayout();
     resizeView();
 }
 
 void QuickSettingContainer::onPluginRemove(QuickSettingItem *quickItem)
 {
-    QObjectList childrens = m_pluginWidget->children();
-    for (QObject *child : childrens) {
-        if (child != quickItem)
-            continue;
+    disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
+    quickItem->setParent(nullptr);
+    quickItem->removeEventFilter(this);
+    quickItem->setMouseTracking(false);
 
-        disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
-        quickItem->setParent(nullptr);
-        quickItem->removeEventFilter(this);
-        quickItem->setMouseTracking(false);
-        quickItem->hide();
-        break;
-    }
     //调整子控件的位置
-    resetItemPosition();
+    updateItemLayout();
     resizeView();
 }
 
@@ -252,44 +241,23 @@ void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void QuickSettingContainer::resetItemPosition()
+void QuickSettingContainer::updateItemLayout()
 {
-    QObjectList childrens = m_pluginWidget->children();
-    QList<QuickSettingItem *> primaryQuickItems;
-    QList<QuickSettingItem *> quickItems;
-    for (QObject *child : childrens) {
-        QuickSettingItem *quickItem = qobject_cast<QuickSettingItem *>(child);
-        if (!quickItem || quickItem->isHidden())
-            continue;
+    // 清空之前的控件，重新添加
+    while (m_pluginLayout->count() > 0)
+        m_pluginLayout->takeAt(0);
 
-        if (quickItem->pluginItem()->isPrimary())
-            primaryQuickItems << quickItem;
-        else
-            quickItems << quickItem;
-    }
-    static QStringList existKeys = {"network-item-key", "sound-item-key", "VPN", "PROJECTSCREEN"};
-    qSort(primaryQuickItems.begin(), primaryQuickItems.end(), [ = ](QuickSettingItem *item1, QuickSettingItem *item2) {
-        int index1 = existKeys.indexOf(item1->itemKey());
-        int index2 = existKeys.indexOf(item2->itemKey());
-        if (index1 >= 0 || index2 >= 0)
-            return index1 < index2;
-        return true;
-    });
-    int primaryColumnCount = COLUMNCOUNT / 2;
-    for (int i = 0; i < primaryQuickItems.size(); i++) {
-        QuickSettingItem *quickitem = primaryQuickItems[i];
-        QPoint ptItem(ITEMSPACE + (ITEMWIDTH + ITEMSPACE) * 2 * (i % primaryColumnCount),
-                      (ITEMHEIGHT + ITEMSPACE) * (static_cast<int>(i / primaryColumnCount)));
-        quickitem->move(ptItem);
-    }
-    int startCount = primaryQuickItems.size() * 2;
-    for (int i = 0; i < quickItems.size(); i++) {
-        QuickSettingItem *qsi = quickItems[i];
-        int columnIndex = (startCount + i) % COLUMNCOUNT;
-        int rowIndex = (startCount + i) / COLUMNCOUNT;
-        int x = (ITEMWIDTH + ITEMSPACE) * columnIndex + ITEMSPACE;
-        int y = (ITEMHEIGHT + ITEMSPACE) * rowIndex;
-        qsi->move(x, y);
+    int row = 0;
+    int column = 0;
+    QList<QuickSettingItem *> quickSettings = m_pluginLoader->settingItems();
+    for (QuickSettingItem *item : quickSettings) {
+        int usedColumn = item->pluginItem()->isPrimary() ? 2 : 1;
+        m_pluginLayout->addWidget(item, row, column, 1, usedColumn);
+        column += usedColumn;
+        if (column >= COLUMNCOUNT) {
+            row++;
+            column = 0;
+        }
     }
 }
 
@@ -311,12 +279,16 @@ void QuickSettingContainer::initUi()
     setWidgetStyle(m_brihtnessWidget);
 
     m_mainlayout->setSpacing(ITEMSPACE);
-    m_mainlayout->setContentsMargins(0, ITEMSPACE, 0, ITEMSPACE);
+    m_mainlayout->setContentsMargins(ITEMSPACE, ITEMSPACE, ITEMSPACE, ITEMSPACE);
 
+    m_pluginLayout->setContentsMargins(0, 0, 0, 0);
+    m_pluginLayout->setSpacing(ITEMSPACE);
+
+    m_pluginWidget->setLayout(m_pluginLayout);
     m_mainlayout->addWidget(m_pluginWidget);
 
     QVBoxLayout *ctrlLayout = new QVBoxLayout(m_componentWidget);
-    ctrlLayout->setContentsMargins(ITEMSPACE, 0, ITEMSPACE, 0);
+    ctrlLayout->setContentsMargins(0, 0, 0, 0);
     ctrlLayout->setSpacing(ITEMSPACE);
 
     ctrlLayout->addWidget(m_playerWidget);
@@ -340,7 +312,7 @@ void QuickSettingContainer::initUi()
 
     QMetaObject::invokeMethod(this, [ = ] {
         if (pluginItems.size() > 0)
-            resetItemPosition();
+            updateItemLayout();
         // 设置当前窗口的大小
         resizeView();
         setFixedWidth(ITEMWIDTH * 4 + (ITEMSPACE * 5));

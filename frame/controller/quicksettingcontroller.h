@@ -51,6 +51,9 @@ protected:
     void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
 
 private:
+    void sortPlugins();
+
+private:
     QList<QuickSettingItem *> m_quickSettingItems;
 };
 
