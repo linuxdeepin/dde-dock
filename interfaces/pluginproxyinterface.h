@@ -61,12 +61,6 @@ public:
     virtual void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
 
     ///
-    /// update display or information
-    ///
-    ///
-    virtual void updateDockInfo(const DockPart &) = 0;
-
-    ///
     /// \brief requestContextMenu
     /// request show context menu
     ///
@@ -102,6 +96,12 @@ public:
     /// SeeAlse: saveValue
     ///
     virtual void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) = 0;
+
+    ///
+    /// update display or information
+    ///
+    ///
+    virtual void updateDockInfo(const DockPart &) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H
