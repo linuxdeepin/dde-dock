@@ -1,3 +1,9 @@
+dde-dock (6.0.0.0) unstable; urgency=low
+
+  * release Tag 6.0.0.0 
+
+ -- donghualin <donghualin@uniontech.com>  Wed, 1 June 2022 10:11:29 +0800
+
 dde-dock (3.0.12-1) unstable; urgency=low
 
   * Autobuild Tag 3.0.12 
@@ -134,4 +140,4 @@ dde-dock (0.0~git20150824-1) unstable; urgency=low
 
   * Initial release
 
- -- Deepin Packages Builder <packages@linuxdeepin.com>  Mon, 24 Aug 2015 19:03:01 +0800
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Mon, 24 Aug 2015 19:03:01 +0000
