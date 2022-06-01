@@ -1089,9 +1089,14 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
         painter.setOpacity(0.1);
     }
 
-    painter.fillRect(m_fixedSpliter->geometry(), color);
-    painter.fillRect(m_appSpliter->geometry(), color);
-    painter.fillRect(m_traySpliter->geometry(), color);
+    if (m_fixedSpliter->isVisible())
+        painter.fillRect(m_fixedSpliter->geometry(), color);
+
+    if (m_appSpliter->isVisible())
+        painter.fillRect(m_appSpliter->geometry(), color);
+
+    if (m_traySpliter->isVisible())
+        painter.fillRect(m_traySpliter->geometry(), color);
 }
 
 // 获取当前屏幕的高或者宽(任务栏上下的时候获取宽，左右获取高)

@@ -117,8 +117,8 @@ MainWindow::MainWindow(QWidget *parent)
     DPlatformWindowHandle::enableDXcbForWindow(this, true);
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
-    m_platformWindowHandle.setShadowOffset(QPoint(0, 5));
-    m_platformWindowHandle.setShadowColor(QColor(0, 0, 0, 0.3 * 255));
+    m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
+    m_platformWindowHandle.setShadowColor(Qt::transparent);
 
     m_mainPanel->setDisplayMode(m_multiScreenWorker->displayMode());
 
@@ -258,11 +258,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     m_shadowMaskOptimizeTimer->start();
 
     return DBlurEffectWidget::resizeEvent(event);
-}
-
-void MainWindow::dragEnterEvent(QDragEnterEvent *e)
-{
-    QWidget::dragEnterEvent(e);
 }
 
 void MainWindow::initMember()
@@ -411,11 +406,12 @@ void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldO
  */
 void MainWindow::setEffectEnabled(const bool enabled)
 {
+    Q_UNUSED(enabled);
+
     setMaskColor(AutoColor);
 
     setMaskAlpha(m_multiScreenWorker->opacity());
-
-    m_platformWindowHandle.setBorderWidth(enabled ? 1 : 0);
+    m_platformWindowHandle.setBorderWidth(0);
 }
 
 /**

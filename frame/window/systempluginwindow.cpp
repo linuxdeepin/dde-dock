@@ -227,8 +227,9 @@ QFont StretchPluginsItem::textFont() const
 
 bool StretchPluginsItem::needShowText() const
 {
+    // 任务栏在上方或者下方显示的时候，根据设计图，只有在当前区域高度大于50的时候才同时显示文本和图标
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        return height() > (ICONSIZE + QFontMetrics(textFont()).height() + ICONTEXTSPACE);
+        return height() >= 50;
 
     return true;
 }
