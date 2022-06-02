@@ -37,6 +37,7 @@ DisplayManager::DisplayManager(QObject *parent)
     if (Utils::IS_WAYLAND_DISPLAY) {
         m_displayInter = new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display",QDBusConnection::sessionBus(), this);
         connect(m_displayInter, &__Display::PrimaryChanged, this, &DisplayManager::dockInfoChanged);
+        connect(m_displayInter, &__Display::DisplayModeChanged, this, &DisplayManager::dockInfoChanged);
     } else {
         connect(qApp, &QApplication::primaryScreenChanged, this, &DisplayManager::dockInfoChanged);
     }
