@@ -392,6 +392,7 @@ void MultiScreenWorker::onDisplayModeChanged(const DisplayMode &displayMode)
     qInfo() << "display mode change:" << displayMode;
 
     m_displayMode = displayMode;
+    parent()->panel()->setDisplayMode(m_displayMode);
 
     DockItem::setDockDisplayMode(displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(displayMode));
@@ -408,7 +409,6 @@ void MultiScreenWorker::onDisplayModeChanged(const DisplayMode &displayMode)
 
     parent()->panel()->setFixedSize(rect.size());
     parent()->panel()->move(0, 0);
-    parent()->panel()->setDisplayMode(m_displayMode);
 
     emit displayModeChanegd();
     emit requestUpdateFrontendGeometry();
