@@ -16,8 +16,18 @@ find_package(DFrameworkdbus REQUIRED)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
+set_source_files_properties(
+    org.fcitx.Fcitx.xml
+    PROPERTIES INCLUDE fcitxinputmethoditem.h
+    CLASSNAME FcitxInputMethodProxy
+)
+
+qt5_add_dbus_interfaces(DBUS_INTERFACES
+    org.fcitx.Fcitx.xml
+)
+
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
+add_library(${PLUGIN_NAME} SHARED ${SRCS} ${DBUS_INTERFACES})
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${DFrameworkDBus_INCLUDE_DIRS}
