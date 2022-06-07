@@ -19,23 +19,40 @@
 
 #include "utils.h"
 #include "dbusadaptors.h"
+#include "fcitxinputmethoditem.h"
 
 #include <DDBusSender>
+#include <DSysInfo>
+
 #include <QDebug>
+#include <QtDBus/QDBusConnection>
+
+// switch kdb layout key in gsettings
+const QString KDB_LAYOUT_KEYBINDING_KEY = "switchNextKbdLayout";
+
+// dcc keyboard layout key in gsettings
+const QString KDB_LAYOUT_DCC_NAME = "keyboardLayout";
+
+// because not allowd to use libfcitx-qt, use org.fcitx.Fcitx to
+// get fcitx status and data
+const QString FCITX_ADDRESSS = "org.fcitx.Fcitx";
 
 DBusAdaptors::DBusAdaptors(QObject *parent)
     : QDBusAbstractAdaptor(parent),
       m_keyboard(new Keyboard("com.deepin.daemon.InputDevices",
                               "/com/deepin/daemon/InputDevice/Keyboard",
                               QDBusConnection::sessionBus(), this)),
-    m_menu(new QMenu()), 
-    m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this))
+    m_menu(new QMenu()),
+    m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this)),
+    m_keybingEnabled(Utils::SettingsPtr("com.deepin.dde.keybinding.system.enable", QByteArray(), this)),
+    m_dccSettings(Utils::SettingsPtr("com.deepin.dde.control-center", QByteArray(), this)),
+    m_fcitxRunning(false),
+    m_inputmethod(nullptr)
 {
     m_keyboard->setSync(false);
 
     connect(m_keyboard, &Keyboard::CurrentLayoutChanged, this, &DBusAdaptors::onCurrentLayoutChanged);
     connect(m_keyboard, &Keyboard::UserLayoutListChanged, this, &DBusAdaptors::onUserLayoutListChanged);
-
     connect(m_menu, &QMenu::triggered, this, &DBusAdaptors::handleActionTriggered);
 
     // init data
@@ -45,6 +62,12 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
 
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &DBusAdaptors::onGSettingsChanged);
+
+    // deepin show fcitx lang code,while fcitx is running
+    if (Dtk::Core::DSysInfo::isCommunityEdition()) {
+        initFcitxWatcher();
+    }
+
 }
 
 DBusAdaptors::~DBusAdaptors()
@@ -93,7 +116,7 @@ void DBusAdaptors::onClicked(int button, int x, int y)
 
     Q_UNUSED(button);
 
-    if (m_menu && m_userLayoutList.size() >= 2) {
+    if (m_menu && m_userLayoutList.size() >= 2 && !m_fcitxRunning) {
         m_menu->exec(QPoint(x, y));
     }
 }
@@ -215,3 +238,143 @@ QString DBusAdaptors::duplicateCheck(const QString &kb)
 
     return kblayout + (list.count() > 1 ? QString::number(list.indexOf(kb) + 1) : "");
 }
+
+void DBusAdaptors::onFcitxConnected(const QString &service)
+{
+    Q_UNUSED(service)
+    if (m_fcitxRunning)
+        return;
+
+    // fcitx from closed to running
+    m_fcitxRunning = true;
+    setKeyboardLayoutGsettings();
+    if (m_inputmethod) {
+        delete m_inputmethod;
+        m_inputmethod = nullptr;
+    }
+    // fcitx from off to on will create this, free it on fcitx closing.
+    m_inputmethod = new FcitxInputMethodProxy(
+        FCITX_ADDRESSS,
+        "/inputmethod",
+        QDBusConnection::sessionBus(),
+        this);
+
+    if (QDBusConnection::sessionBus().connect(FCITX_ADDRESSS, "/inputmethod",
+        "org.freedesktop.DBus.Properties", "PropertiesChanged", this,
+        SLOT(onPropertyChanged(QString, QVariantMap, QStringList)))) {
+    } else {
+        qWarning() << "fcitx's PropertiesChanged signal connection was not successful";
+    }
+
+    Q_EMIT(fcitxStatusChanged(m_fcitxRunning));
+
+}
+
+void DBusAdaptors::onFcitxDisconnected(const QString &service)
+{
+    Q_UNUSED(service)
+    if (!m_fcitxRunning)
+        return;
+
+    // fcitx from running to close
+    m_fcitxRunning = false;
+    setKeyboardLayoutGsettings();
+    QDBusConnection::sessionBus().disconnect(FCITX_ADDRESSS, "/inputmethod",
+        "org.freedesktop.DBus.Properties", "PropertiesChanged", this,
+        SLOT(onPropertyChanged(QString, QVariantMap, QStringList)));
+    // fcitx is closing, free it.
+    if (m_inputmethod) {
+        delete m_inputmethod;
+        m_inputmethod = nullptr;
+    }
+
+    Q_EMIT(fcitxStatusChanged(m_fcitxRunning));
+
+}
+
+void DBusAdaptors::onPropertyChanged(QString name, QVariantMap map, QStringList list)
+{
+    // fcitx uniquename start with fcitx-keyboard- which contains keyboard layout.
+    QString fcitxUniqueName("fcitx-keyboard-");
+    qDebug() << QString("properties of interface %1 changed").arg(name);
+
+    if (list.isEmpty() || "CurrentIM" != list[0])
+        return;
+
+    if (m_inputmethod == nullptr)
+        return;
+
+    QString currentIM = m_inputmethod ->GetCurrentIM();
+    if (currentIM.startsWith(fcitxUniqueName)) {
+        // fcitx uniquename contains keyboard layout, keyboard is after fcitx-keyboard-
+        // such as fcitx-keyboard-ara-uga, keyboard layout is ara;uga
+        // fcitx-keyboard-us keyboard is us;
+        // fcitx-keyboard-am-phonetic-alt keyboard layout is am;phonetic-alt
+        QString layout = currentIM.right(currentIM.size() - fcitxUniqueName.size());
+        int splitLoc = layout.indexOf('-');
+        if (splitLoc > 0) {
+            layout =  layout.replace(splitLoc, 1, ';');
+        } else {
+            layout.append(';');
+        }
+        m_keyboard->setCurrentLayout(layout);
+        qDebug() << (m_keyboard->currentLayout() == layout);
+    } else {
+        // sunpinyin sogounpinyin uniquename not contains keyboard-layout. using lang code only for display.
+        FcitxQtInputMethodItemList lists = m_inputmethod -> iMList();
+        for (FcitxQtInputMethodItem item : lists) {
+            if (currentIM == item.uniqueName()) {
+                // zh_CN display as cn
+                if (0 == QString::compare("zh_CN", item.langCode())) {
+                    item.setLangCode("cn");
+                }
+                QString layout = item.langCode();
+                layout.append(';');
+                m_keyboard->setCurrentLayout(layout);
+                qDebug() << (m_keyboard->currentLayout() == layout);
+            }
+        }
+    }
+
+}
+
+void DBusAdaptors::setKeyboardLayoutGsettings()
+{
+    // while fcitx is running, disable keyboard switch shortcut, enable it after fcitx stopped
+    if (m_keybingEnabled && m_keybingEnabled->keys().contains(KDB_LAYOUT_KEYBINDING_KEY)) {
+        m_keybingEnabled->set(KDB_LAYOUT_KEYBINDING_KEY, QVariant(!m_fcitxRunning));
+    }
+
+    // hide keyboard layout setttings in dde-control-center, resume it after fcitx stopped
+    if (m_dccSettings && m_dccSettings->keys().contains(KDB_LAYOUT_DCC_NAME)) {
+        m_dccSettings->set(KDB_LAYOUT_DCC_NAME, QVariant(!m_fcitxRunning));
+    }
+}
+
+bool DBusAdaptors::isFcitxRunning() const
+{
+    return m_fcitxRunning;
+}
+
+void DBusAdaptors::initFcitxWatcher()
+{
+    qDebug() << "init fcitx status watcher";
+    FcitxQtInputMethodItem::registerMetaType();
+    // init dbusSewrviceWatcher to see fcitx status
+    m_fcitxWatcher = new QDBusServiceWatcher(this);
+    m_fcitxWatcher->setConnection(QDBusConnection::sessionBus());
+    m_fcitxWatcher->addWatchedService(FCITX_ADDRESSS);
+    // send fcitx on or off signal, when fcitx is starting or closing.
+    connect(m_fcitxWatcher, SIGNAL(serviceRegistered(QString)), this, SLOT(onFcitxConnected(QString)));
+    connect(m_fcitxWatcher, SIGNAL(serviceUnregistered(QString)), this, SLOT(onFcitxDisconnected(QString)));
+
+    // get fcitx current status
+    QDBusReply<bool> registered = m_fcitxWatcher ->connection().interface()->isServiceRegistered(FCITX_ADDRESSS);
+
+    if (registered.isValid() && registered.value()) {
+        // fcitx is alerdy running,
+        onFcitxConnected(QString());
+    }
+    setKeyboardLayoutGsettings();
+}
+

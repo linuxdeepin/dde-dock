@@ -20,6 +20,7 @@
  */
 #ifndef UTILS
 #define UTILS
+
 #include <QPixmap>
 #include <QImageReader>
 #include <QApplication>

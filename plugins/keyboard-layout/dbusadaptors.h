@@ -20,8 +20,11 @@
 #ifndef DBUSADAPTORS_H
 #define DBUSADAPTORS_H
 
+#include "fcitxinterface.h"
+
 #include <QMenu>
 #include <QtDBus/QtDBus>
+
 #include <com_deepin_daemon_inputdevice_keyboard.h>
 
 using Keyboard = com::deepin::daemon::inputdevice::Keyboard;
@@ -46,8 +49,10 @@ public:
 
 public:
     Q_PROPERTY(QString layout READ layout WRITE setLayout NOTIFY layoutChanged)
+    Q_PROPERTY(bool fcitxRunning READ isFcitxRunning NOTIFY fcitxStatusChanged)
     QString layout() const;
     void setLayout(const QString &str);
+    bool isFcitxRunning() const;
 
     Keyboard *getCurrentKeyboard();
 
@@ -56,6 +61,7 @@ public slots:
 
 signals:
     void layoutChanged(QString text);
+    void fcitxStatusChanged(bool running);
 
 private slots:
     void onCurrentLayoutChanged(const QString & value);
@@ -67,12 +73,22 @@ private slots:
 
 private slots:
     void onGSettingsChanged(const QString &key);
+    void onFcitxConnected(const QString &service);
+    void onFcitxDisconnected(const QString &service);
+    void onPropertyChanged(QString name, QVariantMap map, QStringList list);
 
 private:
     QString duplicateCheck(const QString &kb);
+    void setKeyboardLayoutGsettings();
+    void initFcitxWatcher();
 
 private:
     Keyboard *m_keyboard;
+    bool m_fcitxRunning;
+    FcitxInputMethodProxy *m_inputmethod;
+    QDBusServiceWatcher *m_fcitxWatcher;
+    QGSettings *m_keybingEnabled;
+    QGSettings *m_dccSettings;
     QMenu *m_menu;
     QAction *m_addLayoutAction;
 
