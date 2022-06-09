@@ -162,6 +162,9 @@ void MainWindow::launch()
         if (m_dconfig.data()->isValid())
             showDock = !m_dconfig.data()->value("alwaysHideDock", false).toBool();
         setVisible(showDock);
+        if (!showDock && m_multiScreenWorker->dockInter()) {
+            m_multiScreenWorker->dockInter()->setHideMode(KeepHidden);
+        }
     });
 }
 
@@ -308,7 +311,11 @@ void MainWindow::initComponents()
     if (m_dconfig.data()->isValid()) {
         connect(m_dconfig.data(), &DConfig::valueChanged, this, [this] (const QString &key) {
             if (key == "alwaysHideDock") {
-                setVisible(!m_dconfig.data()->value(key, false).toBool());
+                const bool showDock = !m_dconfig.data()->value(key, false).toBool();
+                setVisible(showDock);
+                if (!showDock && m_multiScreenWorker->dockInter()) {
+                    m_multiScreenWorker->dockInter()->setHideMode(KeepHidden);
+                }
             }
         });
     }
