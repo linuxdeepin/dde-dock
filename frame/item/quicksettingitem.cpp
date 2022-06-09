@@ -36,7 +36,10 @@
 
 #define BGWIDTH 128
 #define BGSIZE 36
+#define MARGINLEFTSPACE 10
 #define OPENICONSIZE 12
+#define MARGINRIGHTSPACE 12
+
 static QSize expandSize = QSize(6, 10);
 
 QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
@@ -111,9 +114,8 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     pa.fillRect(pm.rect(), painter.pen().brush());
     if (m_pluginInter->isPrimary()) {
         // 如果是主图标，则显示阴影背景
-        int marginXSpace = xMarginSpace();
         int marginYSpace = yMarginSpace();
-        QRect iconBg(marginXSpace, marginYSpace, BGSIZE, BGSIZE);
+        QRect iconBg(MARGINLEFTSPACE, marginYSpace, BGSIZE, BGSIZE);
         QPixmap bgPixmap = ImageUtil::getShadowPixmap(pm, shadowColor(), QSize(BGSIZE, BGSIZE));
         painter.drawPixmap(iconBg, bgPixmap);
         // 绘制文字
@@ -140,8 +142,8 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         pen.setColor(QColor(0, 0, 0));
         pen.setWidth(2);
         painter.setPen(pen);
-        int iconLeft = rect().width() - marginXSpace - expandSize.width();
-        int iconRight = rect().width() - marginXSpace;
+        int iconLeft = rect().width() - MARGINRIGHTSPACE - expandSize.width();
+        int iconRight = rect().width() - MARGINRIGHTSPACE;
         painter.drawLine(QPoint(iconLeft, (iconBg.y() + (iconBg.height() - expandSize.height()) / 2)),
                          QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)));
         painter.drawLine(QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)),
@@ -203,7 +205,7 @@ void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)
     // 如果是鼠标的按下事件
     if (m_pluginInter->isPrimary()) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QRect rctExpand(rect().width() - xMarginSpace() - expandSize.width(),
+        QRect rctExpand(rect().width() - MARGINRIGHTSPACE - expandSize.width(),
                         (rect().height() - expandSize.height()) / 2,
                         expandSize.width(), expandSize.height());
         if (rctExpand.contains(mapFromGlobal(mouseEvent->globalPos())))
@@ -216,11 +218,6 @@ void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)
         if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
             showPopupApplet(w);
     }
-}
-
-int QuickSettingItem::xMarginSpace()
-{
-    return (rect().width() - BGWIDTH) / 2;
 }
 
 int QuickSettingItem::yMarginSpace()

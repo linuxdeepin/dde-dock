@@ -53,7 +53,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-    int xMarginSpace();
     int yMarginSpace();
 
 private:

@@ -34,6 +34,7 @@ class QStandardItem;
 class QMouseEvent;
 class QBoxLayout;
 class QuickDockItem;
+enum class DockPart;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; }
                 namespace Widget { class DListView; class DStandardItem; } }
@@ -65,6 +66,7 @@ private Q_SLOTS:
     void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
     void onFixedClick();
+    void onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart);
 
 private:
     void initUi();

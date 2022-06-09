@@ -283,6 +283,9 @@ void QuickSettingContainer::initUi()
 
     m_pluginLayout->setContentsMargins(0, 0, 0, 0);
     m_pluginLayout->setSpacing(ITEMSPACE);
+    m_pluginLayout->setAlignment(Qt::AlignLeft);
+    for (int i = 0; i < COLUMNCOUNT; i++)
+        m_pluginLayout->setColumnMinimumWidth(i, ITEMWIDTH);
 
     m_pluginWidget->setLayout(m_pluginLayout);
     m_mainlayout->addWidget(m_pluginWidget);

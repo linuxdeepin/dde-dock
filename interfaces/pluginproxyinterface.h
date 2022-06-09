@@ -101,7 +101,7 @@ public:
     /// update display or information
     ///
     ///
-    virtual void updateDockInfo(const DockPart &) = 0;
+    virtual void updateDockInfo(PluginsItemInterface *const itemInter, const DockPart &) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H

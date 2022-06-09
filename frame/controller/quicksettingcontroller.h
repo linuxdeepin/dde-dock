@@ -36,6 +36,7 @@ public:
 Q_SIGNALS:
     void pluginInserted(QuickSettingItem *);
     void pluginRemoved(QuickSettingItem *);
+    void pluginUpdated(PluginsItemInterface *, const DockPart &);
 
 protected:
     void startLoader();
@@ -49,6 +50,7 @@ protected:
     void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
     void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
     void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+    void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:
     void sortPlugins();

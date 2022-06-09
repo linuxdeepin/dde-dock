@@ -260,6 +260,17 @@ void QuickPluginWindow::onFixedClick()
     popWindow->show(popupPoint());
 }
 
+void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart)
+{
+    //update plugin status
+    if (dockPart != DockPart::QuickShow)
+        return;
+
+    QuickDockItem *dockItem = getDockItemByPlugin(itemInter);
+    if (dockItem)
+        dockItem->update();
+}
+
 void QuickPluginWindow::startDrag(PluginsItemInterface *moveItem)
 {
     AppDrag *drag = new AppDrag(this, new QuickDragWidget);
@@ -448,6 +459,8 @@ void QuickPluginWindow::initConnection()
     connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, [ this ] (QuickSettingItem *settingItem){
         removePlugin(settingItem->pluginItem());
     });
+
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginUpdated, this, &QuickPluginWindow::onUpdatePlugin);
 }
 
 /**
@@ -478,6 +491,7 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
     QPixmap pixmap = m_pluginItem->icon(DockPart::QuickPanel).pixmap(ICONHEIGHT, ICONHEIGHT);
     QRect pixmapRect = QRect((rect().width() - ICONHEIGHT) / 2, (rect().height() - ICONHEIGHT) / 2,
                              ICONHEIGHT, ICONHEIGHT);
+
     QPainter painter(this);
     painter.drawPixmap(pixmapRect, pixmap);
 }

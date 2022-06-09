@@ -52,7 +52,7 @@ public:
     void itemUpdate(PluginsItemInterface * const, const QString &) override {}
     void itemRemoved(PluginsItemInterface * const, const QString &) override {}
 
-    void updateDockInfo(const DockPart &) override {}
+    void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
 
 signals:
     void pluginLoaderFinished();

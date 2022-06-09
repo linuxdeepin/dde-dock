@@ -103,6 +103,11 @@ void QuickSettingController::itemRemoved(PluginsItemInterface * const itemInter,
     }
 }
 
+void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
+{
+    Q_EMIT pluginUpdated(itemInter, part);
+}
+
 QuickSettingController *QuickSettingController::instance()
 {
     static QuickSettingController instance;
