@@ -184,7 +184,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     }
 
     bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ?
-        QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool() : checkSwap() && m_powerManagerInter->CanHibernate();
+        QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool() : m_powerManagerInter->CanHibernate();
 
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
@@ -372,39 +372,6 @@ qint64 ShutdownPlugin::get_power_image_size()
     }
 
     return size;
-}
-
-bool ShutdownPlugin::checkSwap()
-{
-    if (!valueByQSettings<bool>("Power", "hibernate", true))
-        return false;
-
-    bool hasSwap = false;
-    QFile file("/proc/swaps");
-    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        const QString &body = file.readAll();
-        QTextStream    stream(body.toUtf8());
-        while (!stream.atEnd()) {
-            const std::pair<bool, qint64> result =
-                checkIsPartitionType(stream.readLine().simplified().split(
-                                         " ", QString::SplitBehavior::SkipEmptyParts));
-            qint64 image_size{ get_power_image_size() };
-
-            if (result.first) {
-                hasSwap = image_size < result.second;
-            }
-
-            if (hasSwap) {
-                break;
-            }
-        }
-
-        file.close();
-    } else {
-        qDebug() << "open /proc/swaps failed! please check permission!!!";
-    }
-
-    return hasSwap;
 }
 
 void ShutdownPlugin::refreshPluginItemsVisible()
