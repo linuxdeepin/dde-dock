@@ -110,7 +110,6 @@ public:
 
 private:
     void loadPlugin();
-    bool checkSwap();
     void refreshPluginItemsVisible();
 
 private:
