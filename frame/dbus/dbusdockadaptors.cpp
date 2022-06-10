@@ -86,7 +86,7 @@ void DBusDockAdaptors::callShow()
 
 void DBusDockAdaptors::ReloadPlugins()
 {
-    return parent()->relaodPlugins();
+    return parent()->reloadPlugins();
 }
 
 QStringList DBusDockAdaptors::GetLoadedPlugins()

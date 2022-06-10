@@ -39,7 +39,6 @@ Q_SIGNALS:
     void pluginUpdated(PluginsItemInterface *, const DockPart &);
 
 protected:
-    void startLoader();
     explicit QuickSettingController(QObject *parent = Q_NULLPTR);
     ~QuickSettingController() override;
 

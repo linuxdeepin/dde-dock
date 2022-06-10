@@ -107,12 +107,6 @@ bool DockItemManager::appIsOnDock(const QString &appDesktop) const
     return m_appInter->IsOnDock(appDesktop);
 }
 
-void DockItemManager::startLoadPlugins() const
-{
-    int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
-    QTimer::singleShot(delay, m_pluginsInter, &DockPluginsController::startLoader);
-}
-
 void DockItemManager::refreshItemsIcon()
 {
     for (auto item : m_itemList) {

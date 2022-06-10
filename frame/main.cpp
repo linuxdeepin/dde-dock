@@ -218,6 +218,11 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
+    // 在qApp中记录当前是否为安全模式，如果为安全模式，则无需加载插件，在退出安全模式下，才正常加载插件
+    // 此处设置这个属性必须在MainWindow创建之前，因为在mainWindow中会创建加载插件的代理，会在代理中根据这个属性来判断是否需要加载插件
+    bool isSafeMode = IsSaveMode();
+    qApp->setProperty("safeMode", isSafeMode);
+
     // 注册任务栏的DBus服务
     MainWindow mw;
     DBusDockAdaptors adaptor(&mw);
@@ -236,8 +241,7 @@ int main(int argc, char *argv[])
     mw.launch();
 
     // 判断是否进入安全模式，是否带有入参 -x
-    if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
-        DockItemManager::instance()->startLoadPlugins();
+    if (!isSafeMode && !parser.isSet(disablePlugOption)) {
         qApp->setProperty("PLUGINSLOADED", true);
     } else {
         mw.sendNotifications();

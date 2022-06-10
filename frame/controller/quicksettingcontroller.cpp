@@ -21,16 +21,18 @@
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
+#include "proxyplugincontroller.h"
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
 {
-    // 异步加载本地插件
-    QMetaObject::invokeMethod(this, &QuickSettingController::startLoader, Qt::QueuedConnection);
+    // 加载本地插件
+    ProxyPluginController::instance(PluginType::QuickPlugin)->addProxyInterface(this);
 }
 
 QuickSettingController::~QuickSettingController()
 {
+    ProxyPluginController::instance(PluginType::QuickPlugin)->removeProxyInterface(this);
 }
 
 void QuickSettingController::sortPlugins()
@@ -112,13 +114,4 @@ QuickSettingController *QuickSettingController::instance()
 {
     static QuickSettingController instance;
     return &instance;
-}
-
-void QuickSettingController::startLoader()
-{
-    QString pluginsDir("../plugins/quick-trays");
-    if (!QDir(pluginsDir).exists())
-        pluginsDir = "/usr/lib/dde-dock/plugins/quick-trays";
-
-    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }

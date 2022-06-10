@@ -172,7 +172,7 @@ public:
 public slots:
     void launch();
     void callShow();
-    void relaodPlugins();
+    void reloadPlugins();
 
 private:
     using QWidget::show;

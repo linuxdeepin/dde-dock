@@ -51,14 +51,16 @@ public:
     void itemAdded(PluginsItemInterface * const, const QString &) override {}
     void itemUpdate(PluginsItemInterface * const, const QString &) override {}
     void itemRemoved(PluginsItemInterface * const, const QString &) override {}
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override {}
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override {}
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override {}
 
     void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
 
+    virtual bool needLoad(PluginsItemInterface *) { return true; }
+
 signals:
     void pluginLoaderFinished();
-
-protected:
-    virtual bool needLoad(PluginsItemInterface *) { return true; }
 
 protected:
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();

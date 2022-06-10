@@ -47,7 +47,6 @@ public:
     const QList<QPointer<DockItem> > itemList() const;
     const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
-    void startLoadPlugins() const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;

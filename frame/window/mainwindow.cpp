@@ -24,6 +24,7 @@
 #include "mainpanelcontrol.h"
 #include "dockitemmanager.h"
 #include "menuworker.h"
+#include "proxyplugincontroller.h"
 
 #include <DStyle>
 #include <DPlatformWindowHandle>
@@ -186,14 +187,19 @@ void MainWindow::callShow()
  * @brief MainWindow::relaodPlugins
  * 需要重新加载插件时，此接口会被调用，目前是用于任务栏的安全模式退出时调用
  */
-void MainWindow::relaodPlugins()
+void MainWindow::reloadPlugins()
 {
     if (qApp->property("PLUGINSLOADED").toBool()) {
         return;
     }
 
-    DockItemManager::instance()->startLoadPlugins();
+    // 发送事件，通知代理来加载插件
+    PluginLoadEvent event;
+    QCoreApplication::sendEvent(qApp, &event);
+
     qApp->setProperty("PLUGINSLOADED", true);
+    // 退出安全模式
+    qApp->setProperty("safeMode", false);
 }
 
 /**

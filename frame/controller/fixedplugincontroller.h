@@ -47,6 +47,8 @@ protected:
     void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
     void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
 
+    bool needLoad(PluginsItemInterface *itemInter) override;
+
 private:
     QList<StretchPluginsItem *> m_pluginItems;
 };

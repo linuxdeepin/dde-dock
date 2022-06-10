@@ -34,12 +34,15 @@
 #include <QDBusConnectionInterface>
 
 class PluginsItemInterface;
+class ProxyPluginController;
+
 class SystemTraysController : public AbstractPluginsController
 {
     Q_OBJECT
 
 public:
     explicit SystemTraysController(QObject *parent = nullptr);
+    ~SystemTraysController() override;
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
@@ -55,12 +58,13 @@ public:
     const QVariant getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
     void saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value);
 
-    void startLoader();
-
 signals:
     void pluginItemAdded(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemRemoved(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemUpdated(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
+
+private:
+    void loadPlugins(ProxyPluginController *proxyController);
 };
 
 #endif // SYSTEMTRAYSCONTROLLER_H

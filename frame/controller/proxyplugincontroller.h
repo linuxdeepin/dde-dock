@@ -24,12 +24,16 @@
 #include "abstractpluginscontroller.h"
 
 class PluginsItemInterface;
-// 加载的插件的类型
-#define FIXEDSYSTEMPLUGIN 1
+// 加载的插件的类型(1 根目录下的插件 2 快捷设置插件 3 系统插件)
+enum class PluginType {
+    FixedSystemPlugin = 0,
+    QuickPlugin,
+    SystemTrays
+};
 
 // 该类是一个底层用来加载系统插件的类，DockPluginsController和
 // FixedPluginController类都是通过这个类来加载系统插件的
-// 该类做成一个单例，因为理论上一个插件只允许被加载一次，但是对于电源插件来说，
+// 该类做成一个多例，因为理论上一个插件只允许被加载一次，但是对于电源插件来说，
 // 电源插件在高效模式和特效模式下都需要显示，因此，此类用于加载插件，然后分发到不同的
 // 上层控制器中
 class ProxyPluginController : public AbstractPluginsController
@@ -37,11 +41,13 @@ class ProxyPluginController : public AbstractPluginsController
     Q_OBJECT
 
 public:
-    static ProxyPluginController *instance(int instanceKey = FIXEDSYSTEMPLUGIN);
-    void addProxyInterface(AbstractPluginsController *interface, const QStringList &pluginNames = QStringList());
+    static ProxyPluginController *instance(PluginType instanceKey);
+    static ProxyPluginController *instance(PluginsItemInterface *itemInter);
+    void addProxyInterface(AbstractPluginsController *interface);
     void removeProxyInterface(AbstractPluginsController *interface);
-    void startLoader();
     QPluginLoader *pluginLoader(PluginsItemInterface * const itemInter);
+    QList<PluginsItemInterface *> pluginsItems() const;
+    QString itemKey(PluginsItemInterface *itemInter) const;
 
 protected:
     explicit ProxyPluginController(QObject *parent = nullptr);
@@ -51,14 +57,36 @@ protected:
     void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
 
-    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
+
+    void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
+
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
-    static QMap<int, ProxyPluginController *> m_instances;
-    QMap<AbstractPluginsController *, QStringList> m_interfaces;
+    QList<AbstractPluginsController *> getValidController(PluginsItemInterface *itemInter) const;
+    // 该方法可以由DockPluginsController类类调用，强制加载，因此，在此处给这个类加载了一个友元
+    void startLoader();
+
+private:
+    QList<AbstractPluginsController *> m_interfaces;
     QList<QStringList> m_dirs;
+    QList<PluginsItemInterface *> m_pluginsItems;
+    QMap<PluginsItemInterface *, QString> m_pluginsItemKeys;
 };
+
+// 该插件用于处理插件的延迟加载，当退出安全模式后，会收到该事件并加载插件
+class PluginLoadEvent : public QEvent
+{
+public:
+    PluginLoadEvent();
+    ~PluginLoadEvent() override;
+
+    static Type eventType();
+};
+
+Q_DECLARE_METATYPE(PluginType)
 
 #endif // PROXYPLUGINCONTROLLER_H

@@ -27,12 +27,12 @@ FixedPluginController::FixedPluginController(QObject *parent)
     : AbstractPluginsController(parent)
 {
     setObjectName("FixedPluginController");
-    ProxyPluginController::instance()->addProxyInterface(this, QStringList("shutdown"));
+    ProxyPluginController::instance(PluginType::FixedSystemPlugin)->addProxyInterface(this);
 }
 
 FixedPluginController::~FixedPluginController()
 {
-    ProxyPluginController::instance()->removeProxyInterface(this);
+    ProxyPluginController::instance(PluginType::FixedSystemPlugin)->removeProxyInterface(this);
 }
 
 void FixedPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -62,4 +62,22 @@ void FixedPluginController::itemRemoved(PluginsItemInterface * const itemInter, 
             break;
         }
     }
+}
+
+bool FixedPluginController::needLoad(PluginsItemInterface *itemInter)
+{
+    ProxyPluginController *controller = ProxyPluginController::instance(itemInter);
+    if (!controller)
+        return false;
+
+    QPluginLoader *pluginLoader = controller->pluginLoader(itemInter);
+    if (!pluginLoader)
+        return false;
+
+    // isFixed配置表示该插件在时尚模式下，显示在最右侧的图标，例如关机图标
+    QJsonObject json = pluginLoader->metaData().value("MetaData").toObject();
+    if (json.contains("fixed"))
+        return json.value("fixed").toBool();
+
+    return false;
 }

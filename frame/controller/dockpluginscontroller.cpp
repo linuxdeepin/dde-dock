@@ -33,12 +33,12 @@ DockPluginsController::DockPluginsController(QObject *parent)
 {
     setObjectName("DockPlugin");
 
-    ProxyPluginController::instance()->addProxyInterface(this);
+    ProxyPluginController::instance(PluginType::FixedSystemPlugin)->addProxyInterface(this);
 }
 
 DockPluginsController::~DockPluginsController()
 {
-    ProxyPluginController::instance()->removeProxyInterface(this);
+    ProxyPluginController::instance(PluginType::FixedSystemPlugin)->removeProxyInterface(this);
 }
 
 void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, const QString &itemKey)
@@ -51,7 +51,11 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
             return;
 
     // 取 plugin api
-    QPluginLoader *pluginLoader = ProxyPluginController::instance()->pluginLoader(itemInter);
+    ProxyPluginController *proxyController = ProxyPluginController::instance(itemInter);
+    if (!proxyController)
+        return;
+
+    QPluginLoader *pluginLoader = proxyController->pluginLoader(itemInter);
     if (!pluginLoader)
         return;
 
@@ -139,9 +143,4 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const 
     } else {
         item->hidePopup();
     }
-}
-
-void DockPluginsController::startLoader()
-{
-    ProxyPluginController::instance()->startLoader();
 }

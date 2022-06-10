@@ -53,8 +53,6 @@ public:
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
 
-    void startLoader();
-
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;
