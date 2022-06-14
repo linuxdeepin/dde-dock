@@ -762,6 +762,8 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     qDebug() << "dock real geometry:" << dockGeometry;
     qDebug() << "screen width:" << DIS_INS->screenRawWidth() << ", height:" << DIS_INS->screenRawHeight();
 
+    QScreen *curentScreen = DIS_INS->screen(m_ds.current());
+    Q_ASSERT(curentScreen);
     const qreal &ratio = qApp->devicePixelRatio();
     if (Utils::IS_WAYLAND_DISPLAY) {
         QList<QVariant> varList = {0, 0, 0, 0};
@@ -769,26 +771,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             varList[0] = 1;
             varList[1] = dockGeometry.y() + dockGeometry.height() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.x();
-            varList[3] = dockGeometry.x() + dockGeometry.width();
+            varList[2] = 0;
+            varList[3] = curentScreen->availableSize().width();
             break;
         case Position::Bottom:
             varList[0] = 3;
             varList[1] = DIS_INS->screenRawHeight() - dockGeometry.y() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.x();
-            varList[3] = dockGeometry.x() + dockGeometry.width();
+            varList[2] = 0;
+            varList[3] = curentScreen->availableSize().width();
             break;
         case Position::Left:
             varList[0] = 0;
             varList[1] = dockGeometry.x() + dockGeometry.width() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.y();
-            varList[3] = dockGeometry.y() + dockGeometry.height();
+            varList[2] = 0;
+            varList[3] = curentScreen->availableSize().height();
             break;
         case Position::Right:
             varList[0] = 2;
             varList[1] = DIS_INS->screenRawWidth() - dockGeometry.x() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.y();
-            varList[3] = dockGeometry.y() + dockGeometry.height();
+            varList[2] = 0;
+            varList[3] = curentScreen->availableSize().height();
             break;
         }
 
@@ -805,26 +807,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             orientation = XcbMisc::OrientationTop;
             strut = dockGeometry.y() + dockGeometry.height();
-            strutStart = dockGeometry.x();
-            strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
+            strutStart = 0;
+            strutEnd = curentScreen->availableSize().width();
             break;
         case Position::Bottom:
             orientation = XcbMisc::OrientationBottom;
             strut = DIS_INS->screenRawHeight() - dockGeometry.y();
-            strutStart = dockGeometry.x();
-            strutEnd = qMin(dockGeometry.x() + dockGeometry.width(), dockGeometry.right());
+            strutStart = 0;
+            strutEnd = curentScreen->availableSize().width();
             break;
         case Position::Left:
             orientation = XcbMisc::OrientationLeft;
             strut = dockGeometry.x() + dockGeometry.width();
-            strutStart = dockGeometry.y();
-            strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
+            strutStart = 0;
+            strutEnd = curentScreen->availableSize().height();
             break;
         case Position::Right:
             orientation = XcbMisc::OrientationRight;
             strut = DIS_INS->screenRawWidth() - dockGeometry.x();
-            strutStart = dockGeometry.y();
-            strutEnd = qMin(dockGeometry.y() + dockGeometry.height(), dockGeometry.bottom());
+            strutStart = 0;
+            strutEnd = curentScreen->availableSize().height();
             break;
         }
 
@@ -902,6 +904,7 @@ void MultiScreenWorker::onChildSizeChanged()
 
     QSize dockSize = dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size();
     parent()->setFixedSize(dockSize);
+    parent()->setGeometry(dockRect(m_ds.current()));
     parent()->panel()->setFixedSize(dockSize);
     parent()->panel()->move(0, 0);
     parent()->panel()->update();
