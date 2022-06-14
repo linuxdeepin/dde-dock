@@ -280,7 +280,7 @@ void BluetoothApplet::initConnect()
         .service("com.deepin.dde.ControlCenter")
         .interface("com.deepin.dde.ControlCenter")
         .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
     });

@@ -38,7 +38,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  dde-daemon (>=5.13.12),
  startdde (>=5.8.9),
  lastore-daemon (>=5.2.9),
- qtxdg-dev-tools
+ qtxdg-dev-tools,
+ dbus-bin
 Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,

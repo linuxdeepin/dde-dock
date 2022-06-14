@@ -164,7 +164,7 @@ void VolumeDevicesWidget::initConnection()
             DDBusSender().service("com.deepin.dde.ControlCenter")
                     .path("/com/deepin/dde/ControlCenter")
                     .interface("com.deepin.dde.ControlCenter")
-                    .method("ShowModule").arg(QString("sound")).call();
+                    .method("ShowPage").arg(QString("sound")).call();
             hide();
         }
     });

@@ -113,7 +113,7 @@ bool PowerPlugin::pluginIsDisable()
 const QString PowerPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowPage \"string:power\"");
 
     return QString();
 }
@@ -153,7 +153,7 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
         .service("com.deepin.dde.ControlCenter")
         .interface("com.deepin.dde.ControlCenter")
         .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
      }

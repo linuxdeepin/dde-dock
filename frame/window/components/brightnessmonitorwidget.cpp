@@ -116,7 +116,7 @@ void BrightnessMonitorWidget::initConnection()
             DDBusSender().service("com.deepin.dde.ControlCenter")
                     .path("/com/deepin/dde/ControlCenter")
                     .interface("com.deepin.dde.ControlCenter")
-                    .method("ShowModule").arg(QString("display")).call();
+                    .method("ShowPage").arg(QString("display")).call();
             hide();
         }
     });
