@@ -237,7 +237,7 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .service("com.deepin.dde.ControlCenter")
         .interface("com.deepin.dde.ControlCenter")
         .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
     } else if (menuId == "Lock") {

@@ -239,6 +239,11 @@ const QString StretchPluginsItem::contextMenu() const
     return m_pluginInter->itemContextMenu(m_itemKey);
 }
 
+void StretchPluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
+{
+    m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
+}
+
 void StretchPluginsItem::mousePressEvent(QMouseEvent *e)
 {
     m_hover = false;

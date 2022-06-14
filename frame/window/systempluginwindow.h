@@ -80,6 +80,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
 
     const QString contextMenu() const override;
+    void invokedMenuItem(const QString &itemId, const bool checked) override;
 
 private:
     void mouseClick();
