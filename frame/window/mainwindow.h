@@ -189,6 +189,7 @@ private:
     void initConnections();
 
     void resizeDockIcon();
+    void updateMaskArea();
 
 signals:
     void panelGeometryChanged();

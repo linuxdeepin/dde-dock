@@ -259,7 +259,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // 任务栏大小、位置、模式改变都会触发resize，发射大小改变信号，供依赖项目更新位置
     Q_EMIT panelGeometryChanged();
 
-    setMaskPath(m_mainPanel->areaPath());
+    updateMaskArea();
     m_mainPanel->updatePluginsLayout();
     m_shadowMaskOptimizeTimer->start();
 
@@ -367,6 +367,13 @@ void MainWindow::resizeDockIcon()
     m_mainPanel->resizeDockIcon();
 }
 
+void MainWindow::updateMaskArea()
+{
+    QPainterPath path = m_mainPanel->areaPath();
+    QPolygon polgon = path.toFillPolygon().toPolygon();
+    setMask(polgon);
+}
+
 /**
  * @brief MainWindow::adjustShadowMask 更新任务栏的圆角大小（时尚模式下才有圆角效果）
  */
@@ -393,7 +400,7 @@ void MainWindow::adjustShadowMask()
     m_platformWindowHandle.setWindowRadius(radius);
     m_mainPanel->updatePluginsLayout();
 
-    setMaskPath(m_mainPanel->areaPath());
+    updateMaskArea();
 }
 
 void MainWindow::onDbusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner)
