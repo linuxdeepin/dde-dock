@@ -296,8 +296,7 @@ QIcon ShutdownPlugin::icon(const DockPart &dockPart)
 {
     Q_UNUSED(dockPart);
 
-    static QIcon shutdownIcon;
-    shutdownIcon.detach();
+    QIcon shutdownIcon;
     shutdownIcon.addPixmap(m_shutdownWidget->loadPixmap());
     return shutdownIcon;
 }

@@ -58,7 +58,7 @@ private Q_SLOTS:
     void onRowCountChanged();
 
 protected:
-    void paintEvent(QPaintEvent *e) override;
+    void paintEvent(QPaintEvent *) override;
     const QString dropIconFile() const;
 
     void resetPosition();

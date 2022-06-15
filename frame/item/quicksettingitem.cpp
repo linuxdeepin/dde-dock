@@ -38,9 +38,9 @@
 #define BGSIZE 36
 #define MARGINLEFTSPACE 10
 #define OPENICONSIZE 12
-#define MARGINRIGHTSPACE 12
+#define MARGINRIGHTSPACE 9
 
-static QSize expandSize = QSize(6, 10);
+static QSize expandSize = QSize(20, 20);
 
 QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent)
@@ -108,7 +108,18 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     // 绘制背景色
     painter.fillRect(rect(), backgroundColor());
     // 让图标填上前景色
-    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
+    int pixmapWidth = static_cast<int>(ICONWIDTH * qApp->devicePixelRatio());
+    int pixmapHeight = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
+    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel);
+    QList<QSize> iconSizes = icon.availableSizes();
+    if (iconSizes.size() > 0) {
+        QSize size = iconSizes[0];
+        if (size.isValid() && !size.isEmpty() && !size.isNull()) {
+            pixmapWidth = size.width();
+            pixmapHeight = size.height();
+        }
+    }
+    QPixmap pm = icon.pixmap(pixmapWidth, pixmapHeight);
     QPainter pa(&pm);
     pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
     pa.fillRect(pm.rect(), painter.pen().brush());
@@ -116,10 +127,17 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         // 如果是主图标，则显示阴影背景
         int marginYSpace = yMarginSpace();
         QRect iconBg(MARGINLEFTSPACE, marginYSpace, BGSIZE, BGSIZE);
-        QPixmap bgPixmap = ImageUtil::getShadowPixmap(pm, shadowColor(), QSize(BGSIZE, BGSIZE));
-        painter.drawPixmap(iconBg, bgPixmap);
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(shadowColor());
+        painter.drawEllipse(iconBg);
+        painter.restore();
+        QRect rctIcon(iconBg.x() + (iconBg.width() - pixmapWidth) / 2,
+                      iconBg.y() + (iconBg.height() - pixmapHeight) / 2,
+                      pixmapWidth, pixmapHeight);
+        painter.drawPixmap(rctIcon, pm);
         // 绘制文字
-        painter.setPen(QColor(0, 0, 0));
+        painter.setPen(Qt::black);
 
         QRect rctPluginName(iconBg.right() + 10, iconBg.top(), BGWIDTH - BGSIZE - OPENICONSIZE - 10 * 2, BGSIZE / 2);
         QFont font = DFontSizeManager::instance()->t6();
@@ -128,7 +146,6 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         QTextOption textOption;
         textOption.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         QString displayName = QFontMetrics(font).elidedText(m_pluginInter->pluginDisplayName(), Qt::TextElideMode::ElideRight, rctPluginName.width());
-        QFontMetrics fm(font);
         painter.drawText(rctPluginName, displayName, textOption);
         // 绘制下方啊的状态文字
         QRect rctPluginStatus(rctPluginName.x(), rctPluginName.bottom() + 1,
@@ -138,16 +155,12 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         QString description = QFontMetrics(font).elidedText(m_pluginInter->description(), Qt::TextElideMode::ElideRight, rctPluginStatus.width());
         painter.drawText(rctPluginStatus, description, textOption);
         // 绘制右侧的展开按钮
-        QPen pen;
-        pen.setColor(QColor(0, 0, 0));
-        pen.setWidth(2);
-        painter.setPen(pen);
-        int iconLeft = rect().width() - MARGINRIGHTSPACE - expandSize.width();
+        QPixmap expandPixmap = ImageUtil::loadSvg(expandFileName(), expandSize);
         int iconRight = rect().width() - MARGINRIGHTSPACE;
-        painter.drawLine(QPoint(iconLeft, (iconBg.y() + (iconBg.height() - expandSize.height()) / 2)),
-                         QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)));
-        painter.drawLine(QPoint(iconRight, (iconBg.y() + iconBg.height() / 2)),
-                         QPoint(iconLeft, (iconBg.y() + (iconBg.height() + expandSize.height()) / 2)));
+        QRect rectOfExpand(iconRight - expandSize.width(),
+                           (rctIcon.y() + (rctIcon.height() - expandSize.height()) / 2),
+                           expandSize.width(), expandSize.height());
+        painter.drawPixmap(rectOfExpand, expandPixmap);
     } else {
         // 绘制图标
         QRect rctIcon = iconRect();
@@ -223,4 +236,12 @@ void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)
 int QuickSettingItem::yMarginSpace()
 {
     return (rect().height() - BGSIZE) / 2;
+}
+
+QString QuickSettingItem::expandFileName()
+{
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        return QString(":/icons/resources/arrow-right-dark.svg");
+
+    return QString(":/icons/resources/arrow-right.svg");
 }

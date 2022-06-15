@@ -28,6 +28,7 @@
 #include <QBoxLayout>
 #include <QDir>
 #include <QMetaObject>
+#include <QGuiApplication>
 
 #define MAXICONSIZE 48
 #define MINICONSIZE 24
@@ -192,18 +193,20 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
     }
 
     // 绘制图标
-    painter.drawPixmap(rctPixmap, icon.pixmap(ICONSIZE, ICONSIZE));
+    int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
+    painter.drawPixmap(rctPixmap, icon.pixmap(iconSize, iconSize));
 }
 
 QSize StretchPluginsItem::suitableSize() const
 {
+    int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         int textWidth = QFontMetrics(textFont()).boundingRect(m_pluginInter->pluginDisplayName()).width();
-        return QSize(qMax(textWidth, ICONSIZE) + 10 * 2, -1);
+        return QSize(qMax(textWidth, iconSize) + 10 * 2, -1);
     }
 
     int height = 6;                                 // 图标上边距6
-    height += ICONSIZE;                             // 图标尺寸20
+    height += iconSize;                             // 图标尺寸20
     height += ICONTEXTSPACE;                        // 图标与文字间距6
     height += QFontMetrics(textFont()).height();    // 文本高度
     height += 4;                                    // 下间距4

@@ -54,6 +54,7 @@ protected:
 
 private:
     int yMarginSpace();
+    QString expandFileName();
 
 private:
     PluginsItemInterface *m_pluginInter;

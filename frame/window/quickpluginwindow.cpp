@@ -34,6 +34,7 @@
 #include <QSize>
 #include <QMouseEvent>
 #include <QBoxLayout>
+#include <QGuiApplication>
 
 #define ITEMSIZE 22
 #define ITEMSPACE 6
@@ -488,7 +489,8 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
     if (!m_pluginItem)
         return QWidget::paintEvent(event);
 
-    QPixmap pixmap = m_pluginItem->icon(DockPart::QuickPanel).pixmap(ICONHEIGHT, ICONHEIGHT);
+    int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
+    QPixmap pixmap = m_pluginItem->icon(DockPart::QuickPanel).pixmap(pixmapSize, pixmapSize);
     QRect pixmapRect = QRect((rect().width() - ICONHEIGHT) / 2, (rect().height() - ICONHEIGHT) / 2,
                              ICONHEIGHT, ICONHEIGHT);
 

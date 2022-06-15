@@ -23,6 +23,7 @@
 #include "tray_model.h"
 #include "tray_delegate.h"
 #include "dockpopupwindow.h"
+#include "imageutil.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -88,13 +89,15 @@ QPixmap ExpandIconWidget::icon()
     return QPixmap(dropIconFile());
 }
 
-void ExpandIconWidget::paintEvent(QPaintEvent *e)
+void ExpandIconWidget::paintEvent(QPaintEvent *)
 {
-    Q_UNUSED(e);
-
     QPainter painter(this);
-    QPixmap pixmap(dropIconFile());
-    painter.drawPixmap(0, 0, pixmap);
+    QPixmap pixmap = ImageUtil::loadSvg(dropIconFile(), QSize(ICON_SIZE, ICON_SIZE));
+    QRect rectOfPixmap(rect().x() + (rect().width() - ICON_SIZE) / 2,
+                    rect().y() + (rect().height() - ICON_SIZE) / 2,
+                    ICON_SIZE, ICON_SIZE);
+
+    painter.drawPixmap(rectOfPixmap, pixmap);
 }
 
 const QString ExpandIconWidget::dropIconFile() const
