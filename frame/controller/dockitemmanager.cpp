@@ -40,7 +40,6 @@ DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
     , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
-    , m_loadFinished(false)
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
@@ -322,10 +321,6 @@ void DockItemManager::pluginItemRemoved(PluginsItem *item)
     emit itemRemoved(item);
 
     m_itemList.removeOne(item);
-
-    if (m_loadFinished) {
-        updatePluginsItemOrderKey();
-    }
 }
 
 void DockItemManager::reloadAppItems()
@@ -349,5 +344,4 @@ void DockItemManager::manageItem(DockItem *item)
 void DockItemManager::onPluginLoadFinished()
 {
     updatePluginsItemOrderKey();
-    m_loadFinished = true;
 }
