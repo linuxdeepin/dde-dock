@@ -763,7 +763,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     qDebug() << "screen width:" << DIS_INS->screenRawWidth() << ", height:" << DIS_INS->screenRawHeight();
 
     QScreen *curentScreen = DIS_INS->screen(m_ds.current());
-    Q_ASSERT(curentScreen);
+    // 在把显示器都拔掉后，此时获取到的当前屏幕为空，无需继续处理
+    if (!curentScreen)
+        return;
+
     const qreal &ratio = qApp->devicePixelRatio();
     if (Utils::IS_WAYLAND_DISPLAY) {
         QList<QVariant> varList = {0, 0, 0, 0};
@@ -771,26 +774,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             varList[0] = 1;
             varList[1] = dockGeometry.y() + dockGeometry.height() + WINDOWMARGIN * ratio;
-            varList[2] = 0;
-            varList[3] = curentScreen->availableSize().width();
+            varList[2] = curentScreen->geometry().x();
+            varList[3] = curentScreen->geometry().x() + curentScreen->size().width();
             break;
         case Position::Bottom:
             varList[0] = 3;
             varList[1] = DIS_INS->screenRawHeight() - dockGeometry.y() + WINDOWMARGIN * ratio;
-            varList[2] = 0;
-            varList[3] = curentScreen->availableSize().width();
+            varList[2] = curentScreen->geometry().x();
+            varList[3] = curentScreen->geometry().x() + curentScreen->size().width();
             break;
         case Position::Left:
             varList[0] = 0;
             varList[1] = dockGeometry.x() + dockGeometry.width() + WINDOWMARGIN * ratio;
-            varList[2] = 0;
-            varList[3] = curentScreen->availableSize().height();
+            varList[2] = curentScreen->geometry().y();
+            varList[3] = curentScreen->geometry().y() + curentScreen->size().height();
             break;
         case Position::Right:
             varList[0] = 2;
             varList[1] = DIS_INS->screenRawWidth() - dockGeometry.x() + WINDOWMARGIN * ratio;
-            varList[2] = 0;
-            varList[3] = curentScreen->availableSize().height();
+            varList[2] = dockGeometry.y();
+            varList[3] = curentScreen->geometry().y() + curentScreen->size().height();
             break;
         }
 
@@ -807,26 +810,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             orientation = XcbMisc::OrientationTop;
             strut = dockGeometry.y() + dockGeometry.height();
-            strutStart = 0;
-            strutEnd = curentScreen->availableSize().width();
+            strutStart = curentScreen->geometry().x();
+            strutEnd = curentScreen->geometry().x() + curentScreen->size().width();
             break;
         case Position::Bottom:
             orientation = XcbMisc::OrientationBottom;
             strut = DIS_INS->screenRawHeight() - dockGeometry.y();
-            strutStart = 0;
-            strutEnd = curentScreen->availableSize().width();
+            strutStart = curentScreen->geometry().x();
+            strutEnd = curentScreen->geometry().x() + curentScreen->size().width();
             break;
         case Position::Left:
             orientation = XcbMisc::OrientationLeft;
             strut = dockGeometry.x() + dockGeometry.width();
-            strutStart = 0;
-            strutEnd = curentScreen->availableSize().height();
+            strutStart = curentScreen->geometry().y();
+            strutEnd = curentScreen->geometry().y() + curentScreen->size().height();
             break;
         case Position::Right:
             orientation = XcbMisc::OrientationRight;
             strut = DIS_INS->screenRawWidth() - dockGeometry.x();
-            strutStart = 0;
-            strutEnd = curentScreen->availableSize().height();
+            strutStart = curentScreen->geometry().y();
+            strutEnd = curentScreen->geometry().y() + curentScreen->size().height();
             break;
         }
 
@@ -1538,8 +1541,8 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
             switch (pos) {
             case Position::Top: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX((static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
-                rect.setY(static_cast<int>((screenRect.y() + margin) / ratio));
+                rect.setX(screenRect.x() + (static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
+                rect.setY(screenRect.y() + static_cast<int>(margin / ratio));
                 rect.setWidth(panelSize.width());
                 rect.setHeight(dockSize);
             }
@@ -1547,24 +1550,24 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
             case Position::Bottom: {
                 // 先用设置屏幕尺寸，理论上不应该在此处设置，因为这是在一个get方法里面，后续改成直接获取，在其他地方设置
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX((static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
-                rect.setY(static_cast<int>(screenRect.y() + screenRect.height() / ratio - margin - dockSize));
+                rect.setX(screenRect.x() + (static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
+                rect.setY(screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin - dockSize));
                 rect.setWidth(panelSize.width());
                 rect.setHeight(dockSize);
             }
                 break;
             case Position::Left: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY((static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
+                rect.setX(screenRect.x() + margin);
+                rect.setY((screenRect.y() + static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
                 rect.setWidth(dockSize);
                 rect.setHeight(panelSize.height());
             }
                 break;
             case Position::Right: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(static_cast<int>(screenRect.x() + screenRect.width() / ratio - margin - dockSize));
-                rect.setY((static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
+                rect.setX(screenRect.x() + static_cast<int>(screenRect.width() / ratio - margin - dockSize));
+                rect.setY((screenRect.y() + static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
                 rect.setWidth(dockSize);
                 rect.setHeight(panelSize.height());
             }
@@ -1598,32 +1601,32 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
             switch (pos) {
             case Position::Top: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
+                rect.setX(screenRect.x() + static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
+                rect.setY(screenRect.y() + margin);
                 rect.setWidth(panelSize.width());
                 rect.setHeight(0);
             }
                 break;
             case Position::Bottom: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
-                rect.setY(static_cast<int>(screenRect.y() + screenRect.height() / ratio - margin));
+                rect.setX(screenRect.x() +  static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
+                rect.setY(screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin));
                 rect.setWidth(panelSize.width());
                 rect.setHeight(0);
             }
                 break;
             case Position::Left: {
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
+                rect.setX(screenRect.x() + margin);
+                rect.setY(screenRect.y() + static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
                 rect.setWidth(0);
                 rect.setHeight(panelSize.height());
             }
                 break;
             case Position::Right:
                 QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(static_cast<int>(screenRect.x() + screenRect.width() / ratio - margin));
-                rect.setY(static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
+                rect.setX(screenRect.x() + static_cast<int>(screenRect.width() / ratio - margin));
+                rect.setY(screenRect.y() + static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
                 rect.setWidth(0);
                 rect.setHeight(panelSize.height());
                 break;
