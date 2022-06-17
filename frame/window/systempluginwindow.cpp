@@ -107,9 +107,23 @@ void SystemPluginWindow::initUi()
     m_mainLayout->setSpacing(0);
 }
 
+bool SystemPluginWindow::pluginExist(StretchPluginsItem *pluginItem)
+{
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+        if (!layoutItem)
+            continue;
+
+        if (layoutItem->widget() == pluginItem)
+            return true;
+    }
+
+    return false;
+}
+
 void SystemPluginWindow::onPluginItemAdded(StretchPluginsItem *pluginItem)
 {
-    if (m_mainLayout->children().contains(pluginItem))
+    if (pluginExist(pluginItem))
         return;
 
     pluginItem->setPosition(m_position);
@@ -121,7 +135,7 @@ void SystemPluginWindow::onPluginItemAdded(StretchPluginsItem *pluginItem)
 
 void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
 {
-    if (!m_mainLayout->children().contains(pluginItem))
+    if (!pluginExist(pluginItem))
         return;
 
     pluginItem->setParent(nullptr);

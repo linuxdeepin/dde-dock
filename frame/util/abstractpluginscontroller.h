@@ -51,19 +51,19 @@ public:
     void itemAdded(PluginsItemInterface * const, const QString &) override {}
     void itemUpdate(PluginsItemInterface * const, const QString &) override {}
     void itemRemoved(PluginsItemInterface * const, const QString &) override {}
-    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override {}
-    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override {}
+    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
+    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
+    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
 
     void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
 
     virtual bool needLoad(PluginsItemInterface *) { return true; }
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
 
 signals:
     void pluginLoaderFinished();
 
 protected:
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
     QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
     PluginsItemInterface *pluginInterAt(const QString &itemKey);
     PluginsItemInterface *pluginInterAt(QObject *destItem);

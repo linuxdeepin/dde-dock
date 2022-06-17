@@ -49,6 +49,7 @@ Q_SIGNALS:
 
 private:
     void initUi();
+    bool pluginExist(StretchPluginsItem *pluginItem);
 
 private Q_SLOTS:
     void onPluginItemAdded(StretchPluginsItem *pluginItem);

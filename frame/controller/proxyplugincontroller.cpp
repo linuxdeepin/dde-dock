@@ -152,13 +152,9 @@ void ProxyPluginController::itemUpdate(PluginsItemInterface * const itemInter, c
 
 void ProxyPluginController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    if (m_pluginsItems.contains(itemInter))
-        m_pluginsItems.removeOne(itemInter);
-
-    if (m_pluginsItemKeys.contains(itemInter))
-        m_pluginsItemKeys.remove(itemInter);
-
+    // 先获取可执行的controller，再移除，因为在判断当前插件是否加载的时候需要用到当前容器中的插件来获取当前代理
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
+    removePluginItem(itemInter);
     for (AbstractPluginsController *interface : validController)
         interface->itemRemoved(itemInter, itemKey);
 }
@@ -212,6 +208,15 @@ QList<AbstractPluginsController *> ProxyPluginController::getValidController(Plu
     }
 
     return validController;
+}
+
+void ProxyPluginController::removePluginItem(PluginsItemInterface * const itemInter)
+{
+    if (m_pluginsItems.contains(itemInter))
+        m_pluginsItems.removeOne(itemInter);
+
+    if (m_pluginsItemKeys.contains(itemInter))
+        m_pluginsItemKeys.remove(itemInter);
 }
 
 void ProxyPluginController::startLoader()

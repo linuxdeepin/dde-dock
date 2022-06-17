@@ -144,3 +144,8 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const 
         item->hidePopup();
     }
 }
+
+QMap<PluginsItemInterface *, QMap<QString, QObject *>> &DockPluginsController::pluginsMap()
+{
+    return ProxyPluginController::instance(PluginType::FixedSystemPlugin)->pluginsMap();
+}

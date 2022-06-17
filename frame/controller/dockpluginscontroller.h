@@ -38,9 +38,6 @@ class DockPluginsController : public AbstractPluginsController
 {
     Q_OBJECT
 
-    friend class DockItemController;
-    friend class DockItemManager;
-
 public:
     explicit DockPluginsController(QObject *parent = nullptr);
     ~DockPluginsController() override;
@@ -52,6 +49,7 @@ public:
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;

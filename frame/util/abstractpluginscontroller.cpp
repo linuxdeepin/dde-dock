@@ -125,7 +125,7 @@ void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInte
     m_dockDaemonInter->RemovePluginSettings(itemInter->pluginName(), keyList);
 }
 
-QMap<PluginsItemInterface *, QMap<QString, QObject *> > &AbstractPluginsController::pluginsMap()
+QMap<PluginsItemInterface *, QMap<QString, QObject *>> &AbstractPluginsController::pluginsMap()
 {
     return m_pluginsMap;
 }

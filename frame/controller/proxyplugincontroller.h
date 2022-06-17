@@ -67,7 +67,7 @@ protected:
 
 private:
     QList<AbstractPluginsController *> getValidController(PluginsItemInterface *itemInter) const;
-    // 该方法可以由DockPluginsController类类调用，强制加载，因此，在此处给这个类加载了一个友元
+    void removePluginItem(PluginsItemInterface * const itemInter);
     void startLoader();
 
 private:
