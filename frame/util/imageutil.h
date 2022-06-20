@@ -35,7 +35,6 @@ public:
     static const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
     static const QPixmap loadSvg(const QString &iconName, const QSize size, const qreal ratio = qApp->devicePixelRatio());
     static QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
-    static const QPixmap getShadowPixmap(const QPixmap &pixmap, const QColor &shadowColor, const QSize &backSize);
 };
 
 #endif // IMAGEUTIL_H

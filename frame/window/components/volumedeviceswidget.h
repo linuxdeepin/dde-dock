@@ -29,7 +29,7 @@ namespace Dtk { namespace Widget { class DListView; } }
 
 using namespace Dtk::Widget;
 
-class CustomSlider;
+class SliderContainer;
 class QStandardItemModel;
 class QLabel;
 class VolumeModel;
@@ -45,6 +45,9 @@ public:
     explicit VolumeDevicesWidget(VolumeModel *model, QWidget *parent = nullptr);
     ~VolumeDevicesWidget() override;
 
+protected:
+    bool eventFilter(QObject *watcher, QEvent *event) override;
+
 private:
     void initUi();
     void reloadAudioDevices();
@@ -58,7 +61,8 @@ private:
     void resetVolumeInfo();
 
 private:
-    CustomSlider *m_volumeSlider;
+    QWidget *m_sliderParent;
+    SliderContainer *m_sliderContainer;
     QLabel *m_descriptionLabel;
     DListView *m_deviceList;
     VolumeModel *m_volumeModel;

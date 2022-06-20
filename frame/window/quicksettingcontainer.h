@@ -33,6 +33,8 @@ class DockItem;
 class QVBoxLayout;
 class QuickSettingController;
 class MediaWidget;
+class VolumeModel;
+class BrightnessModel;
 class VolumeWidget;
 class BrightnessWidget;
 class QuickSettingItem;
@@ -96,6 +98,8 @@ private:
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;
     MediaWidget *m_playerWidget;
+    VolumeModel *m_volumeModel;
+    BrightnessModel *m_brightnessModel;
     VolumeWidget *m_volumnWidget;
     BrightnessWidget *m_brihtnessWidget;
 

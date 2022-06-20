@@ -24,6 +24,7 @@
 
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
+#include <DPaletteHelper>
 
 #include <QIcon>
 #include <QPainterPath>
@@ -106,7 +107,8 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     painter.setClipPath(path);
 
     // 绘制背景色
-    painter.fillRect(rect(), backgroundColor());
+    DPalette dpa = DPaletteHelper::instance()->palette(this);
+    painter.fillRect(rect(), dpa.brush(DPalette::ColorRole::Mid));
     // 让图标填上前景色
     int pixmapWidth = static_cast<int>(ICONWIDTH * qApp->devicePixelRatio());
     int pixmapHeight = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
@@ -129,7 +131,7 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
         QRect iconBg(MARGINLEFTSPACE, marginYSpace, BGSIZE, BGSIZE);
         painter.save();
         painter.setPen(Qt::NoPen);
-        painter.setBrush(shadowColor());
+        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
         painter.drawEllipse(iconBg);
         painter.restore();
         QRect rctIcon(iconBg.x() + (iconBg.width() - pixmapWidth) / 2,
@@ -185,32 +187,15 @@ QRect QuickSettingItem::iconRect()
 
 QColor QuickSettingItem::foregroundColor() const
 {
+    DPalette dpa = DPaletteHelper::instance()->palette(this);
     // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
     if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
-        return QColor(0, 129, 255);
+        return dpa.color(DPalette::ColorGroup::Active, DPalette::ColorRole::Text);
 
     if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Deactive)
-        return QColor(51, 51, 51);
+        return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
 
-    return QColor(181, 181, 181);
-}
-
-QColor QuickSettingItem::backgroundColor() const
-{
-    // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
-        return QColor(250, 250, 252);
-
-    return QColor(241, 241, 246);
-}
-
-QColor QuickSettingItem::shadowColor() const
-{
-    // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
-        return QColor(217, 219, 226);
-
-    return QColor(199, 203, 222);
+    return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
 }
 
 void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)

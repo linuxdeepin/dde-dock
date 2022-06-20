@@ -47,8 +47,6 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     QRect iconRect();
     QColor foregroundColor() const;
-    QColor backgroundColor() const;
-    QColor shadowColor() const;
 
     void mouseReleaseEvent(QMouseEvent *event) override;
 

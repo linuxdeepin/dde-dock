@@ -26,7 +26,7 @@
 
 class VolumeModel;
 class QDBusMessage;
-class CustomSlider;
+class SliderContainer;
 class QLabel;
 class AudioSink;
 
@@ -37,9 +37,8 @@ class VolumeWidget : public DBlurEffectWidget
     Q_OBJECT
 
 public:
-    explicit VolumeWidget(QWidget *parent = nullptr);
+    explicit VolumeWidget(VolumeModel *model, QWidget *parent = nullptr);
     ~VolumeWidget() override;
-    VolumeModel *model();
 
 Q_SIGNALS:
     void visibleChanged(bool);
@@ -57,8 +56,8 @@ private:
     const QString rightIcon();
 
 private:
-    VolumeModel *m_volumeController;
-    CustomSlider *m_volumnCtrl;
+    VolumeModel *m_model;
+    SliderContainer *m_sliderContainer;
     AudioSink *m_defaultSink;
 };
 

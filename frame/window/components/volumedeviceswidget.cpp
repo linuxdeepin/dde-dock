@@ -19,15 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "volumedeviceswidget.h"
-#include "customslider.h"
+#include "brightnessmodel.h"
 #include "volumemodel.h"
 #include "settingdelegate.h"
+#include "imageutil.h"
+#include "slidercontainer.h"
 
 #include <DListView>
 #include <DPushButton>
 #include <DLabel>
 #include <DGuiApplicationHelper>
 #include <DDBusSender>
+#include <DBlurEffectWidget>
+#include <DPaletteHelper>
 
 #include <QVBoxLayout>
 #include <QScrollBar>
@@ -43,7 +47,8 @@ DWIDGET_USE_NAMESPACE
 
 VolumeDevicesWidget::VolumeDevicesWidget(VolumeModel *model, QWidget *parent)
     : QWidget(parent)
-    , m_volumeSlider(new CustomSlider(CustomSlider::Normal, this))
+    , m_sliderParent(new QWidget(this))
+    , m_sliderContainer(new SliderContainer(m_sliderParent))
     , m_descriptionLabel(new QLabel(tr("Output Device"), this))
     , m_deviceList(new DListView(this))
     , m_volumeModel(model)
@@ -54,6 +59,7 @@ VolumeDevicesWidget::VolumeDevicesWidget(VolumeModel *model, QWidget *parent)
     initUi();
     initConnection();
     reloadAudioDevices();
+    m_sliderParent->installEventFilter(this);
 
     QMetaObject::invokeMethod(this, [ this ] {
         resetVolumeInfo();
@@ -65,17 +71,49 @@ VolumeDevicesWidget::~VolumeDevicesWidget()
 {
 }
 
+bool VolumeDevicesWidget::eventFilter(QObject *watcher, QEvent *event)
+{
+    if ((watcher == m_sliderParent) && (event->type() == QEvent::Paint)) {
+        QPainter painter(m_sliderParent);
+        painter.setRenderHint(QPainter::Antialiasing); // 抗锯齿
+        painter.setPen(Qt::NoPen);
+
+        DPalette dpa = DPaletteHelper::instance()->palette(m_sliderParent);
+        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
+        painter.drawRoundedRect(m_sliderParent->rect(), 10, 10);
+    }
+
+    return QWidget::eventFilter(watcher, event);
+}
+
 void VolumeDevicesWidget::initUi()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
 
-    m_volumeSlider->setIconSize(QSize(36, 36));
-    m_volumeSlider->setLeftIcon(QIcon(leftIcon()));
-    m_volumeSlider->setRightIcon(QIcon(rightIcon()));
+    m_sliderParent->setFixedHeight(36);
 
-    layout->addWidget(m_volumeSlider);
+    QHBoxLayout *sliderLayout = new QHBoxLayout(m_sliderParent);
+    sliderLayout->setContentsMargins(11, 0, 11, 0);
+    sliderLayout->setSpacing(0);
+
+    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(24, 24));
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 5 });
+    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(24, 24));
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(), rightPixmap, 7 });
+
+    SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
+    proxy->setParent(m_sliderContainer->slider());
+    m_sliderContainer->slider()->setStyle(proxy);
+    sliderLayout->addWidget(m_sliderContainer);
+
+    QHBoxLayout *topLayout = new QHBoxLayout(this);
+    topLayout->setContentsMargins(10, 0, 10, 0);
+    topLayout->setSpacing(0);
+    topLayout->addWidget(m_sliderParent);
+
+    layout->addLayout(topLayout);
     layout->addSpacing(4);
     layout->addWidget(m_descriptionLabel);
 
@@ -119,9 +157,9 @@ void VolumeDevicesWidget::initConnection()
 {
     m_audioSink = m_volumeModel->defaultSink();
     auto adjustVolumeSlider = [ this ](int volume) {
-        m_volumeSlider->blockSignals(true);
-        m_volumeSlider->setValue(volume);
-        m_volumeSlider->blockSignals(false);
+        m_sliderContainer->slider()->blockSignals(true);
+        m_sliderContainer->slider()->setValue(volume);
+        m_sliderContainer->slider()->blockSignals(false);
     };
     if (m_audioSink)
         connect(m_audioSink, &AudioSink::volumeChanged, this, adjustVolumeSlider);
@@ -137,7 +175,7 @@ void VolumeDevicesWidget::initConnection()
         m_deviceList->update();
     });
 
-    connect(m_volumeSlider, &CustomSlider::valueChanged, this, [ this ](int value) {
+    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
         AudioSink *defSink = m_volumeModel->defaultSink();
         if (!defSink)
             return;
@@ -210,7 +248,7 @@ void VolumeDevicesWidget::resizeHeight()
 {
     m_deviceList->adjustSize();
     QMargins m = layout()->contentsMargins();
-    int height = m.top() + m.bottom() + HEADERHEIGHT + m_volumeSlider->height() + ITEMSPACE
+    int height = m.top() + m.bottom() + HEADERHEIGHT + m_sliderContainer->height() + ITEMSPACE
             + m_descriptionLabel->height() + m_deviceList->height();
 
     setFixedHeight(height);
@@ -222,7 +260,7 @@ void VolumeDevicesWidget::resetVolumeInfo()
     if (!defaultSink)
         return;
 
-    m_volumeSlider->blockSignals(true);
-    m_volumeSlider->setValue(defaultSink->volume());
-    m_volumeSlider->blockSignals(false);
+    m_sliderContainer->slider()->blockSignals(true);
+    m_sliderContainer->slider()->setValue(defaultSink->volume());
+    m_sliderContainer->slider()->blockSignals(false);
 }

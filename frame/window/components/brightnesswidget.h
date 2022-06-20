@@ -25,7 +25,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class CustomSlider;
+class SliderContainer;
 class BrightnessModel;
 class BrightMonitor;
 
@@ -34,13 +34,12 @@ class BrightnessWidget : public DBlurEffectWidget
     Q_OBJECT
 
 public:
-    explicit BrightnessWidget(QWidget *parent = nullptr);
+    explicit BrightnessWidget(BrightnessModel *model, QWidget *parent = nullptr);
     ~BrightnessWidget() override;
-    BrightnessModel *model();
+    SliderContainer *sliderContainer();
 
 Q_SIGNALS:
     void visibleChanged(bool);
-    void rightIconClicked();
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -51,10 +50,10 @@ private Q_SLOTS:
 
 private:
     void initUi();
-    void initConenction();
+    void initConnection();
 
 private:
-    CustomSlider *m_slider;
+    SliderContainer *m_sliderContainer;
     BrightnessModel *m_model;
 };
 

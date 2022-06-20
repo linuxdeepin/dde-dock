@@ -25,7 +25,7 @@
 #include <QWidget>
 
 class QLabel;
-class CustomSlider;
+class SliderContainer;
 class BrightnessModel;
 class QStandardItemModel;
 class QVBoxLayout;

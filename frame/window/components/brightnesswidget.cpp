@@ -19,33 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "brightnesswidget.h"
-#include "customslider.h"
 #include "brightnessmodel.h"
 #include "brightnessmonitorwidget.h"
 #include "imageutil.h"
+#include "slidercontainer.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
 
 #define BACKSIZE 36
-#define IMAGESIZE 24
+#define IMAGESIZE 18
 
-BrightnessWidget::BrightnessWidget(QWidget *parent)
+BrightnessWidget::BrightnessWidget(BrightnessModel *model, QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_slider(new CustomSlider(CustomSlider::SliderType::Normal, this))
-    , m_model(new BrightnessModel(this))
+    , m_sliderContainer(new SliderContainer(this))
+    , m_model(model)
 {
     initUi();
-    initConenction();
+    initConnection();
 }
 
 BrightnessWidget::~BrightnessWidget()
 {
 }
 
-BrightnessModel *BrightnessWidget::model()
+SliderContainer *BrightnessWidget::sliderContainer()
 {
-    return m_model;
+    return m_sliderContainer;
 }
 
 void BrightnessWidget::showEvent(QShowEvent *event)
@@ -63,30 +63,22 @@ void BrightnessWidget::hideEvent(QHideEvent *event)
 void BrightnessWidget::initUi()
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(20, 0, 20, 0);
-    layout->addWidget(m_slider);
+    layout->setContentsMargins(15, 0, 12, 0);
+    layout->addWidget(m_sliderContainer);
 
-    m_slider->setPageStep(1);
-    m_slider->setIconSize(QSize(BACKSIZE, BACKSIZE));
+    QPixmap leftPixmap = ImageUtil::loadSvg(":/icons/resources/brightness.svg", QSize(IMAGESIZE, IMAGESIZE));
+    QPixmap rightPixmap = ImageUtil::loadSvg(":/icons/resources/ICON_Device_Laptop.svg", QSize(IMAGESIZE, IMAGESIZE));
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 10 });
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(BACKSIZE, BACKSIZE), rightPixmap, 12});
 
-    QIcon leftIcon(QPixmap(":/icons/resources/brightness.svg").scaled(IMAGESIZE, IMAGESIZE));
-    m_slider->setLeftIcon(leftIcon);
-    QPixmap rightPixmap = ImageUtil::getShadowPixmap(QPixmap(QString(":/icons/resources/ICON_Device_Laptop.svg")).scaled(24, 24), Qt::lightGray, QSize(36, 36));
-    m_slider->setRightIcon(rightPixmap);
-
-    SliderProxy *style = new SliderProxy;
-    style->setParent(m_slider->qtSlider());
-    m_slider->qtSlider()->setStyle(style);
+    SliderProxyStyle *style = new SliderProxyStyle;
+    style->setParent(m_sliderContainer->slider());
+    m_sliderContainer->slider()->setStyle(style);
 }
 
-void BrightnessWidget::initConenction()
+void BrightnessWidget::initConnection()
 {
-    connect(m_slider, &CustomSlider::iconClicked, this, [ this ](DSlider::SliderIcons icon, bool) {
-        if (icon == DSlider::SliderIcons::RightIcon)
-            Q_EMIT rightIconClicked();
-    });
-
-    connect(m_slider, &CustomSlider::valueChanged, this, [ this ](int value) {
+    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
         BrightMonitor *monitor = m_model->primaryMonitor();
         if (monitor)
             m_model->setBrightness(monitor, value);
@@ -104,5 +96,5 @@ void BrightnessWidget::onUpdateBright(BrightMonitor *monitor)
     if (!monitor->isPrimary())
         return;
     // 此处只显示主屏的亮度
-    m_slider->setValue(monitor->brihtness());
+    m_sliderContainer->slider()->setValue(monitor->brihtness());
 }

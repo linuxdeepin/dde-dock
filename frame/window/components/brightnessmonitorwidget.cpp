@@ -20,8 +20,9 @@
  */
 #include "brightnessmonitorwidget.h"
 #include "brightnessmodel.h"
-#include "customslider.h"
+#include "slidercontainer.h"
 #include "settingdelegate.h"
+#include "imageutil.h"
 
 #include <DListView>
 #include <DDBusSender>
@@ -72,13 +73,19 @@ void BrightnessMonitorWidget::initUi()
 
     QList<BrightMonitor *> monitors = m_brightModel->monitors();
     for (BrightMonitor *monitor : monitors) {
-        SliderContainer *container = new SliderContainer(CustomSlider::Normal, m_sliderWidget);
+        SliderContainer *container = new SliderContainer(m_sliderWidget);
         container->setTitle(monitor->name());
-        container->slider()->setIconSize(QSize(20, 20));
-        container->slider()->setLeftIcon(QIcon(":/icons/resources/brightnesslow"));
-        container->slider()->setRightIcon(QIcon(":/icons/resources/brightnesshigh"));
+        QPixmap leftPixmap = ImageUtil::loadSvg(":/icons/resources/brightnesslow", QSize(20, 20));
+        QPixmap rightPixmap = ImageUtil::loadSvg(":/icons/resources/brightnesshigh", QSize(20, 20));
+        container->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 12 });
+        container->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(), rightPixmap, 12 });
+
         container->setFixedHeight(50);
         m_sliderLayout->addWidget(container);
+
+        SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
+        proxy->setParent(container->slider());
+        container->slider()->setStyle(proxy);
 
         m_sliderContainers << qMakePair(monitor, container);
     }
@@ -122,9 +129,9 @@ void BrightnessMonitorWidget::initConnection()
     });
 
     for (QPair<BrightMonitor *, SliderContainer *> container : m_sliderContainers) {
-        SliderContainer *slider = container.second;
-        slider->slider()->setValue(container.first->brihtness());
-        connect(slider->slider(), &CustomSlider::valueChanged, this, [ = ](int value) {
+        SliderContainer *sliderContainer = container.second;
+        sliderContainer->slider()->setValue(container.first->brihtness());
+        connect(sliderContainer->slider(), &QSlider::valueChanged, this, [ this, container ](int value) {
             m_brightModel->setBrightness(container.first, value);
         });
     }

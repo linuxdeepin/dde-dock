@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "customslider.h"
+#include "brightnessmodel.h"
 #include "mediawidget.h"
 
 #include <DFontSizeManager>

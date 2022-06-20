@@ -19,16 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "quicksettingcontainer.h"
+#include "brightnessmodel.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingitem.h"
 #include "mediawidget.h"
 #include "dockpopupwindow.h"
 #include "brightnesswidget.h"
+#include "slidercontainer.h"
 #include "volumewidget.h"
 #include "volumedeviceswidget.h"
 #include "brightnessmonitorwidget.h"
 #include "pluginchildpage.h"
+#include "volumemodel.h"
 
 #include <DListView>
 #include <DStyle>
@@ -60,10 +63,12 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
     , m_playerWidget(new MediaWidget(m_componentWidget))
-    , m_volumnWidget(new VolumeWidget(m_componentWidget))
-    , m_brihtnessWidget(new BrightnessWidget(m_componentWidget))
-    , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumnWidget->model(), this))
-    , m_brightSettingWidget(new BrightnessMonitorWidget(m_brihtnessWidget->model(), this))
+    , m_volumeModel(new VolumeModel(this))
+    , m_brightnessModel(new BrightnessModel(this))
+    , m_volumnWidget(new VolumeWidget(m_volumeModel, m_componentWidget))
+    , m_brihtnessWidget(new BrightnessWidget(m_brightnessModel, m_componentWidget))
+    , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumeModel, this))
+    , m_brightSettingWidget(new BrightnessMonitorWidget(m_brightnessModel, this))
     , m_childPage(new PluginChildPage(this))
     , m_dragPluginPosition(QPoint(0, 0))
 {
@@ -333,9 +338,12 @@ void QuickSettingContainer::initConnection()
         resizeView();
     });
     connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, [ this ] { resizeView(); });
-    connect(m_brihtnessWidget, &BrightnessWidget::rightIconClicked, this, [ this ] {
-        showWidget(m_brightSettingWidget, tr("brightness"));
-        resizeView();
+    connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
+        if (iconPosition == SliderContainer::RightIcon) {
+            // 点击右侧的按钮，弹出具体的调节的界面
+            showWidget(m_brightSettingWidget, tr("brightness"));
+            resizeView();
+        }
     });
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {
         m_switchLayout->setCurrentWidget(m_mainWidget);

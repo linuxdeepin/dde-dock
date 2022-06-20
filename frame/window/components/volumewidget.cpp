@@ -19,10 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "volumewidget.h"
-#include "customslider.h"
+#include "brightnessmodel.h"
 #include "imageutil.h"
 #include "volumemodel.h"
 #include "imageutil.h"
+#include "slidercontainer.h"
 
 #include <DGuiApplicationHelper>
 
@@ -44,11 +45,11 @@ DGUI_USE_NAMESPACE
 #define ICON_SIZE 24
 #define BACKSIZE 36
 
-VolumeWidget::VolumeWidget(QWidget *parent)
+VolumeWidget::VolumeWidget(VolumeModel *model, QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_volumeController(new VolumeModel(this))
-    , m_volumnCtrl(new CustomSlider(Qt::Horizontal, this))
-    , m_defaultSink(m_volumeController->defaultSink())
+    , m_model(model)
+    , m_sliderContainer(new SliderContainer(this))
+    , m_defaultSink(m_model->defaultSink())
 {
     initUi();
     initConnection();
@@ -61,38 +62,36 @@ VolumeWidget::~VolumeWidget()
 void VolumeWidget::initUi()
 {
     if (m_defaultSink)
-        m_volumnCtrl->setValue(m_defaultSink->volume());
+        m_sliderContainer->slider()->setValue(m_defaultSink->volume());
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout->setContentsMargins(20, 0, 20, 0);
-    mainLayout->addWidget(m_volumnCtrl);
+    mainLayout->setContentsMargins(17, 0, 12, 0);
+    mainLayout->addWidget(m_sliderContainer);
 
-    const QString rightIconFile = rightIcon();
-    QIcon rIcon = ImageUtil::getShadowPixmap(QPixmap(rightIconFile), Qt::lightGray, QSize(BACKSIZE, BACKSIZE));
+    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
+    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 12});
+    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(BACKSIZE, BACKSIZE), rightPixmap, 12});
 
-    m_volumnCtrl->setIconSize(QSize(BACKSIZE, BACKSIZE));
-    m_volumnCtrl->setLeftIcon(QIcon(QPixmap(leftIcon())));
-    m_volumnCtrl->setRightIcon(rIcon);
+    SliderProxyStyle *proxy = new SliderProxyStyle;
+    proxy->setParent(m_sliderContainer->slider());
+    m_sliderContainer->slider()->setStyle(proxy);
 
-    SliderProxy *proxy = new SliderProxy;
-    proxy->setParent(m_volumnCtrl->qtSlider());
-    m_volumnCtrl->qtSlider()->setStyle(proxy);
-
-    bool existActiveOutputDevice = m_volumeController->existActiveOutputDevice();
+    bool existActiveOutputDevice = m_model->existActiveOutputDevice();
     setEnabled(existActiveOutputDevice);
 }
 
 void VolumeWidget::initConnection()
 {
     auto setCtrlVolumeValue = [this](int volume) {
-        m_volumnCtrl->blockSignals(true);
-        m_volumnCtrl->setValue(volume);
-        m_volumnCtrl->blockSignals(false);
+        m_sliderContainer->blockSignals(true);
+        m_sliderContainer->slider()->setValue(volume);
+        m_sliderContainer->blockSignals(false);
     };
     if (m_defaultSink)
         connect(m_defaultSink, &AudioSink::volumeChanged, this, setCtrlVolumeValue);
 
-    connect(m_volumeController, &VolumeModel::defaultSinkChanged, this, [ this, setCtrlVolumeValue ](AudioSink *sink) {
+    connect(m_model, &VolumeModel::defaultSinkChanged, this, [ this, setCtrlVolumeValue ](AudioSink *sink) {
         if (m_defaultSink)
             disconnect(m_defaultSink);
 
@@ -103,36 +102,30 @@ void VolumeWidget::initConnection()
         }
     });
 
-    connect(m_volumnCtrl, &DTK_WIDGET_NAMESPACE::DSlider::valueChanged, this, [ this ](int value) {
-        AudioSink *sink = m_volumeController->defaultSink();
+    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
+        AudioSink *sink = m_model->defaultSink();
         if (sink)
             sink->setVolume(value, true);
     });
 
-    connect(m_volumeController, &VolumeModel::muteChanged, this, [ this ] {
-        m_volumnCtrl->setLeftIcon(QIcon(leftIcon()));
+    connect(m_model, &VolumeModel::muteChanged, this, [ this ] {
+        m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, QIcon(leftIcon()));
     });
 
-    connect(m_volumnCtrl, &CustomSlider::iconClicked, this, [ this ](DSlider::SliderIcons icon, bool) {
+    connect(m_sliderContainer, &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition icon) {
         switch (icon) {
-        case DSlider::SliderIcons::LeftIcon: {
-            if (m_volumeController->existActiveOutputDevice())
-                m_volumeController->setMute(!m_volumeController->isMute());
+        case SliderContainer::IconPosition::LeftIcon: {
+            if (m_model->existActiveOutputDevice())
+                m_model->setMute(!m_model->isMute());
             break;
         }
-        case DSlider::SliderIcons::RightIcon: {
+        case SliderContainer::IconPosition::RightIcon: {
             // 弹出音量选择对话框
             Q_EMIT rightIconClick();
             break;
         }
         }
     });
-}
-
-
-VolumeModel *VolumeWidget::model()
-{
-    return m_volumeController;
 }
 
 void VolumeWidget::showEvent(QShowEvent *event)
@@ -149,8 +142,8 @@ void VolumeWidget::hideEvent(QHideEvent *event)
 
 const QString VolumeWidget::leftIcon()
 {
-    bool existActiveOutputDevice = m_volumeController->existActiveOutputDevice();
-    const bool mute = existActiveOutputDevice ? m_volumeController->isMute() : true;
+    bool existActiveOutputDevice = m_model->existActiveOutputDevice();
+    const bool mute = existActiveOutputDevice ? m_model->isMute() : true;
     if (mute)
         return QString(":/icons/resources/audio-volume-muted-dark");
 
