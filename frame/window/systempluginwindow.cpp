@@ -116,7 +116,7 @@ void SystemPluginWindow::onPluginItemAdded(StretchPluginsItem *pluginItem)
     pluginItem->setParent(this);
     pluginItem->show();
     m_mainLayout->addWidget(pluginItem);
-    Q_EMIT sizeChanged();
+    Q_EMIT itemChanged();
 }
 
 void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
@@ -127,7 +127,7 @@ void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
     pluginItem->setParent(nullptr);
     pluginItem->hide();
     m_mainLayout->removeWidget(pluginItem);
-    Q_EMIT sizeChanged();
+    Q_EMIT itemChanged();
 }
 
 void SystemPluginWindow::onPluginItemUpdated(StretchPluginsItem *pluginItem)

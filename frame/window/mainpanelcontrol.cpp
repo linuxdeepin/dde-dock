@@ -96,6 +96,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_dockScreen(nullptr)
 {
     initUI();
+    initConnection();
     updateMainPanelLayout();
     updateModeChange();
     setAcceptDrops(true);
@@ -153,19 +154,8 @@ void MainPanelControl::initUI()
     m_pluginLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->addWidget(m_pluginAreaWidget, 0, Qt::AlignCenter);
 
-
     m_mainPanelLayout->addSpacing(15);
     m_mainPanelLayout->addWidget(m_trayManagerWidget);
-
-    connect(m_trayManagerWidget, &TrayManagerWindow::sizeChanged, this, [ this ] {
-        QSize suitableSize = m_trayManagerWidget->suitableSize();
-        if (m_position == Position::Right || m_position == Position::Left)
-            m_trayManagerWidget->setFixedSize(width(), suitableSize.height());
-        else
-            m_trayManagerWidget->setFixedSize(suitableSize.width(), height());
-
-        Q_EMIT sizeChanged();
-    });
 
     /* 桌面预览 */
     m_desktopWidget->setObjectName("showdesktoparea");
@@ -176,6 +166,11 @@ void MainPanelControl::initUI()
     m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
+}
+
+void MainPanelControl::initConnection()
+{
+    connect(m_trayManagerWidget, &TrayManagerWindow::requestUpdate, this, &MainPanelControl::onRequestUpdate);
 }
 
 /**
@@ -249,7 +244,7 @@ void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
         wdg->setMaximumSize(width(),width());
     }
     m_fixedAreaLayout->insertWidget(index, wdg);
-    Q_EMIT sizeChanged();
+    Q_EMIT requestUpdate();
 }
 
 /**往应用区域添加应用
@@ -265,7 +260,7 @@ void MainPanelControl::addAppAreaItem(int index, QWidget *wdg)
         wdg->setMaximumSize(width(),width());
     }
     m_appAreaSonLayout->insertWidget(index, wdg);
-    Q_EMIT sizeChanged();
+    Q_EMIT requestUpdate();
 }
 
 /**往托盘插件区域添加应用
@@ -307,7 +302,7 @@ void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
 void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
 {
     m_fixedAreaLayout->removeWidget(wdg);
-    Q_EMIT sizeChanged();
+    Q_EMIT requestUpdate();
 }
 
 /**移除应用区域某一应用
@@ -317,7 +312,7 @@ void MainPanelControl::removeFixedAreaItem(QWidget *wdg)
 void MainPanelControl::removeAppAreaItem(QWidget *wdg)
 {
     m_appAreaSonLayout->removeWidget(wdg);
-    Q_EMIT sizeChanged();
+    Q_EMIT requestUpdate();
 }
 
 /**移除托盘插件区域某一应用
@@ -1054,19 +1049,24 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
         return QSize(width(), static_cast<int>((traySuitableSize.height() + 20) / ratio));
     }
 
-    int yu = (totalLength % iconCount);
+    int redundantLength = (totalLength % iconCount);
     // icon宽度 = (总宽度-余数)/icon个数
-    int iconSize = (totalLength - yu) / iconCount;
+    int iconSize = (totalLength - redundantLength) / iconCount;
 
     if (m_position == Position::Top || m_position == Position::Bottom) {
         iconSize = iconSize < height() ? iconSize : height();
-        return QSize(iconSize * iconCount + static_cast<int>((m_fixedSpliter->width() + traySuitableSize.width() + 20) / ratio),
-                     static_cast<int>(height() / ratio));
+        int panelWidth = qMin(iconSize * iconCount + static_cast<int>((m_fixedSpliter->width() + traySuitableSize.width() + 20) / ratio),
+                              static_cast<int>(screenSize / deviceRatio));
+
+        return QSize(panelWidth, static_cast<int>(height() / ratio));
     }
 
     iconSize = iconSize < width() ? iconSize : width();
 
-    return QSize(width(), iconSize * iconCount + static_cast<int>((m_fixedSpliter->height() + traySuitableSize.height() + 20) / ratio));
+    int panelHeight = qMin(iconSize * iconCount + static_cast<int>((m_fixedSpliter->height() + traySuitableSize.height() + 20) / ratio),
+                           static_cast<int>(screenSize / deviceRatio));
+
+    return QSize(width(), panelHeight);
 }
 
 void MainPanelControl::itemUpdated(DockItem *item)
@@ -1128,8 +1128,9 @@ void MainPanelControl::resizeDockIcon()
     // 总宽度
     if (m_dislayMode == DisplayMode::Fashion) {
         int totalLength = getScreenSize();
+        QSize trayManagerSize = m_trayManagerWidget->suitableSize();
         // 减去右侧托盘和插件区域的宽度
-        totalLength -= ((m_position == Position::Top) || (m_position == Position::Bottom)) ? m_trayManagerWidget->width() : m_trayManagerWidget->height();
+        totalLength -= ((m_position == Position::Top) || (m_position == Position::Bottom)) ? trayManagerSize.width() : trayManagerSize.height();
 
         iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count();
 
@@ -1140,7 +1141,6 @@ void MainPanelControl::resizeDockIcon()
         int yu = (totalLength % iconCount);
         // icon宽度 = (总宽度-余数)/icon个数
         iconSize = (totalLength - yu) / iconCount;
-
         // 计算插件图标的最大或最小值
         tray_item_size = qBound(20, iconSize, 40);
         if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
@@ -1342,6 +1342,14 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
             }
         }
     }
+}
+
+void MainPanelControl::onRequestUpdate()
+{
+    resizeDesktopWidget();
+    // 在插件区域界面发生变化后(新增插件、删除插件、时间长度变化，新增托盘等)，会触发当前的信号，此时当前类
+    // 的尺寸还未变化，因此在此处发送requestUpdate信号，通知外面来调整任务栏右侧的大小，同时计算整个任务栏的大小
+    Q_EMIT requestUpdate();
 }
 
 /**时尚模式没有‘显示桌面’区域

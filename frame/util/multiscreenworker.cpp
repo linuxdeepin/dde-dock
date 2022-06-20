@@ -935,7 +935,7 @@ void MultiScreenWorker::initConnection()
     connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
-    connect(parent()->panel(), &MainPanelControl::sizeChanged, this, &MultiScreenWorker::onChildSizeChanged);
+    connect(parent()->panel(), &MainPanelControl::requestUpdate, this, &MultiScreenWorker::onChildSizeChanged);
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 

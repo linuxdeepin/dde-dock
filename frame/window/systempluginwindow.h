@@ -45,7 +45,7 @@ public:
     QSize suitableSize();
 
 Q_SIGNALS:
-    void sizeChanged();
+    void itemChanged();
 
 private:
     void initUi();

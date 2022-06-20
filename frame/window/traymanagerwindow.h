@@ -57,7 +57,7 @@ public:
     QSize suitableSize();
 
 Q_SIGNALS:
-    void sizeChanged();
+    void requestUpdate();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

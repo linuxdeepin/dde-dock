@@ -64,10 +64,11 @@ public slots:
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
-    void sizeChanged();
+    void requestUpdate();
 
 private:
     void initUI();
+    void initConnection();
     void updateAppAreaSonWidgetSize();
     void updateMainPanelLayout();
     void updateDisplayMode();
@@ -94,6 +95,9 @@ private:
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
     void resetRadius();
+
+private Q_SLOTS:
+    void onRequestUpdate();
 
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;

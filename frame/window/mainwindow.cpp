@@ -317,7 +317,7 @@ void MainWindow::initConnections()
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::windowRadiusChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_mainPanel, &MainPanelControl::sizeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_mainPanel, &MainPanelControl::requestUpdate, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &MainWindow::onDbusNameOwnerChanged);
 

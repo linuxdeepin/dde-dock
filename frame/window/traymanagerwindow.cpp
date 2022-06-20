@@ -82,6 +82,8 @@ void TrayManagerWindow::updateLayout()
     if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
         showSingle = (topLevelWidget()->height() <= CRITLCALHEIGHT);
 
+    QBoxLayout::Direction lastDirection = m_appDatetimeLayout->direction();
+
     if (showSingle)
         resetSingleDirection();
     else
@@ -90,6 +92,10 @@ void TrayManagerWindow::updateLayout()
     resetChildWidgetSize();
     // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
     Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
+
+    // 当插件区域从单行变成两行或者两行变成单行的时候，发送该信号，通知外部重新调整区域大小
+    if (lastDirection != m_appDatetimeLayout->direction())
+        Q_EMIT requestUpdate();
 }
 
 void TrayManagerWindow::setPositon(Dock::Position position)
@@ -237,11 +243,11 @@ void TrayManagerWindow::initConnection()
             // 在加载界面的时候，会出现快捷设置区域的图标和左侧的托盘图标挤在一起(具体原因未知)，此时需要延时50毫秒重新刷新界面来保证界面布局正常(临时解决方案)
             QTimer::singleShot(50, this, [ this ] {
                 resetChildWidgetSize();
-                Q_EMIT sizeChanged();
+                Q_EMIT requestUpdate();
             });
         } else {
             resetChildWidgetSize();
-            Q_EMIT sizeChanged();
+            Q_EMIT requestUpdate();
         }
     });
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, [ this ] {
@@ -252,10 +258,10 @@ void TrayManagerWindow::initConnection()
         else
             m_quickIconWidget->setFixedHeight(m_quickIconWidget->suitableSize().height());
 
-        Q_EMIT sizeChanged();
+        Q_EMIT requestUpdate();
     });
 
-    connect(m_systemPluginWidget, &SystemPluginWindow::sizeChanged, this, [ this ] {
+    connect(m_systemPluginWidget, &SystemPluginWindow::itemChanged, this, [ this ] {
         // 当系统插件发生变化的时候，同样需要调整尺寸
         m_systemPluginWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         if (m_postion == Dock::Position::Top || m_postion == Dock::Position::Bottom)
@@ -263,13 +269,13 @@ void TrayManagerWindow::initConnection()
         else
             m_systemPluginWidget->setFixedHeight(m_systemPluginWidget->suitableSize().height());
 
-        Q_EMIT sizeChanged();
+        Q_EMIT requestUpdate();
     });
 
     connect(m_delegate, &TrayDelegate::visibleChanged, this, [ this ](const QModelIndex &index, bool visible) {
         m_trayView->setRowHidden(index.row(), !visible);
         resetChildWidgetSize();
-        Q_EMIT sizeChanged();
+        Q_EMIT requestUpdate();
     });
 
     connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
@@ -288,12 +294,12 @@ void TrayManagerWindow::initConnection()
              }
         }
     });
-    connect(m_dateTimeWidget, &DateTimeDisplayer::sizeChanged, this, &TrayManagerWindow::sizeChanged);
+    connect(m_dateTimeWidget, &DateTimeDisplayer::sizeChanged, this, &TrayManagerWindow::requestUpdate);
 
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);
     installEventFilter(this);
-    QMetaObject::invokeMethod(this, &TrayManagerWindow::sizeChanged, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &TrayManagerWindow::requestUpdate, Qt::QueuedConnection);
 }
 
 void TrayManagerWindow::resetChildWidgetSize()
