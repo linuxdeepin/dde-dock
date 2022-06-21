@@ -1,14 +1,20 @@
+dde-dock (6.0.1) unstable; urgency=low
+
+  * release Tag 6.0.1 
+
+ --  fanpengcheng <fanpengcheng@uniontech.com>  Tue, 21 Jun 2022 16:24:49 +0800
+
 dde-dock (6.0.0.1) unstable; urgency=low
 
   * release Tag 6.0.0.1 
 
- -- donghualin <donghualin@uniontech.com>  Wed, 1 June 2022 21:34:29 +0800
+ -- donghualin <donghualin@uniontech.com>  Wed, 1 Jun 2022 21:34:29 +0800
 
 dde-dock (6.0.0.0) unstable; urgency=low
 
   * release Tag 6.0.0.0 
 
- -- donghualin <donghualin@uniontech.com>  Wed, 1 June 2022 10:11:29 +0800
+ -- donghualin <donghualin@uniontech.com>  Wed, 1 Jun 2022 10:11:29 +0800
 
 dde-dock (3.0.12-1) unstable; urgency=low
 
