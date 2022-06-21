@@ -30,8 +30,6 @@
 #include "appsnapshot.h"
 #include "floatingpreview.h"
 
-#include <com_deepin_dde_daemon_dock_entry.h>
-
 #include <DWindowManagerHelper>
 
 DWIDGET_USE_NAMESPACE

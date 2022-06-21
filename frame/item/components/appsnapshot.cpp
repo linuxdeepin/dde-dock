@@ -65,7 +65,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DIconButton(this))
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_dockDaemonInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
 {
     m_closeBtn2D->setFixedSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH);
     m_closeBtn2D->setIconSize(QSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH));

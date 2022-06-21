@@ -22,16 +22,15 @@
 #ifndef APPSNAPSHOT_H
 #define APPSNAPSHOT_H
 
-#include <QWidget>
-#include <QDebug>
-#include <QTimer>
+#include "dbusutil.h"
 
 #include <DIconButton>
 #include <DWindowManagerHelper>
 #include <DPushButton>
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
+#include <QWidget>
+#include <QDebug>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -54,8 +53,6 @@ struct SHMInfo;
 struct _XImage;
 typedef _XImage XImage;
 
-using DockDaemonInter = com::deepin::dde::daemon::Dock;
-
 namespace Dock {
 class TipsWidget;
 }
@@ -65,7 +62,7 @@ class AppSnapshot : public QWidget
     Q_OBJECT
 
 public:
-    explicit AppSnapshot(const WId wid, QWidget *parent = 0);
+    explicit AppSnapshot(const WId wid, QWidget *parent = Q_NULLPTR);
 
     inline WId wid() const { return m_wid; }
     inline bool attentioned() const { return m_windowInfo.attention; }
@@ -120,7 +117,7 @@ private:
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
-    DockDaemonInter *m_dockDaemonInter;
+    DockInter *m_dockDaemonInter;
 };
 
 #endif // APPSNAPSHOT_H
