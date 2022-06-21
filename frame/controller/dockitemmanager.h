@@ -27,12 +27,10 @@
 #include "dockitem.h"
 #include "appitem.h"
 #include "placeholderitem.h"
-
-#include <com_deepin_dde_daemon_dock.h>
+#include "dbusutil.h"
 
 #include <QObject>
 
-using DBusDock = com::deepin::dde::daemon::Dock;
 /**
  * @brief The DockItemManager class
  * 管理类，管理所有的应用数据，插件数据
@@ -78,7 +76,7 @@ private:
     void manageItem(DockItem *item);
 
 private:
-    DBusDock *m_appInter;
+    DockInter *m_appInter;
     DockPluginsController *m_pluginsInter;
 
     static DockItemManager *INSTANCE;

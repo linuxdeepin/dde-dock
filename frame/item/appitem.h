@@ -28,15 +28,13 @@
 #include "appdrag.h"
 #include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
+#include "dbusutil.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
 #include <DGuiApplicationHelper>
 
-#include <com_deepin_dde_daemon_dock_entry.h>
-
-using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 class QGSettings;
 
 class AppItem : public DockItem

@@ -38,7 +38,7 @@ const QGSettings *DockItemManager::m_dockedSettings = Utils::ModuleSettingsPtr("
 
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
-    , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_appInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_pluginsInter(new DockPluginsController(this))
     , m_loadFinished(false)
 {
@@ -50,9 +50,9 @@ DockItemManager::DockItemManager(QObject *parent)
         AppItem *it = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, entry);
         manageItem(it);
 
-        connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
-        connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
-        connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
+        connect(it, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
+        connect(it, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
+        connect(it, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
 
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
@@ -62,9 +62,9 @@ DockItemManager::DockItemManager(QObject *parent)
     // 托盘区域和插件区域 由DockPluginsController获取
 
     // 应用信号
-    connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemManager::appItemAdded);
-    connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
-    connect(m_appInter, &DBusDock::ServiceRestarted, this, &DockItemManager::reloadAppItems);
+    connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
+    connect(m_appInter, &DockInter::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
+    connect(m_appInter, &DockInter::ServiceRestarted, this, &DockItemManager::reloadAppItems);
 
     // 插件信号
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemManager::pluginItemInserted, Qt::QueuedConnection);
@@ -203,9 +203,9 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 
     manageItem(item);
 
-    connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
-    connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
-    connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
+    connect(item, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
+    connect(item, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
+    connect(item, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
     connect(this, &DockItemManager::requestUpdateDockItem, item, &AppItem::requestUpdateEntryGeometries);
 
     m_itemList.insert(insertIndex, item);

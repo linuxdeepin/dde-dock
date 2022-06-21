@@ -55,7 +55,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_activeAppSettings(activeAppSettings)
     , m_dockedAppSettings(dockedAppSettings)
     , m_appPreviewTips(nullptr)
-    , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
+    , m_itemEntryInter(new DockEntryInter(dockServiceName(), entry.path(), QDBusConnection::sessionBus(), this))
     , m_swingEffectView(nullptr)
     , m_itemAnimation(nullptr)
     , m_wmHelper(DWindowManagerHelper::instance())
