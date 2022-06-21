@@ -26,8 +26,6 @@
 #include "pluginproxyinterface.h"
 #include "util/abstractpluginscontroller.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>

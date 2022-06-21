@@ -63,6 +63,14 @@ enum Position {
     Left        = 3,
 };
 
+#ifdef USE_AM
+static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
+static const QString servicePath = QString("org.deepin.dde.daemon.Dock1");
+#else
+static const QString serviceName = QString("com.deepin.dde.daemon.Dock");
+static const QString servicePath = QString("/com/deepin/dde/daemon/Dock");
+#endif
+
 ModuleWidget::ModuleWidget(QWidget *parent)
     : QScrollArea(parent)
     , m_modeComboxWidget(new ComboxWidget(this))
@@ -72,7 +80,7 @@ ModuleWidget::ModuleWidget(QWidget *parent)
     , m_pluginTips(new DTipLabel(tr("Select which icons appear in the Dock"), this))
     , m_pluginView(new DListView(this))
     , m_pluginModel(new QStandardItemModel(this))
-    , m_daemonDockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_daemonDockInter(new DBusDock(serviceName, servicePath, QDBusConnection::sessionBus(), this))
     , m_dockInter(new DBusInter("com.deepin.dde.Dock", "/com/deepin/dde/Dock", QDBusConnection::sessionBus(), this))
     , m_dconfigWatcher(new ConfigWatcher("dde.dock.plugin.dconfig", this))
     , m_sliderPressed(false)

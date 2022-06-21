@@ -28,9 +28,6 @@
 #include <QLabel>
 #include <QScopedPointer>
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
-
 namespace Dock {
 class TipsWidget;
 }

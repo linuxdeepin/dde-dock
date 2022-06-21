@@ -21,14 +21,32 @@
 
 #include "onboardplugin.h"
 #include "../widgets/tipswidget.h"
+#ifdef USE_AM
+#include "dockinterface.h"
+#include "entryinterface.h"
+#else
+#include <com_deepin_dde_daemon_dock.h>
+#include <com_deepin_dde_daemon_dock_entry.h>
+#endif
 
 #include <QIcon>
 #include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
 
+#ifdef USE_AM
+using DBusDock = org::deepin::dde::daemon::DdeDock;
+using DockEntryInter = org::deepin::dde::daemon::dock::DockEntry;
+
+static const QString serviceName = QString("com.deepin.dde.daemon.Dock");
+static const QString servicePath = QString("/com/deepin/dde/daemon/Dock");
+#else
 using DBusDock = com::deepin::dde::daemon::Dock;
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
+
+static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
+static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
+#endif
 
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
@@ -139,14 +157,10 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
         process->start("onboard-settings");
     }
 
-    DBusDock DockInter("com.deepin.dde.daemon.Dock",
-                       "/com/deepin/dde/daemon/Dock",
-                       QDBusConnection::sessionBus(), this);
+    DBusDock DockInter(serviceName, servicePath, QDBusConnection::sessionBus(), this);
 
     for (auto entry : DockInter.entries()) {
-        DockEntryInter AppInter("com.deepin.dde.daemon.Dock",
-                                entry.path(),
-                                QDBusConnection::sessionBus(), this);
+        DockEntryInter AppInter(serviceName, entry.path(), QDBusConnection::sessionBus(), this);
         if(AppInter.name() == "Onboard-Settings" && !AppInter.isActive()) {
             AppInter.Activate(0);
             break;

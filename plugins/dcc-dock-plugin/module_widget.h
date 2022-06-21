@@ -21,11 +21,15 @@
 #ifndef MODULE_WIDGET_H
 #define MODULE_WIDGET_H
 
+#ifdef USE_AM
+#include "dockinterface.h"
+#else
+#include <com_deepin_dde_daemon_dock.h>
+#endif
+
 #include <QScrollArea>
 
 #include <dtkwidget_global.h>
-
-#include <com_deepin_dde_daemon_dock.h>
 
 #include "com_deepin_dde_dock.h"
 #include "config_watcher.h"
@@ -47,7 +51,13 @@ class QStandardItemModel;
 
 using namespace dcc::widgets;
 using namespace dcc_dock_plugin;
+
+#ifdef USE_AM
+using DBusDock = org::deepin::dde::daemon::DdeDock;
+#else
 using DBusDock = com::deepin::dde::daemon::Dock;
+#endif
+
 using DBusInter = com::deepin::dde::Dock;
 
 class ModuleWidget : public QScrollArea
