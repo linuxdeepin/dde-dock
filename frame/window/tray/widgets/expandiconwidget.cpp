@@ -230,9 +230,10 @@ void ExpandIconWidget::onGlobMousePress(const QPoint &mousePos, const int flag)
  * @brief 圆角窗体的绘制
  * @param parent
  */
+
 RoundWidget::RoundWidget(QWidget *parent)
     : QWidget (parent)
-    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
 }

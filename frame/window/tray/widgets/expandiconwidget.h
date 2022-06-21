@@ -23,14 +23,11 @@
 
 #include "constants.h"
 #include "basetraywidget.h"
-
-#include <com_deepin_dde_daemon_dock.h>
+#include "dbusutil.h"
 
 class TrayGridView;
 class TrayModel;
 class TrayDelegate;
-
-using DBusDock = com::deepin::dde::daemon::Dock;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; } }
 
@@ -91,7 +88,7 @@ private:
     QColor maskColor() const;
 
 private:
-    DBusDock *m_dockInter;
+    DockInter *m_dockInter;
 };
 
 #endif // EXPANDICONWIDGET_H
