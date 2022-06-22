@@ -910,9 +910,12 @@ void MultiScreenWorker::onChildSizeChanged()
         return;
 
     QSize dockSize = dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size();
-    parent()->setFixedSize(dockSize);
-    parent()->setGeometry(dockRect(m_ds.current()));
-    parent()->panel()->setFixedSize(dockSize);
+    parent()->move(dockRect(m_ds.current()).topLeft());
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+        parent()->setFixedWidth(dockSize.width());
+    else
+        parent()->setFixedHeight(dockSize.height());
+
     parent()->panel()->move(0, 0);
     parent()->panel()->update();
 }
@@ -1313,9 +1316,11 @@ void MultiScreenWorker::resetDockScreen()
     /**
       *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
       */
-    parent()->setFixedSize(dockRect(m_ds.current()).size());
-    parent()->setGeometry(dockRect(m_ds.current()));
-    parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
+    QRect currentRect = dockRect(m_ds.current());
+    QSize dockSize = currentRect.size();
+    parent()->setFixedSize(dockSize);
+    parent()->setGeometry(currentRect);
+    parent()->panel()->setFixedSize(dockSize);
     parent()->panel()->move(0, 0);
 }
 
