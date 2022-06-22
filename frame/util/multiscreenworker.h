@@ -26,8 +26,8 @@
 #include "utils.h"
 #include "dockitem.h"
 #include "xcb_misc.h"
+#include "dbusutil.h"
 
-#include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_api_xeventmonitor.h>
 #include <com_deepin_dde_launcher.h>
 
@@ -49,7 +49,7 @@ DGUI_USE_NAMESPACE
  * 之前测试出的诸多问题都是在切换任务栏位置，切换屏幕，主屏更改，分辨率更改等情况发生后
  * 任务栏的鼠标唤醒区域或任务栏的大小没更新或者更新时的大小还是按照原来的屏幕信息计算而来的，
  */
-using DBusDock = com::deepin::dde::daemon::Dock;
+
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
 using DBusLuncher = ::com::deepin::dde::Launcher;
 
@@ -132,7 +132,7 @@ public:
 
     void initShow();
 
-    DBusDock *dockInter() { return m_dockInter; }
+    DockInter *dockInter() { return m_dockInter; }
 
     inline bool testState(RunState state) { return (m_state & state); }
     void setStates(RunStates state, bool on = true);
@@ -171,7 +171,10 @@ public slots:
     void onAutoHideChanged(bool autoHide);
     void updateDaemonDockSize(int dockSize);
     void onRequestUpdateRegionMonitor();
+
+#ifndef USE_AM
     void handleDbusSignal(QDBusMessage);
+#endif
 
 private slots:
     // Region Monitor
@@ -190,10 +193,10 @@ private slots:
     void updateParentGeometry(const QVariant &value);
 
     // 任务栏属性变化
-    void onPositionChanged(const Position &position);
-    void onDisplayModeChanged(const DisplayMode &displayMode);
-    void onHideModeChanged(const HideMode &hideMode);
-    void onHideStateChanged(const Dock::HideState &state);
+    void onPositionChanged(int position);
+    void onDisplayModeChanged(int displayMode);
+    void onHideModeChanged(int hideMode);
+    void onHideStateChanged(int state);
     void onOpacityChanged(const double value);
 
     // 通知后端任务栏所在位置
@@ -257,7 +260,7 @@ private:
     XEventMonitor *m_touchEventInter;
 
     // DBus interface
-    DBusDock *m_dockInter;
+    DockInter *m_dockInter;
     DBusLuncher *m_launcherInter;
 
     // update monitor info

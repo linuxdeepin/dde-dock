@@ -23,10 +23,8 @@
 #include <QObject>
 
 #include "constants.h"
+#include "dbusutil.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-
-using DBusDock = com::deepin::dde::daemon::Dock;
 class QMenu;
 class QGSettings;
 /**
@@ -36,7 +34,7 @@ class MenuWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuWorker(DBusDock *dockInter,QWidget *parent = nullptr);
+    explicit MenuWorker(DockInter *dockInter,QWidget *parent = nullptr);
 
     void showDockSettingsMenu(QMenu *menu);
 
@@ -53,7 +51,7 @@ private slots:
     void onDockSettingsTriggered();
 
 private:
-    DBusDock *m_dockInter;
+    DockInter *m_dockInter;
     bool m_autoHide;
 };
 

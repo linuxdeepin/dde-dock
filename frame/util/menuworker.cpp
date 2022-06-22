@@ -32,12 +32,11 @@
 
 #define DIS_INS DisplayManager::instance()
 
-MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
-    : QObject (parent)
+MenuWorker::MenuWorker(DockInter *dockInter,QWidget *parent)
+    : QObject(parent)
     , m_dockInter(dockInter)
     , m_autoHide(true)
 {
-
 }
 
 QMenu *MenuWorker::createMenu(QMenu *settingsMenu)

@@ -44,8 +44,6 @@
 #include <X11/X.h>
 #include <X11/Xutil.h>
 
-#include <com_deepin_dde_daemon_dock.h>
-
 #define SNI_WATCHER_SERVICE "org.kde.StatusNotifierWatcher"
 #define SNI_WATCHER_PATH "/StatusNotifierWatcher"
 

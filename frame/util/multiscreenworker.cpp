@@ -52,7 +52,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_touchEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
-    , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
@@ -176,30 +176,34 @@ void MultiScreenWorker::updateDaemonDockSize(int dockSize)
         m_dockInter->setWindowSizeEfficient(uint(dockSize));
 }
 
+#ifndef USE_AM
 void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
 {
     QList<QVariant> arguments = msg.arguments();
     // 参数固定长度
     if (3 != arguments.count())
         return;
+
     // 返回的数据中,这一部分对应的是数据发送方的interfacename,可判断是否是自己需要的服务
     QString interfaceName = msg.arguments().at(0).toString();
-    if (interfaceName == "com.deepin.dde.daemon.Dock") {
-        QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-        QStringList keys = changedProps.keys();
-        foreach (const QString &prop, keys) {
-            if (prop == "Position") {
-                onPositionChanged(static_cast<Position>(changedProps.value(prop).toInt()));
-            } else if (prop == "DisplayMode") {
-                onDisplayModeChanged(static_cast<DisplayMode>(changedProps.value(prop).toInt()));
-            } else if (prop == "HideMode") {
-                onHideModeChanged(static_cast<HideMode>(changedProps.value(prop).toInt()));
-            } else if (prop == "HideState") {
-                onHideStateChanged(static_cast<HideState>(changedProps.value(prop).toInt()));
-            }
+    if (interfaceName != DockInter::staticInterfaceName())
+        return;
+
+    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
+    QStringList keys = changedProps.keys();
+    foreach (const QString &prop, keys) {
+        if (prop == "Position") {
+            onPositionChanged(changedProps.value(prop).toInt());
+        } else if (prop == "DisplayMode") {
+            onDisplayModeChanged(changedProps.value(prop).toInt());
+        } else if (prop == "HideMode") {
+            onHideModeChanged(changedProps.value(prop).toInt());
+        } else if (prop == "HideState") {
+            onHideStateChanged(changedProps.value(prop).toInt());
         }
     }
 }
+#endif
 
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
@@ -354,7 +358,7 @@ void MultiScreenWorker::updateParentGeometry(const QVariant &value)
     updateParentGeometry(value, m_position);
 }
 
-void MultiScreenWorker::onPositionChanged(const Position &position)
+void MultiScreenWorker::onPositionChanged(int position)
 {
     Position lastPos = m_position;
     if (lastPos == position)
@@ -362,7 +366,7 @@ void MultiScreenWorker::onPositionChanged(const Position &position)
 #ifdef QT_DEBUG
     qDebug() << "position change from: " << lastPos << " to: " << position;
 #endif
-    m_position = position;
+    m_position = static_cast<Position>(position);
 
     // 更新鼠标拖拽样式，在类内部设置到qApp单例上去
     if ((Top == m_position) || (Bottom == m_position)) {
@@ -380,21 +384,21 @@ void MultiScreenWorker::onPositionChanged(const Position &position)
         emit requestUpdateFrontendGeometry();
     } else {
         // 一直显示的模式才需要显示
-        emit requestUpdatePosition(lastPos, position);
+        emit requestUpdatePosition(lastPos, m_position);
     }
 }
 
-void MultiScreenWorker::onDisplayModeChanged(const DisplayMode &displayMode)
+void MultiScreenWorker::onDisplayModeChanged(int displayMode)
 {
     if (displayMode == m_displayMode)
         return;
 
     qInfo() << "display mode change:" << displayMode;
 
-    m_displayMode = displayMode;
+    m_displayMode = static_cast<DisplayMode>(displayMode);
     parent()->panel()->setDisplayMode(m_displayMode);
 
-    DockItem::setDockDisplayMode(displayMode);
+    DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(displayMode));
 
     QRect rect;
@@ -415,14 +419,14 @@ void MultiScreenWorker::onDisplayModeChanged(const DisplayMode &displayMode)
     emit requestNotifyWindowManager();
 }
 
-void MultiScreenWorker::onHideModeChanged(const HideMode &hideMode)
+void MultiScreenWorker::onHideModeChanged(int hideMode)
 {
     if (m_hideMode == hideMode)
         return;
 
     qInfo() << "hidemode change:" << hideMode;
 
-    m_hideMode = hideMode;
+    m_hideMode = static_cast<HideMode>(hideMode);
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
@@ -435,12 +439,12 @@ void MultiScreenWorker::onHideModeChanged(const HideMode &hideMode)
     emit requestNotifyWindowManager();
 }
 
-void MultiScreenWorker::onHideStateChanged(const Dock::HideState &state)
+void MultiScreenWorker::onHideStateChanged(int state)
 {
     if (state == Dock::Unknown)
         return;
 
-    m_hideState = state;
+    m_hideState = static_cast<HideState>(state);
 
     // 检查当前屏幕的当前位置是否允许显示,不允许需要更新显示信息(这里应该在函数外部就处理好,不应该走到这里)
 
@@ -942,22 +946,13 @@ void MultiScreenWorker::initConnection()
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
-    /** FIXME
-     * 这里关联的信号有时候收不到是因为 qt-dbus-factory 中的 changed 的信号有时候会发不出来，
-     * qt-dbus-factory 中的 DBusExtendedAbstractInterface::internalPropGet 在同步调用情况下，会将缓存中的数据写入属性中，
-     * 导致后面 onPropertyChanged 中的判断认为属性值没变，就没有发出 changed 信号。
-     * 建议：前端仅在初始化时主动获取一次 dbus 中的值存储在成员变量中，并建立 changed 信号连接，后面所有用到那个值的地方，均获取成员变量;
-     * 或去修改 qt-dbus-factory，取消 DBusExtendedAbstractInterface::internalPropGet 中将数据写入属性值，
-     * 但是 qt-dbus-factory 修改涉及面较广，需要大量测试确认没有问题，再合入。
-     */
-#if 0
-    //    connect(m_dockInter, &DBusDock::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
-    //    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
-    //    connect(m_dockInter, &DBusDock::HideModeChanged, this, &MultiScreenWorker::hideModeChanged);
-    //    connect(m_dockInter, &DBusDock::HideStateChanged, this, &MultiScreenWorker::hideStateChanged);
+#ifdef USE_AM
+    connect(m_dockInter, &DockInter::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
+    connect(m_dockInter, &DockInter::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
+    connect(m_dockInter, &DockInter::HideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
+    connect(m_dockInter, &DockInter::HideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
 #else
-    QDBusConnection::sessionBus().connect("com.deepin.dde.daemon.Dock",
-                                          "/com/deepin/dde/daemon/Dock",
+    QDBusConnection::sessionBus().connect(dockServiceName(), dockServicePath(),
                                           "org.freedesktop.DBus.Properties",
                                           "PropertiesChanged",
                                           "sa{sv}as",
@@ -986,10 +981,10 @@ void MultiScreenWorker::initUI()
     parent()->panel()->setFixedSize(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode).size());
     parent()->panel()->move(0, 0);
 
-    onPositionChanged(static_cast<Position>(dockInter()->position()));
-    onDisplayModeChanged(static_cast<DisplayMode>(dockInter()->displayMode()));
-    onHideModeChanged(static_cast<HideMode>(dockInter()->hideMode()));
-    onHideStateChanged(static_cast<HideState>(dockInter()->hideState()));
+    onPositionChanged(dockInter()->position());
+    onDisplayModeChanged(dockInter()->displayMode());
+    onHideModeChanged(dockInter()->hideMode());
+    onHideStateChanged(dockInter()->hideState());
     onOpacityChanged(m_dockInter->opacity());
 
     // 初始化透明度
@@ -1330,27 +1325,26 @@ void MultiScreenWorker::resetDockScreen()
  */
 void MultiScreenWorker::checkDaemonDockService()
 {
-    auto connectionInit = [ = ](DBusDock * dockInter) {
-        connect(dockInter, &DBusDock::ServiceRestarted, this, [ = ] {
+    auto connectionInit = [ = ](DockInter * dockInter) {
+        connect(dockInter, &DockInter::ServiceRestarted, this, [ = ] {
             resetDockScreen();
 
             emit requestUpdateFrontendGeometry();
         });
-        connect(dockInter, &DBusDock::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
-        connect(dockInter, &DBusDock::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
-        connect(dockInter, &DBusDock::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+        connect(dockInter, &DockInter::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
+        connect(dockInter, &DockInter::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+        connect(dockInter, &DockInter::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
     };
 
-    const QString serverName = "com.deepin.dde.daemon.Dock";
     QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
 
-    if (!ifc->isServiceRegistered(serverName)) {
+    if (!ifc->isServiceRegistered(dockServiceName())) {
         connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
             Q_UNUSED(oldOwner)
-            if (name == serverName && !newOwner.isEmpty()) {
+            if (name == dockServiceName() && !newOwner.isEmpty()) {
                 FREE_POINT(m_dockInter);
 
-                m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+                m_dockInter = new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this);
                 // connect
                 connectionInit(m_dockInter);
 
@@ -1358,10 +1352,10 @@ void MultiScreenWorker::checkDaemonDockService()
                 reInitDisplayData();
 
                 // operation
-                onPositionChanged(static_cast<Position>(dockInter()->position()));
-                onDisplayModeChanged(static_cast<DisplayMode>(dockInter()->displayMode()));
-                onHideModeChanged(static_cast<HideMode>(dockInter()->hideMode()));
-                onHideStateChanged(static_cast<HideState>(dockInter()->hideState()));
+                onPositionChanged(dockInter()->position());
+                onDisplayModeChanged(dockInter()->displayMode());
+                onHideModeChanged(dockInter()->hideMode());
+                onHideStateChanged(dockInter()->hideState());
                 onOpacityChanged(m_dockInter->opacity());
 
                 disconnect(ifc);
