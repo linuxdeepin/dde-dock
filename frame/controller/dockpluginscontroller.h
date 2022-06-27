@@ -49,6 +49,9 @@ public:
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
 
+private:
+    PluginsItem *getPluginItem(PluginsItemInterface * const itemInter, const QString &itemKey) const;
+
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;
     void pluginItemRemoved(PluginsItem *pluginItem) const;

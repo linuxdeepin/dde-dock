@@ -911,10 +911,13 @@ void MultiScreenWorker::onChildSizeChanged()
 
     QSize dockSize = dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size();
     parent()->move(dockRect(m_ds.current()).topLeft());
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         parent()->setFixedWidth(dockSize.width());
-    else
+        parent()->panel()->setFixedWidth(dockSize.width());
+    } else {
         parent()->setFixedHeight(dockSize.height());
+        parent()->panel()->setFixedHeight(dockSize.height());
+    }
 
     parent()->panel()->move(0, 0);
     parent()->panel()->update();

@@ -1054,7 +1054,7 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
     int iconSize = (totalLength - redundantLength) / iconCount;
 
     if (m_position == Position::Top || m_position == Position::Bottom) {
-        iconSize = iconSize < height() ? iconSize : height();
+        iconSize = qMin(iconSize, height());
         int panelWidth = qMin(iconSize * iconCount + static_cast<int>((m_fixedSpliter->width() + traySuitableSize.width() + 20) / ratio),
                               static_cast<int>(screenSize / deviceRatio));
 

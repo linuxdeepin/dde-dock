@@ -81,7 +81,7 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
 
 void DockPluginsController::itemUpdate(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    PluginsItem *item = getPluginItem(itemInter, itemKey);
     if (!item)
         return;
 
@@ -92,7 +92,7 @@ void DockPluginsController::itemUpdate(PluginsItemInterface *const itemInter, co
 
 void DockPluginsController::itemRemoved(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    PluginsItem *item = getPluginItem(itemInter, itemKey);
     if (!item)
         return;
 
@@ -116,7 +116,7 @@ void DockPluginsController::itemRemoved(PluginsItemInterface *const itemInter, c
 
 void DockPluginsController::requestWindowAutoHide(PluginsItemInterface *const itemInter, const QString &itemKey, const bool autoHide)
 {
-    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    PluginsItem *item = getPluginItem(itemInter, itemKey);
     if (!item)
         return;
 
@@ -125,7 +125,7 @@ void DockPluginsController::requestWindowAutoHide(PluginsItemInterface *const it
 
 void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface *const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    PluginsItem *item = getPluginItem(itemInter, itemKey);
     if (!item)
         return;
 
@@ -134,7 +134,7 @@ void DockPluginsController::requestRefreshWindowVisible(PluginsItemInterface *co
 
 void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const itemInter, const QString &itemKey, const bool visible)
 {
-    PluginsItem *item = static_cast<PluginsItem *>(pluginItemAt(itemInter, itemKey));
+    PluginsItem *item = getPluginItem(itemInter, itemKey);
     if (!item)
         return;
 
@@ -148,4 +148,17 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const 
 QMap<PluginsItemInterface *, QMap<QString, QObject *>> &DockPluginsController::pluginsMap()
 {
     return ProxyPluginController::instance(PluginType::FixedSystemPlugin)->pluginsMap();
+}
+
+PluginsItem *DockPluginsController::getPluginItem(PluginsItemInterface * const itemInter, const QString &itemKey) const
+{
+    ProxyPluginController *proxyController = ProxyPluginController::instance(itemInter);
+    if (!proxyController)
+        return nullptr;
+
+    const QMap<PluginsItemInterface *, QMap<QString, QObject *>> &plugins = proxyController->pluginsMap();
+    if (plugins.contains(itemInter) && plugins[itemInter].contains(itemKey))
+        return static_cast<PluginsItem *>(plugins[itemInter][itemKey]);
+
+    return nullptr;
 }

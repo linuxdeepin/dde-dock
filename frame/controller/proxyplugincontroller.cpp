@@ -133,14 +133,11 @@ QString ProxyPluginController::itemKey(PluginsItemInterface *itemInter) const
 
 void ProxyPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    m_pluginsItems << itemInter;
-    m_pluginsItemKeys[itemInter] = itemKey;
-
+    addPluginItems(itemInter, itemKey);
     // 获取需要加载当前插件的监听者,然后将当前插件添加到监听者
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
         interface->itemAdded(itemInter, itemKey);
-
 }
 
 void ProxyPluginController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -154,9 +151,10 @@ void ProxyPluginController::itemRemoved(PluginsItemInterface * const itemInter, 
 {
     // 先获取可执行的controller，再移除，因为在判断当前插件是否加载的时候需要用到当前容器中的插件来获取当前代理
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
-    removePluginItem(itemInter);
     for (AbstractPluginsController *interface : validController)
         interface->itemRemoved(itemInter, itemKey);
+
+    removePluginItem(itemInter);
 }
 
 void ProxyPluginController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
@@ -208,6 +206,15 @@ QList<AbstractPluginsController *> ProxyPluginController::getValidController(Plu
     }
 
     return validController;
+}
+
+void ProxyPluginController::addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    if (!m_pluginsItems.contains(itemInter))
+        m_pluginsItems << itemInter;
+
+    if (!m_pluginsItemKeys.contains(itemInter))
+        m_pluginsItemKeys[itemInter] = itemKey;
 }
 
 void ProxyPluginController::removePluginItem(PluginsItemInterface * const itemInter)

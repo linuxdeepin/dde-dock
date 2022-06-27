@@ -67,6 +67,7 @@ protected:
 
 private:
     QList<AbstractPluginsController *> getValidController(PluginsItemInterface *itemInter) const;
+    void addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey);
     void removePluginItem(PluginsItemInterface * const itemInter);
     void startLoader();
 
