@@ -220,6 +220,10 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
         });
         return;
     }
+
+    if (Utils::IS_WAYLAND_DISPLAY && m_multiScreenWorker->launcherVisible()) {
+        m_multiScreenWorker->setLauncherVisble(false);
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)

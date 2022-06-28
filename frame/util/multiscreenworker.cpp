@@ -1507,6 +1507,18 @@ QRect MultiScreenWorker::getDockShowMinGeometry(const QString &screenName, bool 
     return rect;
 }
 
+bool MultiScreenWorker::launcherVisible()
+{
+    return m_launcherInter->isValid() ? m_launcherInter->visible() : false;
+}
+
+void MultiScreenWorker::setLauncherVisble(bool isVisible)
+{
+    if (m_launcherInter->isValid()) {
+        isVisible ? m_launcherInter->Show() : m_launcherInter->Hide();
+    }
+}
+
 /**
  * @brief 获取任务栏显示时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
  *

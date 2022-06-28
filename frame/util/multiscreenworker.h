@@ -149,6 +149,9 @@ public:
     QRect dockRect(const QString &screenName);
     QRect getDockShowMinGeometry(const QString &screenName, bool withoutScale = false);
 
+    bool launcherVisible();
+    void setLauncherVisble(bool isVisible);
+
 signals:
     void opacityChanged(const quint8 value) const;
     void displayModeChanegd();
