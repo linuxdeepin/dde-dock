@@ -52,6 +52,8 @@ endif()
 
 file(GLOB INTERFACES "interfaces/*.h")
 
+add_compile_definitions(USE_AM)
+
 #因为单元测试需要直接测试源代码，而主程序代码中include的单元使用了相对路径
 #单元测试的CMakeLists和主程序的CMakeLists路径不同，编译单元测试时会提示找不到文件
 #因此设置搜索路径
