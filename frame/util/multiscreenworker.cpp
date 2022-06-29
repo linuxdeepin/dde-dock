@@ -766,11 +766,6 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     qDebug() << "dock real geometry:" << dockGeometry;
     qDebug() << "screen width:" << DIS_INS->screenRawWidth() << ", height:" << DIS_INS->screenRawHeight();
 
-    QScreen *curentScreen = DIS_INS->screen(m_ds.current());
-    // 在把显示器都拔掉后，此时获取到的当前屏幕为空，无需继续处理
-    if (!curentScreen)
-        return;
-
     const qreal &ratio = qApp->devicePixelRatio();
     if (Utils::IS_WAYLAND_DISPLAY) {
         QList<QVariant> varList = {0, 0, 0, 0};
@@ -778,26 +773,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             varList[0] = 1;
             varList[1] = dockGeometry.y() + dockGeometry.height() + WINDOWMARGIN * ratio;
-            varList[2] = curentScreen->geometry().x();
-            varList[3] = curentScreen->geometry().x() + curentScreen->size().width();
+            varList[2] = dockGeometry.x();
+            varList[3] = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Bottom:
             varList[0] = 3;
             varList[1] = DIS_INS->screenRawHeight() - dockGeometry.y() + WINDOWMARGIN * ratio;
-            varList[2] = curentScreen->geometry().x();
-            varList[3] = curentScreen->geometry().x() + curentScreen->size().width();
+            varList[2] = dockGeometry.x();
+            varList[3] = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Left:
             varList[0] = 0;
             varList[1] = dockGeometry.x() + dockGeometry.width() + WINDOWMARGIN * ratio;
-            varList[2] = curentScreen->geometry().y();
-            varList[3] = curentScreen->geometry().y() + curentScreen->size().height();
+            varList[2] = dockGeometry.y();
+            varList[3] = dockGeometry.y() + dockGeometry.height();
             break;
         case Position::Right:
             varList[0] = 2;
             varList[1] = DIS_INS->screenRawWidth() - dockGeometry.x() + WINDOWMARGIN * ratio;
             varList[2] = dockGeometry.y();
-            varList[3] = curentScreen->geometry().y() + curentScreen->size().height();
+            varList[3] = dockGeometry.y() + dockGeometry.height();
             break;
         }
 
@@ -814,26 +809,26 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         case Position::Top:
             orientation = XcbMisc::OrientationTop;
             strut = dockGeometry.y() + dockGeometry.height();
-            strutStart = curentScreen->geometry().x();
-            strutEnd = curentScreen->geometry().x() + curentScreen->size().width();
+            strutStart = dockGeometry.x();
+            strutEnd = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Bottom:
             orientation = XcbMisc::OrientationBottom;
             strut = DIS_INS->screenRawHeight() - dockGeometry.y();
-            strutStart = curentScreen->geometry().x();
-            strutEnd = curentScreen->geometry().x() + curentScreen->size().width();
+            strutStart = dockGeometry.x();
+            strutEnd = dockGeometry.x() + dockGeometry.width();
             break;
         case Position::Left:
             orientation = XcbMisc::OrientationLeft;
             strut = dockGeometry.x() + dockGeometry.width();
-            strutStart = curentScreen->geometry().y();
-            strutEnd = curentScreen->geometry().y() + curentScreen->size().height();
+            strutStart = dockGeometry.y();
+            strutEnd = dockGeometry.y() + dockGeometry.height();
             break;
         case Position::Right:
             orientation = XcbMisc::OrientationRight;
             strut = DIS_INS->screenRawWidth() - dockGeometry.x();
-            strutStart = curentScreen->geometry().y();
-            strutEnd = curentScreen->geometry().y() + curentScreen->size().height();
+            strutStart = dockGeometry.y();
+            strutEnd = dockGeometry.y() + dockGeometry.height();
             break;
         }
 
