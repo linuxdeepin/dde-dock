@@ -28,11 +28,12 @@
 #include <QFrame>
 #include <QPointer>
 #include <QGestureEvent>
-#include <QMenu>
 
 #include <memory>
 
 using namespace Dock;
+
+class QMenu;
 
 class DockItem : public QWidget
 {
@@ -111,7 +112,7 @@ protected:
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
 

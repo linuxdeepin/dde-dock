@@ -40,6 +40,7 @@
 #include <QX11Info>
 #include <QtConcurrent>
 #include <qpa/qplatformwindow.h>
+#include <QMenu>
 
 #include <X11/X.h>
 #include <X11/Xutil.h>

@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QPointer>
+#include <QMenu>
 
 #include <xcb/xproto.h>
 
@@ -36,6 +37,7 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
     : BaseTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
+    , m_contextMenu(new QMenu(this))
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -67,6 +69,10 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("systemtraypopup");
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
+            arrowRectangle->setWindowFlags(flags);
+        }
         PopupWindow = arrowRectangle;
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
@@ -85,7 +91,7 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemPluginItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemPluginItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &SystemPluginItem::menuActionClicked);
+    connect(m_contextMenu, &QMenu::triggered, this, &SystemPluginItem::menuActionClicked);
 
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &SystemPluginItem::onGSettingsChanged);
@@ -430,14 +436,13 @@ void SystemPluginItem::showContextMenu()
     if (menuJson.isEmpty())
         return;
 
-
     QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
     if (jsonDocument.isNull())
         return;
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -447,13 +452,13 @@ void SystemPluginItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu->exec(QCursor::pos());
 
     onContextMenuAccepted();
 }

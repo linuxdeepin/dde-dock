@@ -27,10 +27,9 @@
 #include "pluginsiteminterface.h"
 
 #include <QGestureEvent>
-#include <QMenu>
 
 class QGSettings;
-class Menu;
+class QMenu;
 class DockPopupWindow;
 
 class SystemPluginItem : public BaseTrayWidget
@@ -99,7 +98,7 @@ private:
 private:
     bool m_popupShown;
     bool m_tapAndHold;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
     QWidget *m_centralWidget;

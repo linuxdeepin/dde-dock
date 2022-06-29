@@ -31,7 +31,6 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QMenu>
 #include <QAction>
 #include <QIcon>
 

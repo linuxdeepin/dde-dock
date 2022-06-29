@@ -24,6 +24,7 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <QMenu>
 
 #include <xcb/xproto.h>
 
@@ -34,6 +35,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
     : AbstractTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
+    , m_contextMenu(new QMenu)  // 此处设置parent有问题，会导致当前菜单显示透明，因此设置parent为nullptr,在析构函数中释放
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -65,10 +67,18 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("systemtraypopup");
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
+            arrowRectangle->setWindowFlags(flags);
+        }
         PopupWindow = arrowRectangle;
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Qt::WindowFlags flags = m_contextMenu->windowFlags() | Qt::FramelessWindowHint;
+        m_contextMenu->setWindowFlags(flags);
+    }
     // 必须初始化父窗口，否则当主题切换之后再设置父窗口的时候palette会更改为主题切换前的palette
     if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey)) {
         w->setParent(PopupWindow.data());
@@ -83,7 +93,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemTrayItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemTrayItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
+    connect(m_contextMenu, &QMenu::triggered, this, &SystemTrayItem::menuActionClicked);
 
     if (m_gsettings)
         connect(m_gsettings, &QGSettings::changed, this, &SystemTrayItem::onGSettingsChanged);
@@ -93,6 +103,7 @@ SystemTrayItem::SystemTrayItem(PluginsItemInterface *const pluginInter, const QS
 
 SystemTrayItem::~SystemTrayItem()
 {
+    m_contextMenu->deleteLater();
     if (m_popupShown)
         popupWindowAccept();
 }
@@ -435,7 +446,7 @@ void SystemTrayItem::showContextMenu()
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -445,13 +456,13 @@ void SystemTrayItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu->exec(QCursor::pos());
 
     onContextMenuAccepted();
 }
