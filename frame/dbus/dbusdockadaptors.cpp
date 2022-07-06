@@ -213,5 +213,9 @@ bool DBusDockAdaptors::isPluginValid(const QString &name)
     if (name == "deepin-screen-recorder-plugin")
         return false;
 
+    // 远程助手只有在启动时才会加载在任务栏，不需要在控制中心加载
+    if (name == "uos-remote-assistance")
+        return false;
+
     return true;
 }
