@@ -39,6 +39,8 @@ DWIDGET_USE_NAMESPACE
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
     , m_24HourFormat(false)
+    , m_longDateFormatType(0)
+    , m_weekdayFormatType(0)
     , m_timeOffset(false)
     , m_timedateInter(new Timedate("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", QDBusConnection::sessionBus(), this))
     , m_shortDateFormat("yyyy-MM-dd")
@@ -47,9 +49,14 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setShortDateFormat(m_timedateInter->shortDateFormat());
     setShortTimeFormat(m_timedateInter->shortTimeFormat());
+    setWeekdayFormat(m_timedateInter->weekdayFormat());
+    setLongDateFormat(m_timedateInter->longDateFormat());
+    updateDateTimeString();
 
     connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DatetimeWidget::setShortDateFormat);
     connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DatetimeWidget::setShortTimeFormat);
+    connect(m_timedateInter, &Timedate::LongDateFormatChanged, this, &DatetimeWidget::setLongDateFormat);
+    connect(m_timedateInter, &Timedate::WeekdayFormatChanged, this, &DatetimeWidget::setWeekdayFormat);
     //连接日期时间修改信号,更新日期时间插件的布局
     connect(m_timedateInter, &Timedate::TimeUpdate, this, [ = ]{
         if (isVisible()) {
@@ -112,6 +119,126 @@ void DatetimeWidget::setShortTimeFormat(int type)
 
     if (isVisible()) {
         emit requestUpdateGeometry();
+    }
+}
+
+/**
+ * @brief DatetimeWidget::setLongDateFormat 根据类型设置长时间显示格式
+ * @param type 自定义类型
+ */
+void DatetimeWidget::setLongDateFormat(int type)
+{
+    if (m_longDateFormatType == type)
+        return;
+
+    m_longDateFormatType = type;
+    updateDateTimeString();
+}
+
+/**
+ * @brief DatetimeWidget::setWeekdayFormat 根据类型设置周显示格式
+ * @param type 自定义类型
+ */
+void DatetimeWidget::setWeekdayFormat(int type)
+{
+    if (m_weekdayFormatType == type)
+        return;
+
+    m_weekdayFormatType = type;
+    updateWeekdayFormat();
+    updateDateTimeString();
+}
+
+/**
+ * @brief DatetimeWidget::updateWeekdayFormat 更新周的显示格式
+ */
+void DatetimeWidget::updateWeekdayFormat()
+{
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+    auto dayOfWeek = currentDateTime.date().dayOfWeek();
+
+    if (0 == m_weekdayFormatType) {
+        switch (dayOfWeek) {
+        case 1:
+            m_weekFormat = tr("Monday"); //星期一
+            break;
+        case 2:
+            m_weekFormat = tr("Tuesday"); //星期二
+            break;
+        case 3:
+            m_weekFormat = tr("Wednesday"); //星期三
+            break;
+        case 4:
+            m_weekFormat = tr("Thursday"); //星期四
+            break;
+        case 5:
+            m_weekFormat = tr("Friday"); //星期五
+            break;
+        case 6:
+            m_weekFormat = tr("Saturday"); //星期六
+            break;
+        case 7:
+            m_weekFormat = tr("Sunday"); //星期天
+            break;
+        default:
+            m_weekFormat = tr("Monday"); //星期一
+            break;
+        }
+    } else {
+        switch (dayOfWeek) {
+        case 1:
+            m_weekFormat = tr("monday"); //周一
+            break;
+        case 2:
+            m_weekFormat = tr("tuesday"); //周二
+            break;
+        case 3:
+            m_weekFormat = tr("wednesday"); //周三
+            break;
+        case 4:
+            m_weekFormat = tr("thursday"); //周四
+            break;
+        case 5:
+            m_weekFormat = tr("friday"); //周五
+            break;
+        case 6:
+            m_weekFormat = tr("saturday"); //周六
+            break;
+        case 7:
+            m_weekFormat = tr("sunday"); //周天
+            break;
+        default:
+            m_weekFormat = tr("monday"); //周一
+            break;
+        }
+    }
+}
+
+/**
+ * @brief DatetimeWidget::updateWeekdayTimeString 更新任务栏时间标签的显示
+ */
+void DatetimeWidget::updateDateTimeString()
+{
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+    int year = currentDateTime.date().year();
+    int month = currentDateTime.date().month();
+    int day = currentDateTime.date().day();
+
+    QString longTimeFormat = QString(tr("%1year%2month%3day")).arg(year).arg(month).arg(day);
+
+    switch (m_longDateFormatType) {
+    case 0 :
+        m_dateTime = longTimeFormat;
+        break;
+    case 1:
+        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat;
+        break;
+    case 2:
+        m_dateTime = m_weekFormat + QString(" ") + longTimeFormat;
+        break;
+    default:
+        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat;
+        break;
     }
 }
 

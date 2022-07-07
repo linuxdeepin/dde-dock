@@ -33,10 +33,11 @@ class DatetimeWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DatetimeWidget(QWidget *parent = 0);
+    explicit DatetimeWidget(QWidget *parent = nullptr);
 
-    bool is24HourFormat() const { return m_24HourFormat; }
     QSize sizeHint() const;
+    inline bool is24HourFormat() const { return m_24HourFormat; }
+    inline QString getDateTime() { return m_dateTime; }
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -51,18 +52,26 @@ public slots:
 private Q_SLOTS:
     void setShortDateFormat(int type);
     void setShortTimeFormat(int type);
+    void setLongDateFormat(int type);
+    void setWeekdayFormat(int type);
 
 private:
     QSize curTimeSize() const;
+    void updateDateTimeString();
+    void updateWeekdayFormat();
 
 private:
     bool m_24HourFormat;
+    int m_longDateFormatType;
+    int m_weekdayFormatType;
     mutable QFont m_timeFont;
     mutable QFont m_dateFont;
     mutable int m_timeOffset;
     Timedate *m_timedateInter;
     QString m_shortDateFormat;
     QString m_shortTimeFormat;
+    QString m_dateTime;
+    QString m_weekFormat;
 };
 
 #endif // DATETIMEWIDGET_H
