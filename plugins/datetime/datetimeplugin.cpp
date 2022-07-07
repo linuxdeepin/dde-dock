@@ -220,11 +220,21 @@ void DatetimePlugin::pluginSettingsChanged()
 void DatetimePlugin::updateCurrentTimeString()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
+    auto lang = QLocale::system().language();
+    bool isZhLocale = lang == QLocale::Chinese || lang == QLocale::Tibetan || lang == QLocale::Uighur;
 
-    if (m_centralWidget->is24HourFormat())
-        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
-    else
-        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
+    // 如果系统语言环境为中文(包含藏语和维语），按照中文的显示格式去显示，否则按照当地的日期格式显示
+    if (m_centralWidget->is24HourFormat()) {
+        if (isZhLocale)
+            m_dateTipsLabel->setText(m_centralWidget->getDateTime() + currentDateTime.toString(" hh:mm:ss"));
+        else
+            m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
+    } else {
+        if (isZhLocale)
+            m_dateTipsLabel->setText(m_centralWidget->getDateTime() + currentDateTime.toString(" hh:mm:ss A"));
+        else
+            m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss A"));
+    }
 
     const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
