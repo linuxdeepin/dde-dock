@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Понеділок</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Вівторок</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Середа</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Четвер</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>П&apos;ятниця</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Субота</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Неділя</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>Понеділок</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation>вівторок</translation>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation>середа</translation>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation>четвер</translation>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation>п&apos;ятниця</translation>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation>субота</translation>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>неділя</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation>%1рік%2місяць%3день</translation>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Розмір</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Кілька дисплеїв</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Область додатків</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Режим</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Розташування</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Стан</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Панель</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Розташування</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Стан</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Розмір</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Показувати панель</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Область додатків</translation>
     </message>
 </context>
 <context>

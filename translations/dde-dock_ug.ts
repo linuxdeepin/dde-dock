@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>دۈشەنبە</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>سەيشەنبە</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>چارشەنبە</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>پەيشەنبە</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>جۈمە</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>شەنبە</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>يەكشەنبە</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>دۈشەنبە</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>چوڭلۇقى</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>كۆپ ئېكرانلىق كۆرسىتىش تەڭشىكى</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>قىستۇرما رايونى</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>ھالىتى</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>ئورنى</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>ھالىتى </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>ۋەزىپە ئىستونى</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>ھالىتى</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>ئورنى</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>ھالىتى </translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>چوڭلۇقى</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>ۋەزىپە ئىستونىنىڭ ئورنى</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>قىستۇرما رايونى</translation>
     </message>
 </context>
 <context>

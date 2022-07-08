@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>E hënë</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>E martë</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>E mërkurë</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>E enjte</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>E premte</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>E shtunë</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>E diel</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>e hënë</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>e diel</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Madhësi</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Shumë Ekrane</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Zonë Shtojcash</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Mënyrë</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Vendndodhje</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Gjendje</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Panel</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mënyrë</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Vendndodhje</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Gjendje</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Madhësi</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Shfaqe Panelin</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Zonë Shtojcash</translation>
     </message>
 </context>
 <context>
