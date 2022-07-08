@@ -75,6 +75,8 @@ public:
     QString itemKey() const;
     QSize suitableSize() const;
 
+    inline ItemType itemType() const override { return DockItem::StretchPlugin; }
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;

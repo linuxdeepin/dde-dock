@@ -56,6 +56,9 @@ public:
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName() override;
+    void requestDock();
+    bool isDocked() const;
+    qint64 appOpenMSecs() const;
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -64,6 +67,7 @@ signals:
     void dragReady(QWidget *dragWidget);
 
     void requestUpdateEntryGeometries() const;
+    void isDockChanged(bool) const;
 
 private:
     void moveEvent(QMoveEvent *e) override;
@@ -139,6 +143,7 @@ private:
     QDate m_curDate;                    // 保存当前icon的日期来判断是否需要更新日历APP的ICON
 
     DGuiApplicationHelper::ColorType m_themeType;
+    qint64 m_createMSecs;
 
     static QPoint MousePressPos;
 };

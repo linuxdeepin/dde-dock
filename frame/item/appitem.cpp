@@ -69,6 +69,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
+    , m_createMSecs(QDateTime::currentMSecsSinceEpoch())
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -94,6 +95,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
+    connect(m_itemEntryInter, &DockEntryInter::IsDockedChanged, this, &AppItem::isDockChanged);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
@@ -183,6 +185,21 @@ void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry
 QString AppItem::accessibleName()
 {
     return m_itemEntryInter->name();
+}
+
+void AppItem::requestDock()
+{
+    m_itemEntryInter->RequestDock();
+}
+
+bool AppItem::isDocked() const
+{
+    return m_itemEntryInter->isDocked();
+}
+
+qint64 AppItem::appOpenMSecs() const
+{
+    return m_createMSecs;
 }
 
 void AppItem::moveEvent(QMoveEvent *e)
@@ -564,6 +581,10 @@ QPoint AppItem::appIconPosition() const
 
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
+    // 如果是打开第一个窗口，则更新窗口时间
+    if (m_windowInfos.isEmpty() && !info.isEmpty())
+        m_createMSecs = QDateTime::currentMSecsSinceEpoch();
+
     m_windowInfos = info;
     if (m_appPreviewTips)
         m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());

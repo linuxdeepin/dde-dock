@@ -40,10 +40,12 @@ class AppDragWidget;
 class DesktopWidget;
 class TrayManagerWindow;
 class DockScreen;
+class RecentAppHelper;
 
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit MainPanelControl(QWidget *parent = nullptr);
 
@@ -77,7 +79,6 @@ private:
 
     void addFixedAreaItem(int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
-    void addAppAreaItem(int index, QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
     void addTrayAreaItem(int index, QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
@@ -95,9 +96,11 @@ private:
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
     void resetRadius();
+    void dockRecentApp(DockItem *dockItem);
 
 private Q_SLOTS:
     void onRequestUpdate();
+    void onRecentVisibleChanged(bool visible);
 
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
@@ -114,31 +117,35 @@ private:
     QBoxLayout *m_mainPanelLayout;
 
     QWidget *m_fixedAreaWidget;     // 固定区域
-    QBoxLayout *m_fixedAreaLayout;  //
+    QBoxLayout *m_fixedAreaLayout;  // 固定区域布局
     QLabel *m_fixedSpliter;         // 固定区域与应用区域间的分割线
     QWidget *m_appAreaWidget;       // 应用区域
     QWidget *m_appAreaSonWidget;    // 子应用区域，所在位置根据显示模式手动指定
-    QBoxLayout *m_appAreaSonLayout; //
+    QBoxLayout *m_appAreaSonLayout; // 子应用区域布局
     QLabel *m_appSpliter;           // 应用区域与托盘区域间的分割线
     QWidget *m_trayAreaWidget;      // 托盘区域
-    QBoxLayout *m_trayAreaLayout;   //
+    QBoxLayout *m_trayAreaLayout;   // 托盘区域布局
     QLabel *m_traySpliter;          // 托盘区域与插件区域间的分割线
     QWidget *m_pluginAreaWidget;    // 插件区域
+    QWidget *m_recentAreaWidget;    // 最近打开应用
+    QBoxLayout *m_recentLayout;
+
     TrayManagerWindow *m_trayManagerWidget;
-    QBoxLayout *m_pluginLayout;     //
+    QBoxLayout *m_pluginLayout;     // 插件区域布局
     DesktopWidget *m_desktopWidget; // 桌面预览区域
 
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
     QString m_draggingMimeKey;
     AppDragWidget *m_appDragWidget;
-    DisplayMode m_dislayMode;
+    DisplayMode m_displayMode;
     QPoint m_mousePressPos;
     TrayPluginItem *m_tray;
-    int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
+    int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
     PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
     DockScreen *m_dockScreen;
+    RecentAppHelper *m_recentHelper;
 };
 
 #endif // MAINPANELCONTROL_H

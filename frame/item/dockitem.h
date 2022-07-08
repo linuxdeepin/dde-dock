@@ -41,13 +41,14 @@ class DockItem : public QWidget
 
 public:
     enum ItemType {
-        Launcher,
-        App,
-        Plugins,
-        FixedPlugin,
+        Launcher,               // 启动器
+        App,                    // 任务栏区域的应用
+        Plugins,                // 插件区域图标
+        FixedPlugin,            // 固定区域图标，例如多任务试图
         Placeholder,
-        TrayPlugin,
-        QuickSettingPlugin
+        TrayPlugin,             // 托盘插件
+        QuickSettingPlugin,     // 快捷设置区域插件
+        StretchPlugin           // 时尚模式下的固定在最右侧的插件，例如开关机插件
     };
 
 public:
@@ -57,7 +58,7 @@ public:
     static void setDockPosition(const Position side);
     static void setDockDisplayMode(const DisplayMode mode);
 
-    inline virtual ItemType itemType() const {return App;}
+    inline virtual ItemType itemType() const = 0;
 
     QSize sizeHint() const override;
     virtual QString accessibleName();
