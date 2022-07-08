@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Flugzeugmodus aktiviert</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Flugzeugmodus deaktiviert</translation>
     </message>
 </context>
 <context>
@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Montag</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Dienstag</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Mittwoch</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Donnerstag</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Freitag</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Samstag</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Sonntag</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>Montag</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -185,7 +248,7 @@
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Das Dock befindet sich im abgesicherten Modus, bitte beenden, um es richtig anzuzeigen</translation>
     </message>
 </context>
 <context>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Größe</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Mehrfachbildschirm</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Pluginbereich</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Modus</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Standort</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Status</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -334,7 +409,7 @@
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
-        <translation>Multitask-Ansicht</translation>
+        <translation>Multitasking-Ansicht</translation>
     </message>
     <message>
         <source>Undock</source>
@@ -356,7 +431,7 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation>Energie</translation>
+        <translation>Ausschalten / Abmelden</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -392,7 +467,7 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Kapazität %1, voll aufgeladen</translation>
+        <translation>Kapazität %1, vollständig geladen</translation>
     </message>
 </context>
 <context>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Dock</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Modus</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Standort</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Größe</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Dock anzeigen</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Pluginbereich</translation>
     </message>
 </context>
 <context>
@@ -502,7 +600,7 @@
     </message>
     <message>
         <source>Move to Trash</source>
-        <translation>In den Mull verschieben</translation>
+        <translation>In den Papierkorb verschieben</translation>
     </message>
 </context>
 <context>

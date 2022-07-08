@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>གཟའ་ཟླ་བ།</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>གཟའ་མིག་དམར།</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>གཟའ་ལྷག་པ།</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>གཟའ་ཕུར་བུ།</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>གཟའ་པ་སངས།</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>གཟའ་སྤེན་པ།</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>གཟའ་ཉི་མ།</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>གཟའ་ཟླ་བ། </translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>གཟའ་ཉི་མ།</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>ཆེ་ཆུང་།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>བརྙན་མང་མངོན་སྟོན་སྒྲིག་འགོད།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>ལྷུ་ལག་ཁུལ་ཁོངས།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>དཔེ་རྣམ།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>གནས་ས།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>རྣམ་པ།</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>ལས་འགན་ཚན་བྱང་།</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>དཔེ་རྣམ།</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>གནས་ས།</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>རྣམ་པ།</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>ཆེ་ཆུང་།</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>ལས་འགན་ཚན་བྱང་གི་གནས་ས།</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>ལྷུ་ལག་ཁུལ་ཁོངས།</translation>
     </message>
 </context>
 <context>

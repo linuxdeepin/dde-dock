@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Mode avion activé</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Mode avion désactivé</translation>
     </message>
 </context>
 <context>
@@ -119,6 +119,69 @@
     <message>
         <source>Time settings</source>
         <translation>Réglages de l&apos;heure</translation>
+    </message>
+</context>
+<context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Lundi</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Mardi</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Mercredi</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Jeudi</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Vendredi</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Samedi</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Dimanche</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>lundi</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -240,7 +303,7 @@
     </message>
     <message>
         <source>Dock settings</source>
-        <translation type="unfinished"/>
+        <translation>Paramètres du dock</translation>
     </message>
 </context>
 <context>
@@ -248,18 +311,24 @@
     <message>
         <source>Size</source>
         <translation>Taille</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Affichages multiples</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
-        <translation type="unfinished"/>
+        <translation>Zone de plugins</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
+        <translation>Sélectionner les icônes qui apparaissent dans le dock</translation>
     </message>
     <message>
         <source>Fashion mode</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Mode</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,10 +363,12 @@
     <message>
         <source>Location</source>
         <translation>Emplacement</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
-        <translation type="unfinished"/>
+        <translation>Garder affiché</translation>
     </message>
     <message>
         <source>Keep hidden</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Statut</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -319,7 +394,7 @@
     </message>
     <message>
         <source>Show Dock</source>
-        <translation type="unfinished"/>
+        <translation>Afficher le dock</translation>
     </message>
     <message>
         <source>On screen where the cursor is</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Dock</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Emplacement</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Statut</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Afficher le dock</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Zone de plugins</translation>
     </message>
 </context>
 <context>

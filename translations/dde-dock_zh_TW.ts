@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>星期一</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>星期二</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>星期三</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>星期四</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>星期五</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>星期六</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>星期日</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>週一</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation>週二</translation>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation>週三</translation>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation>週四</translation>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation>週五</translation>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation>週六</translation>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>週日</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation>%1年%2月%3日</translation>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>大小</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>多屏顯示設定</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>外掛程式區域</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>模式</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>位置</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>狀態</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>任務欄</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>模式</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>位置</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>狀態</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>任務欄位置</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>外掛程式區域</translation>
     </message>
 </context>
 <context>

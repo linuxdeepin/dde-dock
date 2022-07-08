@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Mode d&apos;avió activat</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Mode d&apos;avió desactivat</translation>
     </message>
 </context>
 <context>
@@ -119,6 +119,69 @@
     <message>
         <source>Time settings</source>
         <translation>Configuració de l&apos;hora</translation>
+    </message>
+</context>
+<context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Dilluns</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Dimarts</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Dimecres</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Dijous</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Divendres</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Dissabte</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Diumenge</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>dilluns</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Mida</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Pantalles múltiples</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Àrea de connectors</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Mode</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Ubicació</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Estat</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Acoblador</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Ubicació</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Estat</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Mida</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Mostra l&apos;acoblador</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Àrea de connectors</translation>
     </message>
 </context>
 <context>

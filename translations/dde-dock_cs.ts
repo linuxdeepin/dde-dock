@@ -122,6 +122,69 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>pondělí</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>úterý</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>středa</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>čtvrtek</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>pátek</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>sobota</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>neděle</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>pondělí</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>neděle</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Velikost </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Více displejů </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Oblast pluginu </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Režim </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Umístění </translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Stav</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Panel</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Režim</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Umístění</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Stav</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Velikost</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Zobrazit panel</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Oblast zásuvného modulu</translation>
     </message>
 </context>
 <context>
@@ -464,7 +562,7 @@
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Storno ztlumení</translation>
+        <translation>Zrušit ztlumení</translation>
     </message>
     <message>
         <source>Mute</source>

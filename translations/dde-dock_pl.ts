@@ -122,10 +122,73 @@
     </message>
 </context>
 <context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Poniedziałek</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Wtorek</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Środa</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Czwartek</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Piątek</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Sobota</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Niedziela</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>poniedziałek</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>niedziela</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Czy na pewno chcesz trwale usunąć %1 przedmiotów?</translation>
+        <translation>Czy na pewno chcesz usunąć permanentnie %1 przedmiotów?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -170,7 +233,7 @@
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Launcher</translation>
+        <translation>Program wywołujący</translation>
     </message>
 </context>
 <context>
@@ -185,7 +248,7 @@
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Dok jest w trybie bezpiecznym, wyjdź z niego aby wyświetlić go poprawnie</translation>
+        <translation>Dok jest w trybie bezpiecznym, wyjdź z niego, aby wyświetlić go poprawnie</translation>
     </message>
 </context>
 <context>
@@ -208,11 +271,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>Do lewej</translation>
+        <translation>Lewo</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Do prawej</translation>
+        <translation>Prawo</translation>
     </message>
     <message>
         <source>Keep Shown</source>
@@ -236,11 +299,11 @@
     </message>
     <message>
         <source>Status</source>
-        <translation>Stan</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>Dock settings</source>
-        <translation>Ustawienia doka</translation>
+        <translation>Ustawienia doku</translation>
     </message>
 </context>
 <context>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Rozmiar</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Wiele ekranów</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation>Strefa wtyczek</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Tryb</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Położenie</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Status</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation>Dok</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Tryb</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Położenie</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Rozmiar</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation>Pokaż dok</translation>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation>Strefa wtyczek</translation>
     </message>
 </context>
 <context>
