@@ -226,6 +226,9 @@ void DatetimeWidget::updateDateTimeString()
 
     QString longTimeFormat = QString(tr("%1year%2month%3day")).arg(year).arg(month).arg(day);
 
+    // 实时更新周的日期显示
+    updateWeekdayFormat();
+
     switch (m_longDateFormatType) {
     case 0 :
         m_dateTime = longTimeFormat;
