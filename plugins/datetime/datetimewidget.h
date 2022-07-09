@@ -48,6 +48,7 @@ signals:
 
 public slots:
     void set24HourFormat(const bool value);
+    void updateDateTimeString();
 
 private Q_SLOTS:
     void setShortDateFormat(int type);
@@ -57,7 +58,6 @@ private Q_SLOTS:
 
 private:
     QSize curTimeSize() const;
-    void updateDateTimeString();
     void updateWeekdayFormat();
 
 private:
