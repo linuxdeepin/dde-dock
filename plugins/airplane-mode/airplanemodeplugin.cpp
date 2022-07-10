@@ -50,7 +50,32 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
     if (!pluginIsDisable())
         m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
 
-    refreshAirplaneEnableState();
+    bool hasBluetooth = false;
+    QDBusInterface inter("com.deepin.daemon.Bluetooth",
+                    "/com/deepin/daemon/Bluetooth",
+                    "com.deepin.daemon.Bluetooth",
+                    QDBusConnection::sessionBus());
+    if (inter.isValid()) {
+        QDBusReply<QString> reply = inter.call("GetAdapters");
+        QString replyStr = reply.value();
+        replyStr = replyStr.replace("[", "");
+        replyStr = replyStr.replace("]", "");
+        if (!replyStr.isEmpty()) {
+            hasBluetooth = true;
+        }
+    }
+
+    bool hasWireless = false;
+    NetworkInter networkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
+    if (networkInter.isValid()) {
+        if (!networkInter.wirelessAccessPoints().isEmpty()) {
+            hasWireless = true;
+        }
+    }
+    // 蓝牙和无线网络,只要有其中一个就允许显示飞行模式
+    if (hasBluetooth || hasWireless) {
+        refreshAirplaneEnableState();
+    }
 }
 
 void AirplaneModePlugin::pluginStateSwitched()
