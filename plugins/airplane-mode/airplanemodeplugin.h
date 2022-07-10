@@ -24,6 +24,9 @@
 #define AIRPLANEMODEPLUGIN_H
 
 #include "pluginsiteminterface.h"
+#include "com_deepin_daemon_network.h"
+
+using NetworkInter = com::deepin::daemon::Network;
 
 class AirplaneModeItem;
 class AirplaneModePlugin : public QObject, PluginsItemInterface
