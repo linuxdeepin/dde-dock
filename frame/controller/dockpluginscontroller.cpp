@@ -60,18 +60,17 @@ void DockPluginsController::itemAdded(PluginsItemInterface *const itemInter, con
         return;
 
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
-    const QString &pluginApi = meta.value("api").toString();
 
     PluginsItem *item = nullptr;
     if (itemInter->pluginName() == "tray") {
-        item = new TrayPluginItem(itemInter, itemKey, pluginApi);
+        item = new TrayPluginItem(itemInter, itemKey, meta);
         if (item->graphicsEffect()) {
             item->graphicsEffect()->setEnabled(false);
         }
         connect(static_cast<TrayPluginItem *>(item), &TrayPluginItem::trayVisableCountChanged,
                 this, &DockPluginsController::trayVisableCountChanged, Qt::UniqueConnection);
     } else {
-        item = new PluginsItem(itemInter, itemKey, pluginApi);
+        item = new PluginsItem(itemInter, itemKey, meta);
     }
 
     mPluginsMap[itemInter][itemKey] = item;

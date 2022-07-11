@@ -35,6 +35,7 @@
 #include "multiscreenworker.h"
 #include "displaymanager.h"
 #include "recentapphelper.h"
+#include "toolapphelper.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -87,6 +88,9 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_pluginAreaWidget(new QWidget(this))
     , m_recentAreaWidget(new QWidget(this))
     , m_recentLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
+    , m_recentSpliter(new QLabel(this))
+    , m_toolAreaWidget(new QWidget(this))
+    , m_toolLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_toolAreaWidget))
     , m_trayManagerWidget(new TrayManagerWindow(this))
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_desktopWidget(new DesktopWidget(this))
@@ -95,9 +99,9 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_appDragWidget(nullptr)
     , m_displayMode(Efficient)
     , m_tray(nullptr)
-    , m_trashItem(nullptr)
     , m_dockScreen(nullptr)
     , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, this))
+    , m_toolHelper(new ToolAppHelper(m_pluginAreaWidget, m_toolAreaWidget, this))
 {
     initUI();
     initConnection();
@@ -116,6 +120,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     m_fixedSpliter->setFixedSize(0, 0);
     m_appSpliter ->setFixedSize(0, 0);
     m_traySpliter->setFixedSize(0, 0);
+    m_recentSpliter->setFixedSize(0, 0);
 }
 
 void MainPanelControl::initUI()
@@ -149,6 +154,17 @@ void MainPanelControl::initUI()
     m_recentLayout->setContentsMargins(0, 0, 0, 0);
     m_mainPanelLayout->addWidget(m_recentAreaWidget);
 
+    m_recentSpliter->setObjectName("spliter_recent");
+    m_mainPanelLayout->addWidget(m_recentSpliter);
+
+    /* 工具应用 */
+    m_toolAreaWidget->setObjectName("toolarea");
+    m_toolAreaWidget->setAccessibleName("toolarea");
+    m_toolAreaWidget->setLayout(m_toolLayout);
+    m_toolLayout->setSpacing(0);
+    m_toolLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainPanelLayout->addWidget(m_toolAreaWidget);
+
     /* 托盘区域 */
     m_trayAreaWidget->setObjectName("trayarea");
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
@@ -179,6 +195,7 @@ void MainPanelControl::initUI()
     m_mainPanelLayout->setAlignment(m_fixedSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_appSpliter, Qt::AlignCenter);
     m_mainPanelLayout->setAlignment(m_traySpliter, Qt::AlignCenter);
+    m_mainPanelLayout->setAlignment(m_recentSpliter, Qt::AlignCenter);
 }
 
 void MainPanelControl::initConnection()
@@ -186,6 +203,8 @@ void MainPanelControl::initConnection()
     connect(m_trayManagerWidget, &TrayManagerWindow::requestUpdate, this, &MainPanelControl::onRequestUpdate);
     connect(m_recentHelper, &RecentAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_recentHelper, &RecentAppHelper::recentVisibleChanged, this, &MainPanelControl::onRecentVisibleChanged);
+    connect(m_toolHelper, &ToolAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
+    connect(m_toolHelper, &ToolAppHelper::toolVisibleChanged, this, &MainPanelControl::onToolVisibleChanged);
 }
 
 /**
@@ -199,6 +218,7 @@ void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
 
     m_displayMode = dislayMode;
     m_recentHelper->setDisplayMode(dislayMode);
+    m_toolHelper->setDisplayMode(dislayMode);
     updateDisplayMode();
 }
 
@@ -278,25 +298,6 @@ void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
         m_tray->installEventFilter(this);
 }
 
-/**往插件区域添加应用，保存回收站插件指针对象
- * @brief MainPanelControl::addPluginAreaItem
- * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
- * @param wdg　应用指针对象
- */
-void MainPanelControl::addPluginAreaItem(int index, QWidget *wdg)
-{
-    //因为日期时间插件和其他插件的大小有异，为了方便设置边距，在插件区域布局再添加一层布局设置边距
-    //因此在处理插件图标时，需要通过两层布局判断是否为需要的插件，例如拖动插件位置等判断
-    QBoxLayout * boxLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
-    boxLayout->addWidget(wdg, 0, Qt::AlignCenter);
-    m_pluginLayout->insertLayout(index, boxLayout, 0);
-
-    // 保存垃圾箱插件指针
-    PluginsItem *pluginsItem = qobject_cast<PluginsItem *>(wdg);
-    if (pluginsItem && pluginsItem->pluginName() == "trash")
-        m_trashItem = pluginsItem;
-}
-
 /**移除固定区域某一应用
  * @brief MainPanelControl::removeFixedAreaItem
  * @param wdg 应用指针对象
@@ -324,31 +325,6 @@ void MainPanelControl::removeAppAreaItem(QWidget *wdg)
 void MainPanelControl::removeTrayAreaItem(QWidget *wdg)
 {
     m_trayAreaLayout->removeWidget(wdg);
-}
-
-/**移除插件区域某一应用
- * @brief MainPanelControl::removePluginAreaItem
- * @param wdg 应用指针对象
- */
-void MainPanelControl::removePluginAreaItem(QWidget *wdg)
-{
-    // 因为日期时间插件大小和其他插件有异，为了方便设置边距，各插件中增加一层布局
-    // 因此remove插件图标时，需要从多的一层布局中取widget进行判断是否需要移除的插件
-    // 清空保存的垃圾箱插件指针
-    PluginsItem *pluginsItem = qobject_cast<PluginsItem *>(wdg);
-    if (pluginsItem && pluginsItem->pluginName() == "trash")
-        m_trashItem = nullptr;
-
-    for (int i = 0; i < m_pluginLayout->count(); ++i) {
-        QLayoutItem *layoutItem = m_pluginLayout->itemAt(i);
-        QLayout *boxLayout = layoutItem->layout();
-        if (boxLayout && boxLayout->itemAt(0)->widget() == wdg) {
-            boxLayout->removeWidget(wdg);
-            m_pluginLayout->removeItem(layoutItem);
-            delete layoutItem;
-            layoutItem = nullptr;
-        }
-    }
 }
 
 void MainPanelControl::resizeEvent(QResizeEvent *event)
@@ -399,10 +375,12 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         m_appAreaSonWidget->setMaximumHeight(height());
         m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->width());
         m_recentAreaWidget->setFixedHeight(height());
+        m_toolAreaWidget->setFixedHeight(height());
     } else {
         m_appAreaSonWidget->setMaximumWidth(width());
         m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->height());
         m_recentAreaWidget->setFixedWidth(width());
+        m_toolAreaWidget->setFixedWidth(width());
     }
 
     m_appAreaSonWidget->adjustSize();
@@ -452,7 +430,8 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         addTrayAreaItem(index, item);
         break;
     case DockItem::Plugins:
-        addPluginAreaItem(index, item);
+        //addPluginAreaItem(index, item);
+        m_toolHelper->addPluginItem(index, item);
         break;
     default: break;
     }
@@ -484,7 +463,7 @@ void MainPanelControl::removeItem(DockItem *item)
         removeTrayAreaItem(item);
         break;
     case DockItem::Plugins:
-        removePluginAreaItem(item);
+        m_toolHelper->removePluginItem(item);
         break;
     default: break;
     }
@@ -863,8 +842,10 @@ void MainPanelControl::startDrag(DockItem *dockItem)
     // isNeedBack 保存是否需要重置垃圾箱的AcceptDrops
     // 设置垃圾箱插件AcceptDrops false
     bool isNeedBack = false;
-    if (item->itemType() == DockItem::Plugins && m_trashItem && dockItem != m_trashItem) {
-        m_trashItem->centralWidget()->setAcceptDrops(false);
+    PluginsItem *trashItem = m_toolHelper->trashPlugin();
+
+    if (item->itemType() == DockItem::Plugins && trashItem && dockItem != trashItem) {
+        trashItem->centralWidget()->setAcceptDrops(false);
         isNeedBack = true;
     }
 
@@ -878,7 +859,7 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
         // isNeedBack是否需要设置垃圾箱插件AcceptDrops true
         if (isNeedBack)
-            m_trashItem->centralWidget()->setAcceptDrops(true);
+            trashItem->centralWidget()->setAcceptDrops(true);
     }
 }
 
@@ -955,6 +936,8 @@ void MainPanelControl::updateModeChange()
     m_traySpliter->setVisible(m_displayMode == DisplayMode::Efficient);
     m_pluginAreaWidget->setVisible(m_displayMode == DisplayMode::Efficient);
     m_trayManagerWidget->setVisible(m_displayMode != DisplayMode::Efficient);
+    onRecentVisibleChanged(m_recentHelper->recentIsVisible());
+    onToolVisibleChanged(m_toolHelper->toolIsVisible());
     if (m_tray)
         m_tray->setVisible(m_displayMode == DisplayMode::Efficient);
 }
@@ -1038,6 +1021,9 @@ QPainterPath MainPanelControl::areaPath()
         if (m_recentLayout->count() > 0)
             leftWidth += m_recentAreaWidget->width();
 
+        if (m_toolLayout->count() > 0)
+            leftWidth += m_toolAreaWidget->width();
+
         int roundHeight = height();
         path.addRoundedRect(QRect(0, 0, leftWidth, roundHeight), radius, radius);
         path.addRoundedRect(QRect(m_trayManagerWidget->x(), 0, m_trayManagerWidget->width(), roundHeight), radius, radius);
@@ -1046,6 +1032,9 @@ QPainterPath MainPanelControl::areaPath()
         int topHeight = m_fixedAreaWidget->height() + m_fixedSpliter->height() + m_appAreaWidget->height();
         if (m_recentLayout->count() > 0)
             topHeight += m_recentAreaWidget->height();
+
+        if (m_toolLayout->count() > 0)
+            topHeight += m_toolAreaWidget->height();
 
         path.addRoundedRect(QRect(0, 0, roundWidth, topHeight), radius, radius);
         path.addRoundedRect(QRect(0, m_trayManagerWidget->y(), roundWidth, m_trayManagerWidget->height()), radius, radius);
@@ -1077,7 +1066,7 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
     // 减去右侧托盘和快捷设置还有插件区域的尺寸
     totalLength -= (((m_position == Position::Top || m_position == Position::Bottom) ? traySuitableSize.width() : traySuitableSize.height()) / ratio);
     // 需要参与计算的图标的总数
-    int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count();
+    int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count() + m_toolLayout->count();
     if (iconCount <= 0) {
         if (m_position == Position::Top || m_position == Position::Bottom)
             return QSize((static_cast<int>((traySuitableSize.width() + 20) / ratio)), height());
@@ -1091,7 +1080,14 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
 
     if (m_position == Position::Top || m_position == Position::Bottom) {
         iconSize = qMin(iconSize, height());
-        int panelWidth = qMin(iconSize * iconCount + static_cast<int>((m_fixedSpliter->width() + traySuitableSize.width() + 20) / ratio),
+        int spliterWidth = m_fixedSpliter->isVisible() ? m_fixedSpliter->width() : 0;
+        if (m_appSpliter->isVisible())
+            spliterWidth += m_appSpliter->width();
+
+        if (m_recentSpliter->isVisible())
+            spliterWidth += m_recentSpliter->isVisible();
+
+        int panelWidth = qMin(iconSize * iconCount + static_cast<int>((spliterWidth + traySuitableSize.width() + 20) / ratio),
                               static_cast<int>(screenSize / deviceRatio));
 
         return QSize(panelWidth, static_cast<int>(height() / ratio));
@@ -1099,7 +1095,14 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
 
     iconSize = iconSize < width() ? iconSize : width();
 
-    int panelHeight = qMin(iconSize * iconCount + static_cast<int>((m_fixedSpliter->height() + traySuitableSize.height() + 20) / ratio),
+    int spliterHeight = m_fixedSpliter->isVisible() ? m_fixedSpliter->height() : 0;
+    if (m_appSpliter->isVisible())
+        spliterHeight += m_appSpliter->height();
+
+    if (m_recentSpliter->isVisible())
+        spliterHeight += m_recentSpliter->height();
+
+    int panelHeight = qMin(iconSize * iconCount + static_cast<int>((spliterHeight + traySuitableSize.height() + 20) / ratio),
                            static_cast<int>(screenSize / deviceRatio));
 
     return QSize(width(), panelHeight);
@@ -1133,6 +1136,9 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
 
     if (m_traySpliter->isVisible())
         painter.fillRect(m_traySpliter->geometry(), color);
+
+    if (m_recentSpliter->isVisible())
+        painter.fillRect(m_recentSpliter->geometry(), color);
 }
 
 // 获取当前屏幕的高或者宽(任务栏上下的时候获取宽，左右获取高)
@@ -1299,25 +1305,39 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
         m_fixedSpliter->setFixedSize(SPLITER_SIZE, int(w * 0.6));
         m_appSpliter->setFixedSize(SPLITER_SIZE, int(w * 0.6));
         m_traySpliter->setFixedSize(SPLITER_SIZE, int(w * 0.5));
+        m_recentSpliter->setFixedSize(SPLITER_SIZE, int(w * 0.6));
     } else {
         m_fixedSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
         m_appSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
         m_traySpliter->setFixedSize(int(h * 0.5), SPLITER_SIZE);
+        m_recentSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
     }
 
     for (int i = 0; i < m_appAreaSonLayout->count(); ++i)
         m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
 
     // 时尚模式下判断是否需要显示最近打开的应用区域
-    if (m_displayMode == Dock::DisplayMode::Fashion && m_recentLayout->count() > 0) {
-        for (int i = 0; i < m_recentLayout->count(); ++i)
-            m_recentLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+    if (m_displayMode == Dock::DisplayMode::Fashion) {
+        if (m_recentLayout->count() > 0) {
+            for (int i = 0; i < m_recentLayout->count(); ++i)
+                m_recentLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
 
-        // 时尚模式下计算最近打开应用区域的尺寸
-        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-            m_recentAreaWidget->setFixedWidth(appItemSize * m_recentLayout->count());
-        else
-            m_recentAreaWidget->setFixedHeight(appItemSize * m_recentLayout->count());
+            // 时尚模式下计算最近打开应用区域的尺寸
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+                m_recentAreaWidget->setFixedWidth(appItemSize * m_recentLayout->count());
+            else
+                m_recentAreaWidget->setFixedHeight(appItemSize * m_recentLayout->count());
+        }
+
+        if (m_toolLayout->count() > 0) {
+            for (int i = 0; i < m_toolLayout->count(); i++)
+                m_toolLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+                m_toolAreaWidget->setFixedWidth(appItemSize * m_toolLayout->count());
+            else
+                m_toolAreaWidget->setFixedHeight(appItemSize * m_toolLayout->count());
+        }
     }
 
     if (m_tray)
@@ -1329,32 +1349,34 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
         // 三方插件
         for (int i = 0; i < m_pluginLayout->count(); ++ i) {
             QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (layout && layout->itemAt(0)) {
-                PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (pItem) {
-                    if (pItem->sizeHint().height() == -1) {
-                        pItem->setFixedSize(traySize, traySize);
-                    } else if (pItem->sizeHint().height() > height()) {
-                        pItem->resize(pItem->width(), height());
-                    }
-                }
-            }
+            if (!layout || !layout->itemAt(0))
+                continue;
+
+            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+            if (!pItem)
+                continue;
+
+            if (pItem->sizeHint().height() == -1)
+                pItem->setFixedSize(traySize, traySize);
+            else if (pItem->sizeHint().height() > height())
+                pItem->resize(pItem->width(), height());
         }
     } else {
         // 三方插件
-        for (int i = 0; i < m_pluginLayout->count(); ++ i) {
+        for (int i = 0; i < m_pluginLayout->count(); i++) {
             QLayout *layout =  m_pluginLayout->itemAt(i)->layout();
-            if (layout) {
-                PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                qInfo() << pItem->pluginItem()->pluginDisplayName();
-                if (pItem) {
-                    if (pItem->sizeHint().width() == -1) {
-                        pItem->setFixedSize(traySize, traySize);
-                    } else if (pItem->sizeHint().width() > width()) {
-                        pItem->resize(width(), pItem->height());
-                    }
-                }
-            }
+            if (!layout || !layout->itemAt(0))
+                continue;
+
+            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
+            qInfo() << pItem->pluginItem()->pluginDisplayName();
+            if (!pItem)
+                continue;
+
+            if (pItem->sizeHint().width() == -1)
+                pItem->setFixedSize(traySize, traySize);
+            else if (pItem->sizeHint().width() > width())
+                pItem->resize(width(), pItem->height());
         }
     }
 
@@ -1376,8 +1398,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
     m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
     m_trayAreaLayout->setContentsMargins(trayLeftAndRightMargin, trayTopAndBottomMargin, trayLeftAndRightMargin, trayTopAndBottomMargin);
 
-    //因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
-    //而不对日期时间插件设置边距
+    // 因为日期时间插件大小和其他插件大小有异，需要单独设置各插件的边距
+    // 而不对日期时间插件设置边距
     for (int i = 0; i < m_pluginLayout->count(); ++ i) {
         QLayout *layout = m_pluginLayout->itemAt(i)->layout();
         if (layout && layout->itemAt(0)) {
@@ -1401,6 +1423,11 @@ void MainPanelControl::onRequestUpdate()
 void MainPanelControl::onRecentVisibleChanged(bool visible)
 {
     m_appSpliter->setVisible(visible);
+}
+
+void MainPanelControl::onToolVisibleChanged(bool visible)
+{
+    m_recentSpliter->setVisible(visible);
 }
 
 /**时尚模式没有‘显示桌面’区域

@@ -41,6 +41,7 @@ class DesktopWidget;
 class TrayManagerWindow;
 class DockScreen;
 class RecentAppHelper;
+class ToolAppHelper;
 
 class MainPanelControl : public QWidget
 {
@@ -82,8 +83,6 @@ private:
     void removeAppAreaItem(QWidget *wdg);
     void addTrayAreaItem(int index, QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
-    void addPluginAreaItem(int index, QWidget *wdg);
-    void removePluginAreaItem(QWidget *wdg);
     int getScreenSize() const;
 
     // 拖拽相关
@@ -101,6 +100,7 @@ private:
 private Q_SLOTS:
     void onRequestUpdate();
     void onRecentVisibleChanged(bool visible);
+    void onToolVisibleChanged(bool visible);
 
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
@@ -129,6 +129,9 @@ private:
     QWidget *m_pluginAreaWidget;    // 插件区域
     QWidget *m_recentAreaWidget;    // 最近打开应用
     QBoxLayout *m_recentLayout;
+    QLabel *m_recentSpliter;        // 最近打开应用区域分割线
+    QWidget *m_toolAreaWidget;      // 工具区域
+    QBoxLayout *m_toolLayout;       // 工具区域布局
 
     TrayManagerWindow *m_trayManagerWidget;
     QBoxLayout *m_pluginLayout;     // 插件区域布局
@@ -143,9 +146,9 @@ private:
     TrayPluginItem *m_tray;
     int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
-    PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
     DockScreen *m_dockScreen;
     RecentAppHelper *m_recentHelper;
+    ToolAppHelper *m_toolHelper;
 };
 
 #endif // MAINPANELCONTROL_H

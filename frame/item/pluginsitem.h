@@ -31,7 +31,7 @@ class PluginsItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent = nullptr);
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &jsonData, QWidget *parent = nullptr);
     ~PluginsItem() override;
 
     int itemSortKey() const;
@@ -52,6 +52,8 @@ public:
     virtual void setDraging(bool bDrag) override;
 
     PluginsItemInterface *pluginItem() const;
+
+    QJsonObject metaData() const;
 
 public slots:
     void refreshIcon() override;
@@ -78,12 +80,13 @@ private:
     void startDrag();
     void mouseClicked();
     bool checkGSettingsControl() const;
+    QString pluginApi() const;
 
 private:
     PluginsItemInterface *const m_pluginInter;
     QWidget *m_centralWidget;
 
-    const QString m_pluginApi;
+    QJsonObject m_jsonData;
     const QString m_itemKey;
     bool m_dragging;
 
