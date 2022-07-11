@@ -34,8 +34,8 @@ AirplaneModeApplet::AirplaneModeApplet(QWidget *parent)
     : QWidget(parent)
     , m_switchBtn(new DSwitchButton(this))
 {
-    setMinimumWidth(PLUGIN_ITEM_WIDTH);
-    setFixedHeight(30);
+    setMinimumWidth(PLUGIN_ITEM_WIDTH - 40);
+    setFixedHeight(40);
     QLabel *title = new QLabel(this);
     title->setText(tr("Airplane Mode"));
     QHBoxLayout *appletlayout = new QHBoxLayout(this);
