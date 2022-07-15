@@ -47,36 +47,14 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    bool hasBluetooth = false;
-    QDBusInterface inter("com.deepin.daemon.Bluetooth",
-                    "/com/deepin/daemon/Bluetooth",
-                    "com.deepin.daemon.Bluetooth",
-                    QDBusConnection::sessionBus());
-    if (inter.isValid()) {
-        QDBusReply<QString> reply = inter.call("GetAdapters");
-        QString replyStr = reply.value();
-        QJsonDocument json = QJsonDocument::fromJson(replyStr.toUtf8());
-        QJsonArray array = json.array();
-        if (array.size() > 0 && !array[0].toObject()["Path"].toString().isEmpty()) {
-            hasBluetooth = true;
-        }
-    }
 
-    bool hasWireless = false;
-    NetworkInter networkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
-    if (networkInter.isValid()) {
-        if (!networkInter.wirelessAccessPoints().isEmpty()) {
-            hasWireless = true;
-        }
-    }
     if (!pluginIsDisable()) {
-        if (hasBluetooth || hasWireless) {
+        if (supportAirplaneMode()) {
             m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
         }
     }
 
-    // 蓝牙和无线网络,只要有其中一个就允许显示飞行模式
-    if (hasBluetooth || hasWireless) {
+    if (supportAirplaneMode()) {
         refreshAirplaneEnableState();
     }
 }
@@ -174,6 +152,47 @@ void AirplaneModePlugin::onAirplaneEnableChanged(bool enable)
     else {
         m_proxyInter->saveValue(this, STATE_KEY, false);
     }
+}
+
+bool AirplaneModePlugin::supportAirplaneMode() const
+{
+    // 蓝牙和无线网络,只要有其中一个就允许显示飞行模式
+    QDBusInterface inter("com.deepin.system.Bluetooth",
+                    "/com/deepin/system/Bluetooth",
+                    "com.deepin.system.Bluetooth",
+                    QDBusConnection::systemBus());
+    if (inter.isValid()) {
+        QDBusReply<QString> reply = inter.call("GetAdapters");
+        QString replyStr = reply.value();
+        QJsonDocument json = QJsonDocument::fromJson(replyStr.toUtf8());
+        QJsonArray array = json.array();
+        if (array.size() > 0 && !array[0].toObject()["Path"].toString().isEmpty()) {
+            return true;
+        }
+    }
+
+    QDBusInterface networkInter("org.freedesktop.NetworkManager",
+                                "/org/freedesktop/NetworkManager",
+                                "org.freedesktop.NetworkManager",
+                                QDBusConnection::systemBus());
+    if (networkInter.isValid()) {
+        QDBusReply<QList<QDBusObjectPath>> reply = networkInter.call("GetAllDevices");
+        QList<QDBusObjectPath> replyStrList = reply.value();
+        for (QDBusObjectPath objPath : replyStrList) {
+            QDBusInterface deviceInter("org.freedesktop.NetworkManager",
+                                        objPath.path(),
+                                        "org.freedesktop.NetworkManager.Device",
+                                        QDBusConnection::systemBus());
+            if (deviceInter.isValid()) {
+                QVariant reply = deviceInter.property("DeviceType");
+                if (2 == reply.toUInt()) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 

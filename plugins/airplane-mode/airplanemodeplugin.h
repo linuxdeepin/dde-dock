@@ -24,9 +24,6 @@
 #define AIRPLANEMODEPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "com_deepin_daemon_network.h"
-
-using NetworkInter = com::deepin::daemon::Network;
 
 class AirplaneModeItem;
 class AirplaneModePlugin : public QObject, PluginsItemInterface
@@ -52,6 +49,9 @@ public:
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
     void setSortKey(const QString &itemKey, const int order) Q_DECL_OVERRIDE;
     void refreshIcon(const QString &itemKey) Q_DECL_OVERRIDE;
+
+private:
+    bool supportAirplaneMode() const;
 
 public slots:
     void refreshAirplaneEnableState();
