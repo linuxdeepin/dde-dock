@@ -276,6 +276,10 @@ void MultiScreenWorker::updateDisplay()
     //3、任务栏高度或宽度调整的拖拽区域，
     //4、通知窗管的任务栏显示区域信息，
     //5、通知后端的任务栏显示区域信息
+
+    // wayland环境下，QScreen销毁也就是拔掉显示器的时候，会隐藏当前窗口，这里手动显示一次
+    parent()->setVisible(true);
+
     if (DIS_INS->screens().size() == 0) {
         qWarning() << "No Screen Can Display.";
         return;
