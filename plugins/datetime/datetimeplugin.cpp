@@ -149,7 +149,7 @@ const QString DatetimePlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return "dbus-send --print-reply --dest=com.deepin.Calendar /com/deepin/Calendar com.deepin.Calendar.RaiseWindow";
+    return "dbus-send --print-reply --dest=org.deepin.dde.Widgets / org.deepin.dde.Widgets.Toggle";
 }
 
 const QString DatetimePlugin::itemContextMenu(const QString &itemKey)

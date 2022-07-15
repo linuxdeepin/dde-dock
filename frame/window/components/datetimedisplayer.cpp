@@ -131,10 +131,10 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    DDBusSender().service("com.deepin.Calendar")
-            .path("/com/deepin/Calendar")
-            .interface("com.deepin.Calendar")
-            .method("RaiseWindow").call();
+    DDBusSender().service("org.deepin.dde.Widgets")
+            .path("/")
+            .interface("org.deepin.dde.Widgets")
+            .method("Toggle").call();
 }
 
 QString DateTimeDisplayer::getTimeString() const
