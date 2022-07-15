@@ -46,6 +46,8 @@ public:
     const QRect indexRect(const QModelIndex &index) const;
     void dropSwap();
 
+    void handleDropEvent(QDropEvent *e);
+
 Q_SIGNALS:
     void requestRemove(const QString &);
     void dragLeaved();

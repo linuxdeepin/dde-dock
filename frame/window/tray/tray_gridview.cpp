@@ -365,7 +365,7 @@ const QModelIndex TrayGridView::getIndexFromPos(QPoint currentPoint) const
     return QModelIndex();
 }
 
-void TrayGridView::dropEvent(QDropEvent *e)
+void TrayGridView::handleDropEvent(QDropEvent *e)
 {
     setState(DListView::NoState);
     clearDragModelIndex();
@@ -437,6 +437,10 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     drag->setPixmap(pixmap);
     drag->setHotSpot(pixmap.rect().center() / ratio);
     QMimeData *data = model()->mimeData(QModelIndexList() << modelIndex);
+    if (!data) {
+        return false;
+    }
+
     data->setImageData(pixmap);
     drag->setMimeData(data);
 
@@ -512,4 +516,9 @@ void TrayGridView::initUi()
     m_aniStartTime->setSingleShot(true);
 
     connect(m_aniStartTime, &QTimer::timeout, this, &TrayGridView::moveAnimation);
+}
+
+void TrayGridView::dropEvent(QDropEvent *e)
+{
+    handleDropEvent(e);
 }

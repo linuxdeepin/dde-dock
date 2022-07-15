@@ -445,16 +445,22 @@ void TrayManagerWindow::dragMoveEvent(QDragMoveEvent *e)
 
 void TrayManagerWindow::dropEvent(QDropEvent *e)
 {
-    const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(e->mimeData());
-    if (!mimeData)
+    if (!e || !e->mimeData() || e->source() == this)
         return;
 
-    if (e->source() == this)
-        return;
+    if (qobject_cast<QuickPluginWindow *>(e->source())) {
+        const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(e->mimeData());
+        if (!mimeData)
+            return;
 
-    PluginsItemInterface *pluginItem = static_cast<PluginsItemInterface *>(mimeData->pluginItemInterface());
-    if (pluginItem)
-        m_quickIconWidget->dragPlugin(pluginItem);
+        PluginsItemInterface *pluginItem = static_cast<PluginsItemInterface *>(mimeData->pluginItemInterface());
+        if (pluginItem)
+            m_quickIconWidget->dragPlugin(pluginItem);
+    } else if (qobject_cast<TrayGridView *>(e->source())) {
+        // 将trayView中的dropEvent扩大到整个区域（this），这样便于随意拖动到这个区域都可以捕获。
+        // m_trayView中有e->accept不会导致事件重复处理。
+        m_trayView->handleDropEvent(e);
+    }
 }
 
 void TrayManagerWindow::dragLeaveEvent(QDragLeaveEvent *event)
