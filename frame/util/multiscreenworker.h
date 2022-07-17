@@ -35,6 +35,7 @@
 
 #include <QObject>
 #include <QFlag>
+#include <QDebug>
 
 #define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
@@ -79,6 +80,7 @@ public:
 
     void updateDockedScreen(const QString &screenName)
     {
+        qInfo() << "update docked screen" << screenName;
         m_lastScreen = m_currentScreen;
         m_currentScreen = screenName;
     }

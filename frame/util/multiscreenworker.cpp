@@ -354,9 +354,8 @@ void MultiScreenWorker::onPositionChanged(const Position &position)
     Position lastPos = m_position;
     if (lastPos == position)
         return;
-#ifdef QT_DEBUG
-    qDebug() << "position change from: " << lastPos << " to: " << position;
-#endif
+
+    qInfo() << "position changed from: " << lastPos << " to: " << position;
     m_position = position;
 
     // 更新鼠标拖拽样式，在类内部设置到qApp单例上去
@@ -384,7 +383,7 @@ void MultiScreenWorker::onDisplayModeChanged(const DisplayMode &displayMode)
     if (displayMode == m_displayMode)
         return;
 
-    qInfo() << "display mode change:" << displayMode;
+    qInfo() << "display mode changed:" << displayMode;
 
     m_displayMode = displayMode;
 
@@ -415,7 +414,7 @@ void MultiScreenWorker::onHideModeChanged(const HideMode &hideMode)
     if (m_hideMode == hideMode)
         return;
 
-    qInfo() << "hidemode change:" << hideMode;
+    qInfo() << "hidemode changed:" << hideMode;
 
     m_hideMode = hideMode;
 
@@ -446,7 +445,7 @@ void MultiScreenWorker::onHideStateChanged(const Dock::HideState &state)
         m_ds.updateDockedScreen(getValidScreen(m_position));
     }
 
-    qInfo() << "hidestate change:" << m_hideMode << m_hideState;
+    qInfo() << "hidestate changed:" << m_hideMode << m_hideState;
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
@@ -455,13 +454,15 @@ void MultiScreenWorker::onHideStateChanged(const Dock::HideState &state)
         // 如果鼠标正在任务栏要显示的区域,就可以不用隐藏(相当于智能隐藏被唤醒一样)
         if (getDockShowGeometry(m_ds.current(), m_position, m_displayMode).contains(QCursor::pos()))
             return;
+
         displayAnimation(m_ds.current(), AniAction::Hide);
     }
 }
 
 void MultiScreenWorker::onOpacityChanged(const double value)
 {
-    if (int(m_opacity * 100) == int(value * 100)) return;
+    if (int(m_opacity * 100) == int(value * 100))
+        return;
 
     m_opacity = value;
 
@@ -1298,6 +1299,7 @@ void MultiScreenWorker::resetDockScreen()
       */
     parent()->setFixedSize(dockRect(m_ds.current()).size());
     parent()->setGeometry(dockRect(m_ds.current()));
+    qDebug() << "update dock geometry: " << dockRect(m_ds.current());
     parent()->panel()->setFixedSize(dockRect(m_ds.current()).size());
     parent()->panel()->move(0, 0);
 }
