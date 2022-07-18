@@ -24,6 +24,11 @@
 #define AIRPLANEMODEPLUGIN_H
 
 #include "pluginsiteminterface.h"
+#include "com_deepin_daemon_network.h"
+#include "com_deepin_daemon_bluetooth.h"
+
+using NetworkInter = com::deepin::daemon::Network;
+using BluetoothInter = com::deepin::daemon::Bluetooth;
 
 class AirplaneModeItem;
 class AirplaneModePlugin : public QObject, PluginsItemInterface
@@ -56,9 +61,12 @@ private:
 public slots:
     void refreshAirplaneEnableState();
     void onAirplaneEnableChanged(bool enable);
+    void onWirelessAccessPointsOrAdapterChange();
 
 private:
     AirplaneModeItem *m_item;
+    NetworkInter *m_networkInter;
+    BluetoothInter *m_bluetoothInter;
 };
 
 #endif // AIRPLANEMODEPLUGIN_H
