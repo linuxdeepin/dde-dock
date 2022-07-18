@@ -47,6 +47,12 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    m_networkInter = new NetworkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
+    connect(m_networkInter, &NetworkInter::WirelessAccessPointsChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+
+    m_bluetoothInter = new BluetoothInter("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this);
+    connect(m_bluetoothInter, &BluetoothInter::AdapterAdded, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+    connect(m_bluetoothInter, &BluetoothInter::AdapterRemoved, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
 
     if (!pluginIsDisable()) {
         if (supportAirplaneMode()) {
@@ -154,6 +160,15 @@ void AirplaneModePlugin::onAirplaneEnableChanged(bool enable)
     }
 }
 
+void AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange()
+{
+    if (!supportAirplaneMode()) {
+        m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
+    } else {
+        m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+    }
+}
+
 bool AirplaneModePlugin::supportAirplaneMode() const
 {
     // 蓝牙和无线网络,只要有其中一个就允许显示飞行模式
@@ -185,6 +200,7 @@ bool AirplaneModePlugin::supportAirplaneMode() const
                                         QDBusConnection::systemBus());
             if (deviceInter.isValid()) {
                 QVariant reply = deviceInter.property("DeviceType");
+                // 2 NM_DEVICE_TYPE_WIFI
                 if (2 == reply.toUInt()) {
                     return true;
                 }
