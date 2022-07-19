@@ -46,6 +46,7 @@ AirplaneModeApplet::AirplaneModeApplet(QWidget *parent)
     appletlayout->addStretch();
     appletlayout->addWidget(m_switchBtn);
     appletlayout->addSpacing(0);
+    appletlayout->setContentsMargins(20, 0, 6, 0);
     setLayout(appletlayout);
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &AirplaneModeApplet::enableChanged);
 }
