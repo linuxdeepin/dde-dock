@@ -297,7 +297,8 @@ void SoundApplet::onDefaultSinkChanged()
     activePort(portId,cardId);
 
     //无声卡状态下，会有伪sink设备，显示音量为0
-    onVolumeChanged(findPort(portId, cardId) != nullptr ? m_defSinkInter->volume() : 0);
+    //支持云平台无声卡显示
+    onVolumeChanged(existActiveOutputDevice() ? m_defSinkInter->volume() : 0);
     emit defaultSinkChanged(m_defSinkInter);
 }
 
@@ -641,7 +642,8 @@ bool SoundApplet::existActiveOutputDevice()
         }
     }
 
-    return false;
+    // 兼容云平台无端口的情况
+    return jCards.isEmpty() && m_defSinkInter && !m_defSinkInter->name().startsWith("auto_null");
 }
 
 bool SoundApplet::eventFilter(QObject *watcher, QEvent *event)
