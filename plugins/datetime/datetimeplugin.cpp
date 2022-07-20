@@ -227,17 +227,10 @@ void DatetimePlugin::updateCurrentTimeString()
     m_centralWidget->updateDateTimeString();
 
     // 如果系统语言环境为中文(包含藏语和维语），按照中文的显示格式去显示，否则按照当地的日期格式显示
-    if (m_centralWidget->is24HourFormat()) {
-        if (isZhLocale)
-            m_dateTipsLabel->setText(m_centralWidget->getDateTime() + currentDateTime.toString(" hh:mm:ss"));
-        else
-            m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
-    } else {
-        if (isZhLocale)
-            m_dateTipsLabel->setText(m_centralWidget->getDateTime() + currentDateTime.toString(" hh:mm:ss A"));
-        else
-            m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss A"));
-    }
+    if (isZhLocale)
+        m_dateTipsLabel->setText(m_centralWidget->getDateTime());
+    else
+        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
 
     const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
