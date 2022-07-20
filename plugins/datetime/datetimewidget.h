@@ -55,14 +55,17 @@ private Q_SLOTS:
     void setShortTimeFormat(int type);
     void setLongDateFormat(int type);
     void setWeekdayFormat(int type);
+    void setLongTimeFormat(int type);
 
 private:
     QSize curTimeSize() const;
     void updateWeekdayFormat();
+    void updateLongTimeFormat();
 
 private:
     bool m_24HourFormat;
     int m_longDateFormatType;
+    int m_longTimeFormatType;
     int m_weekdayFormatType;
     mutable QFont m_timeFont;
     mutable QFont m_dateFont;
@@ -72,6 +75,7 @@ private:
     QString m_shortTimeFormat;
     QString m_dateTime;
     QString m_weekFormat;
+    QString m_longTimeFormat;
 };
 
 #endif // DATETIMEWIDGET_H

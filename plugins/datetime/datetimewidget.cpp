@@ -45,18 +45,22 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     , m_timedateInter(new Timedate("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", QDBusConnection::sessionBus(), this))
     , m_shortDateFormat("yyyy-MM-dd")
     , m_shortTimeFormat("hh:mm")
+    , m_longTimeFormat(" hh:mm:ss")
 {
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setShortDateFormat(m_timedateInter->shortDateFormat());
     setShortTimeFormat(m_timedateInter->shortTimeFormat());
     setWeekdayFormat(m_timedateInter->weekdayFormat());
     setLongDateFormat(m_timedateInter->longDateFormat());
+    setLongTimeFormat(m_timedateInter->longTimeFormat());
+    set24HourFormat(m_timedateInter->use24HourFormat());
     updateDateTimeString();
 
     connect(m_timedateInter, &Timedate::ShortDateFormatChanged, this, &DatetimeWidget::setShortDateFormat);
     connect(m_timedateInter, &Timedate::ShortTimeFormatChanged, this, &DatetimeWidget::setShortTimeFormat);
     connect(m_timedateInter, &Timedate::LongDateFormatChanged, this, &DatetimeWidget::setLongDateFormat);
     connect(m_timedateInter, &Timedate::WeekdayFormatChanged, this, &DatetimeWidget::setWeekdayFormat);
+    connect(m_timedateInter, &Timedate::LongTimeFormatChanged, this, &DatetimeWidget::setLongTimeFormat);
     //连接日期时间修改信号,更新日期时间插件的布局
     connect(m_timedateInter, &Timedate::TimeUpdate, this, [ = ]{
         if (isVisible()) {
@@ -72,6 +76,7 @@ void DatetimeWidget::set24HourFormat(const bool value)
     }
 
     m_24HourFormat = value;
+    updateLongTimeFormat();
     update();
 
     if (isVisible()) {
@@ -150,6 +155,20 @@ void DatetimeWidget::setWeekdayFormat(int type)
 }
 
 /**
+ * @brief DatetimeWidget::setLongTimeFormat 根据类型设置长时间的显示格式
+ * @param type 自定义类型
+ */
+void DatetimeWidget::setLongTimeFormat(int type)
+{
+    if (m_longTimeFormatType == type)
+        return;
+
+    m_longTimeFormatType = type;
+    updateLongTimeFormat();
+    updateDateTimeString();
+}
+
+/**
  * @brief DatetimeWidget::updateWeekdayFormat 更新周的显示格式
  */
 void DatetimeWidget::updateWeekdayFormat()
@@ -214,6 +233,23 @@ void DatetimeWidget::updateWeekdayFormat()
     }
 }
 
+void DatetimeWidget::updateLongTimeFormat()
+{
+    if (m_24HourFormat) {
+        switch (m_longTimeFormatType) {
+        case 0: m_longTimeFormat = " h:mm:ss"; break;
+        case 1: m_longTimeFormat = " hh:mm:ss";  break;
+        default: m_longTimeFormat = " hh:mm:ss"; break;
+        }
+    } else {
+        switch (m_longTimeFormatType) {
+        case 0: m_longTimeFormat = " h:mm:ss A"; break;
+        case 1: m_longTimeFormat = " hh:mm:ss A";  break;
+        default: m_longTimeFormat = " hh:mm:ss A"; break;
+        }
+    }
+}
+
 /**
  * @brief DatetimeWidget::updateWeekdayTimeString 更新任务栏时间标签的显示
  */
@@ -234,13 +270,13 @@ void DatetimeWidget::updateDateTimeString()
         m_dateTime = longTimeFormat;
         break;
     case 1:
-        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat;
+        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat + currentDateTime.toString(m_longTimeFormat);
         break;
     case 2:
-        m_dateTime = m_weekFormat + QString(" ") + longTimeFormat;
+        m_dateTime = m_weekFormat + QString(" ") + longTimeFormat + currentDateTime.toString(m_longTimeFormat);
         break;
     default:
-        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat;
+        m_dateTime = longTimeFormat + QString(" ") + m_weekFormat + currentDateTime.toString(m_longTimeFormat);
         break;
     }
 }
