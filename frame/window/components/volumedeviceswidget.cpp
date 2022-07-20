@@ -99,13 +99,12 @@ void VolumeDevicesWidget::initUi()
     sliderLayout->setSpacing(0);
 
     QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(24, 24));
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 5 });
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 5);
     QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(24, 24));
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(), rightPixmap, 7 });
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(), 7);
 
     SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
-    proxy->setParent(m_sliderContainer->slider());
-    m_sliderContainer->slider()->setStyle(proxy);
+    m_sliderContainer->setSliderProxyStyle(proxy);
     sliderLayout->addWidget(m_sliderContainer);
 
     QHBoxLayout *topLayout = new QHBoxLayout(this);
@@ -156,26 +155,22 @@ void VolumeDevicesWidget::reloadAudioDevices()
 void VolumeDevicesWidget::initConnection()
 {
     m_audioSink = m_volumeModel->defaultSink();
-    auto adjustVolumeSlider = [ this ](int volume) {
-        m_sliderContainer->slider()->blockSignals(true);
-        m_sliderContainer->slider()->setValue(volume);
-        m_sliderContainer->slider()->blockSignals(false);
-    };
+
     if (m_audioSink)
-        connect(m_audioSink, &AudioSink::volumeChanged, this, adjustVolumeSlider);
-    connect(m_volumeModel, &VolumeModel::defaultSinkChanged, this, [ this, adjustVolumeSlider ](AudioSink *sink) {
+        connect(m_audioSink, &AudioSink::volumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
+    connect(m_volumeModel, &VolumeModel::defaultSinkChanged, this, [ this ](AudioSink *sink) {
         if (m_audioSink)
             disconnect(m_audioSink);
 
         m_audioSink = sink;
-        if (m_audioSink)
-            connect(m_audioSink, &AudioSink::volumeChanged, this, adjustVolumeSlider);
+        if (sink)
+            connect(sink, &AudioSink::volumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
 
         resetVolumeInfo();
         m_deviceList->update();
     });
 
-    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
+    connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         AudioSink *defSink = m_volumeModel->defaultSink();
         if (!defSink)
             return;
@@ -260,7 +255,5 @@ void VolumeDevicesWidget::resetVolumeInfo()
     if (!defaultSink)
         return;
 
-    m_sliderContainer->slider()->blockSignals(true);
-    m_sliderContainer->slider()->setValue(defaultSink->volume());
-    m_sliderContainer->slider()->blockSignals(false);
+    m_sliderContainer->updateSliderValue(defaultSink->volume());
 }

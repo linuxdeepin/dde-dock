@@ -20,7 +20,6 @@
  */
 #include "brightnesswidget.h"
 #include "brightnessmodel.h"
-#include "brightnessmonitorwidget.h"
 #include "imageutil.h"
 #include "slidercontainer.h"
 
@@ -51,50 +50,50 @@ SliderContainer *BrightnessWidget::sliderContainer()
 void BrightnessWidget::showEvent(QShowEvent *event)
 {
     DBlurEffectWidget::showEvent(event);
+
+    // 显示的时候更新一下slider的主屏幕亮度值
+    updateSliderValue();
     Q_EMIT visibleChanged(true);
 }
 
 void BrightnessWidget::hideEvent(QHideEvent *event)
 {
     DBlurEffectWidget::hideEvent(event);
+
     Q_EMIT visibleChanged(true);
 }
 
 void BrightnessWidget::initUi()
 {
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(15, 0, 12, 0);
-    layout->addWidget(m_sliderContainer);
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->setContentsMargins(15, 0, 12, 0);
 
     QPixmap leftPixmap = ImageUtil::loadSvg(":/icons/resources/brightness.svg", QSize(IMAGESIZE, IMAGESIZE));
     QPixmap rightPixmap = ImageUtil::loadSvg(":/icons/resources/ICON_Device_Laptop.svg", QSize(IMAGESIZE, IMAGESIZE));
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 10 });
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(BACKSIZE, BACKSIZE), rightPixmap, 12});
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
 
     SliderProxyStyle *style = new SliderProxyStyle;
-    style->setParent(m_sliderContainer->slider());
-    m_sliderContainer->slider()->setStyle(style);
+    m_sliderContainer->setSliderProxyStyle(style);
+
+    mainLayout->addWidget(m_sliderContainer);
 }
 
 void BrightnessWidget::initConnection()
 {
-    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
+    connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         BrightMonitor *monitor = m_model->primaryMonitor();
         if (monitor)
-            m_model->setBrightness(monitor, value);
+            monitor->setBrightness(value);
     });
 
-    connect(m_model, &BrightnessModel::brightnessChanged, this, &BrightnessWidget::onUpdateBright);
-
-    BrightMonitor *monitor = m_model->primaryMonitor();
-    if (monitor)
-        onUpdateBright(monitor);
+    updateSliderValue();
 }
 
-void BrightnessWidget::onUpdateBright(BrightMonitor *monitor)
+void BrightnessWidget::updateSliderValue()
 {
-    if (!monitor->isPrimary())
-        return;
-    // 此处只显示主屏的亮度
-    m_sliderContainer->slider()->setValue(monitor->brihtness());
+    BrightMonitor *monitor = m_model->primaryMonitor();
+    if (monitor) {
+        m_sliderContainer->updateSliderValue(monitor->brightness());
+    }
 }

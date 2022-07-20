@@ -62,7 +62,7 @@ VolumeWidget::~VolumeWidget()
 void VolumeWidget::initUi()
 {
     if (m_defaultSink)
-        m_sliderContainer->slider()->setValue(m_defaultSink->volume());
+        m_sliderContainer->updateSliderValue(m_defaultSink->volume());
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(17, 0, 12, 0);
@@ -70,12 +70,11 @@ void VolumeWidget::initUi()
 
     QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
     QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::LeftIcon, { leftPixmap.size(), QSize(), leftPixmap, 12});
-    m_sliderContainer->updateSlider(SliderContainer::IconPosition::RightIcon, { rightPixmap.size(), QSize(BACKSIZE, BACKSIZE), rightPixmap, 12});
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 12);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
 
     SliderProxyStyle *proxy = new SliderProxyStyle;
-    proxy->setParent(m_sliderContainer->slider());
-    m_sliderContainer->slider()->setStyle(proxy);
+    m_sliderContainer->setSliderProxyStyle(proxy);
 
     bool existActiveOutputDevice = m_model->existActiveOutputDevice();
     setEnabled(existActiveOutputDevice);
@@ -83,26 +82,21 @@ void VolumeWidget::initUi()
 
 void VolumeWidget::initConnection()
 {
-    auto setCtrlVolumeValue = [this](int volume) {
-        m_sliderContainer->blockSignals(true);
-        m_sliderContainer->slider()->setValue(volume);
-        m_sliderContainer->blockSignals(false);
-    };
     if (m_defaultSink)
-        connect(m_defaultSink, &AudioSink::volumeChanged, this, setCtrlVolumeValue);
+        connect(m_defaultSink, &AudioSink::volumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
 
-    connect(m_model, &VolumeModel::defaultSinkChanged, this, [ this, setCtrlVolumeValue ](AudioSink *sink) {
+    connect(m_model, &VolumeModel::defaultSinkChanged, this, [ this ](AudioSink *sink) {
         if (m_defaultSink)
             disconnect(m_defaultSink);
 
         m_defaultSink = sink;
         if (sink) {
-            setCtrlVolumeValue(sink->volume());
-            connect(m_defaultSink, &AudioSink::volumeChanged, this, setCtrlVolumeValue);
+            m_sliderContainer->updateSliderValue(sink->volume());
+            connect(sink, &AudioSink::volumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
         }
     });
 
-    connect(m_sliderContainer->slider(), &QSlider::valueChanged, this, [ this ](int value) {
+    connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         AudioSink *sink = m_model->defaultSink();
         if (sink)
             sink->setVolume(value, true);

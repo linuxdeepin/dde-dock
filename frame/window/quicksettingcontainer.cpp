@@ -29,7 +29,6 @@
 #include "slidercontainer.h"
 #include "volumewidget.h"
 #include "volumedeviceswidget.h"
-#include "brightnessmonitorwidget.h"
 #include "pluginchildpage.h"
 #include "volumemodel.h"
 
@@ -68,7 +67,6 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_volumnWidget(new VolumeWidget(m_volumeModel, m_componentWidget))
     , m_brihtnessWidget(new BrightnessWidget(m_brightnessModel, m_componentWidget))
     , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumeModel, this))
-    , m_brightSettingWidget(new BrightnessMonitorWidget(m_brightnessModel, this))
     , m_childPage(new PluginChildPage(this))
     , m_dragPluginPosition(QPoint(0, 0))
 {
@@ -313,7 +311,6 @@ void QuickSettingContainer::initUi()
     m_switchLayout->addWidget(m_childPage);
 
     m_volumeSettingWidget->hide();
-    m_brightSettingWidget->hide();
 
     setMouseTracking(true);
     setAcceptDrops(true);
@@ -341,7 +338,7 @@ void QuickSettingContainer::initConnection()
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
         if (iconPosition == SliderContainer::RightIcon) {
             // 点击右侧的按钮，弹出具体的调节的界面
-            showWidget(m_brightSettingWidget, tr("brightness"));
+            // showWidget(m_brightSettingWidget, tr("brightness"));
             resizeView();
         }
     });

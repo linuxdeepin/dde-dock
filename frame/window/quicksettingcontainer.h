@@ -41,7 +41,6 @@ class QuickSettingItem;
 class DockPopupWindow;
 class QStackedLayout;
 class VolumeDevicesWidget;
-class BrightnessMonitorWidget;
 class QLabel;
 class PluginChildPage;
 class QGridLayout;
@@ -104,7 +103,6 @@ private:
     BrightnessWidget *m_brihtnessWidget;
 
     VolumeDevicesWidget *m_volumeSettingWidget;
-    BrightnessMonitorWidget *m_brightSettingWidget;
     PluginChildPage *m_childPage;
     QPoint m_dragPluginPosition;
 };

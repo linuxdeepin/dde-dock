@@ -23,14 +23,11 @@
 #include "slidercontainer.h"
 
 #include <DStyle>
-#include <DApplicationHelper>
 #include <DGuiApplicationHelper>
 #include <DPaletteHelper>
 
 #include <QPainterPath>
 #include <QMouseEvent>
-#include <QDebug>
-#include <QTimer>
 #include <QGridLayout>
 #include <QLabel>
 
@@ -125,6 +122,8 @@ SliderContainer::SliderContainer(QWidget *parent)
     m_leftIconWidget->installEventFilter(this);
     m_slider->installEventFilter(this);
     m_rightIconWidget->installEventFilter(this);
+
+    connect(m_slider, &QSlider::valueChanged, this, &SliderContainer::sliderValueChanged);
 }
 
 SliderContainer::~SliderContainer()
@@ -145,21 +144,26 @@ QSize SliderContainer::getSuitableSize(const QSize &iconSize, const QSize &bgSiz
     return iconSize;
 }
 
-void SliderContainer::updateSlider(const SliderContainer::IconPosition &iconPosition, const SliderContainer::SliderData &sliderData)
+void SliderContainer::setIcon(const SliderContainer::IconPosition &iconPosition, const QPixmap &icon,
+                              const QSize &shadowSize, int space)
 {
+    if (icon.isNull()) {
+        return;
+    }
+
     switch (iconPosition) {
-    case IconPosition::LeftIcon: {
-        m_leftIconWidget->setFixedSize(getSuitableSize(sliderData.iconSize, sliderData.shadowSize));
-        m_leftIconWidget->updateData(sliderData.icon, sliderData.iconSize, sliderData.shadowSize);
-        m_spaceLeftWidget->setFixedWidth(sliderData.space);
-        break;
-    }
-    case IconPosition::RightIcon: {
-        m_rightIconWidget->setFixedSize(getSuitableSize(sliderData.iconSize, sliderData.shadowSize));
-        m_rightIconWidget->updateData(sliderData.icon, sliderData.iconSize, sliderData.shadowSize);
-        m_spaceRightWidget->setFixedWidth(sliderData.space);
-        break;
-    }
+        case IconPosition::LeftIcon: {
+            m_leftIconWidget->setFixedSize(getSuitableSize(icon.size(), shadowSize));
+            m_leftIconWidget->updateData(icon, icon.size(), shadowSize);
+            m_spaceLeftWidget->setFixedWidth(space);
+            break;
+        }
+        case IconPosition::RightIcon: {
+            m_rightIconWidget->setFixedSize(getSuitableSize(icon.size(), shadowSize));
+            m_rightIconWidget->updateData(icon, icon.size(), shadowSize);
+            m_spaceRightWidget->setFixedWidth(space);
+            break;
+        }
     }
 }
 
@@ -177,11 +181,6 @@ void SliderContainer::setIcon(const SliderContainer::IconPosition &iconPosition,
     }
 }
 
-QSlider *SliderContainer::slider()
-{
-    return m_slider;
-}
-
 bool SliderContainer::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease) {
@@ -192,6 +191,19 @@ bool SliderContainer::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
+}
+
+void SliderContainer::updateSliderValue(int value)
+{
+    m_slider->blockSignals(true);
+    m_slider->setValue(value);
+    m_slider->blockSignals(false);
+}
+
+void SliderContainer::setSliderProxyStyle(QProxyStyle *proxyStyle)
+{
+    proxyStyle->setParent(m_slider);
+    m_slider->setStyle(proxyStyle);
 }
 
 SliderProxyStyle::SliderProxyStyle(StyleType drawSpecial, QStyle *style)

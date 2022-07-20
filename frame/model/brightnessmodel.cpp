@@ -49,9 +49,6 @@ BrightnessModel::BrightnessModel(QObject *parent)
             BrightMonitor *monitor = new BrightMonitor(path.path(), this);
             monitor->setPrimary(primaryScreenName == monitor->name());
             m_monitor << monitor;
-            connect(monitor, &BrightMonitor::brightnessChanged, this, [ = ] {
-                Q_EMIT brightnessChanged(monitor);
-            });
         }
     }
 
@@ -75,27 +72,6 @@ BrightMonitor *BrightnessModel::primaryMonitor() const
     }
 
     return nullptr;
-}
-
-void BrightnessModel::setBrightness(BrightMonitor *monitor, int brightness)
-{
-    setBrightness(monitor->name(), brightness);
-}
-
-void BrightnessModel::setBrightness(QString name, int brightness)
-{
-    callMethod("SetBrightness", { name, static_cast<double>(brightness *0.01) });
-}
-
-QDBusMessage BrightnessModel::callMethod(const QString &methodName, const QList<QVariant> &argument)
-{
-    QDBusInterface dbusInter(serviceName, servicePath, serviceInterface, QDBusConnection::sessionBus());
-    if (dbusInter.isValid()) {
-        QDBusPendingCall reply = dbusInter.asyncCallWithArgumentList(methodName, argument);
-        reply.waitForFinished();
-        return reply.reply();
-    }
-    return QDBusMessage();
 }
 
 void BrightnessModel::primaryScreenChanged(QScreen *screen)
@@ -142,7 +118,7 @@ void BrightMonitor::setPrimary(bool primary)
     m_isPrimary = primary;
 }
 
-int BrightMonitor::brihtness()
+int BrightMonitor::brightness()
 {
     return m_brightness;
 }
@@ -160,6 +136,11 @@ QString BrightMonitor::name()
 bool BrightMonitor::isPrimary()
 {
     return m_isPrimary;
+}
+
+void BrightMonitor::setBrightness(int value)
+{
+    callMethod("SetBrightness", { m_name, static_cast<double>(value * 0.01) });
 }
 
 void BrightMonitor::onPropertyChanged(const QDBusMessage &msg)
@@ -196,3 +177,14 @@ void BrightMonitor::onPropertyChanged(const QDBusMessage &msg)
     }
 }
 
+QDBusMessage BrightMonitor::callMethod(const QString &methodName, const QList<QVariant> &argument)
+{
+    QDBusInterface dbusInter(serviceName, servicePath, serviceInterface, QDBusConnection::sessionBus());
+    if (dbusInter.isValid()) {
+        QDBusPendingCall reply = dbusInter.asyncCallWithArgumentList(methodName, argument);
+        reply.waitForFinished();
+        return reply.reply();
+    }
+
+    return QDBusMessage();
+}

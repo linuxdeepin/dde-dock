@@ -46,24 +46,21 @@ public:
         RightIcon
     };
 
-    struct SliderData {
-        QSize iconSize;           // 图标尺寸
-        QSize shadowSize;         // 阴影尺寸
-        QIcon icon;               // 图标
-        int space;                // 间距
-    };
-
 public:
     explicit SliderContainer(QWidget *parent);
     ~SliderContainer() override;
 
     void setTitle(const QString &text);
-    void updateSlider(const IconPosition &iconPosition, const SliderData &sliderData);
+    void setSliderProxyStyle(QProxyStyle *proxyStyle);
     void setIcon(const IconPosition &iconPosition, const QIcon &icon);
-    QSlider *slider();
+    void setIcon(const IconPosition &iconPosition, const QPixmap &icon, const QSize &shadowSize, int space);
 
 Q_SIGNALS:
     void iconClicked(const IconPosition &);
+    void sliderValueChanged(int value);
+
+public slots:
+    void updateSliderValue(int value);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
