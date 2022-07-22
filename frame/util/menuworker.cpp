@@ -158,9 +158,9 @@ QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
 
 void MenuWorker::onDockSettingsTriggered()
 {
-    DDBusSender().service("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
+    DDBusSender().service("org.deepin.dde.ControlCenter")
+            .path("/org/deepin/dde/ControlCenter")
+            .interface("org.deepin.dde.ControlCenter")
             .method("ShowPage")
             .arg(QString("personalization/dock"))
             .call();

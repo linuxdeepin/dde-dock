@@ -118,9 +118,9 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
         m_applet->setAdapterPowered(!m_adapterPowered);
     } else if (menuId == SETTINGS) {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter")
+        .interface("org.deepin.dde.ControlCenter")
+        .path("/org/deepin/dde/ControlCenter")
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();

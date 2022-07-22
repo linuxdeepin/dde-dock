@@ -191,9 +191,9 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "open") {
         DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
+                .service("org.deepin.dde.ControlCenter")
+                .interface("org.deepin.dde.ControlCenter")
+                .path("/org/deepin/dde/ControlCenter")
                 .method(QString("ShowPage"))
                 .arg(QString("datetime"))
                 .call();

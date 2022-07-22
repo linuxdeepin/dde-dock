@@ -174,9 +174,9 @@ void DBusAdaptors::handleActionTriggered(QAction *action)
 {
     if (action == m_addLayoutAction) {
         DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
+                .service("org.deepin.dde.ControlCenter")
+                .interface("org.deepin.dde.ControlCenter")
+                .path("/org/deepin/dde/ControlCenter")
                 .method("ShowPage")
                 .arg(QString("keyboard"))
                 .arg(QString("Keyboard Layout/Add Keyboard Layout"))

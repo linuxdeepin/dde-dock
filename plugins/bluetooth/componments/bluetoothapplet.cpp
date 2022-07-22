@@ -277,9 +277,9 @@ void BluetoothApplet::initConnect()
 
     connect(m_settingLabel, &SettingLabel::clicked, this, [ = ] {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter")
+        .interface("org.deepin.dde.ControlCenter")
+        .path("/org/deepin/dde/ControlCenter")
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();

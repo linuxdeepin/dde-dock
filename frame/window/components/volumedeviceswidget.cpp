@@ -194,9 +194,9 @@ void VolumeDevicesWidget::initConnection()
             m_deviceList->update();
         } else {
             // 打开控制中心的声音模块
-            DDBusSender().service("com.deepin.dde.ControlCenter")
-                    .path("/com/deepin/dde/ControlCenter")
-                    .interface("com.deepin.dde.ControlCenter")
+            DDBusSender().service("org.deepin.dde.ControlCenter")
+                    .path("/org/deepin/dde/ControlCenter")
+                    .interface("org.deepin.dde.ControlCenter")
                     .method("ShowPage").arg(QString("sound")).call();
             hide();
         }
