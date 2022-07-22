@@ -267,7 +267,7 @@ void DatetimeWidget::updateDateTimeString()
 
     switch (m_longDateFormatType) {
     case 0 :
-        m_dateTime = longTimeFormat;
+        m_dateTime = longTimeFormat + currentDateTime.toString(m_longTimeFormat);
         break;
     case 1:
         m_dateTime = longTimeFormat + QString(" ") + m_weekFormat + currentDateTime.toString(m_longTimeFormat);
