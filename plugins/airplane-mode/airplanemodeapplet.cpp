@@ -41,6 +41,7 @@ AirplaneModeApplet::AirplaneModeApplet(QWidget *parent)
     QFont font;
     font.setPixelSize(17);
     title->setFont(font);
+    title->setForegroundRole(QPalette::BrightText);
     QHBoxLayout *appletlayout = new QHBoxLayout(this);
     appletlayout->setMargin(0);
     appletlayout->setSpacing(0);
