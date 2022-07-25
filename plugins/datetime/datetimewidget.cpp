@@ -275,7 +275,7 @@ void DatetimeWidget::updateDateTimeString()
         updateWeekdayFormat();
 
         switch (m_longDateFormatType) {
-        case 0 :
+        case 0:
             m_dateTime = longTimeFormat + currentDateTime.toString(m_longTimeFormat);
             break;
         case 1:
@@ -288,14 +288,14 @@ void DatetimeWidget::updateDateTimeString()
             m_dateTime = longTimeFormat + QString(" ") + m_weekFormat + currentDateTime.toString(m_longTimeFormat);
             break;
         }
-    } else if (lang == QLocale::English){
+    } else if (lang == QLocale::English) {
         auto longDateString = currentDateTime.date().toString(Qt::SystemLocaleLongDate);
         auto week = longDateString.split(",").at(0);
         // 获取英文的日期格式字符串，-2是去掉","和" "
-        auto longDateTimeFormat = longDateString.right(longDateString.size() - week.size() -2);
+        auto longDateTimeFormat = longDateString.right(longDateString.size() - week.size() - 2);
 
         switch (m_longDateFormatType) {
-        case 0 :
+        case 0:
             m_dateTime = longDateTimeFormat + currentDateTime.toString(m_longTimeFormat);
             break;
         case 1:
@@ -305,10 +305,10 @@ void DatetimeWidget::updateDateTimeString()
             m_dateTime = week + QString(", ") + longDateTimeFormat + currentDateTime.toString(m_longTimeFormat);
             break;
         default:
-            m_dateTime = longDateTimeFormat + QString(",") + week + currentDateTime.toString(m_longTimeFormat);
+            m_dateTime = longDateTimeFormat + QString(", ") + week + currentDateTime.toString(m_longTimeFormat);
             break;
         }
-    }else {
+    } else {
         m_dateTime = currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(m_longTimeFormat);
     }
 }
