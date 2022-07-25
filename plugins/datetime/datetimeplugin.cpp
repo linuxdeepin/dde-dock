@@ -220,17 +220,10 @@ void DatetimePlugin::pluginSettingsChanged()
 void DatetimePlugin::updateCurrentTimeString()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
-    auto lang = QLocale::system().language();
-    bool isZhLocale = lang == QLocale::Chinese || lang == QLocale::Tibetan || lang == QLocale::Uighur;
 
     // 实时刷新日期，防止日期显示错误
     m_centralWidget->updateDateTimeString();
-
-    // 如果系统语言环境为中文(包含藏语和维语），按照中文的显示格式去显示，否则按照当地的日期格式显示
-    if (isZhLocale)
-        m_dateTipsLabel->setText(m_centralWidget->getDateTime());
-    else
-        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
+    m_dateTipsLabel->setText(m_centralWidget->getDateTime());
 
     const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
