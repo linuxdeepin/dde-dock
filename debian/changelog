@@ -1,3 +1,21 @@
+dde-dock (6.0.3) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复debian打包使用AM宏不生效的问题(Task: 133075)(Influence: 任务栏是否使用AM服务)
+  * fix: 修复wayland环境下任务栏右键菜单带有标题栏的问题(Bug: 140873)(Influence: wayland下查看任务栏图表的右键菜单)
+  * fix: 修复任务栏在高缩放率下防呆位置错误(Influence: 高缩放率下，查看防呆区域)
+  * fix: 删除任务栏启动时候用ldd检测libdtk库(Task: 157235)(Influence: 任务栏启动的时候检测是否有ldd报错信息)
+  * feat: 暂时取消使用AM宏(Task: 162227)(Influence: 无)
+  * feat: 增加最近使用应用的功能(Task: 158441)(Influence: 控制中心最近使用区域开启情况下，时尚模式，打开一个没有驻留在任务栏的应用，查看新打开的应用是否在最近打开应用区域)
+  * feat: 增加工具区域的使用(Task: 152867)(Influence: 时尚模式下，查看最近打开区域右侧是否显示回收站，来回切换时尚模式与高效模式，查看回收站位置是否发生变化)
+  * feat: recompile(Influence: recompile)
+  * feat: 点击任务栏时间显示窗口呼出小组件面板。(Task: 165407)(Influence: 点击任务栏时间窗口小组件是否显示。)
+  * fix: 修复拖拽托盘窗口图标至任务栏托盘区域经常失败的问题。(Bug: 147789)(Influence: 拖拽托盘窗口图标至任务栏托盘区域。)
+  * chore: 优化有关slider等相关的操作代码(Influence: 快捷设置面板slider操作。)
+  * fix: 修复从任务栏或其他应用打开控制中心卡死的问题(Bug: 149189)(Influence: 任务栏-任务栏设置-打开控制中心，观察打开的时间)
+
+ -- caixiangrong <caixiangrong@uniontech.com>  Mon, 25 Jul 2022 13:10:23 +0800
+
 dde-dock (6.0.2) unstable; urgency=low
 
   * release 6.0.2
