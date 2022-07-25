@@ -24,6 +24,8 @@
 #include "utils.h"
 #include "displaymanager.h"
 
+#include <DWindowManagerHelper>
+
 #include <QWidget>
 #include <QScreen>
 #include <QEvent>
@@ -45,10 +47,9 @@ const QString OnlyShowPrimary = "onlyShowPrimary";
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
 // Monitor数据－＞屏幕是否可停靠更新－＞监视唤醒区域更新，任务栏显示区域更新－＞拖拽区域更新－＞通知后端接口，通知窗管
 
-MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper)
+MultiScreenWorker::MultiScreenWorker(QWidget *parent)
     : QObject(parent)
     , m_parent(parent)
-    , m_wmHelper(helper)
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_touchEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
@@ -178,7 +179,7 @@ void MultiScreenWorker::updateDaemonDockSize(int dockSize)
         m_dockInter->setWindowSizeEfficient(uint(dockSize));
 }
 
-void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
+void MultiScreenWorker::handleDBusSignal(QDBusMessage msg)
 {
     QList<QVariant> arguments = msg.arguments();
     // 参数固定长度
@@ -299,10 +300,12 @@ void MultiScreenWorker::onWindowSizeChanged(uint value)
     m_monitorUpdateTimer->start();
 }
 
-void MultiScreenWorker::primaryScreenChanged()
+void MultiScreenWorker::primaryScreenChanged(QScreen *screen)
 {
+    Q_ASSERT(screen);
+
     // 先更新主屏信息
-    m_ds.updatePrimary(DIS_INS->primary());
+    m_ds.updatePrimary(screen->name());
 
     // 无效值
     if (DIS_INS->screenRawHeight() == 0 || DIS_INS->screenRawWidth() == 0) {
@@ -723,6 +726,8 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
     if ((!DIS_INS->isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
         lastRect = QRect();
 
+        qInfo() << "clear wm struct";
+
         if (Utils::IS_WAYLAND_DISPLAY) {
             QList<QVariant> varList;
             varList.append(0);//dock位置
@@ -914,7 +919,6 @@ void MultiScreenWorker::initMembers()
 
 void MultiScreenWorker::initConnection()
 {
-    connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
@@ -939,7 +943,7 @@ void MultiScreenWorker::initConnection()
                                           "org.freedesktop.DBus.Properties",
                                           "PropertiesChanged",
                                           "sa{sv}as",
-                                          this, SLOT(handleDbusSignal(QDBusMessage)));
+                                          this, SLOT(handleDBusSignal(QDBusMessage)));
 #endif
 
     connect(this, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &MultiScreenWorker::onRequestUpdateFrontendGeometry);
@@ -1068,7 +1072,7 @@ void MultiScreenWorker::displayAnimation(const QString &screen, const Position &
     ani->setEasingCurve(QEasingCurve::InOutCubic);
 
 #ifndef DISABLE_SHOW_ANIMATION
-    const bool composite = m_wmHelper->hasComposite(); // 判断是否开启特效模式
+    const bool composite = DWindowManagerHelper::instance()->hasComposite(); // 判断是否开启特效模式
     const int duration = composite ? ANIMATIONTIME : 0;
 #else
     const int duration = 0;
@@ -1173,7 +1177,7 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
     ani1->setEasingCurve(QEasingCurve::InOutCubic);
     ani2->setEasingCurve(QEasingCurve::InOutCubic);
 
-    const bool composite = m_wmHelper->hasComposite();
+    const bool composite = DWindowManagerHelper::instance()->hasComposite();
 #ifndef DISABLE_SHOW_ANIMATION
     const int duration = composite ? ANIMATIONTIME : 0;
 #else
@@ -1821,32 +1825,33 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 ScreenChangeMonitor::ScreenChangeMonitor(DockScreen *ds, QObject *parent)
     : QObject (parent)
 {
-    connect(qApp, &QApplication::primaryScreenChanged, this, [ this, ds ](QScreen *primaryScreen) {
-        if (!primaryScreen)
-            return;
+    #define DATETOSTRING(date) date.toString("hh:mm:ss:zzz")
+
+    connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, [ this, ds ](QScreen *primaryScreen) {
+        Q_ASSERT(primaryScreen);
 
         // 在screenAdded之后，又会发送一次主屏幕的变更的信息
-        qInfo() << "primary Screen Changed,primary Screen" << primaryScreen->name();
+        qInfo() << "primary screen changed, primary Screen" << primaryScreen->name();
         if (changedInSeconds())
             return;
 
         m_lastScreenName = ds->current();
         m_changePrimaryName = primaryScreen->name();
         m_changeTime = QDateTime::currentDateTime();
-        qInfo() << "primary Changed Info:lastScreen:" << m_lastScreenName << "changeTime:" << m_changeTime;
+        qInfo() << "primary changed from: " << m_lastScreenName << "to: " << DATETOSTRING(m_changeTime);
     });
-    connect(qApp, &QApplication::screenAdded, this, [ this ](QScreen *newScreen) {
+    connect(DIS_INS, &DisplayManager::screenAdded, this, [ this ](QScreen *newScreen) {
         if (newScreen) {
             m_newScreenName = newScreen->name();
             m_newTime = QDateTime::currentDateTime();
-            qInfo() <<"screen added:" << m_newScreenName << ", added time:" << m_newTime;
+            qInfo() <<"screen added:" << m_newScreenName << ", time:" << DATETOSTRING(m_newTime);
         }
     });
-    connect(qApp, &QApplication::screenRemoved, this, [ this ](QScreen *rmScreen) {
+    connect(DIS_INS, &DisplayManager::screenRemoved, this, [ this ](QScreen *rmScreen) {
         if (rmScreen) {
             m_removeScreenName = rmScreen->name();
             m_removeTime = QDateTime::currentDateTime();
-            qInfo() <<"screen removed:" << m_removeScreenName << ", removed time:" << m_removeTime;
+            qInfo() <<"screen removed:" << m_removeScreenName << ", time:" << DATETOSTRING(m_removeTime);
         }
     });
 }

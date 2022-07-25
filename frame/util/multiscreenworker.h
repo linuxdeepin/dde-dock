@@ -31,8 +31,6 @@
 #include <com_deepin_api_xeventmonitor.h>
 #include <com_deepin_dde_launcher.h>
 
-#include <DWindowManagerHelper>
-
 #include <QObject>
 #include <QFlag>
 #include <QDebug>
@@ -130,7 +128,7 @@ public:
 
     typedef QFlags<RunState> RunStates;
 
-    MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
+    MultiScreenWorker(QWidget *parent);
 
     void initShow();
 
@@ -176,9 +174,10 @@ public slots:
     void onAutoHideChanged(bool autoHide);
     void updateDaemonDockSize(int dockSize);
     void onRequestUpdateRegionMonitor();
-    void handleDbusSignal(QDBusMessage);
 
 private slots:
+    void handleDBusSignal(QDBusMessage);
+
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void onExtralRegionMonitorChanged(int x, int y, const QString &key);
@@ -190,7 +189,7 @@ private slots:
     void updateDisplay();
 
     void onWindowSizeChanged(uint value);
-    void primaryScreenChanged();
+    void primaryScreenChanged(QScreen *screen);
     void updateParentGeometry(const QVariant &value, const Position &pos);
     void updateParentGeometry(const QVariant &value);
 
@@ -218,6 +217,7 @@ private slots:
 
 private:
     MainWindow *parent();
+
     // 初始化数据信息
     void initMembers();
     void initDBus();
@@ -251,7 +251,6 @@ private:
 
 private:
     QWidget *m_parent;
-    DWindowManagerHelper *m_wmHelper;
 
     // monitor screen
     XEventMonitor *m_eventInter;
@@ -304,6 +303,7 @@ class ScreenChangeMonitor : public QObject
 public:
     ScreenChangeMonitor(DockScreen *ds, QObject *parent);
     ~ScreenChangeMonitor();
+
     bool needUsedLastScreen() const;
     const QString lastScreen();
 
@@ -315,8 +315,10 @@ private:
 
     QString m_changePrimaryName;
     QDateTime m_changeTime;
+
     QString m_newScreenName;
     QDateTime m_newTime;
+
     QString m_removeScreenName;
     QDateTime m_removeTime;
 };
