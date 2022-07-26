@@ -20,6 +20,7 @@
  */
 
 #include "pluginloader.h"
+#include "utils.h"
 
 #include <QDir>
 #include <QDebug>
@@ -66,6 +67,10 @@ void PluginLoader::run()
 
         // 社区版需要加载键盘布局，其他不需要
         if (file.contains("libkeyboard-layout") && !DSysInfo::isCommunityEdition())
+            continue;
+
+        // 由于onboard不支持wayland下输入，因此屏蔽onboard插件加载
+        if (file.contains("libonboard") && Utils::IS_WAYLAND_DISPLAY)
             continue;
 
         // TODO: old dock plugins is uncompatible
