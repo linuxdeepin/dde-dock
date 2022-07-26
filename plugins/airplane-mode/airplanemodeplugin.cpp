@@ -22,15 +22,19 @@
 
 #include "airplanemodeplugin.h"
 #include "airplanemodeitem.h"
+#include <DConfig>
 
 #define AIRPLANEMODE_KEY "airplane-mode-key"
 #define STATE_KEY  "enable"
+DCORE_USE_NAMESPACE
 
 AirplaneModePlugin::AirplaneModePlugin(QObject *parent)
     : QObject(parent)
     , m_item(new AirplaneModeItem)
+    , m_dconfig(DConfig::create("org.deepin.dde.network", "org.deepin.dde.network", QString(), this))
 {
     connect(m_item, &AirplaneModeItem::airplaneEnableChanged, this, &AirplaneModePlugin::onAirplaneEnableChanged);
+    connect(m_dconfig, &DConfig::valueChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
 }
 
 const QString AirplaneModePlugin::pluginName() const
@@ -47,12 +51,14 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_networkInter = new NetworkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
-    connect(m_networkInter, &NetworkInter::WirelessAccessPointsChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+    if (supportAirplaneMode()) {
+        m_networkInter = new NetworkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
+        connect(m_networkInter, &NetworkInter::WirelessAccessPointsChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
 
-    m_bluetoothInter = new BluetoothInter("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this);
-    connect(m_bluetoothInter, &BluetoothInter::AdapterAdded, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
-    connect(m_bluetoothInter, &BluetoothInter::AdapterRemoved, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+        m_bluetoothInter = new BluetoothInter("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this);
+        connect(m_bluetoothInter, &BluetoothInter::AdapterAdded, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+        connect(m_bluetoothInter, &BluetoothInter::AdapterRemoved, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
+    }
 
     if (!pluginIsDisable()) {
         if (supportAirplaneMode()) {
@@ -60,9 +66,7 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
         }
     }
 
-    if (supportAirplaneMode()) {
-        refreshAirplaneEnableState();
-    }
+    refreshAirplaneEnableState();
 }
 
 void AirplaneModePlugin::pluginStateSwitched()
@@ -97,6 +101,10 @@ QWidget *AirplaneModePlugin::itemTipsWidget(const QString &itemKey)
 
 QWidget *AirplaneModePlugin::itemPopupApplet(const QString &itemKey)
 {
+    if (!supportAirplaneMode()) {
+        return nullptr;
+    }
+
     if (itemKey == AIRPLANEMODE_KEY) {
         return m_item->popupApplet();
     }
@@ -106,6 +114,10 @@ QWidget *AirplaneModePlugin::itemPopupApplet(const QString &itemKey)
 
 const QString AirplaneModePlugin::itemContextMenu(const QString &itemKey)
 {
+    if (!supportAirplaneMode()) {
+        return QString();
+    }
+
     if (itemKey == AIRPLANEMODE_KEY) {
         return m_item->contextMenu();
     }
@@ -151,12 +163,20 @@ void AirplaneModePlugin::onAirplaneEnableChanged(bool enable)
     if (!m_proxyInter)
         return;
 
-    m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
-    if (enable) {
-        m_proxyInter->saveValue(this, STATE_KEY, true);
-    }
-    else {
-        m_proxyInter->saveValue(this, STATE_KEY, false);
+    if (supportAirplaneMode()) {
+        m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+        if (enable) {
+            m_proxyInter->saveValue(this, STATE_KEY, true);
+        }
+        else {
+            m_proxyInter->saveValue(this, STATE_KEY, false);
+        }
+    }  else {
+        if (enable) {
+            m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+        } else {
+            m_proxyInter->itemRemoved(this, AIRPLANEMODE_KEY);
+        }
     }
 }
 
@@ -171,6 +191,15 @@ void AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange()
 
 bool AirplaneModePlugin::supportAirplaneMode() const
 {
+    // dde-dconfig配置优先级高于设备优先级
+    bool bAirplane = false;
+    if (m_dconfig && m_dconfig->isValid()) {
+        bAirplane = m_dconfig->value("networkAirplaneMode", false).toBool();
+    }
+    if (!bAirplane) {
+        return bAirplane;
+    }
+
     // 蓝牙和无线网络,只要有其中一个就允许显示飞行模式
     QDBusInterface inter("com.deepin.system.Bluetooth",
                     "/com/deepin/system/Bluetooth",
