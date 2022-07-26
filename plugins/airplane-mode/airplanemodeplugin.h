@@ -26,9 +26,13 @@
 #include "pluginsiteminterface.h"
 #include "com_deepin_daemon_network.h"
 #include "com_deepin_daemon_bluetooth.h"
+#include "dtkcore_global.h"
 
 using NetworkInter = com::deepin::daemon::Network;
 using BluetoothInter = com::deepin::daemon::Bluetooth;
+DCORE_BEGIN_NAMESPACE
+class DConfig;
+DCORE_END_NAMESPACE
 
 class AirplaneModeItem;
 class AirplaneModePlugin : public QObject, PluginsItemInterface
@@ -67,6 +71,7 @@ private:
     AirplaneModeItem *m_item;
     NetworkInter *m_networkInter;
     BluetoothInter *m_bluetoothInter;
+    DTK_CORE_NAMESPACE::DConfig *m_dconfig;
 };
 
 #endif // AIRPLANEMODEPLUGIN_H
