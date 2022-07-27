@@ -32,6 +32,7 @@
 #include "pluginchildpage.h"
 #include "volumemodel.h"
 #include "utils.h"
+#include "displaysettingwidget.h"
 
 #include <DListView>
 #include <DStyle>
@@ -68,6 +69,7 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_volumnWidget(new VolumeWidget(m_volumeModel, m_componentWidget))
     , m_brihtnessWidget(new BrightnessWidget(m_brightnessModel, m_componentWidget))
     , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumeModel, this))
+    , m_displaySettingWidget(new DisplaySettingWidget(this))
     , m_childPage(new PluginChildPage(this))
     , m_dragPluginPosition(QPoint(0, 0))
 {
@@ -341,7 +343,7 @@ void QuickSettingContainer::initConnection()
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
         if (iconPosition == SliderContainer::RightIcon) {
             // 点击右侧的按钮，弹出具体的调节的界面
-            // showWidget(m_brightSettingWidget, tr("brightness"));
+            showWidget(m_displaySettingWidget, tr("brightness"));
             resizeView();
         }
     });

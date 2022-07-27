@@ -44,6 +44,7 @@ class VolumeDevicesWidget;
 class QLabel;
 class PluginChildPage;
 class QGridLayout;
+class DisplaySettingWidget;
 
 DWIDGET_USE_NAMESPACE
 
@@ -103,6 +104,7 @@ private:
     BrightnessWidget *m_brihtnessWidget;
 
     VolumeDevicesWidget *m_volumeSettingWidget;
+    DisplaySettingWidget *m_displaySettingWidget;
     PluginChildPage *m_childPage;
     QPoint m_dragPluginPosition;
 };
