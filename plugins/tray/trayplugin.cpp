@@ -278,7 +278,7 @@ bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
 {
     AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
 
-    if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+    if (trayWidget && trayWidget->trayType() == AbstractTrayWidget::TrayType::SystemTray) {
         return true;
     }
 
@@ -551,7 +551,7 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
 
     // only delete tray object when it is a tray of applications
     // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/TrayPluginsItem)
-    if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+    if (widget->trayType() == AbstractTrayWidget::TrayType::SystemTray) {
         widget->setParent(nullptr);
     } else if (deleteObject) {
         widget->deleteLater();
