@@ -56,7 +56,7 @@ inline QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path 
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param module 传入QGSettings构造函数时，会添加"com.deepin.dde.dock.module."前缀
  * @param path If non-empty, specifies the path for a relocatable schema
- * @param parent 创建指针的付对象
+ * @param parent 创建指针的父对象
  * @return
  */
 inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr)

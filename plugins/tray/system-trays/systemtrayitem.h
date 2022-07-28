@@ -44,7 +44,7 @@ public:
     QString itemKeyForConfig() override;
     void updateIcon() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
-    inline TrayType trayTyep() const override { return TrayType::SystemTray; }
+    inline TrayType trayType() const override { return TrayType::SystemTray; }
 
     QWidget *trayTipsWidget();
     QWidget *trayPopupApplet();

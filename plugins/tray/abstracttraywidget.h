@@ -41,7 +41,7 @@ public:
     virtual QString itemKeyForConfig() = 0;
     virtual void updateIcon() = 0;
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
-    virtual inline TrayType trayTyep() const { return TrayType::ApplicationTray; } // default is ApplicationTray
+    virtual inline TrayType trayType() const { return TrayType::ApplicationTray; } // default is ApplicationTray
     virtual bool isValid() {return true;}
     uint getOwnerPID();
 

@@ -192,7 +192,7 @@ int NormalContainer::whereToInsert(FashionTrayWidgetWrapper *wrapper)
 int NormalContainer::whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) const
 {
     int index = 0;
-    switch (wrapper->absTrayWidget()->trayTyep()) {
+    switch (wrapper->absTrayWidget()->trayType()) {
     case AbstractTrayWidget::TrayType::ApplicationTray:
         index = whereToInsertAppTrayByDefault(wrapper);
         break;
@@ -208,13 +208,13 @@ int NormalContainer::whereToInsertByDefault(FashionTrayWidgetWrapper *wrapper) c
 
 int NormalContainer::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wrapper) const
 {
-    if (wrapperList().isEmpty() || wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+    if (wrapperList().isEmpty() || wrapper->absTrayWidget()->trayType() != AbstractTrayWidget::TrayType::ApplicationTray) {
         return 0;
     }
 
     int lastAppTrayIndex = -1;
     for (int i = 0; i < wrapperList().size(); ++i) {
-        if (wrapperList().at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::ApplicationTray) {
+        if (wrapperList().at(i)->absTrayWidget()->trayType() == AbstractTrayWidget::TrayType::ApplicationTray) {
             lastAppTrayIndex = i;
             continue;
         }
@@ -225,7 +225,7 @@ int NormalContainer::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wra
         return 0;
     }
     // the inserting tray is not a AppTray
-    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+    if (wrapper->absTrayWidget()->trayType() != AbstractTrayWidget::TrayType::ApplicationTray) {
         return lastAppTrayIndex + 1;
     }
 
@@ -235,7 +235,7 @@ int NormalContainer::whereToInsertAppTrayByDefault(FashionTrayWidgetWrapper *wra
         return 0;
     }
     for (int i = 0; i < wrapperList().size(); ++i) {
-        if (wrapperList().at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::ApplicationTray) {
+        if (wrapperList().at(i)->absTrayWidget()->trayType() != AbstractTrayWidget::TrayType::ApplicationTray) {
             insertIndex = i;
             break;
         }
@@ -260,7 +260,7 @@ int NormalContainer::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
 
     int firstSystemTrayIndex = -1;
     for (int i = 0; i < wrapperList().size(); ++i) {
-        if (wrapperList().at(i)->absTrayWidget()->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
+        if (wrapperList().at(i)->absTrayWidget()->trayType() == AbstractTrayWidget::TrayType::SystemTray) {
             firstSystemTrayIndex = i;
             break;
         }
@@ -270,7 +270,7 @@ int NormalContainer::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
         return wrapperList().size();
     }
     // the inserting tray is not a SystemTray
-    if (wrapper->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+    if (wrapper->absTrayWidget()->trayType() != AbstractTrayWidget::TrayType::SystemTray) {
         return firstSystemTrayIndex;
     }
 
@@ -280,7 +280,7 @@ int NormalContainer::whereToInsertSystemTrayByDefault(FashionTrayWidgetWrapper *
         return firstSystemTrayIndex;
     }
     for (int i = 0; i < wrapperList().size(); ++i) {
-        if (wrapperList().at(i)->absTrayWidget()->trayTyep() != AbstractTrayWidget::TrayType::SystemTray) {
+        if (wrapperList().at(i)->absTrayWidget()->trayType() != AbstractTrayWidget::TrayType::SystemTray) {
             continue;
         }
         if (insertIndex > trayPlugin()->itemSortKey(wrapperList().at(i)->itemKey())) {

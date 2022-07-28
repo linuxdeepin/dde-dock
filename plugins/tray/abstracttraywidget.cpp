@@ -77,7 +77,7 @@ void AbstractTrayWidget::handleMouseRelease()
     Q_ASSERT(sender() == m_handleMouseReleaseTimer);
 
     // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
-    if (trayTyep() == SystemTray)
+    if (trayType() == SystemTray)
         return;
 
     const QPoint point(m_lastMouseReleaseData.first - rect().center());
