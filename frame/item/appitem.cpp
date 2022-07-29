@@ -61,7 +61,6 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     , m_itemAnimation(nullptr)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_drag(nullptr)
-    , m_dragging(false)
     , m_retryTimes(0)
     , m_iconValid(true)
     , m_lastclickTimes(0)
@@ -274,10 +273,8 @@ void AppItem::moveEvent(QMoveEvent *e)
 void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
-    if (m_draging)
-        return;
 
-    if (m_dragging || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
+    if (isDragging() || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
         return;
 
     QPainter painter(this);
@@ -569,7 +566,7 @@ QWidget *AppItem::popupTips()
     if (checkGSettingsControl())
         return nullptr;
 
-    if (m_dragging)
+    if (isDragging())
         return nullptr;
 
     static TipsWidget appNameTips(topLevelWidget());

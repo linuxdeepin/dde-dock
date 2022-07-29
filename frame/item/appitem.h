@@ -139,7 +139,6 @@ private:
 
     QPointer<AppDrag> m_drag;
 
-    bool m_dragging;
     bool m_active;
     int m_retryTimes;
     bool m_iconValid;

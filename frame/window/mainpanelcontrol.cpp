@@ -380,8 +380,8 @@ void MainPanelControl::resetRadius()
  */
 void MainPanelControl::dockRecentApp(DockItem *dockItem)
 {
-    // 如果当前不是特效模式，则无需做驻留操作
-    if (m_displayMode != Dock::DisplayMode::Fashion)
+    // 如果不是插入或者当前不是特效模式，则无需做驻留操作
+    if (m_dragIndex == -1 || m_displayMode != Dock::DisplayMode::Fashion)
         return;
 
     AppItem *appItem = qobject_cast<AppItem *>(dockItem);
@@ -848,9 +848,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
         connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
             m_appDragWidget = nullptr;
-            AppItem *appItem = static_cast<AppItem *>(dockItem);
-            if (appItem->supportSplitWindow())
-                return;
 
             if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
                 // 如果是从最近打开区域移动到应用区域的，则需要将其固定
@@ -861,7 +858,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
                 }
                 item->setDraging(false);
                 item->update();
-
                 // 发送拖拽完成事件
                 m_recentHelper->resetAppInfo();
             }
@@ -892,7 +888,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
     // 设置垃圾箱插件AcceptDrops false
     bool isNeedBack = false;
     PluginsItem *trashItem = m_toolHelper->trashPlugin();
-
     if (item->itemType() == DockItem::Plugins && trashItem && dockItem != trashItem) {
         trashItem->centralWidget()->setAcceptDrops(false);
         isNeedBack = true;
@@ -906,7 +901,25 @@ void MainPanelControl::startDrag(DockItem *dockItem)
         m_appDragWidget->execFinished();
     }
 
-    if (item->itemType() != DockItem::App || m_dragIndex == -1) {
+    if (item->itemType() == DockItem::App) {
+        // 判断是否在回收站区域, 如果在回收站区域，则移除驻留
+        PluginsItem *trashItem = m_toolHelper->trashPlugin();
+        if (!trashItem)
+            return;
+
+        QRect trashRect = trashItem->centralWidget()->geometry();
+        QPoint pointMouse = trashItem->centralWidget()->mapFromGlobal(QCursor::pos());
+        if (trashRect.contains(pointMouse)) {
+            AppItem *appItem = qobject_cast<AppItem *>(dockItem);
+            if (!appItem)
+                return;
+
+            // 先让其设置m_dragIndex==-1，避免在后续放到任务栏
+            m_dragIndex = -1;
+            appItem->setDraging(false);
+            appItem->undock();
+        }
+    } else if (m_dragIndex == -1) {
         m_appDragWidget = nullptr;
         item->setDraging(false);
         item->update();
