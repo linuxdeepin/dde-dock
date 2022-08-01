@@ -21,6 +21,7 @@
 #include "datetimedisplayer.h"
 #include "tipswidget.h"
 #include "dockpopupwindow.h"
+#include "utils.h"
 
 #include <DFontSizeManager>
 #include <DDBusSender>
@@ -64,6 +65,9 @@ DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     m_tipsTimer->start();
     updatePolicy();
     m_tipPopupWindow->hide();
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        m_tipPopupWindow->setWindowFlags(m_tipPopupWindow->windowFlags() | Qt::FramelessWindowHint);
+    }
 }
 
 DateTimeDisplayer::~DateTimeDisplayer()
