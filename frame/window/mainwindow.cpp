@@ -209,7 +209,7 @@ void MainWindow::reloadPlugins()
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
     e->ignore();
-    if (e->button() == Qt::RightButton) {
+    if (e->button() == Qt::RightButton && this->geometry().contains(QCursor::pos())) {
         QTimer::singleShot(10, this, [this]{
             QMenu *menu = new QMenu(this);
             m_menuWorker->showDockSettingsMenu(menu);
