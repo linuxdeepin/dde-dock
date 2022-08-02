@@ -97,9 +97,11 @@ void DatetimeWidget::setShortDateFormat(int type)
     case 3: m_shortDateFormat = "yyyy/MM/dd"; break;
     case 4: m_shortDateFormat = "yyyy-MM-dd"; break;
     case 5: m_shortDateFormat = "yyyy.MM.dd"; break;
-    case 6: m_shortDateFormat = "yy/M/d"; break;
-    case 7: m_shortDateFormat = "yy-M-d"; break;
-    case 8: m_shortDateFormat = "yy.M.d"; break;
+    case 6: m_shortDateFormat = "MM.dd.yyyy"; break;
+    case 7: m_shortDateFormat = "dd.MM.yyyy"; break;
+    case 8: m_shortDateFormat = "yy/M/d"; break;
+    case 9: m_shortDateFormat = "yy-M-d"; break;
+    case 10: m_shortDateFormat = "yy.M.d"; break;
     default: m_shortDateFormat = "yyyy-MM-dd"; break;
     }
     update();
