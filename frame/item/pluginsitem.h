@@ -25,6 +25,8 @@
 #include "dockitem.h"
 #include "pluginsiteminterface.h"
 
+#pragma pack(push, 4)
+
 class QGSettings;
 class PluginsItem : public DockItem
 {
@@ -88,5 +90,7 @@ private:
     static QPoint MousePressPoint;
     const QGSettings *m_gsettings;
 };
+
+#pragma pack(pop)
 
 #endif // PLUGINSITEM_H
