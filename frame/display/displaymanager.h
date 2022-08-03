@@ -27,9 +27,6 @@
 #include "singleton.h"
 #include "constants.h"
 
-#include <com_deepin_daemon_display.h>
-
-using DisplayInter = com::deepin::daemon::Display;
 using namespace Dock;
 
 class QScreen;
@@ -78,7 +75,6 @@ private:
     QMap<QScreen *, QMap<Position, bool>> m_screenPositionMap;
     const QGSettings *m_gsettings;              // 多屏配置控制
     bool m_onlyInPrimary;
-    DisplayInter *m_displayInter;
 };
 
 #endif // DISPLAYMANAGER_H
