@@ -668,11 +668,13 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
 
 void MultiScreenWorker::onRequestUpdateFrontendGeometry()
 {
-    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, m_hideMode, m_displayMode);
+    HideMode hideMode = HideMode::KeepShowing;
+    // 当设置为一直隐藏模式时，按照当前隐藏的状态去设置任务栏区域信息，否则，按照当前显示模式去设置
+    if (m_hideMode == HideMode::KeepHidden) {
+        hideMode = m_hideMode;
+    }
 
-    //!!! 智能隐藏模式下隐藏之后不需要在设置一次，否则会导致HideState属性循环变化
-    if (m_hideMode == HideMode::SmartHide && m_currentHideState == HideState::Hide)
-        return;
+    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, hideMode, m_displayMode);
 
 #ifdef QT_DEBUG
     qDebug() << rect;
