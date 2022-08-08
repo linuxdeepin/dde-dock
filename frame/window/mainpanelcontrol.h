@@ -100,6 +100,7 @@ private:
 private Q_SLOTS:
     void onRequestUpdate();
     void onRecentVisibleChanged(bool visible);
+    void onDockAppVisibleChanged(bool visible);
     void onToolVisibleChanged(bool visible);
 
 protected:

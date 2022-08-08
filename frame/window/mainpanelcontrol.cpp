@@ -202,6 +202,7 @@ void MainPanelControl::initConnection()
     connect(m_trayManagerWidget, &TrayManagerWindow::requestUpdate, this, &MainPanelControl::onRequestUpdate);
     connect(m_recentHelper, &RecentAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_recentHelper, &RecentAppHelper::recentVisibleChanged, this, &MainPanelControl::onRecentVisibleChanged);
+    connect(m_recentHelper, &RecentAppHelper::dockAppVisibleChanged, this, &MainPanelControl::onDockAppVisibleChanged);
     connect(m_toolHelper, &ToolAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_toolHelper, &ToolAppHelper::toolVisibleChanged, this, &MainPanelControl::onToolVisibleChanged);
 }
@@ -951,6 +952,7 @@ void MainPanelControl::updateModeChange()
     m_pluginAreaWidget->setVisible(m_displayMode == DisplayMode::Efficient);
     m_trayManagerWidget->setVisible(m_displayMode != DisplayMode::Efficient);
     onRecentVisibleChanged(m_recentHelper->recentIsVisible());
+    onDockAppVisibleChanged(m_recentHelper->dockAppIsVisible());
     onToolVisibleChanged(m_toolHelper->toolIsVisible());
     if (m_tray)
         m_tray->setVisible(m_displayMode == DisplayMode::Efficient);
@@ -1436,6 +1438,11 @@ void MainPanelControl::onRequestUpdate()
 void MainPanelControl::onRecentVisibleChanged(bool visible)
 {
     m_appSpliter->setVisible(visible);
+}
+
+void MainPanelControl::onDockAppVisibleChanged(bool visible)
+{
+    m_fixedSpliter->setVisible(visible);
 }
 
 void MainPanelControl::onToolVisibleChanged(bool visible)

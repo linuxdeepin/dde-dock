@@ -228,6 +228,11 @@ qint64 AppItem::appOpenMSecs() const
     return m_createMSecs;
 }
 
+void AppItem::updateMSecs()
+{
+    m_createMSecs = QDateTime::currentMSecsSinceEpoch();
+}
+
 void AppItem::moveEvent(QMoveEvent *e)
 {
     DockItem::moveEvent(e);
@@ -609,7 +614,7 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     // 如果是打开第一个窗口，则更新窗口时间
     if (m_windowInfos.isEmpty() && !info.isEmpty())
-        m_createMSecs = QDateTime::currentMSecsSinceEpoch();
+        updateMSecs();
 
     m_windowInfos = info;
     if (m_appPreviewTips)

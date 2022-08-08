@@ -42,12 +42,14 @@ public:
     void setDisplayMode(Dock::DisplayMode displayMode);
     void resetAppInfo();
     void addAppItem(int index, DockItem *appItem);
-    void removeAppItem(DockItem *appItem);
+    void removeAppItem(DockItem *dockItem);
     bool recentIsVisible() const;
+    bool dockAppIsVisible() const;
 
 Q_SIGNALS:
     void requestUpdate();
     void recentVisibleChanged(bool);                    // 最近区域是否可见发生变化的信号
+    void dockAppVisibleChanged(bool);                       // 驻留应用区域是否可见发生变化的信号
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -57,6 +59,7 @@ private:
     void addAppAreaItem(int index, DockItem *wdg);
     void addRecentAreaItem(int index, DockItem *wdg);
     void updateRecentVisible();
+    void updateDockAppVisible(bool lastVisible);
 
     void removeRecentAreaItem(DockItem *wdg);
     void removeAppAreaItem(DockItem *wdg);
@@ -76,7 +79,7 @@ private:
 
     QList<DockItem *> m_sequentDockItems;
 
-    Dock::DisplayMode m_dislayMode;
+    Dock::DisplayMode m_displayMode;
 };
 
 #endif // RECENTAPPHELPER_H

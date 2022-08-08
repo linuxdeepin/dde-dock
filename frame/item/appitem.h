@@ -67,6 +67,7 @@ public:
     void requestDock();
     bool isDocked() const;
     qint64 appOpenMSecs() const;
+    void updateMSecs();
 
 signals:
     void requestActivateWindow(const WId wid) const;

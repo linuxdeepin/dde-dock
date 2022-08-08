@@ -35,9 +35,11 @@ RecentAppHelper::RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObj
 
 void RecentAppHelper::setDisplayMode(Dock::DisplayMode displayMode)
 {
-    m_dislayMode = displayMode;
+    bool lastVisible = dockAppIsVisible();
+    m_displayMode = displayMode;
     resetDockItems();
     updateRecentVisible();
+    updateDockAppVisible(lastVisible);
 }
 
 // 当在应用区域调整位置的时候，需要重新设置索引
@@ -74,12 +76,14 @@ void RecentAppHelper::resetAppInfo()
 
 void RecentAppHelper::addAppItem(int index, DockItem *dockItem)
 {
-    if (appInRecent(dockItem))
+    if (appInRecent(dockItem)) {
         addRecentAreaItem(index, dockItem);
-    else
+        updateRecentVisible();
+    } else {
+        bool lastVisible = dockAppIsVisible();
         addAppAreaItem(index, dockItem);
-
-    updateRecentVisible();
+        updateDockAppVisible(lastVisible);
+    }
 
     connect(dockItem, &QWidget::destroyed, this, [ this, dockItem ] {
         if (m_sequentDockItems.contains(dockItem))
@@ -96,17 +100,26 @@ void RecentAppHelper::addAppItem(int index, DockItem *dockItem)
         m_sequentDockItems << dockItem;
 }
 
-void RecentAppHelper::removeAppItem(DockItem *appItem)
+void RecentAppHelper::removeAppItem(DockItem *dockItem)
 {
-    if (appInRecent(appItem))
-        removeRecentAreaItem(appItem);
+    if (appInRecent(dockItem))
+        removeRecentAreaItem(dockItem);
     else
-        removeAppAreaItem(appItem);
+        removeAppAreaItem(dockItem);
+
+    AppItem *appItem = qobject_cast<AppItem *>(dockItem);
+    disconnect(appItem, &AppItem::isDockChanged, this, &RecentAppHelper::onIsDockChanged);
 }
 
 bool RecentAppHelper::recentIsVisible() const
 {
     return m_recentWidget->isVisible();
+}
+
+bool RecentAppHelper::dockAppIsVisible() const
+{
+    return (m_displayMode == Dock::DisplayMode::Efficient
+            || m_appWidget->layout()->count() > 0);
 }
 
 bool RecentAppHelper::eventFilter(QObject *watched, QEvent *event)
@@ -134,14 +147,16 @@ bool RecentAppHelper::eventFilter(QObject *watched, QEvent *event)
 
 void RecentAppHelper::onIsDockChanged()
 {
+    bool lastVisible = dockAppIsVisible();
     resetDockItems();
     updateRecentVisible();
+    updateDockAppVisible(lastVisible);
 }
 
 bool RecentAppHelper::appInRecent(DockItem *item) const
 {
     // 先判断当前是否为时尚模式，只有时尚模式下才支持最近打开的应用
-    if (m_dislayMode != Dock::DisplayMode::Fashion)
+    if (m_displayMode != Dock::DisplayMode::Fashion)
         return false;
 
     // TODO 当控制中心不开启最近打开应用的功能的时候，则始终让其显示在应用区域
@@ -165,21 +180,30 @@ void RecentAppHelper::addRecentAreaItem(int index, DockItem *wdg)
 
 void RecentAppHelper::updateRecentVisible()
 {
-    bool oldVisible = recentIsVisible();
+    bool lastRecentVisible = recentIsVisible();
+    bool recentVisible = lastRecentVisible;
 
-    if (m_dislayMode == Dock::DisplayMode::Efficient) {
+    if (m_displayMode == Dock::DisplayMode::Efficient) {
         // 如果是高效模式，不显示最近打开应用区域
         m_recentWidget->setVisible(false);
+        recentVisible = false;
     } else {
         QBoxLayout *recentLayout = static_cast<QBoxLayout *>(m_recentWidget->layout());
-        qInfo() << "recent Widget count:" << recentLayout->count();
+        qInfo() << "recent Widget count:" << recentLayout->count() << ", app Widget count" << m_appWidget->layout()->count();
         // 如果是特效模式，则判断当前打开应用数量是否为0，为0则不显示，否则显示
-        m_recentWidget->setVisible(recentLayout->count() > 0);
+        recentVisible = (recentLayout->count() > 0);
+        m_recentWidget->setVisible(recentVisible);
     }
 
-    bool recentVisible = recentIsVisible();
-    if (oldVisible != recentVisible)
+    if (lastRecentVisible != recentVisible)
         Q_EMIT recentVisibleChanged(recentVisible);
+}
+
+void RecentAppHelper::updateDockAppVisible(bool lastVisible)
+{
+    bool visible = dockAppIsVisible();
+    if (lastVisible != visible)
+        Q_EMIT dockAppVisibleChanged(visible);
 }
 
 void RecentAppHelper::removeRecentAreaItem(DockItem *wdg)
@@ -192,13 +216,15 @@ void RecentAppHelper::removeRecentAreaItem(DockItem *wdg)
 void RecentAppHelper::removeAppAreaItem(DockItem *wdg)
 {
     QBoxLayout *boxLayout = static_cast<QBoxLayout *>(m_appWidget->layout());
+    bool lastVisible = dockAppIsVisible();
     boxLayout->removeWidget(wdg);
+    updateDockAppVisible(lastVisible);
 }
 
 QList<DockItem *> RecentAppHelper::dockItemToAppArea() const
 {
     QList<DockItem *> dockItems;
-    if (m_dislayMode == Dock::DisplayMode::Efficient) {
+    if (m_displayMode == Dock::DisplayMode::Efficient) {
         // 由特效模式变成高效模式，将所有的最近打开的应用移动到左侧的应用区域
         for (int i = 0; i < m_recentWidget->layout()->count(); i++) {
             DockItem *appItem = qobject_cast<DockItem *>(m_recentWidget->layout()->itemAt(i)->widget());
@@ -240,7 +266,7 @@ void RecentAppHelper::resetDockItems()
             boxLayout->addWidget(appItem);
     }
 
-    if (m_dislayMode == Dock::DisplayMode::Fashion) {
+    if (m_displayMode == Dock::DisplayMode::Fashion) {
         // 由高效模式变成特效模式后，将左侧未驻留的应用移动到右侧的最近打开应用中
         QList<DockItem *> unDockItems;
         for (int i = 0; i < m_appWidget->layout()->count() ; i++) {
