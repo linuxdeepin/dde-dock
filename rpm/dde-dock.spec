@@ -11,7 +11,6 @@ Source0:        %{name}-%{version}.orig.tar.xz
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(dbusmenu-qt5)
-BuildRequires:  pkgconfig(dde-network-utils)
 BuildRequires:  dtkwidget-devel >= 5.1
 BuildRequires:  dtkcore-devel >= 5.1
 BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
@@ -33,7 +32,6 @@ BuildRequires:  qt5-linguist
 BuildRequires:  gtest-devel
 BuildRequires:  gmock-devel
 Requires:       dbusmenu-qt5
-Requires:       dde-network-utils
 Requires:       dde-qt-dbus-factory
 Requires:       xcb-util-wm
 Requires:       xcb-util-image
