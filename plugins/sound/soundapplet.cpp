@@ -285,7 +285,7 @@ void SoundApplet::onDefaultSinkChanged()
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
     connect(m_defSinkInter, &DBusSink::MuteChanged, this, [ = ] {
-        onVolumeChanged(m_defSinkInter->volume());
+        onVolumeChanged(existActiveOutputDevice() ? m_defSinkInter->volume() : 0);
     });
 
     QString portId = m_defSinkInter->activePort().name;

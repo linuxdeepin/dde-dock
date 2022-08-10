@@ -88,14 +88,15 @@ const QString SoundItem::contextMenu()
 
     QMap<QString, QVariant> open;
     open["itemId"] = MUTE;
-    if (m_sinkInter->mute()) {
+    if (!m_applet->existActiveOutputDevice()) {
         open["itemText"] = tr("Unmute");
-        if (!m_applet->existActiveOutputDevice())
-            open["isActive"] = false;
-        else
-            open["isActive"] = true;
+        open["isActive"] = false;
     } else {
-        open["itemText"] = tr("Mute");
+        if (m_sinkInter->mute()) {
+            open["itemText"] = tr("Unmute");
+        } else {
+            open["itemText"] = tr("Mute");
+        }
         open["isActive"] = true;
     }
     items.push_back(open);
@@ -229,11 +230,14 @@ void SoundItem::refreshTips(const int volume, const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
-    if (mute) {
-        m_tipsLabel->setText(QString(tr("Mute")));
+    if (!m_applet->existActiveOutputDevice()) {
+        m_tipsLabel->setText(QString(tr("No output devices")));
     } else {
-        m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
+        if (m_sinkInter->mute()) {
+            m_tipsLabel->setText(QString(tr("Mute")));
+        } else {
+            m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
+        }
     }
 }
 
