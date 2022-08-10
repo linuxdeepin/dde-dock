@@ -157,23 +157,23 @@
     </message>
     <message>
         <source>tuesday</source>
-        <translation type="unfinished"/>
+        <translation>tiistai</translation>
     </message>
     <message>
         <source>wednesday</source>
-        <translation type="unfinished"/>
+        <translation>keskiviikko</translation>
     </message>
     <message>
         <source>thursday</source>
-        <translation type="unfinished"/>
+        <translation>torstai</translation>
     </message>
     <message>
         <source>friday</source>
-        <translation type="unfinished"/>
+        <translation>perjantai</translation>
     </message>
     <message>
         <source>saturday</source>
-        <translation type="unfinished"/>
+        <translation>lauantai</translation>
     </message>
     <message>
         <source>sunday</source>
@@ -181,7 +181,7 @@
     </message>
     <message>
         <source>%1year%2month%3day</source>
-        <translation type="unfinished"/>
+        <translation>%3day%2month%1year</translation>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Äänitaso: %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

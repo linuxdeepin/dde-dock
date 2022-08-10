@@ -157,31 +157,31 @@
     </message>
     <message>
         <source>tuesday</source>
-        <translation type="unfinished"/>
+        <translation>Kedd</translation>
     </message>
     <message>
         <source>wednesday</source>
-        <translation type="unfinished"/>
+        <translation>Szerda</translation>
     </message>
     <message>
         <source>thursday</source>
-        <translation type="unfinished"/>
+        <translation>Csütörtök</translation>
     </message>
     <message>
         <source>friday</source>
-        <translation type="unfinished"/>
+        <translation>Péntek</translation>
     </message>
     <message>
         <source>saturday</source>
-        <translation type="unfinished"/>
+        <translation>Szombat</translation>
     </message>
     <message>
         <source>sunday</source>
-        <translation type="unfinished"/>
+        <translation>Vasárnap</translation>
     </message>
     <message>
         <source>%1year%2month%3day</source>
-        <translation type="unfinished"/>
+        <translation>% 1év %2 hónap %3 nap</translation>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Hangerő: %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

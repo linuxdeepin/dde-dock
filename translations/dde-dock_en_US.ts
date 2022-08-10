@@ -157,31 +157,31 @@
     </message>
     <message>
         <source>tuesday</source>
-        <translation type="unfinished"/>
+        <translation>tuesday</translation>
     </message>
     <message>
         <source>wednesday</source>
-        <translation type="unfinished"/>
+        <translation>wednesday</translation>
     </message>
     <message>
         <source>thursday</source>
-        <translation type="unfinished"/>
+        <translation>thursday</translation>
     </message>
     <message>
         <source>friday</source>
-        <translation type="unfinished"/>
+        <translation>friday</translation>
     </message>
     <message>
         <source>saturday</source>
-        <translation type="unfinished"/>
+        <translation>saturday</translation>
     </message>
     <message>
         <source>sunday</source>
-        <translation type="unfinished"/>
+        <translation>sunday</translation>
     </message>
     <message>
         <source>%1year%2month%3day</source>
-        <translation type="unfinished"/>
+        <translation>%1year%2month%3day</translation>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Volume %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

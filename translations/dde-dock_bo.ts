@@ -576,6 +576,10 @@
         <source>Volume %1</source>
         <translation>མིག་སྔའི་སྐད་གདངས་%1</translation>
     </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundPlugin</name>

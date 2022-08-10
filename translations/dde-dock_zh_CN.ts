@@ -576,6 +576,10 @@
         <source>Volume %1</source>
         <translation>当前音量 %1</translation>
     </message>
+    <message>
+        <source>No output devices</source>
+        <translation>无声音输出设备</translation>
+    </message>
 </context>
 <context>
     <name>SoundPlugin</name>
