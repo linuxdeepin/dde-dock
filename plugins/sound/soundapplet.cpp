@@ -162,7 +162,7 @@ void SoundApplet::initUi()
     m_soundShow->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_soundShow, DFontSizeManager::T8, QFont::Medium);
 
-    m_deviceLabel->setText(tr("Device"));
+    m_deviceLabel->setText(tr("Volume"));
     m_deviceLabel->setFixedHeight(TITLE_HEIGHT);
     m_deviceLabel->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_deviceLabel, DFontSizeManager::T4, QFont::Medium);
