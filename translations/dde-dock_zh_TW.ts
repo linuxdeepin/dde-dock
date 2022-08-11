@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>裝置</translation>
+        <source>Volume</source>
+        <translation>音量</translation>
     </message>
 </context>
 <context>
