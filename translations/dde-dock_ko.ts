@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>장치</translation>
+        <source>Volume</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

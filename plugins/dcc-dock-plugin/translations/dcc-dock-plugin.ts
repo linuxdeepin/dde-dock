@@ -695,7 +695,7 @@
     <name>SoundApplet</name>
     <message>
         <location filename="../../sound/soundapplet.cpp" line="165"/>
-        <source>Device</source>
+        <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

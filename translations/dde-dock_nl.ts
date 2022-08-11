@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>Apparaat</translation>
+        <source>Volume</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -578,7 +578,7 @@
     </message>
     <message>
         <source>No output devices</source>
-        <translation type="unfinished"/>
+        <translation>Geen uitvoerapparaten</translation>
     </message>
 </context>
 <context>
