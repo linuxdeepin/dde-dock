@@ -229,6 +229,7 @@ void AppSnapshot::fetchSnapshot()
                     m_snapshotSrcRect = m_snapshot.rect();
                     qDebug() << "reply: " << tmpFile;
                     QFile::remove(tmpFile);
+                    break;
                 }  else {
                     qDebug() << "get current workspace bckground error, file does not exist : " << tmpFile;
                 }
@@ -251,7 +252,7 @@ void AppSnapshot::fetchSnapshot()
             image_data = nullptr;
         }
 
-        if (!image_data || qimage.isNull()) {
+        if (!Utils::IS_WAYLAND_DISPLAY && (!image_data || qimage.isNull())) {
             // get window image from XGetImage(a little slow)
             qDebug() << "get Image from dxcbplugin SHM failed!";
             qDebug() << "get Image from Xlib...";
@@ -263,14 +264,22 @@ void AppSnapshot::fetchSnapshot()
                 return;
             }
             qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+
+            if (!qimage.isNull()) {
+                m_snapshot = qimage;
+                // remove shadow frame
+                m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
+            } else {
+                qDebug() << "can not get QImage! giving up...";
+            }
         }
-
-        Q_ASSERT(!qimage.isNull());
-
-        // remove shadow frame
-        m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
-        m_snapshot = qimage;
     } while(false);
+
+    // 如果m_snapshot或m_snapshotSrcRect为空，说明三种方式均失败，返回不做处理
+    if (m_snapshot.isNull() || m_snapshotSrcRect.isNull()) {
+        qWarning() << "can not get QImage or QRectF! giving up...";
+        return;
+    }
 
     QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
     const auto ratio = devicePixelRatioF();
