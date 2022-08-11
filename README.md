@@ -11,7 +11,6 @@ Any usage issues can ask for help via
 * [Gitter](https://gitter.im/orgs/linuxdeepin/rooms)
 * [IRC channel](https://webchat.freenode.net/?channels=deepin)
 * [Forum](https://bbs.deepin.org)
-* [WiKi](https://wiki.deepin.org/)
 
 ## Getting involved
 
