@@ -43,4 +43,4 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
 )
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays/)
-install(FILES ./keybord_layout.json DESTINATION /etc/dde-dock/indicator)
+install(FILES ./keybord_layout.json DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/dde-dock/indicator)
