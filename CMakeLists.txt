@@ -114,7 +114,7 @@ install(FILES ${QM_FILES}
 
 ## dev files
 install(FILES ${INTERFACES}
-    DESTINATION include/dde-dock)
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dde-dock)
 
 install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
@@ -123,7 +123,7 @@ install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
-    DESTINATION share/glib-2.0/schemas)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 
 # Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
