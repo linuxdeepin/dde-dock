@@ -504,6 +504,7 @@ void MainWindow::resizeDock(int offset, bool dragging)
 {
     qApp->setProperty(DRAG_STATE_PROP, dragging);
 
+    // 以任务栏的最小高度区域为参照，通过offset设置其高度或宽度
     const QRect &rect = m_multiScreenWorker->getDockShowMinGeometry(m_multiScreenWorker->deskScreen());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {
