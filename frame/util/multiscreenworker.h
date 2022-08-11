@@ -147,7 +147,7 @@ public:
 
     QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
     QRect dockRect(const QString &screenName);
-    QRect getDockShowMinGeometry(const QString &screenName, bool withoutScale = false);
+    QRect getDockShowMinGeometry(const QString &screenName);
 
     bool launcherVisible();
     void setLauncherVisble(bool isVisible);
@@ -248,6 +248,7 @@ private:
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
     static bool isCopyMode();
+    QRect getScreenRect(QScreen *s);
 
 private:
     QWidget *m_parent;
