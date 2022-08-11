@@ -1,11 +1,11 @@
-prefix=/usr
+prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=${prefix}
-libdir=${prefix}/lib/@HOST_MULTIARCH@
-includedir=${prefix}/include/dde-dock
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/dde-dock
 
-Name: dde dock
+Name: dde-dock
 Description: dock dev header for deepin
-Version: 1.0
+Version: @VERSION@
 Libs:
 Cflags: -I${includedir}
 Requires:
