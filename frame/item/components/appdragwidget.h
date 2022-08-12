@@ -23,6 +23,8 @@
 #define APPDRAGWIDGET_H
 
 #include "constants.h"
+#include "screenspliter.h"
+#include "utils.h"
 
 #include <QPixmap>
 #include <QGraphicsObject>
@@ -37,6 +39,9 @@
 #include "../widgets/tipswidget.h"
 #include "dockpopupwindow.h"
 #include "dockitem.h"
+
+class QDrag;
+class DockScreen;
 
 class AppGraphicsObject : public QGraphicsObject
 {
@@ -85,18 +90,18 @@ class AppDragWidget : public QGraphicsView
 public:
     explicit AppDragWidget(QWidget *parent = Q_NULLPTR);
 
+    void execFinished();
     void setAppPixmap(const QPixmap &pix);
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
     void setOriginPos(const QPoint position);
     void setPixmapOpacity(qreal opacity);
-    bool isRemoveAble(const QPoint &curPos);
     void setItem(DockItem *item) { m_item = item; }
-    static bool isRemoveable(const Dock::Position &dockPos, const QRect &doctRect);
     void showRemoveAnimation();
     void showGoBackAnimation();
 
 signals:
-    void requestRemoveItem();
+    void requestChangedArea(QRect);
+    void requestSplitWindow(ScreenSpliter::SplitDirection);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -104,7 +109,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void hideEvent(QHideEvent *event) override;
-    void moveEvent(QMoveEvent *event) override;
     void enterEvent(QEvent *event) override;
 
 private:
@@ -113,11 +117,20 @@ private:
             QAbstractAnimation::State oldState);
     const QPoint popupMarkPoint(Dock::Position pos);
     const QPoint topleftPoint() const;
-    void showRemoveTips();
-    bool isRemoveItem();
+    bool canSplitWindow(const QPoint &pos) const;
+    ScreenSpliter::SplitDirection splitPosition() const;
+    QRect splitGeometry(const QPoint &pos) const;
+    void initWaylandEnv();
+
+    void dropHandler(const QPoint &pos);
+    void moveHandler(const QPoint &pos);
+    void moveCurrent(const QPoint &destPos);
+    void adjustDesktopGeometry(QRect &rect) const;
 
 private Q_SLOTS:
     void onFollowMouse();
+    void onButtonRelease(int, int x, int y, const QString &);
+    void onCursorMove(int x, int y, const QString &);
 
 protected:
     QScopedPointer<AppGraphicsObject> m_object;
@@ -133,7 +146,6 @@ protected:
     QRect m_dockGeometry;
     QPoint m_originPoint;
     QSize m_iconSize;
-    Dock::TipsWidget *m_removeTips;
     QScopedPointer<DockPopupWindow> m_popupWindow;
     /**
      * @brief m_distanceMultiple: 倍数
@@ -143,6 +155,8 @@ protected:
 
     bool m_bDragDrop = false; // 图标是否被拖拽
     DockItem *m_item;
+    QRect m_lastMouseGeometry;
+    DockScreen *m_dockScreen;
 };
 
 class QuickDragWidget : public AppDragWidget
@@ -160,6 +174,9 @@ public:
 protected:
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
+
+private:
+    bool isRemoveAble(const QPoint &curPos);
 };
 
 #endif /* APPDRAGWIDGET_H */

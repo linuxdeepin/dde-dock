@@ -25,6 +25,7 @@
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "utils.h"
+#include "screenspliter.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -70,6 +71,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
     , m_createMSecs(QDateTime::currentMSecsSinceEpoch())
+    , m_screenSpliter(ScreenSpliterFactory::createScreenSpliter(this, m_itemEntryInter))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -103,7 +105,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
-    refreshIcon();
 
     if (m_appSettings)
         connect(m_appSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
@@ -180,6 +181,31 @@ void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry
     if (m_drag) {
         m_drag->appDragWidget()->setDockInfo(dockPosition, dockGeometry);
     }
+}
+
+void AppItem::setDraging(bool drag)
+{
+    if (drag == isDragging())
+        return;
+
+    DockItem::setDraging(drag);
+    if (!drag)
+        m_screenSpliter->releaseSplit();
+}
+
+void AppItem::startSplit(const QRect &rect)
+{
+    m_screenSpliter->startSplit(rect);
+}
+
+bool AppItem::supportSplitWindow()
+{
+    return m_screenSpliter->suportSplitScreen();
+}
+
+bool AppItem::splitWindowOnScreen(ScreenSpliter::SplitDirection direction)
+{
+    return m_screenSpliter->split(direction);
 }
 
 QString AppItem::accessibleName()
@@ -636,7 +662,9 @@ void AppItem::refreshIcon()
         update();
 
         return;
-    } else if (m_retryTimes > 0) {
+    }
+
+    if (m_retryTimes > 0) {
         // reset times
         m_retryTimes = 0;
     }

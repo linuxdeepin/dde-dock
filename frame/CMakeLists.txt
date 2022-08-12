@@ -5,8 +5,8 @@ set(BIN_NAME dde-dock)
 configure_file(environments.h.in environments.h @ONLY)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O0")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O0")
 endif()
 
 # Sources files
@@ -19,6 +19,8 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Svg REQUIRED)
+find_package(Qt5WaylandClient REQUIRED)
+find_package(Qt5XkbCommonSupport REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(DtkCMake REQUIRED)
 find_package(dbusmenu-qt5 REQUIRED)
@@ -27,6 +29,9 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-image xcb-ewmh xcb-composite xtst x11 db
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DtkGUI REQUIRED dtkgui)
+
+set(Wayland_INCLUDE_DIRS /usr/include/DWayland/Client)
+set(Wayland_LIBRARIES /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/libDWaylandClient.so)
 
 # driver-manager
 add_executable(${BIN_NAME}
@@ -45,6 +50,10 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${DtkGUI_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${dbusmenu-qt5_INCLUDE_DIRS}
+    ${Wayland_INCLUDE_DIRS}
+    ${Qt5WaylandClient_INCLUDE_DIRS}
+    ${Qt5WaylandClient_PRIVATE_INCLUDE_DIRS}
+    ${Qt5XkbCommonSupport_PRIVATE_INCLUDE_DIRS}
     ../interfaces
     ../widgets
     accessible
@@ -54,6 +63,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     item
     item/components
     model
+    screenspliter
     util
     window
     window/components
@@ -82,6 +92,10 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
     ${DtkGUI_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${Wayland_LIBRARIES}
+    ${Qt5Wayland_LIBRARIES}
+    ${Qt5WaylandClient_LIBRARIES}
+    ${Qt5XkbCommonSupport_LIBRARIES}
     -lpthread -lm
 )
 

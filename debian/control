@@ -26,7 +26,10 @@ Build-Depends: debhelper (>= 8.0.0),
  libgtest-dev,
  libgmock-dev,
  qttools5-dev,
- libxcursor-dev
+ libxcursor-dev,
+ libqt5waylandclient5-dev,
+ qtwayland5-private-dev,
+ libdwayland-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

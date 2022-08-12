@@ -282,7 +282,7 @@ void QuickPluginWindow::startDrag(PluginsItemInterface *moveItem)
     drag->setPixmap(dragPixmap);
     drag->setHotSpot(QPoint(0, 0));
 
-    connect(drag->appDragWidget(), &AppDragWidget::requestRemoveItem, this, [ this, moveItem ] {
+    connect(drag->appDragWidget(), &AppDragWidget::requestSplitWindow, this, [ this, moveItem ] {
         removePlugin(moveItem);
     });
 

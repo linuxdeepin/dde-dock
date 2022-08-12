@@ -49,7 +49,7 @@ void registerWindowInfoMetaType()
 
 QDebug operator<<(QDebug argument, const WindowInfo &info)
 {
-    argument << '(' << info.title << ',' << info.attention << ')';
+    argument << '(' << info.title << ',' << info.attention << info.uuid << ')';
 
     return argument;
 }
@@ -57,7 +57,7 @@ QDebug operator<<(QDebug argument, const WindowInfo &info)
 QDBusArgument &operator<<(QDBusArgument &argument, const WindowInfo &info)
 {
     argument.beginStructure();
-    argument << info.title << info.attention;
+    argument << info.title << info.attention << info.uuid;
     argument.endStructure();
 
     return argument;
@@ -66,7 +66,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const WindowInfo &info)
 const QDBusArgument &operator>>(const QDBusArgument &argument, WindowInfo &info)
 {
     argument.beginStructure();
-    argument >> info.title >> info.attention;
+    argument >> info.title >> info.attention >> info.uuid;
     argument.endStructure();
 
     return argument;
@@ -74,14 +74,20 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, WindowInfo &info)
 
 bool WindowInfo::operator==(const WindowInfo &rhs) const
 {
-    return attention == rhs.attention &&
-           title == rhs.title;
+    return (attention == rhs.attention &&
+           title == rhs.title &&
+           uuid == rhs.uuid);
 }
 
 class EntryPrivate
 {
 public:
-   EntryPrivate() = default;
+    EntryPrivate()
+        : CurrentWindow(0)
+        , IsActive(false)
+        , IsDocked(false)
+        , mode(0)
+    {}
 
     // begin member variables
     uint CurrentWindow;

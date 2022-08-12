@@ -36,6 +36,7 @@
 #include <DGuiApplicationHelper>
 
 class QGSettings;
+class ScreenSpliter;
 
 class AppItem : public DockItem
 {
@@ -52,7 +53,14 @@ public:
     void undock();
     QWidget *appDragWidget();
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
+    void setDraging(bool drag) override;
 
+    void startSplit(const QRect &rect);
+    bool supportSplitWindow();
+    bool splitWindowOnScreen(ScreenSpliter::SplitDirection direction);
+#ifdef USE_AM
+    int mode() const;
+#endif
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName() override;
@@ -146,6 +154,8 @@ private:
     qint64 m_createMSecs;
 
     static QPoint MousePressPos;
+
+    ScreenSpliter *m_screenSpliter;
 };
 
 #endif // APPITEM_H

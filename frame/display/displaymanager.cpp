@@ -69,6 +69,17 @@ QScreen *DisplayManager::screen(const QString &screenName) const
     return nullptr;
 }
 
+QScreen *DisplayManager::screenAt(const QPoint &pos) const
+{
+    for (QScreen *screen : m_screens) {
+        QRect screenGeometry = screen->geometry();
+        if (screenGeometry.contains(pos))
+            return screen;
+    }
+
+    return nullptr;
+}
+
 /**
  * @brief DisplayManager::primary
  * @return 主屏幕名称

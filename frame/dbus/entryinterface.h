@@ -53,6 +53,7 @@ public:
 public:
     bool attention;
     QString title;
+    QString uuid;
 };
 
 Q_DECLARE_METATYPE(WindowInfo)

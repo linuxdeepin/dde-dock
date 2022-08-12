@@ -45,6 +45,7 @@ public:
 
     QList<QScreen *> screens() const;
     QScreen *screen(const QString &screenName) const;
+    QScreen *screenAt(const QPoint &pos) const;
     QString primary() const;
     int screenRawWidth() const;
     int screenRawHeight() const;

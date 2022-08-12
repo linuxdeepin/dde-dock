@@ -47,16 +47,15 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QtConcurrent/QtConcurrentRun>
+#include <QX11Info>
+
 #include <qpa/qplatformnativeinterface.h>
 #include <qpa/qplatformintegration.h>
-#define protected public
-#include <QtGui/private/qsimpledrag_p.h>
-#undef protected
-#include <QtGui/private/qshapedpixmapdndwindow_p.h>
-#include <QtGui/private/qguiapplication_p.h>
 
 #include <DGuiApplicationHelper>
 #include <DWindowManagerHelper>
+
+#include <X11/Xlib.h>
 
 #define SPLITER_SIZE 2
 #define TRASH_MARGIN 20
@@ -794,8 +793,25 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
         m_appDragWidget = appDrag->appDragWidget();
 
+        connect(m_appDragWidget, &AppDragWidget::requestChangedArea, this, [ = ](QRect rect) {
+            // 在区域改变的时候，出现分屏提示效果
+            AppItem *appItem = static_cast<AppItem *>(dockItem);
+            if (appItem->supportSplitWindow())
+                appItem->startSplit(rect);
+        });
+
+        connect(m_appDragWidget, &AppDragWidget::requestSplitWindow, this, [ = ](ScreenSpliter::SplitDirection dir) {
+            AppItem *appItem = static_cast<AppItem *>(dockItem);
+            if (appItem->supportSplitWindow())
+                appItem->splitWindowOnScreen(dir);
+        });
+
         connect(m_appDragWidget, &AppDragWidget::destroyed, this, [ = ] {
             m_appDragWidget = nullptr;
+            AppItem *appItem = static_cast<AppItem *>(dockItem);
+            if (appItem->supportSplitWindow())
+                return;
+
             if (!item.isNull() && qobject_cast<AppItem *>(item)->isValid()) {
                 // 如果是从最近打开区域移动到应用区域的，则需要将其固定
                 dockRecentApp(item);
@@ -808,13 +824,6 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
                 // 发送拖拽完成事件
                 m_recentHelper->resetAppInfo();
-            }
-        });
-
-        connect(m_appDragWidget, &AppDragWidget::requestRemoveItem, this, [ = ] {
-            if (-1 != m_appAreaSonLayout->indexOf(item)) {
-                m_dragIndex = m_appAreaSonLayout->indexOf(item);
-                removeItem(item);
             }
         });
 
@@ -851,6 +860,11 @@ void MainPanelControl::startDrag(DockItem *dockItem)
 
     drag->setMimeData(new QMimeData);
     drag->exec(Qt::MoveAction);
+
+    if (item->itemType() == DockItem::App && m_appDragWidget) {
+        // TODO AppDragWidget中偶尔会出现拖拽结束后没有触发dropEvent的情况，因此exec结束后处理dropEvent中未执行的操作(临时处理方式)
+        m_appDragWidget->execFinished();
+    }
 
     if (item->itemType() != DockItem::App || m_dragIndex == -1) {
         m_appDragWidget = nullptr;
@@ -1368,8 +1382,7 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
             if (!layout || !layout->itemAt(0))
                 continue;
 
-            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-            qInfo() << pItem->pluginItem()->pluginDisplayName();
+            PluginsItem *pItem = qobject_cast<PluginsItem *>(layout->itemAt(0)->widget());
             if (!pItem)
                 continue;
 
