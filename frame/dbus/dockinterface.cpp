@@ -323,6 +323,11 @@ void Dde_Dock::setWindowSizeFashion(uint value)
     setProperty("WindowSizeFashion", QVariant::fromValue(value));
 }
 
+bool Dde_Dock::showRecent() const
+{
+    return qvariant_cast<bool>(property("ShowRecent"));
+}
+
 QDBusPendingReply<> Dde_Dock::ActivateWindow(uint in0)
 {
     return m_wm->ActivateWindow(in0);

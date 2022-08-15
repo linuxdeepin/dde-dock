@@ -23,6 +23,7 @@
 #define MAINPANELCONTROL_H
 
 #include "constants.h"
+#include "dbusutil.h"
 
 #include <QWidget>
 
@@ -148,6 +149,7 @@ private:
     int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
     DockScreen *m_dockScreen;
+    DockInter *m_dockInter;
     RecentAppHelper *m_recentHelper;
     ToolAppHelper *m_toolHelper;
 };

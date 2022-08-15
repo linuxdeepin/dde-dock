@@ -91,7 +91,7 @@ public:
     Q_PROPERTY(QString Icon READ icon NOTIFY IconChanged)
     QString icon();
 
-    Q_PROPERTY(QString Id READ id NOTIFY IdChanged)
+    Q_PROPERTY(QString Id READ id)
     QString id();
 
     Q_PROPERTY(bool IsActive READ isActive NOTIFY IsActiveChanged)
@@ -108,6 +108,9 @@ public:
 
     Q_PROPERTY(WindowInfoMap WindowInfos READ windowInfos NOTIFY WindowInfosChanged)
     WindowInfoMap windowInfos();
+
+    Q_PROPERTY(int Mode READ mode NOTIFY ModeChanged)
+    int mode() const;
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Activate(uint in0)
@@ -243,7 +246,7 @@ Q_SIGNALS: // SIGNALS
     void CurrentWindowChanged(uint32_t value) const;
 
     void WindowInfosChanged(WindowInfoMap value) const;
-    void IdChanged(const QString &value) const;
+    void ModeChanged(int value) const;
 
 private:
     QVariant asyncProperty(const QString &propertyName);

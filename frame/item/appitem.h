@@ -76,7 +76,11 @@ signals:
     void dragReady(QWidget *dragWidget);
 
     void requestUpdateEntryGeometries() const;
+#ifdef USE_AM
+    void modeChanged(int) const;
+#else
     void isDockChanged(bool) const;
+#endif
 
 private:
     void moveEvent(QMoveEvent *e) override;

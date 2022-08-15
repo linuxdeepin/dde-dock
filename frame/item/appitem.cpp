@@ -97,8 +97,11 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
+#ifdef USE_AM
+    connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, &AppItem::modeChanged);
+#else
     connect(m_itemEntryInter, &DockEntryInter::IsDockedChanged, this, &AppItem::isDockChanged);
-
+#endif
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
 
@@ -207,6 +210,13 @@ bool AppItem::splitWindowOnScreen(ScreenSpliter::SplitDirection direction)
 {
     return m_screenSpliter->split(direction);
 }
+
+#ifdef USE_AM
+int AppItem::mode() const
+{
+    return m_itemEntryInter->mode();
+}
+#endif
 
 QString AppItem::accessibleName()
 {

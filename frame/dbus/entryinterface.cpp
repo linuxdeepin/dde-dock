@@ -86,6 +86,7 @@ public:
         : CurrentWindow(0)
         , IsActive(false)
         , IsDocked(false)
+        , mode(0)
     {}
 
     // begin member variables
@@ -99,6 +100,7 @@ public:
     QString Name;
 
     WindowInfoMap WindowInfos;
+    int mode;
 
 public:
     QMap<QString, QDBusPendingCallWatcher *> m_processingCalls;
@@ -131,8 +133,7 @@ void Dock_Entry::onPropertyChanged(const QString &propName, const QVariant &valu
 {
     if (propName == QStringLiteral("CurrentWindow")) {
         const uint &CurrentWindow = qvariant_cast<uint>(value);
-        if (d_ptr->CurrentWindow != CurrentWindow)
-        {
+        if (d_ptr->CurrentWindow != CurrentWindow) {
             d_ptr->CurrentWindow = CurrentWindow;
             Q_EMIT CurrentWindowChanged(d_ptr->CurrentWindow);
         }
@@ -154,15 +155,6 @@ void Dock_Entry::onPropertyChanged(const QString &propName, const QVariant &valu
         {
             d_ptr->Icon = Icon;
             Q_EMIT IconChanged(d_ptr->Icon);
-        }
-        return;
-    }
-
-    if (propName == QStringLiteral("Id")) {
-        const QString &Id = qvariant_cast<QString>(value);
-        if (d_ptr->Id != Id) {
-            d_ptr->Id = Id;
-            Q_EMIT IdChanged(d_ptr->Id);
         }
         return;
     }
@@ -212,6 +204,14 @@ void Dock_Entry::onPropertyChanged(const QString &propName, const QVariant &valu
         return;
     }
 
+    if (propName == QStringLiteral("Mode")) {
+        const int mode = qvariant_cast<int>(value);
+        if (d_ptr->mode != mode) {
+            d_ptr->mode = mode;
+            Q_EMIT ModeChanged(d_ptr->mode);
+        }
+    }
+
     qWarning() << "property not handle: " << propName;
     return;
 }
@@ -244,6 +244,11 @@ bool Dock_Entry::isActive()
 bool Dock_Entry::isDocked()
 {
     return qvariant_cast<bool>(property("IsDocked"));
+}
+
+int Dock_Entry::mode() const
+{
+    return qvariant_cast<int>(property("Mode"));
 }
 
 QString Dock_Entry::menu()

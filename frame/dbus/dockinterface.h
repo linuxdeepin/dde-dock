@@ -125,6 +125,9 @@ public:
     uint windowSizeFashion();
     void setWindowSizeFashion(uint value);
 
+    Q_PROPERTY(bool ShowRecent READ showRecent NOTIFY showRecentChanged)
+    bool showRecent() const;
+
 public Q_SLOTS: // METHODS
     QDBusPendingReply<> ActivateWindow(uint in0);
 
@@ -263,6 +266,14 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("RequestUndock"), argumentList);
     }
 
+    inline void SetShowRecent(bool in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+
+        CallQueued(QStringLiteral("SetShowRecent"), argumentList);
+    }
+
     inline QDBusPendingReply<> SetFrontendWindowRect(int in0, int in1, uint in2, uint in3)
     {
         QList<QVariant> argumentList;
@@ -314,6 +325,7 @@ Q_SIGNALS: // SIGNALS
     void WindowSizeChanged(uint value) const;
     void WindowSizeEfficientChanged(uint value) const;
     void WindowSizeFashionChanged(uint value) const;
+    void showRecentChanged(bool) const;
 
 public Q_SLOTS:
     void CallQueued(const QString &callName, const QList<QVariant> &args);

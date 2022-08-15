@@ -99,7 +99,8 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_displayMode(Efficient)
     , m_tray(nullptr)
     , m_dockScreen(nullptr)
-    , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, this))
+    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, m_dockInter, this))
     , m_toolHelper(new ToolAppHelper(m_pluginAreaWidget, m_toolAreaWidget, this))
 {
     initUI();
@@ -359,8 +360,11 @@ void MainPanelControl::dockRecentApp(DockItem *dockItem)
     if (!appItem)
         return;
 
-    // TODO 如果控制中心设置不开启最近应用，则不让其驻留
-
+    // 如果控制中心设置不开启最近应用，则不让其驻留
+#ifdef USE_AM
+    if (!m_dockInter->showRecent())
+        return;
+#endif
     // 如果控制中心开启了最近应用并且当前应用是未驻留应用，则可以驻留
     if (!appItem->isDocked())
         appItem->requestDock();

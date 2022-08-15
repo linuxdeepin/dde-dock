@@ -23,10 +23,12 @@
 #define RECENTAPPHELPER_H
 
 #include "constants.h"
+#include "dbusutil.h"
 
 #include <QObject>
 
 class DockItem;
+class AppItem;
 class QWidget;
 
 /** 用来管理最近打开区域和APP应用区域交互的类
@@ -38,7 +40,7 @@ class RecentAppHelper : public QObject
     Q_OBJECT
 
 public:
-    explicit RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObject *parent = nullptr);
+    explicit RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, DockInter *dockInter, QObject *parent = nullptr);
     void setDisplayMode(Dock::DisplayMode displayMode);
     void resetAppInfo();
     void addAppItem(int index, DockItem *appItem);
@@ -64,22 +66,29 @@ private:
     void removeRecentAreaItem(DockItem *wdg);
     void removeAppAreaItem(DockItem *wdg);
 
+#ifndef USE_AM
     QList<DockItem *> dockItemToAppArea() const;
     void resetDockItems();
     int getDockItemIndex(DockItem *dockItem, bool isRecent) const;
+#endif
+    int getEntryIndex(DockItem *dockItem, QWidget *widget) const;
 
-    QList<DockItem *> dockItems(bool isRecent) const;
+    QList<AppItem *> appItems(QWidget *widget) const;
 
 private Q_SLOTS:
-    void onIsDockChanged();
-
+#ifdef USE_AM
+    void onModeChanged(int mode);
+#else
+    void onItemChanged();
+#endif
 private:
     QWidget *m_appWidget;
     QWidget *m_recentWidget;
-
+#ifndef USE_AM
     QList<DockItem *> m_sequentDockItems;
-
+#endif
     Dock::DisplayMode m_displayMode;
+    DockInter *m_dockInter;
 };
 
 #endif // RECENTAPPHELPER_H
