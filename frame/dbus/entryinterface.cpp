@@ -86,7 +86,6 @@ public:
         : CurrentWindow(0)
         , IsActive(false)
         , IsDocked(false)
-        , mode(0)
     {}
 
     // begin member variables
