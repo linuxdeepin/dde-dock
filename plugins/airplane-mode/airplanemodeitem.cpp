@@ -113,14 +113,25 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
     if (menuId == SHIFT)
         m_airplaneModeInter->Enable(!m_airplaneModeInter->enabled());
     else if (menuId == SETTINGS)
+#ifdef USE_AM
         DDBusSender()
-        .service("org.deepin.dde.ControlCenter")
-        .interface("org.deepin.dde.ControlCenter")
-        .path("/org/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
         .method(QString("ShowPage"))
         .arg(QString("network"))
         .arg(QString("Airplane Mode"))
         .call();
+#else
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowPage"))
+        .arg(QString("network"))
+        .arg(QString("Airplane Mode"))
+        .call();
+#endif
     */
 }
 

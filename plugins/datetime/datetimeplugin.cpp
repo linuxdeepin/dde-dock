@@ -190,13 +190,23 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(checked)
 
     if (menuId == "open") {
+#ifdef USE_AM
         DDBusSender()
-                .service("org.deepin.dde.ControlCenter")
-                .interface("org.deepin.dde.ControlCenter")
-                .path("/org/deepin/dde/ControlCenter")
+                .service("org.deepin.dde.ControlCenter1")
+                .interface("org.deepin.dde.ControlCenter1")
+                .path("/org/deepin/dde/ControlCenter1")
                 .method(QString("ShowPage"))
                 .arg(QString("datetime"))
                 .call();
+#else
+        DDBusSender()
+                .service("com.deepin.dde.ControlCenter")
+                .interface("com.deepin.dde.ControlCenter")
+                .path("/com/deepin/dde/ControlCenter")
+                .method(QString("ShowPage"))
+                .arg(QString("datetime"))
+                .call();
+#endif
     } else {
         const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
         timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);

@@ -113,7 +113,11 @@ bool PowerPlugin::pluginIsDisable()
 const QString PowerPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-        return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter /org/deepin/dde/ControlCenter org.deepin.dde.ControlCenter.ShowPage \"string:power\"");
+#ifdef USE_AM
+        return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowPage \"string:power\"");
+#else
+        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowPage \"string:power\"");
+#endif
 
     return QString();
 }
@@ -149,13 +153,23 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
     Q_UNUSED(checked)
 
     if (menuId == "power") {
+#ifdef USE_AM
         DDBusSender()
-        .service("org.deepin.dde.ControlCenter")
-        .interface("org.deepin.dde.ControlCenter")
-        .path("/org/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
         .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
+#else
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowPage"))
+        .arg(QString("power"))
+        .call();
+#endif
      }
 }
 

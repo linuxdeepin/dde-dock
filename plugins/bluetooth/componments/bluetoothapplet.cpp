@@ -274,15 +274,24 @@ void BluetoothApplet::initConnect()
 {
     connect(m_adaptersManager, &AdaptersManager::adapterIncreased, this, &BluetoothApplet::onAdapterAdded);
     connect(m_adaptersManager, &AdaptersManager::adapterDecreased, this, &BluetoothApplet::onAdapterRemoved);
-
     connect(m_settingLabel, &SettingLabel::clicked, this, [ = ] {
+#ifdef USE_AM
         DDBusSender()
-        .service("org.deepin.dde.ControlCenter")
-        .interface("org.deepin.dde.ControlCenter")
-        .path("/org/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
+#else
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowPage"))
+        .arg(QString("bluetooth"))
+        .call();
+#endif
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);

@@ -233,13 +233,23 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         QCoreApplication::processEvents(QEventLoop::AllEvents, 200);
 
     if (menuId == "power") {
+#ifdef USE_AM
         DDBusSender()
-        .service("org.deepin.dde.ControlCenter")
-        .interface("org.deepin.dde.ControlCenter")
-        .path("/org/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
         .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
+#else
+        DDBusSender()
+        .service("com.deepin.dde.ControlCenter")
+        .interface("com.deepin.dde.ControlCenter")
+        .path("/com/deepin/dde/ControlCenter")
+        .method(QString("ShowPage"))
+        .arg(QString("power"))
+        .call();
+#endif
     } else if (menuId == "Lock") {
         if (QFile::exists(ICBC_CONF_FILE)) {
             QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
