@@ -126,13 +126,6 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 {
     initUi();
     initConnect();
-
-
-    QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
-    QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();
-    QVariant overshootPolicyOne = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
-    propertiesOne.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, overshootPolicyOne);
-    QScroller::scroller(m_scroarea)->setScrollerProperties(propertiesOne);
 }
 
 bool BluetoothApplet::poweredInitState()
@@ -249,14 +242,19 @@ void BluetoothApplet::initUi()
     m_contentLayout->addWidget(m_settingLabel, 0, Qt::AlignBottom | Qt::AlignVCenter);
 
     m_scroarea = new QScrollArea(this);
-
     m_scroarea->setWidgetResizable(true);
-    m_scroarea->setFrameStyle(QFrame::NoFrame);
-    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scroarea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-    m_scroarea->setContentsMargins(0, 0, 0, 0);
     m_scroarea->setWidget(m_contentWidget);
+    m_scroarea->setFrameShape(QFrame::NoFrame);
+    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_scroarea->setAutoFillBackground(true);
+    m_scroarea->viewport()->setAutoFillBackground(true);
+
+    QScroller::grabGesture(m_scroarea->viewport(), QScroller::LeftMouseButtonGesture);
+    QScroller *scroller = QScroller::scroller(m_scroarea);
+    QScrollerProperties sp;
+    sp.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(sp);
 
     updateIconTheme();
 
