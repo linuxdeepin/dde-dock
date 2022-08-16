@@ -532,7 +532,6 @@ void SoundApplet::activePort(const QString &portId, const uint &cardId)
     for (Port *it : m_ports) {
         if (it->id() == portId && it->cardId() == cardId) {
             it->setIsActive(true);
-            enableDevice(true);
         }
         else {
             it->setIsActive(false);
