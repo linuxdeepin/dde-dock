@@ -29,6 +29,7 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QFont>
+#include <QMenu>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -46,6 +47,7 @@ DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     , m_position(Dock::Position::Bottom)
     , m_dateFont(DFontSizeManager::instance()->t10())
     , m_tipsWidget(new Dock::TipsWidget(this))
+    , m_menu(new QMenu(this))
     , m_tipsTimer(new QTimer(this))
     , m_currentSize(0)
     , m_oneRow(false)
@@ -64,10 +66,10 @@ DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     m_tipsTimer->setInterval(1000);
     m_tipsTimer->start();
     updatePolicy();
-    m_tipPopupWindow->hide();
-    if (Utils::IS_WAYLAND_DISPLAY) {
+    createMenuItem();
+    if (Utils::IS_WAYLAND_DISPLAY)
         m_tipPopupWindow->setWindowFlags(m_tipPopupWindow->windowFlags() | Qt::FramelessWindowHint);
-    }
+    m_tipPopupWindow->hide();
 }
 
 DateTimeDisplayer::~DateTimeDisplayer()
@@ -129,6 +131,14 @@ QSize DateTimeDisplayer::suitableSize()
     }
 
     return QSize(width(), info.m_timeRect.height() + info.m_dateRect.height());
+}
+
+void DateTimeDisplayer::mousePressEvent(QMouseEvent *event)
+{
+    if ((event->button() != Qt::RightButton))
+        return QWidget::mousePressEvent(event);
+
+    m_menu->exec(QCursor::pos());
 }
 
 void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
@@ -226,7 +236,7 @@ void DateTimeDisplayer::onDateTimeFormatChanged()
     repaint();
     // 如果日期时间的格式发生了变化，需要通知外部来调整日期时间的尺寸
     if (lastSize != m_currentSize)
-        Q_EMIT sizeChanged();
+        Q_EMIT requestUpdate();
 }
 
 void DateTimeDisplayer::paintEvent(QPaintEvent *e)
@@ -302,6 +312,45 @@ QFont DateTimeDisplayer::timeFont() const
     return dateFontSize[index];
 }
 
+void DateTimeDisplayer::createMenuItem()
+{
+    QAction *timeFormatAction = new QAction(this);
+    if (m_timedateInter->use24HourFormat())
+        timeFormatAction->setText(tr("12-hour time"));
+    else
+        timeFormatAction->setText(tr("24-hour time"));
+
+    connect(timeFormatAction, &QAction::triggered, this, [ = ] {
+        m_timedateInter->setUse24HourFormat(!m_timedateInter->use24HourFormat());
+    });
+    m_menu->addAction(timeFormatAction);
+
+    if (!QFile::exists(ICBC_CONF_FILE)) {
+        QAction *timeSettingAction = new QAction(tr("Time settings"), this);
+        connect(timeSettingAction, &QAction::triggered, this, [ = ] {
+#ifdef USE_AM
+            DDBusSender()
+                    .service("org.deepin.dde.ControlCenter1")
+                    .interface("org.deepin.dde.ControlCenter1")
+                    .path("/org/deepin/dde/ControlCenter1")
+                    .method(QString("ShowPage"))
+                    .arg(QString("datetime"))
+                    .call();
+#else
+            DDBusSender()
+                    .service("com.deepin.dde.ControlCenter")
+                    .interface("com.deepin.dde.ControlCenter")
+                    .path("/com/deepin/dde/ControlCenter")
+                    .method(QString("ShowPage"))
+                    .arg(QString("datetime"))
+                    .call();
+#endif
+        });
+
+        m_menu->addAction(timeSettingAction);
+    }
+}
+
 void DateTimeDisplayer::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
@@ -312,6 +361,16 @@ void DateTimeDisplayer::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
     m_tipPopupWindow->hide();
+}
+
+void DateTimeDisplayer::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    int oldSize = m_currentSize;
+    m_currentSize = (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) ? width() : height();
+    if (oldSize != m_currentSize)
+        Q_EMIT requestUpdate();
 }
 
 void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)

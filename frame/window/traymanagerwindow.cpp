@@ -294,7 +294,7 @@ void TrayManagerWindow::initConnection()
              }
         }
     });
-    connect(m_dateTimeWidget, &DateTimeDisplayer::sizeChanged, this, &TrayManagerWindow::requestUpdate);
+    connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &TrayManagerWindow::requestUpdate);
 
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);

@@ -21,7 +21,6 @@
 #include "systempluginwindow.h"
 #include "systemplugincontroller.h"
 #include "systempluginitem.h"
-#include "dockpluginscontroller.h"
 #include "fixedplugincontroller.h"
 
 #include <DListView>

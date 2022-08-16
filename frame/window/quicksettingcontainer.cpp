@@ -31,6 +31,7 @@
 #include "volumedeviceswidget.h"
 #include "pluginchildpage.h"
 #include "volumemodel.h"
+#include "utils.h"
 
 #include <DListView>
 #include <DStyle>
@@ -120,6 +121,8 @@ DockPopupWindow *QuickSettingContainer::popWindow()
     m_popWindow->setArrowHeight(10);
     m_popWindow->setArrowDirection(getDirection(m_position));
     m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
+    if (Utils::IS_WAYLAND_DISPLAY)
+        m_popWindow->setWindowFlags(m_popWindow->windowFlags() | Qt::FramelessWindowHint | Qt::Popup);
     return m_popWindow;
 }
 

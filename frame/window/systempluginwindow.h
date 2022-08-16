@@ -22,13 +22,14 @@
 #define SYSTEMPLUGINWINDOW_H
 
 #include "constants.h"
-#include "dockpluginscontroller.h"
+#include "dockitem.h"
 
 #include <QWidget>
 
 class FixedPluginController;
 class StretchPluginsItem;
 class QBoxLayout;
+class PluginsItemInterface;
 
 namespace Dtk { namespace Widget { class DListView; } }
 

@@ -29,7 +29,9 @@
 #include <com_deepin_daemon_timedate.h>
 
 namespace Dock { class TipsWidget; }
+
 class DockPopupWindow;
+class QMenu;
 
 using Timedate = com::deepin::daemon::Timedate;
 
@@ -53,13 +55,15 @@ public:
     QSize suitableSize();
 
 Q_SIGNALS:
-    void sizeChanged();         // 当日期时间格式发生变化的时候，需要通知外面来更新窗口尺寸
+    void requestUpdate();         // 当日期时间格式发生变化的时候，需要通知外面来更新窗口尺寸
 
 protected:
+    void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updatePolicy();
@@ -72,6 +76,8 @@ private:
     QPoint tipsPoint() const;
     QFont timeFont() const;
 
+    void createMenuItem();
+
 private Q_SLOTS:
     void onTimeChanged();
     void onDateTimeFormatChanged();
@@ -81,6 +87,7 @@ private:
     Dock::Position m_position;
     QFont m_dateFont;
     Dock::TipsWidget *m_tipsWidget;
+    QMenu *m_menu;
     QSharedPointer<DockPopupWindow> m_tipPopupWindow;
     QTimer *m_tipsTimer;
     QString m_lastDateString;
