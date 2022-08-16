@@ -40,7 +40,7 @@ void QuickSettingController::sortPlugins()
     QList<QuickSettingItem *> primarySettingItems;
     QList<QuickSettingItem *> quickItems;
     for (QuickSettingItem *item : m_quickSettingItems) {
-        if (item->pluginItem()->isPrimary())
+        if (item->isPrimary())
             primarySettingItems << item;
         else
             quickItems << item;
@@ -70,7 +70,11 @@ void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, c
     if (findItemIterator != m_quickSettingItems.end())
         return;
 
-    QuickSettingItem *quickItem = new QuickSettingItem(itemInter, itemKey);
+    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
+    QJsonObject metaData;
+    if (pluginLoader)
+        metaData = pluginLoader->metaData().value("MetaData").toObject();
+    QuickSettingItem *quickItem = new QuickSettingItem(itemInter, itemKey, metaData);
 
     m_quickSettingItems << quickItem;
     sortPlugins();

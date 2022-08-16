@@ -93,10 +93,11 @@ class QuickDockItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit QuickDockItem(PluginsItemInterface *pluginItem, QWidget *parent = nullptr);
+    explicit QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, QWidget *parent = nullptr);
     ~QuickDockItem();
 
     PluginsItemInterface *pluginItem();
+    bool isPrimary() const;
 
 Q_SIGNALS:
     void clicked();
@@ -107,6 +108,7 @@ protected:
 
 private:
     PluginsItemInterface *m_pluginItem;
+    QJsonObject m_metaData;
 };
 
 #endif // QUICKPLUGINWINDOW_H

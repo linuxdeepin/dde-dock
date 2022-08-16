@@ -39,9 +39,10 @@ public:
     ItemType itemType() const override;
     const QPixmap dragPixmap();
     const QString itemKey() const;
+    bool isPrimary() const;
 
 protected:
-    QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent = nullptr);
     ~QuickSettingItem() override;
 
     void paintEvent(QPaintEvent *e) override;
@@ -57,6 +58,7 @@ private:
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
+    QJsonObject m_metaData;
 };
 
 #endif // QUICKSETTINGITEM_H

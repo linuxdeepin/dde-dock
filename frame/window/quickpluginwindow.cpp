@@ -24,6 +24,7 @@
 #include "pluginsiteminterface.h"
 #include "quicksettingcontainer.h"
 #include "appdrag.h"
+#include "proxyplugincontroller.h"
 
 #include <DStyleOption>
 #include <DStandardItem>
@@ -334,7 +335,7 @@ int QuickPluginWindow::getDropIndex(QPoint point)
 
             QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
             QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
-            if (dockItem->pluginItem()->isPrimary())
+            if (dockItem->isPrimary())
                 continue;
 
             if (dockBeforeItem->geometry().x() > point.x() && dockItem->geometry().right() < point.x())
@@ -348,7 +349,7 @@ int QuickPluginWindow::getDropIndex(QPoint point)
             continue;
 
         QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
-        if (dockBeforeItem->pluginItem()->isPrimary())
+        if (dockBeforeItem->isPrimary())
             break;
 
         QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
@@ -439,7 +440,12 @@ void QuickPluginWindow::resetPluginDisplay()
             if (pluginItems.contains(item)) {
                 itemWidget = pluginItems[item];
             } else {
-                itemWidget = new QuickDockItem(item, this);
+                QJsonObject metaData;
+                QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(item);
+                if (pluginLoader)
+                    metaData = pluginLoader->metaData().value("MetaData").toObject();
+
+                itemWidget = new QuickDockItem(item, metaData, this);
                 itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
             }
             connect(itemWidget, &QuickDockItem::clicked, this, &QuickPluginWindow::onFixedClick);
@@ -474,9 +480,10 @@ void QuickPluginWindow::initConnection()
  * @param pluginItem
  * @param parent
  */
-QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, QWidget *parent)
+QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, QWidget *parent)
     : QWidget(parent)
     , m_pluginItem(pluginItem)
+    , m_metaData(metaData)
 {
 }
 
@@ -487,6 +494,14 @@ QuickDockItem::~QuickDockItem()
 PluginsItemInterface *QuickDockItem::pluginItem()
 {
     return m_pluginItem;
+}
+
+bool QuickDockItem::isPrimary() const
+{
+    if (m_metaData.contains("primary"))
+        return m_metaData.value("primary").toBool();
+
+    return false;
 }
 
 void QuickDockItem::paintEvent(QPaintEvent *event)

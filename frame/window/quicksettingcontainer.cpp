@@ -203,7 +203,7 @@ void QuickSettingContainer::mousePressEvent(QMouseEvent *event)
         return QWidget::mousePressEvent(event);
 
     QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(childAt(event->pos()));
-    if (!moveItem || moveItem->pluginItem()->isPrimary())
+    if (!moveItem || moveItem->isPrimary())
         return QWidget::mousePressEvent(event);
 
     m_dragPluginPosition = event->pos();
@@ -257,7 +257,7 @@ void QuickSettingContainer::updateItemLayout()
     int column = 0;
     QList<QuickSettingItem *> quickSettings = m_pluginLoader->settingItems();
     for (QuickSettingItem *item : quickSettings) {
-        int usedColumn = item->pluginItem()->isPrimary() ? 2 : 1;
+        int usedColumn = item->isPrimary() ? 2 : 1;
         m_pluginLayout->addWidget(item, row, column, 1, usedColumn);
         column += usedColumn;
         if (column >= COLUMNCOUNT) {
@@ -361,7 +361,7 @@ void QuickSettingContainer::resizeView()
         int selfPluginCount = 0;
         for (QuickSettingItem *item : pluginItems) {
             // 如果是置顶的插件，则认为它占用两个普通插件的位置
-            int increCount = (item->pluginItem()->isPrimary() ? 2 : 1);
+            int increCount = (item->isPrimary() ? 2 : 1);
             selfPluginCount += increCount;
         }
         int rowCount = selfPluginCount / COLUMNCOUNT;

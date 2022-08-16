@@ -43,10 +43,11 @@
 
 static QSize expandSize = QSize(20, 20);
 
-QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
+QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
+    , m_metaData(metaData)
 {
     setAcceptDrops(true);
     this->installEventFilter(this);
@@ -96,6 +97,14 @@ const QString QuickSettingItem::itemKey() const
     return m_itemKey;
 }
 
+bool QuickSettingItem::isPrimary() const
+{
+    if (m_metaData.contains("primary"))
+        return m_metaData.value("primary").toBool();
+
+    return false;
+}
+
 void QuickSettingItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
@@ -125,7 +134,7 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     QPainter pa(&pm);
     pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
     pa.fillRect(pm.rect(), painter.pen().brush());
-    if (m_pluginInter->isPrimary()) {
+    if (isPrimary()) {
         // 如果是主图标，则显示阴影背景
         int marginYSpace = yMarginSpace();
         QRect iconBg(MARGINLEFTSPACE, marginYSpace, BGSIZE, BGSIZE);
@@ -201,7 +210,7 @@ QColor QuickSettingItem::foregroundColor() const
 void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)
 {
     // 如果是鼠标的按下事件
-    if (m_pluginInter->isPrimary()) {
+    if (isPrimary()) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QRect rctExpand(rect().width() - MARGINRIGHTSPACE - expandSize.width(),
                         (rect().height() - expandSize.height()) / 2,

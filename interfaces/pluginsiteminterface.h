@@ -270,12 +270,6 @@ public:
     virtual PluginStatus status() const { return PluginStatus::Deactive; }
 
     ///
-    /// return is primary plugin,if true, the plugin will display on top
-    /// the default value is false
-    ///
-    virtual bool isPrimary() const { return false; }
-
-    ///
     /// return the detail value, it will display in the center
     ///
     ///
