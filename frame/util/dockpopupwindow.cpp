@@ -47,7 +47,8 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
     if (Utils::IS_WAYLAND_DISPLAY) {
         setAttribute(Qt::WA_NativeWindow);
-        windowHandle()->setProperty("_d_dwayland_window-type", "override");
+        // 谨慎修改层级，特别要注意对锁屏的影响
+        windowHandle()->setProperty("_d_dwayland_window-type", "onScreenDisplay");
     } else {
         setAttribute(Qt::WA_InputMethodEnabled, false);
     }
