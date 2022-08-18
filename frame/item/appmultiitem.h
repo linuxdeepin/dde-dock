@@ -24,9 +24,6 @@
 #include "dockitem.h"
 #include "dbusutil.h"
 
-struct SHMInfo;
-struct _XImage;
-typedef _XImage XImage;
 class AppItem;
 
 class AppMultiItem : public DockItem
@@ -51,10 +48,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-    bool isKWinAvailable() const;
-    QImage snapImage() const;
-    SHMInfo *getImageDSHM() const;
-    XImage *getImageXlib() const;
     void initMenu();
     void initConnection();
 

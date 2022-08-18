@@ -29,6 +29,9 @@
 #include <QPainterPath>
 #include <QRegion>
 #include <QBitmap>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QFile>
 
 #include <X11/Xcursor/Xcursor.h>
 
@@ -83,4 +86,54 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
     QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
     XcursorImagesDestroy(images);
     return cursor;
+}
+
+QImage ImageUtil::loadWindowThumb(const WId &windowId, int width, int height)
+{
+    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+
+    QList<QVariant> args;
+    args << QVariant::fromValue(windowId);
+    args << QVariant::fromValue(quint32(width));
+    args << QVariant::fromValue(quint32(height));
+
+    QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("screenshotForWindowExtend"), args);
+    if(reply.isValid()){
+        const QString tmpFile = reply.value();
+        if (QFile::exists(tmpFile)) {
+            QImage image(tmpFile);
+            QFile::remove(tmpFile);
+            return image;
+        }
+        qDebug() << "get current workspace background error, file does not exist : " << tmpFile;
+    } else {
+        qDebug() << "get current workspace background error: "<< reply.error().message();
+    }
+
+    return QImage();
+}
+
+QImage ImageUtil::loadWindowThumb(const QString &uuid, int width, int height)
+{
+    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+
+    QList<QVariant> args;
+    args << QVariant::fromValue(uuid);
+    args << QVariant::fromValue(quint32(width));
+    args << QVariant::fromValue(quint32(height));
+
+    QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("screenshotForWindowExtendUuid"), args);
+    if(reply.isValid()){
+        const QString tmpFile = reply.value();
+        if (QFile::exists(tmpFile)) {
+            QImage image(tmpFile);
+            QFile::remove(tmpFile);
+            return image;
+        }
+        qDebug() << "get current workspace background error, file does not exist : " << tmpFile;
+    } else {
+        qDebug() << "get current workspace background error: "<< reply.error().message();
+    }
+
+    return QImage();
 }

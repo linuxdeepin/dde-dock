@@ -450,7 +450,8 @@ void DockItemManager::onShowMultiWindowChanged()
 {
     if (m_appInter->showMultiWindow()) {
         // 如果当前设置支持窗口多开，那么就依次对每个APPItem加载多开窗口
-        for (const QPointer<DockItem> &dockItem : m_itemList) {
+        for (int i = 0; i < m_itemList.size(); i++) {
+            const QPointer<DockItem> &dockItem = m_itemList[i];
             if (dockItem->itemType() != DockItem::ItemType::App)
                 continue;
 

@@ -23,6 +23,7 @@
 #include "previewcontainer.h"
 #include "../widgets/tipswidget.h"
 #include "utils.h"
+#include "imageutil.h"
 
 #include <DStyle>
 
@@ -212,27 +213,13 @@ void AppSnapshot::fetchSnapshot()
 
     // 优先使用窗管进行窗口截图
     if (isKWinAvailable()) {
-        QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-        qDebug() << "windowsID:"<< m_wid;
+#ifdef USE_AM
+        if (Utils::IS_WAYLAND_DISPLAY)
+            m_snapshot = ImageUtil::loadWindowThumb(m_windowInfo.uuid, SNAP_WIDTH, SNAP_HEIGHT);
+        else
+#endif
+            m_snapshot = ImageUtil::loadWindowThumb(m_wid, SNAP_WIDTH, SNAP_HEIGHT);
 
-        QList<QVariant> args;
-        args << QVariant::fromValue(m_wid);
-        args << QVariant::fromValue(quint32(SNAP_WIDTH));
-        args << QVariant::fromValue(quint32(SNAP_HEIGHT));
-
-        QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block,QStringLiteral("screenshotForWindowExtend"), args);
-        if(reply.isValid()){
-            const QString tmpFile = reply.value();
-            if (QFile::exists(tmpFile)) {
-                m_snapshot.load(tmpFile);
-                qDebug() << "reply: " << tmpFile;
-                QFile::remove(tmpFile);
-            }  else {
-                qDebug() << "get current workspace bckground error, file does not exist : " << tmpFile;
-            }
-        } else {
-            qDebug() << "get current workspace bckground error: "<< reply.error().message();
-        }
         m_snapshotSrcRect = m_snapshot.rect();
     } else {
         do {

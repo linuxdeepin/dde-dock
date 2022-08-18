@@ -34,21 +34,6 @@
 #include <X11/Xatom.h>
 #include <sys/shm.h>
 
-struct SHMInfo {
-    long shmid;
-    long width;
-    long height;
-    long bytesPerLine;
-    long format;
-
-    struct Rect {
-        long x;
-        long y;
-        long width;
-        long height;
-    } rect;
-};
-
 AppMultiItem::AppMultiItem(AppItem *appItem, WId winId, const WindowInfo &windowInfo, QWidget *parent)
     : DockItem(parent)
     , m_appItem(appItem)
@@ -90,113 +75,6 @@ DockItem::ItemType AppMultiItem::itemType() const
     return DockItem::AppMultiWindow;
 }
 
-bool AppMultiItem::isKWinAvailable() const
-{
-    if (QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral("org.kde.KWin"))) {
-        QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Effects"), QStringLiteral("org.kde.kwin.Effects"));
-        QDBusReply<bool> reply = interface.call(QStringLiteral("isEffectLoaded"), "screenshot");
-
-        return reply.value();
-    }
-    return false;
-}
-
-QImage AppMultiItem::snapImage() const
-{
-    // 优先使用窗管进行窗口截图
-    if (isKWinAvailable()) {
-        QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-
-        QList<QVariant> args;
-        args << QVariant::fromValue(m_winId);
-        args << QVariant::fromValue(quint32(width() - 20));
-        args << QVariant::fromValue(quint32(height() - 20));
-
-        QImage image;
-        QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("screenshotForWindowExtend"), args);
-        if(reply.isValid()){
-            const QString tmpFile = reply.value();
-            if (QFile::exists(tmpFile)) {
-                image.load(tmpFile);
-                qDebug() << "reply: " << tmpFile;
-                QFile::remove(tmpFile);
-            } else {
-                qDebug() << "get current workspace bckground error, file does not exist : " << tmpFile;
-            }
-        } else {
-            qDebug() << "get current workspace bckground error: "<< reply.error().message();
-        }
-        return image;
-    }
-
-    // get window image from shm(only for deepin app)
-    SHMInfo *info = getImageDSHM();
-    QImage image;
-    uchar *image_data = 0;
-    if (info) {
-        qDebug() << "get Image from dxcbplugin SHM...";
-        image_data = (uchar *)shmat(info->shmid, 0, 0);
-        if ((qint64)image_data != -1)
-            return QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-
-        qDebug() << "invalid pointer of shm!";
-        image_data = nullptr;
-    }
-
-    QImage qimage;
-    XImage *ximage;
-    if (!image_data || qimage.isNull()) {
-        ximage = getImageXlib();
-        if (!ximage)
-            return QImage();
-
-        qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
-    }
-
-    return image;
-}
-
-SHMInfo *AppMultiItem::getImageDSHM() const
-{
-    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
-    if (!display) {
-        qWarning() << "Error: get display failed!";
-        return nullptr;
-    }
-
-    Atom atom_prop = XInternAtom(display, "_DEEPIN_DXCB_SHM_INFO", true);
-    if (!atom_prop) {
-        return nullptr;
-    }
-
-    Atom actual_type_return_deepin_shm;
-    int actual_format_return_deepin_shm;
-    unsigned long nitems_return_deepin_shm;
-    unsigned long bytes_after_return_deepin_shm;
-    unsigned char *prop_return_deepin_shm;
-
-    XGetWindowProperty(display, m_winId, atom_prop, 0, 32 * 9, false, AnyPropertyType,
-                       &actual_type_return_deepin_shm, &actual_format_return_deepin_shm, &nitems_return_deepin_shm,
-                       &bytes_after_return_deepin_shm, &prop_return_deepin_shm);
-
-    return reinterpret_cast<SHMInfo *>(prop_return_deepin_shm);
-}
-
-XImage *AppMultiItem::getImageXlib() const
-{
-    const auto display = Utils::IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
-    if (!display) {
-        qWarning() << "Error: get display failed!";
-        return nullptr;
-    }
-
-    Window unused_window;
-    int unused_int;
-    unsigned unused_uint, w, h;
-    XGetGeometry(display, m_winId, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
-    return XGetImage(display, m_winId, 0, 0, w, h, AllPlanes, ZPixmap);
-}
-
 void AppMultiItem::initMenu()
 {
     QAction *actionOpen = new QAction(m_menu);
@@ -232,7 +110,12 @@ void AppMultiItem::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     if (m_snapImage.isNull()) {
-        m_snapImage = snapImage();
+#ifdef USE_AM
+        if (Utils::IS_WAYLAND_DISPLAY)
+            m_snapImage = ImageUtil::loadWindowThumb(m_windowInfo.uuid, width() - 20, height() - 20);
+        else
+#endif
+            m_snapImage = ImageUtil::loadWindowThumb(m_winId, width() - 20, height() - 20);
     }
 
     DStyleHelper dstyle(style());

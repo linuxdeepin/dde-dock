@@ -35,6 +35,9 @@ public:
     static const QPixmap loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio);
     static const QPixmap loadSvg(const QString &iconName, const QSize size, const qreal ratio = qApp->devicePixelRatio());
     static QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
+    // 加载窗口的预览图
+    static QImage loadWindowThumb(const WId &windowId, int width, int height);     // x11下加载，用windowID
+    static QImage loadWindowThumb(const QString &uuid, int width, int height);     // wayland下加载，用uuid
 };
 
 #endif // IMAGEUTIL_H
