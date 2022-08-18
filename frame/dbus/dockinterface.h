@@ -128,6 +128,9 @@ public:
     Q_PROPERTY(bool ShowRecent READ showRecent NOTIFY showRecentChanged)
     bool showRecent() const;
 
+    Q_PROPERTY(bool ShowMultiWindow READ showMultiWindow NOTIFY ShowMultiWindowChanged)
+    bool showMultiWindow() const;
+
 public Q_SLOTS: // METHODS
     QDBusPendingReply<> ActivateWindow(uint in0);
 
@@ -326,6 +329,7 @@ Q_SIGNALS: // SIGNALS
     void WindowSizeEfficientChanged(uint value) const;
     void WindowSizeFashionChanged(uint value) const;
     void showRecentChanged(bool) const;
+    void ShowMultiWindowChanged(bool) const;
 
 public Q_SLOTS:
     void CallQueued(const QString &callName, const QList<QVariant> &args);

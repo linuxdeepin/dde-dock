@@ -36,6 +36,10 @@
 #include "displaymanager.h"
 #include "recentapphelper.h"
 #include "toolapphelper.h"
+#include "multiwindowhelper.h"
+#include "mainwindow.h"
+#include "appmultiitem.h"
+#include "multiwindowhelper.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -89,7 +93,11 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_recentLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_recentSpliter(new QLabel(this))
     , m_toolAreaWidget(new QWidget(this))
-    , m_toolLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_toolAreaWidget))
+    , m_toolAreaLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_toolAreaWidget))
+    , m_multiWindowWidget(new QWidget(m_toolAreaWidget))
+    , m_multiWindowLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_multiWindowWidget))
+    , m_toolSonAreaWidget(new QWidget(m_toolAreaWidget))
+    , m_toolSonLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_toolSonAreaWidget))
     , m_trayManagerWidget(new TrayManagerWindow(this))
     , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_desktopWidget(new DesktopWidget(this))
@@ -102,6 +110,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, m_dockInter, this))
     , m_toolHelper(new ToolAppHelper(m_pluginAreaWidget, m_toolAreaWidget, this))
+    , m_multiHelper(new MultiWindowHelper(m_appAreaSonWidget, m_multiWindowWidget, this))
 {
     initUI();
     initConnection();
@@ -158,12 +167,27 @@ void MainPanelControl::initUI()
     m_mainPanelLayout->addWidget(m_recentSpliter);
 
     /* 工具应用 */
-    m_toolAreaWidget->setObjectName("toolarea");
-    m_toolAreaWidget->setAccessibleName("toolarea");
-    m_toolAreaWidget->setLayout(m_toolLayout);
-    m_toolLayout->setSpacing(0);
-    m_toolLayout->setContentsMargins(0, 0, 0, 0);
+    // 包含窗口多开和工具组合
+    m_toolAreaWidget->setObjectName("toolArea");
+    m_toolAreaWidget->setAccessibleName("toolArea");
+    m_toolAreaWidget->setLayout(m_toolAreaLayout);
+    m_toolAreaLayout->setContentsMargins(0, 0, 0, 0);
+    m_toolAreaLayout->setSpacing(0);
     m_mainPanelLayout->addWidget(m_toolAreaWidget);
+    // 多开窗口区域
+    m_multiWindowWidget->setObjectName("multiWindow");
+    m_multiWindowWidget->setAccessibleName("multiWindow");
+    m_multiWindowWidget->setLayout(m_multiWindowLayout);
+    m_multiWindowLayout->setContentsMargins(0, 2, 0, 2);
+    m_multiWindowLayout->setSpacing(0);
+    m_toolAreaLayout->addWidget(m_multiWindowWidget);
+    // 工具应用区域-包含打开窗口区域和回收站区域
+    m_toolSonAreaWidget->setObjectName("toolsonarea");
+    m_toolSonAreaWidget->setAccessibleName("toolsonarea");
+    m_toolSonAreaWidget->setLayout(m_toolSonLayout);
+    m_toolSonLayout->setSpacing(0);
+    m_toolSonLayout->setContentsMargins(0, 0, 0, 0);
+    m_toolAreaLayout->addWidget(m_toolSonAreaWidget);
 
     /* 托盘区域 */
     m_trayAreaWidget->setObjectName("trayarea");
@@ -206,6 +230,7 @@ void MainPanelControl::initConnection()
     connect(m_recentHelper, &RecentAppHelper::dockAppVisibleChanged, this, &MainPanelControl::onDockAppVisibleChanged);
     connect(m_toolHelper, &ToolAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_toolHelper, &ToolAppHelper::toolVisibleChanged, this, &MainPanelControl::onToolVisibleChanged);
+    connect(m_multiHelper, &MultiWindowHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
 }
 
 /**
@@ -220,6 +245,7 @@ void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
     m_displayMode = dislayMode;
     m_recentHelper->setDisplayMode(dislayMode);
     m_toolHelper->setDisplayMode(dislayMode);
+    m_multiHelper->setDisplayMode(dislayMode);
     updateDisplayMode();
 }
 
@@ -244,6 +270,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_recentLayout->setDirection(QBoxLayout::LeftToRight);
         m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
         m_pluginLayout->setContentsMargins(10, 0, 10, 0);
+        m_multiWindowLayout->setContentsMargins(0, 2, 0, 2);
         break;
     case Position::Right:
     case Position::Left:
@@ -260,6 +287,7 @@ void MainPanelControl::updateMainPanelLayout()
         m_recentLayout->setDirection(QBoxLayout::TopToBottom);
         m_trayAreaLayout->setContentsMargins(10, 0, 10, 0);
         m_pluginLayout->setContentsMargins(0, 10, 0, 10);
+        m_multiWindowLayout->setContentsMargins(2, 0, 2, 0);
         break;
     }
 
@@ -379,12 +407,12 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
         m_appAreaSonWidget->setMaximumHeight(height());
         m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->width());
         m_recentAreaWidget->setFixedHeight(height());
-        m_toolAreaWidget->setFixedHeight(height());
+        //m_toolAreaWidget->setFixedHeight(height());
     } else {
         m_appAreaSonWidget->setMaximumWidth(width());
         m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->height());
         m_recentAreaWidget->setFixedWidth(width());
-        m_toolAreaWidget->setFixedWidth(width());
+        //m_toolAreaWidget->setFixedWidth(width());
     }
 
     m_appAreaSonWidget->adjustSize();
@@ -434,10 +462,13 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         addTrayAreaItem(index, item);
         break;
     case DockItem::Plugins:
-        //addPluginAreaItem(index, item);
         m_toolHelper->addPluginItem(index, item);
         break;
-    default: break;
+    case DockItem::AppMultiWindow:
+        m_multiHelper->addMultiWindow(index, static_cast<AppMultiItem *>(item));
+        break;
+    default:
+        break;
     }
 
     // 同removeItem处 注意:不能屏蔽此接口，否则会造成插件插入时无法显示
@@ -469,7 +500,11 @@ void MainPanelControl::removeItem(DockItem *item)
     case DockItem::Plugins:
         m_toolHelper->removePluginItem(item);
         break;
-    default: break;
+    case DockItem::AppMultiWindow:
+        m_multiHelper->removeMultiWindow(static_cast<AppMultiItem *>(item));
+        break;
+    default:
+        break;
     }
 
     item->removeEventFilter(this);
@@ -954,7 +989,7 @@ void MainPanelControl::updateModeChange()
     m_trayAreaWidget->setVisible(m_displayMode == DisplayMode::Efficient);
     m_traySpliter->setVisible(m_displayMode == DisplayMode::Efficient);
     m_pluginAreaWidget->setVisible(m_displayMode == DisplayMode::Efficient);
-    m_trayManagerWidget->setVisible(m_displayMode != DisplayMode::Efficient);
+    m_toolAreaWidget->setVisible(m_displayMode == DisplayMode::Fashion);
     onRecentVisibleChanged(m_recentHelper->recentIsVisible());
     onDockAppVisibleChanged(m_recentHelper->dockAppIsVisible());
     onToolVisibleChanged(m_toolHelper->toolIsVisible());
@@ -969,20 +1004,11 @@ void MainPanelControl::moveAppSonWidget()
 {
     QRect rect(QPoint(0, 0), m_appAreaSonWidget->size());
     if (DisplayMode::Efficient == m_displayMode) {
-        switch (m_position) {
-        case Top:
-        case Bottom :
-            rect.moveTo(m_appAreaWidget->pos());
-            break;
-        case Right:
-        case Left:
-            rect.moveTo(m_appAreaWidget->pos());
-            break;
-        }
+        rect.moveTo(m_appAreaWidget->pos());
     } else {
         switch (m_position) {
         case Top:
-        case Bottom :
+        case Bottom:
             rect.moveCenter(this->rect().center());
             if (rect.right() > m_appAreaWidget->geometry().right()) {
                 rect.moveRight(m_appAreaWidget->geometry().right());
@@ -1041,7 +1067,7 @@ QPainterPath MainPanelControl::areaPath()
         if (m_recentLayout->count() > 0)
             leftWidth += m_recentAreaWidget->width();
 
-        if (m_toolLayout->count() > 0)
+        if (m_toolAreaLayout->count() > 0)
             leftWidth += m_toolAreaWidget->width();
 
         int roundHeight = height();
@@ -1053,7 +1079,7 @@ QPainterPath MainPanelControl::areaPath()
         if (m_recentLayout->count() > 0)
             topHeight += m_recentAreaWidget->height();
 
-        if (m_toolLayout->count() > 0)
+        if (m_toolAreaLayout->count() > 0)
             topHeight += m_toolAreaWidget->height();
 
         path.addRoundedRect(QRect(0, 0, roundWidth, topHeight), radius, radius);
@@ -1086,7 +1112,7 @@ QSize MainPanelControl::suitableSize(int screenSize, double deviceRatio) const
     // 减去右侧托盘和快捷设置还有插件区域的尺寸
     totalLength -= (((m_position == Position::Top || m_position == Position::Bottom) ? traySuitableSize.width() : traySuitableSize.height()) / ratio);
     // 需要参与计算的图标的总数
-    int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count() + m_toolLayout->count();
+    int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count() + m_toolAreaLayout->count();
     if (iconCount <= 0) {
         if (m_position == Position::Top || m_position == Position::Bottom)
             return QSize((static_cast<int>((traySuitableSize.width() + 20) / ratio)), height());
@@ -1195,7 +1221,12 @@ void MainPanelControl::resizeDockIcon()
         // 减去右侧托盘和插件区域的宽度
         totalLength -= ((m_position == Position::Top) || (m_position == Position::Bottom)) ? trayManagerSize.width() : trayManagerSize.height();
 
-        iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count();
+        iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count();
+        if (m_recentAreaWidget->isVisible())
+            iconCount += m_recentLayout->count();
+
+        if (m_toolAreaWidget->isVisible())
+            iconCount += m_toolSonLayout->count();
 
         if (iconCount <= 0)
             return;
@@ -1333,11 +1364,11 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
         m_recentSpliter->setFixedSize(int(h * 0.6), SPLITER_SIZE);
     }
 
-    for (int i = 0; i < m_appAreaSonLayout->count(); ++i)
-        m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
-
     // 时尚模式下判断是否需要显示最近打开的应用区域
     if (m_displayMode == Dock::DisplayMode::Fashion) {
+        for (int i = 0; i < m_appAreaSonLayout->count(); ++i)
+            m_appAreaSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+
         if (m_recentLayout->count() > 0) {
             for (int i = 0; i < m_recentLayout->count(); ++i)
                 m_recentLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
@@ -1349,14 +1380,61 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
                 m_recentAreaWidget->setFixedHeight(appItemSize * m_recentLayout->count());
         }
 
-        if (m_toolLayout->count() > 0) {
-            for (int i = 0; i < m_toolLayout->count(); i++)
-                m_toolLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+        if (m_multiWindowLayout->count() > 0) {
+            QList<QSize> multiSizes;
+            for (int i = 0; i < m_multiWindowLayout->count(); i++) {
+                // 因为多开窗口的长宽会不一样，因此，需要将当前的尺寸传入
+                // 由它自己来计算自己的长宽尺寸
+                AppMultiItem *appMultiItem = qobject_cast<AppMultiItem *>(m_multiWindowLayout->itemAt(i)->widget());
+                if (!appMultiItem)
+                    continue;
 
-            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-                m_toolAreaWidget->setFixedWidth(appItemSize * m_toolLayout->count());
-            else
-                m_toolAreaWidget->setFixedHeight(appItemSize * m_toolLayout->count());
+                QSize size = appMultiItem->suitableSize(appItemSize);
+                appMultiItem->setFixedSize(size);
+                multiSizes << size;
+            }
+            // 计算多开窗口的尺寸
+            int totalSize = 0;
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+                for (QSize size : multiSizes)
+                    totalSize += size.width();
+
+                m_multiWindowWidget->setFixedSize(totalSize, appItemSize);
+            } else {
+                for (QSize size : multiSizes)
+                    totalSize += size.height();
+
+                m_multiWindowWidget->setFixedSize(appItemSize, totalSize);
+            }
+        } else {
+            m_multiWindowWidget->setFixedSize(0, 0);
+        }
+        if (m_toolSonLayout->count() > 0) {
+            for (int i = 0; i < m_toolSonLayout->count(); i++)
+                m_toolSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+                m_toolSonAreaWidget->setFixedWidth(appItemSize * m_toolSonLayout->count());
+            } else {
+                m_toolSonAreaWidget->setFixedHeight(appItemSize * m_toolSonLayout->count());
+            }
+        }
+
+        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+            m_toolAreaWidget->setFixedWidth(m_multiWindowWidget->width() + m_toolSonAreaWidget->width());
+        else
+            m_toolAreaWidget->setFixedHeight(m_multiWindowWidget->height() + m_toolSonAreaWidget->height());
+    } else {
+        for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
+            DockItem *dockItem = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(i)->widget());
+            if (!dockItem)
+                continue;
+            if (dockItem->itemType() == DockItem::ItemType::AppMultiWindow) {
+                AppMultiItem *appMultiItem = qobject_cast<AppMultiItem *>(dockItem);
+                dockItem->setFixedSize(appMultiItem->suitableSize(appItemSize));
+            } else {
+                dockItem->setFixedSize(appItemSize, appItemSize);
+            }
         }
     }
 

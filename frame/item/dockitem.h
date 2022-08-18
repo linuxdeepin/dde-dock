@@ -48,7 +48,8 @@ public:
         Placeholder,
         TrayPlugin,             // 托盘插件
         QuickSettingPlugin,     // 快捷设置区域插件
-        StretchPlugin           // 时尚模式下的固定在最右侧的插件，例如开关机插件
+        StretchPlugin,          // 时尚模式下的固定在最右侧的插件，例如开关机插件
+        AppMultiWindow          // APP的多开应用的窗口
     };
 
 public:

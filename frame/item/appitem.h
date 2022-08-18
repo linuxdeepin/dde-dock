@@ -43,11 +43,12 @@ class AppItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
     const QString appId() const;
+    QString name() const;
     bool isValid() const;
     void updateWindowIconGeometries();
     void undock();
@@ -61,6 +62,7 @@ public:
 #ifdef USE_AM
     int mode() const;
 #endif
+    DockEntryInter *itemEntryInter() const;
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName() override;
@@ -68,6 +70,7 @@ public:
     bool isDocked() const;
     qint64 appOpenMSecs() const;
     void updateMSecs();
+    const WindowInfoMap &windowsMap() const;
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -76,6 +79,7 @@ signals:
     void dragReady(QWidget *dragWidget);
 
     void requestUpdateEntryGeometries() const;
+    void windowCountChanged() const;
 #ifdef USE_AM
     void modeChanged(int) const;
 #else
@@ -161,6 +165,7 @@ private:
     static QPoint MousePressPos;
 
     ScreenSpliter *m_screenSpliter;
+    DockInter *m_dockInter;
 };
 
 #endif // APPITEM_H

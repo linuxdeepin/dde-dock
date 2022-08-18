@@ -145,6 +145,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("ForceQuit"), argumentList);
     }
 
+    inline QDBusPendingReply<> ActiveWindow(quint32 in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << in0;
+        return asyncCallWithArgumentList(QStringLiteral("ActiveWindow"), argumentList);
+    }
+
     inline void ForceQuitQueued()
     {
         QList<QVariant> argumentList;

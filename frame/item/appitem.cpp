@@ -50,7 +50,7 @@ DCORE_USE_NAMESPACE
 
 QPoint AppItem::MousePressPos;
 
-AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
     , m_appSettings(appSettings)
     , m_activeAppSettings(activeAppSettings)
@@ -72,6 +72,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
     , m_createMSecs(QDateTime::currentMSecsSinceEpoch())
     , m_screenSpliter(ScreenSpliterFactory::createScreenSpliter(this, m_itemEntryInter))
+    , m_dockInter(dockInter)
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -133,6 +134,11 @@ void AppItem::checkEntry()
 const QString AppItem::appId() const
 {
     return m_id;
+}
+
+QString AppItem::name() const
+{
+    return m_itemEntryInter->name();
 }
 
 bool AppItem::isValid() const
@@ -216,7 +222,13 @@ int AppItem::mode() const
 {
     return m_itemEntryInter->mode();
 }
+
 #endif
+
+DockEntryInter *AppItem::itemEntryInter() const
+{
+    return m_itemEntryInter;
+}
 
 QString AppItem::accessibleName()
 {
@@ -241,6 +253,11 @@ qint64 AppItem::appOpenMSecs() const
 void AppItem::updateMSecs()
 {
     m_createMSecs = QDateTime::currentMSecsSinceEpoch();
+}
+
+const WindowInfoMap &AppItem::windowsMap() const
+{
+    return m_windowInfos;
 }
 
 void AppItem::moveEvent(QMoveEvent *e)
@@ -281,14 +298,26 @@ void AppItem::paintEvent(QPaintEvent *e)
         QPainterPath path;
         path.addRoundedRect(backgroundRect, 8, 8);
 
-        if (m_active) {
-            painter.fillPath(path, QColor(0, 0, 0, 255 * 0.8));
-        } else if (!m_windowInfos.isEmpty()) {
-            if (hasAttention())
-                painter.fillPath(path, QColor(241, 138, 46, 255 * .8));
-            else
-                painter.fillPath(path, QColor(0, 0, 0, 255 * 0.3));
+        // 在没有开启窗口多开的情况下，显示背景色
+#ifdef USE_AM
+        if (!m_dockInter->showMultiWindow()) {
+#endif
+            if (m_active) {
+                QColor color = Qt::black;
+                color.setAlpha(255 * 0.8);
+                painter.fillPath(path, color);
+            } else if (!m_windowInfos.isEmpty()) {
+                if (hasAttention()) {
+                    painter.fillPath(path, QColor(241, 138, 46, 255 * .8));
+                } else {
+                    QColor color = Qt::black;
+                    color.setAlpha(255 * 0.3);
+                    painter.fillPath(path, color);
+                }
+            }
+#ifdef USE_AM
         }
+#endif
     } else {
         if (!m_windowInfos.isEmpty()) {
             QPoint p;
@@ -381,12 +410,21 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
-        m_itemEntryInter->Activate(QX11Info::getTimestamp());
-
-        // play launch effect
-        if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
-            playSwingEffect();
+#ifdef USE_AM
+        if (m_dockInter->showMultiWindow()) {
+            // 如果开启了多窗口显示，则直接新建一个窗口
+            m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+        } else {
+#endif
+            // 如果没有开启新窗口显示，则
+            m_itemEntryInter->Activate(QX11Info::getTimestamp());
+            // play launch effect
+            if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
+                playSwingEffect();
+        }
+#ifdef USE_AM
     }
+#endif
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)
@@ -640,6 +678,9 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
     }
 
     update();
+
+    // 通知外面窗体数量发生变化，需要更新多开窗口的信息
+    Q_EMIT windowCountChanged();
 }
 
 void AppItem::refreshIcon()

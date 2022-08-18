@@ -328,6 +328,11 @@ bool Dde_Dock::showRecent() const
     return qvariant_cast<bool>(property("ShowRecent"));
 }
 
+bool Dde_Dock::showMultiWindow() const
+{
+    return qvariant_cast<bool>(property("ShowMultiWindow"));
+}
+
 QDBusPendingReply<> Dde_Dock::ActivateWindow(uint in0)
 {
     return m_wm->ActivateWindow(in0);

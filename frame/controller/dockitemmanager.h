@@ -31,6 +31,7 @@
 
 #include <QObject>
 
+class AppMultiItem;
 /**
  * @brief The DockItemManager class
  * 管理类，管理所有的应用数据，插件数据
@@ -64,6 +65,11 @@ public slots:
 private Q_SLOTS:
     void onPluginLoadFinished();
 
+#ifdef USE_AM
+    void onAppWindowCountChanged();
+    void onShowMultiWindowChanged();
+#endif
+
 private:
     explicit DockItemManager(QObject *parent = nullptr);
     void appItemAdded(const QDBusObjectPath &path, const int index);
@@ -74,6 +80,12 @@ private:
     void updatePluginsItemOrderKey();
     void reloadAppItems();
     void manageItem(DockItem *item);
+
+#ifdef USE_AM
+    void updateMultiItems(AppItem *appItem, bool emitSignal = false);
+    bool multiWindowExist(quint32 winId) const;
+    bool needRemoveMultiWindow(AppMultiItem *multiItem) const;
+#endif
 
 private:
     DockInter *m_appInter;

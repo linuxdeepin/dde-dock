@@ -43,6 +43,7 @@ class TrayManagerWindow;
 class DockScreen;
 class RecentAppHelper;
 class ToolAppHelper;
+class MultiWindowHelper;
 
 class MainPanelControl : public QWidget
 {
@@ -132,8 +133,12 @@ private:
     QWidget *m_recentAreaWidget;    // 最近打开应用
     QBoxLayout *m_recentLayout;
     QLabel *m_recentSpliter;        // 最近打开应用区域分割线
-    QWidget *m_toolAreaWidget;      // 工具区域
-    QBoxLayout *m_toolLayout;       // 工具区域布局
+    QWidget *m_toolAreaWidget;      // 工具区域，用来存放多开窗口和回收站等
+    QBoxLayout *m_toolAreaLayout;   // 工具区域的布局
+    QWidget *m_multiWindowWidget;   // 多开窗口区域，用来存放多开窗口
+    QBoxLayout *m_multiWindowLayout;// 用来存放多开窗口的布局
+    QWidget *m_toolSonAreaWidget;   // 工具区域，用来存放回收站等工具
+    QBoxLayout *m_toolSonLayout;    // 工具区域布局
 
     TrayManagerWindow *m_trayManagerWidget;
     QBoxLayout *m_pluginLayout;     // 插件区域布局
@@ -152,6 +157,7 @@ private:
     DockInter *m_dockInter;
     RecentAppHelper *m_recentHelper;
     ToolAppHelper *m_toolHelper;
+    MultiWindowHelper *m_multiHelper;
 };
 
 #endif // MAINPANELCONTROL_H

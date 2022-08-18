@@ -25,6 +25,7 @@
 #include "pluginsitem.h"
 #include "traypluginitem.h"
 #include "utils.h"
+#include "appmultiitem.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -47,16 +48,23 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, entry);
+        AppItem *it = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, entry);
         manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
 
+#ifdef USE_AM
+        connect(it, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
+#endif
+
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
         m_itemList.append(it);
+#ifdef USE_AM
+        updateMultiItems(it);
+#endif
     }
 
     // 托盘区域和插件区域 由DockPluginsController获取
@@ -65,6 +73,9 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
     connect(m_appInter, &DockInter::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
     connect(m_appInter, &DockInter::ServiceRestarted, this, &DockItemManager::reloadAppItems);
+#ifdef USE_AM
+    connect(m_appInter, &DockInter::ShowMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
+#endif
 
     // 插件信号
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemManager::pluginItemInserted, Qt::QueuedConnection);
@@ -194,7 +205,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, path);
+    AppItem *item = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;
@@ -206,17 +217,24 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
     connect(item, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
+#ifdef USE_AM
+    connect(item, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
+#endif
     connect(this, &DockItemManager::requestUpdateDockItem, item, &AppItem::requestUpdateEntryGeometries);
 
     m_itemList.insert(insertIndex, item);
     m_appIDist.append(item->appId());
 
-    if (index != -1) {
-        emit itemInserted(insertIndex - 1, item);
-        return;
-    }
+    int itemIndex = insertIndex;
+    if (index != -1)
+        itemIndex = insertIndex - 1;
 
-    emit itemInserted(insertIndex, item);
+    // 插入dockItem
+    emit itemInserted(itemIndex, item);
+#ifdef USE_AM
+    // 向后插入多开窗口
+    updateMultiItems(item, true);
+#endif
 }
 
 void DockItemManager::appItemRemoved(const QString &appId)
@@ -299,9 +317,7 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 
     m_itemList.insert(insertIndex, item);
     if(pluginType == DockItem::FixedPlugin)
-    {
         insertIndex ++;
-    }
 
     if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
         item->setVisible(false);
@@ -345,3 +361,115 @@ void DockItemManager::onPluginLoadFinished()
     updatePluginsItemOrderKey();
     m_loadFinished = true;
 }
+
+#ifdef USE_AM
+void DockItemManager::onAppWindowCountChanged()
+{
+    AppItem *appItem = static_cast<AppItem *>(sender());
+    updateMultiItems(appItem, true);
+}
+
+void DockItemManager::updateMultiItems(AppItem *appItem, bool emitSignal)
+{
+    // 如果系统设置不开启应用多窗口拆分，则无需之后的操作
+    if (!m_appInter->showMultiWindow())
+        return;
+
+    // 如果开启了多窗口拆分，则同步窗口和多窗口应用的信息
+    const WindowInfoMap &windowInfoMap = appItem->windowsMap();
+    QList<AppMultiItem *> removeItems;
+    // 同步当前已经存在的多开窗口的列表，删除不存在的多开窗口
+    for (int i = 0; i < m_itemList.size(); i++) {
+        QPointer<DockItem> dockItem = m_itemList[i];
+        AppMultiItem *multiItem = qobject_cast<AppMultiItem *>(dockItem.data());
+        if (!multiItem || multiItem->appItem() != appItem)
+            continue;
+
+        // 如果查找到的当前的应用的窗口不需要移除，则继续下一个循环
+        if (!needRemoveMultiWindow(multiItem))
+            continue;
+
+        removeItems << multiItem;
+    }
+    // 从itemList中移除多开窗口
+    for (AppMultiItem *dockItem : removeItems)
+        m_itemList.removeOne(dockItem);
+    if (emitSignal) {
+        // 移除发送每个多开窗口的移除信号
+        for (AppMultiItem *dockItem : removeItems)
+            Q_EMIT itemRemoved(dockItem);
+    }
+    qDeleteAll(removeItems);
+
+    // 遍历当前APP打开的所有窗口的列表，如果不存在多开窗口的应用，则新增，同时发送信号
+    for (auto it = windowInfoMap.begin(); it != windowInfoMap.end(); it++) {
+        if (multiWindowExist(it.key()))
+            continue;
+
+        const WindowInfo &windowInfo = it.value();
+        // 如果不存在这个窗口对应的多开窗口，则新建一个窗口，同时发送窗口新增的信号
+        AppMultiItem *multiItem = new AppMultiItem(appItem, it.key(), windowInfo);
+        m_itemList << multiItem;
+        if (emitSignal)
+            Q_EMIT itemInserted(-1, multiItem);
+    }
+}
+
+// 检查对应的窗口是否存在多开窗口
+bool DockItemManager::multiWindowExist(quint32 winId) const
+{
+    for (QPointer<DockItem> dockItem : m_itemList) {
+        AppMultiItem *multiItem = qobject_cast<AppMultiItem *>(dockItem.data());
+        if (!multiItem)
+            continue;
+
+        if (multiItem->winId() == winId)
+            return true;
+    }
+
+    return false;
+}
+
+// 检查当前多开窗口是否需要移除
+// 如果当前多开窗口图标对应的窗口在这个窗口所属的APP中所有打开窗口中不存在，那么则认为该多窗口已经被关闭
+bool DockItemManager::needRemoveMultiWindow(AppMultiItem *multiItem) const
+{
+    // 查找多分窗口对应的窗口在应用所有的打开的窗口中是否存在，只要它对应的窗口存在，就无需删除
+    // 只要不存在，就需要删除
+    AppItem *appItem = multiItem->appItem();
+    const WindowInfoMap &windowInfoMap = appItem->windowsMap();
+    for (auto it = windowInfoMap.begin(); it != windowInfoMap.end(); it++) {
+        if (it.key() == multiItem->winId())
+            return false;
+    }
+
+    return true;
+}
+
+void DockItemManager::onShowMultiWindowChanged()
+{
+    if (m_appInter->showMultiWindow()) {
+        // 如果当前设置支持窗口多开，那么就依次对每个APPItem加载多开窗口
+        for (const QPointer<DockItem> &dockItem : m_itemList) {
+            if (dockItem->itemType() != DockItem::ItemType::App)
+                continue;
+
+            updateMultiItems(static_cast<AppItem *>(dockItem.data()), true);
+        }
+    } else {
+        // 如果当前设置不支持窗口多开，则删除所有的多开窗口
+        QList<DockItem *> multiWindows;
+        for (const QPointer<DockItem> &dockItem : m_itemList) {
+            if (dockItem->itemType() != DockItem::AppMultiWindow)
+                continue;
+
+            multiWindows << dockItem.data();
+        }
+        for (DockItem *multiItem : multiWindows) {
+            m_itemList.removeOne(multiItem);
+            Q_EMIT itemRemoved(multiItem);
+            multiItem->deleteLater();
+        }
+    }
+}
+#endif
