@@ -557,9 +557,7 @@ void SoundApplet::enableDevice(bool flag)
         m_volumeSlider->setEnabled(flag);
     }
     m_volumeIconMin->setEnabled(flag);
-    m_soundShow->setEnabled(flag);
     m_volumeIconMax->setEnabled(flag);
-    m_deviceLabel->setEnabled(flag);
 }
 
 void SoundApplet::disableAllDevice()
