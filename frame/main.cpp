@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
     // 启动入参 dde-dock --help可以看到一下内容， -x不加载插件 -r 一般用在startdde启动任务栏
     QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
-    QCommandLineOption runOption(QStringList() << "r" << "run-by-stardde", "run by startdde.");
+    QCommandLineOption runOption(QStringList() << "r" << "run-by-startdde", "run by startdde.");
     QCommandLineParser parser;
     parser.setApplicationDescription("DDE Dock");
     parser.addHelpOption();
