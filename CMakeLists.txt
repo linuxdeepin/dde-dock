@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(VERSION 4.0)
+if (NOT DEFINED VERSION)
+    set(VERSION 4.0)
+endif()
 
 project(dde-dock)
 
