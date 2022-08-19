@@ -120,6 +120,10 @@ configure_file(dde-dock.pc.in dde-dock.pc @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake.in 
+    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake 
+    @ONLY)
 install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
