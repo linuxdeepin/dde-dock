@@ -23,6 +23,7 @@
 #include "themeappicon.h"
 #include "utils.h"
 #include "../widgets/tipswidget.h"
+#include "dbusutil.h"
 
 #include <QPainter>
 #include <QProcess>
@@ -100,17 +101,11 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-#ifdef USE_AM
     DDBusSender dbusSender = DDBusSender()
-            .service("org.deepin.dde.Launcher1")
-            .path("/org/deepin/dde/Launcher1")
-            .interface("org.deepin.dde.Launcher1");
-#else
-    DDBusSender dbusSender = DDBusSender()
-            .service("com.deepin.dde.Launcher")
-            .path("/com/deepin/dde/Launcher")
-            .interface("com.deepin.dde.Launcher");
-#endif
+            .service(launcherService)
+            .path(launcherPath)
+            .interface(launcherInterface);
+
     QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
     if (!visibleReply.value())
        dbusSender.method("Show").call();

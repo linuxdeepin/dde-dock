@@ -22,6 +22,7 @@
 #include "tipswidget.h"
 #include "dockpopupwindow.h"
 #include "utils.h"
+#include "dbusutil.h"
 
 #include <DFontSizeManager>
 #include <DDBusSender>
@@ -338,23 +339,13 @@ void DateTimeDisplayer::createMenuItem()
     if (!QFile::exists(ICBC_CONF_FILE)) {
         QAction *timeSettingAction = new QAction(tr("Time settings"), this);
         connect(timeSettingAction, &QAction::triggered, this, [ = ] {
-#ifdef USE_AM
             DDBusSender()
-                    .service("org.deepin.dde.ControlCenter1")
-                    .interface("org.deepin.dde.ControlCenter1")
-                    .path("/org/deepin/dde/ControlCenter1")
+                    .service(controllCenterService)
+                    .interface(controllCenterPath)
+                    .path(controllCenterInterface)
                     .method(QString("ShowPage"))
                     .arg(QString("datetime"))
                     .call();
-#else
-            DDBusSender()
-                    .service("com.deepin.dde.ControlCenter")
-                    .interface("com.deepin.dde.ControlCenter")
-                    .path("/com/deepin/dde/ControlCenter")
-                    .method(QString("ShowPage"))
-                    .arg(QString("datetime"))
-                    .call();
-#endif
         });
 
         m_menu->addAction(timeSettingAction);

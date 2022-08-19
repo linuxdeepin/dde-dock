@@ -156,16 +156,16 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
 void MenuWorker::onDockSettingsTriggered()
 {
 #ifdef USE_AM
-    DDBusSender().service("org.deepin.dde.ControlCenter1")
-            .path("/org/deepin/dde/ControlCenter1")
-            .interface("org.deepin.dde.ControlCenter1")
+    DDBusSender().service(controllCenterService)
+            .path(controllCenterPath)
+            .interface(controllCenterInterface)
             .method("ShowPage")
             .arg(QString("personalization/desktop/dock"))
             .call();
 #else
-    DDBusSender().service("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
+    DDBusSender().service(controllCenterService)
+            .path("controllCenterPath")
+            .interface(controllCenterInterface)
             .method("ShowPage")
             .arg(QString("personalization/dock"))
             .call();

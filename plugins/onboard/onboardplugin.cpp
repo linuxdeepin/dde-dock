@@ -38,14 +38,14 @@
 using DBusDock = org::deepin::dde::daemon::DdeDock;
 using DockEntryInter = org::deepin::dde::daemon::dock::DockEntry;
 
-static const QString serviceName = QString("com.deepin.dde.daemon.Dock");
-static const QString servicePath = QString("/com/deepin/dde/daemon/Dock");
+static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
+static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
 #else
 using DBusDock = com::deepin::dde::daemon::Dock;
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 
-static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
-static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
+static const QString serviceName = QString("com.deepin.dde.daemon.Dock");
+static const QString servicePath = QString("/com/deepin/dde/daemon/Dock");
 #endif
 
 using namespace Dock;

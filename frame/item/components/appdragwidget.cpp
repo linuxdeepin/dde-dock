@@ -452,7 +452,7 @@ void AppDragWidget::initWaylandEnv()
 
     // 由于在wayland环境下无法触发drop事件，导致鼠标无法释放，所以这里暂时用XEventMonitor的方式(具体原因待查)
     Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    XEventMonitor *extralEventInter = new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
+    XEventMonitor *extralEventInter = new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus());
     QList<MonitRect> extralRectList;
     QList<QScreen *> screens = DisplayManager::instance()->screens();
     for (QScreen *screen : screens) {

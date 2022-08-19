@@ -55,11 +55,11 @@ const QString OnlyShowPrimary = "onlyShowPrimary";
 
 MultiScreenWorker::MultiScreenWorker(QObject *parent)
     : QObject(parent)
-    , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
-    , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
-    , m_touchEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
+    , m_eventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
+    , m_extralEventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
+    , m_touchEventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
-    , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
+    , m_launcherInter(new DBusLuncher(launcherService, launcherPath, QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
     , m_position(Dock::Position::Bottom)
@@ -856,20 +856,19 @@ void MultiScreenWorker::checkXEventMonitorService()
         connect(touchEventInter, &XEventMonitor::ButtonRelease, this, &MultiScreenWorker::onTouchRelease);
     };
 
-    const QString serverName = "com.deepin.api.XEventMonitor";
     QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
 
-    if (!ifc->isServiceRegistered(serverName)) {
+    if (!ifc->isServiceRegistered(xEventMonitorService)) {
         connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
             Q_UNUSED(oldOwner)
-            if (name == serverName && !newOwner.isEmpty()) {
+            if (name == xEventMonitorService && !newOwner.isEmpty()) {
                 FREE_POINT(m_eventInter);
                 FREE_POINT(m_extralEventInter);
                 FREE_POINT(m_touchEventInter);
 
-                m_eventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
-                m_extralEventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
-                m_touchEventInter = new XEventMonitor(serverName, "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus());
+                m_eventInter = new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus());
+                m_extralEventInter = new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus());
+                m_touchEventInter = new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus());
                 // connect
                 connectionInit(m_eventInter, m_extralEventInter, m_touchEventInter);
 

@@ -24,6 +24,7 @@
 #include "settingdelegate.h"
 #include "imageutil.h"
 #include "slidercontainer.h"
+#include "dbusutil.h"
 
 #include <DListView>
 #include <DPushButton>
@@ -194,17 +195,10 @@ void VolumeDevicesWidget::initConnection()
             m_deviceList->update();
         } else {
             // 打开控制中心的声音模块
-#ifdef USE_AM
-            DDBusSender().service("org.deepin.dde.ControlCenter1")
-                    .path("/org/deepin/dde/ControlCenter1")
-                    .interface("org.deepin.dde.ControlCenter1")
+            DDBusSender().service(controllCenterService)
+                    .path(controllCenterPath)
+                    .interface(controllCenterInterface)
                     .method("ShowPage").arg(QString("sound")).call();
-#else
-            DDBusSender().service("com.deepin.dde.ControlCenter")
-                    .path("/com/deepin/dde/ControlCenter")
-                    .interface("com.deepin.dde.ControlCenter")
-                    .method("ShowPage").arg(QString("sound")).call();
-#endif
             hide();
         }
     });

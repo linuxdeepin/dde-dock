@@ -117,9 +117,9 @@ void WindowManager::sendNotifications()
     // 在进入安全模式时，执行此DBUS耗时25S左右，导致任务栏显示阻塞，所以使用线程调用
     QtConcurrent::run(QThreadPool::globalInstance(), [ = ] {
         DDBusSender()
-                .service("com.deepin.dde.Notification")
-                .path("/com/deepin/dde/Notification")
-                .interface("com.deepin.dde.Notification")
+                .service(notificationService)
+                .path(notificationPath)
+                .interface(notificationInterface)
                 .method(QString("Notify"))
                 .arg(QString("dde-control-center"))                                            // appname
                 .arg(static_cast<uint>(0))                                                     // id
@@ -394,9 +394,9 @@ void WindowManager::RegisterDdeSession()
 
     if (!cookie.isEmpty()) {
         QDBusPendingReply<bool> r = DDBusSender()
-                .interface("com.deepin.SessionManager")
-                .path("/com/deepin/SessionManager")
-                .service("com.deepin.SessionManager")
+                .interface(sessionManagerService)
+                .path(sessionManagerPath)
+                .service(sessionManagerInterface)
                 .method("Register")
                 .arg(QString(cookie))
                 .call();
