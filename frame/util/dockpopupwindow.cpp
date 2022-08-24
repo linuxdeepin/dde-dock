@@ -48,7 +48,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     if (Utils::IS_WAYLAND_DISPLAY) {
         setAttribute(Qt::WA_NativeWindow);
         // 谨慎修改层级，特别要注意对锁屏的影响
-        windowHandle()->setProperty("_d_dwayland_window-type", "onScreenDisplay");
+        windowHandle()->setProperty("_d_dwayland_window-type", "dock");
     } else {
         setAttribute(Qt::WA_InputMethodEnabled, false);
     }
