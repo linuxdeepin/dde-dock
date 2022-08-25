@@ -61,6 +61,7 @@ public:
 
 private:
     bool supportAirplaneMode() const;
+    bool getAirplaneDconfig() const;
 
 public slots:
     void refreshAirplaneEnableState();
