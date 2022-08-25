@@ -51,7 +51,7 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (supportAirplaneMode()) {
+    if (getAirplaneDconfig()) {
         m_networkInter = new NetworkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
         connect(m_networkInter, &NetworkInter::WirelessAccessPointsChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
 
@@ -238,6 +238,15 @@ bool AirplaneModePlugin::supportAirplaneMode() const
     }
 
     return false;
+}
+
+bool AirplaneModePlugin::getAirplaneDconfig() const
+{
+    bool airplane = false;
+    if (m_dconfig && m_dconfig->isValid()) {
+        airplane = m_dconfig->value("networkAirplaneMode", false).toBool();
+    }
+    return airplane;
 }
 
 
