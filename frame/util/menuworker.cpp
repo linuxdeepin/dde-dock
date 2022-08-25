@@ -32,14 +32,13 @@
 
 #define DIS_INS DisplayManager::instance()
 
-MenuWorker::MenuWorker(DockInter *dockInter,QWidget *parent)
+MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
-    , m_dockInter(dockInter)
-    , m_autoHide(true)
+    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
 {
 }
 
-QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
+void MenuWorker::createMenu(QMenu *settingsMenu)
 {
     settingsMenu->setAccessibleName("settingsmenu");
     settingsMenu->setTitle("Settings Menu");
@@ -152,8 +151,6 @@ QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
     }
 
     delete menuSettings;
-    menuSettings = nullptr;
-    return settingsMenu;
 }
 
 void MenuWorker::onDockSettingsTriggered()
@@ -175,31 +172,17 @@ void MenuWorker::onDockSettingsTriggered()
 #endif
 }
 
-void MenuWorker::showDockSettingsMenu(QMenu *menu)
+void MenuWorker::exec()
 {
     // 菜单功能被禁用
-    static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray(), this);
+    static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray());
     if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
         return;
     }
 
-    // 菜单将要被打开
-    setAutoHide(false);
-
-    menu = createMenu(menu);
-    menu->exec(QCursor::pos());
-
-    // 菜单已经关闭
-    setAutoHide(true);
-    delete menu;
-    menu = nullptr;
-}
-
-void MenuWorker::setAutoHide(const bool autoHide)
-{
-    if (m_autoHide == autoHide)
-        return;
-
-    m_autoHide = autoHide;
-    emit autoHideChanged(m_autoHide);
+    QMenu menu;
+    if (Utils::IS_WAYLAND_DISPLAY)
+        menu.setWindowFlag(Qt::FramelessWindowHint);
+    createMenu(&menu);
+    menu.exec(QCursor::pos());
 }

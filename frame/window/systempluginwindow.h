@@ -43,7 +43,8 @@ public:
     explicit SystemPluginWindow(QWidget *parent = nullptr);
     ~SystemPluginWindow() override;
     void setPositon(Dock::Position position);
-    QSize suitableSize();
+    QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
 
 Q_SIGNALS:
     void itemChanged();
@@ -75,6 +76,7 @@ public:
     PluginsItemInterface *pluginInter() const;
     QString itemKey() const;
     QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
 
     inline ItemType itemType() const override { return DockItem::StretchPlugin; }
 
@@ -89,6 +91,7 @@ protected:
 private:
     void mouseClick();
     QFont textFont() const;
+    QFont textFont(const Dock::Position &position) const;
     bool needShowText() const;
 
 private:

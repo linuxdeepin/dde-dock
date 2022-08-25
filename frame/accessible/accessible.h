@@ -5,6 +5,7 @@
 #include "desktop_widget.h"
 #include "tipswidget.h"
 #include "dockpopupwindow.h"
+#include "dragwidget.h"
 
 #include "launcheritem.h"
 #include "appitem.h"

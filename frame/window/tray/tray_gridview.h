@@ -39,6 +39,7 @@ public:
     void setPosition(Dock::Position position);
     Dock::Position position() const;
     QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
     void setDragDistance(int pixel);
     void setAnimationProperty(const QEasingCurve::Type easing, const int duringTime = 250);
     void moveAnimation();

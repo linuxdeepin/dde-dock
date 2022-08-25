@@ -122,10 +122,15 @@ void DateTimeDisplayer::updatePolicy()
     }
 }
 
-QSize DateTimeDisplayer::suitableSize()
+QSize DateTimeDisplayer::suitableSize() const
 {
-    DateTimeInfo info = dateTimeInfo();
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+    return suitableSize(m_position);
+}
+
+QSize DateTimeDisplayer::suitableSize(const Dock::Position &position) const
+{
+    DateTimeInfo info = dateTimeInfo(position);
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         int width = info.m_timeRect.width() + info.m_dateRect.width() + 16;
         return QSize(width, height());
     }
@@ -151,7 +156,7 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
             .method("Toggle").call();
 }
 
-QString DateTimeDisplayer::getTimeString() const
+QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
 {
     QString tFormat = QString("hh:mm");
     int type = m_timedateInter->shortTimeFormat();
@@ -159,7 +164,7 @@ QString DateTimeDisplayer::getTimeString() const
         tFormat = timeFormat[type];
 
     if (!m_timedateInter->use24HourFormat()) {
-        if (m_position == Dock::Top || m_position == Dock::Bottom)
+        if (position == Dock::Top || position == Dock::Bottom)
             tFormat = tFormat.append(" AP");
         else
             tFormat = tFormat.append("\nAP");
@@ -170,12 +175,17 @@ QString DateTimeDisplayer::getTimeString() const
 
 QString DateTimeDisplayer::getDateString() const
 {
+    return getDateString(m_position);
+}
+
+QString DateTimeDisplayer::getDateString(const Dock::Position &position) const
+{
     int type = m_timedateInter->shortDateFormat();
     QString shortDateFormat = "yyyy-MM-dd";
     if (dateFormat.contains(type))
         shortDateFormat = dateFormat.value(type);
     // 如果是左右方向，则不显示年份
-    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right) {
+    if (position == Dock::Position::Left || position == Dock::Position::Right) {
         static QStringList yearStrList{"yyyy/", "yyyy-", "yyyy.", "yy/", "yy-", "yy."};
         for (int i = 0; i < yearStrList.size() ; i++) {
             const QString &yearStr = yearStrList[i];
@@ -189,16 +199,16 @@ QString DateTimeDisplayer::getDateString() const
     return QDateTime::currentDateTime().toString(shortDateFormat);
 }
 
-DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo()
+DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Position &position) const
 {
     DateTimeInfo info;
     info.m_timeRect = rect();
     info.m_dateRect = rect();
 
-    info.m_time = getTimeString();
-    info.m_date = getDateString();
+    info.m_time = getTimeString(position);
+    info.m_date = getDateString(position);
 
-    if (m_position == Dock::Top || m_position == Dock::Bottom) {
+    if (position == Dock::Top || position == Dock::Bottom) {
         int timeWidth = QFontMetrics(timeFont()).boundingRect(info.m_time).width() + 3;
         int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
         info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
@@ -243,7 +253,7 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    DateTimeInfo info = dateTimeInfo();
+    DateTimeInfo info = dateTimeInfo(m_position);
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -382,4 +392,9 @@ void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
         m_currentSize = dateTimeSize.width();
     else
         m_currentSize = dateTimeSize.height();
+}
+
+QString DateTimeDisplayer::getTimeString() const
+{
+    return getTimeString(m_position);
 }

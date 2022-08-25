@@ -22,6 +22,7 @@
 #define TRAYMANAGERWINDOW_H
 
 #include "constants.h"
+#include "dbusutil.h"
 
 #include <QWidget>
 
@@ -43,6 +44,7 @@ class SystemPluginWindow;
 class QLabel;
 class QDropEvent;
 class DateTimeDisplayer;
+class QPainterPath;
 
 class TrayManagerWindow : public QWidget
 {
@@ -52,9 +54,11 @@ public:
     explicit TrayManagerWindow(QWidget *parent = nullptr);
     ~TrayManagerWindow() override;
 
+    void updateBorderRadius(int borderRadius);
     void updateLayout();
     void setPositon(Dock::Position position);
-    QSize suitableSize();
+    QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
 
 Q_SIGNALS:
     void requestUpdate();
@@ -76,7 +80,7 @@ private:
     void resetSingleDirection();
     QColor maskColor(uint8_t alpha) const;
 
-    int appDatetimeSize();
+    int appDatetimeSize(const Dock::Position &position) const;
     QPainterPath roundedPaths();
 
 private:
@@ -86,13 +90,15 @@ private:
     QuickPluginWindow *m_quickIconWidget;
     DateTimeDisplayer *m_dateTimeWidget;
     QBoxLayout *m_appPluginLayout;
-    QBoxLayout *m_appDatetimeLayout;
     QBoxLayout *m_mainLayout;
     TrayGridView *m_trayView;
     TrayModel *m_model;
     TrayDelegate *m_delegate;
-    Dock::Position m_postion;
+    Dock::Position m_position;
     QLabel *m_splitLine;
+    DockInter *m_dockInter;
+    bool m_singleShow;                              // 用于记录当前日期时间和插件区域是显示一行还是显示多行
+    int m_borderRadius;                             // 圆角的值
 };
 
 #endif // PLUGINWINDOW_H

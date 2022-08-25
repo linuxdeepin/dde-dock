@@ -26,6 +26,8 @@
 #include "themeappicon.h"
 #include "dockitemmanager.h"
 #include "dockapplication.h"
+#include "traymainwindow.h"
+#include "windowmanager.h"
 
 #include <QAccessible>
 #include <QDir>
@@ -221,30 +223,37 @@ int main(int argc, char *argv[])
     // 在qApp中记录当前是否为安全模式，如果为安全模式，则无需加载插件，在退出安全模式下，才正常加载插件
     // 此处设置这个属性必须在MainWindow创建之前，因为在mainWindow中会创建加载插件的代理，会在代理中根据这个属性来判断是否需要加载插件
     bool isSafeMode = IsSaveMode();
-    qApp->setProperty("safeMode", isSafeMode);
+    bool disablePlugin = parser.isSet(disablePlugOption);
+    qApp->setProperty("safeMode", (isSafeMode || disablePlugin));
+
+    MultiScreenWorker multiScreenWorker;
+
+    MainWindow mainWindow(&multiScreenWorker);
+    TrayMainWindow trayMainWindow(&multiScreenWorker);
+
+    WindowManager windowManager(&multiScreenWorker);
+
+    // 保证添加窗口的先后顺序，先添加的窗口显示在左边，后添加的窗口显示在右边
+    windowManager.addWindow(&mainWindow);
+    windowManager.addWindow(&trayMainWindow);
 
     // 注册任务栏的DBus服务
-    MainWindow mw;
-    DBusDockAdaptors adaptor(&mw);
-
-    if(Utils::IS_WAYLAND_DISPLAY) {
-        mw.setAttribute(Qt::WA_NativeWindow);
-        mw.windowHandle()->setProperty("_d_dwayland_window-type", "dock");
-    }
+    DBusDockAdaptors adaptor(&windowManager);
 
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
-    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
+    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &windowManager);
 
     // 当任务栏以-r参数启动时，设置CANSHOW未false，之后调用launch不显示任务栏
     qApp->setProperty("CANSHOW", !parser.isSet(runOption));
 
-    mw.launch();
+    windowManager.launch();
+    mainWindow.setVisible(true);
 
     // 判断是否进入安全模式，是否带有入参 -x
-    if (!isSafeMode && !parser.isSet(disablePlugOption)) {
+    if (!isSafeMode && !disablePlugin) {
         qApp->setProperty("PLUGINSLOADED", true);
     } else {
-        mw.sendNotifications();
+        windowManager.sendNotifications();
     }
 
     return app.exec();

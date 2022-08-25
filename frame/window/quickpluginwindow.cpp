@@ -131,6 +131,11 @@ void QuickPluginWindow::dragPlugin(PluginsItemInterface *item)
     Q_EMIT itemCountChanged();
 }
 
+QSize QuickPluginWindow::suitableSize() const
+{
+    return suitableSize(m_position);
+}
+
 void QuickPluginWindow::addPlugin(QuickSettingItem *item)
 {
     for (int i = 0; i < m_mainLayout->count(); i++) {
@@ -163,9 +168,9 @@ void QuickPluginWindow::addPlugin(QuickSettingItem *item)
     Q_EMIT itemCountChanged();
 }
 
-QSize QuickPluginWindow::suitableSize()
+QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
 {
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom)
         return QSize((ITEMSPACE + ICONWIDTH) * m_mainLayout->count() + ITEMSPACE, ITEMSIZE);
 
     int height = 0;

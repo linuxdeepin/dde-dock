@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
+ * Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
  *
- * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
+ * Author:     donghualin <donghualin@uniontech.com>
  *
- * Maintainer: fanpengcheng <fanpengcheng_cm@deepin.com>
+ * Maintainer: donghualin <donghualin@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,35 +18,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef MENUWORKER_H
-#define MENUWORKER_H
+#ifndef DOCKSCREEN_H
+#define DOCKSCREEN_H
 
-#include "constants.h"
-#include "dbusutil.h"
+#include <QString>
 
-#include <QObject>
-
-class QMenu;
-class QGSettings;
 /**
- * @brief The MenuWorker class  此类用于处理任务栏右键菜单的逻辑
+ * @brief The DockScreen class
+ * 保存任务栏的屏幕信息
  */
-class MenuWorker : public QObject
+class DockScreen
 {
-    Q_OBJECT
 public:
-    explicit MenuWorker(QObject *parent = nullptr);
+    static DockScreen *instance();
 
-    void exec();
-
-private:
-    void createMenu(QMenu *settingsMenu);
-
-private slots:
-    void onDockSettingsTriggered();
+    const QString &current() const;
+    const QString &last() const;
+    const QString &primary() const;
+    void updateDockedScreen(const QString &screenName);
+    void updatePrimary(const QString &primary);
 
 private:
-    DockInter *m_dockInter;
+    explicit DockScreen();
+
+private:
+    QString m_primary;
+    QString m_currentScreen;
+    QString m_lastScreen;
 };
 
-#endif // MENUWORKER_H
+#endif // DOCKSCREEN_H

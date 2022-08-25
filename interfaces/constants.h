@@ -43,6 +43,8 @@ namespace Dock {
 // 插件最小尺寸，图标采用深色
 #define PLUGIN_MIN_ICON_NAME "-dark"
 
+// dock最小尺寸
+#define DOCK_MIN_SIZE 40
 // dock最大尺寸
 #define DOCK_MAX_SIZE 100
 ///
@@ -94,6 +96,11 @@ enum HideState {
     Unknown     = 0,
     Show        = 1,
     Hide        = 2,
+};
+
+enum class AniAction {
+    Show = 0,
+    Hide
 };
 
 #define IS_TOUCH_STATE "isTouchState"

@@ -60,6 +60,11 @@ Dock::Position TrayGridView::position() const
 
 QSize TrayGridView::suitableSize() const
 {
+    return suitableSize(m_positon);
+}
+
+QSize TrayGridView::suitableSize(const Dock::Position &position) const
+{
     TrayModel *dataModel = qobject_cast<TrayModel *>(model());
     if (!dataModel)
         return QSize(-1, -1);
@@ -88,21 +93,38 @@ QSize TrayGridView::suitableSize() const
         }
         return QSize(width, height);
     }
-    if (m_positon == Dock::Position::Top || m_positon == Dock::Position::Bottom) {
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         int length = spacing() + 2;
-        for (int i = 0; i < dataModel->rowCount(); i++) {
-            QModelIndex index = dataModel->index(i, 0);
-            QRect indexRect = visualRect(index);
-            length += indexRect.width() + spacing();
+        if (m_positon == Dock::Position::Top || m_positon == Dock::Position::Bottom) {
+            for (int i = 0; i < dataModel->rowCount(); i++) {
+                QModelIndex index = dataModel->index(i, 0);
+                QRect indexRect = visualRect(index);
+                length += indexRect.width() + spacing();
+            }
+        } else {
+            // 如果是从左右切换过来的，此时还未进入上下位置，则将当前位置的高度作为计算左右位置的宽度
+            for (int i = 0; i < dataModel->rowCount(); i++) {
+                QModelIndex index = dataModel->index(i, 0);
+                QRect indexRect = visualRect(index);
+                length += indexRect.height() + spacing();
+            }
         }
 
         return QSize(length, -1);
     }
     int height = spacing() + 2;
-    for (int i = 0; i < dataModel->rowCount(); i++) {
-        QModelIndex index = dataModel->index(i, 0);
-        QRect indexRect = visualRect(index);
-        height += indexRect.height() + spacing();
+    if (m_positon == Dock::Position::Left || m_positon == Dock::Position::Right) {
+        for (int i = 0; i < dataModel->rowCount(); i++) {
+            QModelIndex index = dataModel->index(i, 0);
+            QRect indexRect = visualRect(index);
+            height += indexRect.height() + spacing();
+        }
+    } else {
+        for (int i = 0; i < dataModel->rowCount(); i++) {
+            QModelIndex index = dataModel->index(i, 0);
+            QRect indexRect = visualRect(index);
+            height += indexRect.width() + spacing();
+        }
     }
 
     return QSize(-1, height);

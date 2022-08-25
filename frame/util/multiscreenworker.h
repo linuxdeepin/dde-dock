@@ -50,6 +50,9 @@ DGUI_USE_NAMESPACE
  * 任务栏的鼠标唤醒区域或任务栏的大小没更新或者更新时的大小还是按照原来的屏幕信息计算而来的，
  */
 
+#define DRAG_AREA_SIZE (5)
+#define DOCKSPACE (WINDOWMARGIN * 2)
+
 using XEventMonitor = ::com::deepin::api::XEventMonitor;
 using DBusLuncher = ::com::deepin::dde::Launcher;
 
@@ -59,56 +62,18 @@ class QWidget;
 class QTimer;
 class MainWindow;
 class QGSettings;
-
-/**
- * @brief The DockScreen class
- * 保存任务栏的屏幕信息
- */
-class DockScreen
-{
-public:
-    explicit DockScreen(const QString &primary)
-        : m_currentScreen(primary)
-        , m_lastScreen(primary)
-        , m_primary(primary)
-    {}
-    inline const QString &current() const {return m_currentScreen;}
-    inline const QString &last() const {return m_lastScreen;}
-    inline const QString &primary() const {return m_primary;}
-
-    void updateDockedScreen(const QString &screenName)
-    {
-        m_lastScreen = m_currentScreen;
-        m_currentScreen = screenName;
-    }
-
-    void updatePrimary(const QString &primary)
-    {
-        m_primary = primary;
-        if (m_currentScreen.isEmpty()) {
-            updateDockedScreen(primary);
-        }
-    }
-
-private:
-    QString m_currentScreen;
-    QString m_lastScreen;
-    QString m_primary;
-};
+class TrayMainWindow;
+class MenuWorker;
 
 class MultiScreenWorker : public QObject
 {
     Q_OBJECT
+
 public:
     enum Flag {
         Motion = 1 << 0,
         Button = 1 << 1,
         Key    = 1 << 2
-    };
-
-    enum AniAction {
-        Show = 0,
-        Hide
     };
 
     enum RunState {
@@ -119,8 +84,7 @@ public:
         MousePress = 0x10,                  // 当前鼠标是否被按下
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
-        DockIsShowing = 0x80,               // 任务栏正在显示
-        DockIsDraging = 0x100,              // 任务栏正在拖拽
+        DockIsDraging = 0x80,               // 任务栏正在拖拽
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -128,48 +92,41 @@ public:
 
     typedef QFlags<RunState> RunStates;
 
-    MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper);
-
-    void initShow();
+    explicit MultiScreenWorker(QObject *parent = Q_NULLPTR);
+    ~MultiScreenWorker() override;
 
     DockInter *dockInter() { return m_dockInter; }
+    void updateDaemonDockSize(const int &dockSize);
 
     inline bool testState(RunState state) { return (m_state & state); }
     void setStates(RunStates state, bool on = true);
 
-    inline const QString &lastScreen() { return m_ds.last(); }
-    inline const QString &deskScreen() { return m_ds.current(); }
     inline const Position &position() { return m_position; }
     inline const DisplayMode &displayMode() { return m_displayMode; }
     inline const HideMode &hideMode() { return m_hideMode; }
     inline const HideState &hideState() { return m_hideState; }
     inline quint8 opacity() { return m_opacity * 255; }
 
-    QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
-    QRect dockRect(const QString &screenName);
-    QRect getDockShowMinGeometry(const QString &screenName, bool withoutScale = false);
-
 signals:
     void opacityChanged(const quint8 value) const;
-    void displayModeChanegd();
+    void displayModeChanged(const Dock::DisplayMode &);
 
     // 更新监视区域
     void requestUpdateRegionMonitor();                          // 更新监听区域
     void requestUpdateFrontendGeometry();                       //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
-    void requestUpdateLayout();                                 //　界面需要根据任务栏更新布局的方向
-    void requestUpdateDragArea();                               //　更新拖拽区域
     void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
 
-    void requestStopShowAni();
-    void requestStopHideAni();
+    // 用来通知WindowManager的信号
+    void requestUpdateDockGeometry(const Dock::HideMode &hideMode);
+    void positionChanged(const Dock::Position &position);
 
-    void requestUpdateDockEntry();
+    void requestPlayAnimation(const QString &screenName, const Position &position, const Dock::AniAction &animation, bool containMouse = false, bool updatePos = false);
+    void requestChangeDockPosition(const QString &fromScreen, const QString &toScreen, const Position &fromPos, const Position &toPos);
 
 public slots:
-    void onAutoHideChanged(bool autoHide);
-    void updateDaemonDockSize(int dockSize);
+    void onAutoHideChanged(const bool autoHide);
     void onRequestUpdateRegionMonitor();
 
 #ifndef USE_AM
@@ -181,16 +138,10 @@ private slots:
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void onExtralRegionMonitorChanged(int x, int y, const QString &key);
 
-    // Animation
-    void showAniFinished();
-    void hideAniFinished();
-
     void updateDisplay();
 
     void onWindowSizeChanged(uint value);
-    void primaryScreenChanged();
-    void updateParentGeometry(const QVariant &value, const Position &pos);
-    void updateParentGeometry(const QVariant &value);
+    void onPrimaryScreenChanged();
 
     // 任务栏属性变化
     void onPositionChanged(int position);
@@ -199,11 +150,6 @@ private slots:
     void onHideStateChanged(int state);
     void onOpacityChanged(const double value);
 
-    // 通知后端任务栏所在位置
-    void onRequestUpdateFrontendGeometry();
-
-    void onRequestUpdateLayout();
-    void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
     void onRequestUpdateMonitorInfo();
     void onRequestDelayShowDock();
@@ -214,46 +160,33 @@ private slots:
 
     void onDelayAutoHideChanged();
 
-    // 子部件尺寸发生变化
-    void onChildSizeChanged();
-
 private:
-    MainWindow *parent();
     // 初始化数据信息
     void initMembers();
     void initDockMode();
     void initConnection();
     void initUI();
+
     void initDisplayData();
     void reInitDisplayData();
-
-    void displayAnimation(const QString &screen, const Position &pos, AniAction act);
-    void displayAnimation(const QString &screen, AniAction act);
 
     void tryToShowDock(int eventX, int eventY);
     void changeDockPosition(QString fromScreen, QString toScreen, const Position &fromPos, const Position &toPos);
 
-    QString getValidScreen(const Position &pos);
     void resetDockScreen();
 
     void checkDaemonDockService();
     void checkXEventMonitorService();
 
-    QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
+    QString getValidScreen(const Position &pos);
 
-    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
-    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     bool isCursorOut(int x, int y);
 
-    QScreen *screenByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
     static bool isCopyMode();
 
 private:
-    QWidget *m_parent;
-    DWindowManagerHelper *m_wmHelper;
-
     // monitor screen
     XEventMonitor *m_eventInter;
     XEventMonitor *m_extralEventInter;
@@ -266,8 +199,6 @@ private:
     // update monitor info
     QTimer *m_monitorUpdateTimer;
     QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
-
-    DockScreen m_ds;                            // 屏幕名称信息
 
     // 任务栏属性
     double m_opacity;

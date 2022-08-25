@@ -30,6 +30,8 @@
  * Adaptor class for interface com.deepin.dde.Dock
  */
 class QGSettings;
+class WindowManager;
+
 class DBusDockAdaptors: public QDBusAbstractAdaptor
 {
     Q_OBJECT
@@ -69,10 +71,8 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
     Q_PROPERTY(bool showInPrimary READ showInPrimary WRITE setShowInPrimary NOTIFY showInPrimaryChanged)
 
 public:
-    explicit DBusDockAdaptors(MainWindow *parent);
+    explicit DBusDockAdaptors(WindowManager *parent);
     virtual ~DBusDockAdaptors();
-
-    MainWindow *parent() const;
 
 public Q_SLOTS: // METHODS
     void callShow();
@@ -103,6 +103,7 @@ private:
 
 private:
     QGSettings *m_gsettings;
+    WindowManager *m_windowManager;
 };
 
 #endif //DBUSDOCKADAPTORS

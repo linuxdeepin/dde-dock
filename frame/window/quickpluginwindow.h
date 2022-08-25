@@ -52,7 +52,8 @@ public:
     void setPositon(Dock::Position position);
     void dragPlugin(PluginsItemInterface *item);
 
-    QSize suitableSize();
+    QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
 
 Q_SIGNALS:
     void itemCountChanged();

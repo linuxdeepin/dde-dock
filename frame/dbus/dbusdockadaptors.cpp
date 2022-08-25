@@ -22,16 +22,19 @@
 #include "dbusdockadaptors.h"
 #include "utils.h"
 #include "dockitemmanager.h"
+#include "windowmanager.h"
+#include "proxyplugincontroller.h"
 
 #include <QScreen>
 #include <QDebug>
 #include <QGSettings>
 
-DBusDockAdaptors::DBusDockAdaptors(MainWindow* parent)
+DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
     : QDBusAbstractAdaptor(parent)
     , m_gsettings(Utils::SettingsPtr("com.deepin.dde.dock.mainwindow", QByteArray(), this))
+    , m_windowManager(parent)
 {
-    connect(parent, &MainWindow::panelGeometryChanged, this, [=] {
+    connect(parent, &WindowManager::panelGeometryChanged, this, [ = ] {
         emit DBusDockAdaptors::geometryChanged(geometry());
     });
 
@@ -74,19 +77,23 @@ DBusDockAdaptors::~DBusDockAdaptors()
 
 }
 
-MainWindow *DBusDockAdaptors::parent() const
-{
-    return static_cast<MainWindow *>(QObject::parent());
-}
-
 void DBusDockAdaptors::callShow()
 {
-    return parent()->callShow();
+    m_windowManager->callShow();
 }
 
 void DBusDockAdaptors::ReloadPlugins()
 {
-    return parent()->reloadPlugins();
+    if (qApp->property("PLUGINSLOADED").toBool())
+        return;
+
+    // 发送事件，通知代理来加载插件
+    PluginLoadEvent event;
+    QCoreApplication::sendEvent(qApp, &event);
+
+    qApp->setProperty("PLUGINSLOADED", true);
+    // 退出安全模式
+    qApp->setProperty("safeMode", false);
 }
 
 QStringList DBusDockAdaptors::GetLoadedPlugins()
@@ -120,7 +127,7 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
 
 void DBusDockAdaptors::resizeDock(int offset, bool dragging)
 {
-    parent()->resizeDock(offset, dragging);
+    m_windowManager->resizeDock(offset, dragging);
 }
 
 // 返回每个插件的识别Key(所以此值应始终不变)，供个性化插件根据key去匹配每个插件对应的图标
@@ -181,7 +188,7 @@ void DBusDockAdaptors::setPluginVisible(const QString &pluginName, bool visible)
 
 QRect DBusDockAdaptors::geometry() const
 {
-    return parent()->geometry();
+    return m_windowManager->geometry();
 }
 
 bool DBusDockAdaptors::showInPrimary() const

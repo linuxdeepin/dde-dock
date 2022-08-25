@@ -23,6 +23,12 @@
 #include "mainwindow.h"
 #include "utils.h"
 #include "displaymanager.h"
+#include "traymainwindow.h"
+#include "mainwindow.h"
+#include "menuworker.h"
+#include "windowmanager.h"
+#include "dockitemmanager.h"
+#include "dockscreen.h"
 
 #include <QWidget>
 #include <QScreen>
@@ -33,6 +39,7 @@
 #include <QX11Info>
 #include <QDBusConnection>
 #include <QGuiApplication>
+#include <QMenu>
 
 #include <qpa/qplatformscreen.h>
 #include <qpa/qplatformnativeinterface.h>
@@ -41,14 +48,13 @@ const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
 
 #define DIS_INS DisplayManager::instance()
+#define DOCK_SCREEN DockScreen::instance()
 
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
 // Monitor数据－＞屏幕是否可停靠更新－＞监视唤醒区域更新，任务栏显示区域更新－＞拖拽区域更新－＞通知后端接口，通知窗管
 
-MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *helper)
+MultiScreenWorker::MultiScreenWorker(QObject *parent)
     : QObject(parent)
-    , m_parent(parent)
-    , m_wmHelper(helper)
     , m_eventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_extralEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
     , m_touchEventInter(new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this))
@@ -56,45 +62,30 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent, DWindowManagerHelper *help
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
-    , m_ds(DIS_INS->primary())
+    , m_position(Dock::Position::Bottom)
+    , m_hideMode(Dock::HideMode::KeepShowing)
+    , m_hideState(Dock::HideState::Show)
+    , m_displayMode(Dock::DisplayMode::Efficient)
     , m_state(AutoHide)
 {
-    qInfo() << "init dock screen: " << m_ds.current();
-
     initConnection();
     initMembers();
     initDockMode();
-    initDisplayData();
     initUI();
+    QMetaObject::invokeMethod(this, &MultiScreenWorker::initDisplayData, Qt::QueuedConnection);
 }
 
-void MultiScreenWorker::initShow()
+MultiScreenWorker::~MultiScreenWorker()
 {
-    // 仅在初始化时调用一次
-    static bool first = true;
-    if (!first)
-        return;
-    first = false;
+}
 
-    //　这里是为了在调用时让MainWindow更新界面布局方向
-    emit requestUpdateLayout();
-
-    if (m_hideMode == HideMode::KeepShowing)
-        displayAnimation(m_ds.current(), AniAction::Show);
-    else if (m_hideMode == HideMode::KeepHidden) {
-        QRect rect = getDockShowGeometry(m_ds.current(), m_position, m_displayMode);
-        parent()->panel()->setFixedSize(rect.size());
-        parent()->panel()->move(0, 0);
-
-        rect = getDockHideGeometry(m_ds.current(), m_position, m_displayMode);
-        parent()->setFixedSize(rect.size());
-        parent()->setGeometry(rect);
-    } else if (m_hideMode == HideMode::SmartHide) {
-        if (m_hideState == HideState::Show)
-            displayAnimation(m_ds.current(), AniAction::Show);
-        else if (m_hideState == HideState::Hide)
-            displayAnimation(m_ds.current(), AniAction::Hide);
-    }
+void MultiScreenWorker::updateDaemonDockSize(const int &dockSize)
+{
+    m_dockInter->setWindowSize(uint(dockSize));
+    if (m_displayMode == Dock::DisplayMode::Fashion)
+        m_dockInter->setWindowSizeFashion(uint(dockSize));
+    else
+        m_dockInter->setWindowSizeEfficient(uint(dockSize));
 }
 
 /**
@@ -112,48 +103,7 @@ void MultiScreenWorker::setStates(RunStates state, bool on)
         m_state &= ~(type);
 }
 
-/**
- * @brief dockRect
- * @param screenName            屏幕名
- * @param pos                   任务栏位置
- * @param hideMode              模式
- * @param displayMode           状态
- * @return                      按照给定的数据计算出任务栏所在位置
- */
-QRect MultiScreenWorker::dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
-{
-    if (hideMode == HideMode::KeepShowing || (hideMode == HideMode::SmartHide && m_hideState == HideState::Show))
-        return getDockShowGeometry(screenName, pos, displayMode);
-
-    return getDockHideGeometry(screenName, pos, displayMode);
-}
-
-/**
- * @brief dockRect
- * @param screenName        屏幕名
- * @return                  按照当前屏幕的当前属性给出任务栏所在区域
- */
-QRect MultiScreenWorker::dockRect(const QString &screenName)
-{
-    return dockRect(screenName, m_position, m_hideMode, m_displayMode);
-}
-
-/**
- * @brief realDockRect      给出不计算缩放情况的区域信息(和后端接口保持一致)
- * @param screenName        屏幕名
- * @param pos               任务栏位置
- * @param hideMode          模式
- * @param displayMode       状态
- * @return
- */
-QRect MultiScreenWorker::dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode)
-{
-    if (hideMode == HideMode::KeepShowing)
-        return getDockShowGeometry(screenName, pos, displayMode, true);
-    return getDockHideGeometry(screenName, pos, displayMode, true);
-}
-
-void MultiScreenWorker::onAutoHideChanged(bool autoHide)
+void MultiScreenWorker::onAutoHideChanged(const bool autoHide)
 {
     if (testState(AutoHide) != autoHide)
         setStates(AutoHide, autoHide);
@@ -161,19 +111,6 @@ void MultiScreenWorker::onAutoHideChanged(bool autoHide)
     if (testState(AutoHide)) {
         QTimer::singleShot(500, this, &MultiScreenWorker::onDelayAutoHideChanged);
     }
-}
-
-/**
- * @brief updateDaemonDockSize
- * @param dockSize              这里的高度是通过qt获取的，不能使用后端的接口数据
- */
-void MultiScreenWorker::updateDaemonDockSize(int dockSize)
-{
-    m_dockInter->setWindowSize(uint(dockSize));
-    if (m_displayMode == DisplayMode::Fashion)
-        m_dockInter->setWindowSizeFashion(uint(dockSize));
-    else
-        m_dockInter->setWindowSizeEfficient(uint(dockSize));
 }
 
 #ifndef USE_AM
@@ -225,67 +162,23 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
         return;
 
     // FIXME:每次都要重置一下，是因为qt中的QScreen类缺少nameChanged信号，后面会给上游提交patch修复
-    m_ds.updateDockedScreen(getValidScreen(position()));
+    DOCK_SCREEN->updateDockedScreen(getValidScreen(position()));
 
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
     m_delayWakeTimer->stop();
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
-        displayAnimation(m_ds.current(), AniAction::Show);
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
-        displayAnimation(m_ds.current(), AniAction::Hide);
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Hide);
     }
-}
-
-void MultiScreenWorker::showAniFinished()
-{
-    QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-    if (m_displayMode == Dock::DisplayMode::Fashion
-            && (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)) {
-        // 特效模式下且在上下位置，需要先设置高度，因为trayManager
-        // 里面需要根据顶层窗口的高度来设置显示一行还是两行，
-        // 此时trayManager的长度就会发送变化，返回的建议值才是正确的尺寸值
-        parent()->setFixedHeight(rect.height());
-        // 调用更新布局接口来调整trayManager窗口的尺寸
-        parent()->panel()->updatePluginsLayout();
-        // 重新获取窗口尺寸
-        rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-    }
-
-    parent()->setFixedSize(rect.size());
-    parent()->setGeometry(rect);
-
-    parent()->panel()->setFixedSize(rect.size());
-    parent()->panel()->move(0, 0);
-
-    emit requestUpdateFrontendGeometry();
-    emit requestNotifyWindowManager();
-}
-
-void MultiScreenWorker::hideAniFinished()
-{
-    // 提前更新界面布局
-    emit requestUpdateLayout();
-
-    const QRect rect = dockRect(m_ds.current(), m_position, HideMode::KeepHidden, m_displayMode);
-    parent()->setFixedSize(rect.size());
-    parent()->setGeometry(rect);
-    parent()->panel()->setFixedSize(rect.size());
-    parent()->panel()->move(0, 0);
-
-    DockItem::setDockPosition(m_position);
-    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
-
-    emit requestUpdateFrontendGeometry();
-    emit requestNotifyWindowManager();
 }
 
 void MultiScreenWorker::updateDisplay()
 {
     //1、屏幕停靠信息，
     //2、任务栏当前显示在哪个屏幕也需要更新
-    //2、监视任务栏唤醒区域信息，
     //3、任务栏高度或宽度调整的拖拽区域，
     //4、通知窗管的任务栏显示区域信息，
     //5、通知后端的任务栏显示区域信息
@@ -293,12 +186,13 @@ void MultiScreenWorker::updateDisplay()
         qWarning() << "No Screen Can Display.";
         return;
     }
+
     // 更新所在屏幕
     resetDockScreen();
     // 通知后端
-    onRequestUpdateFrontendGeometry();
+    Q_EMIT requestUpdateFrontendGeometry();
     // 通知窗管
-    onRequestNotifyWindowManager();
+    Q_EMIT requestNotifyWindowManager();
 }
 
 void MultiScreenWorker::onWindowSizeChanged(uint value)
@@ -308,10 +202,10 @@ void MultiScreenWorker::onWindowSizeChanged(uint value)
     m_monitorUpdateTimer->start();
 }
 
-void MultiScreenWorker::primaryScreenChanged()
+void MultiScreenWorker::onPrimaryScreenChanged()
 {
     // 先更新主屏信息
-    m_ds.updatePrimary(DIS_INS->primary());
+    DOCK_SCREEN->updatePrimary(DIS_INS->primary());
 
     // 无效值
     if (DIS_INS->screenRawHeight() == 0 || DIS_INS->screenRawWidth() == 0) {
@@ -321,41 +215,6 @@ void MultiScreenWorker::primaryScreenChanged()
     }
 
     m_monitorUpdateTimer->start();
-}
-
-void MultiScreenWorker::updateParentGeometry(const QVariant &value, const Position &pos)
-{
-    Q_ASSERT_X(value.type() == QVariant::Rect, "", "ERROR OCCURED!");
-
-    const QRect &rect = value.toRect();
-    parent()->setFixedSize(rect.size());
-    parent()->setGeometry(rect);
-
-    const int panelSize = ((pos == Position::Top || pos == Position::Bottom) ? parent()->panel()->height() : parent()->panel()->width());
-
-    switch (pos) {
-    case Position::Top: {
-        parent()->panel()->move(0, rect.height() - panelSize);
-    }
-        break;
-    case Position::Left: {
-        parent()->panel()->move(rect.width() - panelSize, 0);
-    }
-        break;
-    case Position::Bottom:
-    case Position::Right: {
-        parent()->panel()->move(0, 0);
-    }
-        break;
-    }
-}
-
-void MultiScreenWorker::updateParentGeometry(const QVariant &value)
-{
-    if (!testState(ShowAnimationStart) && !testState(HideAnimationStart))
-        return;
-
-    updateParentGeometry(value, m_position);
 }
 
 void MultiScreenWorker::onPositionChanged(int position)
@@ -368,18 +227,15 @@ void MultiScreenWorker::onPositionChanged(int position)
 #endif
     m_position = static_cast<Position>(position);
 
-    // 更新鼠标拖拽样式，在类内部设置到qApp单例上去
-    if ((Top == m_position) || (Bottom == m_position)) {
-        parent()->panel()->setCursor(Qt::SizeVerCursor);
-    } else {
-        parent()->panel()->setCursor(Qt::SizeHorCursor);
-    }
-
     if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide)) {
         // 这种情况切换位置,任务栏不需要显示
-        displayAnimation(m_ds.current(), lastPos, AniAction::Hide);
+        // 参数说明 1 当前屏幕名称 2 改变位置之前的位置，因为需要从之前的位置完成隐藏的动画
+        // 3 隐藏动画 4 无需考虑当前鼠标是否在任务栏上，这个参数是通过其他方式隐藏唤醒任务栏的时候考虑鼠标是否在任务栏的位置来决定是否做隐藏动画
+        // 默认是false，也就是无需考虑 5 当前动画是否为执行位置改变的动画，如果该值为true，那么在动画执行完成后，WindowManager需要给其管理的
+        // 子窗口来更新当前的位置的信息
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), lastPos, Dock::AniAction::Hide, false, true);
         // 更新当前屏幕信息,下次显示从目标屏幕显示
-        m_ds.updateDockedScreen(getValidScreen(m_position));
+        DOCK_SCREEN->updateDockedScreen(getValidScreen(m_position));
         // 需要更新frontendWindowRect接口数据，否则会造成HideState属性值不变
         emit requestUpdateFrontendGeometry();
     } else {
@@ -396,25 +252,8 @@ void MultiScreenWorker::onDisplayModeChanged(int displayMode)
     qInfo() << "display mode change:" << displayMode;
 
     m_displayMode = static_cast<DisplayMode>(displayMode);
-    parent()->panel()->setDisplayMode(m_displayMode);
 
-    DockItem::setDockDisplayMode(m_displayMode);
-    qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(displayMode));
-
-    QRect rect;
-    if (m_hideMode == HideMode::KeepShowing || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Show)) {
-        rect = dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-    } else {
-        rect = dockRect(m_ds.current(), m_position, HideMode::KeepHidden, m_displayMode);
-    }
-
-    parent()->setFixedSize(rect.size());
-    parent()->move(rect.topLeft());
-
-    parent()->panel()->setFixedSize(rect.size());
-    parent()->panel()->move(0, 0);
-
-    emit displayModeChanegd();
+    emit displayModeChanged(m_displayMode);
     emit requestUpdateFrontendGeometry();
     emit requestNotifyWindowManager();
 }
@@ -430,9 +269,9 @@ void MultiScreenWorker::onHideModeChanged(int hideMode)
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
-        displayAnimation(m_ds.current(), AniAction::Show);
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
-        displayAnimation(m_ds.current(), AniAction::Hide);
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Hide);
     }
 
     emit requestUpdateFrontendGeometry();
@@ -450,27 +289,27 @@ void MultiScreenWorker::onHideStateChanged(int state)
 
     //TODO 这里是否存在屏幕找不到的问题，m_ds的当前屏幕是否可以做成实时同步的，公用一个指针？
     //TODO 这里真的有必要加以下代码吗，只是隐藏模式的切换，理论上不需要检查屏幕是否允许任务栏停靠
-    QScreen *curScreen = DIS_INS->screen(m_ds.current());
+    const QString currentScreen = DOCK_SCREEN->current();
+    QScreen *curScreen = DIS_INS->screen(currentScreen);
     if (!DIS_INS->canDock(curScreen, m_position)) {
-        m_ds.updateDockedScreen(getValidScreen(m_position));
+        DOCK_SCREEN->updateDockedScreen(getValidScreen(m_position));
     }
 
     qInfo() << "hidestate change:" << m_hideMode << m_hideState;
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
-        displayAnimation(m_ds.current(), AniAction::Show);
+        Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
-        // 如果鼠标正在任务栏要显示的区域,就可以不用隐藏(相当于智能隐藏被唤醒一样)
-        if (getDockShowGeometry(m_ds.current(), m_position, m_displayMode).contains(QCursor::pos()))
-            return;
-        displayAnimation(m_ds.current(), AniAction::Hide);
+        // 最后一个参数，当任务栏的隐藏状态发生变化的时候（从一直显示变成一直隐藏或者智能隐藏），需要考虑鼠标是否在任务栏上，如果在任务栏上，此时无需执行隐藏动画
+        Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Hide, true);
     }
 }
 
 void MultiScreenWorker::onOpacityChanged(const double value)
 {
-    if (int(m_opacity * 100) == int(value * 100)) return;
+    if (int(m_opacity * 100) == int(value * 100))
+        return;
 
     m_opacity = value;
 
@@ -659,7 +498,6 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
             break;
         }
 
-
         if (!m_touchRectList.contains(monitorRect)) {
             m_touchRectList << monitorRect;
         }
@@ -669,31 +507,6 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     m_registerKey = m_eventInter->RegisterAreas(m_monitorRectList, flags);
     m_extralRegisterKey = m_extralEventInter->RegisterAreas(m_extralRectList, flags);
     m_touchRegisterKey = m_touchEventInter->RegisterAreas(m_touchRectList, flags);
-}
-
-void MultiScreenWorker::onRequestUpdateFrontendGeometry()
-{
-    const QRect rect = dockRectWithoutScale(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode);
-
-    //!!! 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
-    if (rect.width() == 0 || rect.height() == 0)
-        return;
-
-#ifdef QT_DEBUG
-    qDebug() << rect;
-#endif
-
-    m_dockInter->SetFrontendWindowRect(int(rect.x()), int(rect.y()), uint(rect.width()), uint(rect.height()));
-    emit requestUpdateDockEntry();
-}
-
-void MultiScreenWorker::onRequestUpdateLayout()
-{
-    parent()->panel()->setFixedSize(dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size());
-    parent()->panel()->move(0, 0);
-    parent()->panel()->setDisplayMode(displayMode());
-    parent()->panel()->setPositonValue(position());
-    parent()->panel()->update();
 }
 
 /**
@@ -717,147 +530,17 @@ bool MultiScreenWorker::isCopyMode()
     return true;
 }
 
-/**
- * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
- * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
- */
-void MultiScreenWorker::onRequestNotifyWindowManager()
-{
-    static QRect lastRect = QRect();
-    static int lastScreenWidth = 0;
-    static int lastScreenHeight = 0;
-
-    /* 在非主屏或非一直显示状态时，清除任务栏区域，不挤占应用 */
-    if ((!DIS_INS->isCopyMode() && m_ds.current() != m_ds.primary()) || m_hideMode != HideMode::KeepShowing) {
-        lastRect = QRect();
-
-        if (Utils::IS_WAYLAND_DISPLAY) {
-            QList<QVariant> varList;
-            varList.append(0);//dock位置
-            varList.append(0);//dock高度/宽度
-            varList.append(0);//start值
-            varList.append(0);//end值
-            if (parent()->windowHandle()->handle()) {
-                QGuiApplication::platformNativeInterface()->setWindowProperty(parent()->windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
-            }
-        } else {
-            const auto display = QX11Info::display();
-            if (!display) {
-                qWarning() << "QX11Info::display() is " << display;
-                return;
-            }
-
-            XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
-        }
-
-        return;
-    }
-
-    QRect dockGeometry = getDockShowGeometry(m_ds.current(), m_position, m_displayMode, true);
-    if (lastRect == dockGeometry
-            && lastScreenWidth == DIS_INS->screenRawWidth()
-            && lastScreenHeight == DIS_INS->screenRawHeight()) {
-        return;
-    }
-
-    lastRect = dockGeometry;
-    lastScreenWidth = DIS_INS->screenRawWidth();
-    lastScreenHeight = DIS_INS->screenRawHeight();
-    qDebug() << "dock real geometry:" << dockGeometry;
-    qDebug() << "screen width:" << DIS_INS->screenRawWidth() << ", height:" << DIS_INS->screenRawHeight();
-
-    const qreal &ratio = qApp->devicePixelRatio();
-    if (Utils::IS_WAYLAND_DISPLAY) {
-        QList<QVariant> varList = {0, 0, 0, 0};
-        switch (m_position) {
-        case Position::Top:
-            varList[0] = 1;
-            varList[1] = dockGeometry.y() + dockGeometry.height() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.x();
-            varList[3] = dockGeometry.x() + dockGeometry.width();
-            break;
-        case Position::Bottom:
-            varList[0] = 3;
-            varList[1] = DIS_INS->screenRawHeight() - dockGeometry.y() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.x();
-            varList[3] = dockGeometry.x() + dockGeometry.width();
-            break;
-        case Position::Left:
-            varList[0] = 0;
-            varList[1] = dockGeometry.x() + dockGeometry.width() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.y();
-            varList[3] = dockGeometry.y() + dockGeometry.height();
-            break;
-        case Position::Right:
-            varList[0] = 2;
-            varList[1] = DIS_INS->screenRawWidth() - dockGeometry.x() + WINDOWMARGIN * ratio;
-            varList[2] = dockGeometry.y();
-            varList[3] = dockGeometry.y() + dockGeometry.height();
-            break;
-        }
-
-        if (parent()->windowHandle()->handle()) {
-            QGuiApplication::platformNativeInterface()->setWindowProperty(parent()->windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
-        }
-    } else {
-        XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
-        double strut = 0;
-        double strutStart = 0;
-        double strutEnd = 0;
-
-        switch (m_position) {
-        case Position::Top:
-            orientation = XcbMisc::OrientationTop;
-            strut = dockGeometry.y() + dockGeometry.height();
-            strutStart = dockGeometry.x();
-            strutEnd = dockGeometry.x() + dockGeometry.width();
-            break;
-        case Position::Bottom:
-            orientation = XcbMisc::OrientationBottom;
-            strut = DIS_INS->screenRawHeight() - dockGeometry.y();
-            strutStart = dockGeometry.x();
-            strutEnd = dockGeometry.x() + dockGeometry.width();
-            break;
-        case Position::Left:
-            orientation = XcbMisc::OrientationLeft;
-            strut = dockGeometry.x() + dockGeometry.width();
-            strutStart = dockGeometry.y();
-            strutEnd = dockGeometry.y() + dockGeometry.height();
-            break;
-        case Position::Right:
-            orientation = XcbMisc::OrientationRight;
-            strut = DIS_INS->screenRawWidth() - dockGeometry.x();
-            strutStart = dockGeometry.y();
-            strutEnd = dockGeometry.y() + dockGeometry.height();
-            break;
-        }
-
-        qDebug() << "set reserved area to xcb:" << strut << strutStart << strutEnd;
-
-        const auto display = QX11Info::display();
-        if (!display) {
-            qWarning() << "QX11Info::display() is " << display;
-            return;
-        }
-
-        XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
-                                               static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
-                                               static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
-                                               static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
-    }
-}
-
 void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const Position &toPos)
 {
     qInfo() << "request change pos from: " << fromPos << " to: " << toPos;
     // 更新要切换到的屏幕
-    if (!DIS_INS->canDock(DIS_INS->screen(m_ds.current()), m_position))
-        m_ds.updateDockedScreen(getValidScreen(m_position));
+    if (!DIS_INS->canDock(DIS_INS->screen(DOCK_SCREEN->current()), m_position))
+        DOCK_SCREEN->updateDockedScreen(getValidScreen(m_position));
 
-    qInfo() << "update allow screen: " << m_ds.current();
+    qInfo() << "update allow screen: " << DOCK_SCREEN->current();
 
     // 无论什么模式,都先显示
-    changeDockPosition(m_ds.last(), m_ds.current(), fromPos, toPos);
+    changeDockPosition(DOCK_SCREEN->last(), DOCK_SCREEN->current(), fromPos, toPos);
 }
 
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
@@ -879,55 +562,28 @@ void MultiScreenWorker::onRequestDelayShowDock()
     // 复制模式．不需要响应切换屏幕
     if (DIS_INS->screens().size() == 2 && DIS_INS->screens().first()->geometry() == DIS_INS->screens().last()->geometry()) {
         qInfo() << "copy mode　or merge mode";
-        parent()->setFixedSize(dockRect(m_ds.current()).size());
-        parent()->setGeometry(dockRect(m_ds.current()));
+        Q_EMIT requestUpdateDockGeometry(m_hideMode);
         return;
     }
 
-    m_ds.updateDockedScreen(m_delayScreen);
+    DOCK_SCREEN->updateDockedScreen(m_delayScreen);
 
     // 检查当前屏幕的当前位置是否允许显示,不允许需要更新显示信息(这里应该在函数外部就处理好,不应该走到这里)
     // 检查边缘是否允许停靠
     QScreen *curScreen = DIS_INS->screen(m_delayScreen);
     if (curScreen && DIS_INS->canDock(curScreen, m_position)) {
         if (m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) {
-            displayAnimation(m_ds.current(), AniAction::Show);
+            Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Hide);
         } else if (m_hideMode == HideMode::KeepShowing) {
-            changeDockPosition(m_ds.last(), m_ds.current(), m_position, m_position);
+            changeDockPosition(DOCK_SCREEN->last(), DOCK_SCREEN->current(), m_position, m_position);
         }
     }
-}
-
-void MultiScreenWorker::onChildSizeChanged()
-{
-    // 如果当前为隐藏，则无需再次设置其尺寸
-    if (parent()->height() == 0)
-        return;
-
-    QSize dockSize = dockRect(m_ds.current(), position(), HideMode::KeepShowing, displayMode()).size();
-    parent()->move(dockRect(m_ds.current()).topLeft());
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        parent()->setFixedWidth(dockSize.width());
-        parent()->panel()->setFixedWidth(dockSize.width());
-    } else {
-        parent()->setFixedHeight(dockSize.height());
-        parent()->panel()->setFixedHeight(dockSize.height());
-    }
-
-    parent()->panel()->move(0, 0);
-    parent()->panel()->update();
-}
-
-MainWindow *MultiScreenWorker::parent()
-{
-    return static_cast<MainWindow *>(m_parent);
 }
 
 void MultiScreenWorker::initMembers()
 {
     m_monitorUpdateTimer->setInterval(100);
     m_monitorUpdateTimer->setSingleShot(true);
-    parent()->panel()->setDockScreen(&m_ds);
 
     m_delayWakeTimer->setSingleShot(true);
 
@@ -940,10 +596,8 @@ void MultiScreenWorker::initMembers()
 
 void MultiScreenWorker::initConnection()
 {
-    connect(qApp, &QApplication::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
-    connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::primaryScreenChanged);
+    connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::onPrimaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
-    connect(parent()->panel(), &MainPanelControl::requestUpdate, this, &MultiScreenWorker::onChildSizeChanged);
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
@@ -960,15 +614,10 @@ void MultiScreenWorker::initConnection()
                                           this, SLOT(handleDbusSignal(QDBusMessage)));
 #endif
 
-    connect(this, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &MultiScreenWorker::onRequestUpdateFrontendGeometry);
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
-    connect(this, &MultiScreenWorker::requestNotifyWindowManager, this, &MultiScreenWorker::onRequestNotifyWindowManager);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
 
     connect(m_delayWakeTimer, &QTimer::timeout, this, &MultiScreenWorker::onRequestDelayShowDock);
-
-    //　更新任务栏内容展示方式
-    connect(this, &MultiScreenWorker::requestUpdateLayout, this, &MultiScreenWorker::onRequestUpdateLayout);
 
     // 刷新所有显示的内容，布局，方向，大小，位置等
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, &MultiScreenWorker::updateDisplay);
@@ -976,20 +625,10 @@ void MultiScreenWorker::initConnection()
 
 void MultiScreenWorker::initUI()
 {
-    // 设置界面大小
-    parent()->setFixedSize(dockRect(m_ds.current()).size());
-    parent()->move(dockRect(m_ds.current()).topLeft());
-    parent()->panel()->setFixedSize(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode).size());
-    parent()->panel()->move(0, 0);
-
     onPositionChanged(dockInter()->position());
     onDisplayModeChanged(dockInter()->displayMode());
     onHideModeChanged(dockInter()->hideMode());
-    onHideStateChanged(dockInter()->hideState());
     onOpacityChanged(m_dockInter->opacity());
-
-    // 初始化透明度
-    QTimer::singleShot(0, this, [ = ] {onOpacityChanged(m_dockInter->opacity());});
 }
 
 void MultiScreenWorker::initDockMode()
@@ -1000,8 +639,6 @@ void MultiScreenWorker::initDockMode()
         m_hideState = static_cast<Dock::HideState >(m_dockInter->hideState());
         m_displayMode = static_cast<Dock::DisplayMode >(m_dockInter->displayMode());
         m_opacity = m_dockInter->opacity();
-
-        parent()->panel()->setDisplayMode(m_displayMode);
 
         DockItem::setDockPosition(m_position);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
@@ -1034,136 +671,6 @@ void MultiScreenWorker::reInitDisplayData()
 }
 
 /**
- * @brief MultiScreenWorker::displayAnimation
- * 任务栏显示或隐藏过程的动画。
- * @param screen 任务栏要显示的屏幕
- * @param pos 任务栏显示的位置（上：0，右：1，下：2，左：3）
- * @param act 显示（隐藏）任务栏
- * @return void
- */
-void MultiScreenWorker::displayAnimation(const QString &screen, const Position &pos, AniAction act)
-{
-    if (!testState(AutoHide) || qApp->property("DRAG_STATE").toBool()
-            || testState(ChangePositionAnimationStart)
-            || testState(HideAnimationStart)
-            || testState(ShowAnimationStart))
-        return;
-
-    QRect mainwindowRect = parent()->geometry();
-    QRect dockShowRect = getDockShowGeometry(screen, pos, m_displayMode);
-    QRect dockHideRect = getDockHideGeometry(screen, pos, m_displayMode);
-
-    /** FIXME
-     * 在高分屏2.75倍缩放的情况下，parent()->geometry()返回的任务栏高度有问题（实际是40,返回是39）
-     * 在这里增加判断，当返回值在范围（38，42）开区间内，均认为任务栏显示位置正确，直接返回，不执行动画
-     * 也就是在实际值基础上下浮动1像素的误差范围
-     * 正常屏幕情况下是没有这个问题的
-     */
-    switch (act) {
-    case AniAction::Show:
-        if (pos == Position::Top || pos == Position::Bottom) {
-            if (qAbs(dockShowRect.height() - mainwindowRect.height()) <= 1
-                    && mainwindowRect.contains(dockShowRect.center())) {
-                emit requestNotifyWindowManager();
-                return;
-            }
-        } else if (pos == Position::Left || pos == Position::Right) {
-            if (qAbs(dockShowRect.width() - mainwindowRect.width()) <= 1
-                    && mainwindowRect.contains(dockShowRect.center())) {
-                emit requestNotifyWindowManager();
-                return;
-            }
-        }
-        break;
-    case AniAction::Hide:
-        if (dockHideRect == mainwindowRect) {
-            emit requestNotifyWindowManager();
-            return;
-        }
-        break;
-    }
-
-    QVariantAnimation *ani = new QVariantAnimation(this);
-    ani->setEasingCurve(QEasingCurve::InOutCubic);
-
-#ifndef DISABLE_SHOW_ANIMATION
-    const bool composite = m_wmHelper->hasComposite(); // 判断是否开启特效模式
-    const int duration = composite ? ANIMATIONTIME : 0;
-#else
-    const int duration = 0;
-#endif
-    ani->setDuration(duration);
-
-    ani->setStartValue(dockHideRect);
-    ani->setEndValue(dockShowRect);
-
-    switch (act) {
-    case AniAction::Show:
-        ani->setDirection(QAbstractAnimation::Forward);
-        connect(ani, &QVariantAnimation::finished, this, &MultiScreenWorker::showAniFinished);
-        connect(this, &MultiScreenWorker::requestStopShowAni, ani, &QVariantAnimation::stop);
-        break;
-
-    case AniAction::Hide:
-        ani->setDirection(QAbstractAnimation::Backward); // 隐藏时动画反向走
-        connect(ani, &QVariantAnimation::finished, this, &MultiScreenWorker::hideAniFinished);
-        connect(this, &MultiScreenWorker::requestStopHideAni, ani, &QVariantAnimation::stop);
-        break;
-    }
-
-    connect(ani, &QVariantAnimation::valueChanged, this, static_cast<void (MultiScreenWorker::*)(const QVariant &value)>(&MultiScreenWorker::updateParentGeometry));
-
-    connect(ani, &QVariantAnimation::stateChanged, this, [ = ](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
-        // 更新动画是否正在进行的信号值
-        switch (act) {
-        case AniAction::Show:
-            if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                if (m_hideMode == HideMode::KeepShowing || duration)
-                    setStates(ShowAnimationStart);
-                else
-                    setStates(DockIsShowing);
-            }
-            if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                if (m_hideMode == HideMode::KeepShowing || duration)
-                    setStates(ShowAnimationStart, false);
-                else // 如果不是一直显示的状态，则让其延时修改状态，防止在resetDock的时候重复改变其高度引起任务栏闪烁导致无法唤醒
-                    QTimer::singleShot(ANIMATIONTIME, [ = ] { setStates(DockIsShowing, false); });
-            }
-            break;
-        case AniAction::Hide:
-            if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-                setStates(HideAnimationStart);
-            }
-            if (newState == QVariantAnimation::Stopped && oldState == QVariantAnimation::Running) {
-                setStates(HideAnimationStart, false);
-            }
-            break;
-        }
-    });
-
-    parent()->panel()->setFixedSize(dockRect(m_ds.current(), m_position, HideMode::KeepShowing, m_displayMode).size());
-    parent()->panel()->move(0, 0);
-
-    emit requestStopShowAni();
-    emit requestStopHideAni();
-    emit requestUpdateLayout();
-
-    ani->start(QVariantAnimation::DeleteWhenStopped);
-}
-
-/**
- * @brief MultiScreenWorker::displayAnimation
- * 任务栏显示或隐藏过程的动画。
- * @param screen 任务栏要显示的屏幕
- * @param act 显示（隐藏）任务栏
- * @return void
- */
-void MultiScreenWorker::displayAnimation(const QString &screen, AniAction act)
-{
-    return displayAnimation(screen, m_position, act);
-}
-
-/**
  * @brief changeDockPosition    做一个动画操作
  * @param fromScreen            上次任务栏所在的屏幕
  * @param toScreen              任务栏要移动到的屏幕
@@ -1177,101 +684,13 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
         return;
     }
 
+    // 该动画放到WindowManager中来实现
     // 更新屏幕信息
-    m_ds.updateDockedScreen(toScreen);
+    DOCK_SCREEN->updateDockedScreen(toScreen);
 
     // TODO: 考虑切换过快的情况,这里需要停止上一次的动画,可增加信号控制,暂时无需要
     qInfo() << "from: " << fromScreen << "  to: " << toScreen;
-
-    QSequentialAnimationGroup *group = new QSequentialAnimationGroup(this);
-
-    QVariantAnimation *ani1 = new QVariantAnimation(group);
-    QVariantAnimation *ani2 = new QVariantAnimation(group);
-
-    //　初始化动画信息
-    ani1->setEasingCurve(QEasingCurve::InOutCubic);
-    ani2->setEasingCurve(QEasingCurve::InOutCubic);
-
-    const bool composite = m_wmHelper->hasComposite();
-#ifndef DISABLE_SHOW_ANIMATION
-    const int duration = composite ? ANIMATIONTIME : 0;
-#else
-    const int duration = 0;
-#endif
-
-    ani1->setDuration(duration);
-    ani2->setDuration(duration);
-
-    //　隐藏
-    ani1->setStartValue(getDockShowGeometry(fromScreen, fromPos, m_displayMode));
-    ani1->setEndValue(getDockHideGeometry(fromScreen, fromPos, m_displayMode));
-    qDebug() << fromScreen << "hide from :" << getDockShowGeometry(fromScreen, fromPos, m_displayMode);
-    qDebug() << fromScreen << "hide to   :" << getDockHideGeometry(fromScreen, fromPos, m_displayMode);
-
-    //　显示
-    ani2->setStartValue(getDockHideGeometry(toScreen, toPos, m_displayMode));
-    ani2->setEndValue(getDockShowGeometry(toScreen, toPos, m_displayMode));
-    qDebug() << toScreen << "show from :" << getDockHideGeometry(toScreen, toPos, m_displayMode);
-    qDebug() << toScreen << "show to   :" << getDockShowGeometry(toScreen, toPos, m_displayMode);
-
-    group->addAnimation(ani1);
-    group->addAnimation(ani2);
-
-    // 隐藏时固定一下内容大小
-    connect(ani1, &QVariantAnimation::stateChanged, this, [ = ](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
-        if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-            parent()->panel()->setFixedSize(dockRect(fromScreen, fromPos, HideMode::KeepShowing, m_displayMode).size());
-            parent()->panel()->move(0, 0);
-        }
-    });
-
-    connect(ani1, &QVariantAnimation::valueChanged, this, [ = ](const QVariant & value) {
-        updateParentGeometry(value, fromPos);
-    });
-
-    // 显示时固定一下内容大小
-    connect(ani2, &QVariantAnimation::stateChanged, this, [ = ](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
-        // 位置发生变化时需要更新位置属性,且要在隐藏动画之后,显示动画之前
-        DockItem::setDockPosition(m_position);
-        qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
-
-        if (newState == QVariantAnimation::Running && oldState == QVariantAnimation::Stopped) {
-            parent()->panel()->setFixedSize(dockRect(toScreen, toPos, HideMode::KeepShowing, m_displayMode).size());
-            parent()->panel()->move(0, 0);
-        }
-    });
-
-    connect(ani2, &QVariantAnimation::valueChanged, this, [ = ](const QVariant & value) {
-        updateParentGeometry(value, toPos);
-    });
-
-    // 如果更改了显示位置，在显示之前应该更新一下界面布局方向
-    if (fromPos != toPos)
-        connect(ani1, &QVariantAnimation::finished, this, [ = ] {
-            const auto display = QX11Info::display();
-            if (!display) {
-                qWarning() << "QX11Info::display() is " << display;
-            } else {
-                // 先清除原先的窗管任务栏区域
-                //XcbMisc::instance()->clear_strut_partial(xcb_window_t(parent()->winId()));
-            }
-
-            // 隐藏后需要通知界面更新布局方向
-            emit requestUpdateLayout();
-        });
-
-    connect(group, &QVariantAnimation::finished, this, [ = ] {
-        setStates(ChangePositionAnimationStart, false);
-
-        // 结束之后需要根据确定需要再隐藏
-        emit showAniFinished();
-        emit requestUpdateFrontendGeometry();
-        emit requestNotifyWindowManager();
-    });
-
-    setStates(ChangePositionAnimationStart);
-
-    group->start(QVariantAnimation::DeleteWhenStopped);
+    Q_EMIT requestChangeDockPosition(fromScreen, toScreen, fromPos, toPos);
 }
 
 /**
@@ -1281,10 +700,10 @@ void MultiScreenWorker::changeDockPosition(QString fromScreen, QString toScreen,
 QString MultiScreenWorker::getValidScreen(const Position &pos)
 {
     //TODO 考虑在主屏幕名变化时自动更新，是不是就不需要手动处理了
-    m_ds.updatePrimary(DIS_INS->primary());
+    DOCK_SCREEN->updatePrimary(DIS_INS->primary());
 
-    if (DIS_INS->canDock(DIS_INS->screen(m_ds.current()), pos))
-        return m_ds.current();
+    if (DIS_INS->canDock(DIS_INS->screen(DOCK_SCREEN->current()), pos))
+        return DOCK_SCREEN->current();
 
     if (DIS_INS->canDock(qApp->primaryScreen(), pos))
         return DIS_INS->primary();
@@ -1305,21 +724,12 @@ void MultiScreenWorker::resetDockScreen()
     if (testState(ChangePositionAnimationStart)
             || testState(HideAnimationStart)
             || testState(ShowAnimationStart)
-            || testState(DockIsShowing)
             || testState(DockIsDraging))
         return;
 
-    m_ds.updateDockedScreen(getValidScreen(position()));
+    DOCK_SCREEN->updateDockedScreen(getValidScreen(position()));
     // 更新任务栏自身信息
-    /**
-      *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
-      */
-    QRect currentRect = dockRect(m_ds.current());
-    QSize dockSize = currentRect.size();
-    parent()->setFixedSize(dockSize);
-    parent()->setGeometry(currentRect);
-    parent()->panel()->setFixedSize(dockSize);
-    parent()->panel()->move(0, 0);
+    Q_EMIT requestUpdateDockGeometry(m_hideMode);
 }
 
 /**
@@ -1471,180 +881,9 @@ void MultiScreenWorker::checkXEventMonitorService()
     }
 }
 
-QRect MultiScreenWorker::getDockShowMinGeometry(const QString &screenName, bool withoutScale)
-{
-    QRect rect;
-    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = static_cast<int>((m_displayMode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
-    const int dockSize = 40;
-
-    for (auto s : DIS_INS->screens()) {
-        if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
-            switch (m_position) {
-            case Position::Top:
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
-                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
-                rect.setHeight(dockSize);
-                break;
-            case Position::Bottom:
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(screenRect.y() + screenRect.height() / ratio - margin - dockSize));
-                rect.setWidth(static_cast<int>(screenRect.width() / ratio - 2 * margin));
-                rect.setHeight(dockSize);
-                break;
-            case Position::Left:
-                rect.setX(static_cast<int>(screenRect.x() + margin));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
-                rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
-                break;
-            case Position::Right:
-                rect.setX(static_cast<int>(screenRect.x() + screenRect.width() / ratio - margin - dockSize));
-                rect.setY(static_cast<int>(screenRect.y() + margin));
-                rect.setWidth(dockSize);
-                rect.setHeight(static_cast<int>(screenRect.height() / ratio - 2 * margin));
-                break;
-            }
-        }
-    }
-    return rect;
-}
-
-/**
- * @brief 获取任务栏显示时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
- *
- * @param screenName    当前屏幕名字
- * @param pos           任务栏位置
- * @param displaymode   任务栏显示模式
- * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
- * @return QRect        任务栏参数
- */
-QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
-{
-    QRect rect;
-    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
-    const int dockSize = static_cast<int>((displaymode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() : m_dockInter->windowSizeEfficient()) * (withoutScale ? qApp->devicePixelRatio() : 1));
-
-    for (auto s : DIS_INS->screens()) {
-        if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
-            switch (pos) {
-            case Position::Top: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(screenRect.x() + (static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
-                rect.setY(screenRect.y() + static_cast<int>(margin / ratio));
-                rect.setWidth(panelSize.width());
-                rect.setHeight(dockSize);
-            }
-                break;
-            case Position::Bottom: {
-                // 先用设置屏幕尺寸，理论上不应该在此处设置，因为这是在一个get方法里面，后续改成直接获取，在其他地方设置
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(screenRect.x() + (static_cast<int>(screenRect.width() / ratio) - panelSize.width()) / 2);
-                rect.setY(screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin - dockSize));
-                rect.setWidth(panelSize.width());
-                rect.setHeight(dockSize);
-            }
-                break;
-            case Position::Left: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(screenRect.x() + margin);
-                rect.setY((screenRect.y() + static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
-                rect.setWidth(dockSize);
-                rect.setHeight(panelSize.height());
-            }
-                break;
-            case Position::Right: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(screenRect.x() + static_cast<int>(screenRect.width() / ratio - margin - dockSize));
-                rect.setY((screenRect.y() + static_cast<int>(screenRect.height() / ratio) - panelSize.height()) / 2);
-                rect.setWidth(dockSize);
-                rect.setHeight(panelSize.height());
-            }
-                break;
-            }
-        }
-    }
-    return rect;
-}
-
-/**
- * @brief 获取任务栏隐藏时的参数。目前多屏情况下缩放保持一致，如果后续缩放规则修改，这里需要重新调整
- *
- * @param screenName    当前屏幕名字
- * @param pos           任务栏位置
- * @param displaymode   任务栏显示模式
- * @param withoutScale  是否考虑缩放（true:获取的是真实值; false:获取的是前端认为的值(默认)）
- * @return QRect        任务栏参数
- */
-QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale)
-{
-    QRect rect;
-    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
-
-    for (auto s : DIS_INS->screens()) {
-        if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
-            switch (pos) {
-            case Position::Top: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(screenRect.x() + static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
-                rect.setY(screenRect.y() + margin);
-                rect.setWidth(panelSize.width());
-                rect.setHeight(0);
-            }
-                break;
-            case Position::Bottom: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.width(), ratio);
-                rect.setX(screenRect.x() +  static_cast<int>((screenRect.width() / ratio - panelSize.width()) / 2));
-                rect.setY(screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin));
-                rect.setWidth(panelSize.width());
-                rect.setHeight(0);
-            }
-                break;
-            case Position::Left: {
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(screenRect.x() + margin);
-                rect.setY(screenRect.y() + static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
-                rect.setWidth(0);
-                rect.setHeight(panelSize.height());
-            }
-                break;
-            case Position::Right:
-                QSize panelSize = parent()->panel()->suitableSize(screenRect.height(), ratio);
-                rect.setX(screenRect.x() + static_cast<int>(screenRect.width() / ratio - margin));
-                rect.setY(screenRect.y() + static_cast<int>(static_cast<int>((screenRect.height() / ratio - panelSize.height()) / 2)));
-                rect.setWidth(0);
-                rect.setHeight(panelSize.height());
-                break;
-            }
-        }
-    }
-    return rect;
-}
-
-QScreen *MultiScreenWorker::screenByName(const QString &screenName)
-{
-    foreach (QScreen *screen, qApp->screens()) {
-        if (screen->name() == screenName)
-            return screen;
-    }
-    return nullptr;
-}
-
 bool MultiScreenWorker::onScreenEdge(const QString &screenName, const QPoint &point)
 {
-    QScreen *screen = screenByName(screenName);
+    QScreen *screen = DIS_INS->screen(screenName);
     if (screen) {
         const QRect r { screen->geometry() };
         const QRect rect { r.topLeft(), r.size() *screen->devicePixelRatio() };
@@ -1730,27 +969,22 @@ void MultiScreenWorker::onTouchRelease(int type, int x, int y, const QString &ke
 void MultiScreenWorker::onDelayAutoHideChanged()
 {
     switch (m_hideMode) {
-    case HideMode::KeepHidden:
-    {
-        // 这时候鼠标如果在任务栏上,就不能隐藏
-        if (!parent()->geometry().contains(QCursor::pos()))
-            displayAnimation(m_ds.current(), AniAction::Hide);
-    }
+    case HideMode::KeepHidden: {
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Hide, true);
         break;
+    }
     case HideMode::SmartHide: {
         if (m_hideState == HideState::Show)
-        {
-            displayAnimation(m_ds.current(), AniAction::Show);
-        } else if (m_hideState == HideState::Hide) {
-            displayAnimation(m_ds.current(), AniAction::Hide);
-        }
-    }
-        break;
-    case HideMode::KeepShowing:
-        displayAnimation(m_ds.current(), AniAction::Show);
+            Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Show);
+        else if (m_hideState == HideState::Hide)
+            Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Hide);
         break;
     }
-
+    case HideMode::KeepShowing: {
+        Q_EMIT requestPlayAnimation(DOCK_SCREEN->current(), m_position, Dock::AniAction::Show);
+        break;
+    }
+    }
 }
 
 /**
@@ -1779,8 +1013,9 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
      * 使用screenAtByScaled获取屏幕名时,实际上获取的不一定是当前屏幕
      * 举例:点(100,100)不在(0,0,100,100)的屏幕上
      */
-    if (onScreenEdge(m_ds.current(), QPoint(eventX, eventY))) {
-        toScreen = m_ds.current();
+    const QString &currentScreen = DOCK_SCREEN->current();
+    if (onScreenEdge(currentScreen, QPoint(eventX, eventY))) {
+        toScreen = currentScreen;
     }
 
     // 过滤重复坐标
@@ -1791,7 +1026,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     lastPos = QPoint(eventX, eventY);
 
     // 任务栏显示状态，但需要切换屏幕
-    if (toScreen != m_ds.current()) {
+    if (toScreen != currentScreen) {
         if (!m_delayWakeTimer->isActive()) {
             m_delayScreen = toScreen;
             m_delayWakeTimer->start(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", MonitorsSwitchTime, 2000).toInt());
@@ -1799,8 +1034,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
     } else {
         // 任务栏隐藏状态，但需要显示
         if (hideMode() == HideMode::KeepShowing) {
-            parent()->setFixedSize(dockRect(m_ds.current()).size());
-            parent()->setGeometry(dockRect(m_ds.current()));
+            Q_EMIT requestUpdateDockGeometry(m_hideMode);
             return;
         }
 
@@ -1809,11 +1043,8 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
             return;
         }
 
-        const QRect boundRect = parent()->visibleRegion().boundingRect();
-        qDebug() << "boundRect:" << boundRect;
-        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
-                && (boundRect.size().isEmpty())) {
-            displayAnimation(m_ds.current(), AniAction::Show);
+        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)) {
+            Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Show);
         }
     }
 }

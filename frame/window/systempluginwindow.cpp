@@ -72,17 +72,22 @@ void SystemPluginWindow::setPositon(Position position)
     }
 }
 
-QSize SystemPluginWindow::suitableSize()
+QSize SystemPluginWindow::suitableSize() const
+{
+    return suitableSize(m_position);
+}
+
+QSize SystemPluginWindow::suitableSize(const Position &position) const
 {
     QObjectList childs = children();
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         int itemWidth = 0;
         for (QObject *childObject : childs) {
             StretchPluginsItem *childItem = qobject_cast<StretchPluginsItem *>(childObject);
             if (!childItem)
                 continue;
 
-            itemWidth += childItem->suitableSize().width();
+            itemWidth += childItem->suitableSize(position).width();
         }
 
         return QSize(itemWidth, QWIDGETSIZE_MAX);
@@ -94,7 +99,7 @@ QSize SystemPluginWindow::suitableSize()
         if (!item)
             continue;
 
-        itemHeight += item->suitableSize().height();
+        itemHeight += item->suitableSize(position).height();
     }
 
     return QSize(QWIDGETSIZE_MAX, itemHeight);
@@ -175,6 +180,11 @@ QString StretchPluginsItem::itemKey() const
     return m_itemKey;
 }
 
+QSize StretchPluginsItem::suitableSize() const
+{
+    return suitableSize(m_position);
+}
+
 PluginsItemInterface *StretchPluginsItem::pluginInter() const
 {
     return m_pluginInter;
@@ -210,31 +220,38 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
     painter.drawPixmap(rctPixmap, icon.pixmap(iconSize, iconSize));
 }
 
-QSize StretchPluginsItem::suitableSize() const
+QSize StretchPluginsItem::suitableSize(const Position &position) const
 {
     int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        int textWidth = QFontMetrics(textFont()).boundingRect(m_pluginInter->pluginDisplayName()).width();
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
+        int textWidth = QFontMetrics(textFont(position)).boundingRect(m_pluginInter->pluginDisplayName()).width();
         return QSize(qMax(textWidth, iconSize) + 10 * 2, -1);
     }
 
-    int height = 6;                                 // 图标上边距6
-    height += iconSize;                             // 图标尺寸20
-    height += ICONTEXTSPACE;                        // 图标与文字间距6
-    height += QFontMetrics(textFont()).height();    // 文本高度
-    height += 4;                                    // 下间距4
+    int height = 6;                                         // 图标上边距6
+    height += iconSize;                                     // 图标尺寸20
+    height += ICONTEXTSPACE;                                // 图标与文字间距6
+    height += QFontMetrics(textFont(position)).height();    // 文本高度
+    height += 4;                                            // 下间距4
     return QSize(-1, height);
 }
 
 QFont StretchPluginsItem::textFont() const
 {
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+    return textFont(m_position);
+}
+
+QFont StretchPluginsItem::textFont(const Position &position) const
+{
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         static QList<QFont> fonts{ DFontSizeManager::instance()->t9(),
                               DFontSizeManager::instance()->t8(),
                               DFontSizeManager::instance()->t7(),
                               DFontSizeManager::instance()->t6() };
 #define MINHEIGHT 50
-        int index = qMin(qMax((height() - MINHEIGHT) / 2, 0), fonts.size() - 1);
+        // 如果当前的实际位置和请求的位置不一致，说明当前正在切换位置，此时将它的宽度作为它的高度(左到下切换的时候，左侧的宽度和下面的高度一致)
+        int size = (m_position == position ? height() : width());
+        int index = qMin(qMax((size - MINHEIGHT) / 2, 0), fonts.size() - 1);
         return fonts[index];
     }
 

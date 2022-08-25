@@ -52,7 +52,8 @@ public:
     ~DateTimeDisplayer() override;
     void setPositon(Dock::Position position);
     void setOneRow(bool oneRow);
-    QSize suitableSize();
+    QSize suitableSize() const;
+    QSize suitableSize(const Dock::Position &position) const;
 
 Q_SIGNALS:
     void requestUpdate();         // 当日期时间格式发生变化的时候，需要通知外面来更新窗口尺寸
@@ -67,11 +68,13 @@ protected:
 
 private:
     void updatePolicy();
-    DateTimeInfo dateTimeInfo();
+    DateTimeInfo dateTimeInfo(const Dock::Position &position) const;
     void updateLastData(const DateTimeInfo &info);
 
     QString getTimeString() const;
+    QString getTimeString(const Dock::Position &position) const;
     QString getDateString() const;
+    QString getDateString(const Dock::Position &position) const;
 
     QPoint tipsPoint() const;
     QFont timeFont() const;

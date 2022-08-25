@@ -39,8 +39,6 @@ class DockItem;
 class PlaceholderItem;
 class AppDragWidget;
 class DesktopWidget;
-class TrayManagerWindow;
-class DockScreen;
 class RecentAppHelper;
 class ToolAppHelper;
 class MultiWindowHelper;
@@ -50,16 +48,14 @@ class MainPanelControl : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainPanelControl(QWidget *parent = nullptr);
+    explicit MainPanelControl(DockInter *dockInter, QWidget *parent = nullptr);
 
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
     void updatePluginsLayout();
 
-    void setDockScreen(DockScreen *dockScreen);
-    QPainterPath areaPath();
-    QSize suitableSize(int screenSize, double deviceRatio) const;
+    QSize suitableSize(const Position &position, int screenSize, double deviceRatio) const;
 
 public slots:
     void insertItem(const int index, DockItem *item);
@@ -96,7 +92,6 @@ private:
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
-    void resetRadius();
     void dockRecentApp(DockItem *dockItem);
 
 private Q_SLOTS:
@@ -140,7 +135,6 @@ private:
     QWidget *m_toolSonAreaWidget;   // 工具区域，用来存放回收站等工具
     QBoxLayout *m_toolSonLayout;    // 工具区域布局
 
-    TrayManagerWindow *m_trayManagerWidget;
     QBoxLayout *m_pluginLayout;     // 插件区域布局
     DesktopWidget *m_desktopWidget; // 桌面预览区域
 
@@ -153,7 +147,6 @@ private:
     TrayPluginItem *m_tray;
     int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
-    DockScreen *m_dockScreen;
     DockInter *m_dockInter;
     RecentAppHelper *m_recentHelper;
     ToolAppHelper *m_toolHelper;
