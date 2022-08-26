@@ -45,6 +45,7 @@ signals:
 
 public slots:
     void setAutoHide(const bool autoHide);
+    void onNotifyDaemonInterfaceUpdate(DBusDock *dockInter);
 
 private:
     QMenu *createMenu(QMenu *settingsMenu);
