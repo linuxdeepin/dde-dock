@@ -378,6 +378,10 @@ void MainWindow::initConnections()
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
     connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, &DragWidget::onTouchMove);
+
+    connect(m_multiScreenWorker, &MultiScreenWorker::notifyDaemonInterfaceUpdate, m_menuWorker, [this]() {
+        m_menuWorker->onNotifyDaemonInterfaceUpdate(m_multiScreenWorker->dockInter());
+    });
 }
 
 /**

@@ -1371,6 +1371,7 @@ void MultiScreenWorker::checkDaemonDockService()
                 FREE_POINT(m_dockInter);
 
                 m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+                Q_EMIT notifyDaemonInterfaceUpdate();
                 // connect
                 connectionInit(m_dockInter);
 

@@ -169,6 +169,7 @@ signals:
     void requestStopHideAni();
 
     void requestUpdateDockEntry();
+    void notifyDaemonInterfaceUpdate();
 
 public slots:
     void onAutoHideChanged(bool autoHide);

@@ -196,3 +196,8 @@ void MenuWorker::setAutoHide(const bool autoHide)
     m_autoHide = autoHide;
     emit autoHideChanged(m_autoHide);
 }
+
+void MenuWorker::onNotifyDaemonInterfaceUpdate(DBusDock *dockInter)
+{
+    m_dockInter = dockInter;
+}
