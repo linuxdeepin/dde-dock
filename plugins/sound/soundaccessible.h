@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #ifndef SOUNDACCESSIBLE_H
 #define SOUNDACCESSIBLE_H
 #include "accessibledefine.h"

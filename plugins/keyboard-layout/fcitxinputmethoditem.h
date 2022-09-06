@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef FCITX_QT_INPUT_METHOD_ITEM_H
 #define FCITX_QT_INPUT_METHOD_ITEM_H
