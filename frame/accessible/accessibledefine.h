@@ -1,27 +1,6 @@
-/*
- * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
- *
- * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * Maintainer: fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// 为了方便使用,把相关定义独立出来,如有需要,直接包含这个头文件,然后使用SET_*的宏去设置,USE_*宏开启即可
-// 注意：对项目中出现的所有的QWidget的派生类都要再启用一次accessiblity，包括qt的原生控件[qt未限制其标记名称为空的情况]
-// 注意：使用USE_ACCESSIBLE_BY_OBJECTNAME开启accessiblity的时候，一定要再对这个类用一下USE_ACCESSIBLE，否则标记可能会遗漏
+// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef ACCESSIBLEINTERFACE_H
 #define ACCESSIBLEINTERFACE_H
