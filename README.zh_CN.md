@@ -34,10 +34,10 @@ $ sudo make install
 
 ## 帮助
 
-- [官方论坛](https://bbs.deepin.org/) 
-- [开发者中心](https://github.com/linuxdeepin/developer-center) 
-- [Wiki](https://wiki.deepin.org/)
-- [项目地址](https://github.com/linuxdeepin/dde-dock) 
+* [Matrix](https://matrix.to/#/#deepin-community:matrix.org)
+* [WiKi](https://wiki.deepin.org)
+* [官方论坛](https://bbs.deepin.org)
+* [开发者中心](https://github.com/linuxdeepin/developer-center/issues) 
 
 ## 贡献指南
 
