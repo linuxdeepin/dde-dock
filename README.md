@@ -34,10 +34,10 @@ $ sudo make install
 
 ## Getting help
 
-- [Official Forum](https://bbs.deepin.org/) for generic discussion and help.
-- [Developer Center](https://github.com/linuxdeepin/developer-center) for BUG report and suggestions.
-- [Wiki](https://wiki.deepin.org/)
-- [Developer Center](https://github.com/linuxdeepin/dde-dock) 
+* [Matrix](https://matrix.to/#/#deepin-community:matrix.org)
+* [WiKi](https://wiki.deepin.org)
+* [Forum](https://bbs.deepin.org)
+* [Developer Center](https://github.com/linuxdeepin/developer-center/issues) 
 
 ## Getting involved
 
