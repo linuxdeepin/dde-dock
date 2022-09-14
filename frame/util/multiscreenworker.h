@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
- *
- * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * Maintainer: fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef MULTISCREENWORKER_H
 #define MULTISCREENWORKER_H
@@ -147,7 +130,7 @@ public:
 
     QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
     QRect dockRect(const QString &screenName);
-    QRect getDockShowMinGeometry(const QString &screenName, bool withoutScale = false);
+    QRect getDockShowMinGeometry(const QString &screenName);
 
     bool launcherVisible();
     void setLauncherVisble(bool isVisible);
@@ -169,6 +152,7 @@ signals:
     void requestStopHideAni();
 
     void requestUpdateDockEntry();
+    void notifyDaemonInterfaceUpdate();
 
 public slots:
     void onAutoHideChanged(bool autoHide);
@@ -248,6 +232,7 @@ private:
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
     static bool isCopyMode();
+    QRect getScreenRect(QScreen *s);
 
 private:
     QWidget *m_parent;

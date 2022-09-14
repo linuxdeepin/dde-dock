@@ -157,27 +157,27 @@
     </message>
     <message>
         <source>tuesday</source>
-        <translation type="unfinished"/>
+        <translation>Dienstag</translation>
     </message>
     <message>
         <source>wednesday</source>
-        <translation type="unfinished"/>
+        <translation>Mittwoch</translation>
     </message>
     <message>
         <source>thursday</source>
-        <translation type="unfinished"/>
+        <translation>Donnerstag</translation>
     </message>
     <message>
         <source>friday</source>
-        <translation type="unfinished"/>
+        <translation>Freitag</translation>
     </message>
     <message>
         <source>saturday</source>
-        <translation type="unfinished"/>
+        <translation>Samstag</translation>
     </message>
     <message>
         <source>sunday</source>
-        <translation type="unfinished"/>
+        <translation>Sonntag</translation>
     </message>
     <message>
         <source>%1year%2month%3day</source>
@@ -259,7 +259,7 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Leistungs-Modus</translation>
+        <translation>Effizienzmodus</translation>
     </message>
     <message>
         <source>Top</source>
@@ -336,7 +336,7 @@
     </message>
     <message>
         <source>Efficient mode</source>
-        <translation>Leistungs-Modus</translation>
+        <translation>Effizienzmodus</translation>
     </message>
     <message>
         <source>Mode</source>
@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>Gerät</translation>
+        <source>Volume</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Lautstärke %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

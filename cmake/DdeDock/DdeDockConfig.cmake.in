@@ -1,0 +1,2 @@
+set(DDE_DOCK_INCLUDE_DIR @CMAKE_INSTALL_FULL_INCLUDEDIR@/dde-dock)
+include_directories("${DDE_DOCK_INCLUDE_DIR}")

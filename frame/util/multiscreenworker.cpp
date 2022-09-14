@@ -1,23 +1,6 @@
-﻿/*
- * Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
- *
- * Author:     fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * Maintainer: fanpengcheng <fanpengcheng_cm@deepin.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "multiscreenworker.h"
 #include "mainwindow.h"
@@ -715,6 +698,40 @@ bool MultiScreenWorker::isCopyMode()
 }
 
 /**
+ * @brief MultiScreenWorker::getScreenRect
+ * @param s
+ * @param ratio
+ * @return 返回屏幕 \s 的原始尺寸，\ratio 为屏幕 \s 的当前缩放值
+ */
+QRect MultiScreenWorker::getScreenRect(QScreen *s)
+{
+    if (!s)
+        return QRect();
+
+    auto geo = s->geometry();
+    QRect screenRect;
+    screenRect.setX(geo.x());
+    screenRect.setY(geo.y());
+    screenRect.setWidth(static_cast<int>(geo.width() * s->devicePixelRatio()));
+    screenRect.setHeight(static_cast<int>(geo.height() * s->devicePixelRatio()));
+
+    /* QScreen的handle会返回显示器缩放之前的分辨率
+    * 比如1920*1080,调整缩放为1.25，那么QScreen::geometry返回的为QSize(1536, 864),QScreen::handle()->geometry()返回的为QSize(1920, 1080);
+    *
+    * @note 但在特殊情况下，比如频繁插拔显示器时，小概率出现handle返回的值并不等于缩放前的分辨率的情况，从而导致任务栏位置设置出错，
+    * 这里仍然直接使用geometry*ratio的方式,去获取缩放前的分辨率
+    * 但考虑到缩放值类型为double，可能在高分屏下计算得到的尺寸和通过handle函数的原始尺寸有1像素的误差，
+    * 所以计算完毕后和handle比对一下，如果存在1像素的误差，则仍然使用handle函数，否则使用QScreen::geometry() * ratio
+    */
+    auto size = s->handle()->geometry().size() - screenRect.size();
+    if (Q_LIKELY(size.width() <= 1 && size.height() <= 1)) {
+        screenRect = s->handle()->geometry();
+    }
+
+    return screenRect;
+}
+
+/**
  * @brief 这里用到xcb去设置任务栏的高度，比较特殊，参考_NET_WM_STRUT_PARTIAL属性
  * 在屏幕旋转后，所有参数以控制中心自定义设置里主屏显示的图示为准（旋转不用特殊处理）
  */
@@ -1337,6 +1354,7 @@ void MultiScreenWorker::checkDaemonDockService()
                 FREE_POINT(m_dockInter);
 
                 m_dockInter = new DBusDock(serverName, "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this);
+                Q_EMIT notifyDaemonInterfaceUpdate();
                 // connect
                 connectionInit(m_dockInter);
 
@@ -1476,18 +1494,21 @@ void MultiScreenWorker::checkXEventMonitorService()
     }
 }
 
-QRect MultiScreenWorker::getDockShowMinGeometry(const QString &screenName, bool withoutScale)
+/**
+ * @brief MultiScreenWorker::getDockShowMinGeometry
+ * @param screenName
+ * @return 如果dock在当前screenName对应的屏幕上显示，返回其在最小 高/宽 度(也就是40,最大值为100)的rect区域
+ */
+QRect MultiScreenWorker::getDockShowMinGeometry(const QString &screenName)
 {
     QRect rect;
-    const double ratio = withoutScale ? 1 : qApp->devicePixelRatio();
-    const int margin = static_cast<int>((m_displayMode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
+    const double ratio = qApp->devicePixelRatio();
+    const int margin = static_cast<int>((m_displayMode == DisplayMode::Fashion ? 10 : 0) * qApp->devicePixelRatio());
     const int dockSize = 40;
 
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
+            const QRect screenRect = getScreenRect(s);
             switch (m_position) {
             case Position::Top:
                 rect.setX(static_cast<int>(screenRect.x() + margin));
@@ -1549,9 +1570,7 @@ QRect MultiScreenWorker::getDockShowGeometry(const QString &screenName, const Po
 
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
+            const QRect screenRect = getScreenRect(s);
             switch (pos) {
             case Position::Top:
                 rect.setX(static_cast<int>(screenRect.x() + margin));
@@ -1600,9 +1619,7 @@ QRect MultiScreenWorker::getDockHideGeometry(const QString &screenName, const Po
 
     for (auto s : DIS_INS->screens()) {
         if (s->name() == screenName) {
-            // 拿到当前显示器缩放之前的分辨率
-            QRect screenRect = s->handle()->geometry();
-
+            const QRect screenRect = getScreenRect(s);
             switch (pos) {
             case Position::Top:
                 rect.setX(static_cast<int>(screenRect.x() + margin));

@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     chenwei <chenwei@uniontech.com>
- *
- * Maintainer: chenwei <chenwei@uniontech.com>
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "bluetoothadapteritem.h"
 #include "adapter.h"
@@ -188,6 +170,7 @@ void BluetoothAdapterItem::onTopDeviceItem(DStandardItem *item)
         return;
 
     int index1 = item->row();
+    // 先获取，再移除，后插入
     QStandardItem *index = m_deviceModel->takeItem(index1, 0);
     m_deviceModel->removeRow(index1);
     m_deviceModel->insertRow(0, index);
@@ -234,7 +217,8 @@ QStringList BluetoothAdapterItem::connectedDevicesName()
 void BluetoothAdapterItem::initData()
 {
     m_showUnnamedDevices = m_bluetoothInter->displaySwitch();
-    if (!m_adapter->powered())
+
+    if (m_adapter && !m_adapter->powered())
         return;
 
     foreach (const auto device, m_adapter->devices()) {
@@ -264,10 +248,10 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
         }
     });
 
-    m_deviceItems.insert(device->id(), item);
-    if (!m_showUnnamedDevices && device->name().isEmpty() && Device::StateConnected != device->state())
+    if (!m_showUnnamedDevices && device->name().isEmpty())
         return;
 
+    m_deviceItems.insert(device->id(), item);
     m_deviceModel->insertRow(insertRow, item->standardItem());
     emit deviceCountChanged();
 }
@@ -277,7 +261,18 @@ void BluetoothAdapterItem::onDeviceRemoved(const Device *device)
     if (m_deviceItems.isEmpty())
         return;
 
-    m_deviceModel->removeRow(m_deviceItems.value(device->id())->standardItem()->row());
+    int row = -1;
+    if (!m_deviceItems.value(device->id()))
+        return;
+
+    row = m_deviceItems.value(device->id())->standardItem()->row();
+    if ((row < 0) || (row > m_deviceItems.size() - 1)) {
+        m_deviceItems.value(device->id())->deleteLater();
+        m_deviceItems.remove(device->id());
+        return;
+    }
+
+    m_deviceModel->removeRow(row);
     m_deviceItems.value(device->id())->deleteLater();
     m_deviceItems.remove(device->id());
     emit deviceCountChanged();
@@ -423,7 +418,6 @@ void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
 
         return;
     }
-
 
     for (i = m_deviceItems.begin(); i != m_deviceItems.end(); ++i) {
         BluetoothDeviceItem *deviceItem = i.value();

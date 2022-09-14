@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "soundapplet.h"
 #include "util/horizontalseperator.h"
@@ -162,7 +145,7 @@ void SoundApplet::initUi()
     m_soundShow->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_soundShow, DFontSizeManager::T8, QFont::Medium);
 
-    m_deviceLabel->setText(tr("Device"));
+    m_deviceLabel->setText(tr("Volume"));
     m_deviceLabel->setFixedHeight(TITLE_HEIGHT);
     m_deviceLabel->setForegroundRole(QPalette::BrightText);
     DFontSizeManager::instance()->bind(m_deviceLabel, DFontSizeManager::T4, QFont::Medium);
@@ -285,7 +268,7 @@ void SoundApplet::onDefaultSinkChanged()
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
     connect(m_defSinkInter, &DBusSink::MuteChanged, this, [ = ] {
-        onVolumeChanged(m_defSinkInter->volume());
+        onVolumeChanged(existActiveOutputDevice() ? m_defSinkInter->volume() : 0);
     });
 
     QString portId = m_defSinkInter->activePort().name;
@@ -532,7 +515,6 @@ void SoundApplet::activePort(const QString &portId, const uint &cardId)
     for (Port *it : m_ports) {
         if (it->id() == portId && it->cardId() == cardId) {
             it->setIsActive(true);
-            enableDevice(true);
         }
         else {
             it->setIsActive(false);
@@ -558,9 +540,7 @@ void SoundApplet::enableDevice(bool flag)
         m_volumeSlider->setEnabled(flag);
     }
     m_volumeIconMin->setEnabled(flag);
-    m_soundShow->setEnabled(flag);
     m_volumeIconMax->setEnabled(flag);
-    m_deviceLabel->setEnabled(flag);
 }
 
 void SoundApplet::disableAllDevice()

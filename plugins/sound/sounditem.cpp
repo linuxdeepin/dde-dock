@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "sounditem.h"
 #include "constants.h"
@@ -88,14 +71,15 @@ const QString SoundItem::contextMenu()
 
     QMap<QString, QVariant> open;
     open["itemId"] = MUTE;
-    if (m_sinkInter->mute()) {
+    if (!m_applet->existActiveOutputDevice()) {
         open["itemText"] = tr("Unmute");
-        if (!m_applet->existActiveOutputDevice())
-            open["isActive"] = false;
-        else
-            open["isActive"] = true;
+        open["isActive"] = false;
     } else {
-        open["itemText"] = tr("Mute");
+        if (m_sinkInter->mute()) {
+            open["itemText"] = tr("Unmute");
+        } else {
+            open["itemText"] = tr("Mute");
+        }
         open["isActive"] = true;
     }
     items.push_back(open);
@@ -229,11 +213,14 @@ void SoundItem::refreshTips(const int volume, const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
-    if (mute) {
-        m_tipsLabel->setText(QString(tr("Mute")));
+    if (!m_applet->existActiveOutputDevice()) {
+        m_tipsLabel->setText(QString(tr("No output devices")));
     } else {
-        m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
+        if (m_sinkInter->mute()) {
+            m_tipsLabel->setText(QString(tr("Mute")));
+        } else {
+            m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
+        }
     }
 }
 

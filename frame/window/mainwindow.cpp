@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *             zhaolong <zhaolong@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "mainwindow.h"
 #include "mainpanelcontrol.h"
@@ -378,6 +360,10 @@ void MainWindow::initConnections()
     // 响应后端触控屏拖拽任务栏高度长按信号
     connect(TouchSignalManager::instance(), &TouchSignalManager::middleTouchPress, this, &MainWindow::touchRequestResizeDock);
     connect(TouchSignalManager::instance(), &TouchSignalManager::touchMove, m_dragWidget, &DragWidget::onTouchMove);
+
+    connect(m_multiScreenWorker, &MultiScreenWorker::notifyDaemonInterfaceUpdate, m_menuWorker, [this]() {
+        m_menuWorker->onNotifyDaemonInterfaceUpdate(m_multiScreenWorker->dockInter());
+    });
 }
 
 /**
@@ -504,6 +490,7 @@ void MainWindow::resizeDock(int offset, bool dragging)
 {
     qApp->setProperty(DRAG_STATE_PROP, dragging);
 
+    // 以任务栏的最小高度区域为参照，通过offset设置其高度或宽度
     const QRect &rect = m_multiScreenWorker->getDockShowMinGeometry(m_multiScreenWorker->deskScreen());
     QRect newRect;
     switch (m_multiScreenWorker->position()) {

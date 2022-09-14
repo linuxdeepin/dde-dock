@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(VERSION 4.0)
-
-configure_file(dde-dock.pc.in dde-dock.pc @ONLY)
+if (NOT DEFINED VERSION)
+    set(VERSION 4.0)
+endif()
 
 project(dde-dock)
 
@@ -39,15 +39,10 @@ endif ()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DQT_DEBUG")
 
 # Test architecture
-execute_process(COMMAND dpkg-architecture -qDEB_BUILD_ARCH OUTPUT_VARIABLE ARCHITECTURE RESULT_VARIABLE EXIT_CODE)
-if (${EXIT_CODE} EQUAL 0)
-    string(STRIP ${ARCHITECTURE} ARCHITECTURE)
-
-    if (${ARCHITECTURE} STREQUAL "sw_64")
-        # add compiler flags -mieee for mathmatic
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
-        add_definitions(-DDISABLE_SHOW_ANIMATION)
-    endif()
+if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
+    # add compiler flags -mieee for mathmatic
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
+    add_definitions(-DDISABLE_SHOW_ANIMATION)
 endif()
 
 file(GLOB INTERFACES "interfaces/*.h")
@@ -114,16 +109,21 @@ install(FILES ${QM_FILES}
 
 ## dev files
 install(FILES ${INTERFACES}
-    DESTINATION include/dde-dock)
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dde-dock)
 
+configure_file(dde-dock.pc.in dde-dock.pc @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake.in 
+    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake 
+    @ONLY)
 install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
-    DESTINATION share/glib-2.0/schemas)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 
 # Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")

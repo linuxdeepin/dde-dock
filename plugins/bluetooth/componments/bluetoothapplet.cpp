@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     chenwei <chenwei@uniontech.com>
- *
- * Maintainer: chenwei <chenwei@uniontech.com>
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "bluetoothapplet.h"
 #include "device.h"
@@ -126,13 +108,6 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
 {
     initUi();
     initConnect();
-
-
-    QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
-    QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();
-    QVariant overshootPolicyOne = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
-    propertiesOne.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, overshootPolicyOne);
-    QScroller::scroller(m_scroarea)->setScrollerProperties(propertiesOne);
 }
 
 bool BluetoothApplet::poweredInitState()
@@ -249,14 +224,19 @@ void BluetoothApplet::initUi()
     m_contentLayout->addWidget(m_settingLabel, 0, Qt::AlignBottom | Qt::AlignVCenter);
 
     m_scroarea = new QScrollArea(this);
-
     m_scroarea->setWidgetResizable(true);
-    m_scroarea->setFrameStyle(QFrame::NoFrame);
-    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scroarea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-    m_scroarea->setContentsMargins(0, 0, 0, 0);
     m_scroarea->setWidget(m_contentWidget);
+    m_scroarea->setFrameShape(QFrame::NoFrame);
+    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_scroarea->setAutoFillBackground(true);
+    m_scroarea->viewport()->setAutoFillBackground(true);
+
+    QScroller::grabGesture(m_scroarea->viewport(), QScroller::LeftMouseButtonGesture);
+    QScroller *scroller = QScroller::scroller(m_scroarea);
+    QScrollerProperties sp;
+    sp.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(sp);
 
     updateIconTheme();
 

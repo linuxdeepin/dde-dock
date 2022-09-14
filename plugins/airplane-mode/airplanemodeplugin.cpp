@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2020 ~ 2022 Deepin Technology Co., Ltd.
- *
- * Author:     weizhixiang <weizhixiang@uniontech.com>
- *
- * Maintainer: weizhixiang <weizhixiang@uniontech.com>
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2020 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "airplanemodeplugin.h"
 #include "airplanemodeitem.h"
@@ -51,7 +33,7 @@ void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (supportAirplaneMode()) {
+    if (getAirplaneDconfig()) {
         m_networkInter = new NetworkInter("com.deepin.daemon.Network", "/com/deepin/daemon/Network", QDBusConnection::sessionBus(), this);
         connect(m_networkInter, &NetworkInter::WirelessAccessPointsChanged, this, &AirplaneModePlugin::onWirelessAccessPointsOrAdapterChange);
 
@@ -238,6 +220,15 @@ bool AirplaneModePlugin::supportAirplaneMode() const
     }
 
     return false;
+}
+
+bool AirplaneModePlugin::getAirplaneDconfig() const
+{
+    bool airplane = false;
+    if (m_dconfig && m_dconfig->isValid()) {
+        airplane = m_dconfig->value("networkAirplaneMode", false).toBool();
+    }
+    return airplane;
 }
 
 

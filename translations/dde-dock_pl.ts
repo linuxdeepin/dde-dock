@@ -157,23 +157,23 @@
     </message>
     <message>
         <source>tuesday</source>
-        <translation type="unfinished"/>
+        <translation>wtorek</translation>
     </message>
     <message>
         <source>wednesday</source>
-        <translation type="unfinished"/>
+        <translation>środa</translation>
     </message>
     <message>
         <source>thursday</source>
-        <translation type="unfinished"/>
+        <translation>czwartek</translation>
     </message>
     <message>
         <source>friday</source>
-        <translation type="unfinished"/>
+        <translation>piątek</translation>
     </message>
     <message>
         <source>saturday</source>
-        <translation type="unfinished"/>
+        <translation>sobota</translation>
     </message>
     <message>
         <source>sunday</source>
@@ -181,7 +181,7 @@
     </message>
     <message>
         <source>%1year%2month%3day</source>
-        <translation type="unfinished"/>
+        <translation>%1rok%2miesiąc%3dzień</translation>
     </message>
 </context>
 <context>
@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>Urządzenie</translation>
+        <source>Volume</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Głośność %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation>Brak urządzeń wyjściowych</translation>
     </message>
 </context>
 <context>

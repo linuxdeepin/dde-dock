@@ -92,6 +92,6 @@ if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
 endif()
 
 # bin
-install(TARGETS ${BIN_NAME} DESTINATION bin)
+install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 dconfig_meta_files(APPID org.deepin.dde.dock FILES ../configs/org.deepin.dde.dock.json)

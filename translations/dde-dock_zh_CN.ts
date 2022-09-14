@@ -554,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>设备</translation>
+        <source>Volume</source>
+        <translation>音量</translation>
     </message>
 </context>
 <context>
@@ -575,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>当前音量 %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation>无声音输出设备</translation>
     </message>
 </context>
 <context>
