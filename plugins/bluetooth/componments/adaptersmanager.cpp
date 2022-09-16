@@ -31,8 +31,8 @@
 
 AdaptersManager::AdaptersManager(QObject *parent)
     : QObject(parent)
-    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth",
-                                         "/com/deepin/daemon/Bluetooth",
+    , m_bluetoothInter(new DBusBluetooth("org.deepin.daemon.Bluetooth1",
+                                         "/org/deepin/daemon/Bluetooth1",
                                          QDBusConnection::sessionBus(),
                                          this))
 {
@@ -65,9 +65,9 @@ AdaptersManager::AdaptersManager(QObject *parent)
     });
 #endif
 
-    QDBusInterface inter("com.deepin.daemon.Bluetooth",
-                         "/com/deepin/daemon/Bluetooth",
-                         "com.deepin.daemon.Bluetooth",
+    QDBusInterface inter("org.deepin.daemon.Bluetooth1",
+                         "/org/deepin/daemon/Bluetooth1",
+                         "org.deepin.daemon.Bluetooth1",
                          QDBusConnection::sessionBus());
     QDBusReply<QString> reply = inter.call(QDBus::Block, "GetAdapters");
     const QString replyStr = reply.value();

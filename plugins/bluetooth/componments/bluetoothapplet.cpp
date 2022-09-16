@@ -121,12 +121,11 @@ BluetoothApplet::BluetoothApplet(QWidget *parent)
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
     , m_seperator(new HorizontalSeperator(this))
-    , m_airPlaneModeInter(new DBusAirplaneMode("com.deepin.daemon.AirplaneMode", "/com/deepin/daemon/AirplaneMode", QDBusConnection::systemBus(), this))
+    , m_airPlaneModeInter(new DBusAirplaneMode("org.deepin.daemon.AirplaneMode1", "/org/deepin/daemon/AirplaneMode1", QDBusConnection::systemBus(), this))
     , m_airplaneModeEnable(false)
 {
     initUi();
     initConnect();
-
 
     QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
     QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();

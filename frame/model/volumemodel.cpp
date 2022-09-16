@@ -11,8 +11,8 @@
  * @param parent
  */
 
-static const QString serviceName = QString("com.deepin.daemon.Audio");
-static const QString servicePath = QString("/com/deepin/daemon/Audio");
+static const QString serviceName = QString("org.deepin.daemon.Audio1");
+static const QString servicePath = QString("/org/deepin/daemon/Audio1");
 
 VolumeModel::VolumeModel(QObject *parent)
     : QObject(parent)

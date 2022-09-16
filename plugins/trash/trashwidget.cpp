@@ -239,7 +239,7 @@ void TrashWidget::setDragging(bool state)
 
 void TrashWidget::removeApp(const QString &appKey)
 {
-    const QString cmd("dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.UninstallApp string:\"" + appKey + "\"");
+    const QString cmd("dbus-send --print-reply --dest=org.deepin.dde.Launcher1 /org/deepin/dde/Launcher1 org.deepin.dde.Launcher1.UninstallApp string:\"" + appKey + "\"");
 
     QProcess *proc = new QProcess;
     proc->start(cmd);

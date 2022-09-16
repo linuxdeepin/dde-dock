@@ -24,16 +24,16 @@
 #include "constants.h"
 #include "dbusutil.h"
 
-#include <QWidget>
+#include "org_deepin_daemon_timedate.h"
 
-#include <com_deepin_daemon_timedate.h>
+#include <QWidget>
 
 namespace Dtk { namespace Gui { class DRegionMonitor; };
                 namespace Widget { class DBlurEffectWidget; } }
 
 using namespace Dtk::Widget;
 
-using Timedate = com::deepin::daemon::Timedate;
+using Timedate = org::deepin::daemon::Timedate1;
 
 class QuickPluginWindow;
 class QBoxLayout;

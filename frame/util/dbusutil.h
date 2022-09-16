@@ -44,13 +44,13 @@ const QString controllCenterService = "org.deepin.dde.ControlCenter1";
 const QString controllCenterPath = "/org/deepin/dde/ControlCenter1";
 const QString controllCenterInterface = "org.deepin.dde.ControlCenter1";
 
-const QString notificationService = "org.deepin.dde.Notification1";
-const QString notificationPath = "/org/deepin/dde/Notification1";
-const QString notificationInterface = "org.deepin.dde.Notification1";
+const QString notificationService = "com.deepin.dde.Notification";
+const QString notificationPath = "/com/deepin/dde/Notification";
+const QString notificationInterface = "com.deepin.dde.Notification";
 
-const QString sessionManagerService = "org.deepin.SessionManager1";
-const QString sessionManagerPath = "/org/deepin/SessionManager1";
-const QString sessionManagerInterface = "org.deepin.SessionManager1";
+const QString sessionManagerService = "com.deepin.SessionManager";
+const QString sessionManagerPath = "/com/deepin/SessionManager";
+const QString sessionManagerInterface = "com.deepin.SessionManager";
 #else
 using DockInter = com::deepin::dde::daemon::Dock;
 using DockEntryInter = com::deepin::dde::daemon::dock::Entry;

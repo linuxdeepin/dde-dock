@@ -23,17 +23,17 @@
 
 #include "constants.h"
 
+#include "org_deepin_daemon_timedate.h"
+
 #include <QWidget>
 #include <QFont>
-
-#include <com_deepin_daemon_timedate.h>
 
 namespace Dock { class TipsWidget; }
 
 class DockPopupWindow;
 class QMenu;
 
-using Timedate = com::deepin::daemon::Timedate;
+using Timedate = org::deepin::daemon::Timedate1;
 
 class DateTimeDisplayer : public QWidget
 {

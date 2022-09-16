@@ -55,6 +55,24 @@ if (${EXIT_CODE} EQUAL 0)
     endif()
 endif()
 
+function(generation_dbus_interface xmldir outdir)
+    IF(NOT EXISTS ${outdir})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir})
+    ENDIF()
+    file(GLOB_RECURSE allXmls ${xmldir}/*.xml)
+    foreach(XMLFILE ${allXmls})
+        string(FIND ${XMLFILE} "/" INDEX REVERSE)
+        string(SUBSTRING ${XMLFILE} ${INDEX} -1 classname)
+        string(REPLACE "/" "" classname ${classname})
+        string(REPLACE ".xml" "" classname ${classname})
+        string(REPLACE "." "_" classname ${classname})
+        string(TOLOWER ${classname} filename)
+
+        execute_process(COMMAND qdbusxml2cpp-fix -c ${classname} -p ${outdir}/${filename} ${XMLFILE}
+            WORKING_DIRECTORY ${outdir})
+    endforeach()
+endfunction(generation_dbus_interface)
+
 file(GLOB INTERFACES "interfaces/*.h")
 
 add_compile_definitions(USE_AM)

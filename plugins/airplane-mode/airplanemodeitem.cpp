@@ -43,8 +43,8 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new Dock::TipsWidget(this))
     , m_applet(new AirplaneModeApplet(this))
-    , m_airplaneModeInter(new DBusAirplaneMode("com.deepin.daemon.AirplaneMode",
-                                               "/com/deepin/daemon/AirplaneMode",
+    , m_airplaneModeInter(new DBusAirplaneMode("org.deepin.daemon.AirplaneMode1",
+                                               "/org/deepin/daemon/AirplaneMode1",
                                                QDBusConnection::systemBus(),
                                                this))
 {

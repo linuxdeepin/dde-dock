@@ -26,7 +26,7 @@
 #include "basetraywidget.h"
 #include "dockpopupwindow.h"
 
-#include <org_kde_statusnotifieritem.h>
+#include "org_kde_statusnotifieritem.h"
 
 #include <QMenu>
 #include <QDBusObjectPath>

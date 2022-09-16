@@ -22,9 +22,9 @@
 
 #include <QMenu>
 #include <QtDBus/QtDBus>
-#include <com_deepin_daemon_inputdevice_keyboard.h>
+#include "org_deepin_daemon_inputdevice_keyboard.h"
 
-using Keyboard = com::deepin::daemon::inputdevice::Keyboard;
+using Keyboard = org::deepin::daemon::inputdevice::Keyboard1;
 class QGSettings;
 
 class DBusAdaptors : public QDBusAbstractAdaptor

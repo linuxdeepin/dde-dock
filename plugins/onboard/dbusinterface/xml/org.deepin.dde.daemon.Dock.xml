@@ -1,0 +1,3 @@
+<interface name="org.deepin.dde.daemon.Dock1">
+  <property name="Entries" type="ao" access="read"/>
+</interface>

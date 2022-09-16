@@ -236,7 +236,7 @@ void PowerPlugin::loadPlugin()
 
     m_powerInter = new DBusPower(this);
 
-    m_systemPowerInter = new SystemPowerInter("com.deepin.system.Power", "/com/deepin/system/Power", QDBusConnection::systemBus(), this);
+    m_systemPowerInter = new SystemPowerInter("org.deepin.system.Power1", "/org/deepin/system/Power1", QDBusConnection::systemBus(), this);
     m_systemPowerInter->setSync(true);
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &PowerPlugin::onGSettingsChanged);

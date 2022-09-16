@@ -29,12 +29,13 @@
 
 #include "popupcontrolwidget.h"
 
+#include "org_freedesktop_filemanager.h"
+
 #include <QWidget>
 #include <QPixmap>
 #include <QAction>
 #include <QIcon>
 
-#include <org_freedesktop_filemanager1.h>
 using  DBusFileManager1 = org::freedesktop::FileManager1;
 
 class TrashWidget : public QWidget

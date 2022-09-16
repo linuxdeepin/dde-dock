@@ -27,8 +27,6 @@
 
 #include <QWidget>
 
-#include <com_deepin_daemon_gesture.h>
-
 using namespace Dock;
 
 class QBoxLayout;

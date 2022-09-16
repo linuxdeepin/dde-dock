@@ -23,8 +23,8 @@
 #ifndef ADAPTERSMANAGER_H
 #define ADAPTERSMANAGER_H
 
-#include <com_deepin_daemon_bluetooth.h>
-using  DBusBluetooth = com::deepin::daemon::Bluetooth;
+#include "org_deepin_daemon_bluetooth.h"
+using  DBusBluetooth = org::deepin::daemon::Bluetooth1;
 
 class Adapter;
 class Device;

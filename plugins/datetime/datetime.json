@@ -1,4 +1,4 @@
 {
     "api": "2.0.0",
-    "depends-daemon-dbus-service": "com.deepin.daemon.Timedate"
+    "depends-daemon-dbus-service": "org.deepin.daemon.Timedate1"
 }

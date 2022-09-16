@@ -24,6 +24,8 @@
 
 #ifdef USE_AM
 
+#include "types/dockrect.h"
+
 #include <QObject>
 #include <QByteArray>
 #include <QList>
@@ -38,25 +40,6 @@
  */
 class DockPrivate;
 class WM;
-
-struct DockRect
-{
-public:
-    DockRect();
-    operator QRect() const;
-
-    friend QDebug operator<<(QDebug debug, const DockRect &rect);
-    friend const QDBusArgument &operator>>(const QDBusArgument &arg, DockRect &rect);
-    friend QDBusArgument &operator<<(QDBusArgument &arg, const DockRect &rect);
-
-private:
-    int x;
-    int y;
-    uint w;
-    uint h;
-};
-
-Q_DECLARE_METATYPE(DockRect)
 
 void registerDockRectMetaType();
 

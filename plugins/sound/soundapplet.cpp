@@ -120,7 +120,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     , m_deviceLabel(new QLabel(this))
     , m_seperator(new HorizontalSeperator(this))
     , m_secondSeperator(new HorizontalSeperator(this))
-    , m_audioInter(new DBusAudio("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", QDBusConnection::sessionBus(), this))
+    , m_audioInter(new DBusAudio("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", QDBusConnection::sessionBus(), this))
     , m_defSinkInter(nullptr)
     , m_listView(new DListView(this))
     , m_model(new QStandardItemModel(m_listView))
@@ -245,7 +245,7 @@ void SoundApplet::initUi()
     });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundApplet::refreshIcon);
     connect(qApp, &DApplication::iconThemeChanged, this, &SoundApplet::refreshIcon);
-    QDBusConnection::sessionBus().connect("com.deepin.daemon.Audio", "/com/deepin/daemon/Audio", "org.freedesktop.DBus.Properties"
+    QDBusConnection::sessionBus().connect("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", "org.freedesktop.DBus.Properties"
                                           ,"PropertiesChanged", "sa{sv}as", this, SLOT(haldleDbusSignal(QDBusMessage)));
 
     QMetaObject::invokeMethod(this, "onDefaultSinkChanged", Qt::QueuedConnection);
@@ -281,7 +281,7 @@ void SoundApplet::onDefaultSinkChanged()
     }
 
     const QDBusObjectPath defSinkPath = m_audioInter->defaultSink();
-    m_defSinkInter = new DBusSink("com.deepin.daemon.Audio", defSinkPath.path(), QDBusConnection::sessionBus(), this);
+    m_defSinkInter = new DBusSink("org.deepin.daemon.Audio1", defSinkPath.path(), QDBusConnection::sessionBus(), this);
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
     connect(m_defSinkInter, &DBusSink::MuteChanged, this, [ = ] {

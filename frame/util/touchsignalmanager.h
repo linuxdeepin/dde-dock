@@ -22,11 +22,11 @@
 #ifndef TOUCHSIGNALMANAGER_H
 #define TOUCHSIGNALMANAGER_H
 
+#include "org_deepin_daemon_gesture.h"
+
 #include <QObject>
 
-#include <com_deepin_daemon_gesture.h>
-
-using Gesture = com::deepin::daemon::Gesture;
+using Gesture = com::deepin::daemon::Gesture1;
 
 class TouchSignalManager : public QObject
 {

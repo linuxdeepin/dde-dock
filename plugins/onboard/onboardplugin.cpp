@@ -21,32 +21,20 @@
 
 #include "onboardplugin.h"
 #include "../widgets/tipswidget.h"
-#ifdef USE_AM
-#include "dockinterface.h"
-#include "entryinterface.h"
-#else
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
-#endif
+
+#include "org_deepin_dde_daemon_dock.h"
+#include "org_deepin_dde_daemon_dock_entry.h"
 
 #include <QIcon>
 #include <QSettings>
 
 #define PLUGIN_STATE_KEY    "enable"
 
-#ifdef USE_AM
-using DBusDock = org::deepin::dde::daemon::DdeDock;
-using DockEntryInter = org::deepin::dde::daemon::dock::DockEntry;
+using DBusDock = org::deepin::dde::daemon::Dock1;
+using DockEntryInter = org::deepin::dde::daemon::dock1::Entry;
 
 static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
 static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
-#else
-using DBusDock = com::deepin::dde::daemon::Dock;
-using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
-
-static const QString serviceName = QString("com.deepin.dde.daemon.Dock");
-static const QString servicePath = QString("/com/deepin/dde/daemon/Dock");
-#endif
 
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)

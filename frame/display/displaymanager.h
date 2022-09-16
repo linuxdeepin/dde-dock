@@ -26,8 +26,7 @@
 
 #include "singleton.h"
 #include "constants.h"
-
-#include <com_deepin_daemon_display.h>
+#include "org_deepin_daemon_display.h"
 
 using DisplayInter = com::deepin::daemon::Display;
 using namespace Dock;

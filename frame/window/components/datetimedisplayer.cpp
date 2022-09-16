@@ -44,7 +44,7 @@ static QMap<int, QString> timeFormat{{0, "h:mm"}, {1, "hh:mm"}};
 
 DateTimeDisplayer::DateTimeDisplayer(QWidget *parent)
     : QWidget (parent)
-    , m_timedateInter(new Timedate("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", QDBusConnection::sessionBus(), this))
+    , m_timedateInter(new Timedate("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", QDBusConnection::sessionBus(), this))
     , m_position(Dock::Position::Bottom)
     , m_dateFont(DFontSizeManager::instance()->t10())
     , m_tipsWidget(new Dock::TipsWidget(this))

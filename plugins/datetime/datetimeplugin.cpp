@@ -42,7 +42,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     , m_pluginLoaded(false)
 {
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
-    sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
+    sessionBus.connect("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
 
 PluginsItemInterface::PluginSizePolicy DatetimePlugin::pluginSizePolicy() const
@@ -268,11 +268,11 @@ void DatetimePlugin::propertiesChanged()
 QDBusInterface* DatetimePlugin::timedateInterface()
 {
     if (!m_interface) {
-        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.daemon.Timedate")) {
-            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate", QDBusConnection::sessionBus(), this);
+        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.deepin.daemon.Timedate1")) {
+            m_interface = new QDBusInterface("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", "org.deepin.daemon.Timedate1", QDBusConnection::sessionBus(), this);
         } else {
-            const QString path = QString("/com/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
-            QDBusInterface * systemInterface = new QDBusInterface("com.deepin.daemon.Accounts", path, "com.deepin.daemon.Accounts.User",
+            const QString path = QString("/org/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
+            QDBusInterface * systemInterface = new QDBusInterface("org.deepin.daemon.Accounts1", path, "org.deepin.daemon.Accounts.User",
                                                                   QDBusConnection::systemBus(), this);
             return systemInterface;
         }

@@ -29,7 +29,7 @@
 
 #include <dtkwidget_global.h>
 
-#include <com_deepin_daemon_airplanemode.h>
+#include "org_deepin_daemon_airplanemode.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -48,7 +48,7 @@ DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
 
-using DBusAirplaneMode = com::deepin::daemon::AirplaneMode;
+using DBusAirplaneMode = org::deepin::daemon::AirplaneMode1;
 
 class SettingLabel : public QWidget
 {

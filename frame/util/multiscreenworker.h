@@ -28,8 +28,8 @@
 #include "xcb_misc.h"
 #include "dbusutil.h"
 
-#include <com_deepin_api_xeventmonitor.h>
-#include <com_deepin_dde_launcher.h>
+#include "org_deepin_api_xeventmonitor.h"
+#include "org_deepin_dde_launcher.h"
 
 #include <DWindowManagerHelper>
 
@@ -53,8 +53,8 @@ DGUI_USE_NAMESPACE
 #define DRAG_AREA_SIZE (5)
 #define DOCKSPACE (WINDOWMARGIN * 2)
 
-using XEventMonitor = ::com::deepin::api::XEventMonitor;
-using DBusLuncher = ::com::deepin::dde::Launcher;
+using XEventMonitor = ::org::deepin::api::XEventMonitor1;
+using DBusLuncher = ::org::deepin::dde::Launcher1;
 
 using namespace Dock;
 class QVariantAnimation;

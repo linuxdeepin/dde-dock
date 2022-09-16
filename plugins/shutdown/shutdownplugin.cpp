@@ -45,7 +45,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_shutdownWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
-    , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
+    , m_powerManagerInter(new DBusPowerManager("org.deepin.daemon.PowerManager1", "/org/deepin/daemon/PowerManager1", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
     , m_sessionShellGsettings(Utils::SettingsPtr("com.deepin.dde.session-shell", "/com/deepin/dde/session-shell/", this))
 {
