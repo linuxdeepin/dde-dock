@@ -30,6 +30,9 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QDBusPendingCall>
+#include <QtConcurrent>
+#include <QFuture>
 
 #include <xcb/xproto.h>
 
@@ -39,7 +42,6 @@ DGUI_USE_NAMESPACE
 
 const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "SystemServices", "Hardware"};
 const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
-const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 using namespace Dock;
@@ -93,7 +95,7 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     setOwnerPID(conn.interface()->servicePid(m_dbusService));
 
     m_sniInter = new StatusNotifierItem(m_dbusService, m_dbusPath, QDBusConnection::sessionBus(), this);
-
+    m_sniInter->setSync(false);
     if (!m_sniInter->isValid()) {
         qDebug() << "SNI dbus interface is invalid!" << m_dbusService << m_dbusPath << m_sniInter->lastError();
         return;
@@ -154,30 +156,11 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::NewStatus, [ = ] {
         onSNIStatusChanged(m_sniInter->status());
     });
-
-    initSNIPropertys();
 }
 
 QString SNITrayWidget::itemKeyForConfig()
 {
-    QString key;
-
-    do {
-        key = m_sniId;
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        key = QDBusInterface(m_dbusService, m_dbusPath, StatusNotifierItem::staticInterfaceName())
-              .property("Id").toString();
-        if (!key.isEmpty()) {
-            break;
-        }
-
-        key = m_sniServicePath;
-    } while (false);
-
-    return QString("sni:%1").arg(key);
+    return QString("sni:%1").arg(m_sniId.isEmpty() ? m_sniServicePath : m_sniId);
 }
 
 void SNITrayWidget::updateIcon()
@@ -188,13 +171,18 @@ void SNITrayWidget::updateIcon()
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     switch (mouseButton) {
-    case XCB_BUTTON_INDEX_1:
-        // left button click invalid
-        if (LeftClickInvalidIdList.contains(m_sniId)) {
-            showContextMenu(x, y);
-        } else {
-            m_sniInter->Activate(x, y);
-        }
+    case XCB_BUTTON_INDEX_1: {
+        QFuture<void> future = QtConcurrent::run([ = ] {
+            StatusNotifierItem inter(m_dbusService, m_dbusPath, QDBusConnection::sessionBus());
+            QDBusPendingReply<> reply = inter.Activate(x, y);
+            // try to invoke context menu while calling activate get a error.
+            // primarily work for apps using libappindicator.
+            reply.waitForFinished();
+            if (reply.isError()) {
+                showContextMenu(x,y);
+            }
+        });
+    }
         break;
     case XCB_BUTTON_INDEX_2:
         m_sniInter->SecondaryActivate(x, y);
@@ -261,26 +249,6 @@ uint SNITrayWidget::servicePID(const QString &servicePath)
     QString serviceName = serviceAndPath(servicePath).first;
     QDBusConnection conn = QDBusConnection::sessionBus();
     return conn.interface()->servicePid(serviceName);
-}
-
-void SNITrayWidget::initSNIPropertys()
-{
-    m_sniAttentionIconName = m_sniInter->attentionIconName();
-    m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
-    m_sniAttentionMovieName = m_sniInter->attentionMovieName();
-    m_sniCategory = m_sniInter->category();
-    m_sniIconName = m_sniInter->iconName();
-    m_sniIconPixmap = m_sniInter->iconPixmap();
-    m_sniIconThemePath = m_sniInter->iconThemePath();
-    m_sniId = m_sniInter->id();
-    m_sniMenuPath = m_sniInter->menu();
-    m_sniOverlayIconName = m_sniInter->overlayIconName();
-    m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
-    m_sniStatus = m_sniInter->status();
-
-    m_updateIconTimer->start();
-//    m_updateOverlayIconTimer->start();
-//    m_updateAttentionIconTimer->start();
 }
 
 void SNITrayWidget::initMenu()
