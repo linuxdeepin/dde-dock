@@ -1,11 +1,6 @@
-/**
- * Copyright (C) 2016 Deepin Technology Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 #include <memory>

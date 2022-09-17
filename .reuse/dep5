@@ -1,0 +1,59 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: dde-dock
+Upstream-Contact:  UnionTech Software Technology Co., Ltd. <>
+Source: https://github.com/linuxdeepin/dde-dock
+
+# ci
+Files: .github/* .gitlab-ci.yml
+Copyright: None
+License: CC0-1.0
+
+# Packaging configuration
+Files: rpm/* debian/* archlinux/*
+Copyright: None
+License: CC0-1.0
+
+# README & DOC
+Files: README.md README.zh_CN.md CHANGELOG.md doc/*  technology-overview.md plugins/plugin-guide/plugins-developer-guide.md
+Copyright: UnionTech Software Technology Co., Ltd.
+License: CC-BY-4.0
+
+# translation
+Files: translations/* plugins/*.ts
+Copyright: UnionTech Software Technology Co., Ltd.
+License: LGPL-3.0-or-later
+
+# png svg
+Files: plugins/*.png plugins/*.svg frame/*.svg tests/*.png tests/*.svg
+Copyright: UnionTech Software Technology Co., Ltd.
+License: LGPL-3.0-or-later
+
+# qrc
+Files: plugins/*.qrc frame/*.qrc tests/*.qrc
+Copyright: None
+License: CC0-1.0
+
+# Project file
+Files: frame/*CMakeLists.txt plugins/*CMakeLists.txt CMakeLists.txt .project tests/CMakeLists.txt .gitignore tests/cmake/modules/FindGMock.cmake
+Copyright: None
+License: CC0-1.0
+
+# xml toml json policy yaml
+Files: gschema/*.xml plugins/*.xml frame/*.xml .clog.toml plugins/*.json configs/*.json .packit.yaml .tx/config plugins/overlay-warning/com.deepin.dde.dock.overlay.policy plugins/dcc-dock-plugin/.tx/config 
+Copyright: None
+License: CC0-1.0
+
+# in
+Files: cmake/DdeDock/DdeDockConfig.cmake.in dde-dock.pc.in frame/environments.h.in 
+Copyright: None
+License: CC0-1.0
+
+# sh
+Files: gen_report.sh lupdate.sh plugins/dcc-dock-plugin/translate_generation.sh tests/test-recoverage.sh translate_generation.sh
+Copyright: None
+License: CC0-1.0
+
+# xml2cpp
+Files: frame/dbus/* plugins/disk-mount/dbus/dbusdiskmount.* plugins/power/dbus/dbuspower.* plugins/shutdown/dbus/dbuspowermanager.* plugins/tray/dbus/dbustraymanager.*
+Copyright: The Qt Company Ltd.
+License: CC0-1.0
