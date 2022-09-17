@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -878,7 +878,11 @@ void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const P
 
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
 {
-    resetDockScreen();
+    // resetDockScreen 调用太频繁，未在合适的时机调用时出现 wayland set_position 数值异常
+    // 推测是 qt 未能正确传递窗口位置到 waylandserver， 此处修改经过测试可以较好的规避此问题。
+    // for test ： DOCK_RESET_NOW=true dde-dock
+    if (qEnvironmentVariableIsSet("DOCK_RESET_NOW"))
+        resetDockScreen(); // m_monitorUpdateTimer timeout will call resetDockScreen
 
     // 只需要在屏幕信息变化的时候更新，其他时间不需要更新
     onRequestUpdateRegionMonitor();
@@ -1320,6 +1324,8 @@ void MultiScreenWorker::resetDockScreen()
     /**
       *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
       */
+    if (m_ds.current().isEmpty()) // wayland下当没有屏幕时连接时，qt会虚拟一个空的屏幕，空屏幕这里不处理，不然会导致崩溃
+        return;
     parent()->setFixedSize(dockRect(m_ds.current()).size());
     parent()->setGeometry(dockRect(m_ds.current()));
     qDebug() << "update dock geometry: " << dockRect(m_ds.current());
