@@ -878,7 +878,11 @@ void MultiScreenWorker::onRequestUpdatePosition(const Position &fromPos, const P
 
 void MultiScreenWorker::onRequestUpdateMonitorInfo()
 {
-    resetDockScreen();
+    // resetDockScreen 调用太频繁，未在合适的时机调用时出现 wayland set_position 数值异常
+    // 推测是 qt 未能正确传递窗口位置到 waylandserver， 此处修改经过测试可以较好的规避此问题。
+    // for test ： DOCK_RESET_NOW=true dde-dock
+    if (qEnvironmentVariableIsSet("DOCK_RESET_NOW"))
+        resetDockScreen(); // m_monitorUpdateTimer timeout will call resetDockScreen
 
     // 只需要在屏幕信息变化的时候更新，其他时间不需要更新
     onRequestUpdateRegionMonitor();
