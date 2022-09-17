@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -1320,6 +1320,8 @@ void MultiScreenWorker::resetDockScreen()
     /**
       *注意这里要先对parent()进行setFixedSize，在分辨率切换过程中，setGeometry可能会导致其大小未改变
       */
+    if (m_ds.current().isEmpty()) // wayland下当没有屏幕时连接时，qt会虚拟一个空的屏幕，空屏幕这里不处理，不然会导致崩溃
+        return;
     parent()->setFixedSize(dockRect(m_ds.current()).size());
     parent()->setGeometry(dockRect(m_ds.current()));
     qDebug() << "update dock geometry: " << dockRect(m_ds.current());
