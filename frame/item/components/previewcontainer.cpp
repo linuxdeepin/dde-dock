@@ -251,6 +251,12 @@ void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 
 void PreviewContainer::onSnapshotClicked(const WId wid)
 {
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        /* BUGFIX-159303 本地发现该问题仅在wayland下出现，问题已与窗管对接沟通过，根据窗管建议，上层进
+        规避，避免因底层强行修改引入新的问题 */
+        Q_EMIT requestCancelPreviewWindow();
+    }
+
     Q_EMIT requestActivateWindow(wid);
     m_needActivate = true;
     m_waitForShowPreviewTimer->stop();
