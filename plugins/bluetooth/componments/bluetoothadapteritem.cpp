@@ -106,6 +106,7 @@ void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
 {
     m_labelAction->setText(m_device->alias());
+
     if (state == Device::StateAvailable) {
         m_loading->start();
         m_stateAction->setVisible(true);
@@ -120,6 +121,8 @@ void BluetoothDeviceItem::updateDeviceState(Device::State state)
         m_stateAction->setVisible(false);
         m_connAction->setVisible(false);
     }
+
+    m_loading->setVisible(state == Device::StateAvailable);
     emit deviceStateChanged(m_device);
 }
 
