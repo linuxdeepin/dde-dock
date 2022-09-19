@@ -188,9 +188,9 @@ void SoundItem::refreshIcon()
             volumeString = "muted";
         else if (int(volmue) == 0)
             volumeString = "off";
-        else if (volmue / maxVolmue > double(2) / 3)
+        else if (volmue / maxVolmue > 0.6)
             volumeString = "high";
-        else if (volmue / maxVolmue > double(1) / 3)
+        else if (volmue / maxVolmue > 0.3)
             volumeString = "medium";
         else
             volumeString = "low";
