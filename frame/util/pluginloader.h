@@ -12,6 +12,7 @@ class PluginLoader : public QThread
     Q_OBJECT
 
 public:
+    explicit PluginLoader(const QStringList &pluginDirPaths, QObject *parent);
     explicit PluginLoader(const QString &pluginDirPath, QObject *parent);
     static QString libUsedDtkCoreFileName(const QString &fileName);
     /**
@@ -31,7 +32,7 @@ protected:
     QString dtkCoreFileName();
 
 private:
-    QString m_pluginDirPath;
+    QStringList m_pluginDirPaths;
 };
 
 #endif // PLUGINLOADER_H

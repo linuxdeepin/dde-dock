@@ -17,75 +17,83 @@
 
 DCORE_USE_NAMESPACE
 
+PluginLoader::PluginLoader(const QStringList &pluginDirPaths, QObject *parent)
+    : QThread(parent)
+    , m_pluginDirPaths(pluginDirPaths)
+{
+}
+
 PluginLoader::PluginLoader(const QString &pluginDirPath, QObject *parent)
     : QThread(parent)
-    , m_pluginDirPath(pluginDirPath)
+    , m_pluginDirPaths(QStringList() << pluginDirPath)
 {
+
 }
 
 void PluginLoader::run()
 {
-    QDir pluginsDir(m_pluginDirPath);
-    const QStringList files = pluginsDir.entryList(QDir::Files);
+    for (auto path : m_pluginDirPaths) {
+        QDir pluginsDir(path);
+        const QStringList files = pluginsDir.entryList(QDir::Files);
+        auto getDisablePluginList = [ = ] {
+            if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.disableplugins")) {
+                QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
+                return gsetting.get("disable-plugins-list").toStringList();
+            }
+            return QStringList();
+        };
 
-    auto getDisablePluginList = [ = ] {
-        if (QGSettings::isSchemaInstalled("com.deepin.dde.dock.disableplugins")) {
-            QGSettings gsetting("com.deepin.dde.dock.disableplugins", "/com/deepin/dde/dock/disableplugins/");
-            return gsetting.get("disable-plugins-list").toStringList();
+        const QStringList disable_plugins_list = getDisablePluginList();
+
+        const QString dtkCoreName = dtkCoreFileName();
+
+        QStringList plugins;
+
+        // 查找可用插件
+        QList<QString> filePaths;
+        for (QString file : files) {
+            if (!QLibrary::isLibrary(file))
+                continue;
+
+            // 社区版需要加载键盘布局，其他不需要
+            if (file.contains("libkeyboard-layout") && !DSysInfo::isCommunityEdition())
+                continue;
+
+            // 由于onboard不支持wayland下输入，因此屏蔽onboard插件加载
+            if (file.contains("libonboard") && Utils::IS_WAYLAND_DISPLAY)
+                continue;
+
+            // TODO: old dock plugins is uncompatible
+            if (file.startsWith("libdde-dock-"))
+                continue;
+
+            if (disable_plugins_list.contains(file)) {
+                qDebug() << "disable loading plugin:" << file;
+                continue;
+            }
+
+            filePaths.push_back(pluginsDir.absoluteFilePath(file));
         }
-        return QStringList();
-    };
 
-    const QStringList disable_plugins_list = getDisablePluginList();
-
-    const QString dtkCoreName = dtkCoreFileName();
-
-    QStringList plugins;
-
-    // 查找可用插件
-    QList<QString> filePaths;
-    for (QString file : files) {
-        if (!QLibrary::isLibrary(file))
-            continue;
-
-        // 社区版需要加载键盘布局，其他不需要
-        if (file.contains("libkeyboard-layout") && !DSysInfo::isCommunityEdition())
-            continue;
-
-        // 由于onboard不支持wayland下输入，因此屏蔽onboard插件加载
-        if (file.contains("libonboard") && Utils::IS_WAYLAND_DISPLAY)
-            continue;
-
-        // TODO: old dock plugins is uncompatible
-        if (file.startsWith("libdde-dock-"))
-            continue;
-
-        if (disable_plugins_list.contains(file)) {
-            qDebug() << "disable loading plugin:" << file;
-            continue;
+        // 由于使用ldd获取.so信息比较耗时，采用并行处理
+        QFuture<QString> f = QtConcurrent::mapped(filePaths, &PluginLoader::libUsedDtkCoreFileName);
+        f.waitForFinished();
+        const QStringList &results = f.results();
+        if (results.size() == filePaths.size()) {
+            for (int i = 0; i < results.size(); ++i) {
+                const QString &libUsedDtkCore = results.at(i);
+                // 判断当前进程加载的dtkcore库是否和当前库加载的dtkcore的库为同一个，如果不同，则无需加载，
+                // 否则在加载dtkcore的时候会报错（dtkcore内部判断如果加载两次会抛出错误
+                if (libUsedDtkCore.isEmpty() || libUsedDtkCore == dtkCoreName)
+                    plugins << filePaths.at(i);
+            }
+        } else {
+            plugins.append(filePaths);
         }
 
-        filePaths.push_back(pluginsDir.absoluteFilePath(file));
-    }
-
-    // 由于使用ldd获取.so信息比较耗时，采用并行处理
-    QFuture<QString> f = QtConcurrent::mapped(filePaths, &PluginLoader::libUsedDtkCoreFileName);
-    f.waitForFinished();
-    const QStringList &results = f.results();
-    if (results.size() == filePaths.size()) {
-        for (int i = 0; i < results.size(); ++i) {
-            const QString &libUsedDtkCore = results.at(i);
-            // 判断当前进程加载的dtkcore库是否和当前库加载的dtkcore的库为同一个，如果不同，则无需加载，
-            // 否则在加载dtkcore的时候会报错（dtkcore内部判断如果加载两次会抛出错误
-            if (libUsedDtkCore.isEmpty() || libUsedDtkCore == dtkCoreName)
-                plugins << filePaths.at(i);
+        for (auto plugin : plugins) {
+            emit pluginFounded(pluginsDir.absoluteFilePath(plugin));
         }
-    } else {
-        plugins.append(filePaths);
-    }
-
-    for (auto plugin : plugins) {
-        emit pluginFounded(pluginsDir.absoluteFilePath(plugin));
     }
 
     emit finished();
@@ -134,6 +142,7 @@ QString PluginLoader::dtkCoreFileName()
  */
 QString PluginLoader::libUsedDtkCoreFileName(const QString &fileName)
 {
+    // TODO 不存在ldd时的处理
     QString lddCommand = QString("ldd -r %1").arg(fileName);
     FILE *fp = popen(lddCommand.toLocal8Bit().data(), "r");
     if (fp) {

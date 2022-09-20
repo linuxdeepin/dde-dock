@@ -124,8 +124,8 @@ void DockPluginsController::startLoader()
 
 void DockPluginsController::loadLocalPlugins()
 {
+    // 仍然支持加载当前用户.local目录中的插件
     QString pluginsDir(QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()));
-
     if (!QDir(pluginsDir).exists()) {
         return;
     }
@@ -138,8 +138,13 @@ void DockPluginsController::loadLocalPlugins()
 void DockPluginsController::loadSystemPlugins()
 {
     QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
+
 #ifndef QT_DEBUG
-    pluginsDir = "/usr/lib/dde-dock/plugins";
+    pluginsDir = qgetenv("DOCK_PLUGIN_PATH");
+    // 缺省路径
+    if (pluginsDir.isEmpty()) {
+        pluginsDir = "/usr/lib/dde-dock/plugins";
+    }
 #endif
     qDebug() << "using dock plugins dir:" << pluginsDir;
 
