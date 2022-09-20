@@ -21,28 +21,67 @@
 #include "proxyplugincontroller.h"
 #include "pluginsiteminterface.h"
 
+#include <QSettings>
+
+static QStringList getPathFromConf(const QString &key) {
+    QSettings set("/etc/deepin/dde-dock.conf", QSettings::IniFormat);
+    auto value = set.value(key).toString();
+    if (!value.isEmpty()) {
+        return value.split(':');
+    }
+
+    return QStringList();
+}
+
 // 该方法用来设置所有的需要加载的插件的路径信息
-static QMap<PluginType, QList<QStringList>> getPluginPaths()
+static QMap<PluginType, QStringList> getPluginPaths()
 {
+    QMap<PluginType, QStringList> plugins;
+
     // 添加系统目录
-    QList<QStringList> pluginPaths;
-    pluginPaths << QStringList{ QString("%1/.local/lib/dde-dock/plugins/").arg(QDir::homePath()) }
-                << QStringList{ QString(qApp->applicationDirPath() + "/../plugins"),
-                                QString("/usr/lib/dde-dock/plugins") };
-    QMap<PluginType, QList<QStringList>> plugins;
-    plugins[PluginType::FixedSystemPlugin] = pluginPaths;
+    {    
+        QStringList pluginPaths;
+    #ifdef QT_DEBUG
+        pluginPaths << qApp->applicationDirPath() + "/../plugins";    
+    #else
+        pluginPaths << "/usr/lib/dde-dock/plugins";
+        
+        const QStringList &pluginsDirs = getPathFromConf("PATH");
+        if (!pluginsDirs.isEmpty())
+            pluginPaths << pluginsDirs;        
+    #endif
+        plugins[PluginType::FixedSystemPlugin] = pluginPaths;
+    }
 
     // 添加快捷插件目录
-    pluginPaths.clear();
-    pluginPaths << QStringList{ QString(qApp->applicationDirPath() + "/../plugins/quick-trays"),
-                                QString("/usr/lib/dde-dock/plugins/quick-trays") };
-    plugins[PluginType::QuickPlugin] = pluginPaths;
+    {
+        QStringList pluginPaths;
+    #ifdef QT_DEBUG
+        pluginPaths << qApp->applicationDirPath() + "/../plugins/quick-trays";
+    #else
+        pluginPaths << "/usr/lib/dde-dock/plugins/quick-trays";
+
+        const QStringList &pluginsDirs = getPathFromConf("QUICK_TRAY_PATH");
+        if (!pluginsDirs.isEmpty())
+            pluginPaths << pluginsDirs;       
+    #endif
+        plugins[PluginType::QuickPlugin] = pluginPaths;
+    }
 
     // 添加系统插件目录
-    pluginPaths.clear();
-    pluginPaths << QStringList { QString(qApp->applicationDirPath() + "/../plugins/system-trays"),
-                                 QString("/usr/lib/dde-dock/plugins/system-trays") };
-    plugins[PluginType::SystemTrays] = pluginPaths;
+    {    
+        QStringList pluginPaths;
+    #ifdef QT_DEBUG
+        pluginPaths << qApp->applicationDirPath() + "/../plugins/system-trays";
+    #else
+        pluginPaths << "/usr/lib/dde-dock/plugins/system-trays";
+
+        const QStringList &pluginsDirs = getPathFromConf("SYSTEM_TRAY_PATH");
+        if (!pluginsDirs.isEmpty())
+            pluginPaths << pluginsDirs;        
+    #endif
+        plugins[PluginType::SystemTrays] = pluginPaths;
+    }
 
     return plugins;
 }
@@ -58,9 +97,9 @@ ProxyPluginController *ProxyPluginController::instance(PluginType instanceKey)
         return proxyInstances.value(instanceKey);
 
     // 生成单例类，获取加载插件的路径信息
-    static QMap<PluginType, QList<QStringList>> pluginLoadInfos = getPluginPaths();
+    static QMap<PluginType, QStringList> pluginLoadInfos = getPluginPaths();
     ProxyPluginController *controller = new ProxyPluginController();
-    controller->m_dirs = (pluginLoadInfos.contains(instanceKey) ? pluginLoadInfos[instanceKey] : QList<QStringList>());
+    controller->m_dirs = pluginLoadInfos.contains(instanceKey) ? pluginLoadInfos[instanceKey] : QStringList();
     proxyInstances[instanceKey] = controller;
     qApp->setProperty("proxyController", QVariant::fromValue(proxyInstances));
     return controller;
@@ -229,14 +268,11 @@ void ProxyPluginController::removePluginItem(PluginsItemInterface * const itemIn
 void ProxyPluginController::startLoader()
 {
     QDir dir;
-    for (const QStringList &pluginPaths : m_dirs) {
-        for (const QString &pluginPath : pluginPaths) {
-            if (!dir.exists(pluginPath))
-                continue;
+    for (const QString &path : m_dirs) {
+        if (!dir.exists(path))
+            continue;
 
-            AbstractPluginsController::startLoader(new PluginLoader(pluginPath, this));
-            break;
-        }
+        AbstractPluginsController::startLoader(new PluginLoader(path, this));
     }
 }
 

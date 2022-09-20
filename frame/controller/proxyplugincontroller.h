@@ -73,7 +73,7 @@ private:
 
 private:
     QList<AbstractPluginsController *> m_interfaces;
-    QList<QStringList> m_dirs;
+    QStringList m_dirs;
     QList<PluginsItemInterface *> m_pluginsItems;
     QMap<PluginsItemInterface *, QString> m_pluginsItemKeys;
 };
