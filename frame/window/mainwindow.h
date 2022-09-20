@@ -140,6 +140,7 @@ private:
 class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
+    friend class MainPanelControl;
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -149,7 +150,7 @@ public:
     void setGeometry(const QRect &rect);
     void sendNotifications();
 
-    friend class MainPanelControl;
+    void setVisible(bool visible) override;
 
     MainPanelControl *panel() {return m_mainPanel;}
 

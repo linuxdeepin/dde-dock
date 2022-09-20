@@ -143,6 +143,7 @@ void MainWindow::launch()
         bool showDock = true;
         if (m_dconfig.data()->isValid())
             showDock = !m_dconfig.data()->value("alwaysHideDock", false).toBool();
+        qApp->setProperty("ALWAYS_HIDE_DOCK", !showDock);
         setVisible(showDock);
         if (!showDock && m_multiScreenWorker->dockInter()) {
             m_multiScreenWorker->dockInter()->setHideMode(KeepHidden);
@@ -298,6 +299,7 @@ void MainWindow::initComponents()
         connect(m_dconfig.data(), &DConfig::valueChanged, this, [this] (const QString &key) {
             if (key == "alwaysHideDock") {
                 const bool showDock = !m_dconfig.data()->value(key, false).toBool();
+                qApp->setProperty("ALWAYS_HIDE_DOCK", !showDock);
                 setVisible(showDock);
                 if (!showDock && m_multiScreenWorker->dockInter()) {
                     m_multiScreenWorker->dockInter()->setHideMode(KeepHidden);
@@ -677,4 +679,14 @@ void MainWindow::sendNotifications()
                 .arg(15000)                                                                    // timeout
                 .call();
     });
+}
+
+void MainWindow::setVisible(bool visible)
+{
+    // 设置了始终隐藏的情况下，任务栏将永远不显示
+    if (visible && qApp->property("ALWAYS_HIDE_DOCK").toBool()) {
+        return;
+    }
+
+    return DBlurEffectWidget::setVisible(visible);
 }
