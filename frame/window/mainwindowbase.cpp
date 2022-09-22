@@ -568,11 +568,17 @@ void MainWindowBase::resizeEvent(QResizeEvent *event)
     }
 
     m_shadowMaskOptimizeTimer->start();
+
+    if (!isDraging())
+        m_updateDragAreaTimer->start();
 }
 
 void MainWindowBase::moveEvent(QMoveEvent *)
 {
     updateDragGeometry();
+
+    if (!isDraging())
+        m_updateDragAreaTimer->start();
 }
 
 void MainWindowBase::enterEvent(QEvent *e)
