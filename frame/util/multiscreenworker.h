@@ -18,7 +18,6 @@
 #include <QFlag>
 #include <QDebug>
 
-#define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
 #define FREE_POINT(p) if (p) {\
         delete p;\

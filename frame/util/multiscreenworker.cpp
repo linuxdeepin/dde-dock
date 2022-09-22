@@ -25,6 +25,7 @@
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
 
+#define WINDOW_MARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define DIS_INS DisplayManager::instance()
 
 // 保证以下数据更新顺序(大环节顺序不要变，内部还有一些小的调整，比如任务栏显示区域更新的时候，里面内容的布局方向可能也要更新...)
@@ -593,7 +594,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     }
 
     // 触屏监控高度固定调整为最大任务栏高度100+任务栏与屏幕边缘间距
-    const int monitHeight = 100 + WINDOWMARGIN;
+    const int monitHeight = 100 + WINDOW_MARGIN;
 
     // 任务栏触屏唤起区域
     m_touchRectList.clear();
@@ -812,6 +813,10 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
             break;
         }
 
+        // 加上边距(时尚模式为10+10, 高效模式为0)
+        varList[1] = varList[1].toDouble() + WINDOW_MARGIN * ratio * 2;
+        qDebug() << "Dock strut: " << varList;
+
         if (parent()->windowHandle()->handle()) {
             QGuiApplication::platformNativeInterface()->setWindowProperty(parent()->windowHandle()->handle(),"_d_dwayland_dockstrut", varList);
         }
@@ -857,7 +862,7 @@ void MultiScreenWorker::onRequestNotifyWindowManager()
         }
 
         XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(parent()->winId()), orientation,
-                                               static_cast<uint>(strut + WINDOWMARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
+                                               static_cast<uint>(strut + WINDOW_MARGIN * ratio), // 设置窗口与屏幕边缘距离，需要乘缩放
                                                static_cast<uint>(strutStart),                   // 设置任务栏起点坐标（上下为x，左右为y）
                                                static_cast<uint>(strutEnd));                    // 设置任务栏终点坐标（上下为x，左右为y）
     }
