@@ -353,6 +353,7 @@ void MainWindowBase::setDisplayMode(const Dock::DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
     adjustShadowMask();
+    m_platformWindowHandle.setShadowOffset(QPoint(0, (displayMode == Dock::DisplayMode::Fashion ? 5 : 0)));
 }
 
 void MainWindowBase::setPosition(const Dock::Position &position)
@@ -554,7 +555,9 @@ void MainWindowBase::initUi()
     m_platformWindowHandle.setEnableBlurWindow(true);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
-    m_platformWindowHandle.setShadowColor(Qt::transparent);
+    QColor shadorColor = Qt::black;
+    shadorColor.setAlpha(static_cast<int>(0.3 * 255));
+    m_platformWindowHandle.setShadowColor(shadorColor);
 }
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
