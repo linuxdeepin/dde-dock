@@ -64,14 +64,13 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     BaseTrayWidget *trayWidget = nullptr;
     if(type == TrayIconType::XEMBED) {
         if (Utils::IS_WAYLAND_DISPLAY) {
-            trayWidget = new XEmbedTrayItemWidget(winId, nullptr, nullptr, parent);
-        } else {
-            int screenp = 0;
+            static Display *display = XOpenDisplay(nullptr);
+            static int screenp = 0;
             static xcb_connection_t *xcb_connection = xcb_connect(qgetenv("DISPLAY"), &screenp);
-            static Display *m_display = XOpenDisplay(nullptr);
-            trayWidget = new XEmbedTrayItemWidget(winId, xcb_connection, m_display, parent);
+            trayWidget = new XEmbedTrayItemWidget(winId, xcb_connection, display, parent);
+        } else {
+            trayWidget = new XEmbedTrayItemWidget(winId, nullptr, nullptr, parent);
         }
-
         const TrayModel *model = qobject_cast<const TrayModel *>(index.model());
         if (model)
             connect(model, &TrayModel::requestUpdateIcon, trayWidget, &BaseTrayWidget::updateIcon);
