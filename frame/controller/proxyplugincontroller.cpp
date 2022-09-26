@@ -144,8 +144,6 @@ ProxyPluginController::ProxyPluginController(QObject *parent)
     // 只有在非安全模式下才加载插件，安全模式会在等退出安全模式后通过接受事件的方式来加载插件
     if (!qApp->property("safeMode").toBool())
         QMetaObject::invokeMethod(this, &ProxyPluginController::startLoader, Qt::QueuedConnection);
-
-    qApp->installEventFilter(this);
 }
 
 QPluginLoader *ProxyPluginController::pluginLoader(PluginsItemInterface * const itemInter)
@@ -231,7 +229,7 @@ bool ProxyPluginController::eventFilter(QObject *watched, QEvent *event)
         startLoader();
     }
 
-    return QObject::eventFilter(watched, event);
+    return AbstractPluginsController::eventFilter(watched, event);
 }
 
 QList<AbstractPluginsController *> ProxyPluginController::getValidController(PluginsItemInterface *itemInter) const

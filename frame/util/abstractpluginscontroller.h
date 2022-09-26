@@ -64,6 +64,7 @@ protected:
     QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
     PluginsItemInterface *pluginInterAt(const QString &itemKey);
     PluginsItemInterface *pluginInterAt(QObject *destItem);
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 protected Q_SLOTS:
     void startLoader(PluginLoader *loader);
@@ -75,8 +76,6 @@ private slots:
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
 
-private:
-    bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
