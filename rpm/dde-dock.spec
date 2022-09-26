@@ -4,7 +4,7 @@ Name:           dde-dock
 Version:        5.4.9
 Release:        1
 Summary:        Deepin desktop-environment - Dock module
-License:        GPLv3
+License:        LGPL-3.0-or-later
 URL:            http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/RERFNS4wLjAuNjU3NQ/pool/main/d/dde-dock/
 Source0:        %{name}-%{version}.orig.tar.xz	
 
