@@ -260,6 +260,7 @@ private:
     HideState m_hideState;
     HideState m_currentHideState;
     DisplayMode m_displayMode;
+    bool m_dockIsWaitingToShow = false;
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     QString m_registerKey;

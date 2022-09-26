@@ -189,10 +189,13 @@ void MultiScreenWorker::handleDBusSignal(QDBusMessage msg)
 
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
-    if (m_registerKey != key || testState(MousePress))
+    if (m_registerKey != key || testState(MousePress) || m_dockIsWaitingToShow)
         return;
-
-    tryToShowDock(x, y);
+    m_dockIsWaitingToShow = true;
+    QTimer::singleShot(2000, this, [=] {
+        m_dockIsWaitingToShow = false;
+        tryToShowDock(x, y);
+    });
 }
 
 // 鼠标在任务栏之外移动时,任务栏该响应隐藏时需要隐藏
@@ -1455,16 +1458,19 @@ void MultiScreenWorker::checkXEventMonitorService()
         });
 
         connect(extralEventInter, &XEventMonitor::CursorOut, this, [ = ](int x, int y, const QString &key) {
-            if (isCursorOut(x, y)) {
-                if (testState(ShowAnimationStart)) {
-                    // 在OUT后如果检测到当前的动画正在进行，在out后延迟500毫秒等动画结束再执行移出动画
-                    QTimer::singleShot(500, this, [ = ] {
+            // 要求是2s后才自动显示，所以要跟着先等待一下,避免提前隐藏
+            QTimer::singleShot(2000, this, [=] {
+                if (isCursorOut(x, y)) {
+                    if (testState(ShowAnimationStart)) {
+                        // 在OUT后如果检测到当前的动画正在进行，在out后延迟500毫秒等动画结束再执行移出动画
+                        QTimer::singleShot(500, this, [ = ] {
+                            onExtralRegionMonitorChanged(x, y, key);
+                        });
+                    } else {
                         onExtralRegionMonitorChanged(x, y, key);
-                    });
-                } else {
-                    onExtralRegionMonitorChanged(x, y, key);
+                    }
                 }
-            }
+            });
         });
 
         // 触屏时，后端只发送press、release消息，有move消息则为鼠标，press置false
