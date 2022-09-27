@@ -12,8 +12,6 @@ file(GLOB_RECURSE SRCS "*.h"
     "../../widgets/*.cpp"
     "../../frame/util/imageutil.h"
     "../../frame/util/imageutil.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp")
 

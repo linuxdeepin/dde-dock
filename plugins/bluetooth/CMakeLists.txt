@@ -16,8 +16,6 @@ file(GLOB_RECURSE SRCS "*.h"
     "../../frame/util/statebutton.cpp"
     "../../frame/util/horizontalseperator.h"
     "../../frame/util/horizontalseperator.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp")
 

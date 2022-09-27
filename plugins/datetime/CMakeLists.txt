@@ -10,8 +10,6 @@ file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
     "../../widgets/*.h"
     "../../widgets/*.cpp"
-    "./dbusinterface/*.h"
-    "./dbusinterface/*.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp" "")
 

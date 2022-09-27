@@ -12,16 +12,7 @@ endif()
 generation_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/xml ${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/generation_dbus_interface)
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h"
-    "*.cpp"
-    "../widgets/*.h"
-    "../widgets/*.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
-    "./qtdbusextended/*.h"
-    "./qtdbusextended/*.cpp"
-    "./dbusinterface/types/*.h"
-    "./dbusinterface/types/*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../widgets/*.h" "../widgets/*.cpp")
 
 # Find the library
 find_package(PkgConfig REQUIRED)

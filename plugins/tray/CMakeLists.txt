@@ -38,10 +38,6 @@ file(GLOB_RECURSE SRCS "*.h"
     "../../frame/controller/proxyplugincontroller.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
-    "./dbusinterface/types/*.h"
-    "./dbusinterface/types/*.cpp"
 )
 
 find_package(PkgConfig REQUIRED)

@@ -6,12 +6,10 @@ project(${PLUGIN_NAME})
 generation_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/xml ${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/generation_dbus_interface)
 
 # Sources files
-file(GLOB SRCS "*.h"
+file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
     "../../widgets/*.h"
     "../../widgets/*.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp")
 

@@ -8,12 +8,8 @@ generation_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/xml ${CMAKE_
 # Sources files
 file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
-    "./dbusinterface/generation_dbus_interface/*.h"
-    "./dbusinterface/generation_dbus_interface/*.cpp"
     "../../frame/qtdbusextended/*.h"
-    "../../frame/qtdbusextended/*.cpp"
-    "./dbusinterface/types/*.h"
-    "./dbusinterface/types/*.cpp")
+    "../../frame/qtdbusextended/*.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
