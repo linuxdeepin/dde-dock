@@ -185,10 +185,17 @@ void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
 
 void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 {
-    if (type == DGuiApplicationHelper::LightType)
+    QPalette widgetBackgroud;
+    if (type == DGuiApplicationHelper::LightType) {
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
-    else
+        widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
+    } else {
+        widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
         m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+    }
+
+    m_adapterLabel->label()->setAutoFillBackground(true);
+    m_adapterLabel->label()->setPalette(widgetBackgroud);
 }
 
 QSize BluetoothAdapterItem::sizeHint() const
