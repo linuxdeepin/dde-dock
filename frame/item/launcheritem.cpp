@@ -108,7 +108,7 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 
     QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
     if (!visibleReply.value())
-       dbusSender.method("Show").call();
+       dbusSender.method("Toggle").call();
 }
 
 QWidget *LauncherItem::popupTips()
