@@ -115,15 +115,16 @@ void BluetoothDeviceItem::updateDeviceState(Device::State state)
     } else if (state == Device::StateConnected) {
         m_loading->stop();
         emit requestTopDeviceItem(m_standarditem);
+
+        /* 已连接的Item插入到首位后，其设置的 DViewItemAction 对象的位置未更新，导致还是显示在原位置
+        手动设置其位置到首位，触发 DViewItemAction 对象的位置更新，规避该问题，该问题待后期DTK优化 */
+        QRect loadingRect = m_loading->geometry();
+        loadingRect.setY(0);
+        m_loading->setGeometry(loadingRect);
     } else {
         m_loading->stop();
     }
 
-    /* 已连接的Item插入到首位后，其设置的 DViewItemAction 对象的位置未更新，导致还是显示在原位置
-    手动设置其位置到首位，触发 DViewItemAction 对象的位置更新，规避该问题，该问题待后期DTK优化 */
-    QRect loadingRect = m_loading->geometry();
-    loadingRect.setY(0);
-    m_loading->setGeometry(loadingRect);
     emit deviceStateChanged(m_device);
 }
 
