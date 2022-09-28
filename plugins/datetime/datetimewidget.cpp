@@ -14,8 +14,6 @@
 #include <DGuiApplicationHelper>
 
 #define PLUGIN_STATE_KEY    "enable"
-#define TIME_FONT DFontSizeManager::instance()->t4()
-#define DATE_FONT DFontSizeManager::instance()->t10()
 
 DWIDGET_USE_NAMESPACE
 
@@ -30,6 +28,12 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     , m_shortTimeFormat("hh:mm")
     , m_longTimeFormat(" hh:mm:ss")
 {
+    auto font = this->font();
+    font.setPixelSize(10);
+    this->setFont(font);
+    m_dateFont = font;
+    m_timeSize = this->font();
+    m_timeSize.setPixelSize(20);
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     setShortDateFormat(m_timedateInter->shortDateFormat());
     setShortTimeFormat(m_timedateInter->shortTimeFormat());
@@ -306,8 +310,8 @@ QSize DatetimeWidget::curTimeSize() const
 {
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
 
-    m_timeFont = TIME_FONT;
-    m_dateFont = DATE_FONT;
+    m_timeFont = m_timeSize;
+    m_dateFont = m_dateSize;
     QString timeFormat = m_shortTimeFormat;
     QString dateFormat = m_shortDateFormat;
     if (!m_24HourFormat) {

@@ -46,6 +46,8 @@ private:
     void updateLongTimeFormat();
 
 private:
+    QFont m_timeSize;
+    QFont m_dateSize;
     bool m_24HourFormat;
     int m_longDateFormatType;
     int m_longTimeFormatType;
