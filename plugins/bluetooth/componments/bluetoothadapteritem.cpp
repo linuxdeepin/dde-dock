@@ -26,7 +26,7 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     , m_labelAction(nullptr)
     , m_stateAction(nullptr)
     , m_connAction(nullptr)
-    , m_loading(new DSpinner(parent->viewport()))
+    , m_loading(new DSpinner(parent))
     , m_iconWidget(new QWidget(parent->viewport()))
     , m_connButton(new StateButton(m_iconWidget))
 {
@@ -106,24 +106,22 @@ void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
 {
     m_labelAction->setText(m_device->alias());
-
-    m_connAction->setVisible(state == Device::StateConnected);
-    m_stateAction->setVisible(state == Device::StateAvailable);
-
     if (state == Device::StateAvailable) {
         m_loading->start();
+        m_stateAction->setVisible(true);
+        m_connAction->setVisible(false);
     } else if (state == Device::StateConnected) {
         m_loading->stop();
+        m_stateAction->setVisible(false);
+        m_connAction->setVisible(true);
         emit requestTopDeviceItem(m_standarditem);
     } else {
         m_loading->stop();
+        m_stateAction->setVisible(false);
+        m_connAction->setVisible(false);
     }
 
-    /* 已连接的Item插入到首位后，其设置的 DViewItemAction 对象的位置未更新，导致还是显示在原位置
-    手动设置其位置到首位，触发 DViewItemAction 对象的位置更新，规避该问题，该问题待后期DTK优化 */
-    QRect loadingRect = m_loading->geometry();
-    loadingRect.setY(0);
-    m_loading->setGeometry(loadingRect);
+    m_loading->setVisible(state == Device::StateAvailable);
     emit deviceStateChanged(m_device);
 }
 
@@ -173,11 +171,11 @@ void BluetoothAdapterItem::onTopDeviceItem(DStandardItem *item)
     if (!item || item->row() == -1 || item->row() == 0)
         return;
 
-    int row = item->row();
+    int index1 = item->row();
     // 先获取，再移除，后插入
-    QStandardItem *sItem = m_deviceModel->takeItem(row, 0);
-    m_deviceModel->removeRow(row);
-    m_deviceModel->insertRow(0, sItem);
+    QStandardItem *index = m_deviceModel->takeItem(index1, 0);
+    m_deviceModel->removeRow(index1);
+    m_deviceModel->insertRow(0, index);
 }
 
 void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
