@@ -59,7 +59,7 @@ private:
     AppItem *m_appItem;
     WindowInfo m_windowInfo;
     DockEntryInter *m_entryInter;
-    QImage m_snapImage;
+    QPixmap m_pixmap;
     WId m_winId;
     QMenu *m_menu;
 };

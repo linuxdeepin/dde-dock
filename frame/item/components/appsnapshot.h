@@ -68,8 +68,7 @@ public:
     inline bool attentioned() const { return m_windowInfo.attention; }
     inline bool closeAble() const { return m_closeAble; }
     inline void setCloseAble(const bool value) { m_closeAble = value; }
-    inline const QImage snapshot() const { return m_snapshot; }
-    inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
+    inline const QPixmap snapshot() const { return m_pixmap; }
     inline const QString title() const { return m_windowInfo.title; }
     void setWindowState();
     void setTitleVisible(bool bVisible);
@@ -108,8 +107,7 @@ private:
 
     bool m_closeAble;
     bool m_isWidowHidden;
-    QImage m_snapshot;
-    QRectF m_snapshotSrcRect;
+    QPixmap m_pixmap;
 
     Dock::TipsWidget *m_title;
     DPushButton *m_3DtitleBtn;

@@ -109,7 +109,7 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     if (m_tracked.isNull())
         return;
 
-    const QImage &snapshot = m_tracked->snapshot();
+    const QPixmap &snapshot = m_tracked->snapshot();
 
     if (snapshot.isNull())
         return;

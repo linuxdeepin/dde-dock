@@ -38,6 +38,7 @@
 #include <QVBoxLayout>
 #include <QSizeF>
 #include <QTimer>
+#include <QPainterPath>
 
 struct SHMInfo {
     long shmid;
@@ -206,31 +207,24 @@ void AppSnapshot::fetchSnapshot()
     if (!m_wmHelper->hasComposite())
         return;
 
-    QImage qimage;
     SHMInfo *info = nullptr;
     uchar *image_data = nullptr;
     XImage *ximage = nullptr;
 
     // 优先使用窗管进行窗口截图
     if (isKWinAvailable()) {
-#ifdef USE_AM
-        if (Utils::IS_WAYLAND_DISPLAY)
-            m_snapshot = ImageUtil::loadWindowThumb(m_windowInfo.uuid, SNAP_WIDTH, SNAP_HEIGHT);
-        else
-#endif
-            m_snapshot = ImageUtil::loadWindowThumb(m_wid, SNAP_WIDTH, SNAP_HEIGHT);
-
-        m_snapshotSrcRect = m_snapshot.rect();
+        const QString windowInfoId = Utils::IS_WAYLAND_DISPLAY ? m_windowInfo.uuid : QString::number(m_wid);
+        m_pixmap = ImageUtil::loadWindowThumb(windowInfoId);
     } else {
         do {
             // get window image from shm(only for deepin app)
+            QImage qimage;
             info = getImageDSHM();
             if (info) {
                 qDebug() << "get Image from dxcbplugin SHM...";
                 image_data = (uchar *)shmat(info->shmid, 0, 0);
                 if ((qint64)image_data != -1) {
-                    m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-                    m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
+                    qimage = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
                     break;
                 }
                 qDebug() << "invalid pointer of shm!";
@@ -253,22 +247,9 @@ void AppSnapshot::fetchSnapshot()
 
             Q_ASSERT(!qimage.isNull());
 
-            // remove shadow frame
-            m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
-            m_snapshot = qimage;
+            m_pixmap = QPixmap::fromImage(qimage);
         } while (false);
     }
-
-    QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
-    const auto ratio = devicePixelRatioF();
-    size = m_snapshotSrcRect.size().scaled(size * ratio, Qt::KeepAspectRatio);
-    qreal scale = qreal(size.width()) / m_snapshotSrcRect.width();
-    m_snapshot = m_snapshot.scaled(qRound(m_snapshot.width() * scale), qRound(m_snapshot.height() * scale),
-                                   Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_snapshotSrcRect.moveTop(m_snapshotSrcRect.top() * scale + 0.5);
-    m_snapshotSrcRect.moveLeft(m_snapshotSrcRect.left() * scale + 0.5);
-    m_snapshotSrcRect.setWidth(size.width() - 0.5);
-    m_snapshotSrcRect.setHeight(size.height() - 0.5);
 
     if (image_data) shmdt(image_data);
     if (ximage) XDestroyImage(ximage);
@@ -312,7 +293,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         return;
     }
 
-    if (m_snapshot.isNull())
+    if (m_pixmap.isNull())
         return;
 
     const auto ratio = devicePixelRatioF();
@@ -324,22 +305,20 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         painter.drawRoundedRect(rect(), 5, 5);
     }
 
-    // draw image
-    const QImage &im = m_snapshot;
-
-    const qreal offset_x = width() / 2.0 - m_snapshotSrcRect.width() / ratio / 2 - m_snapshotSrcRect.left() / ratio;
-    const qreal offset_y = height() / 2.0 - m_snapshotSrcRect.height() / ratio / 2 - m_snapshotSrcRect.top() / ratio;
+    const qreal offset_x = width() / 2.0 - SNAP_WIDTH / ratio / 2;
+    const qreal offset_y = height() / 2.0 - SNAP_HEIGHT / ratio / 2;
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
-    QBrush brush;
-    brush.setTextureImage(im);
-    painter.setBrush(brush);
-    painter.setPen(Qt::NoPen);
-    painter.scale(1 / ratio, 1 / ratio);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
-    painter.drawRoundedRect(m_snapshotSrcRect, radius * ratio, radius * ratio);
+    QRect imageRect(8, 8, width() - 16, height() - 16);
+    painter.setPen(Qt::NoPen);
+    QPainterPath path;
+    path.addRoundedRect(imageRect, radius * ratio, radius * ratio);
+    painter.setClipPath(path);
+    painter.drawPixmap(imageRect, m_pixmap, m_pixmap.rect());
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)

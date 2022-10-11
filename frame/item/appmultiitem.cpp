@@ -109,20 +109,13 @@ void AppMultiItem::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    if (m_snapImage.isNull()) {
-#ifdef USE_AM
-        if (Utils::IS_WAYLAND_DISPLAY)
-            m_snapImage = ImageUtil::loadWindowThumb(m_windowInfo.uuid, width() - 20, height() - 20);
-        else
-#endif
-            m_snapImage = ImageUtil::loadWindowThumb(m_winId, width() - 20, height() - 20);
-    }
+    if (m_pixmap.isNull())
+        m_pixmap = ImageUtil::loadWindowThumb(Utils::IS_WAYLAND_DISPLAY ? m_windowInfo.uuid : QString::number(m_winId));
 
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
     QRect itemRect = rect();
     itemRect.marginsRemoved(QMargins(6, 6, 6, 6));
-    QPixmap pixmapWindowIcon = QPixmap::fromImage(m_snapImage);
     QPainterPath path;
     path.addRoundedRect(rect(), radius, radius);
     painter.fillPath(path, Qt::transparent);
@@ -133,12 +126,12 @@ void AppMultiItem::paintEvent(QPaintEvent *)
         painter.fillPath(path, backColor);
     }
 
-    itemRect = m_snapImage.rect();
+    itemRect = m_pixmap.rect();
     int itemWidth = itemRect.width();
     int itemHeight = itemRect.height();
     int x = (rect().width() - itemWidth) / 2;
     int y = (rect().height() - itemHeight) / 2;
-    painter.drawPixmap(QRect(x, y, itemWidth, itemHeight), pixmapWindowIcon);
+    painter.drawPixmap(QRect(x, y, itemWidth, itemHeight), m_pixmap);
 
     QPixmap pixmapAppIcon;
     ThemeAppIcon::getIcon(pixmapAppIcon, m_entryInter->icon(), qMin(width(), height()) * 0.8);

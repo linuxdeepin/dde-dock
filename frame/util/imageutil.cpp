@@ -32,8 +32,14 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QFile>
+#include <QDBusUnixFileDescriptor>
+#include <QDir>
 
 #include <X11/Xcursor/Xcursor.h>
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <iosfwd>
 
 const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
 {
@@ -88,52 +94,66 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
     return cursor;
 }
 
-QImage ImageUtil::loadWindowThumb(const WId &windowId, int width, int height)
+QPixmap ImageUtil::loadWindowThumb(const QString &winInfoId)
 {
-    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
+    // 在tmp下创建临时目录，用来存放缩略图
+    QString thumbPath(imagePath());
+    QDir dir(thumbPath);
+    if (!dir.exists())
+        dir.mkpath(thumbPath);
 
-    QList<QVariant> args;
-    args << QVariant::fromValue(windowId);
-    args << QVariant::fromValue(quint32(width));
-    args << QVariant::fromValue(quint32(height));
-
-    QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("screenshotForWindowExtend"), args);
-    if(reply.isValid()){
-        const QString tmpFile = reply.value();
-        if (QFile::exists(tmpFile)) {
-            QImage image(tmpFile);
-            QFile::remove(tmpFile);
-            return image;
-        }
-        qDebug() << "get current workspace background error, file does not exist : " << tmpFile;
-    } else {
-        qDebug() << "get current workspace background error: "<< reply.error().message();
+    QString fileName = QString("%1/%2").arg(thumbPath).arg(winInfoId);
+    int fileId = open(fileName.toLocal8Bit().data(), O_CREAT | O_RDWR, S_IWUSR | S_IRUSR);
+    if (fileId < 0) {
+        //打开文件失败
+        return QPixmap();
     }
 
-    return QImage();
+    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/org/kde/KWin/ScreenShot2"), QStringLiteral("org.kde.KWin.ScreenShot2"));
+    // 第一个参数，winID或者UUID
+    QList<QVariant> args;
+    args << QVariant::fromValue(winInfoId);
+    // 第二个参数，需要截图的选项
+    QVariantMap option;
+    option["include-decoration"] = true;
+    option["include-cursor"] = false;
+    option["native-resolution"] = true;
+    args << QVariant::fromValue(option);
+    // 第三个参数，文件描述符
+    args << QVariant::fromValue(QDBusUnixFileDescriptor(fileId));
+
+    QDBusReply<QVariantMap> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("CaptureWindow"), args);
+    if(!reply.isValid()) {
+        close(fileId);
+        qDebug() << "get current workspace background error: "<< reply.error().message();
+        return QPixmap();
+    }
+
+    QVariantMap imageInfo = reply.value();
+    int imageWidth = imageInfo.value("width").toUInt();
+    int imageHeight = imageInfo.value("height").toUInt();
+    int imageStride = imageInfo.value("stride").toUInt();
+    int imageFormat = imageInfo.value("format").toUInt();
+
+    QFile file;
+    if (!file.open(fileId, QIODevice::ReadOnly)) {
+        close(fileId);
+        return QPixmap();
+    }
+
+    if (file.size() == 0) {
+        file.close();
+        return QPixmap();
+    }
+
+    QByteArray fileContent = file.readAll();
+    QImage image(reinterpret_cast<uchar *>(fileContent.data()), imageWidth, imageHeight, imageStride, static_cast<QImage::Format>(imageFormat));
+    QPixmap pixmap = QPixmap::fromImage(image);
+    close(fileId);
+    return pixmap;
 }
 
-QImage ImageUtil::loadWindowThumb(const QString &uuid, int width, int height)
+QString ImageUtil::imagePath()
 {
-    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-
-    QList<QVariant> args;
-    args << QVariant::fromValue(uuid);
-    args << QVariant::fromValue(quint32(width));
-    args << QVariant::fromValue(quint32(height));
-
-    QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("screenshotForWindowExtendUuid"), args);
-    if(reply.isValid()){
-        const QString tmpFile = reply.value();
-        if (QFile::exists(tmpFile)) {
-            QImage image(tmpFile);
-            QFile::remove(tmpFile);
-            return image;
-        }
-        qDebug() << "get current workspace background error, file does not exist : " << tmpFile;
-    } else {
-        qDebug() << "get current workspace background error: "<< reply.error().message();
-    }
-
-    return QImage();
+    return QString("%1/dde-dock/windowthumb").arg(QDir::tempPath());
 }
