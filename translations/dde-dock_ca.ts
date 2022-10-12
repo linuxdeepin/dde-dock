@@ -555,7 +555,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum</translation>
     </message>
 </context>
 <context>

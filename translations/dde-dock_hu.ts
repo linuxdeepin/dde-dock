@@ -555,7 +555,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Hangerő</translation>
     </message>
 </context>
 <context>

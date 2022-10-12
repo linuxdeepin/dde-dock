@@ -555,7 +555,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Voimakkuus</translation>
     </message>
 </context>
 <context>
@@ -574,11 +574,11 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Äänitaso: %1</translation>
+        <translation>Voimakkuus: %1</translation>
     </message>
     <message>
         <source>No output devices</source>
-        <translation type="unfinished"/>
+        <translation>Ei ulostulon laitteita</translation>
     </message>
 </context>
 <context>

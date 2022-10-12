@@ -555,7 +555,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Гучність</translation>
     </message>
 </context>
 <context>
@@ -578,7 +578,7 @@
     </message>
     <message>
         <source>No output devices</source>
-        <translation type="unfinished"/>
+        <translation>Немає пристроїв виведення</translation>
     </message>
 </context>
 <context>

@@ -10,14 +10,14 @@
     <name>AirplaneModeApplet</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Zrakoplovni način</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Zrakoplovni način rada omogućen</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -29,18 +29,18 @@
     </message>
     <message>
         <source>Airplane Mode settings</source>
-        <translation type="unfinished"/>
+        <translation>Postavke zrakoplovnog načina rada</translation>
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Zrakoplovni način rada onemogućen</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModePlugin</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Zrakoplovni način</translation>
     </message>
 </context>
 <context>
@@ -119,6 +119,69 @@
     <message>
         <source>Time settings</source>
         <translation>Postavke vremena</translation>
+    </message>
+</context>
+<context>
+    <name>DatetimeWidget</name>
+    <message>
+        <source>Monday</source>
+        <translation>Ponedjeljak</translation>
+    </message>
+    <message>
+        <source>Tuesday</source>
+        <translation>Utorak</translation>
+    </message>
+    <message>
+        <source>Wednesday</source>
+        <translation>Srijeda</translation>
+    </message>
+    <message>
+        <source>Thursday</source>
+        <translation>Četvrtak</translation>
+    </message>
+    <message>
+        <source>Friday</source>
+        <translation>Petak</translation>
+    </message>
+    <message>
+        <source>Saturday</source>
+        <translation>Subota</translation>
+    </message>
+    <message>
+        <source>Sunday</source>
+        <translation>Nedjelja</translation>
+    </message>
+    <message>
+        <source>monday</source>
+        <translation>ponedjeljak</translation>
+    </message>
+    <message>
+        <source>tuesday</source>
+        <translation>utorak</translation>
+    </message>
+    <message>
+        <source>wednesday</source>
+        <translation>srijeda</translation>
+    </message>
+    <message>
+        <source>thursday</source>
+        <translation>četvrtak</translation>
+    </message>
+    <message>
+        <source>friday</source>
+        <translation>petak</translation>
+    </message>
+    <message>
+        <source>saturday</source>
+        <translation>subota</translation>
+    </message>
+    <message>
+        <source>sunday</source>
+        <translation>nedjelja</translation>
+    </message>
+    <message>
+        <source>%1year%2month%3day</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -248,14 +311,20 @@
     <message>
         <source>Size</source>
         <translation>Veličina</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Multiple Displays</source>
         <translation>Višestruki zasloni</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Plugin Area</source>
         <translation type="unfinished"/>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Select which icons appear in the Dock</source>
@@ -272,6 +341,8 @@
     <message>
         <source>Mode</source>
         <translation>Način</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Top</source>
@@ -292,6 +363,8 @@
     <message>
         <source>Location</source>
         <translation>Lokacija</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Keep shown</source>
@@ -308,6 +381,8 @@
     <message>
         <source>Status</source>
         <translation>Status</translation>
+        <extra-child_page>Dock</extra-child_page>
+        <extra-contents_path>/personalization/Dock</extra-contents_path>
     </message>
     <message>
         <source>Small</source>
@@ -400,7 +475,30 @@
     <message>
         <source>Dock</source>
         <translation type="unfinished"/>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation>Način</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Lokacija</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Veličina</translation>
+    </message>
+    <message>
+        <source>Show Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin Area</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -456,8 +554,8 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Device</source>
-        <translation>Uređaj</translation>
+        <source>Volume</source>
+        <translation>Glasnoća</translation>
     </message>
 </context>
 <context>
@@ -477,6 +575,10 @@
     <message>
         <source>Volume %1</source>
         <translation>Glasnoća %1</translation>
+    </message>
+    <message>
+        <source>No output devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
