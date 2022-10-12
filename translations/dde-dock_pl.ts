@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Unknown volume</source>
-        <translation>Nieznany wolumin</translation>
+        <translation>Nieznana głośność</translation>
     </message>
 </context>
 <context>
@@ -555,7 +555,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Głośność</translation>
     </message>
 </context>
 <context>

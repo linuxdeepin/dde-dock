@@ -556,7 +556,7 @@
     <name>SoundApplet</name>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"/>
+        <translation>Громкость</translation>
     </message>
 </context>
 <context>
