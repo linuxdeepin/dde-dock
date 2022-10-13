@@ -375,7 +375,7 @@ QRect WindowManager::getDockGeometry(bool withoutScale) const
                 y = windowRect.y();
 
             if (i == 0) {
-                y = windowRect.y();
+                x = windowRect.x();
                 width = windowRect.width();
             }
             height += windowRect.height() + mainWindow->dockSpace();
