@@ -14,6 +14,7 @@
 #define ITEM_MAXSIZE    100
 
 Position DockItem::DockPosition = Position::Top;
+int DockItem::DockSize = 40;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 QPointer<DockPopupWindow> DockItem::PopupWindow(nullptr);
 
@@ -75,6 +76,11 @@ QString DockItem::accessibleName()
 void DockItem::setDockPosition(const Position side)
 {
     DockPosition = side;
+}
+
+void DockItem::setDockSize(const int size)
+{
+    DockSize = size;
 }
 
 void DockItem::setDockDisplayMode(const DisplayMode mode)

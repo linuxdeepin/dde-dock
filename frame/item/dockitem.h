@@ -36,6 +36,7 @@ public:
     ~DockItem() override;
 
     static void setDockPosition(const Position side);
+    static void setDockSize(const int size);
     static void setDockDisplayMode(const DisplayMode mode);
 
     inline virtual ItemType itemType() const {return App;}
@@ -101,6 +102,7 @@ protected:
     QTimer *m_popupAdjustDelayTimer;
 
     static Position DockPosition;
+    static int DockSize;
     static DisplayMode DockDisplayMode;
     static QPointer<DockPopupWindow> PopupWindow;
 };

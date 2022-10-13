@@ -67,7 +67,6 @@ private:
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
-    void startDrag();
     bool hasAttention() const;
 
     QPoint appIconPosition() const;

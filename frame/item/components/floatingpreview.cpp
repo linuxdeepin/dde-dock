@@ -77,12 +77,6 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     // 显示此标题的前提条件：配置了标题跟随鼠标显示
     // 此对象是共用的，鼠标移动到哪个预览图，title就移动到哪里显示，所以他的text统一snap获取，不再重复计算显示长度
     m_titleBtn->setText(snap->appTitle());
-
-    QTimer::singleShot(0, this, [ = ] {
-        // 此处获取的snap->geometry()有可能是错误的，所以做个判断并且在resizeEvent中也做处理
-        if(snap->width() == SNAP_WIDTH)
-            setGeometry(snap->geometry());
-    });
 }
 
 void FloatingPreview::paintEvent(QPaintEvent *e)
@@ -143,9 +137,6 @@ bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
             m_tracked = nullptr;
             hide();
         }
-
-        if (event->type() == QEvent::Resize && m_tracked->width() == SNAP_WIDTH)
-            setGeometry(m_tracked->geometry());
     }
 
     return QWidget::eventFilter(watched, event);

@@ -8,6 +8,8 @@
 #include <QWidget>
 #include <QBoxLayout>
 #include <QTimer>
+#include <QScrollArea>
+#include <QScrollerProperties>
 
 #include "constants.h"
 #include "appsnapshot.h"
@@ -45,6 +47,7 @@ public:
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
+    void updateDockSize(const int size);
     void checkMouseLeave();
     void prepareHide();
 
@@ -52,10 +55,11 @@ private:
     void adjustSize(bool composite);
     void appendSnapWidget(const WId wid);
 
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dragLeaveEvent(QDragLeaveEvent *e);
+    void enterEvent(QEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    bool eventFilter(QObject *watcher, QEvent *event) override;
 
 private slots:
     void onSnapshotClicked(const WId wid);
@@ -65,11 +69,18 @@ private slots:
 
 private:
     bool m_needActivate;
+    bool m_canPreview;
+    int m_dockSize;
+    Dock::Position m_dockPos;
     QMap<WId, AppSnapshot *> m_snapshots;
 
     FloatingPreview *m_floatingPreview;
+    QScrollArea * m_scrollArea;
+    QWidget *m_windowListWidget;
     QBoxLayout *m_windowListLayout;
+    QScrollerProperties m_sp;
 
+    QTimer *m_preparePreviewTimer;
     QTimer *m_mouseLeaveTimer;
     DWindowManagerHelper *m_wmHelper;
     QTimer *m_waitForShowPreviewTimer;

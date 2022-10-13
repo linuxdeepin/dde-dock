@@ -480,6 +480,7 @@ void MainWindow::resetDragWindow()
     m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
     m_multiScreenWorker->requestUpdateRegionMonitor();                                  // 界面发生变化，应更新监控区域
+    DockItem::setDockSize(dockSize);                                                    // 更新预览界面2D模式时大小
 
     if ((Top == m_multiScreenWorker->position()) || (Bottom == m_multiScreenWorker->position())) {
         m_dragWidget->setCursor(Qt::SizeVerCursor);
