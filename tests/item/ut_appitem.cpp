@@ -93,7 +93,6 @@ TEST_F(Test_AppItem, coverage_test)
     appItem->checkGSettingsControl();
     appItem->showHoverTips();
     appItem->popupTips();
-    appItem->startDrag();
     appItem->playSwingEffect();
     appItem->invokedMenuItem("invalid", true);
     appItem->contextMenu();

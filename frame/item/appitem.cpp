@@ -332,10 +332,6 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
 {
     e->accept();
 
-    // handle preview
-    //    if (e->buttons() == Qt::NoButton)
-    //        return showPreview();
-
     // handle drag
     if (e->buttons() != Qt::LeftButton)
         return;
@@ -343,10 +339,6 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     const QPoint pos = e->pos();
     if (!rect().contains(pos))
         return;
-
-    const QPoint distance = pos - MousePressPos;
-    if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
-        return startDrag();
 }
 
 void AppItem::wheelEvent(QWheelEvent *e)
@@ -473,57 +465,6 @@ QWidget *AppItem::popupTips()
     return &appNameTips;
 }
 
-void AppItem::startDrag()
-{
-    // 拖拽实现放到mainpanelcontrol
-
-    /*
-    if (!acceptDrops())
-        return;
-
-    if (checkGSettingsControl()) {
-        return;
-    }
-
-    m_dragging = true;
-    update();
-
-    const QPixmap &dragPix = m_appIcon;
-
-    m_drag = new AppDrag(this);
-    m_drag->setMimeData(new QMimeData);
-
-    // handle drag finished here
-    connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [ = ] {
-        m_dragging = false;
-        m_drag.clear();
-        setVisible(true);
-        update();
-    });
-
-    if (m_wmHelper->hasComposite()) {
-        m_drag->setPixmap(dragPix);
-        m_drag->appDragWidget()->setOriginPos(mapToGlobal(appIconPosition()));
-        emit dragStarted();
-        m_drag->exec(Qt::MoveAction);
-    } else {
-        m_drag->QDrag::setPixmap(dragPix);
-        m_drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
-        emit dragStarted();
-        m_drag->QDrag::exec(Qt::MoveAction);
-    }
-
-    // MainPanel will put this item to Item-Container when received this signal(MainPanel::itemDropped)
-    //emit itemDropped(m_drag->target());
-
-    if (!m_wmHelper->hasComposite()) {
-        if (!m_drag->target()) {
-            m_itemEntryInter->RequestUndock();
-        }
-    }
-    */
-}
-
 bool AppItem::hasAttention() const
 {
     auto it = std::find_if(m_windowInfos.constBegin(), m_windowInfos.constEnd(), [ = ] (const auto &info) {
@@ -635,6 +576,7 @@ void AppItem::showPreview()
         return;
 
     m_appPreviewTips = new PreviewContainer;
+    m_appPreviewTips->updateDockSize(DockSize);
     m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
@@ -653,6 +595,13 @@ void AppItem::showPreview()
     if (config->isValid() && config->keyList().contains("showWindowName"))
         m_appPreviewTips->setTitleDisplayMode(config->value("showWindowName").toInt());
     delete config;
+
+    // 设置预览界面是否开启左右两边的圆角
+    if (!PopupWindow.isNull() && m_wmHelper->hasComposite()) {
+        PopupWindow->setLeftRightRadius(true);
+    } else {
+        PopupWindow->setLeftRightRadius(false);
+    }
 
     showPopupWindow(m_appPreviewTips, true);
 }

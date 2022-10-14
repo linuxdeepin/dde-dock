@@ -50,6 +50,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
 {
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     m_closeBtn2D->setFixedSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH);
     m_closeBtn2D->setIconSize(QSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH));
     m_closeBtn2D->setObjectName("closebutton-2d");
@@ -66,7 +68,6 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     setLayout(centralLayout);
     setAcceptDrops(true);
-    resize(SNAP_WIDTH / 2, SNAP_HEIGHT / 2);
 
     connect(m_closeBtn2D, &DIconButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
@@ -165,8 +166,18 @@ void AppSnapshot::setWindowInfo(const WindowInfo &info)
 {
     m_windowInfo = info;
     QFontMetrics fm(m_title->font());
-    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, SNAP_WIDTH - SNAP_CLOSE_BTN_WIDTH - SNAP_CLOSE_BTN_MARGIN);
+    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, SNAP_WIDTH_WITHOUT_COMPOSITE - SNAP_CLOSE_BTN_WIDTH - 2 *SNAP_CLOSE_BTN_MARGIN);
     m_title->setText(strTtile);
+    m_title->adjustSize();
+
+    // 设置单个预览界面大小
+    if (m_wmHelper->hasComposite()) {
+        setMinimumSize(SNAP_WIDTH, SNAP_HEIGHT);
+        setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
+    } else {
+        setMinimumSize(m_title->width() + SNAP_CLOSE_BTN_WIDTH + 2 * SNAP_CLOSE_BTN_MARGIN, SNAP_HEIGHT_WITHOUT_COMPOSITE);
+    }
+
     updateTitle();
 
     // 只有在X11下，才能通过XGetWindowProperty获取窗口属性
