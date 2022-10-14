@@ -27,11 +27,13 @@
 
 #include <DDBusSender>
 
+const int ItemSpacing = 10;
+
 DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
     : QWidget(parent)
     , m_brightnessAdjWidget(new BrightnessAdjWidget(this))
     , m_collaborationWidget(new DevCollaborationWidget(this))
-    , m_settingBtn(new QPushButton(this))
+    , m_settingBtn(new QPushButton(tr("Display setting"), this))
 {
     initUI();
 
@@ -46,8 +48,10 @@ DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
 
 void DisplaySettingWidget::initUI()
 {
+    setContentsMargins(0, 10, 0, 30);
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->setMargin(0);
+    mainLayout->setSpacing(ItemSpacing);
 
     mainLayout->addWidget(m_brightnessAdjWidget);
     mainLayout->addWidget(m_collaborationWidget);
@@ -55,4 +59,8 @@ void DisplaySettingWidget::initUI()
     mainLayout->addStretch();
 
     setLayout(mainLayout);
+
+    QMargins margins = this->contentsMargins();
+    setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height() +
+            m_collaborationWidget->height() + m_settingBtn->height() + ItemSpacing * 2);
 }

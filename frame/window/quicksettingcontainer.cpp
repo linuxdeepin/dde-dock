@@ -327,6 +327,8 @@ void QuickSettingContainer::initUi()
         resizeView();
         setFixedWidth(ITEMWIDTH * 4 + (ITEMSPACE * 5));
     }, Qt::QueuedConnection);
+
+    m_displaySettingWidget->setVisible(false);
 }
 
 void QuickSettingContainer::initConnection()

@@ -27,7 +27,7 @@
 #include <DFontSizeManager>
 
 #define RADIUS_VALUE 10
-#define ITEM_SPACE 10
+#define ITEM_SPACE 20
 #define ICON_WIDTH 16
 #define ICON_HEIGHT 16
 #define TEXT_RECT_HEIGHT 20

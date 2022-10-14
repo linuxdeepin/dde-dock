@@ -25,18 +25,24 @@
 
 #include <QVBoxLayout>
 
+const int ItemSpacing = 5;
+
 BrightnessAdjWidget::BrightnessAdjWidget(QWidget *parent)
     : QWidget(parent)
     , m_mainLayout(new QVBoxLayout(this))
     , m_brightnessModel(new BrightnessModel(this))
 {
-    m_mainLayout->setSpacing(5);
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(ItemSpacing);
+
     loadBrightnessItem();
 }
 
 void BrightnessAdjWidget::loadBrightnessItem()
 {
     QList<BrightMonitor *> monitors = m_brightnessModel->monitors();
+    int itemHeight = monitors.count() > 1 ? 56 : 30;
+
     for (BrightMonitor *monitor : monitors) {
         SliderContainer *sliderContainer = new SliderContainer(this);
         if (monitors.count() > 1)
@@ -48,7 +54,7 @@ void BrightnessAdjWidget::loadBrightnessItem()
         sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(), 12);
 
         sliderContainer->setFixedWidth(310);
-        sliderContainer->setFixedHeight(monitors.count() > 1 ? 56 : 30);
+        sliderContainer->setFixedHeight(itemHeight);
         sliderContainer->updateSliderValue(monitor->brightness());
 
         SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
@@ -58,5 +64,8 @@ void BrightnessAdjWidget::loadBrightnessItem()
         connect(monitor, &BrightMonitor::brightnessChanged, sliderContainer, &SliderContainer::updateSliderValue);
         connect(sliderContainer, &SliderContainer::sliderValueChanged, monitor, &BrightMonitor::setBrightness);
     }
+
+    QMargins margins = this->contentsMargins();
+    setFixedHeight(margins.top() + margins.bottom() + monitors.count() * itemHeight + monitors.count() * ItemSpacing);
 }
 
