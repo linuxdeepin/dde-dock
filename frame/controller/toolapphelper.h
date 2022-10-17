@@ -38,11 +38,10 @@ class ToolAppHelper : public QObject
     Q_OBJECT
 
 public:
-    explicit ToolAppHelper(QWidget *pluginAreaWidget, QWidget *toolAreaWidget, QObject *parent = nullptr);
+    explicit ToolAppHelper(QWidget *toolAreaWidget, QObject *parent = nullptr);
 
     void setDisplayMode(DisplayMode displayMode);
     void removePluginItem(DockItem *dockItem);
-    PluginsItem *trashPlugin() const;
     bool toolIsVisible() const;
 
 Q_SIGNALS:
@@ -51,22 +50,17 @@ Q_SIGNALS:
 
 private:
     void appendToToolArea(int index, DockItem *dockItem);
-    bool removePluginArea(DockItem *dockItem);
     bool removeToolArea(DockItem *dockItem);
     void moveToolWidget();
 
     void updateWidgetStatus();
     bool pluginInTool(DockItem *dockItem) const;
-    int itemIndex(DockItem *dockItem, bool isTool) const;
-    QList<DockItem *> dockItemOnWidget(bool isTool) const;
     void pluginItemAdded(PluginsItemInterface *itemInter);
     bool pluginExists(PluginsItemInterface *itemInter) const;
 
 private:
-    QWidget *m_pluginAreaWidget;
     QWidget *m_toolAreaWidget;
     DisplayMode m_displayMode;
-    PluginsItem *m_trashItem;
     QList<DockItem *> m_sequentPluginItems;
 };
 

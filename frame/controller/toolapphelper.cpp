@@ -27,12 +27,10 @@
 #include <QWidget>
 #include <QBoxLayout>
 
-ToolAppHelper::ToolAppHelper(QWidget *pluginAreaWidget, QWidget *toolAreaWidget, QObject *parent)
+ToolAppHelper::ToolAppHelper(QWidget *toolAreaWidget, QObject *parent)
     : QObject(parent)
-    , m_pluginAreaWidget(pluginAreaWidget)
     , m_toolAreaWidget(toolAreaWidget)
     , m_displayMode(DisplayMode::Efficient)
-    , m_trashItem(nullptr)
 {
     connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
         if (pluginClass != QuickSettingController::PluginAttribute::Tool)
@@ -55,21 +53,12 @@ void ToolAppHelper::setDisplayMode(DisplayMode displayMode)
 
 void ToolAppHelper::removePluginItem(DockItem *dockItem)
 {
-    if (dockItem == m_trashItem)
-        m_trashItem = nullptr;
-
-    if (!removePluginArea(dockItem))
-        removeToolArea(dockItem);
+    removeToolArea(dockItem);
 
     if (m_toolAreaWidget->layout()->count() == 0 && toolIsVisible())
         updateWidgetStatus();
 
     Q_EMIT requestUpdate();
-}
-
-PluginsItem *ToolAppHelper::trashPlugin() const
-{
-    return m_trashItem;
 }
 
 bool ToolAppHelper::toolIsVisible() const
@@ -87,25 +76,6 @@ void ToolAppHelper::appendToToolArea(int index, DockItem *dockItem)
         boxLayout->addWidget(dockItem);
 
     Q_EMIT requestUpdate();
-}
-
-bool ToolAppHelper::removePluginArea(DockItem *dockItem)
-{
-    bool removeResult = false;
-    QBoxLayout *pluginLayout = static_cast<QBoxLayout *>(m_pluginAreaWidget->layout());
-    for (int i = 0; i < pluginLayout->count(); ++i) {
-        QLayoutItem *layoutItem = pluginLayout->itemAt(i);
-        QLayout *boxLayout = layoutItem->layout();
-        if (boxLayout && boxLayout->itemAt(0)->widget() == dockItem) {
-            boxLayout->removeWidget(dockItem);
-            pluginLayout->removeItem(layoutItem);
-            delete layoutItem;
-            layoutItem = nullptr;
-            removeResult = true;
-        }
-    }
-
-    return removeResult;
 }
 
 bool ToolAppHelper::removeToolArea(DockItem *dockItem)
@@ -150,11 +120,9 @@ void ToolAppHelper::updateWidgetStatus()
     bool oldVisible = toolIsVisible();
     if (m_displayMode == DisplayMode::Efficient) {
         // 高效模式
-        m_pluginAreaWidget->setVisible(true);
         m_toolAreaWidget->setVisible(false);
     } else {
         // 时尚模式
-        m_pluginAreaWidget->setVisible(false);
         m_toolAreaWidget->setVisible(m_toolAreaWidget->layout()->count() > 0);
     }
     bool visible = toolIsVisible();
@@ -173,63 +141,6 @@ bool ToolAppHelper::pluginInTool(DockItem *dockItem) const
         return metaData.value("tool").toBool();
 
     return false;
-}
-
-/**
- * @brief ToolAppHelper::itemIndex 返回该插件在工具区域（isTool == true）或插件区域（isTool == false）的正确位置
- * @param dockItem
- * @param isTool
- * @return
- */
-int ToolAppHelper::itemIndex(DockItem *dockItem, bool isTool) const
-{
-    int index = m_sequentPluginItems.indexOf(dockItem);
-    if (index < 0 || index >= m_sequentPluginItems.size() - 1)
-        return -1;
-
-    QList<DockItem *> dockItems = dockItemOnWidget(isTool);
-    for (int i = index + 1; i < m_sequentPluginItems.size(); i++) {
-        DockItem *nextItem = m_sequentPluginItems[i];
-        if (dockItems.contains(nextItem)) {
-            // 如果当前包含当前插入的下一个item，则直接返回下一个item的插入位置
-            return dockItems.indexOf(nextItem);
-        }
-    }
-
-    return -1;
-}
-
-QList<DockItem *> ToolAppHelper::dockItemOnWidget(bool isTool) const
-{
-    QList<DockItem *> dockItems;
-    if (isTool) {
-        QLayout *layout = m_toolAreaWidget->layout();
-        for (int i = 0; i < layout->count(); i++) {
-            DockItem *dockItem = qobject_cast<DockItem *>(layout->itemAt(i)->widget());
-            if (!dockItem)
-                continue;
-
-            dockItems << dockItem;
-        }
-    } else {
-        QBoxLayout *pluginLayout = static_cast<QBoxLayout *>(m_pluginAreaWidget->layout());
-        if (pluginLayout) {
-            for (int i = 0; i < pluginLayout->count(); ++i) {
-                QLayoutItem *layoutItem = pluginLayout->itemAt(i);
-                QLayout *boxLayout = layoutItem->layout();
-                if (!boxLayout)
-                    continue;
-
-                DockItem *dockItem = qobject_cast<DockItem *>(boxLayout->itemAt(0)->widget());
-                if (!dockItem)
-                    continue;
-
-                dockItems << dockItem;
-            }
-        }
-    }
-
-    return dockItems;
 }
 
 void ToolAppHelper::pluginItemAdded(PluginsItemInterface *itemInter)

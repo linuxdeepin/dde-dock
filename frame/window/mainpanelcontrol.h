@@ -77,8 +77,6 @@ private:
     void addFixedAreaItem(int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
-    //void addTrayAreaItem(int index, QWidget *wdg);
-    void removeTrayAreaItem(QWidget *wdg);
     int getScreenSize() const;
 
     // 拖拽相关
@@ -87,10 +85,10 @@ private:
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
     void calcuDockIconSize(int w, int h, int traySize);
-    void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
     void dockRecentApp(DockItem *dockItem);
+    PluginsItem *trash() const;
 
 private Q_SLOTS:
     void onRequestUpdate();
@@ -120,10 +118,6 @@ private:
     QWidget *m_appAreaSonWidget;    // 子应用区域，所在位置根据显示模式手动指定
     QBoxLayout *m_appAreaSonLayout; // 子应用区域布局
     QLabel *m_appSpliter;           // 应用区域与托盘区域间的分割线
-    QWidget *m_trayAreaWidget;      // 托盘区域
-    QBoxLayout *m_trayAreaLayout;   // 托盘区域布局
-    QLabel *m_traySpliter;          // 托盘区域与插件区域间的分割线
-    QWidget *m_pluginAreaWidget;    // 插件区域
     QWidget *m_recentAreaWidget;    // 最近打开应用
     QBoxLayout *m_recentLayout;
     QLabel *m_recentSpliter;        // 最近打开应用区域分割线
@@ -135,7 +129,6 @@ private:
     QBoxLayout *m_toolSonLayout;    // 工具区域布局
 
     QBoxLayout *m_pluginLayout;     // 插件区域布局
-    DesktopWidget *m_desktopWidget; // 桌面预览区域
 
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;

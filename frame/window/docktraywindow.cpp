@@ -68,6 +68,10 @@ void DockTrayWindow::setPositon(const Dock::Position &position)
     m_systemPuginWidget->setPositon(position);
     m_quickIconWidget->setPositon(position);
     m_trayView->setPosition(position);
+    m_delegate->setPositon(position);
+    QModelIndex index = m_model->index(0, 0);
+    m_trayView->closePersistentEditor(index);
+    m_trayView->openPersistentEditor(index);
     updateLayout(position);
     onResetLayout();
 }
@@ -194,9 +198,9 @@ void DockTrayWindow::resizeTool() const
     }
 
     if (m_position == Dock::Position::Left || m_position == Dock::Position::Right)
-        m_toolWidget->setFixedHeight(toolSize);
+        m_toolWidget->setFixedSize(QWIDGETSIZE_MAX, toolSize);
     else
-        m_toolWidget->setFixedWidth(toolSize);
+        m_toolWidget->setFixedSize(toolSize, QWIDGETSIZE_MAX);
 }
 
 bool DockTrayWindow::pluginExists(PluginsItemInterface *itemInter) const
