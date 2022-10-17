@@ -39,7 +39,6 @@ static const QString ColPropertiesInterface = "org.freedesktop.DBus.Properties";
 
 CollaborationDevModel::CollaborationDevModel(QObject *parent)
     : QObject(parent)
-    , m_timer(new QTimer(this))
     , m_colDbusInter(new QDBusInterface(CollaborationService, CollaborationPath, CollaborationInterface, QDBusConnection::sessionBus(), this))
 {
     if (m_colDbusInter->isValid()) {
@@ -56,21 +55,18 @@ CollaborationDevModel::CollaborationDevModel(QObject *parent)
     }
 
     m_colDbusInter->connection().connect(CollaborationService, CollaborationPath, ColPropertiesInterface,
-                                          "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(QDBusMessage)));
-
-    connect(m_timer, &QTimer::timeout, this, &CollaborationDevModel::callScanMethod);
+                                         "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(QDBusMessage)));
 }
 
-void CollaborationDevModel::scanDevice()
+void CollaborationDevModel::checkServiceValid()
 {
-    callScanMethod();
-    m_timer->start(30 * 1000); // 30s
-}
-
-void CollaborationDevModel::stopScanDevice()
-{
-    if (m_timer->isActive())
-        m_timer->stop();
+    if (!m_colDbusInter->isValid()) {
+        for (CollaborationDevice *device : m_devices) {
+            device->deleteLater();
+        }
+        m_devices.clear();
+        Q_EMIT devicesChanged();
+    }
 }
 
 QList<CollaborationDevice *> CollaborationDevModel::devices() const
@@ -90,15 +86,13 @@ void CollaborationDevModel::onPropertyChanged(const QDBusMessage &msg)
 
     QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
     if (changedProps.contains("Machines")) {
-        QStringList devPaths = changedProps.value("Machines").toStringList();
+        QList<QDBusObjectPath> paths = m_colDbusInter->property("Machines").value<QList<QDBusObjectPath>>();
+        QStringList devPaths;
+        for (const QDBusObjectPath& path : paths) {
+            devPaths << path.path();
+        }
         updateDevice(devPaths);
     }
-}
-
-void CollaborationDevModel::callScanMethod()
-{
-    // TODO 该功能目前不可用
-    // m_dbusInter->asyncCall("Scan");
 }
 
 void CollaborationDevModel::updateDevice(const QStringList &devPaths)
@@ -132,16 +126,9 @@ void CollaborationDevModel::updateDevice(const QStringList &devPaths)
     emit devicesChanged();
 }
 
-const CollaborationDevice *CollaborationDevModel::getDevice(const QString &uuid)
+const CollaborationDevice *CollaborationDevModel::getDevice(const QString &machinePath)
 {
-    QList<CollaborationDevice *> devices = m_devices.values();
-    for (const CollaborationDevice *device : devices) {
-        if (device->uuid() == uuid) {
-            return device;
-        }
-    }
-
-    return nullptr;
+    return m_devices.value(machinePath, nullptr);
 }
 
 CollaborationDevice::CollaborationDevice(const QString &devPath, QObject *parent)
@@ -182,6 +169,11 @@ QString CollaborationDevice::name() const
 QString CollaborationDevice::uuid() const
 {
     return m_uuid;
+}
+
+QString CollaborationDevice::machinePath() const
+{
+    return m_path;
 }
 
 QString CollaborationDevice::deviceIcon() const

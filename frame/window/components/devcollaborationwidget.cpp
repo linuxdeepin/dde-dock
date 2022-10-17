@@ -54,16 +54,9 @@ DevCollaborationWidget::DevCollaborationWidget(QWidget *parent)
 
 void DevCollaborationWidget::showEvent(QShowEvent *event)
 {
-    m_deviceModel->scanDevice();
+    m_deviceModel->checkServiceValid();
 
     QWidget::showEvent(event);
-}
-
-void DevCollaborationWidget::hideEvent(QHideEvent *event)
-{
-    m_deviceModel->stopScanDevice();
-
-    QWidget::hideEvent(event);
 }
 
 void DevCollaborationWidget::initUI()
@@ -133,12 +126,12 @@ void DevCollaborationWidget::addItem(const CollaborationDevice *device)
     int resultState = device->isCooperated() ? DevItemDelegate::Connected : DevItemDelegate::None;
 
     item->setData(QVariant::fromValue(data), DevItemDelegate::StaticDataRole);
-    item->setData(device->uuid(), DevItemDelegate::UUIDDataRole);
+    item->setData(device->machinePath(), DevItemDelegate::MachinePathDataRole);
     item->setData(0, DevItemDelegate::DegreeDataRole);
     item->setData(resultState, DevItemDelegate::ResultDataRole);
 
     m_viewItemModel->appendRow(item);
-    m_uuidItemMap[device->uuid()] = item;
+    m_deviceItemMap[device->machinePath()] = item;
 
     connect(device, &CollaborationDevice::pairedStateChanged, this, &DevCollaborationWidget::itemStatusChanged);
 }
@@ -157,24 +150,24 @@ void DevCollaborationWidget::updateDeviceListView()
         if (!item)
             continue;
 
-        QString uuid = item->data(DevItemDelegate::UUIDDataRole).toString();
-        if (m_deviceModel->getDevice(uuid))
+        QString machinePath = item->data(DevItemDelegate::MachinePathDataRole).toString();
+        if (m_deviceModel->getDevice(machinePath))
             continue;
 
         m_deviceListView->removeItem(row);
 
-        if (m_uuidItemMap.contains(uuid)) {
-            m_uuidItemMap.remove(uuid);
+        if (m_deviceItemMap.contains(machinePath)) {
+            m_deviceItemMap.remove(machinePath);
         }
 
-        if (m_connectingDevices.contains(uuid)) {
-            m_connectingDevices.removeAll(uuid);
+        if (m_connectingDevices.contains(machinePath)) {
+            m_connectingDevices.removeAll(machinePath);
         }
     }
 
     // 处理新增
     for (CollaborationDevice *device : devices) {
-        if (!m_uuidItemMap.contains(device->uuid())) {
+        if (!m_deviceItemMap.contains(device->machinePath())) {
             addItem(device);
         }
     }
@@ -189,19 +182,23 @@ void DevCollaborationWidget::resetWidgetSize()
 
 void DevCollaborationWidget::itemClicked(const QModelIndex &index)
 {
-    QString uuid = index.data(DevItemDelegate::UUIDDataRole).toString();
-    const CollaborationDevice *device = m_deviceModel->getDevice(uuid);
+    QString machinePath = index.data(DevItemDelegate::MachinePathDataRole).toString();
+    const CollaborationDevice *device = m_deviceModel->getDevice(machinePath);
     if (!device)
         return;
 
     if (!device->isPaired()) {
         device->pair();
-        m_connectingDevices.append(uuid);
+        if (!m_connectingDevices.contains(machinePath))
+            m_connectingDevices.append(machinePath);
     } else if (!device->isCooperated()) {
         device->requestCooperate();
-        m_connectingDevices.append(uuid);
+        if (!m_connectingDevices.contains(machinePath))
+            m_connectingDevices.append(machinePath);
     } else if (device->isCooperated()) {
         device->disconnectDevice();
+        if (m_connectingDevices.contains(machinePath))
+            m_connectingDevices.removeOne(machinePath);
     }
 
     if (!m_connectingDevices.isEmpty() && !m_refreshTimer->isActive())
@@ -214,18 +211,18 @@ void DevCollaborationWidget::itemStatusChanged()
     if (!device)
         return;
 
-    QString uuid = device->uuid();
-    if (m_uuidItemMap.contains(uuid) && m_uuidItemMap[uuid]) {
+    QString machinePath = device->machinePath();
+    if (m_deviceItemMap.contains(machinePath) && m_deviceItemMap[machinePath]) {
         // 更新item的连接状态
         int resultState = device->isCooperated() ? DevItemDelegate::Connected : DevItemDelegate::None;
-        m_uuidItemMap[uuid]->setData(resultState, DevItemDelegate::ResultDataRole);
+        m_deviceItemMap[machinePath]->setData(resultState, DevItemDelegate::ResultDataRole);
         if (device->isCooperated())
-            m_uuidItemMap[uuid]->setData(0, DevItemDelegate::DegreeDataRole);
+            m_deviceItemMap[machinePath]->setData(0, DevItemDelegate::DegreeDataRole);
 
-        m_deviceListView->update(m_uuidItemMap[uuid]->index());
+        m_deviceListView->update(m_deviceItemMap[machinePath]->index());
 
-        if (resultState == DevItemDelegate::Connected && m_connectingDevices.contains(uuid)) {
-            m_connectingDevices.removeAll(uuid);
+        if (resultState == DevItemDelegate::Connected && m_connectingDevices.contains(machinePath)) {
+            m_connectingDevices.removeAll(machinePath);
         }
     }
 }
@@ -237,13 +234,13 @@ void DevCollaborationWidget::refreshViewItem()
         return;
     }
 
-    for (const QString &uuid : m_connectingDevices) {
-        if (m_uuidItemMap.contains(uuid) && m_uuidItemMap[uuid]) {
-            int degree = m_uuidItemMap[uuid]->data(DevItemDelegate::DegreeDataRole).toInt();
+    for (const QString &machinePath : m_connectingDevices) {
+        if (m_deviceItemMap.contains(machinePath) && m_deviceItemMap[machinePath]) {
+            int degree = m_deviceItemMap[machinePath]->data(DevItemDelegate::DegreeDataRole).toInt();
             degree += PER_DEGREE; // 递进值
-            m_uuidItemMap[uuid]->setData(DevItemDelegate::Connecting, DevItemDelegate::ResultDataRole);
-            m_uuidItemMap[uuid]->setData(degree, DevItemDelegate::DegreeDataRole);
-            m_deviceListView->update(m_uuidItemMap[uuid]->index());
+            m_deviceItemMap[machinePath]->setData(DevItemDelegate::Connecting, DevItemDelegate::ResultDataRole);
+            m_deviceItemMap[machinePath]->setData(degree, DevItemDelegate::DegreeDataRole);
+            m_deviceListView->update(m_deviceItemMap[machinePath]->index());
         }
     }
 }

@@ -43,20 +43,18 @@ signals:
     void devicesChanged();
 
 public:
-    void scanDevice();
-    void stopScanDevice();
+    void checkServiceValid();
+
     QList<CollaborationDevice *> devices() const;
-    const CollaborationDevice *getDevice(const QString &uuid);
+    const CollaborationDevice *getDevice(const QString &machinePath);
 
 private slots:
     void onPropertyChanged(const QDBusMessage &msg);
 
 private:
-    void callScanMethod();
     void updateDevice(const QStringList &devPaths);
 
 private:
-    QTimer *m_timer; // 定时扫描设备
     QDBusInterface *m_colDbusInter;
     // machine path : device object
     QMap<QString, CollaborationDevice *> m_devices;
@@ -84,6 +82,7 @@ public:
 
     QString name() const;
     QString uuid() const;
+    QString machinePath() const;
     QString deviceIcon() const;
     bool isPaired() const;
     bool isCooperated() const;

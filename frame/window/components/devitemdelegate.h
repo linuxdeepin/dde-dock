@@ -31,10 +31,10 @@ class DevItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     enum DevItemDataRole {
-        StaticDataRole  = Qt::UserRole + 1, // 静态信息
-        UUIDDataRole    = Qt::UserRole + 2, // uuid, 可唯一代表一个设备
-        DegreeDataRole  = Qt::UserRole + 3, // degree 绘制waiting使用的参数
-        ResultDataRole  = Qt::UserRole + 4  // 连接结果
+        StaticDataRole         = Qt::UserRole + 1,  // 静态信息
+        MachinePathDataRole    = Qt::UserRole + 2,  // machinePath, 可唯一代表一个设备
+        DegreeDataRole         = Qt::UserRole + 3,  // degree 绘制waiting使用的参数
+        ResultDataRole         = Qt::UserRole + 4   // 连接结果
     };
 
     enum ResultState {

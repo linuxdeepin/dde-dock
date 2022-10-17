@@ -41,7 +41,6 @@ public:
 
 protected:
     void showEvent(QShowEvent *event) override;
-    void hideEvent(QHideEvent *event) override;
 
 private slots:
     void loadDevice();
@@ -60,7 +59,7 @@ private:
     CollaborationDevModel *m_deviceModel;
     DListView *m_deviceListView;
     QStandardItemModel *m_viewItemModel;
-    QMap<QString, QStandardItem *> m_uuidItemMap;
+    QMap<QString, QStandardItem *> m_deviceItemMap;
     QStringList m_connectingDevices;
 
     QTimer *m_refreshTimer;
