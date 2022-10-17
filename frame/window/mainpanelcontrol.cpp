@@ -944,6 +944,12 @@ void MainPanelControl::updatePluginsLayout()
     }
 }
 
+void MainPanelControl::setToggleDesktopInterval(int ms)
+{
+    if (m_desktopWidget)
+        m_desktopWidget->setToggleDesktopInterval(ms);
+}
+
 void MainPanelControl::itemUpdated(DockItem *item)
 {
     item->updateGeometry();

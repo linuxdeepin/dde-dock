@@ -8,12 +8,14 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QEnterEvent>
+#include <QTimer>
 
 class DesktopWidget : public QWidget
 {
 public:
     explicit DesktopWidget(QWidget *parent = nullptr);
 
+    void setToggleDesktopInterval(int ms);
 private:
     bool checkNeedShowDesktop();
 
@@ -22,10 +24,12 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+    void toggleDesktop();
 
 private:
     bool m_isHover;         // 判断鼠标是否移到desktop区域
     bool m_needRecoveryWin;
+    QTimer *m_timer;
 };
 
 #endif // DESKTOP_WIDGET_H
