@@ -31,6 +31,7 @@ public:
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
     void updatePluginsLayout();
+    void setToggleDesktopInterval(int ms);
 
 public slots:
     void insertItem(const int index, DockItem *item);

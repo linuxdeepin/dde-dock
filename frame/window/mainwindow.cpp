@@ -141,8 +141,11 @@ void MainWindow::launch()
     m_shadowMaskOptimizeTimer->start();
     QTimer::singleShot(0, this, [ this ] {
         bool showDock = true;
-        if (m_dconfig.data()->isValid())
+        if (m_dconfig.data()->isValid()) {
             showDock = !m_dconfig.data()->value("alwaysHideDock", false).toBool();
+            const int ms = m_dconfig.data()->value("toggleDesktopInterval", 0).toInt();
+            m_mainPanel->setToggleDesktopInterval(ms);
+        }
         qApp->setProperty("ALWAYS_HIDE_DOCK", !showDock);
         setVisible(showDock);
         if (!showDock && m_multiScreenWorker->dockInter()) {
@@ -304,6 +307,9 @@ void MainWindow::initComponents()
                 if (!showDock && m_multiScreenWorker->dockInter()) {
                     m_multiScreenWorker->dockInter()->setHideMode(KeepHidden);
                 }
+            } else if ("toggleDesktopInterval") {
+                const int ms = m_dconfig.data()->value(key, 0).toInt();
+                m_mainPanel->setToggleDesktopInterval(ms);
             }
         });
     }
