@@ -32,6 +32,6 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${QGSettings_LIBRARIES}
 )
 
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins/system-trays)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/dde-dock/plugins/system-trays)
 
 dconfig_meta_files(APPID org.deepin.dde.dock FILES ../../configs/org.deepin.dde.dock.plugin.power.json)

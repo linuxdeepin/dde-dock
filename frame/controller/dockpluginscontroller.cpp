@@ -10,6 +10,9 @@
 #include <QDir>
 #include <QDrag>
 
+
+const QString PLUGIN_DIR = QStringLiteral(DefaultDockPluginsDir);
+
 DockPluginsController::DockPluginsController(QObject *parent)
     : AbstractPluginsController(parent)
 {
@@ -139,9 +142,10 @@ void DockPluginsController::loadSystemPlugins()
 {
     QString pluginsDir(qApp->applicationDirPath() + "/../plugins");
 #ifndef QT_DEBUG
-    pluginsDir = "/usr/lib/dde-dock/plugins";
+    pluginsDir = PLUGIN_DIR;
 #endif
     qDebug() << "using dock plugins dir:" << pluginsDir;
 
     AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
 }
+

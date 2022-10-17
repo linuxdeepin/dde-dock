@@ -22,3 +22,8 @@ CMakeLists.txt.user*
 # binary file
 dde-dock
 .vscode
+
+# clangd
+.cache
+
+cmake/DdeDock/DdeDockConfig.cmake
