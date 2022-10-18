@@ -30,13 +30,12 @@
 
 #include <QMenu>
 #include <QDBusObjectPath>
-//DWIDGET_USE_NAMESPACE
-//DGUI_USE_NAMESPACE
+
 class DBusMenuImporter;
-//namespace Dock {
-//class TipsWidget;
-//}
-//using namespace com::deepin::dde;
+namespace Dock {
+class TipsWidget;
+}
+
 using namespace org::kde;
 
 /**
@@ -54,6 +53,7 @@ public:
 
 public:
     SNITrayItemWidget(const QString &sniServicePath, QWidget *parent = Q_NULLPTR);
+    ~SNITrayItemWidget();
 
     QString itemKeyForConfig() override;
     void updateIcon() override;
@@ -112,6 +112,7 @@ private:
     QPixmap newIconPixmap(IconType iconType);
     void setMouseData(QMouseEvent *e);
     void handleMouseRelease();
+    void initMember();
 
 private:
     StatusNotifierItem *m_sniInter;
@@ -148,7 +149,7 @@ private:
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
     static Dock::Position DockPosition;
     static QPointer<DockPopupWindow> PopupWindow;
-//    Dock::TipsWidget *m_tipsLabel;
+    Dock::TipsWidget *m_tipsLabel;
     bool m_popupShown;
 };
 

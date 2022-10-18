@@ -36,6 +36,7 @@
 #include <QMouseEvent>
 #include <QBoxLayout>
 #include <QGuiApplication>
+#include <QMenu>
 
 #define ITEMSIZE 22
 #define ITEMSPACE 6
@@ -501,11 +502,28 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject
     , m_pluginItem(pluginItem)
     , m_metaData(metaData)
     , m_itemKey(itemKey)
+    , m_position(Dock::Position::Bottom)
+    , m_popupWindow(new DockPopupWindow)
+    , m_contextMenu(new QMenu(this))
 {
+    m_popupWindow->setShadowBlurRadius(20);
+    m_popupWindow->setRadius(6);
+    m_popupWindow->setShadowYOffset(2);
+    m_popupWindow->setShadowXOffset(0);
+    m_popupWindow->setArrowWidth(18);
+    m_popupWindow->setArrowHeight(10);
+    m_popupWindow->setObjectName("quickitempopup");
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
+        m_popupWindow->setWindowFlags(flags);
+    }
+
+    connect(qApp, &QApplication::aboutToQuit, m_popupWindow, &DockPopupWindow::deleteLater);
 }
 
 QuickDockItem::~QuickDockItem()
 {
+    m_popupWindow->deleteLater();
 }
 
 PluginsItemInterface *QuickDockItem::pluginItem()
@@ -534,10 +552,79 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
     painter.drawPixmap(pixmapRect, pixmap);
 }
 
-void QuickDockItem::mouseReleaseEvent(QMouseEvent *event)
+void QuickDockItem::mousePressEvent(QMouseEvent *event)
 {
-    Q_EMIT clicked();
-    QWidget::mouseReleaseEvent(event);
+    switch (event->button()) {
+    case Qt::LeftButton: {
+        Q_EMIT clicked();
+        break;
+    }
+    case Qt::RightButton: {
+        if (m_contextMenu->actions().isEmpty()) {
+            const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
+            if (menuJson.isEmpty())
+                return;
+
+            QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
+            if (jsonDocument.isNull())
+                return;
+
+            QJsonObject jsonMenu = jsonDocument.object();
+
+            QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
+            for (auto item : jsonMenuItems) {
+                QJsonObject itemObj = item.toObject();
+                QAction *action = new QAction(itemObj.value("itemText").toString());
+                action->setCheckable(itemObj.value("isCheckable").toBool());
+                action->setChecked(itemObj.value("checked").toBool());
+                action->setData(itemObj.value("itemId").toString());
+                action->setEnabled(itemObj.value("isActive").toBool());
+                m_contextMenu->addAction(action);
+            }
+        }
+
+        m_contextMenu->exec(QCursor::pos());
+        break;
+    }
+    default:
+        break;
+    }
+    QWidget::mousePressEvent(event);
+}
+
+void QuickDockItem::enterEvent(QEvent *event)
+{
+    QWidget::enterEvent(event);
+
+    QWidget *tipWidget = m_pluginItem->itemTipsWidget(m_itemKey);
+    if (!tipWidget)
+        return;
+
+    switch (m_position) {
+    case Top:
+        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowTop);
+        break;
+    case Bottom:
+        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowBottom);
+        break;
+    case Left:
+        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowLeft);
+        break;
+    case Right:
+        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowRight);
+        break;
+    }
+
+    m_popupWindow->resize(tipWidget->sizeHint());
+    m_popupWindow->setContent(tipWidget);
+
+    m_popupWindow->show(popupMarkPoint());
+}
+
+void QuickDockItem::leaveEvent(QEvent *event)
+{
+    QWidget::leaveEvent(event);
+    m_popupWindow->hide();
 }
 
 QPixmap QuickDockItem::iconPixmap() const
@@ -554,4 +641,53 @@ QPixmap QuickDockItem::iconPixmap() const
     }
 
     return QPixmap();
+}
+
+QPoint QuickDockItem::topleftPoint() const
+{
+    QPoint p = this->pos();
+    /* 由于点击范围的问题，在图标的外面加了一层布局，这个布局的边距需要考虑 */
+    switch (m_position) {
+    case Top:
+        p.setY(p.y() * 2);
+        break;
+    case Bottom:
+        p.setY(0);
+        break;
+    case Left:
+        p.setX(p.x() * 2);
+        break;
+    case Right:
+        p.setX(0);
+        break;
+    }
+
+    QWidget *w = qobject_cast<QWidget *>(this->parent());
+    while (w) {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    }
+
+    return p;
+}
+
+QPoint QuickDockItem::popupMarkPoint() const
+{
+    QPoint p(topleftPoint());
+    const QRect r = rect();
+    switch (m_position) {
+    case Top:
+        p += QPoint(r.width() / 2, r.height());
+        break;
+    case Bottom:
+        p += QPoint(r.width() / 2, 0);
+        break;
+    case Left:
+        p += QPoint(r.width(), r.height() / 2);
+        break;
+    case Right:
+        p += QPoint(0, r.height() / 2);
+        break;
+    }
+    return p;
 }

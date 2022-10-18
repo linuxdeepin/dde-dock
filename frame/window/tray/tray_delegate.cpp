@@ -53,6 +53,8 @@ TrayDelegate::TrayDelegate(QListView *view, QObject *parent)
 void TrayDelegate::setPositon(Dock::Position position)
 {
     m_position = position;
+    SNITrayItemWidget::setDockPostion(position);
+    SystemPluginItem::setDockPostion(m_position);
 }
 
 QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -107,7 +109,6 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         PluginsItemInterface *pluginInter = (PluginsItemInterface *)(index.data(TrayModel::PluginInterfaceRole).toULongLong());
         if (pluginInter) {
             const QString itemKey = QuickSettingController::instance()->itemKey(pluginInter);
-            SystemPluginItem::setDockPostion(m_position);
             trayWidget = new SystemPluginItem(pluginInter, itemKey, parent);
         }
     }

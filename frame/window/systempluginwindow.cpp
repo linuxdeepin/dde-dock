@@ -318,6 +318,11 @@ void StretchPluginsItem::invokedMenuItem(const QString &itemId, const bool check
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
+QWidget *StretchPluginsItem::popupTips()
+{
+    return m_pluginInter->itemTipsWidget(m_itemKey);
+}
+
 void StretchPluginsItem::mousePressEvent(QMouseEvent *e)
 {
     m_hover = false;

@@ -34,6 +34,8 @@ class QStandardItem;
 class QMouseEvent;
 class QBoxLayout;
 class QuickDockItem;
+class DockPopupWindow;
+class QMenu;
 enum class DockPart;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; }
@@ -97,6 +99,7 @@ public:
     explicit QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, const QString itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
+    void setPositon(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool isPrimary() const;
 
@@ -104,15 +107,24 @@ Q_SIGNALS:
     void clicked();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
     QPixmap iconPixmap() const;
+
+private:
+    QPoint topleftPoint() const;
+    QPoint popupMarkPoint() const;
 
 private:
     PluginsItemInterface *m_pluginItem;
     QJsonObject m_metaData;
     QString m_itemKey;
+    Dock::Position m_position;
+    DockPopupWindow *m_popupWindow;
+    QMenu *m_contextMenu;
 };
 
 #endif // QUICKPLUGINWINDOW_H

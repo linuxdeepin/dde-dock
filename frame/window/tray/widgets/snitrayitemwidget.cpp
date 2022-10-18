@@ -21,7 +21,7 @@
 
 #include "snitrayitemwidget.h"
 #include "themeappicon.h"
-//#include "test/tipswidget.h"
+#include "tipswidget.h"
 
 #include <dbusmenu-qt5/dbusmenuimporter.h>
 
@@ -43,8 +43,9 @@ const QStringList ItemCategoryList {"ApplicationStatus", "Communications", "Syst
 const QStringList ItemStatusList {"Passive", "Active", "NeedsAttention"};
 const QStringList LeftClickInvalidIdList {"sogou-qimpanel",};
 QPointer<DockPopupWindow> SNITrayItemWidget::PopupWindow = nullptr;
-Dock::Position SNITrayItemWidget::DockPosition = Dock::Position::Top;
+Dock::Position SNITrayItemWidget::DockPosition = Dock::Position::Bottom;
 using namespace Dock;
+
 SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *parent)
     : BaseTrayWidget(parent),
       m_menu(nullptr),
@@ -54,6 +55,8 @@ SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *par
     , m_sniServicePath(sniServicePath)
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_handleMouseReleaseTimer(new QTimer(this))
+    , m_tipsLabel(new TipsWidget)
+    , m_popupShown(false)
 {
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
@@ -152,22 +155,12 @@ SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *par
         onSNIStatusChanged(m_sniInter->status());
     });
 
-    QMetaObject::invokeMethod(this, [ this ] {
-        m_sniIconName = m_sniInter->iconName();
-        m_sniIconPixmap = m_sniInter->iconPixmap();
-        m_sniIconThemePath = m_sniInter->iconThemePath();
-        m_updateIconTimer->start();
+    QMetaObject::invokeMethod(this, &SNITrayItemWidget::initMember, Qt::QueuedConnection);
+}
 
-        m_sniOverlayIconName = m_sniInter->overlayIconName();
-        m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
-        m_sniIconThemePath = m_sniInter->iconThemePath();
-        m_updateOverlayIconTimer->start();
-
-        m_sniAttentionIconName = m_sniInter->attentionIconName();
-        m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
-        m_sniIconThemePath = m_sniInter->iconThemePath();
-        m_updateAttentionIconTimer->start();
-    }, Qt::QueuedConnection);
+SNITrayItemWidget::~SNITrayItemWidget()
+{
+    m_tipsLabel->deleteLater();
 }
 
 QString SNITrayItemWidget::itemKeyForConfig()
@@ -643,14 +636,29 @@ void SNITrayItemWidget::handleMouseRelease()
     }
 }
 
+void SNITrayItemWidget::initMember()
+{
+    onSNIAttentionIconNameChanged(m_sniInter->attentionIconName());
+    onSNIAttentionIconPixmapChanged(m_sniInter->attentionIconPixmap());
+    onSNIAttentionMovieNameChanged(m_sniInter->attentionMovieName());
+    onSNICategoryChanged(m_sniInter->category());
+    onSNIIconNameChanged(m_sniInter->iconName());
+    onSNIIconPixmapChanged(m_sniInter->iconPixmap());
+    onSNIIconThemePathChanged(m_sniInter->iconThemePath());
+    onSNIIdChanged(m_sniInter->id());
+    onSNIMenuChanged(m_sniInter->menu());
+    onSNIOverlayIconNameChanged(m_sniInter->overlayIconName());
+    onSNIOverlayIconPixmapChanged(m_sniInter->overlayIconPixmap());
+    onSNIStatusChanged(m_sniInter->status());
+
+    m_updateIconTimer->start();
+    m_updateOverlayIconTimer->start();
+    m_updateAttentionIconTimer->start();
+}
+
 void SNITrayItemWidget::showHoverTips()
 {
     if (PopupWindow->model())
-        return;
-
-    // if not in geometry area
-    const QRect r(topleftPoint(), size());
-    if (!r.contains(QCursor::pos()))
         return;
 
     QProcess p;
@@ -669,20 +677,16 @@ void SNITrayItemWidget::showHoverTips()
         if (tooltip.title.isEmpty())
             return;
 
-#ifdef QT_DEBUG
-        setToolTip(tooltip.title);
-#else
-//        // 当提示信息中有换行符时，需要使用setTextList
-//        if (tooltip.title.contains('\n'))
-//            m_tipsLabel->setTextList(tooltip.title.split('\n'));
-//        else
-//            m_tipsLabel->setText(tooltip.title);
+        // 当提示信息中有换行符时，需要使用setTextList
+        if (tooltip.title.contains('\n'))
+            m_tipsLabel->setTextList(tooltip.title.split('\n'));
+        else
+            m_tipsLabel->setText(tooltip.title);
 
-//        m_tipsLabel->setAccessibleName(itemKeyForConfig().replace("sni:",""));
+        m_tipsLabel->setAccessibleName(itemKeyForConfig().replace("sni:",""));
 
 
-//        showPopupWindow(m_tipsLabel);
-#endif
+        showPopupWindow(m_tipsLabel);
     }
 }
 

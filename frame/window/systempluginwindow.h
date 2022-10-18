@@ -90,6 +90,8 @@ protected:
     const QString contextMenu() const override;
     void invokedMenuItem(const QString &itemId, const bool checked) override;
 
+    QWidget *popupTips() override;
+
 private:
     void mouseClick();
     QFont textFont() const;

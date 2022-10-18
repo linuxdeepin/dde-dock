@@ -30,7 +30,7 @@
 
 #include <xcb/xproto.h>
 
-Dock::Position SystemPluginItem::DockPosition = Dock::Position::Top;
+Dock::Position SystemPluginItem::DockPosition = Dock::Position::Bottom;
 QPointer<DockPopupWindow> SystemPluginItem::PopupWindow = nullptr;
 
 SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent)
