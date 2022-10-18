@@ -28,10 +28,10 @@ QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 using namespace Dock;
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
-    : AbstractTrayWidget(parent),
-      m_dbusMenuImporter(nullptr),
-      m_menu(nullptr),
-      m_updateIconTimer(new QTimer(this))
+    : AbstractTrayWidget(parent)
+    , m_dbusMenuImporter(nullptr)
+    , m_menu(nullptr)
+    , m_updateIconTimer(new QTimer(this))
     , m_updateOverlayIconTimer(new QTimer(this))
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
@@ -241,11 +241,15 @@ void SNITrayWidget::initSNIPropertys()
     m_sniIconName = m_sniInter->iconName();
     m_sniIconPixmap = m_sniInter->iconPixmap();
     m_sniIconThemePath = m_sniInter->iconThemePath();
-    m_sniId = m_sniInter->id();
     m_sniMenuPath = m_sniInter->menu();
     m_sniOverlayIconName = m_sniInter->overlayIconName();
     m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
     m_sniStatus = m_sniInter->status();
+
+    // 使用同步的方式获取id，否则在插入的时候无法获取正确的位置
+    m_sniInter->setSync(true);
+    m_sniId = m_sniInter->id();
+    m_sniInter->setSync(false);
 
     m_updateIconTimer->start();
 //    m_updateOverlayIconTimer->start();
