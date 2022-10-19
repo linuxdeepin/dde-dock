@@ -26,6 +26,7 @@
 #include "traypluginitem.h"
 #include "utils.h"
 #include "appmultiitem.h"
+#include "quicksettingcontroller.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -40,7 +41,6 @@ const QGSettings *DockItemManager::m_dockedSettings = Utils::ModuleSettingsPtr("
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
     , m_appInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
-    , m_pluginsInter(new DockPluginsController(this))
     , m_loadFinished(false)
 {
     //固定区域：启动器
@@ -77,13 +77,6 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_appInter, &DockInter::ShowMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
 #endif
 
-    // 插件信号
-    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemManager::pluginItemInserted, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemManager::pluginItemRemoved, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemManager::itemUpdated, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
-
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
         connect(app, &DApplication::iconThemeChanged, this, &DockItemManager::refreshItemsIcon);
@@ -110,7 +103,7 @@ const QList<QPointer<DockItem>> DockItemManager::itemList() const
 
 const QList<PluginsItemInterface *> DockItemManager::pluginList() const
 {
-    return m_pluginsInter->pluginsMap().keys();
+    return QuickSettingController::instance()->pluginsMap().keys();
 }
 
 bool DockItemManager::appIsOnDock(const QString &appDesktop) const
@@ -266,76 +259,6 @@ void DockItemManager::appItemRemoved(AppItem *appItem)
         QDrag::cancel();
     }
     appItem->deleteLater();
-}
-
-void DockItemManager::pluginItemInserted(PluginsItem *item)
-{
-    manageItem(item);
-
-    DockItem::ItemType pluginType = item->itemType();
-
-    // find first plugins item position
-    int firstPluginPosition = -1;
-    for (int i(0); i != m_itemList.size(); ++i) {
-        DockItem::ItemType type = m_itemList[i]->itemType();
-        if (type != pluginType)
-            continue;
-
-        firstPluginPosition = i;
-        break;
-    }
-
-    if (firstPluginPosition == -1)
-        firstPluginPosition = m_itemList.size();
-
-    // find insert position
-    int insertIndex = 0;
-    const int itemSortKey = item->itemSortKey();
-    if (itemSortKey == -1 || firstPluginPosition == -1) {
-        insertIndex = m_itemList.size();
-    } else if (itemSortKey == 0) {
-        insertIndex = firstPluginPosition;
-    } else {
-        insertIndex = m_itemList.size();
-        for (int i(firstPluginPosition + 1); i != m_itemList.size() + 1; ++i) {
-            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i - 1].data());
-            Q_ASSERT(pItem);
-
-            const int sortKey = pItem->itemSortKey();
-            if (pluginType == DockItem::FixedPlugin) {
-                if (sortKey != -1 && itemSortKey > sortKey)
-                    continue;
-                insertIndex = i - 1;
-                break;
-            }
-            if (sortKey != -1 && itemSortKey > sortKey && pItem->itemType() != DockItem::FixedPlugin)
-                continue;
-            insertIndex = i - 1;
-            break;
-        }
-    }
-
-    m_itemList.insert(insertIndex, item);
-    if(pluginType == DockItem::FixedPlugin)
-        insertIndex ++;
-
-    if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
-        item->setVisible(false);
-
-    emit itemInserted(insertIndex - firstPluginPosition, item);
-}
-
-void DockItemManager::pluginItemRemoved(PluginsItem *item)
-{
-    item->hidePopup();
-
-    emit itemRemoved(item);
-
-    m_itemList.removeOne(item);
-
-    if (m_loadFinished) {
-        updatePluginsItemOrderKey();
-    }
 }
 
 void DockItemManager::reloadAppItems()

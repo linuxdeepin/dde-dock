@@ -48,7 +48,7 @@ private:
     };
 
 public:
-    explicit DateTimeDisplayer(QWidget *parent = nullptr);
+    explicit DateTimeDisplayer(bool showMultiRow, QWidget *parent = nullptr);
     ~DateTimeDisplayer() override;
     void setPositon(Dock::Position position);
     void setOneRow(bool oneRow);
@@ -80,6 +80,7 @@ private:
     QFont timeFont() const;
 
     void createMenuItem();
+    QRect textRect(const QRect &sourceRect) const;
 
 private Q_SLOTS:
     void onTimeChanged();
@@ -97,6 +98,7 @@ private:
     QString m_lastTimeString;
     int m_currentSize;
     bool m_oneRow;
+    bool m_showMultiRow;
 };
 
 #endif // DATETIMEDISPLAYER_H

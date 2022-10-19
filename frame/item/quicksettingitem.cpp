@@ -28,6 +28,8 @@
 
 #include <QIcon>
 #include <QPainterPath>
+#include <QPushButton>
+#include <QFontMetrics>
 
 #define ICONWIDTH 24
 #define ICONHEIGHT 24
@@ -48,13 +50,45 @@ QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, cons
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
     , m_metaData(metaData)
+    , m_iconWidgetParent(new QWidget(this))
+    , m_iconWidget(new QuickIconWidget(pluginInter, itemKey, isPrimary(), m_iconWidgetParent))
+    , m_textWidget(new QWidget(this))
+    , m_nameLabel(new QLabel(m_textWidget))
+    , m_stateLabel(new QLabel(m_textWidget))
 {
+    initUi();
     setAcceptDrops(true);
     this->installEventFilter(this);
 }
 
 QuickSettingItem::~QuickSettingItem()
 {
+}
+
+bool QuickSettingItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonRelease) {
+        if (obj->objectName() == "expandLabel") {
+            // 如果是鼠标的按下事件
+            if (isPrimary())
+                Q_EMIT detailClicked(m_pluginInter);
+        } else if (obj == this) {
+            const QString &command = m_pluginInter->itemCommand(m_itemKey);
+            if (!command.isEmpty())
+                QProcess::startDetached(command);
+
+            if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
+                showPopupApplet(w);
+        }
+    } else if (event->type() == QEvent::Resize) {
+        if (obj == m_nameLabel) {
+            m_nameLabel->setText(QFontMetrics(m_nameLabel->font()).elidedText(m_pluginInter->pluginDisplayName(), Qt::TextElideMode::ElideRight, m_nameLabel->width()));
+        } else if (obj == m_stateLabel) {
+            m_stateLabel->setText(QFontMetrics(m_stateLabel->font()).elidedText(m_pluginInter->description(), Qt::TextElideMode::ElideRight, m_stateLabel->width()));
+        }
+    }
+
+    return DockItem::eventFilter(obj, event);
 }
 
 PluginsItemInterface *QuickSettingItem::pluginItem() const
@@ -114,84 +148,9 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     QPainterPath path;
     path.addRoundedRect(rect(), RADIUS, RADIUS);
     painter.setClipPath(path);
-
     // 绘制背景色
     DPalette dpa = DPaletteHelper::instance()->palette(this);
-    painter.fillRect(rect(), dpa.brush(DPalette::ColorRole::Mid));
-    // 让图标填上前景色
-    int pixmapWidth = static_cast<int>(ICONWIDTH * qApp->devicePixelRatio());
-    int pixmapHeight = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
-    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel);
-    QList<QSize> iconSizes = icon.availableSizes();
-    if (iconSizes.size() > 0) {
-        QSize size = iconSizes[0];
-        if (size.isValid() && !size.isEmpty() && !size.isNull()) {
-            pixmapWidth = size.width();
-            pixmapHeight = size.height();
-        }
-    }
-    QPixmap pm = icon.pixmap(pixmapWidth, pixmapHeight);
-    QPainter pa(&pm);
-    pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    pa.fillRect(pm.rect(), painter.pen().brush());
-    if (isPrimary()) {
-        // 如果是主图标，则显示阴影背景
-        int marginYSpace = yMarginSpace();
-        QRect iconBg(MARGINLEFTSPACE, marginYSpace, BGSIZE, BGSIZE);
-        painter.save();
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
-        painter.drawEllipse(iconBg);
-        painter.restore();
-        QRect rctIcon(iconBg.x() + (iconBg.width() - pixmapWidth) / 2,
-                      iconBg.y() + (iconBg.height() - pixmapHeight) / 2,
-                      pixmapWidth, pixmapHeight);
-        painter.drawPixmap(rctIcon, pm);
-        // 绘制文字
-        painter.setPen(Qt::black);
-
-        QRect rctPluginName(iconBg.right() + 10, iconBg.top(), BGWIDTH - BGSIZE - OPENICONSIZE - 10 * 2, BGSIZE / 2);
-        QFont font = DFontSizeManager::instance()->t6();
-        font.setBold(true);
-        painter.setFont(font);
-        QTextOption textOption;
-        textOption.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        QString displayName = QFontMetrics(font).elidedText(m_pluginInter->pluginDisplayName(), Qt::TextElideMode::ElideRight, rctPluginName.width());
-        painter.drawText(rctPluginName, displayName, textOption);
-        // 绘制下方啊的状态文字
-        QRect rctPluginStatus(rctPluginName.x(), rctPluginName.bottom() + 1,
-                              rctPluginName.width(), BGSIZE / 2);
-        font = DFontSizeManager::instance()->t10();
-        painter.setFont(font);
-        QString description = QFontMetrics(font).elidedText(m_pluginInter->description(), Qt::TextElideMode::ElideRight, rctPluginStatus.width());
-        painter.drawText(rctPluginStatus, description, textOption);
-        // 绘制右侧的展开按钮
-        QPixmap expandPixmap = ImageUtil::loadSvg(expandFileName(), expandSize);
-        int iconRight = rect().width() - MARGINRIGHTSPACE;
-        QRect rectOfExpand(iconRight - expandSize.width(),
-                           (rctIcon.y() + (rctIcon.height() - expandSize.height()) / 2),
-                           expandSize.width(), expandSize.height());
-        painter.drawPixmap(rectOfExpand, expandPixmap);
-    } else {
-        // 绘制图标
-        QRect rctIcon = iconRect();
-        painter.drawPixmap(rctIcon, pm);
-        // 绘制文字
-        QFont ft;
-        ft.setPixelSize(FONTSIZE);
-        painter.setFont(ft);
-        QTextOption option;
-        option.setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-        painter.drawText(QRect(QPoint(0, rctIcon.top() + ICONHEIGHT + ICONSPACE),
-                               QPoint(width(), height())), m_pluginInter->pluginDisplayName(), option);
-    }
-}
-
-QRect QuickSettingItem::iconRect()
-{
-    int left = (width() - ICONWIDTH) / 2;
-    int top = (height() - ICONHEIGHT - ICONSPACE - 10) / 2;
-    return QRect(left, top, ICONWIDTH, ICONHEIGHT);
+    painter.fillRect(rect(), Qt::white);
 }
 
 QColor QuickSettingItem::foregroundColor() const
@@ -207,29 +166,94 @@ QColor QuickSettingItem::foregroundColor() const
     return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
 }
 
-void QuickSettingItem::mouseReleaseEvent(QMouseEvent *event)
+void QuickSettingItem::initUi()
 {
-    // 如果是鼠标的按下事件
     if (isPrimary()) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QRect rctExpand(rect().width() - MARGINRIGHTSPACE - expandSize.width(),
-                        (rect().height() - expandSize.height()) / 2,
-                        expandSize.width(), expandSize.height());
-        if (rctExpand.contains(mapFromGlobal(mouseEvent->globalPos())))
-            Q_EMIT detailClicked(m_pluginInter);
+        // 如果是占用两排的插件，则用横向Layout
+        QHBoxLayout *mainLayout = new QHBoxLayout(this);
+        mainLayout->setContentsMargins(10, 0, 10, 0);
+        mainLayout->setSpacing(0);
+        mainLayout->addStretch(10);
+        mainLayout->setAlignment(Qt::AlignCenter);
+        // 添加图标
+        QVBoxLayout *iconLayout = new QVBoxLayout(m_iconWidgetParent);
+        iconLayout->setContentsMargins(0, 0, 0, 0);
+        iconLayout->setSpacing(0);
+        iconLayout->setAlignment(Qt::AlignCenter);
+        m_iconWidget->setFixedSize(BGSIZE, BGSIZE);
+        iconLayout->addWidget(m_iconWidget);
+        mainLayout->addWidget(m_iconWidgetParent);
+        mainLayout->addSpacing(10);
+        // 添加中间的名称部分
+        QFont nameFont = DFontSizeManager::instance()->t6();
+        nameFont.setBold(true);
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, Qt::black);
+        m_nameLabel->setPalette(pe);
+        m_stateLabel->setPalette(pe);
+        m_nameLabel->setFont(nameFont);
+        m_stateLabel->setFont(DFontSizeManager::instance()->t10());
+        m_nameLabel->setText(m_pluginInter->pluginDisplayName());
+        m_stateLabel->setText(m_pluginInter->description());
+        m_nameLabel->installEventFilter(this);
+        m_stateLabel->installEventFilter(this);
+        QVBoxLayout *textLayout = new QVBoxLayout(m_textWidget);
+        textLayout->setContentsMargins(0, 0, 0, 0);
+        textLayout->setSpacing(0);
+        textLayout->addWidget(m_nameLabel);
+        textLayout->addWidget(m_stateLabel);
+        textLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        mainLayout->addWidget(m_textWidget);
+
+        // 添加右侧的展开按钮
+        QWidget *expandWidgetParent = new QWidget(this);
+        QVBoxLayout *expandLayout = new QVBoxLayout(expandWidgetParent);
+        expandLayout->setSpacing(0);
+        QLabel *expandLabel = new QLabel(expandWidgetParent);
+        expandLabel->setObjectName("expandLabel");
+        expandLabel->setPixmap(QPixmap(expandFileName()));
+        expandLabel->setFixedSize(expandSize);
+        expandLabel->setAutoFillBackground(true);
+        expandLabel->installEventFilter(this);
+        expandLayout->addWidget(expandLabel);
+        pe.setBrush(QPalette::Window, Qt::transparent);
+        expandLabel->setPalette(pe);
+
+        mainLayout->addWidget(expandWidgetParent);
     } else {
-        const QString command = m_pluginInter->itemCommand(m_itemKey);
-        if (!command.isEmpty())
-            QProcess::startDetached(command);
+        QHBoxLayout *iconLayout = new QHBoxLayout(m_iconWidgetParent);
+        iconLayout->setContentsMargins(0, 0, 0, 0);
+        iconLayout->setSpacing(0);
+        iconLayout->setAlignment(Qt::AlignHCenter);
 
-        if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
-            showPopupApplet(w);
+        m_iconWidgetParent->setFixedHeight(ICONHEIGHT);
+        m_iconWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+        iconLayout->addWidget(m_iconWidget);
+
+        QVBoxLayout *mainLayout = new QVBoxLayout(this);
+        mainLayout->setContentsMargins(0, 10, 0, 10);
+        mainLayout->setSpacing(7);
+        mainLayout->setAlignment(Qt::AlignCenter);
+        // 添加上方的图标
+        mainLayout->addWidget(m_iconWidgetParent);
+
+        // 添加下方的文字
+        QHBoxLayout *textLayout = new QHBoxLayout(m_textWidget);
+        textLayout->setAlignment(Qt::AlignCenter);
+        textLayout->setContentsMargins(0, 0, 0, 0);
+        textLayout->setSpacing(0);
+        QFont nameFont = DFontSizeManager::instance()->t10();
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, Qt::black);
+        m_nameLabel->setFont(nameFont);
+        m_nameLabel->setPalette(pe);
+        m_nameLabel->setText(m_pluginInter->pluginDisplayName());
+        textLayout->addWidget(m_nameLabel);
+        m_stateLabel->setVisible(false);
+        m_textWidget->setFixedHeight(11);
+        mainLayout->addWidget(m_textWidget);
+        installEventFilter(this);
     }
-}
-
-int QuickSettingItem::yMarginSpace()
-{
-    return (rect().height() - BGSIZE) / 2;
 }
 
 QString QuickSettingItem::expandFileName()
@@ -238,4 +262,113 @@ QString QuickSettingItem::expandFileName()
         return QString(":/icons/resources/arrow-right-dark.svg");
 
     return QString(":/icons/resources/arrow-right.svg");
+}
+
+QPixmap QuickSettingItem::pluginIcon() const
+{
+    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel);
+    if (icon.isNull()) {
+        // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
+        QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
+        itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+        QPixmap grabPixmap = itemWidget->grab();
+        return grabPixmap;
+    }
+
+    // 获取icon接口返回的图标
+    int pixmapWidth = width();
+    int pixmapHeight = height();
+    QList<QSize> iconSizes = icon.availableSizes();
+    if (iconSizes.size() > 0) {
+        QSize size = iconSizes[0];
+        if (size.isValid() && !size.isEmpty() && !size.isNull()) {
+            pixmapWidth = size.width();
+            pixmapHeight = size.height();
+        }
+    }
+
+    return icon.pixmap(pixmapWidth, pixmapHeight);
+}
+
+/**
+ * @brief QuickIconWidget::QuickIconWidget
+ * @param pluginInter
+ * @param parent
+ * 图标的widget
+ */
+QuickIconWidget::QuickIconWidget(PluginsItemInterface *pluginInter, const QString &itemKey, bool isPrimary, QWidget *parent)
+    : QWidget(parent)
+    , m_pluginInter(pluginInter)
+    , m_itemKey(itemKey)
+    , m_isPrimary(isPrimary)
+{
+}
+
+void QuickIconWidget::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+    QPixmap pm = pluginIcon();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+    painter.setPen(foregroundColor());
+
+    if (m_isPrimary) {
+        DPalette dpa = DPaletteHelper::instance()->palette(this);
+        QPainter pa(&pm);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pm.rect(), painter.pen().brush());
+        // 如果是主图标，则显示阴影背景
+        painter.save();
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
+        painter.drawEllipse(rect());
+        painter.restore();
+        QRect rctIcon((rect().width() - pm.width()) / 2, (rect().height() - pm.height()) / 2, pm.width(), pm.height());
+        painter.drawPixmap(rctIcon, pm);
+    } else {
+        QRect rctIcon(0, 0, pm.width(), pm.height());
+        painter.drawPixmap(rctIcon, pm);
+    }
+}
+
+QColor QuickIconWidget::foregroundColor() const
+{
+    DPalette dpa = DPaletteHelper::instance()->palette(this);
+    // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
+    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
+        return dpa.color(DPalette::ColorGroup::Active, DPalette::ColorRole::Text);
+
+    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Deactive)
+        return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
+
+    return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
+}
+
+QPixmap QuickIconWidget::pluginIcon() const
+{
+    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel);
+    if (icon.isNull()) {
+        // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
+        QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
+        if (itemWidget) {
+            itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+            return itemWidget->grab();
+        }
+        return QPixmap();
+    }
+
+    // 获取icon接口返回的图标
+    int pixmapWidth = width();
+    int pixmapHeight = height();
+    QList<QSize> iconSizes = icon.availableSizes();
+    if (iconSizes.size() > 0) {
+        QSize size = iconSizes[0];
+        if (size.isValid() && !size.isEmpty() && !size.isNull()) {
+            pixmapWidth = size.width();
+            pixmapHeight = size.height();
+        }
+    }
+
+    return icon.pixmap(pixmapWidth, pixmapHeight);
 }

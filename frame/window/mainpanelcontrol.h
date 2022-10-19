@@ -31,7 +31,7 @@ using namespace Dock;
 
 class QBoxLayout;
 class QLabel;
-class TrayPluginItem;
+class DockTrayWindow;
 class PluginsItem;
 class DockItem;
 class PlaceholderItem;
@@ -77,7 +77,7 @@ private:
     void addFixedAreaItem(int index, QWidget *wdg);
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
-    void addTrayAreaItem(int index, QWidget *wdg);
+    //void addTrayAreaItem(int index, QWidget *wdg);
     void removeTrayAreaItem(QWidget *wdg);
     int getScreenSize() const;
 
@@ -97,6 +97,7 @@ private Q_SLOTS:
     void onRecentVisibleChanged(bool visible);
     void onDockAppVisibleChanged(bool visible);
     void onToolVisibleChanged(bool visible);
+    void onTrayRequestUpdate();
 
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
@@ -142,7 +143,7 @@ private:
     AppDragWidget *m_appDragWidget;
     DisplayMode m_displayMode;
     QPoint m_mousePressPos;
-    TrayPluginItem *m_tray;
+    DockTrayWindow *m_tray;
     int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
     DockInter *m_dockInter;

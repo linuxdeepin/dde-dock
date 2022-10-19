@@ -26,12 +26,14 @@
 #include "pluginsiteminterface.h"
 
 class QGSettings;
+
 class PluginsItem : public DockItem
 {
     Q_OBJECT
 
+    friend class QuickSettingController;
+
 public:
-    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &jsonData, QWidget *parent = nullptr);
     ~PluginsItem() override;
 
     int itemSortKey() const;
@@ -57,6 +59,9 @@ public:
 
 public slots:
     void refreshIcon() override;
+
+protected:
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &jsonData, QWidget *parent = nullptr);
 
 private slots:
     void onGSettingsChanged(const QString &key);

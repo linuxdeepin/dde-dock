@@ -22,6 +22,7 @@
 #include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
 #include "proxyplugincontroller.h"
+#include "pluginsitem.h"
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -35,78 +36,46 @@ QuickSettingController::~QuickSettingController()
     ProxyPluginController::instance(PluginType::QuickPlugin)->removeProxyInterface(this);
 }
 
-void QuickSettingController::sortPlugins()
-{
-    QList<QuickSettingItem *> primarySettingItems;
-    QList<QuickSettingItem *> quickItems;
-    for (QuickSettingItem *item : m_quickSettingItems) {
-        if (item->isPrimary())
-            primarySettingItems << item;
-        else
-            quickItems << item;
-    }
-
-    static QStringList existKeys = {"network-item-key", "sound-item-key", "VPN", "PROJECTSCREEN"};
-    qSort(primarySettingItems.begin(), primarySettingItems.end(), [ = ](QuickSettingItem *item1, QuickSettingItem *item2) {
-        int index1 = existKeys.indexOf(item1->itemKey());
-        int index2 = existKeys.indexOf(item2->itemKey());
-        if (index1 >= 0 || index2 >= 0)
-            return index1 < index2;
-
-        return true;
-    });
-
-    m_quickSettingItems.clear();
-    m_quickSettingItems << primarySettingItems << quickItems;
-}
-
 void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    QList<QuickSettingItem *>::iterator findItemIterator = std::find_if(m_quickSettingItems.begin(), m_quickSettingItems.end(),
-                 [ = ](QuickSettingItem *item) {
-        return item->itemKey() == itemKey;
-    });
-
-    if (findItemIterator != m_quickSettingItems.end())
-        return;
-
+    // 根据读取到的metaData数据获取当前插件的类型，提供给外部
+    PluginAttribute pluginClass = PluginAttribute::Quick;
     QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
-    QJsonObject metaData;
-    if (pluginLoader)
-        metaData = pluginLoader->metaData().value("MetaData").toObject();
-    QuickSettingItem *quickItem = new QuickSettingItem(itemInter, itemKey, metaData);
+    QJsonObject meta;
+    if (pluginLoader) {
+        meta = pluginLoader->metaData().value("MetaData").toObject();
+        if (meta.contains("tool") && meta.value("tool").toBool())
+            pluginClass = PluginAttribute::Tool;
+        else if (meta.contains("fixed") && meta.value("fixed").toBool())
+            pluginClass = PluginAttribute::Fixed;
+    }
 
-    m_quickSettingItems << quickItem;
-    sortPlugins();
+    m_quickPlugins[pluginClass] << itemInter;
+    m_quickPluginsMap[itemInter] = itemKey;
 
-    emit pluginInserted(quickItem);
+    emit pluginInserted(itemInter, pluginClass);
 }
 
 void QuickSettingController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
 {
-    auto findItemIterator = std::find_if(m_quickSettingItems.begin(), m_quickSettingItems.end(),
-                                         [ = ](QuickSettingItem *item) {
-        return item->pluginItem() == itemInter;
-    });
-    if (findItemIterator != m_quickSettingItems.end()) {
-        QuickSettingItem *settingItem = *findItemIterator;
-        settingItem->update();
-    }
 }
 
 void QuickSettingController::itemRemoved(PluginsItemInterface * const itemInter, const QString &)
 {
-    // 删除本地记录的插件列表
-    QList<QuickSettingItem *>::iterator findItemIterator = std::find_if(m_quickSettingItems.begin(), m_quickSettingItems.end(),
-                                         [ = ](QuickSettingItem *item) {
-            return (item->pluginItem() == itemInter);
-    });
-    if (findItemIterator != m_quickSettingItems.end()) {
-        QuickSettingItem *quickItem = *findItemIterator;
-        m_quickSettingItems.removeOne(quickItem);
-        Q_EMIT pluginRemoved(quickItem);
-        quickItem->deleteLater();
+    for (auto it = m_quickPlugins.begin(); it != m_quickPlugins.end(); it++) {
+        QList<PluginsItemInterface *> &plugins = m_quickPlugins[it.key()];
+        if (!plugins.contains(itemInter))
+            continue;
+
+        plugins.removeOne(itemInter);
+        if (plugins.isEmpty())
+            m_quickPlugins.remove(it.key());
+
+        break;
     }
+
+    m_quickPluginsMap.remove(itemInter);
+    Q_EMIT pluginRemoved(itemInter);
 }
 
 void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
@@ -118,4 +87,33 @@ QuickSettingController *QuickSettingController::instance()
 {
     static QuickSettingController instance;
     return &instance;
+}
+
+QList<PluginsItemInterface *> QuickSettingController::pluginItems(const PluginAttribute &pluginClass) const
+{
+    return m_quickPlugins.value(pluginClass);
+}
+
+QString QuickSettingController::itemKey(PluginsItemInterface *pluginItem) const
+{
+    return m_quickPluginsMap.value(pluginItem);
+}
+
+QJsonObject QuickSettingController::metaData(PluginsItemInterface *pluginItem) const
+{
+    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(pluginItem);
+    if (!pluginLoader)
+        return QJsonObject();
+
+    return pluginLoader->metaData().value("MetaData").toObject();
+}
+
+PluginsItem *QuickSettingController::pluginItemWidget(PluginsItemInterface *pluginItem)
+{
+    if (m_pluginItemWidgetMap.contains(pluginItem))
+        return m_pluginItemWidgetMap[pluginItem];
+
+    PluginsItem *widget = new PluginsItem(pluginItem, itemKey(pluginItem), metaData(pluginItem));
+    m_pluginItemWidgetMap[pluginItem] = widget;
+    return widget;
 }

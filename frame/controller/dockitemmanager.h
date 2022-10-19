@@ -22,7 +22,6 @@
 #ifndef DOCKITEMMANAGER_H
 #define DOCKITEMMANAGER_H
 
-#include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
 #include "dockitem.h"
 #include "appitem.h"
@@ -75,8 +74,6 @@ private:
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
     void appItemRemoved(AppItem *appItem);
-    void pluginItemInserted(PluginsItem *item);
-    void pluginItemRemoved(PluginsItem *item);
     void updatePluginsItemOrderKey();
     void reloadAppItems();
     void manageItem(DockItem *item);
@@ -89,7 +86,6 @@ private:
 
 private:
     DockInter *m_appInter;
-    DockPluginsController *m_pluginsInter;
 
     static DockItemManager *INSTANCE;
 

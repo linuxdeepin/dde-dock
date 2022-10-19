@@ -66,8 +66,8 @@ protected:
     void showHomePage();
 
 private Q_SLOTS:
-    void onPluginInsert(QuickSettingItem *quickItem);
-    void onPluginRemove(QuickSettingItem *quickItem);
+    void onPluginInsert(PluginsItemInterface * itemInter);
+    void onPluginRemove(PluginsItemInterface * itemInter);
     void onItemDetailClick(PluginsItemInterface *pluginInter);
     bool eventFilter(QObject *watched, QEvent *event) override;
     void onResizeView();
@@ -80,7 +80,7 @@ private:
     // 调整控件位置
     void updateItemLayout();
     // 初始化控件项目
-    void initQuickItem(QuickSettingItem *quickItem);
+    void initQuickItem(PluginsItemInterface *plugin);
     // 显示具体的窗体
     void showWidget(QWidget *widget, const QString &title);
     // 清除移动轨迹
@@ -106,6 +106,7 @@ private:
     DisplaySettingWidget *m_displaySettingWidget;
     PluginChildPage *m_childPage;
     QPoint m_dragPluginPosition;
+    QList<QuickSettingItem *> m_quickSettings;
 };
 
 class QuickPluginMimeData : public QMimeData

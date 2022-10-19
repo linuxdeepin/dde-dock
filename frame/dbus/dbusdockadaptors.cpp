@@ -24,6 +24,7 @@
 #include "dockitemmanager.h"
 #include "windowmanager.h"
 #include "proxyplugincontroller.h"
+#include "pluginsitem.h"
 
 #include <QScreen>
 #include <QDebug>

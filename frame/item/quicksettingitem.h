@@ -24,17 +24,18 @@
 #include "dockitem.h"
 
 class PluginsItemInterface;
+class QuickIconWidget;
 
 class QuickSettingItem : public DockItem
 {
     Q_OBJECT
 
-    friend class QuickSettingController;
-
 Q_SIGNALS:
     void detailClicked(PluginsItemInterface *);
 
 public:
+    QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent = nullptr);
+    ~QuickSettingItem() override;
     PluginsItemInterface *pluginItem() const;
     ItemType itemType() const override;
     const QPixmap dragPixmap();
@@ -42,23 +43,49 @@ public:
     bool isPrimary() const;
 
 protected:
-    QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent = nullptr);
-    ~QuickSettingItem() override;
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
-    QRect iconRect();
     QColor foregroundColor() const;
 
-    void mouseReleaseEvent(QMouseEvent *event) override;
-
 private:
-    int yMarginSpace();
+    void initUi();
     QString expandFileName();
+    QPixmap pluginIcon() const;
 
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
     QJsonObject m_metaData;
+    QWidget *m_iconWidgetParent;
+    QuickIconWidget *m_iconWidget;
+    QWidget *m_textWidget;
+    QLabel *m_nameLabel;
+    QLabel *m_stateLabel;
+};
+
+/**
+ * @brief The QuickIconWidget class
+ * 图标的Widget
+ */
+class QuickIconWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit QuickIconWidget(PluginsItemInterface *pluginInter, const QString &itemKey, bool isPrimary, QWidget *parent = Q_NULLPTR);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
+private:
+    QColor foregroundColor() const;
+    QPixmap pluginIcon() const;
+
+private:
+    PluginsItemInterface *m_pluginInter;
+    QString m_itemKey;
+    bool m_isPrimary;
 };
 
 #endif // QUICKSETTINGITEM_H

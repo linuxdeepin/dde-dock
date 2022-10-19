@@ -55,7 +55,7 @@ TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     , m_systemPluginWidget(new SystemPluginWindow(this))
     , m_appPluginWidget(new QWidget(m_appPluginDatetimeWidget))
     , m_quickIconWidget(new QuickPluginWindow(m_appPluginWidget))
-    , m_dateTimeWidget(new DateTimeDisplayer(m_appPluginDatetimeWidget))
+    , m_dateTimeWidget(new DateTimeDisplayer(false, m_appPluginDatetimeWidget))
     , m_appPluginLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_trayView(new TrayGridView(this))
@@ -217,6 +217,7 @@ void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 
 void TrayManagerWindow::initUi()
 {
+    m_systemPluginWidget->setDisplayMode(Dock::DisplayMode::Fashion);
     m_trayView->setModel(m_model);
     m_trayView->setItemDelegate(m_delegate);
     m_trayView->setDragDistance(2);

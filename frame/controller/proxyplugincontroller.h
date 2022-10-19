@@ -26,8 +26,7 @@
 class PluginsItemInterface;
 // 加载的插件的类型(1 根目录下的插件 2 快捷设置插件 3 系统插件)
 enum class PluginType {
-    FixedSystemPlugin = 0,
-    QuickPlugin,
+    QuickPlugin = 0,
     SystemTrays
 };
 

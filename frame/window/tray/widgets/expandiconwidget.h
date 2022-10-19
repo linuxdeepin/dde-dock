@@ -28,6 +28,7 @@
 class TrayGridView;
 class TrayModel;
 class TrayDelegate;
+class TrayGridWidget;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; } }
 
@@ -45,41 +46,32 @@ public:
     QString itemKeyForConfig() override { return "Expand"; }
     void updateIcon() override {}
     QPixmap icon() override;
-    QWidget *popupTrayView();
+    TrayGridWidget *popupTrayView();
 
 Q_SIGNALS:
     void trayVisbleChanged(bool);
 
-private Q_SLOTS:
-    void onGlobMousePress(const QPoint &mousePos, const int flag);
-    void onRowCountChanged();
-
 protected:
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *event) override;
     const QString dropIconFile() const;
 
     void resetPosition();
 
 private:
-    void initUi();
-    void initConnection();
-
-private:
     Dtk::Gui::DRegionMonitor *m_regionInter;
     Dock::Position m_position;
-    QWidget *m_gridParentView;
-    TrayGridView *m_trayView;
-    TrayDelegate *m_trayDelegate;
-    TrayModel *m_trayModel;
 };
 
 // 绘制圆角窗体
-class RoundWidget : public QWidget
+class TrayGridWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RoundWidget(QWidget *parent);
+    explicit TrayGridWidget(QWidget *parent);
+
+    void setTrayGridView(TrayGridView *trayView);
+    TrayGridView *trayView() const;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -89,6 +81,7 @@ private:
 
 private:
     DockInter *m_dockInter;
+    TrayGridView *m_trayGridView;
 };
 
 #endif // EXPANDICONWIDGET_H

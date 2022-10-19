@@ -24,18 +24,29 @@
 #include "abstractpluginscontroller.h"
 
 class QuickSettingItem;
+class PluginsItem;
 
 class QuickSettingController : public AbstractPluginsController
 {
     Q_OBJECT
 
 public:
+    enum class PluginAttribute {
+        Quick = 0,
+        Tool,
+        Fixed
+    };
+
+public:
     static QuickSettingController *instance();
-    const QList<QuickSettingItem *> &settingItems() const { return m_quickSettingItems; }
+    QList<PluginsItemInterface *> pluginItems(const PluginAttribute &pluginClass) const;
+    QString itemKey(PluginsItemInterface *pluginItem) const;
+    QJsonObject metaData(PluginsItemInterface *pluginItem) const;
+    PluginsItem *pluginItemWidget(PluginsItemInterface *pluginItem);
 
 Q_SIGNALS:
-    void pluginInserted(QuickSettingItem *);
-    void pluginRemoved(QuickSettingItem *);
+    void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute &);
+    void pluginRemoved(PluginsItemInterface *itemInter);
     void pluginUpdated(PluginsItemInterface *, const DockPart &);
 
 protected:
@@ -52,10 +63,9 @@ protected:
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:
-    void sortPlugins();
-
-private:
-    QList<QuickSettingItem *> m_quickSettingItems;
+    QMap<PluginAttribute, QList<PluginsItemInterface *>> m_quickPlugins;
+    QMap<PluginsItemInterface *, QString> m_quickPluginsMap;
+    QMap<PluginsItemInterface *, PluginsItem *> m_pluginItemWidgetMap;
 };
 
 #endif // CONTAINERPLUGINSCONTROLLER_H

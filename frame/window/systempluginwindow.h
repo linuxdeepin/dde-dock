@@ -26,7 +26,6 @@
 
 #include <QWidget>
 
-class FixedPluginController;
 class StretchPluginsItem;
 class QBoxLayout;
 class PluginsItemInterface;
@@ -42,6 +41,7 @@ class SystemPluginWindow : public QWidget
 public:
     explicit SystemPluginWindow(QWidget *parent = nullptr);
     ~SystemPluginWindow() override;
+    void setDisplayMode(const Dock::DisplayMode &displayMode);
     void setPositon(Dock::Position position);
     QSize suitableSize() const;
     QSize suitableSize(const Dock::Position &position) const;
@@ -51,16 +51,17 @@ Q_SIGNALS:
 
 private:
     void initUi();
-    bool pluginExist(StretchPluginsItem *pluginItem);
+    void initConnection();
+    StretchPluginsItem *findPluginItemWidget(PluginsItemInterface *pluginItem);
+    void pluginAdded(PluginsItemInterface *plugin);
 
 private Q_SLOTS:
-    void onPluginItemAdded(StretchPluginsItem *pluginItem);
-    void onPluginItemRemoved(StretchPluginsItem *pluginItem);
-    void onPluginItemUpdated(StretchPluginsItem *pluginItem);
+    void onPluginItemRemoved(PluginsItemInterface *pluginItem);
+    void onPluginItemUpdated(PluginsItemInterface *pluginItem);
 
 private:
-    FixedPluginController *m_pluginController;
     DListView *m_listView;
+    Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
     QBoxLayout *m_mainLayout;
 };
@@ -72,6 +73,7 @@ class StretchPluginsItem : public DockItem
 public:
     StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
     ~StretchPluginsItem() override;
+    void setDisplayMode(const Dock::DisplayMode &displayMode);
     void setPosition(Dock::Position position);
     PluginsItemInterface *pluginInter() const;
     QString itemKey() const;
@@ -97,6 +99,7 @@ private:
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
+    Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
     QPoint m_mousePressPoint;
 };

@@ -21,7 +21,7 @@
 #include "systempluginwindow.h"
 #include "systemplugincontroller.h"
 #include "systempluginitem.h"
-#include "fixedplugincontroller.h"
+#include "quicksettingcontroller.h"
 
 #include <DListView>
 #include <QBoxLayout>
@@ -35,19 +35,31 @@
 
 SystemPluginWindow::SystemPluginWindow(QWidget *parent)
     : QWidget(parent)
-    , m_pluginController(new FixedPluginController(this))
     , m_listView(new DListView(this))
+    , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
 {
     initUi();
-    connect(m_pluginController, &FixedPluginController::pluginItemInserted, this, &SystemPluginWindow::onPluginItemAdded);
-    connect(m_pluginController, &FixedPluginController::pluginItemRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
-    connect(m_pluginController, &FixedPluginController::pluginItemUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
+    initConnection();
 }
 
 SystemPluginWindow::~SystemPluginWindow()
 {
+}
+
+void SystemPluginWindow::setDisplayMode(const DisplayMode &displayMode)
+{
+    m_displayMode = displayMode;
+
+    QObjectList childObjects = children();
+    for (QObject *childObject : childObjects) {
+        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
+        if (!item)
+            continue;
+
+        item->setDisplayMode(displayMode);
+    }
 }
 
 void SystemPluginWindow::setPositon(Position position)
@@ -111,46 +123,66 @@ void SystemPluginWindow::initUi()
     m_mainLayout->setSpacing(0);
 }
 
-bool SystemPluginWindow::pluginExist(StretchPluginsItem *pluginItem)
+void SystemPluginWindow::initConnection()
+{
+    QuickSettingController *quickController = QuickSettingController::instance();
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
+        if (pluginClass != QuickSettingController::PluginAttribute::Fixed)
+            return;
+
+        pluginAdded(itemInter);
+    });
+
+    connect(quickController, &QuickSettingController::pluginRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
+    connect(quickController, &QuickSettingController::pluginUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
+
+    QList<PluginsItemInterface *> plugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Fixed);
+    for (int i = 0; i < plugins.size(); i++)
+        pluginAdded(plugins[i]);
+}
+
+StretchPluginsItem *SystemPluginWindow::findPluginItemWidget(PluginsItemInterface *pluginItem)
 {
     for (int i = 0; i < m_mainLayout->count(); i++) {
         QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
         if (!layoutItem)
             continue;
 
-        if (layoutItem->widget() == pluginItem)
-            return true;
+        StretchPluginsItem *itemWidget = qobject_cast<StretchPluginsItem *>(layoutItem->widget());
+        if (itemWidget && itemWidget->pluginInter() == pluginItem)
+            return itemWidget;
     }
 
-    return false;
+    return nullptr;
 }
 
-void SystemPluginWindow::onPluginItemAdded(StretchPluginsItem *pluginItem)
+void SystemPluginWindow::pluginAdded(PluginsItemInterface *plugin)
 {
-    if (pluginExist(pluginItem))
-        return;
-
-    pluginItem->setPosition(m_position);
-    pluginItem->setParent(this);
-    pluginItem->show();
-    m_mainLayout->addWidget(pluginItem);
+    StretchPluginsItem *item = new StretchPluginsItem(plugin, QuickSettingController::instance()->itemKey(plugin));
+    item->setDisplayMode(m_displayMode);
+    item->setPosition(m_position);
+    item->setParent(this);
+    item->show();
+    m_mainLayout->addWidget(item);
     Q_EMIT itemChanged();
 }
 
-void SystemPluginWindow::onPluginItemRemoved(StretchPluginsItem *pluginItem)
+void SystemPluginWindow::onPluginItemRemoved(PluginsItemInterface *pluginItem)
 {
-    if (!pluginExist(pluginItem))
-        return;
-
-    pluginItem->setParent(nullptr);
-    pluginItem->hide();
-    m_mainLayout->removeWidget(pluginItem);
-    Q_EMIT itemChanged();
+    StretchPluginsItem *item = findPluginItemWidget(pluginItem);
+    if (item) {
+        item->setParent(nullptr);
+        item->hide();
+        m_mainLayout->removeWidget(item);
+        Q_EMIT itemChanged();
+    }
 }
 
-void SystemPluginWindow::onPluginItemUpdated(StretchPluginsItem *pluginItem)
+void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
 {
-    pluginItem->update();
+    StretchPluginsItem *item = findPluginItemWidget(pluginItem);
+    if (item)
+        item->update();
 }
 
 #define ICONSIZE 20
@@ -161,12 +193,18 @@ StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter,
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
+    , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
 {
 }
 
 StretchPluginsItem::~StretchPluginsItem()
 {
+}
+
+void StretchPluginsItem::setDisplayMode(const DisplayMode &displayMode)
+{
+    m_displayMode = displayMode;
 }
 
 void StretchPluginsItem::setPosition(Position position)
@@ -260,6 +298,9 @@ QFont StretchPluginsItem::textFont(const Position &position) const
 
 bool StretchPluginsItem::needShowText() const
 {
+    // 如果是高效模式，则不需要显示下面的文本
+    if (m_displayMode == Dock::DisplayMode::Efficient)
+        return false;
     // 任务栏在上方或者下方显示的时候，根据设计图，只有在当前区域高度大于50的时候才同时显示文本和图标
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
         return height() >= 50;

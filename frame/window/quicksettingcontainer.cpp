@@ -144,12 +144,14 @@ void QuickSettingContainer::setPosition(Position position)
     }
 }
 
-void QuickSettingContainer::initQuickItem(QuickSettingItem *quickItem)
+void QuickSettingContainer::initQuickItem(PluginsItemInterface *plugin)
 {
+    QuickSettingItem *quickItem = new QuickSettingItem(plugin, m_pluginLoader->itemKey(plugin), m_pluginLoader->metaData(plugin));
     quickItem->setParent(m_pluginWidget);
     quickItem->setMouseTracking(true);
     quickItem->installEventFilter(this);
     connect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
+    m_quickSettings << quickItem;
 }
 
 void QuickSettingContainer::onItemDetailClick(PluginsItemInterface *pluginInter)
@@ -181,19 +183,31 @@ void QuickSettingContainer::showWidget(QWidget *widget, const QString &title)
     m_switchLayout->setCurrentWidget(m_childPage);
 }
 
-void QuickSettingContainer::onPluginInsert(QuickSettingItem *quickItem)
+void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
 {
-    initQuickItem(quickItem);
+    initQuickItem(itemInter);
     updateItemLayout();
     onResizeView();
 }
 
-void QuickSettingContainer::onPluginRemove(QuickSettingItem *quickItem)
+void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
 {
+    QuickSettingItem *quickItem = nullptr;
+    for (QuickSettingItem *settingItem : m_quickSettings) {
+        if (settingItem->pluginItem() != itemInter)
+            continue;
+
+        quickItem = settingItem;
+        break;
+    }
+    if (!quickItem)
+        return;
+
     disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
     quickItem->setParent(nullptr);
     quickItem->removeEventFilter(this);
     quickItem->setMouseTracking(false);
+    quickItem->deleteLater();
 
     //调整子控件的位置
     updateItemLayout();
@@ -258,8 +272,7 @@ void QuickSettingContainer::updateItemLayout()
 
     int row = 0;
     int column = 0;
-    QList<QuickSettingItem *> quickSettings = m_pluginLoader->settingItems();
-    for (QuickSettingItem *item : quickSettings) {
+    for (QuickSettingItem *item : m_quickSettings) {
         int usedColumn = item->isPrimary() ? 2 : 1;
         m_pluginLayout->addWidget(item, row, column, 1, usedColumn);
         column += usedColumn;
@@ -309,9 +322,9 @@ void QuickSettingContainer::initUi()
 
     m_mainlayout->addWidget(m_componentWidget);
     // 加载所有的插件
-    QList<QuickSettingItem *> pluginItems = m_pluginLoader->settingItems();
-    for (QuickSettingItem *quickItem: pluginItems)
-        initQuickItem(quickItem);
+    QList<PluginsItemInterface *> plugins = m_pluginLoader->pluginItems(QuickSettingController::PluginAttribute::Quick);
+    for (PluginsItemInterface *plugin : plugins)
+        initQuickItem(plugin);
 
     m_switchLayout->addWidget(m_mainWidget);
     m_switchLayout->addWidget(m_childPage);
@@ -322,7 +335,7 @@ void QuickSettingContainer::initUi()
     setAcceptDrops(true);
 
     QMetaObject::invokeMethod(this, [ = ] {
-        if (pluginItems.size() > 0)
+        if (plugins.size() > 0)
             updateItemLayout();
         // 设置当前窗口的大小
         onResizeView();
@@ -334,7 +347,12 @@ void QuickSettingContainer::initUi()
 
 void QuickSettingContainer::initConnection()
 {
-    connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, &QuickSettingContainer::onPluginInsert);
+    connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
+        if (pluginClass != QuickSettingController::PluginAttribute::Quick)
+            return;
+
+        onPluginInsert(itemInter);
+    });
     connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
     connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_volumnWidget, &VolumeWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
@@ -363,9 +381,8 @@ void QuickSettingContainer::initConnection()
 void QuickSettingContainer::onResizeView()
 {
     if (m_switchLayout->currentWidget() == m_mainWidget) {
-        QList<QuickSettingItem *> pluginItems = m_pluginLoader->settingItems();
         int selfPluginCount = 0;
-        for (QuickSettingItem *item : pluginItems) {
+        for (QuickSettingItem *item : m_quickSettings) {
             // 如果是置顶的插件，则认为它占用两个普通插件的位置
             int increCount = (item->isPrimary() ? 2 : 1);
             selfPluginCount += increCount;

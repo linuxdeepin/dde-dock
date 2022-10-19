@@ -37,39 +37,25 @@ static QStringList getPathFromConf(const QString &key) {
 static QMap<PluginType, QStringList> getPluginPaths()
 {
     QMap<PluginType, QStringList> plugins;
-
-    // 添加系统目录
-    {    
-        QStringList pluginPaths;
-    #ifdef QT_DEBUG
-        pluginPaths << qApp->applicationDirPath() + "/../plugins";    
-    #else
-        pluginPaths << "/usr/lib/dde-dock/plugins";
-        
-        const QStringList &pluginsDirs = getPathFromConf("PATH");
-        if (!pluginsDirs.isEmpty())
-            pluginPaths << pluginsDirs;        
-    #endif
-        plugins[PluginType::FixedSystemPlugin] = pluginPaths;
-    }
-
     // 添加快捷插件目录
     {
         QStringList pluginPaths;
     #ifdef QT_DEBUG
-        pluginPaths << qApp->applicationDirPath() + "/../plugins/quick-trays";
+        pluginPaths << qApp->applicationDirPath() + "/../plugins/quick-trays"
+                    << qApp->applicationDirPath() + "/../plugins";
     #else
-        pluginPaths << "/usr/lib/dde-dock/plugins/quick-trays";
+        pluginPaths << "/usr/lib/dde-dock/plugins/quick-trays"
+                    << "/usr/lib/dde-dock/plugins";
 
-        const QStringList &pluginsDirs = getPathFromConf("QUICK_TRAY_PATH");
+        const QStringList pluginsDirs = (getPathFromConf("QUICK_TRAY_PATH") << getPathFromConf("PATH"));
         if (!pluginsDirs.isEmpty())
-            pluginPaths << pluginsDirs;       
+            pluginPaths << pluginsDirs;
     #endif
         plugins[PluginType::QuickPlugin] = pluginPaths;
     }
 
     // 添加系统插件目录
-    {    
+    {
         QStringList pluginPaths;
     #ifdef QT_DEBUG
         pluginPaths << qApp->applicationDirPath() + "/../plugins/system-trays";
@@ -78,7 +64,7 @@ static QMap<PluginType, QStringList> getPluginPaths()
 
         const QStringList &pluginsDirs = getPathFromConf("SYSTEM_TRAY_PATH");
         if (!pluginsDirs.isEmpty())
-            pluginPaths << pluginsDirs;        
+            pluginPaths << pluginsDirs;
     #endif
         plugins[PluginType::SystemTrays] = pluginPaths;
     }

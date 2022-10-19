@@ -39,18 +39,11 @@ ExpandIconWidget::ExpandIconWidget(QWidget *parent, Qt::WindowFlags f)
     : BaseTrayWidget(parent, f)
     , m_regionInter(new DRegionMonitor(this))
     , m_position(Dock::Position::Bottom)
-    , m_gridParentView(new RoundWidget(nullptr))
-    , m_trayView(new TrayGridView(m_gridParentView))
-    , m_trayDelegate(new TrayDelegate(m_trayView, m_trayView))
-    , m_trayModel(new TrayModel(m_trayView, true, false))
 {
-    initUi();
-    initConnection();
 }
 
 ExpandIconWidget::~ExpandIconWidget()
 {
-    m_gridParentView->deleteLater();
 }
 
 void ExpandIconWidget::setPositonValue(Dock::Position position)
@@ -69,17 +62,19 @@ void ExpandIconWidget::sendClick(uint8_t mouseButton, int x, int y)
     if (mouseButton != XCB_BUTTON_INDEX_1)
         return;
 
-    setTrayPanelVisible(!m_gridParentView->isVisible());
+    QWidget *gridParentView = popupTrayView();
+    setTrayPanelVisible(!gridParentView->isVisible());
 }
 
 void ExpandIconWidget::setTrayPanelVisible(bool visible)
 {
+    QWidget *gridParentView = popupTrayView();
     if (visible) {
         resetPosition();
-        m_gridParentView->show();
+        gridParentView->show();
         m_regionInter->registerRegion();
     } else {
-        m_gridParentView->hide();
+        gridParentView->hide();
         m_regionInter->unregisterRegion();
     }
 }
@@ -89,8 +84,11 @@ QPixmap ExpandIconWidget::icon()
     return QPixmap(dropIconFile());
 }
 
-void ExpandIconWidget::paintEvent(QPaintEvent *)
+void ExpandIconWidget::paintEvent(QPaintEvent *event)
 {
+    if (popupTrayView()->trayView()->model()->rowCount() == 0)
+        return BaseTrayWidget::paintEvent(event);
+
     QPainter painter(this);
     QPixmap pixmap = ImageUtil::loadSvg(dropIconFile(), QSize(ICON_SIZE, ICON_SIZE));
     QRect rectOfPixmap(rect().x() + (rect().width() - ICON_SIZE) / 2,
@@ -129,9 +127,72 @@ const QString ExpandIconWidget::dropIconFile() const
     return iconFile + ".svg";
 }
 
-QWidget *ExpandIconWidget::popupTrayView()
+TrayGridWidget *ExpandIconWidget::popupTrayView()
 {
-    return m_gridParentView;
+    static TrayGridWidget *gridParentView = nullptr;
+    if (gridParentView)
+        return gridParentView;
+
+    gridParentView = new TrayGridWidget(nullptr);
+    TrayGridView *trayView = new TrayGridView(gridParentView);
+    TrayDelegate *trayDelegate = new TrayDelegate(trayView, trayView);
+    TrayModel *trayModel = new TrayModel(trayView, true, false);
+    gridParentView->setTrayGridView(trayView);
+
+    gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    trayView->setModel(trayModel);
+    trayView->setItemDelegate(trayDelegate);
+    trayView->setSpacing(ITEM_SPACING);
+    trayView->setDragDistance(2);
+
+    QVBoxLayout *layout = new QVBoxLayout(gridParentView);
+    layout->setContentsMargins(ITEM_SPACING, ITEM_SPACING, ITEM_SPACING, ITEM_SPACING);
+    layout->setSpacing(0);
+    layout->addWidget(trayView);
+
+    auto rowCountChanged = [ = ] {
+        int count = trayModel->rowCount();
+        trayView->setFixedSize(trayView->suitableSize());
+        gridParentView->setFixedSize(trayView->size() + QSize(ITEM_SPACING * 2, ITEM_SPACING * 2));
+        if (count > 0)
+            resetPosition();
+        else if (gridParentView->isVisible())
+            gridParentView->hide();
+
+        Q_EMIT trayVisbleChanged(count > 0);
+    };
+
+    connect(trayView, &TrayGridView::rowCountChanged, this, rowCountChanged);
+
+    connect(trayDelegate, &TrayDelegate::removeRow, this, [ = ](const QModelIndex &index) {
+        trayView->model()->removeRow(index.row(),index.parent());
+    });
+    connect(trayView, &TrayGridView::requestRemove, trayModel, &TrayModel::removeRow);
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
+        // 如果当前是隐藏，那么在点击任何地方都隐藏
+        if (!isVisible()) {
+            gridParentView->hide();
+            return;
+        }
+
+        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
+            return;
+
+        QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
+        const QRect rect = QRect(ptPos, size());
+        if (rect.contains(mousePos))
+            return;
+
+        const QRect rctView(gridParentView->pos(), gridParentView->size());
+        if (rctView.contains(mousePos))
+            return;
+
+        gridParentView->hide();
+    });
+
+    QMetaObject::invokeMethod(this, rowCountChanged, Qt::QueuedConnection);
+
+    return gridParentView;
 }
 
 void ExpandIconWidget::resetPosition()
@@ -139,91 +200,29 @@ void ExpandIconWidget::resetPosition()
     if (!parentWidget())
         return;
 
+    QWidget *gridParentView = popupTrayView();
     QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
     switch (m_position) {
     case Dock::Position::Bottom: {
-        ptPos.setY(ptPos.y() - m_gridParentView->height());
-        ptPos.setX(ptPos.x() - m_gridParentView->width());
+        ptPos.setY(ptPos.y() - gridParentView->height());
+        ptPos.setX(ptPos.x() - gridParentView->width());
         break;
     }
     case Dock::Position::Top: {
-        ptPos.setY(ptPos.y() + m_gridParentView->height());
-        ptPos.setX(ptPos.x() - m_gridParentView->width());
+        ptPos.setY(ptPos.y() + gridParentView->height());
+        ptPos.setX(ptPos.x() - gridParentView->width());
         break;
     }
     case Dock::Position::Left: {
-        ptPos.setX(ptPos.x() + m_gridParentView->width() / 2);
+        ptPos.setX(ptPos.x() + gridParentView->width() / 2);
         break;
     }
     case Dock::Position::Right: {
-        ptPos.setX(ptPos.x() - m_gridParentView->width() / 2);
+        ptPos.setX(ptPos.x() - gridParentView->width() / 2);
         break;
     }
     }
-    m_gridParentView->move(ptPos);
-}
-
-void ExpandIconWidget::initUi()
-{
-    m_gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
-    m_trayView->setModel(m_trayModel);
-    m_trayView->setItemDelegate(m_trayDelegate);
-    m_trayView->setSpacing(ITEM_SPACING);
-    m_trayView->setDragDistance(2);
-
-    QVBoxLayout *layout = new QVBoxLayout(m_gridParentView);
-    layout->setContentsMargins(ITEM_SPACING, ITEM_SPACING, ITEM_SPACING, ITEM_SPACING);
-    layout->setSpacing(0);
-    layout->addWidget(m_trayView);
-}
-
-void ExpandIconWidget::initConnection()
-{
-    connect(m_trayView, &TrayGridView::rowCountChanged, this, &ExpandIconWidget::onRowCountChanged);
-
-    connect(m_trayDelegate, &TrayDelegate::removeRow, this, [ = ](const QModelIndex &index) {
-        m_trayView->model()->removeRow(index.row(),index.parent());
-    });
-    connect(m_trayView, &TrayGridView::requestRemove, m_trayModel, &TrayModel::removeRow);
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &ExpandIconWidget::onGlobMousePress);
-
-    QMetaObject::invokeMethod(this, &ExpandIconWidget::onRowCountChanged, Qt::QueuedConnection);
-}
-
-void ExpandIconWidget::onRowCountChanged()
-{
-    int count = m_trayModel->rowCount();
-    m_trayView->setFixedSize(m_trayView->suitableSize());
-    m_gridParentView->setFixedSize(m_trayView->size() + QSize(ITEM_SPACING * 2, ITEM_SPACING * 2));
-    if (count > 0)
-        resetPosition();
-    else if (m_gridParentView->isVisible())
-        m_gridParentView->hide();
-
-    Q_EMIT trayVisbleChanged(count > 0);
-}
-
-void ExpandIconWidget::onGlobMousePress(const QPoint &mousePos, const int flag)
-{
-    // 如果当前是隐藏，那么在点击任何地方都隐藏
-    if (!isVisible()) {
-        m_gridParentView->hide();
-        return;
-    }
-
-    if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
-        return;
-
-    QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
-    const QRect rect = QRect(ptPos, size());
-    if (rect.contains(mousePos))
-        return;
-
-    const QRect rctView(m_gridParentView->pos(), m_gridParentView->size());
-    if (rctView.contains(mousePos))
-        return;
-
-    m_gridParentView->hide();
+    gridParentView->move(ptPos);
 }
 
 /**
@@ -231,14 +230,25 @@ void ExpandIconWidget::onGlobMousePress(const QPoint &mousePos, const int flag)
  * @param parent
  */
 
-RoundWidget::RoundWidget(QWidget *parent)
+TrayGridWidget::TrayGridWidget(QWidget *parent)
     : QWidget (parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    , m_trayGridView(nullptr)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 }
 
-void RoundWidget::paintEvent(QPaintEvent *event)
+void TrayGridWidget::setTrayGridView(TrayGridView *trayView)
+{
+    m_trayGridView = trayView;
+}
+
+TrayGridView *TrayGridWidget::trayView() const
+{
+    return m_trayGridView;
+}
+
+void TrayGridWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
@@ -252,7 +262,7 @@ void RoundWidget::paintEvent(QPaintEvent *event)
     painter.fillPath(path, maskColor());
 }
 
-QColor RoundWidget::maskColor() const
+QColor TrayGridWidget::maskColor() const
 {
     QColor color = DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::instance()->themeType()).window().color();
     int maskAlpha(static_cast<int>(255 * m_dockInter->opacity()));

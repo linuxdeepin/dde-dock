@@ -29,6 +29,7 @@
 class QWidget;
 class DockItem;
 class PluginsItem;
+class PluginsItemInterface;
 
 using namespace Dock;
 
@@ -40,7 +41,6 @@ public:
     explicit ToolAppHelper(QWidget *pluginAreaWidget, QWidget *toolAreaWidget, QObject *parent = nullptr);
 
     void setDisplayMode(DisplayMode displayMode);
-    void addPluginItem(int index, DockItem *dockItem);
     void removePluginItem(DockItem *dockItem);
     PluginsItem *trashPlugin() const;
     bool toolIsVisible() const;
@@ -50,16 +50,17 @@ Q_SIGNALS:
     void toolVisibleChanged(bool);
 
 private:
-    void appendToPluginArea(int index, DockItem *dockItem);
     void appendToToolArea(int index, DockItem *dockItem);
     bool removePluginArea(DockItem *dockItem);
     bool removeToolArea(DockItem *dockItem);
+    void moveToolWidget();
 
-    void resetPluginItems();
     void updateWidgetStatus();
     bool pluginInTool(DockItem *dockItem) const;
     int itemIndex(DockItem *dockItem, bool isTool) const;
     QList<DockItem *> dockItemOnWidget(bool isTool) const;
+    void pluginItemAdded(PluginsItemInterface *itemInter);
+    bool pluginExists(PluginsItemInterface *itemInter) const;
 
 private:
     QWidget *m_pluginAreaWidget;

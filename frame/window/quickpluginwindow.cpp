@@ -70,13 +70,13 @@ void QuickPluginWindow::initUi()
     m_mainLayout->setDirection(QBoxLayout::RightToLeft);
     m_mainLayout->setContentsMargins(ITEMSPACE, 0, ITEMSPACE, 0);
     m_mainLayout->setSpacing(ITEMSPACE);
-    const QList<QuickSettingItem *> &items = QuickSettingController::instance()->settingItems();
-    for (QuickSettingItem *settingItem : items) {
-        const QString pluginName = settingItem->pluginItem()->pluginName();
+    QList<PluginsItemInterface *> items = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::Quick);
+    for (PluginsItemInterface *pluginItem : items) {
+        const QString pluginName = pluginItem->pluginName();
         if (!fixedPluginNames.contains(pluginName))
             continue;
 
-        addPlugin(settingItem);
+        addPlugin(pluginItem);
     }
 }
 
@@ -137,8 +137,11 @@ QSize QuickPluginWindow::suitableSize() const
     return suitableSize(m_position);
 }
 
-void QuickPluginWindow::addPlugin(QuickSettingItem *item)
+void QuickPluginWindow::addPlugin(PluginsItemInterface *pluginItem)
 {
+    if (!isQuickPlugin(pluginItem))
+        return;
+
     for (int i = 0; i < m_mainLayout->count(); i++) {
         QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
         if (!layoutItem)
@@ -148,14 +151,14 @@ void QuickPluginWindow::addPlugin(QuickSettingItem *item)
         if (!dockItem)
             continue;
 
-        if (item->pluginItem() == dockItem->pluginItem()) {
+        if (pluginItem == dockItem->pluginItem()) {
             resetPluginDisplay();
             return;
         }
     }
-    if (fixedPluginNames.contains(item->pluginItem()->pluginName())) {
+    if (fixedPluginNames.contains(pluginItem->pluginName())) {
         // 新插入的插件如果是固定插件,则将其插入到固定插件列表中，并对其进行排序
-        m_fixedSettingItems << item->pluginItem();
+        m_fixedSettingItems << pluginItem;
         qSort(m_fixedSettingItems.begin(), m_fixedSettingItems.end(), [](PluginsItemInterface *item1, PluginsItemInterface *item2) {
             int index1 = fixedPluginNames.indexOf(item1->pluginName());
             int index2 = fixedPluginNames.indexOf(item2->pluginName());
@@ -163,7 +166,7 @@ void QuickPluginWindow::addPlugin(QuickSettingItem *item)
         });
     } else {
         // 如果是非固定插件，则直接插入到末尾
-        m_activeSettingItems << item->pluginItem();
+        m_activeSettingItems << pluginItem;
     }
     resetPluginDisplay();
     Q_EMIT itemCountChanged();
@@ -319,6 +322,15 @@ QuickDockItem *QuickPluginWindow::getDockItemByPlugin(PluginsItemInterface *item
     return nullptr;
 }
 
+bool QuickPluginWindow::isQuickPlugin(PluginsItemInterface *pluginItem)
+{
+    QJsonObject metaData = QuickSettingController::instance()->metaData(pluginItem);
+    if (metaData.contains("tool"))
+        return !metaData.value("tool").toBool();
+
+    return true;
+}
+
 int QuickPluginWindow::getDropIndex(QPoint point)
 {
     QuickDockItem *targetItem = getDockItemByPlugin(findQuickSettingItem(point, m_activeSettingItems));
@@ -435,6 +447,7 @@ void QuickPluginWindow::resetPluginDisplay()
     }
     // 将列表中所有的控件按照顺序添加到布局上
     auto addWidget = [ = ](const QList<PluginsItemInterface *> &items) {
+        QuickSettingController *quickController = QuickSettingController::instance();
         for (PluginsItemInterface *item : items) {
             QuickDockItem *itemWidget = nullptr;
             if (pluginItems.contains(item)) {
@@ -445,7 +458,7 @@ void QuickPluginWindow::resetPluginDisplay()
                 if (pluginLoader)
                     metaData = pluginLoader->metaData().value("MetaData").toObject();
 
-                itemWidget = new QuickDockItem(item, metaData, this);
+                itemWidget = new QuickDockItem(item, metaData, quickController->itemKey(item), this);
                 itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
             }
             connect(itemWidget, &QuickDockItem::clicked, this, &QuickPluginWindow::onFixedClick);
@@ -460,16 +473,19 @@ void QuickPluginWindow::resetPluginDisplay()
 
 void QuickPluginWindow::initConnection()
 {
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ](QuickSettingItem * settingItem) {
-        const QString pluginName = settingItem->pluginItem()->pluginName();
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
+        if (pluginClass != QuickSettingController::PluginAttribute::Quick)
+            return;
+
+        const QString pluginName = itemInter->pluginName();
         if (!fixedPluginNames.contains(pluginName))
             return;
 
-        addPlugin(settingItem);
+        addPlugin(itemInter);
     });
 
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, [ this ] (QuickSettingItem *settingItem){
-        removePlugin(settingItem->pluginItem());
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, [ this ] (PluginsItemInterface *itemInter){
+        removePlugin(itemInter);
     });
 
     connect(QuickSettingController::instance(), &QuickSettingController::pluginUpdated, this, &QuickPluginWindow::onUpdatePlugin);
@@ -480,10 +496,11 @@ void QuickPluginWindow::initConnection()
  * @param pluginItem
  * @param parent
  */
-QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, QWidget *parent)
+QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, const QString itemKey, QWidget *parent)
     : QWidget(parent)
     , m_pluginItem(pluginItem)
     , m_metaData(metaData)
+    , m_itemKey(itemKey)
 {
 }
 
@@ -509,8 +526,7 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
     if (!m_pluginItem)
         return QWidget::paintEvent(event);
 
-    int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
-    QPixmap pixmap = m_pluginItem->icon(DockPart::QuickPanel).pixmap(pixmapSize, pixmapSize);
+    QPixmap pixmap = iconPixmap();
     QRect pixmapRect = QRect((rect().width() - ICONHEIGHT) / 2, (rect().height() - ICONHEIGHT) / 2,
                              ICONHEIGHT, ICONHEIGHT);
 
@@ -522,4 +538,20 @@ void QuickDockItem::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT clicked();
     QWidget::mouseReleaseEvent(event);
+}
+
+QPixmap QuickDockItem::iconPixmap() const
+{
+    int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
+    QIcon icon = m_pluginItem->icon(DockPart::QuickShow);
+    if (!icon.isNull())
+        return icon.pixmap(pixmapSize, pixmapSize);
+
+    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+    if (itemWidget) {
+        itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+        return itemWidget->grab();
+    }
+
+    return QPixmap();
 }

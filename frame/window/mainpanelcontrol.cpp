@@ -39,6 +39,7 @@
 #include "mainwindow.h"
 #include "appmultiitem.h"
 #include "dockscreen.h"
+#include "docktraywindow.h"
 
 #include <QDrag>
 #include <QTimer>
@@ -97,7 +98,7 @@ MainPanelControl::MainPanelControl(DockInter *dockInter, QWidget *parent)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_displayMode(Efficient)
-    , m_tray(nullptr)
+    , m_tray(new DockTrayWindow(dockInter, this))
     , m_dockInter(dockInter)
     , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, m_dockInter, this))
     , m_toolHelper(new ToolAppHelper(m_pluginAreaWidget, m_toolSonAreaWidget, this))
@@ -181,22 +182,28 @@ void MainPanelControl::initUI()
     m_toolSonLayout->setContentsMargins(0, 0, 0, 0);
     m_toolAreaLayout->addWidget(m_toolSonAreaWidget);
 
+    // 添加托盘区域（包括托盘图标和插件）等
+    m_tray->setObjectName("tray");
+    m_mainPanelLayout->addWidget(m_tray);
+
+    m_trayAreaWidget->setVisible(false);
+    m_pluginAreaWidget->setVisible(false);
     /* 托盘区域 */
-    m_trayAreaWidget->setObjectName("trayarea");
+    /*m_trayAreaWidget->setObjectName("trayarea");
     m_trayAreaWidget->setLayout(m_trayAreaLayout);
     m_trayAreaLayout->setSpacing(0);
     m_trayAreaLayout->setContentsMargins(0, 10, 0, 10);
     m_mainPanelLayout->addWidget(m_trayAreaWidget);
 
     m_traySpliter->setObjectName("spliter_tray");
-    m_mainPanelLayout->addWidget(m_traySpliter);
+    m_mainPanelLayout->addWidget(m_traySpliter);*/
 
     /* 插件区域 */
-    m_pluginAreaWidget->setObjectName("pluginarea");
+    /*m_pluginAreaWidget->setObjectName("pluginarea");
     m_pluginAreaWidget->setLayout(m_pluginLayout);
     m_pluginLayout->setSpacing(10);
     m_pluginLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainPanelLayout->addWidget(m_pluginAreaWidget, 0, Qt::AlignCenter);
+    m_mainPanelLayout->addWidget(m_pluginAreaWidget, 0, Qt::AlignCenter);*/
 
     /* 桌面预览 */
     m_desktopWidget->setObjectName("showdesktoparea");
@@ -218,6 +225,7 @@ void MainPanelControl::initConnection()
     connect(m_toolHelper, &ToolAppHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_toolHelper, &ToolAppHelper::toolVisibleChanged, this, &MainPanelControl::onToolVisibleChanged);
     connect(m_multiHelper, &MultiWindowHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
+    connect(m_tray, &DockTrayWindow::requestUpdate, this, &MainPanelControl::onTrayRequestUpdate);
 }
 
 /**
@@ -231,6 +239,7 @@ void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
 
     m_displayMode = dislayMode;
     m_recentHelper->setDisplayMode(dislayMode);
+    m_tray->setDisplayMode(dislayMode);
     m_toolHelper->setDisplayMode(dislayMode);
     m_multiHelper->setDisplayMode(dislayMode);
     updateDisplayMode();
@@ -310,13 +319,13 @@ void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
  * @param index　位置索引，如果为负数则插入到最后，为正则插入到指定位置
  * @param wdg　应用指针对象
  */
-void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
+/*void MainPanelControl::addTrayAreaItem(int index, QWidget *wdg)
 {
     m_tray = static_cast<TrayPluginItem *>(wdg);
     m_trayAreaLayout->insertWidget(index, wdg);
     if (m_tray)
         m_tray->installEventFilter(this);
-}
+}*/
 
 /**移除固定区域某一应用
  * @brief MainPanelControl::removeFixedAreaItem
@@ -437,10 +446,12 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         m_recentHelper->addAppItem(index, item);
         break;
     case DockItem::TrayPlugin: // 此处只会有一个tray系统托盘插件，微信、声音、网络蓝牙等等，都在系统托盘插件中处理的
-        addTrayAreaItem(index, item);
-        break;
+        //addTrayAreaItem(index, item);
+        return;
+        //break;
     case DockItem::Plugins:
-        m_toolHelper->addPluginItem(index, item);
+        //m_toolHelper->addPluginItem(index, item);
+        return;
         break;
     case DockItem::AppMultiWindow:
         m_multiHelper->addMultiWindow(index, static_cast<AppMultiItem *>(item));
@@ -695,8 +706,8 @@ bool MainPanelControl::eventFilter(QObject *watched, QEvent *event)
     // 但是子部件的模式变化函数在FashionTrayItem部件中的
     // NormalContainer部件尺寸变化完成之前就已经结束，导致
     // NormalContainer没有更新自己的尺寸，引起插件区域拥挤
-    if (m_tray && watched == m_tray && event->type() == QEvent::Resize)
-        m_tray->pluginItem()->displayModeChanged(m_displayMode);
+    //if (m_tray && watched == m_tray && event->type() == QEvent::Resize)
+        //m_tray->pluginItem()->displayModeChanged(m_displayMode);
 
     // 更新应用区域大小和任务栏图标大小
     if (watched == m_appAreaSonWidget) {
@@ -980,11 +991,11 @@ void MainPanelControl::updateModeChange()
     m_traySpliter->setVisible(m_displayMode == DisplayMode::Efficient);
     m_pluginAreaWidget->setVisible(m_displayMode == DisplayMode::Efficient);
     m_toolAreaWidget->setVisible(m_displayMode == DisplayMode::Fashion);
+    m_toolSonAreaWidget->setVisible(m_displayMode == DisplayMode::Fashion);
     onRecentVisibleChanged(m_recentHelper->recentIsVisible());
     onDockAppVisibleChanged(m_recentHelper->dockAppIsVisible());
     onToolVisibleChanged(m_toolHelper->toolIsVisible());
-    if (m_tray)
-        m_tray->setVisible(m_displayMode == DisplayMode::Efficient);
+    m_tray->setVisible(m_displayMode == DisplayMode::Efficient);
 }
 
 /**把驻留应用和被打开的应用所在窗口移动到指定位置
@@ -1224,9 +1235,10 @@ void MainPanelControl::resizeDockIcon()
     } else {
         int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
         // 减去托盘间隔区域
-        if (m_tray) {
+        /*if (m_tray) {
             totalLength -= (m_tray->trayVisibleItemCount() + 1) * 10;
-        }
+        }*/
+        totalLength -= m_tray->width();
         // 减去3个分割线的宽度
         totalLength -= 3 * SPLITER_SIZE;
         // 减去显示桌面图标宽度
@@ -1265,9 +1277,9 @@ void MainPanelControl::resizeDockIcon()
             return;
 
         // 参与计算的插件的个数包含托盘和插件
-        int pluginCount = m_tray ? m_tray->trayVisibleItemCount() + calcPluginItemCount : calcPluginItemCount;
+//        int pluginCount = m_tray ? m_tray->trayVisibleItemCount() + calcPluginItemCount : calcPluginItemCount;
         // 需要计算的图标总数
-        int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + pluginCount;
+        int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count()/* + pluginCount*/;
         if (iconCount <= 0)
             return;
 
@@ -1290,8 +1302,8 @@ void MainPanelControl::resizeDockIcon()
             tray_item_size = 20;
 
         // 减去插件图标的大小后重新计算固定图标和应用图标的平均大小
-        totalLength -= tray_item_size * pluginCount;
-        iconCount -= pluginCount;
+        totalLength -= m_tray->width();//tray_item_size * pluginCount;
+        //iconCount -= pluginCount;
 
         // 余数
         yu = (totalLength % iconCount);
@@ -1408,8 +1420,8 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
         }
     }
 
-    if (m_tray)
-        m_tray->centralWidget()->setProperty("iconSize", traySize);
+    /*if (m_tray)
+        m_tray->centralWidget()->setProperty("iconSize", traySize);*/
 
     // 因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
     // 因此需要通过多一层布局来获取各插件
@@ -1500,6 +1512,15 @@ void MainPanelControl::onDockAppVisibleChanged(bool visible)
 void MainPanelControl::onToolVisibleChanged(bool visible)
 {
     m_recentSpliter->setVisible(visible);
+}
+
+void MainPanelControl::onTrayRequestUpdate()
+{
+    m_tray->layoutWidget();
+    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right)
+        m_tray->setFixedHeight(m_tray->suitableSize().height());
+    else
+        m_tray->setFixedWidth(m_tray->suitableSize().width());
 }
 
 /**时尚模式没有‘显示桌面’区域

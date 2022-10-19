@@ -62,7 +62,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
-    void addPlugin(QuickSettingItem *item);
+    void addPlugin(PluginsItemInterface *pluginItem);
     void removePlugin(PluginsItemInterface *item);
     void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
@@ -79,6 +79,7 @@ private:
     void resetPluginDisplay();
     QPoint popupPoint() const;
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
+    bool isQuickPlugin(PluginsItemInterface *pluginItem);
 
 private:
     QBoxLayout *m_mainLayout;
@@ -93,7 +94,7 @@ class QuickDockItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, QWidget *parent = nullptr);
+    explicit QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, const QString itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
     PluginsItemInterface *pluginItem();
@@ -106,9 +107,12 @@ protected:
     void paintEvent(QPaintEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
+    QPixmap iconPixmap() const;
+
 private:
     PluginsItemInterface *m_pluginItem;
     QJsonObject m_metaData;
+    QString m_itemKey;
 };
 
 #endif // QUICKPLUGINWINDOW_H
