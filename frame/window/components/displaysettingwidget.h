@@ -39,6 +39,7 @@ public:
 
 private:
     void initUI();
+    void resizeWidgetHeight();
 
 private:
     BrightnessAdjWidget *m_brightnessAdjWidget;     // 亮度调整

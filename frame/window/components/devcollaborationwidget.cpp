@@ -31,10 +31,9 @@
 #include <QStandardItemModel>
 
 #define TITLE_HEIGHT 16
-#define ITME_WIDTH 310
+#define ITEM_WIDTH 310
 #define ITEM_HEIGHT 36
-#define LISTVIEW_ITEM_SPACE 2
-#define ITME_SPACE 10
+#define LISTVIEW_ITEM_SPACE 5
 #define PER_DEGREE 14
 
 DevCollaborationWidget::DevCollaborationWidget(QWidget *parent)
@@ -59,6 +58,13 @@ void DevCollaborationWidget::showEvent(QShowEvent *event)
     QWidget::showEvent(event);
 }
 
+void DevCollaborationWidget::resizeEvent(QResizeEvent *event)
+{
+    Q_EMIT sizeChanged();
+
+    QWidget::resizeEvent(event);
+}
+
 void DevCollaborationWidget::initUI()
 {
     m_deviceListView->setModel(m_viewItemModel);
@@ -73,7 +79,7 @@ void DevCollaborationWidget::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->setMargin(0);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(ITME_SPACE);
+    mainLayout->setSpacing(0);
     mainLayout->addLayout(hLayout);
     mainLayout->addWidget(m_deviceListView);
 
@@ -107,7 +113,7 @@ void DevCollaborationWidget::loadDevice()
         if (!m_deviceListView->isVisible())
             m_deviceListView->setVisible(true);
 
-        m_deviceListView->setFixedSize(ITME_WIDTH, m_deviceListView->count() * ITEM_HEIGHT + LISTVIEW_ITEM_SPACE * (m_deviceListView->count() * 2));
+        m_deviceListView->setFixedSize(ITEM_WIDTH, m_deviceListView->count() * ITEM_HEIGHT + LISTVIEW_ITEM_SPACE * (m_deviceListView->count() * 2));
     }
 
     resetWidgetSize();
@@ -175,9 +181,9 @@ void DevCollaborationWidget::updateDeviceListView()
 
 void DevCollaborationWidget::resetWidgetSize()
 {
-    int height = TITLE_HEIGHT + ITME_SPACE + (m_deviceListView->count() ? m_deviceListView->height() : 0);
+    int height = TITLE_HEIGHT + (m_deviceListView->count() ? m_deviceListView->height() : 0);
 
-    setFixedSize(ITME_WIDTH, height);
+    setFixedSize(ITEM_WIDTH, height);
 }
 
 void DevCollaborationWidget::itemClicked(const QModelIndex &index)

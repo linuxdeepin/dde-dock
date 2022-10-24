@@ -39,8 +39,12 @@ class DevCollaborationWidget : public QWidget
 public:
     explicit DevCollaborationWidget(QWidget *parent = nullptr);
 
+signals:
+    void sizeChanged();
+
 protected:
     void showEvent(QShowEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void loadDevice();

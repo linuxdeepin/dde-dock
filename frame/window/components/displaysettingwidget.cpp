@@ -60,7 +60,14 @@ void DisplaySettingWidget::initUI()
 
     setLayout(mainLayout);
 
+    resizeWidgetHeight();
+    connect(m_collaborationWidget, &DevCollaborationWidget::sizeChanged,
+            this, &DisplaySettingWidget::resizeWidgetHeight);
+}
+
+void DisplaySettingWidget::resizeWidgetHeight()
+{
     QMargins margins = this->contentsMargins();
     setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height() +
-            m_collaborationWidget->height() + m_settingBtn->height() + ItemSpacing * 2);
+                   m_collaborationWidget->height() + m_settingBtn->height() + ItemSpacing * 2);
 }
