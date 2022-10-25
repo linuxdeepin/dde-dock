@@ -242,9 +242,9 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
-void PluginsItem::showPopupWindow(QWidget *const content, const bool model)
+void PluginsItem::showPopupWindow(QWidget *const content, const bool model, const int radius)
 {
-    DockItem::showPopupWindow(content, model);
+    DockItem::showPopupWindow(content, model, radius);
 }
 
 const QString PluginsItem::contextMenu() const

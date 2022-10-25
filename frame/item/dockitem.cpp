@@ -30,7 +30,7 @@ DockItem::DockItem(QWidget *parent)
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
-        arrowRectangle->setRadius(18);
+        arrowRectangle->setRadius(6);
         arrowRectangle->setShadowYOffset(2);
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
@@ -270,13 +270,9 @@ void DockItem::showHoverTips()
     showPopupWindow(content);
 }
 
-void DockItem::showPopupWindow(QWidget *const content, const bool model)
+void DockItem::showPopupWindow(QWidget *const content, const bool model, const int radius)
 {
-    if(itemType() == App){
-        PopupWindow->setRadius(18);
-    }else {
-        PopupWindow->setRadius(6);
-    }
+    PopupWindow->setRadius(radius);
 
     m_popupShown = true;
     m_lastPopupWidget = content;
