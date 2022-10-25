@@ -126,7 +126,7 @@ void CollaborationDevModel::updateDevice(const QStringList &devPaths)
     emit devicesChanged();
 }
 
-const CollaborationDevice *CollaborationDevModel::getDevice(const QString &machinePath)
+CollaborationDevice *CollaborationDevModel::getDevice(const QString &machinePath)
 {
     return m_devices.value(machinePath, nullptr);
 }
@@ -138,6 +138,7 @@ CollaborationDevice::CollaborationDevice(const QString &devPath, QObject *parent
     , m_isPaired(false)
     , m_isCooperated(false)
     , m_isValid(false)
+    , m_isCooperating(false)
     , m_devDbusInter(new QDBusInterface(CollaborationService, devPath, CollaborationInterface + QString(".Machine"),
                                         QDBusConnection::sessionBus(), this))
 {
@@ -204,6 +205,11 @@ bool CollaborationDevice::isCooperated() const
     return m_isCooperated;
 }
 
+void CollaborationDevice::setDeviceIsCooperating(bool isCooperating)
+{
+    m_isCooperating = isCooperating;
+}
+
 void CollaborationDevice::onPropertyChanged(const QDBusMessage &msg)
 {
     QList<QVariant> arguments = msg.arguments();
@@ -218,10 +224,12 @@ void CollaborationDevice::onPropertyChanged(const QDBusMessage &msg)
     if (changedProps.contains("Paired")) {
         bool isPaired = changedProps.value("Paired").value<bool>();
         m_isPaired = isPaired;
-        if (isPaired) {
+        if (isPaired && m_isCooperating) {
             // paired 成功之后再去请求cooperate
             requestCooperate();
-        } else {
+        }
+
+        if (!isPaired){
             Q_EMIT pairedStateChanged(false);
         }
     } else if (changedProps.contains("Cooperating")) {

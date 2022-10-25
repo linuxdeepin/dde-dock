@@ -189,11 +189,12 @@ void DevCollaborationWidget::resetWidgetSize()
 void DevCollaborationWidget::itemClicked(const QModelIndex &index)
 {
     QString machinePath = index.data(DevItemDelegate::MachinePathDataRole).toString();
-    const CollaborationDevice *device = m_deviceModel->getDevice(machinePath);
+    CollaborationDevice *device = m_deviceModel->getDevice(machinePath);
     if (!device)
         return;
 
     if (!device->isPaired()) {
+        device->setDeviceIsCooperating(true);
         device->pair();
         if (!m_connectingDevices.contains(machinePath))
             m_connectingDevices.append(machinePath);
@@ -217,6 +218,7 @@ void DevCollaborationWidget::itemStatusChanged()
     if (!device)
         return;
 
+    device->setDeviceIsCooperating(false);
     QString machinePath = device->machinePath();
     if (m_deviceItemMap.contains(machinePath) && m_deviceItemMap[machinePath]) {
         // 更新item的连接状态

@@ -46,7 +46,7 @@ public:
     void checkServiceValid();
 
     QList<CollaborationDevice *> devices() const;
-    const CollaborationDevice *getDevice(const QString &machinePath);
+    CollaborationDevice *getDevice(const QString &machinePath);
 
 private slots:
     void onPropertyChanged(const QDBusMessage &msg);
@@ -86,6 +86,7 @@ public:
     QString deviceIcon() const;
     bool isPaired() const;
     bool isCooperated() const;
+    void setDeviceIsCooperating(bool isCooperating);
 
 private slots:
     void onPropertyChanged(const QDBusMessage &msg);
@@ -111,6 +112,9 @@ private:
     bool m_isPaired;
     bool m_isCooperated;
     bool m_isValid;
+
+    // 标记任务栏点击触发协同连接
+    bool m_isCooperating;
 
     QDBusInterface *m_devDbusInter;
 };
