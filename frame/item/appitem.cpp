@@ -603,7 +603,7 @@ void AppItem::showPreview()
         PopupWindow->setLeftRightRadius(false);
     }
 
-    showPopupWindow(m_appPreviewTips, true);
+    showPopupWindow(m_appPreviewTips, true, 18);
 }
 
 void AppItem::playSwingEffect()

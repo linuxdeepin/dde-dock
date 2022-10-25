@@ -8,6 +8,8 @@
 #include <QAccessible>
 #include <QTextDocument>
 
+#define PADDING 4
+
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
@@ -30,7 +32,7 @@ void TipsWidget::setText(const QString &text)
     m_text = "བོད་སྐད་ཡིག་གཟུགས་ཚད་ལེན་ཚོད་ལྟའི་སྐོར་གྱི་རྗོད་ཚིག";
 #endif
 
-    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().boundingRect(m_text).height());
+    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().boundingRect(m_text).height() + PADDING);
 
     update();
 
@@ -54,7 +56,7 @@ void TipsWidget::setTextList(const QStringList &textList)
         height += fontMetrics().boundingRect(text).height();
     }
 
-    setFixedSize(width + 20, height);
+    setFixedSize(width + 20, height + PADDING);
 
     update();
 }

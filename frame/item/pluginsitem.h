@@ -50,7 +50,7 @@ protected:
     void showEvent(QShowEvent *event) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
-    void showPopupWindow(QWidget *const content, const bool model = false) override;
+    void showPopupWindow(QWidget *const content, const bool model = false, const int radius = 6) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
     void resizeEvent(QResizeEvent *event) override;

@@ -72,7 +72,7 @@ protected:
 
     void hideNonModel();
     void popupWindowAccept();
-    virtual void showPopupWindow(QWidget *const content, const bool model = false);
+    virtual void showPopupWindow(QWidget *const content, const bool model = false, const int radius = 6);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
