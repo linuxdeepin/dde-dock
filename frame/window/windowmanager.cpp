@@ -601,7 +601,7 @@ void WindowManager::onChangeDockPosition(QString fromScreen, QString toScreen, c
 
 void WindowManager::onRequestUpdateFrontendGeometry()
 {
-    QRect rect = getDockGeometry(false);
+    QRect rect = getDockGeometry(true);
     // 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
     if (rect.width() == 0 || rect.height() == 0)
         return;

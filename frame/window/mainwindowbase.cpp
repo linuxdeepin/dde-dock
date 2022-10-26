@@ -388,7 +388,7 @@ QRect MainWindowBase::getDockGeometry(QScreen *screen, const Dock::Position &pos
     const int margin = static_cast<int>((displaymode == DisplayMode::Fashion ? 10 : 0) * (withoutScale ? qApp->devicePixelRatio() : 1));
     int dockSize = 0;
     if (hideState == Dock::HideState::Show)
-        dockSize = windowSize();
+        dockSize = windowSize() * (withoutScale ? qApp->devicePixelRatio() : 1);
 
     // 拿到当前显示器缩放之前的分辨率
     QRect screenRect = screen->handle()->geometry();
