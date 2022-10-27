@@ -59,6 +59,7 @@ public:
     void startSplit(const QRect &rect) override;
     bool split(SplitDirection direction) override;
     bool suportSplitScreen() override;
+    bool releaseSplit() override;
 
 private:
     void setMaskVisible(const QRect &rect, bool visible);

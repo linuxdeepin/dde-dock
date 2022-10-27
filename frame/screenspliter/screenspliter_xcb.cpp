@@ -95,7 +95,6 @@ void ScreenSpliter_Xcb::startSplit(const QRect &rect)
 
 bool ScreenSpliter_Xcb::split(ScreenSpliter::SplitDirection direction)
 {
-    showSplitScreenEffect(QRect(), false);
     if (!openWindow())
         return false;
 
@@ -208,6 +207,7 @@ bool ScreenSpliter_Xcb::suportSplitScreen()
 
 bool ScreenSpliter_Xcb::releaseSplit()
 {
+    showSplitScreenEffect(QRect(), false);
     if (!m_isSplitCreateWindow)
         return false;
 

@@ -172,6 +172,12 @@ bool ScreenSpliter_Wayland::suportSplitScreen()
     return (!m_checkedNotSupport);
 }
 
+bool ScreenSpliter_Wayland::releaseSplit()
+{
+    setMaskVisible(QRect(), false);
+    return true;
+}
+
 /**
  * @brief SplitWindowManager::SplitWindowManager
  * @param wayland下的分屏的管理
