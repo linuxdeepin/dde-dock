@@ -21,6 +21,7 @@
  */
 
 #include "bluetoothitem.h"
+#include "adaptersmanager.h"
 #include "constants.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
@@ -29,6 +30,7 @@
 #include <DApplication>
 #include <DDBusSender>
 #include <DGuiApplicationHelper>
+#include <adapter.h>
 
 #include <QPainter>
 
@@ -41,10 +43,10 @@ DGUI_USE_NAMESPACE
 
 using namespace Dock;
 
-BluetoothItem::BluetoothItem(QWidget *parent)
+BluetoothItem::BluetoothItem(AdaptersManager *adapterManager, QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
-    , m_applet(new BluetoothApplet(this))
+    , m_applet(new BluetoothApplet(adapterManager, this))
     , m_devState(Device::State::StateUnavailable)
     , m_adapterPowered(m_applet->poweredInitState())
 {
@@ -193,6 +195,19 @@ void BluetoothItem::refreshTips()
 bool BluetoothItem::hasAdapter()
 {
     return m_applet->hasAadapter();
+}
+
+bool BluetoothItem::isPowered()
+{
+    if (!m_applet->hasAadapter())
+        return false;
+
+    QList<const Adapter *> adapters = m_applet->adaptersManager()->adapters();
+    for (const Adapter *adapter : adapters) {
+        if (adapter->powered())
+            return true;
+    }
+    return false;
 }
 
 void BluetoothItem::resizeEvent(QResizeEvent *event)

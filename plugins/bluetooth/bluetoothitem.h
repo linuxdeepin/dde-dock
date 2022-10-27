@@ -30,6 +30,7 @@
 #define BLUETOOTH_KEY "bluetooth-item-key"
 
 class BluetoothApplet;
+class AdaptersManager;
 
 namespace Dock {
 class TipsWidget;
@@ -39,7 +40,7 @@ class BluetoothItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit BluetoothItem(QWidget *parent = nullptr);
+    explicit BluetoothItem(AdaptersManager *adapterManager, QWidget *parent = nullptr);
 
     QWidget *tipsWidget();
     QWidget *popupApplet();
@@ -51,6 +52,7 @@ public:
     void refreshTips();
 
     bool hasAdapter();
+    bool isPowered();
 
 protected:
     void resizeEvent(QResizeEvent *event);

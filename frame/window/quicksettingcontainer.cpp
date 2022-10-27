@@ -158,17 +158,18 @@ void QuickSettingContainer::onItemDetailClick(PluginsItemInterface *pluginInter)
     if (!quickItemWidget)
         return;
 
-    QWidget *widget = pluginInter->itemWidget(quickItemWidget->itemKey());
+    QWidget *widget = pluginInter->itemPopupApplet(QUICK_ITEM_DETAIL_KEY);
     if (!widget)
         return;
 
     showWidget(widget, pluginInter->pluginDisplayName());
+    onResizeView();
 }
 
 bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_childPage && event->type() == QEvent::Resize)
-        resizeView();
+        onResizeView();
 
     return QWidget::eventFilter(watched, event);
 }
@@ -184,7 +185,7 @@ void QuickSettingContainer::onPluginInsert(QuickSettingItem *quickItem)
 {
     initQuickItem(quickItem);
     updateItemLayout();
-    resizeView();
+    onResizeView();
 }
 
 void QuickSettingContainer::onPluginRemove(QuickSettingItem *quickItem)
@@ -196,7 +197,7 @@ void QuickSettingContainer::onPluginRemove(QuickSettingItem *quickItem)
 
     //调整子控件的位置
     updateItemLayout();
-    resizeView();
+    onResizeView();
 }
 
 void QuickSettingContainer::mousePressEvent(QMouseEvent *event)
@@ -324,7 +325,7 @@ void QuickSettingContainer::initUi()
         if (pluginItems.size() > 0)
             updateItemLayout();
         // 设置当前窗口的大小
-        resizeView();
+        onResizeView();
         setFixedWidth(ITEMWIDTH * 4 + (ITEMSPACE * 5));
     }, Qt::QueuedConnection);
 
@@ -335,18 +336,18 @@ void QuickSettingContainer::initConnection()
 {
     connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, &QuickSettingContainer::onPluginInsert);
     connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
-    connect(m_playerWidget, &MediaWidget::visibleChanged, this, [ this ] { resizeView(); });
-    connect(m_volumnWidget, &VolumeWidget::visibleChanged, this, [ this ] { resizeView(); });
+    connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
+    connect(m_volumnWidget, &VolumeWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_volumnWidget, &VolumeWidget::rightIconClick, this, [ this ] {
         showWidget(m_volumeSettingWidget, tr("voice"));
-        resizeView();
+        onResizeView();
     });
-    connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, [ this ] { resizeView(); });
+    connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
         if (iconPosition == SliderContainer::RightIcon) {
             // 点击右侧的按钮，弹出具体的调节的界面
             showWidget(m_displaySettingWidget, tr("brightness"));
-            resizeView();
+            onResizeView();
         }
     });
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {
@@ -358,7 +359,8 @@ void QuickSettingContainer::initConnection()
     });
 }
 
-void QuickSettingContainer::resizeView()
+// 调整尺寸
+void QuickSettingContainer::onResizeView()
 {
     if (m_switchLayout->currentWidget() == m_mainWidget) {
         QList<QuickSettingItem *> pluginItems = m_pluginLoader->settingItems();

@@ -112,11 +112,11 @@ void SettingLabel::paintEvent(QPaintEvent *event)
     return QWidget::paintEvent(event);
 }
 
-BluetoothApplet::BluetoothApplet(QWidget *parent)
+BluetoothApplet::BluetoothApplet(AdaptersManager *adapterManager, QWidget *parent)
     : QWidget(parent)
     , m_scroarea(nullptr)
     , m_contentWidget(new QWidget(this))
-    , m_adaptersManager(new AdaptersManager(this))
+    , m_adaptersManager(adapterManager)
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
@@ -176,6 +176,11 @@ QStringList BluetoothApplet::connectedDevicesName()
     }
 
     return deviceList;
+}
+
+AdaptersManager *BluetoothApplet::adaptersManager()
+{
+    return m_adaptersManager;
 }
 
 void BluetoothApplet::onAdapterAdded(Adapter *adapter)

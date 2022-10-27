@@ -38,6 +38,7 @@ public:
     void connectDevice(const Device *device, Adapter *adapter);
     int adaptersCount();
     void adapterRefresh(const Adapter *adapter);
+    QList<const Adapter *> adapters();
 
 signals:
     void adapterIncreased(Adapter *adapter);

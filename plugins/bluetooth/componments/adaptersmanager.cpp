@@ -227,29 +227,28 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
     QDBusObjectPath dPath(adpterObj["Path"].toString());
     QDBusPendingCall call = m_bluetoothInter->GetDevices(dPath);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, adapter, call, watcher] {
-        if (adapter) {
-            if (!call.isError()) {
-                QDBusReply<QString> reply = call.reply();
-                const QString replyStr = reply.value();
-                QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
-                adapter->initDevicesList(doc);
-                emit this->adapterIncreased(adapter);
-            } else {
-                qWarning() << call.error().message();
-            }
-        }
-        delete watcher;
-    });
+    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QDBusPendingCallWatcher::deleteLater);
+    connect(watcher, &QDBusPendingCallWatcher::finished, [ this, adapter, call ] {
+        if (!call.isError()) {
+            QDBusReply<QString> reply = call.reply();
+            const QString replyStr = reply.value();
+            QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
+            adapter->initDevicesList(doc);
 
-    QString id = adapter->id();
-    if (!id.isEmpty()) {
-        if (!m_adapters.contains(id)) {
-            m_adapters[id] = adapter;
-        } else if (m_adapters[id] == nullptr) {
-            m_adapters[id] = adapter;
+            QString id = adapter->id();
+            if (!id.isEmpty()) {
+                if (!m_adapters.contains(id)) {
+                    m_adapters[id] = adapter;
+                } else if (!m_adapters[id]) {
+                    m_adapters[id] = adapter;
+                }
+            }
+
+            emit this->adapterIncreased(adapter);
+        } else {
+            qWarning() << call.error().message();
         }
-    }
+    });
 }
 
 void AdaptersManager::inflateAdapter(Adapter *adapter, const QJsonObject &adapterObj)
@@ -272,4 +271,9 @@ void AdaptersManager::adapterRefresh(const Adapter *adapter)
 {
     QDBusObjectPath dPath(adapter->id());
     m_bluetoothInter->RequestDiscovery(dPath);
+}
+
+QList<const Adapter *> AdaptersManager::adapters()
+{
+    return m_adapters.values();
 }

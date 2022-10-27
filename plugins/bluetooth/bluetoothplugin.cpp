@@ -21,12 +21,16 @@
  */
 
 #include "bluetoothplugin.h"
+#include "bluetoothwidget.h"
+#include "adaptersmanager.h"
 
 #define STATE_KEY  "enable"
 
 BluetoothPlugin::BluetoothPlugin(QObject *parent)
-    : QObject(parent),
-      m_bluetoothItem(nullptr)
+    : QObject(parent)
+    , m_adapterManager(new AdaptersManager(this))
+    , m_bluetoothItem(nullptr)
+    , m_bluetoothWidget(new BluetoothWidget(m_adapterManager))
 {
 }
 
@@ -47,7 +51,7 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
     if (m_bluetoothItem)
         return;
 
-    m_bluetoothItem.reset(new BluetoothItem);
+    m_bluetoothItem.reset(new BluetoothItem(m_adapterManager));
 
     connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
         m_enableState = true;
@@ -100,6 +104,10 @@ QWidget *BluetoothPlugin::itemPopupApplet(const QString &itemKey)
         return m_bluetoothItem->popupApplet();
     }
 
+    if (itemKey == QUICK_ITEM_DETAIL_KEY) {
+        return m_bluetoothItem->popupApplet();
+    }
+
     return nullptr;
 }
 
@@ -143,6 +151,28 @@ void BluetoothPlugin::refreshIcon(const QString &itemKey)
 void BluetoothPlugin::pluginSettingsChanged()
 {
     refreshPluginItemsVisible();
+}
+
+QIcon BluetoothPlugin::icon(const DockPart &)
+{
+    static QIcon icon(":/bluetooth-active-symbolic.svg");
+    return icon;
+}
+
+PluginsItemInterface::PluginStatus BluetoothPlugin::status() const
+{
+    if (m_bluetoothItem.data()->isPowered())
+        return PluginStatus::Active;
+
+    return PluginStatus::Deactive;
+}
+
+QString BluetoothPlugin::description() const
+{
+    if (m_bluetoothItem.data()->isPowered())
+        return tr("open");
+
+    return tr("close");
 }
 
 void BluetoothPlugin::refreshPluginItemsVisible()

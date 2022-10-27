@@ -28,6 +28,9 @@
 
 #include <QScopedPointer>
 
+class BluetoothWidget;
+class AdaptersManager;
+
 class BluetoothPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -53,11 +56,17 @@ public:
     void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
 
+    QIcon icon(const DockPart &) override;
+    PluginStatus status() const override;
+    QString description() const override;
+
 private:
     void refreshPluginItemsVisible();
 
 private:
+    AdaptersManager *m_adapterManager;
     QScopedPointer<BluetoothItem> m_bluetoothItem;
+    QScopedPointer<BluetoothWidget> m_bluetoothWidget;
     bool m_enableState = true;
 };
 

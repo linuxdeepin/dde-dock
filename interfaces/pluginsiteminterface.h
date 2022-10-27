@@ -34,6 +34,8 @@ enum class DockPart {
     SystemPanel      // 系统插件显示区域
 };
 
+// 快捷面板详情页面的itemWidget对应的itemKey
+#define QUICK_ITEM_DETAIL_KEY "quick_item_detail_key"
 ///
 /// \brief The PluginsItemInterface class
 /// the dock plugins item interface, all dock plugins should

@@ -70,14 +70,13 @@ private Q_SLOTS:
     void onPluginRemove(QuickSettingItem *quickItem);
     void onItemDetailClick(PluginsItemInterface *pluginInter);
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void onResizeView();
 
 private:
     // 加载UI
     void initUi();
     // 初始化槽函数
     void initConnection();
-    // 调整尺寸
-    void resizeView();
     // 调整控件位置
     void updateItemLayout();
     // 初始化控件项目

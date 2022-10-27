@@ -77,7 +77,7 @@ class BluetoothApplet : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BluetoothApplet(QWidget *parent = nullptr);
+    explicit BluetoothApplet(AdaptersManager *adapterManager, QWidget *parent = nullptr);
     bool poweredInitState();
     // 当前是否有蓝牙适配器
     bool hasAadapter();
@@ -89,6 +89,8 @@ public:
     QStringList connectedDevicesName();
 
     inline bool airplaneModeEnable() const { return m_airplaneModeEnable;}
+    // 返回蓝牙适配器
+    AdaptersManager *adaptersManager();
 
 signals:
     void noAdapter();
