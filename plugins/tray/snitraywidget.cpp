@@ -156,6 +156,8 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::NewStatus, [ = ] {
         onSNIStatusChanged(m_sniInter->status());
     });
+
+    initSNIPropertys();
 }
 
 QString SNITrayWidget::itemKeyForConfig()
@@ -249,6 +251,30 @@ uint SNITrayWidget::servicePID(const QString &servicePath)
     QString serviceName = serviceAndPath(servicePath).first;
     QDBusConnection conn = QDBusConnection::sessionBus();
     return conn.interface()->servicePid(serviceName);
+}
+
+void SNITrayWidget::initSNIPropertys()
+{
+    m_sniAttentionIconName = m_sniInter->attentionIconName();
+    m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
+    m_sniAttentionMovieName = m_sniInter->attentionMovieName();
+    m_sniCategory = m_sniInter->category();
+    m_sniIconName = m_sniInter->iconName();
+    m_sniIconPixmap = m_sniInter->iconPixmap();
+    m_sniIconThemePath = m_sniInter->iconThemePath();
+    m_sniMenuPath = m_sniInter->menu();
+    m_sniOverlayIconName = m_sniInter->overlayIconName();
+    m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
+    m_sniStatus = m_sniInter->status();
+
+    // 使用同步的方式获取id，否则在插入的时候无法获取正确的位置
+    m_sniInter->setSync(true);
+    m_sniId = m_sniInter->id();
+    m_sniInter->setSync(false);
+
+    m_updateIconTimer->start();
+//    m_updateOverlayIconTimer->start();
+//    m_updateAttentionIconTimer->start();
 }
 
 void SNITrayWidget::initMenu()

@@ -79,6 +79,7 @@ Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
 
 private Q_SLOTS:
+    void initSNIPropertys();
     void initMenu();
     void refreshIcon();
     void refreshOverlayIcon();
