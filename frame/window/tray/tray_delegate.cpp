@@ -27,6 +27,9 @@
 #include "widgets/snitrayitemwidget.h"
 #include "widgets/expandiconwidget.h"
 #include "utils.h"
+#include "pluginsiteminterface.h"
+#include "quicksettingcontroller.h"
+#include "systempluginitem.h"
 
 #include <DGuiApplicationHelper>
 
@@ -62,7 +65,7 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     quint32 winId = index.data(TrayModel::WinIdRole).value<quint32>();
 
     BaseTrayWidget *trayWidget = nullptr;
-    if(type == TrayIconType::XEMBED) {
+    if(type == TrayIconType::XEmbed) {
         if (Utils::IS_WAYLAND_DISPLAY) {
             static Display *display = XOpenDisplay(nullptr);
             static int screenp = 0;
@@ -74,9 +77,9 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         const TrayModel *model = qobject_cast<const TrayModel *>(index.model());
         if (model)
             connect(model, &TrayModel::requestUpdateIcon, trayWidget, &BaseTrayWidget::updateIcon);
-    } else if (type == TrayIconType::SNI) {
+    } else if (type == TrayIconType::Sni) {
         trayWidget = new SNITrayItemWidget(servicePath, parent);
-    } else if (type == TrayIconType::EXPANDICON) {
+    } else if (type == TrayIconType::ExpandIcon) {
         ExpandIconWidget *expandWidget = new ExpandIconWidget(parent);
         expandWidget->setPositonValue(m_position);
         connect(expandWidget, &ExpandIconWidget::trayVisbleChanged, this, [ = ](bool visible) {
@@ -84,7 +87,7 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         });
         connect(this, &TrayDelegate::requestDrag, this, &TrayDelegate::onRequestDrag);
         trayWidget = expandWidget;
-    } else if (type == TrayIconType::INDICATOR) {
+    } else if (type == TrayIconType::Incicator) {
         QString indicateName = key;
         int flagIndex = indicateName.indexOf("indicator:");
         if (flagIndex >= 0)
@@ -100,6 +103,13 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
                 indicatorWidget->setText(text);
         }
         trayWidget = indicatorWidget;
+    } else if (type == TrayIconType::SystemItem) {
+        PluginsItemInterface *pluginInter = (PluginsItemInterface *)(index.data(TrayModel::PluginInterfaceRole).toULongLong());
+        if (pluginInter) {
+            const QString itemKey = QuickSettingController::instance()->itemKey(pluginInter);
+            SystemPluginItem::setDockPostion(m_position);
+            trayWidget = new SystemPluginItem(pluginInter, itemKey, parent);
+        }
     }
 
     if (trayWidget)

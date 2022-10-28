@@ -37,6 +37,10 @@ namespace Dock {
 #define PLUGIN_ICON_MAX_SIZE 20
 #define PLUGIN_ITEM_WIDTH 300
 
+#define QUICK_PATH "/plugins/quick-trays"
+#define PLUGIN_PATH "/plugins"
+#define TRAY_PATH "/plugins/system-trays"
+
 // 需求变更成插件图标始终保持20x20,但16x16的资源还在。所以暂时保留此宏
 #define PLUGIN_ICON_MIN_SIZE 20
 

@@ -231,7 +231,7 @@ void TrayManagerWindow::initUi()
     m_splitLine->setPalette(pal);
 
     WinInfo info;
-    info.type = TrayIconType::EXPANDICON;
+    info.type = TrayIconType::ExpandIcon;
     m_model->addRow(info);
     m_trayView->openPersistentEditor(m_model->index(0, 0));
 

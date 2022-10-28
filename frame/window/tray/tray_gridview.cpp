@@ -289,7 +289,7 @@ void TrayGridView::mouseMoveEvent(QMouseEvent *e)
 
     // 如果当前拖动的位置是托盘展开按钮，则不让其拖动
     TrayIconType iconType = index.data(TrayModel::Role::TypeRole).value<TrayIconType>();
-    if (iconType == TrayIconType::EXPANDICON)
+    if (iconType == TrayIconType::ExpandIcon)
         return DListView::mouseMoveEvent(e);
 
     if ((qAbs(e->pos().x() - m_dragPos.x()) > m_dragDistance ||
@@ -426,7 +426,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     QModelIndex modelIndex = indexAt(m_dragPos);
     TrayIconType trayType = modelIndex.data(TrayModel::Role::TypeRole).value<TrayIconType>();
     // 展开图标不能移动
-    if (trayType == TrayIconType::EXPANDICON)
+    if (trayType == TrayIconType::ExpandIcon)
         return false;
 
     m_dropPos = indexRect(modelIndex).center();

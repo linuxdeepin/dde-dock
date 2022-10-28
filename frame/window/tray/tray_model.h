@@ -28,13 +28,15 @@
 class TrayMonitor;
 class IndicatorPlugin;
 class IndicatorTrayItem;
+class PluginsItemInterface;
 
 enum TrayIconType {
-    UNKNOW,
-    XEMBED,
-    SNI,
-    INDICATOR,
-    EXPANDICON
+    UnKnow,
+    XEmbed,
+    Sni,
+    Incicator,
+    ExpandIcon,
+    SystemItem
 };
 
 struct WinInfo {
@@ -43,19 +45,22 @@ struct WinInfo {
     quint32 winId;
     QString servicePath;
     bool isTypeWriting;
+    PluginsItemInterface *pluginInter;
 
-    WinInfo() : type(UNKNOW)
+    WinInfo() : type(UnKnow)
       , key(QString())
       , winId(0)
       , servicePath(QString())
-      , isTypeWriting(false) {}
+      , isTypeWriting(false)
+      , pluginInter(nullptr) {}
 
     bool operator==(const WinInfo &other) {
         return this->type == other.type
                 && this->key == other.key
                 && this->winId == other.winId
                 && this->servicePath == other.servicePath
-                && this->isTypeWriting == other.isTypeWriting;
+                && this->isTypeWriting == other.isTypeWriting
+                && this->pluginInter == other.pluginInter;
     }
 };
 
@@ -69,6 +74,7 @@ public:
         KeyRole,
         WinIdRole,
         ServiceRole,
+        PluginInterfaceRole,
         Blank
     };
 
@@ -113,10 +119,14 @@ private Q_SLOTS:
     void onIndicatorAdded(const QString &indicatorName);
     void onIndicatorRemoved(const QString &indicatorName);
 
+    void onSystemItemRemoved(PluginsItemInterface *itemInter);
+
 private:
     bool exist(const QString &itemKey);
     QString fileNameByServiceName(const QString &serviceName);
     bool isTypeWriting(const QString &servicePath);
+
+    void systemItemAdded(PluginsItemInterface *itemInter);
 
 protected:
     QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;

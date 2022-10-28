@@ -33,6 +33,7 @@
 struct WinInfo;
 class ExpandIconWidget;
 class QListView;
+class PluginsItemInterface;
 
 class TrayDelegate : public QStyledItemDelegate
 {

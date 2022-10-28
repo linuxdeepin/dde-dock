@@ -20,6 +20,7 @@
  */
 #include "proxyplugincontroller.h"
 #include "pluginsiteminterface.h"
+#include "constants.h"
 
 #include <QSettings>
 
@@ -41,13 +42,15 @@ static QMap<PluginType, QStringList> getPluginPaths()
     {
         QStringList pluginPaths;
     #ifdef QT_DEBUG
-        pluginPaths << qApp->applicationDirPath() + "/../plugins/quick-trays"
-                    << qApp->applicationDirPath() + "/../plugins";
+        pluginPaths << QString("%1/..%2").arg(qApp->applicationDirPath()).arg(QUICK_PATH)
+                    << QString("%1/..%2").arg(qApp->applicationDirPath()).arg(PLUGIN_PATH)
+                    << QString("%1/..%2").arg(qApp->applicationDirPath()).arg(TRAY_PATH);
     #else
-        pluginPaths << "/usr/lib/dde-dock/plugins/quick-trays"
-                    << "/usr/lib/dde-dock/plugins";
+        pluginPaths << QString("/usr/lib/dde-dock%1").arg(QUICK_PATH)
+                    << QString("/usr/lib/dde-dock%1").arg(PLUGIN_PATH)
+                    << QString("/usr/lib/dde-dock%1").arg(TRAY_PATH);
 
-        const QStringList pluginsDirs = (getPathFromConf("QUICK_TRAY_PATH") << getPathFromConf("PATH"));
+        const QStringList pluginsDirs = (getPathFromConf("QUICK_TRAY_PATH") << getPathFromConf("PATH") << getPathFromConf("SYSTEM_TRAY_PATH"));
         if (!pluginsDirs.isEmpty())
             pluginPaths << pluginsDirs;
     #endif

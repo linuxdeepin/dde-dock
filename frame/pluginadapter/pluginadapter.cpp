@@ -162,13 +162,21 @@ PluginsItemInterface::PluginSizePolicy PluginAdapter::pluginSizePolicy() const
 
 QIcon PluginAdapter::icon(const DockPart &dockPart)
 {
-    if (dockPart == DockPart::QuickPanel) {
+    QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
+    if (!itemWidget)
+        return QIcon();
+
+    switch (dockPart) {
+    case DockPart::QuickPanel: {
         // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
-        QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
-        if (itemWidget) {
-            itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
-            return itemWidget->grab();
-        }
+        itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+        return itemWidget->grab();
+    }
+    case DockPart::SystemPanel: {
+        itemWidget->setFixedSize(16, 16);
+        return itemWidget->grab();
+    }
+    default: break;
     }
 
     return QIcon();

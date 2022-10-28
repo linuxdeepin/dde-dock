@@ -41,13 +41,17 @@ void QuickSettingController::pluginItemAdded(PluginsItemInterface * const itemIn
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
     PluginAttribute pluginClass = PluginAttribute::Quick;
     QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
-    QJsonObject meta;
     if (pluginLoader) {
-        meta = pluginLoader->metaData().value("MetaData").toObject();
-        if (meta.contains("tool") && meta.value("tool").toBool())
-            pluginClass = PluginAttribute::Tool;
-        else if (meta.contains("fixed") && meta.value("fixed").toBool())
-            pluginClass = PluginAttribute::Fixed;
+        if (pluginLoader->fileName().contains("/plugins/system-trays")) {
+            // 如果是从系统托盘目录下加载的插件，则认为它是托盘插件，此时需要放入到托盘中
+            pluginClass = PluginAttribute::System;
+        } else {
+            QJsonObject meta = pluginLoader->metaData().value("MetaData").toObject();
+            if (meta.contains("tool") && meta.value("tool").toBool())
+                pluginClass = PluginAttribute::Tool;
+            else if (meta.contains("fixed") && meta.value("fixed").toBool())
+                pluginClass = PluginAttribute::Fixed;
+        }
     }
 
     m_quickPlugins[pluginClass] << itemInter;
@@ -64,8 +68,10 @@ void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const item
             continue;
 
         plugins.removeOne(itemInter);
-        if (plugins.isEmpty())
-            m_quickPlugins.remove(it.key());
+        if (plugins.isEmpty()) {
+            QuickSettingController::PluginAttribute pluginclass = it.key();
+            m_quickPlugins.remove(pluginclass);
+        }
 
         break;
     }

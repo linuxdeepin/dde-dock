@@ -261,7 +261,7 @@ void DockTrayWindow::initUi()
     m_mainBoxLayout->setAlignment(m_toolLineLabel, Qt::AlignCenter);
 
     WinInfo info;
-    info.type = TrayIconType::EXPANDICON;
+    info.type = TrayIconType::ExpandIcon;
     m_model->addRow(info);
     m_trayView->openPersistentEditor(m_model->index(0, 0));
 
@@ -277,11 +277,15 @@ void DockTrayWindow::initConnection()
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onResetLayout);
     connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onResetLayout);
 
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
-        if (pluginClass != QuickSettingController::PluginAttribute::Tool)
-            return;
-
-        onItemAdded(itemInter);
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+        switch (pluginAttr) {
+        case QuickSettingController::PluginAttribute::Tool:
+            // 下方只处理回收站等插件
+            onItemAdded(itemInter);
+            break;
+        default:
+            break;
+        }
     });
 
     connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, &DockTrayWindow::onItemRemove);
@@ -336,6 +340,7 @@ void DockTrayWindow::onItemRemove(PluginsItemInterface *itemInter)
             continue;
 
         m_toolLayout->removeWidget(pluginItem);
+
         Q_EMIT requestUpdate();
         break;
     }

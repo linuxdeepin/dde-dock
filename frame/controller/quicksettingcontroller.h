@@ -34,7 +34,8 @@ public:
     enum class PluginAttribute {
         Quick = 0,
         Tool,
-        Fixed
+        Fixed,
+        System
     };
 
 public:

@@ -23,6 +23,8 @@
 
 #include "indicatortrayitem.h"
 #include "indicatorplugin.h"
+#include "quicksettingcontroller.h"
+#include "pluginsiteminterface.h"
 
 #include <QMimeData>
 #include <QIcon>
@@ -46,6 +48,19 @@ TrayModel::TrayModel(QListView *view, bool isIconTray, bool hasInputMethod, QObj
     if (isIconTray) {
         connect(m_monitor, &TrayMonitor::xEmbedTrayAdded, this, &TrayModel::onXEmbedTrayAdded);
         connect(m_monitor, &TrayMonitor::indicatorFounded, this, &TrayModel::onIndicatorFounded);
+        connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+            if (pluginAttr != QuickSettingController::PluginAttribute::System)
+                return;
+
+            systemItemAdded(itemInter);
+        });
+
+        connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, &TrayModel::onSystemItemRemoved);
+        QMetaObject::invokeMethod(this, [ = ] {
+            QList<PluginsItemInterface *> systemPlugins = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::System);
+            for (PluginsItemInterface *plugin : systemPlugins)
+                systemItemAdded(plugin);
+        }, Qt::QueuedConnection);
     }
     connect(m_monitor, &TrayMonitor::xEmbedTrayRemoved, this, &TrayModel::onXEmbedTrayRemoved);
     connect(m_monitor, &TrayMonitor::requestUpdateIcon, this, &TrayModel::requestUpdateIcon);
@@ -173,6 +188,8 @@ QVariant TrayModel::data(const QModelIndex &index, int role) const
         return info.winId;
     case Role::ServiceRole:
         return info.servicePath;
+    case Role::PluginInterfaceRole:
+        return (qulonglong)(info.pluginInter);
     case Role::Blank:
         return indexDragging(index);
     default:
@@ -202,7 +219,7 @@ bool TrayModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, in
     Q_UNUSED(column)
 
     TrayIconType iconType = parent.data(TrayModel::Role::TypeRole).value<TrayIconType>();
-    if (iconType == TrayIconType::EXPANDICON)
+    if (iconType == TrayIconType::ExpandIcon)
         return false;
 
     return data->formats().contains(TRAY_DRAG_FALG);
@@ -243,7 +260,7 @@ void TrayModel::onXEmbedTrayAdded(quint32 winId)
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     WinInfo info;
-    info.type = XEMBED;
+    info.type = XEmbed;
     info.key = "wininfo:" + QString::number(winId);
     info.winId = winId;
     m_winInfos.append(info);
@@ -295,6 +312,23 @@ bool TrayModel::isTypeWriting(const QString &servicePath)
     return (appFilePath.startsWith("/usr/bin/fcitx") || appFilePath.endsWith("chinime-qim"));
 }
 
+void TrayModel::systemItemAdded(PluginsItemInterface *itemInter)
+{
+    for (const WinInfo &info : m_winInfos) {
+        if (info.pluginInter == itemInter)
+            return;
+    }
+
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+
+    WinInfo info;
+    info.type = SystemItem;
+    info.pluginInter = itemInter;
+    m_winInfos.append(info);
+
+    endInsertRows();
+}
+
 void TrayModel::onSniTrayAdded(const QString &servicePath)
 {
     bool typeWriting = isTypeWriting(servicePath);
@@ -313,7 +347,7 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     WinInfo info;
-    info.type = SNI;
+    info.type = Sni;
     info.key = "sni:" + servicePath;
     info.servicePath = servicePath;
     info.isTypeWriting = typeWriting;    // 是否为输入法
@@ -395,7 +429,7 @@ void TrayModel::onIndicatorAdded(const QString &indicatorName)
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     WinInfo info;
-    info.type = INDICATOR;
+    info.type = Incicator;
     info.key = itemKey;
     m_winInfos.append(info);
     endInsertRows();
@@ -405,6 +439,21 @@ void TrayModel::onIndicatorRemoved(const QString &indicatorName)
 {
     const QString &itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
     removeRow(itemKey);
+}
+
+void TrayModel::onSystemItemRemoved(PluginsItemInterface *itemInter)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+
+    for (const WinInfo &info : m_winInfos) {
+        if (info.pluginInter != itemInter)
+            continue;
+
+        m_winInfos.removeOne(info);
+        break;
+    }
+
+    endInsertRows();
 }
 
 void TrayModel::removeRow(const QString &itemKey)
