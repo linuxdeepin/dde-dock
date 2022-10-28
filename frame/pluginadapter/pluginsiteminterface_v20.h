@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     sbw <sbw@sbw.so>
+ * Author:     donghualin <donghualin@uniontech.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: donghualin <donghualin@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,30 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLUGINSITEMINTERFACE_H
-#define PLUGINSITEMINTERFACE_H
+#ifndef PLUGINSITEMINTERFACE_V20_H
+#define PLUGINSITEMINTERFACE_V20_H
 
 #include "pluginproxyinterface.h"
 
 #include <QIcon>
 #include <QtCore>
 
-// 任务栏的部件位置
-enum class DockPart {
-    QuickShow = 0,   // 快捷插件显示区域
-    QuickPanel,      // 快捷面板区域
-    SystemPanel      // 系统插件显示区域
-};
-
-// 快捷面板详情页面的itemWidget对应的itemKey
-#define QUICK_ITEM_DETAIL_KEY "quick_item_detail_key"
 ///
-/// \brief The PluginsItemInterface class
+/// \brief The PluginsItemInterface_V20 class
 /// the dock plugins item interface, all dock plugins should
 /// inheirt this class and override all pure virtual function.
 ///
-
-class PluginsItemInterface
+class PluginsItemInterface_V20
 {
 public:
     enum PluginType {
@@ -58,17 +48,11 @@ public:
         Custom = 1 << 1  // The custom
     };
 
-    enum PluginStatus {
-        Deactive = 0,
-        Active,
-        Disabled
-    };
-
     ///
-    /// \brief ~PluginsItemInterface
+    /// \brief ~PluginsItemInterface_V20
     /// DON'T try to delete m_proxyInter.
     ///
-    virtual ~PluginsItemInterface() {}
+    virtual ~PluginsItemInterface_V20() {}
 
     ///
     /// \brief pluginName
@@ -259,24 +243,6 @@ public:
     ///
     virtual PluginSizePolicy pluginSizePolicy() const { return System; }
 
-    ///
-    /// the icon display on plugin panel
-    ///
-    ///
-    virtual QIcon icon(const DockPart &) { return QIcon(); }
-
-    ///
-    /// the plugin status
-    ///
-    ///
-    virtual PluginStatus status() const { return PluginStatus::Deactive; }
-
-    ///
-    /// return the detail value, it will display in the center
-    ///
-    ///
-    virtual QString description() const { return QString(); }
-
 protected:
     ///
     /// \brief m_proxyInter
@@ -287,9 +253,9 @@ protected:
 
 QT_BEGIN_NAMESPACE
 
-#define ModuleInterface_iid "com.deepin.dock.PluginsItemInterface_2_0_0"
+#define ModuleInterface_iid "com.deepin.dock.PluginsItemInterface"
 
-Q_DECLARE_INTERFACE(PluginsItemInterface, ModuleInterface_iid)
+Q_DECLARE_INTERFACE(PluginsItemInterface_V20, ModuleInterface_iid)
 QT_END_NAMESPACE
 
 #endif // PLUGINSITEMINTERFACE_H

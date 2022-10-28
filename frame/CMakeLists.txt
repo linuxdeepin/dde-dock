@@ -66,6 +66,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     item
     item/components
     model
+    pluginadapter
     screenspliter
     util
     window

@@ -52,13 +52,13 @@ protected:
     explicit ProxyPluginController(QObject *parent = nullptr);
     ~ProxyPluginController() override {}
 
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
 
-    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
-    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
+    void requestPluginWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
+    void requestRefreshPluginWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
 
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
@@ -66,7 +66,7 @@ protected:
 
 private:
     QList<AbstractPluginsController *> getValidController(PluginsItemInterface *itemInter) const;
-    void addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey);
+    bool addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey);
     void removePluginItem(PluginsItemInterface * const itemInter);
     void startLoader();
 

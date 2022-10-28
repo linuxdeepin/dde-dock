@@ -54,12 +54,13 @@ protected:
     ~QuickSettingController() override;
 
 protected:
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
-    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+    void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &) override {}
+    void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
+    void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
+    void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) override {}
+    void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:

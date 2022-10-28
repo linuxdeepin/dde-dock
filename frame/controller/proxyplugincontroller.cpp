@@ -154,51 +154,53 @@ QString ProxyPluginController::itemKey(PluginsItemInterface *itemInter) const
     return QString();
 }
 
-void ProxyPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+void ProxyPluginController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    addPluginItems(itemInter, itemKey);
+    if (!addPluginItems(itemInter, itemKey))
+        return;
+
     // 获取需要加载当前插件的监听者,然后将当前插件添加到监听者
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->itemAdded(itemInter, itemKey);
+        interface->pluginItemAdded(itemInter, itemKey);
 }
 
-void ProxyPluginController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
+void ProxyPluginController::pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->itemUpdate(itemInter, itemKey);
+        interface->pluginItemUpdate(itemInter, itemKey);
 }
 
-void ProxyPluginController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
+void ProxyPluginController::pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // 先获取可执行的controller，再移除，因为在判断当前插件是否加载的时候需要用到当前容器中的插件来获取当前代理
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->itemRemoved(itemInter, itemKey);
+        interface->pluginItemRemoved(itemInter, itemKey);
 
     removePluginItem(itemInter);
 }
 
-void ProxyPluginController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+void ProxyPluginController::requestPluginWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->requestWindowAutoHide(itemInter, itemKey, autoHide);
+        interface->requestPluginWindowAutoHide(itemInter, itemKey, autoHide);
 }
 
-void ProxyPluginController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+void ProxyPluginController::requestRefreshPluginWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->requestRefreshWindowVisible(itemInter, itemKey);
+        interface->requestRefreshPluginWindowVisible(itemInter, itemKey);
 }
 
-void ProxyPluginController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+void ProxyPluginController::requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
 {
     QList<AbstractPluginsController *> validController = getValidController(itemInter);
     for (AbstractPluginsController *interface : validController)
-        interface->requestSetAppletVisible(itemInter, itemKey, visible);
+        interface->requestSetPluginAppletVisible(itemInter, itemKey, visible);
 }
 
 void ProxyPluginController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
@@ -231,13 +233,15 @@ QList<AbstractPluginsController *> ProxyPluginController::getValidController(Plu
     return validController;
 }
 
-void ProxyPluginController::addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey)
+bool ProxyPluginController::addPluginItems(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    if (!m_pluginsItems.contains(itemInter))
-        m_pluginsItems << itemInter;
+    // 如果该插件已经存在，则无需再次插入
+    if (m_pluginsItems.contains(itemInter))
+        return false;
 
-    if (!m_pluginsItemKeys.contains(itemInter))
-        m_pluginsItemKeys[itemInter] = itemKey;
+    m_pluginsItems << itemInter;
+    m_pluginsItemKeys[itemInter] = itemKey;
+    return true;
 }
 
 void ProxyPluginController::removePluginItem(PluginsItemInterface * const itemInter)

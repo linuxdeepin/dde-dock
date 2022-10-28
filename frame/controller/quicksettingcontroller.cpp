@@ -36,7 +36,7 @@ QuickSettingController::~QuickSettingController()
     ProxyPluginController::instance(PluginType::QuickPlugin)->removeProxyInterface(this);
 }
 
-void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+void QuickSettingController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
     PluginAttribute pluginClass = PluginAttribute::Quick;
@@ -56,11 +56,7 @@ void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, c
     emit pluginInserted(itemInter, pluginClass);
 }
 
-void QuickSettingController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
-{
-}
-
-void QuickSettingController::itemRemoved(PluginsItemInterface * const itemInter, const QString &)
+void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &)
 {
     for (auto it = m_quickPlugins.begin(); it != m_quickPlugins.end(); it++) {
         QList<PluginsItemInterface *> &plugins = m_quickPlugins[it.key()];

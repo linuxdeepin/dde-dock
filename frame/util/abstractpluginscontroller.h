@@ -32,6 +32,8 @@
 #include <QDBusConnectionInterface>
 
 class PluginsItemInterface;
+class PluginAdapter;
+
 class AbstractPluginsController : public QObject, PluginProxyInterface
 {
     Q_OBJECT
@@ -40,25 +42,39 @@ public:
     explicit AbstractPluginsController(QObject *parent = Q_NULLPTR);
     ~ AbstractPluginsController() override;
 
-    // implements PluginProxyInterface
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
-    void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
-
-    void itemAdded(PluginsItemInterface * const, const QString &) override {}
-    void itemUpdate(PluginsItemInterface * const, const QString &) override {}
-    void itemRemoved(PluginsItemInterface * const, const QString &) override {}
-    void requestWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
-
     void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
 
     virtual bool needLoad(PluginsItemInterface *) { return true; }
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
 
-signals:
+    virtual void savePluginValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
+    virtual const QVariant getPluginValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant());
+    virtual void removePluginValue(PluginsItemInterface * const itemInter, const QStringList &keyList);
+
+    virtual void pluginItemAdded(PluginsItemInterface * const, const QString &) = 0;
+    virtual void pluginItemUpdate(PluginsItemInterface * const, const QString &) = 0;
+    virtual void pluginItemRemoved(PluginsItemInterface * const, const QString &) = 0;
+    virtual void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) {}
+    virtual void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) {}
+    virtual void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) {}
+
+Q_SIGNALS:
     void pluginLoaderFinished();
+
+private:
+    // implements PluginProxyInterface
+    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
+    void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
+
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
+
+    PluginsItemInterface *getPluginInterface(PluginsItemInterface * const itemInter);
 
 protected:
     QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
@@ -76,7 +92,6 @@ private slots:
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
 
-
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
     DockInter *m_dockDaemonInter;
@@ -88,6 +103,7 @@ private:
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
 
     QJsonObject m_pluginSettingsObject;
+    QMap<qulonglong, PluginAdapter *> m_pluginAdapterMap;
 };
 
 #endif // ABSTRACTPLUGINSCONTROLLER_H

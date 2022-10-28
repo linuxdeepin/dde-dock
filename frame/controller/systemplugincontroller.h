@@ -42,12 +42,12 @@ public:
     explicit SystemPluginController(QObject *parent = nullptr);
 
     // implements PluginProxyInterface
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
-    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
+    void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestPluginWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
+    void requestRefreshPluginWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
 
     int systemTrayItemSortKey(const QString &itemKey);
     void setSystemTrayItemSortKey(const QString &itemKey, const int order);

@@ -21,6 +21,8 @@
 
 #include "abstractpluginscontroller.h"
 #include "pluginsiteminterface.h"
+#include "pluginsiteminterface_v20.h"
+#include "pluginadapter.h"
 #include "utils.h"
 
 #include <DNotifySender>
@@ -63,6 +65,71 @@ AbstractPluginsController::~AbstractPluginsController()
 
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value)
 {
+    savePluginValue(getPluginInterface(itemInter), key, value);
+}
+
+const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &fallback)
+{
+    return getPluginValue(getPluginInterface(itemInter), key, fallback);
+}
+
+void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList)
+{
+    removePluginValue(getPluginInterface(itemInter), keyList);
+}
+
+void AbstractPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItemInterface *pluginItem = getPluginInterface(itemInter);
+    PluginAdapter *pluginAdapter = dynamic_cast<PluginAdapter *>(pluginItem);
+    if (pluginAdapter)
+        pluginAdapter->setItemKey(itemKey);
+
+    pluginItemAdded(pluginItem, itemKey);
+}
+
+void AbstractPluginsController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    pluginItemUpdate(getPluginInterface(itemInter), itemKey);
+}
+
+void AbstractPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    pluginItemRemoved(getPluginInterface(itemInter), itemKey);
+}
+
+void AbstractPluginsController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+{
+    requestPluginWindowAutoHide(getPluginInterface(itemInter), itemKey, autoHide);
+}
+
+void AbstractPluginsController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    requestRefreshPluginWindowVisible(getPluginInterface(itemInter), itemKey);
+}
+
+void AbstractPluginsController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+{
+    requestSetPluginAppletVisible(getPluginInterface(itemInter), itemKey, visible);
+}
+
+PluginsItemInterface *AbstractPluginsController::getPluginInterface(PluginsItemInterface * const itemInter)
+{
+    // 先从事先定义好的map中查找，如果没有找到，就是v23插件，直接返回当前插件的指针
+    qulonglong pluginAddr = (qulonglong)itemInter;
+    if (m_pluginAdapterMap.contains(pluginAddr))
+        return m_pluginAdapterMap[pluginAddr];
+
+    return itemInter;
+}
+
+QMap<PluginsItemInterface *, QMap<QString, QObject *>> &AbstractPluginsController::pluginsMap()
+{
+    return m_pluginsMap;
+}
+
+void AbstractPluginsController::savePluginValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value)
+{
     // is it necessary?
     //    refreshPluginSettings();
 
@@ -99,7 +166,7 @@ void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter,
     m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
-const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &fallback)
+const QVariant AbstractPluginsController::getPluginValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &fallback)
 {
     // load from local cache
     QVariant v = m_pluginSettingsObject.value(itemInter->pluginName()).toObject().value(key).toVariant();
@@ -110,7 +177,7 @@ const QVariant AbstractPluginsController::getValue(PluginsItemInterface *const i
     return v;
 }
 
-void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList)
+void AbstractPluginsController::removePluginValue(PluginsItemInterface * const itemInter, const QStringList &keyList)
 {
     if (keyList.isEmpty()) {
         m_pluginSettingsObject.remove(itemInter->pluginName());
@@ -123,11 +190,6 @@ void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInte
     }
 
     m_dockDaemonInter->RemovePluginSettings(itemInter->pluginName(), keyList);
-}
-
-QMap<PluginsItemInterface *, QMap<QString, QObject *>> &AbstractPluginsController::pluginsMap()
-{
-    return m_pluginsMap;
 }
 
 QObject *AbstractPluginsController::pluginItemAt(PluginsItemInterface *const itemInter, const QString &itemKey) const
@@ -213,6 +275,18 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
+    if (!interface) {
+        // 如果识别当前插件失败，就认为这个插件是v20的插件，将其转换为v20插件接口
+        PluginsItemInterface_V20 *interface_v20 = qobject_cast<PluginsItemInterface_V20 *>(pluginLoader->instance());
+        if (interface_v20) {
+            // 将v20插件接口通过适配器转换成v23的接口，方便在后面识别
+            PluginAdapter *pluginAdapter = new PluginAdapter(interface_v20);
+            // 将适配器的地址保存到map列表中，因为适配器自己会调用itemAdded方法，转换成PluginsItemInterface类，但是实际上它
+            // 对应的是PluginAdapter类，因此，这个map用于在后面的itemAdded方法中用来查找
+            m_pluginAdapterMap[(qulonglong)(interface_v20)] = pluginAdapter;
+            interface = pluginAdapter;
+        }
+    }
 
     if (!interface) {
         qDebug() << objectName() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;

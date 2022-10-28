@@ -33,7 +33,7 @@ SystemPluginController::SystemPluginController(QObject *parent)
     setObjectName("SystemTray");
 }
 
-void SystemPluginController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+void SystemPluginController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
 
@@ -54,7 +54,7 @@ void SystemPluginController::itemAdded(PluginsItemInterface * const itemInter, c
         emit pluginItemAdded(itemKey, item);
 }
 
-void SystemPluginController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
+void SystemPluginController::pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     SystemPluginItem *item = static_cast<SystemPluginItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -65,7 +65,7 @@ void SystemPluginController::itemUpdate(PluginsItemInterface * const itemInter, 
     emit pluginItemUpdated(itemKey, item);
 }
 
-void SystemPluginController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
+void SystemPluginController::pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     SystemPluginItem *item = static_cast<SystemPluginItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -85,7 +85,7 @@ void SystemPluginController::itemRemoved(PluginsItemInterface * const itemInter,
     item->deleteLater();
 }
 
-void SystemPluginController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
+void SystemPluginController::requestPluginWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
 {
     SystemPluginItem *item = static_cast<SystemPluginItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -94,7 +94,7 @@ void SystemPluginController::requestWindowAutoHide(PluginsItemInterface * const 
     Q_EMIT item->requestWindowAutoHide(autoHide);
 }
 
-void SystemPluginController::requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
+void SystemPluginController::requestRefreshPluginWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     SystemPluginItem *item = static_cast<SystemPluginItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -103,7 +103,7 @@ void SystemPluginController::requestRefreshWindowVisible(PluginsItemInterface * 
     Q_EMIT item->requestRefershWindowVisible();
 }
 
-void SystemPluginController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
+void SystemPluginController::requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
 {
     SystemPluginItem *item = static_cast<SystemPluginItem *>(pluginItemAt(itemInter, itemKey));
     if (!item)
@@ -146,7 +146,7 @@ const QVariant SystemPluginController::getValueSystemTrayItem(const QString &ite
         return QVariant();
     }
 
-    return getValue(inter, key, fallback);
+    return getPluginValue(inter, key, fallback);
 }
 
 void SystemPluginController::saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value)
@@ -157,7 +157,7 @@ void SystemPluginController::saveValueSystemTrayItem(const QString &itemKey, con
         return;
     }
 
-    saveValue(inter, key, value);
+    savePluginValue(inter, key, value);
 }
 
 void SystemPluginController::startLoader()
