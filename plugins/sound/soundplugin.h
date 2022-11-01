@@ -25,6 +25,9 @@
 #include "pluginsiteminterface.h"
 #include "sounditem.h"
 
+class SoundWidget;
+class SoundDevicesWidget;
+
 class SoundPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -49,12 +52,16 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
     void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &) override;
+    PluginStatus status() const override;
 
 private:
     void refreshPluginItemsVisible();
 
 private:
     QScopedPointer<SoundItem> m_soundItem;
+    QScopedPointer<SoundWidget> m_soundWidget;
+    QScopedPointer<SoundDevicesWidget> m_soundDeviceWidget;
 };
 
 #endif // SOUNDPLUGIN_H

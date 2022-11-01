@@ -249,6 +249,11 @@ void SoundItem::refreshTips(const int volume, const bool force)
     }
 }
 
+QPixmap SoundItem::pixmap() const
+{
+    return m_iconPixmap;
+}
+
 void SoundItem::sinkChanged(DBusSink *sink)
 {
     m_sinkInter = sink;

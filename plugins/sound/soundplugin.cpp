@@ -21,6 +21,8 @@
 
 #include "soundplugin.h"
 #include "soundaccessible.h"
+#include "soundwidget.h"
+#include "sounddeviceswidget.h"
 
 #include <QDebug>
 #include <QAccessible>
@@ -28,8 +30,9 @@
 #define STATE_KEY  "enable"
 
 SoundPlugin::SoundPlugin(QObject *parent)
-    : QObject(parent),
-      m_soundItem(nullptr)
+    : QObject(parent)
+    , m_soundItem(nullptr)
+    , m_soundWidget(nullptr)
 {
     QAccessible::installFactory(soundAccessibleFactory);
 }
@@ -52,9 +55,17 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
         return;
 
     m_soundItem.reset(new SoundItem);
+    m_soundWidget.reset(new SoundWidget);
+    m_soundWidget->setFixedHeight(60);
 
-    if (!pluginIsDisable())
+    m_soundDeviceWidget.reset(new SoundDevicesWidget);
+
+    if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, SOUND_KEY);
+        connect(m_soundWidget.data(), &SoundWidget::rightIconClick, this, [ this, proxyInter ] {
+            proxyInter->requestSetAppletVisible(this, QUICK_ITEM_DETAIL_KEY, true);
+        });
+    }
 }
 
 void SoundPlugin::pluginStateSwitched()
@@ -71,18 +82,19 @@ bool SoundPlugin::pluginIsDisable()
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == SOUND_KEY) {
+    if (itemKey == SOUND_KEY)
         return m_soundItem.data();
-    }
+
+    if (itemKey == QUICK_ITEM_DETAIL_KEY)
+        return m_soundWidget.data();
 
     return nullptr;
 }
 
 QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
 {
-    if (itemKey == SOUND_KEY) {
+    if (itemKey == SOUND_KEY)
         return m_soundItem->tipsWidget();
-    }
 
     return nullptr;
 }
@@ -92,6 +104,8 @@ QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
     if (itemKey == SOUND_KEY) {
         return m_soundItem->popupApplet();
     }
+    if (itemKey == QUICK_ITEM_DETAIL_KEY)
+        return m_soundDeviceWidget.data();
 
     return nullptr;
 }
@@ -136,6 +150,16 @@ void SoundPlugin::refreshIcon(const QString &itemKey)
 void SoundPlugin::pluginSettingsChanged()
 {
     refreshPluginItemsVisible();
+}
+
+QIcon SoundPlugin::icon(const DockPart &)
+{
+    return m_soundItem->pixmap();
+}
+
+PluginsItemInterface::PluginStatus SoundPlugin::status() const
+{
+    return SoundPlugin::Active;
 }
 
 void SoundPlugin::refreshPluginItemsVisible()

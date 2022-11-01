@@ -50,6 +50,7 @@ public:
 
     void refreshIcon();
     void refreshTips(const int volume, const bool force = false);
+    QPixmap pixmap() const;
 
 signals:
     void requestContextMenu() const;

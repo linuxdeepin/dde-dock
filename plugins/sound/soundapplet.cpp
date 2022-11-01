@@ -285,7 +285,7 @@ void SoundApplet::onDefaultSinkChanged()
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);
     connect(m_defSinkInter, &DBusSink::MuteChanged, this, [ = ] {
-        onVolumeChanged(m_defSinkInter->volume());
+        onVolumeChanged(m_defSinkInter->volume() * 100);
     });
 
     QString portId = m_defSinkInter->activePort().name;
@@ -297,7 +297,7 @@ void SoundApplet::onDefaultSinkChanged()
     activePort(portId,cardId);
 
     //无声卡状态下，会有伪sink设备，显示音量为0
-    onVolumeChanged(findPort(portId, cardId) != nullptr ? m_defSinkInter->volume() : 0);
+    onVolumeChanged(findPort(portId, cardId) != nullptr ? m_defSinkInter->volume() * 100 : 0);
     emit defaultSinkChanged(m_defSinkInter);
 }
 
