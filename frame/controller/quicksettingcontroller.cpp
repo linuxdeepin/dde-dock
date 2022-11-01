@@ -74,6 +74,13 @@ void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const item
     Q_EMIT pluginRemoved(itemInter);
 }
 
+void QuickSettingController::requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool show)
+{
+    // 设置插件列表可见事件
+    if (show)
+        Q_EMIT requestAppletShow(itemInter, itemKey);
+}
+
 void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
 {
     Q_EMIT pluginUpdated(itemInter, part);

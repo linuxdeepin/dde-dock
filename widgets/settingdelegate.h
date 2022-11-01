@@ -27,6 +27,7 @@ DWIDGET_USE_NAMESPACE
 
 static const int itemCheckRole = Dtk::UserRole + 1;
 static const int itemDataRole = Dtk::UserRole + 2;
+static const int itemFlagRole = Dtk::UserRole + 3;
 
 class SettingDelegate : public DStyledItemDelegate
 {

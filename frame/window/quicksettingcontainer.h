@@ -33,9 +33,7 @@ class DockItem;
 class QVBoxLayout;
 class QuickSettingController;
 class MediaWidget;
-class VolumeModel;
 class BrightnessModel;
-class VolumeWidget;
 class BrightnessWidget;
 class QuickSettingItem;
 class DockPopupWindow;
@@ -70,6 +68,7 @@ private Q_SLOTS:
     void onPluginRemove(PluginsItemInterface * itemInter);
     void onItemDetailClick(PluginsItemInterface *pluginInter);
     void onResizeView();
+    void onRequestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
 
 private:
     // 加载UI
@@ -84,6 +83,8 @@ private:
     void showWidget(QWidget *widget, const QString &title);
     // 获取拖动图标的热点
     QPoint hotSpot(const QPixmap &pixmap);
+    // 判断是否支持显示在面板上
+    bool isApplet(PluginsItemInterface * itemInter) const;
 
 private:
     static DockPopupWindow *m_popWindow;
@@ -96,12 +97,9 @@ private:
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;
     MediaWidget *m_playerWidget;
-    VolumeModel *m_volumeModel;
     BrightnessModel *m_brightnessModel;
-    VolumeWidget *m_volumnWidget;
     BrightnessWidget *m_brihtnessWidget;
 
-    VolumeDevicesWidget *m_volumeSettingWidget;
     DisplaySettingWidget *m_displaySettingWidget;
     PluginChildPage *m_childPage;
     QuickDragInfo *m_dragInfo;

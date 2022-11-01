@@ -52,6 +52,7 @@ Q_SIGNALS:
     void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute &);
     void pluginRemoved(PluginsItemInterface *itemInter);
     void pluginUpdated(PluginsItemInterface *, const DockPart &);
+    void requestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
 
 protected:
     explicit QuickSettingController(QObject *parent = Q_NULLPTR);
@@ -63,7 +64,7 @@ protected:
     void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
     void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
     void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
+    void requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool show) override;
 
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 

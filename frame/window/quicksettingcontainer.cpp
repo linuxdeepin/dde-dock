@@ -27,10 +27,7 @@
 #include "dockpopupwindow.h"
 #include "brightnesswidget.h"
 #include "slidercontainer.h"
-#include "volumewidget.h"
-#include "volumedeviceswidget.h"
 #include "pluginchildpage.h"
-#include "volumemodel.h"
 #include "utils.h"
 #include "displaysettingwidget.h"
 
@@ -47,11 +44,13 @@ DWIDGET_USE_NAMESPACE
 
 struct QuickDragInfo {
     QPoint dragPosition;
-    QuickSettingItem *dragItem = nullptr;
+    QWidget *dragItem = nullptr;
+    PluginsItemInterface *pluginInter = nullptr;
     void reset() {
         dragPosition.setX(0);
         dragPosition.setY(0);
         dragItem = nullptr;
+        pluginInter = nullptr;
     }
     bool isNull() {
         return !dragItem;
@@ -76,11 +75,8 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
     , m_playerWidget(new MediaWidget(m_componentWidget))
-    , m_volumeModel(new VolumeModel(this))
     , m_brightnessModel(new BrightnessModel(this))
-    , m_volumnWidget(new VolumeWidget(m_volumeModel, m_componentWidget))
     , m_brihtnessWidget(new BrightnessWidget(m_brightnessModel, m_componentWidget))
-    , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumeModel, this))
     , m_displaySettingWidget(new DisplaySettingWidget(this))
     , m_childPage(new PluginChildPage(this))
     , m_dragInfo(new struct QuickDragInfo)
@@ -190,13 +186,27 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
         break;
     }
     case QEvent::MouseButtonPress: {
-        QuickSettingItem *item = qobject_cast<QuickSettingItem *>(watched);
-        if (!item)
-            break;
-
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        m_dragInfo->dragPosition = mouseEvent->pos();
-        m_dragInfo->dragItem = item;
+        QuickSettingItem *item = qobject_cast<QuickSettingItem *>(watched);
+        if (item) {
+            m_dragInfo->dragPosition = mouseEvent->pos();
+            m_dragInfo->dragItem = item;
+            m_dragInfo->pluginInter = item->pluginItem();
+        } else {
+            QList<PluginsItemInterface *> plugins = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::Quick);
+            for (PluginsItemInterface *plugin : plugins) {
+                if (!isApplet(plugin))
+                    continue;
+
+                if (plugin->itemWidget(QUICK_ITEM_DETAIL_KEY) != watched)
+                    continue;
+
+                m_dragInfo->dragPosition = mouseEvent->pos();
+                m_dragInfo->dragItem = plugin->itemWidget(QUICK_ITEM_DETAIL_KEY);
+                m_dragInfo->pluginInter = plugin;
+                break;
+            }
+        }
         break;
     }
     case QEvent::MouseButtonRelease: {
@@ -228,36 +238,103 @@ QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
     return QPoint(pixmap.width(), pixmap.height());
 }
 
+bool QuickSettingContainer::isApplet(PluginsItemInterface *itemInter) const
+{
+    if (!itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY))
+        return false;
+
+    QJsonObject json = QuickSettingController::instance()->metaData(itemInter);
+    if (!json.contains("applet"))
+        return false;
+
+    return json.value("applet").toBool();
+}
+
 void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
 {
-    initQuickItem(itemInter);
-    updateItemLayout();
+    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY);
+    if (isApplet(itemInter)) {
+        // 如果存在这个窗体，就让其显示在下方
+        DBlurEffectWidget *effectWidget = new DBlurEffectWidget(m_componentWidget);
+        QVBoxLayout *layout = new QVBoxLayout(effectWidget);
+        layout->setContentsMargins(0, 0, 0, 0);
+        itemWidget->setParent(effectWidget);
+        itemWidget->setVisible(true);
+        layout->addWidget(itemWidget);
+        effectWidget->setFixedHeight(itemWidget->height());
+        effectWidget->setMaskColor(QColor(239, 240, 245));
+        effectWidget->setBlurRectXRadius(8);
+        effectWidget->setBlurRectYRadius(8);
+        m_componentWidget->layout()->addWidget(effectWidget);
+
+        itemWidget->installEventFilter(this);
+    } else {
+        // 如果不存在获取到的子窗体，就让其显示在上方插件显示的位置
+        initQuickItem(itemInter);
+        updateItemLayout();
+    }
     onResizeView();
 }
 
 void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
 {
-    QuickSettingItem *quickItem = nullptr;
-    for (QuickSettingItem *settingItem : m_quickSettings) {
-        if (settingItem->pluginItem() != itemInter)
-            continue;
+    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY);
+    if (itemWidget) {
+        for (int i = 0; i < m_componentWidget->layout()->count(); i++) {
+            QLayoutItem *layoutItem = m_componentWidget->layout()->itemAt(i);
+            if (!layoutItem)
+                continue;
 
-        quickItem = settingItem;
-        break;
+            DBlurEffectWidget *effectWidget = qobject_cast<DBlurEffectWidget *>(layoutItem->widget());
+            if (!effectWidget || !effectWidget->layout())
+                continue;
+
+            bool found = false;
+            for (int j = 0; j < effectWidget->layout()->count(); j++) {
+                QLayoutItem *layoutItem = effectWidget->layout()->itemAt(i);
+                if (!layoutItem)
+                    continue;
+
+                if (layoutItem->widget() == itemWidget) {
+                    effectWidget->layout()->removeWidget(itemWidget);
+                    itemWidget->setParent(nullptr);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                continue;
+
+            m_componentWidget->layout()->removeWidget(effectWidget);
+            effectWidget->setParent(nullptr);
+            effectWidget->deleteLater();
+            break;
+        }
+    } else {
+        QuickSettingItem *quickItem = nullptr;
+        for (QuickSettingItem *settingItem : m_quickSettings) {
+            if (settingItem->pluginItem() != itemInter)
+                continue;
+
+            quickItem = settingItem;
+            break;
+        }
+        if (!quickItem)
+            return;
+
+        m_pluginLayout->removeWidget(quickItem);
+        m_quickSettings.removeOne(quickItem);
+        disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
+        quickItem->setParent(nullptr);
+        quickItem->removeEventFilter(this);
+        quickItem->setMouseTracking(false);
+        quickItem->deleteLater();
+
+        //调整子控件的位置
+        updateItemLayout();
     }
-    if (!quickItem)
-        return;
 
-    m_pluginLayout->removeWidget(quickItem);
-    m_quickSettings.removeOne(quickItem);
-    disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
-    quickItem->setParent(nullptr);
-    quickItem->removeEventFilter(this);
-    quickItem->setMouseTracking(false);
-    quickItem->deleteLater();
-
-    //调整子控件的位置
-    updateItemLayout();
     onResizeView();
 }
 
@@ -269,16 +346,23 @@ void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
     QPoint pointCurrent = event->pos();
     if (qAbs(m_dragInfo->dragPosition.x() - pointCurrent.x()) > 5
             || qAbs(m_dragInfo->dragPosition.y() - pointCurrent.y()) > 5) {
-        QuickSettingItem *moveItem = m_dragInfo->dragItem;
-        m_dragInfo->reset();
 
         QDrag *drag = new QDrag(this);
-        QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem->pluginItem());
+        QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(m_dragInfo->dragItem);
+        QuickPluginMimeData *mimedata = new QuickPluginMimeData(m_dragInfo->pluginInter);
         drag->setMimeData(mimedata);
-        QPixmap dragPixmap = moveItem->dragPixmap();
-        drag->setPixmap(dragPixmap);
-        drag->setHotSpot(hotSpot(dragPixmap));
+        if (moveItem) {
+            QPixmap dragPixmap = moveItem->dragPixmap();
+            drag->setPixmap(dragPixmap);
+            drag->setHotSpot(hotSpot(dragPixmap));
+        } else {
+            // 如果拖动的是声音等插件
+            QPixmap dragPixmap = m_dragInfo->dragItem->grab();
+            drag->setPixmap(dragPixmap);
+            drag->setHotSpot(hotSpot(dragPixmap));
+        }
 
+        m_dragInfo->reset();
         drag->exec(Qt::MoveAction | Qt::CopyAction);
     }
 }
@@ -312,11 +396,9 @@ void QuickSettingContainer::initUi()
 
     // 添加音乐播放插件
     m_playerWidget->setFixedHeight(ITEMHEIGHT);
-    m_volumnWidget->setFixedHeight(ITEMHEIGHT);
     m_brihtnessWidget->setFixedHeight(ITEMHEIGHT);
 
     setWidgetStyle(m_playerWidget);
-    setWidgetStyle(m_volumnWidget);
     setWidgetStyle(m_brihtnessWidget);
 
     m_mainlayout->setSpacing(ITEMSPACE);
@@ -336,19 +418,16 @@ void QuickSettingContainer::initUi()
     ctrlLayout->setSpacing(ITEMSPACE);
 
     ctrlLayout->addWidget(m_playerWidget);
-    ctrlLayout->addWidget(m_volumnWidget);
     ctrlLayout->addWidget(m_brihtnessWidget);
 
     m_mainlayout->addWidget(m_componentWidget);
     // 加载所有的插件
     QList<PluginsItemInterface *> plugins = m_pluginLoader->pluginItems(QuickSettingController::PluginAttribute::Quick);
     for (PluginsItemInterface *plugin : plugins)
-        initQuickItem(plugin);
+        onPluginInsert(plugin);
 
     m_switchLayout->addWidget(m_mainWidget);
     m_switchLayout->addWidget(m_childPage);
-
-    m_volumeSettingWidget->hide();
 
     setMouseTracking(true);
     setAcceptDrops(true);
@@ -373,12 +452,8 @@ void QuickSettingContainer::initConnection()
         onPluginInsert(itemInter);
     });
     connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
+    connect(m_pluginLoader, &QuickSettingController::requestAppletShow, this, &QuickSettingContainer::onRequestAppletShow);
     connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
-    connect(m_volumnWidget, &VolumeWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
-    connect(m_volumnWidget, &VolumeWidget::rightIconClick, this, [ this ] {
-        showWidget(m_volumeSettingWidget, tr("voice"));
-        onResizeView();
-    });
     connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
         if (iconPosition == SliderContainer::RightIcon) {
@@ -412,17 +487,50 @@ void QuickSettingContainer::onResizeView()
 
         m_pluginWidget->setFixedHeight(ITEMHEIGHT * rowCount + ITEMSPACE * (rowCount - 1));
 
-        int panelCount = 0;
-        if (m_playerWidget->isVisible())
-            panelCount++;
-        if (m_volumnWidget->isVisible())
-            panelCount++;
-        if (m_brihtnessWidget->isVisible())
-            panelCount++;
+        int height = 0;
+        int widgetCount = 0;
+        for (int i = 0; i < m_componentWidget->layout()->count(); i++) {
+             QLayoutItem *layoutItem = m_componentWidget->layout()->itemAt(i);
+             if (!layoutItem)
+                 continue;
 
-        m_componentWidget->setFixedHeight(ITEMHEIGHT * panelCount + ITEMSPACE * (panelCount - 1));
+             DBlurEffectWidget *widget = qobject_cast<DBlurEffectWidget *>(layoutItem->widget());
+             if (!widget)
+                 continue;
+
+             if (widget == m_playerWidget || widget == m_brihtnessWidget)
+                 continue;
+
+             height += widget->height();
+             widgetCount++;
+        }
+
+        if (m_playerWidget->isVisible()) {
+            height += m_playerWidget->height();
+            widgetCount++;
+        }
+        if (m_brihtnessWidget->isVisible()) {
+            height += m_brihtnessWidget->height();
+            widgetCount++;
+        }
+
+        m_componentWidget->setFixedHeight(height + (widgetCount - 1) * ITEMSPACE);
+
         setFixedHeight(ITEMSPACE * 3 + m_pluginWidget->height() + m_componentWidget->height());
     } else if (m_switchLayout->currentWidget() == m_childPage) {
         setFixedHeight(m_childPage->height());
+    }
+}
+
+void QuickSettingContainer::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
+{
+    if (itemKey == QUICK_ITEM_DETAIL_KEY) {
+        // 显示弹出的内容
+        QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
+        if (!itemApplet)
+            return;
+
+        showWidget(itemApplet, itemInter->pluginDisplayName());
+        onResizeView();
     }
 }
