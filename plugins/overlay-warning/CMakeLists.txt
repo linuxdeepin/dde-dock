@@ -4,7 +4,7 @@ set(PLUGIN_NAME "overlay-warning")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/tipswidget.h" "../../widgets/tipswidget.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)

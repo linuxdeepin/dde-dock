@@ -8,8 +8,8 @@ generation_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/xml ${CMAKE_
 # Sources files
 file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
-    "../../widgets/*.h"
-    "../../widgets/*.cpp"
+    "../../widgets/tipswidget.h"
+    "../../widgets/tipswidget.cpp"
     "../../frame/util/imageutil.h"
     "../../frame/util/imageutil.cpp"
     "../../frame/util/statebutton.h"

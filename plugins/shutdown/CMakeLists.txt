@@ -4,7 +4,7 @@ set(PLUGIN_NAME "shutdown")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "../../widgets/tipswidget.h" "../../widgets/tipswidget.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -23,7 +23,8 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                  ${Qt5DBus_INCLUDE_DIRS}
                                                  ${QGSettings_INCLUDE_DIRS}
-                                                 ../../interfaces)
+                                                 ../../interfaces
+                                                 ../../widgets)
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
