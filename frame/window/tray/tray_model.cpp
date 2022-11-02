@@ -25,6 +25,8 @@
 #include "indicatorplugin.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
+#include "settingconfig.h"
+#include "platformutils.h"
 
 #include <QMimeData>
 #include <QIcon>
@@ -33,41 +35,54 @@
 #include <QDBusInterface>
 
 #define TRAY_DRAG_FALG "tray_drag"
+#define DOCKQUICKTRAYNAME "Dock_Quick_Tray_Name"
 
-TrayModel::TrayModel(QListView *view, bool isIconTray, bool hasInputMethod, QObject *parent)
+TrayModel *TrayModel::getDockModel()
+{
+    static TrayModel *model = nullptr;
+    if (!model) {
+        model = new TrayModel(false);
+        TrayModel *iconModel = getIconModel();
+        connect(iconModel, &TrayModel::rowsRemoved, model, [ = ] {
+            model->setExpandVisible(iconModel->rowCount() > 0);
+        });
+        connect(iconModel, &TrayModel::rowsInserted, model, [ = ] {
+            model->setExpandVisible(iconModel->rowCount() > 0);
+        });
+    }
+
+    return model;
+}
+
+TrayModel *TrayModel::getIconModel()
+{
+    static TrayModel model(true);
+    return &model;
+}
+
+TrayModel::TrayModel(bool isIconTray, QObject *parent)
     : QAbstractListModel(parent)
     , m_dragModelIndex(QModelIndex())
     , m_dropModelIndex(QModelIndex())
-    , m_view(view)
     , m_monitor(new TrayMonitor(this))
     , m_isTrayIcon(isIconTray)
-    , m_hasInputMethod(hasInputMethod)
 {
-    Q_ASSERT(m_view);
-
-    if (isIconTray) {
-        connect(m_monitor, &TrayMonitor::xEmbedTrayAdded, this, &TrayModel::onXEmbedTrayAdded);
-        connect(m_monitor, &TrayMonitor::indicatorFounded, this, &TrayModel::onIndicatorFounded);
-
-        QuickSettingController *quickController = QuickSettingController::instance();
-        connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
-            if (pluginAttr != QuickSettingController::PluginAttribute::Tray)
-                return;
-
-            systemItemAdded(itemInter);
-        });
-
-        connect(quickController, &QuickSettingController::pluginRemoved, this, &TrayModel::onSystemItemRemoved);
-        QMetaObject::invokeMethod(this, [ = ] {
-            QList<PluginsItemInterface *> trayPlugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Tray);
-            for (PluginsItemInterface *plugin : trayPlugins)
-                systemItemAdded(plugin);
-        }, Qt::QueuedConnection);
-    }
+    connect(m_monitor, &TrayMonitor::xEmbedTrayAdded, this, &TrayModel::onXEmbedTrayAdded);
     connect(m_monitor, &TrayMonitor::xEmbedTrayRemoved, this, &TrayModel::onXEmbedTrayRemoved);
-    connect(m_monitor, &TrayMonitor::requestUpdateIcon, this, &TrayModel::requestUpdateIcon);
+
     connect(m_monitor, &TrayMonitor::sniTrayAdded, this, &TrayModel::onSniTrayAdded);
     connect(m_monitor, &TrayMonitor::sniTrayRemoved, this, &TrayModel::onSniTrayRemoved);
+
+    connect(m_monitor, &TrayMonitor::indicatorFounded, this, &TrayModel::onIndicatorFounded);
+
+    connect(m_monitor, &TrayMonitor::systemTrayAdded, this, &TrayModel::onSystemTrayAdded);
+    connect(m_monitor, &TrayMonitor::systemTrayRemoved, this, &TrayModel::onSystemTrayRemoved);
+
+    connect(m_monitor, &TrayMonitor::requestUpdateIcon, this, &TrayModel::requestUpdateIcon);
+    connect(SETTINGCONFIG, &SettingConfig::valueChanged, this, &TrayModel::onSettingChanged);
+
+    m_fixedTrayNames = SETTINGCONFIG->value(DOCKQUICKTRAYNAME).toStringList();
+    m_fixedTrayNames.removeDuplicates();
 }
 
 void TrayModel::dropSwap(int newPos)
@@ -97,6 +112,7 @@ void TrayModel::clearDragDropIndex()
 
     m_dragModelIndex = m_dropModelIndex = QModelIndex();
 
+    Q_EMIT requestRefreshEditor();
     emit QAbstractItemModel::dataChanged(startIndex, endIndex);
     emit QAbstractItemModel::dataChanged(endIndex, startIndex);
 }
@@ -106,6 +122,7 @@ void TrayModel::setDragingIndex(const QModelIndex index)
     m_dragModelIndex = index;
     m_dropModelIndex = index;
 
+    Q_EMIT requestRefreshEditor();
     emit QAbstractListModel::dataChanged(index, index);
 }
 
@@ -118,6 +135,44 @@ void TrayModel::setDragDropIndex(const QModelIndex index)
 
     emit QAbstractListModel::dataChanged(m_dragModelIndex, index);
     emit QAbstractListModel::dataChanged(index, m_dragModelIndex);
+}
+
+void TrayModel::setExpandVisible(bool visible, bool openExpand)
+{
+    // 如果是托盘，不支持展开图标
+    if (m_isTrayIcon)
+        return;
+
+    if (visible) {
+        // 如果展开图标已经存在，则不添加,
+        for (const WinInfo &winInfo : m_winInfos) {
+            if (winInfo.type == TrayIconType::ExpandIcon)
+                return;
+        }
+        // 如果是任务栏图标，则添加托盘展开图标
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        WinInfo info;
+        info.type = TrayIconType::ExpandIcon;
+        info.expand = openExpand;
+        m_winInfos.insert(0, info);  // 展开图标始终显示在第一个
+        endInsertRows();
+
+        Q_EMIT requestRefreshEditor();
+        Q_EMIT rowCountChanged();
+    } else {
+        // 如果隐藏，则直接从列表中移除
+        bool rowChanged = false;
+        beginResetModel();
+        for (const WinInfo &winInfo : m_winInfos) {
+            if (winInfo.type == TrayIconType::ExpandIcon) {
+                m_winInfos.removeOne(winInfo);
+                rowChanged = true;
+            }
+        }
+        endResetModel();
+        if (rowChanged)
+            Q_EMIT rowCountChanged();
+    }
 }
 
 void TrayModel::setDragKey(const QString &key)
@@ -165,8 +220,12 @@ QMimeData *TrayModel::mimeData(const QModelIndexList &indexes) const
         auto info = m_winInfos.at(itemIndex);
         mime->setData("type", QByteArray::number(static_cast<int>(info.type)));
         mime->setData("key", info.key.toLatin1());
+        mime->setData("itemKey", info.itemKey.toLatin1());
         mime->setData("winId", QByteArray::number(info.winId));
         mime->setData("servicePath", info.servicePath.toLatin1());
+        mime->setData("isTypeWritting", info.isTypeWriting ? "1" : "0");
+        mime->setData("expand", info.expand ? "1" : "0");
+        mime->setImageData(QVariant::fromValue((qulonglong)(info.pluginInter)));
 
         //TODO 支持多个index的数据，待支持
     }
@@ -192,6 +251,10 @@ QVariant TrayModel::data(const QModelIndex &index, int role) const
         return info.servicePath;
     case Role::PluginInterfaceRole:
         return (qulonglong)(info.pluginInter);
+    case Role::ExpandRole:
+        return info.expand;
+    case Role::ItemKeyRole:
+        return info.itemKey;
     case Role::Blank:
         return indexDragging(index);
     default:
@@ -210,6 +273,8 @@ bool TrayModel::removeRows(int row, int count, const QModelIndex &parent)
     beginRemoveRows(parent, row, row);
     m_dragInfo = m_winInfos.takeAt(row);
     endRemoveRows();
+
+    Q_EMIT rowCountChanged();
 
     return true;
 }
@@ -230,7 +295,7 @@ bool TrayModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, in
 Qt::ItemFlags TrayModel::flags(const QModelIndex &index) const
 {
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
-    m_view->openPersistentEditor(index);
+    Q_EMIT requestOpenEditor(index);
 
     return defaultFlags | Qt::ItemIsEditable |  Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
@@ -246,15 +311,40 @@ bool TrayModel::isIconTray()
     return m_isTrayIcon;
 }
 
+bool TrayModel::hasExpand() const
+{
+    for (const WinInfo &winInfo : m_winInfos) {
+        if (winInfo.type == TrayIconType::ExpandIcon)
+            return true;
+    }
+
+    return false;
+}
+
+bool TrayModel::isEmpty() const
+{
+    for (const WinInfo &winInfo : m_winInfos) {
+        if (winInfo.type != TrayIconType::ExpandIcon)
+            return false;
+    }
+
+    return true;
+}
+
 void TrayModel::clear()
 {
     beginResetModel();
     m_winInfos.clear();
     endResetModel();
+
+    Q_EMIT rowCountChanged();
 }
 
 void TrayModel::onXEmbedTrayAdded(quint32 winId)
 {
+    if (!xembedCanExport(winId))
+        return;
+
     for (const WinInfo &info : m_winInfos) {
         if (info.winId == winId)
             return;
@@ -264,9 +354,12 @@ void TrayModel::onXEmbedTrayAdded(quint32 winId)
     WinInfo info;
     info.type = XEmbed;
     info.key = "wininfo:" + QString::number(winId);
+    info.itemKey = xembedItemKey(winId);
     info.winId = winId;
     m_winInfos.append(info);
     endInsertRows();
+
+    Q_EMIT rowCountChanged();
 }
 
 void TrayModel::onXEmbedTrayRemoved(quint32 winId)
@@ -277,19 +370,21 @@ void TrayModel::onXEmbedTrayRemoved(quint32 winId)
             beginRemoveRows(QModelIndex(),  index, index);
             m_winInfos.removeOne(info);
             endRemoveRows();
+
+            Q_EMIT rowCountChanged();
             return;
         }
     }
 }
 
-QString TrayModel::fileNameByServiceName(const QString &serviceName)
+QString TrayModel::fileNameByServiceName(const QString &serviceName) const
 {
     QStringList serviceInfo = serviceName.split("/");
     if (serviceInfo.size() <= 0)
         return QString();
 
     QDBusInterface dbsInterface("org.freedesktop.DBus", "/org/freedesktop/DBus",
-                                "org.freedesktop.DBus", QDBusConnection::sessionBus(), this);
+                                "org.freedesktop.DBus", QDBusConnection::sessionBus());
     QDBusMessage msg = dbsInterface.call("GetConnectionUnixProcessID", serviceInfo[0] );
     QList<QVariant> arguments = msg.arguments();
     if (arguments.size() == 0)
@@ -308,34 +403,80 @@ QString TrayModel::fileNameByServiceName(const QString &serviceName)
     return QString();
 }
 
-bool TrayModel::isTypeWriting(const QString &servicePath)
+bool TrayModel::isTypeWriting(const QString &servicePath) const
 {
     const QString appFilePath = fileNameByServiceName(servicePath);
     return (appFilePath.startsWith("/usr/bin/fcitx") || appFilePath.endsWith("chinime-qim"));
 }
 
-void TrayModel::systemItemAdded(PluginsItemInterface *itemInter)
+void TrayModel::saveConfig(int index, const WinInfo &winInfo)
 {
-    for (const WinInfo &info : m_winInfos) {
-        if (info.pluginInter == itemInter)
-            return;
+    if (m_fixedTrayNames.contains(winInfo.itemKey))
+        return;
+
+    if (index >= 0 && index < m_fixedTrayNames.size()) {
+        m_fixedTrayNames.insert(index, winInfo.itemKey);
+    } else {
+        m_fixedTrayNames << winInfo.itemKey;
     }
+    SETTINGCONFIG->setValue(DOCKQUICKTRAYNAME, m_fixedTrayNames);
+}
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+bool TrayModel::inTrayConfig(const QString itemKey) const
+{
+    if (m_isTrayIcon) {
+        // 如果是托盘区域，显示所有不在配置中的应用
+        return !m_fixedTrayNames.contains(itemKey);
+    }
+    // 如果是任务栏区域，显示所有在配置中的应用
+    return m_fixedTrayNames.contains(itemKey);
+}
 
-    WinInfo info;
-    info.type = SystemItem;
-    info.pluginInter = itemInter;
-    m_winInfos.append(info);
+QString TrayModel::xembedItemKey(quint32 winId) const
+{
+    return QString("embed:%1").arg(PlatformUtils::getAppNameForWindow(winId));
+}
 
-    endInsertRows();
+bool TrayModel::xembedCanExport(quint32 winId) const
+{
+    return inTrayConfig(xembedItemKey(winId));
+}
+
+QString TrayModel::sniItemKey(const QString &servicePath) const
+{
+    if (isTypeWriting(servicePath))
+        return "fcitx";
+
+    QString fileName = fileNameByServiceName(servicePath);
+    return QString("sni:%1").arg(fileName.mid(fileName.lastIndexOf("/") + 1));
+}
+
+bool TrayModel::sniCanExport(const QString &servicePath) const
+{
+    return inTrayConfig(sniItemKey(servicePath));
+}
+
+bool TrayModel::indicatorCanExport(const QString &indicatorName) const
+{
+    return inTrayConfig(IndicatorTrayItem::toIndicatorKey(indicatorName));
+}
+
+QString TrayModel::systemItemKey(const QString &pluginName) const
+{
+    return QString("systemItem:%1").arg(pluginName);
+}
+
+bool TrayModel::systemItemCanExport(const QString &pluginName) const
+{
+    return inTrayConfig(systemItemKey(pluginName));
 }
 
 void TrayModel::onSniTrayAdded(const QString &servicePath)
 {
-    bool typeWriting = isTypeWriting(servicePath);
-    if ((m_hasInputMethod && !typeWriting) || (!m_hasInputMethod && typeWriting))
+    if (!sniCanExport(servicePath))
         return;
+
+    bool typeWriting = isTypeWriting(servicePath);
 
     int citxIndex = -1;
     for (int i = 0; i < m_winInfos.size(); i++) {
@@ -351,6 +492,7 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
     WinInfo info;
     info.type = Sni;
     info.key = "sni:" + servicePath;
+    info.itemKey = sniItemKey(servicePath);
     info.servicePath = servicePath;
     info.isTypeWriting = typeWriting;    // 是否为输入法
     if (typeWriting) {
@@ -366,6 +508,8 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
         }
     } else {
         m_winInfos.append(info);
+
+        Q_EMIT rowCountChanged();
     }
     endInsertRows();
 }
@@ -392,6 +536,8 @@ void TrayModel::onSniTrayRemoved(const QString &servicePath)
                 beginRemoveRows(QModelIndex(), index, index);
                 m_winInfos.removeOne(info);
                 endRemoveRows();
+
+                Q_EMIT rowCountChanged();
             }
             break;
         }
@@ -423,6 +569,9 @@ void TrayModel::onIndicatorFounded(const QString &indicatorName)
 
 void TrayModel::onIndicatorAdded(const QString &indicatorName)
 {
+    if (!indicatorCanExport(indicatorName))
+        return;
+
     const QString &itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
     for (const WinInfo &info : m_winInfos) {
         if (info.key == itemKey)
@@ -433,8 +582,11 @@ void TrayModel::onIndicatorAdded(const QString &indicatorName)
     WinInfo info;
     info.type = Incicator;
     info.key = itemKey;
+    info.itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
     m_winInfos.append(info);
     endInsertRows();
+
+    Q_EMIT rowCountChanged();
 }
 
 void TrayModel::onIndicatorRemoved(const QString &indicatorName)
@@ -443,19 +595,84 @@ void TrayModel::onIndicatorRemoved(const QString &indicatorName)
     removeRow(itemKey);
 }
 
-void TrayModel::onSystemItemRemoved(PluginsItemInterface *itemInter)
+void TrayModel::onSystemTrayAdded(PluginsItemInterface *itemInter)
 {
+    if (!systemItemCanExport(itemInter->pluginName()))
+        return;
+
+    for (const WinInfo &info : m_winInfos) {
+        if (info.pluginInter == itemInter)
+            return;
+    }
+
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
+    WinInfo info;
+    info.type = SystemItem;
+    info.pluginInter = itemInter;
+    info.itemKey = systemItemKey(itemInter->pluginName());
+    m_winInfos.append(info);
+
+    endInsertRows();
+
+    Q_EMIT rowCountChanged();
+}
+
+void TrayModel::onSystemTrayRemoved(PluginsItemInterface *itemInter)
+{
     for (const WinInfo &info : m_winInfos) {
         if (info.pluginInter != itemInter)
             continue;
 
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
         m_winInfos.removeOne(info);
+        endInsertRows();
+
+        Q_EMIT rowCountChanged();
         break;
     }
+}
 
-    endInsertRows();
+void TrayModel::onSettingChanged(const QString &key, const QVariant &value)
+{
+    if (key != DOCKQUICKTRAYNAME)
+        return;
+
+    // 先将其转换为任务栏上的图标列表
+    m_fixedTrayNames = value.toStringList();
+    // 依次获取所有的图盘图标，判断当前图标是否可以保持在当前的view中，
+    // 如果可以保留，则添加到view上显示，否则，移除显示
+    QList<quint32> trayWinIds = m_monitor->trayWinIds();
+    for (quint32 trayId : trayWinIds) {
+        if (xembedCanExport(trayId))
+            onXEmbedTrayAdded(trayId);
+        else
+            onXEmbedTrayRemoved(trayId);
+    }
+
+    QStringList sniServices = m_monitor->sniServices();
+    for (const QString &sniService : sniServices) {
+        if (sniCanExport(sniService))
+            onSniTrayAdded(sniService);
+        else
+            onSniTrayRemoved(sniService);
+    }
+
+    QStringList indicators = m_monitor->indicatorNames();
+    for (const QString &indicatorName : indicators) {
+        if (indicatorCanExport(indicatorName))
+            onIndicatorAdded(indicatorName);
+        else
+            onIndicatorRemoved(indicatorName);
+    }
+
+    QList<PluginsItemInterface *> pluginItems = m_monitor->systemTrays();
+    for (PluginsItemInterface *plugin : pluginItems) {
+        if (systemItemCanExport(plugin->pluginName()))
+            onSystemTrayAdded(plugin);
+        else
+            onSystemTrayRemoved(plugin);
+    }
 }
 
 void TrayModel::removeRow(const QString &itemKey)
@@ -466,6 +683,8 @@ void TrayModel::removeRow(const QString &itemKey)
             beginRemoveRows(QModelIndex(),  index, index);
             m_winInfos.removeOne(info);
             endRemoveRows();
+
+            Q_EMIT rowCountChanged();
             break;
         }
     }
@@ -481,6 +700,9 @@ void TrayModel::addRow(WinInfo info)
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_winInfos.append(info);
     endInsertRows();
+
+    Q_EMIT requestRefreshEditor();
+    Q_EMIT rowCountChanged();
 }
 
 void TrayModel::insertRow(int index, WinInfo info)
@@ -497,6 +719,9 @@ void TrayModel::insertRow(int index, WinInfo info)
     beginInsertRows(QModelIndex(), index, index);
     m_winInfos.insert(index, info);
     endInsertRows();
+
+    Q_EMIT requestRefreshEditor();
+    Q_EMIT rowCountChanged();
 }
 
 bool TrayModel::exist(const QString &itemKey)

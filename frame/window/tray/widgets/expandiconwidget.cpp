@@ -40,24 +40,53 @@ ExpandIconWidget::ExpandIconWidget(QWidget *parent, Qt::WindowFlags f)
     , m_regionInter(new DRegionMonitor(this))
     , m_position(Dock::Position::Bottom)
 {
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
+        TrayGridWidget *gridView = popupTrayView();
+        // 如果当前是隐藏，那么在点击任何地方都隐藏
+        if (!isVisible()) {
+            gridView->hide();
+            return;
+        }
+
+        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
+            return;
+
+        QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
+        const QRect rect = QRect(ptPos, size());
+        if (rect.contains(mousePos))
+            return;
+
+        const QRect rctView(gridView->pos(), gridView->size());
+        if (rctView.contains(mousePos))
+            return;
+
+        gridView->hide();
+    });
 }
 
 ExpandIconWidget::~ExpandIconWidget()
 {
+    TrayGridWidget *gridView = popupTrayView();
+    gridView->setOwnerWidget(nullptr);
+    setTrayPanelVisible(false);
 }
 
-void ExpandIconWidget::setPositonValue(Dock::Position position)
+void ExpandIconWidget::setPositon(Dock::Position position)
 {
-    if (m_position == position)
-        return;
+    if (m_position != position)
+        m_position = position;
 
-    m_position = position;
+    TrayGridWidget::setPosition(position);
 }
 
 void ExpandIconWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
+
+    // 如果当前图标不可见，则不让展开托盘列表
+    if (popupTrayView()->trayView()->model()->rowCount() == 0)
+        return;
 
     if (mouseButton != XCB_BUTTON_INDEX_1)
         return;
@@ -68,9 +97,9 @@ void ExpandIconWidget::sendClick(uint8_t mouseButton, int x, int y)
 
 void ExpandIconWidget::setTrayPanelVisible(bool visible)
 {
-    QWidget *gridParentView = popupTrayView();
+    TrayGridWidget *gridParentView = popupTrayView();
     if (visible) {
-        resetPosition();
+        gridParentView->resetPosition();
         gridParentView->show();
         m_regionInter->registerRegion();
     } else {
@@ -86,7 +115,8 @@ QPixmap ExpandIconWidget::icon()
 
 void ExpandIconWidget::paintEvent(QPaintEvent *event)
 {
-    if (popupTrayView()->trayView()->model()->rowCount() == 0)
+    TrayGridWidget *gridView = popupTrayView();
+    if (gridView->trayView()->model()->rowCount() == 0)
         return BaseTrayWidget::paintEvent(event);
 
     QPainter painter(this);
@@ -96,6 +126,8 @@ void ExpandIconWidget::paintEvent(QPaintEvent *event)
                     ICON_SIZE, ICON_SIZE);
 
     painter.drawPixmap(rectOfPixmap, pixmap);
+
+    gridView->setOwnerWidget(this);
 }
 
 const QString ExpandIconWidget::dropIconFile() const
@@ -136,7 +168,7 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
     gridParentView = new TrayGridWidget(nullptr);
     TrayGridView *trayView = new TrayGridView(gridParentView);
     TrayDelegate *trayDelegate = new TrayDelegate(trayView, trayView);
-    TrayModel *trayModel = new TrayModel(trayView, true, false);
+    TrayModel *trayModel = TrayModel::getIconModel();
     gridParentView->setTrayGridView(trayView);
 
     gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
@@ -152,77 +184,25 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
 
     auto rowCountChanged = [ = ] {
         int count = trayModel->rowCount();
-        trayView->setFixedSize(trayView->suitableSize());
-        gridParentView->setFixedSize(trayView->size() + QSize(ITEM_SPACING * 2, ITEM_SPACING * 2));
         if (count > 0)
-            resetPosition();
+            gridParentView->resetPosition();
         else if (gridParentView->isVisible())
             gridParentView->hide();
-
-        Q_EMIT trayVisbleChanged(count > 0);
     };
 
-    connect(trayView, &TrayGridView::rowCountChanged, this, rowCountChanged);
+    connect(trayModel, &TrayModel::rowCountChanged, gridParentView, rowCountChanged);
 
-    connect(trayDelegate, &TrayDelegate::removeRow, this, [ = ](const QModelIndex &index) {
+    connect(trayDelegate, &TrayDelegate::removeRow, trayView, [ = ](const QModelIndex &index) {
         trayView->model()->removeRow(index.row(),index.parent());
     });
     connect(trayView, &TrayGridView::requestRemove, trayModel, &TrayModel::removeRow);
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
-        // 如果当前是隐藏，那么在点击任何地方都隐藏
-        if (!isVisible()) {
-            gridParentView->hide();
-            return;
-        }
-
-        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
-            return;
-
-        QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
-        const QRect rect = QRect(ptPos, size());
-        if (rect.contains(mousePos))
-            return;
-
-        const QRect rctView(gridParentView->pos(), gridParentView->size());
-        if (rctView.contains(mousePos))
-            return;
-
-        gridParentView->hide();
+    connect(trayModel, &TrayModel::requestOpenEditor, trayView, [ trayView ](const QModelIndex &index) {
+        trayView->openPersistentEditor(index);
     });
 
-    QMetaObject::invokeMethod(this, rowCountChanged, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(gridParentView, rowCountChanged, Qt::QueuedConnection);
 
     return gridParentView;
-}
-
-void ExpandIconWidget::resetPosition()
-{
-    if (!parentWidget())
-        return;
-
-    QWidget *gridParentView = popupTrayView();
-    QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
-    switch (m_position) {
-    case Dock::Position::Bottom: {
-        ptPos.setY(ptPos.y() - gridParentView->height());
-        ptPos.setX(ptPos.x() - gridParentView->width());
-        break;
-    }
-    case Dock::Position::Top: {
-        ptPos.setY(ptPos.y() + gridParentView->height());
-        ptPos.setX(ptPos.x() - gridParentView->width());
-        break;
-    }
-    case Dock::Position::Left: {
-        ptPos.setX(ptPos.x() + gridParentView->width() / 2);
-        break;
-    }
-    case Dock::Position::Right: {
-        ptPos.setX(ptPos.x() - gridParentView->width() / 2);
-        break;
-    }
-    }
-    gridParentView->move(ptPos);
 }
 
 /**
@@ -230,12 +210,20 @@ void ExpandIconWidget::resetPosition()
  * @param parent
  */
 
+Dock::Position TrayGridWidget::m_position = Dock::Position::Bottom;
+
 TrayGridWidget::TrayGridWidget(QWidget *parent)
     : QWidget (parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_trayGridView(nullptr)
+    , m_ownerWidget(nullptr)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+}
+
+void TrayGridWidget::setPosition(const Dock::Position &position)
+{
+    m_position = position;
 }
 
 void TrayGridWidget::setTrayGridView(TrayGridView *trayView)
@@ -243,9 +231,48 @@ void TrayGridWidget::setTrayGridView(TrayGridView *trayView)
     m_trayGridView = trayView;
 }
 
+void TrayGridWidget::setOwnerWidget(QWidget *widget)
+{
+    // 设置所属的Widget，目的是为了计算当前窗体的具体位置
+    m_ownerWidget = widget;
+}
+
 TrayGridView *TrayGridWidget::trayView() const
 {
     return m_trayGridView;
+}
+
+void TrayGridWidget::resetPosition()
+{
+    // 如果没有设置所属窗体，则无法计算位置
+    if (!m_ownerWidget || !m_ownerWidget->parentWidget())
+        return;
+
+    QWidget *topWidget = m_ownerWidget->topLevelWidget();
+    QPoint ptPos = m_ownerWidget->parentWidget()->mapToGlobal(m_ownerWidget->pos());
+    switch (m_position) {
+    case Dock::Position::Bottom: {
+        ptPos.setX(ptPos.x() - width());
+        ptPos.setY(topWidget->y() - height());
+        break;
+    }
+    case Dock::Position::Top: {
+        ptPos.setY(topWidget->y() + topWidget->height());
+        ptPos.setX(ptPos.x() - width());
+        break;
+    }
+    case Dock::Position::Left: {
+        ptPos.setX(topWidget->x() + topWidget->width());
+        break;
+    }
+    case Dock::Position::Right: {
+        ptPos.setX(topWidget->x() - width());
+        break;
+    }
+    }
+    m_trayGridView->setFixedSize(m_trayGridView->suitableSize());
+    setFixedSize(m_trayGridView->size() + QSize(ITEM_SPACING * 2, ITEM_SPACING * 2));
+    move(ptPos);
 }
 
 void TrayGridWidget::paintEvent(QPaintEvent *event)

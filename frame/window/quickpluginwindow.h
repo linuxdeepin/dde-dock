@@ -59,16 +59,15 @@ public:
 
 Q_SIGNALS:
     void itemCountChanged();
+    void requestDrop(QDropEvent *dropEvent);
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private Q_SLOTS:
-    void addPlugin(PluginsItemInterface *pluginItem);
-    void removePlugin(PluginsItemInterface *item);
+    void onRequestUpdate();
     void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
-    void onFixedClick();
     void onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart);
 
 private:
@@ -76,18 +75,15 @@ private:
     void initConnection();
     void startDrag(PluginsItemInterface *moveItem);
     PluginsItemInterface *findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems);
-    int findActiveTargetIndex(QuickDockItem *widget);
     int getDropIndex(QPoint point);
-    void resetPluginDisplay();
     QPoint popupPoint() const;
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
-    bool isQuickPlugin(PluginsItemInterface *pluginItem);
+    QuickDockItem *getActiveDockItem(QPoint point) const;
 
 private:
     QBoxLayout *m_mainLayout;
     Dock::Position m_position;
-    QList<PluginsItemInterface *> m_activeSettingItems;
-    QList<PluginsItemInterface *> m_fixedSettingItems;
+    struct DragInfo *m_dragInfo;
 };
 
 // 用于在任务栏上显示的插件
@@ -102,9 +98,6 @@ public:
     void setPositon(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool isPrimary() const;
-
-Q_SIGNALS:
-    void clicked();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

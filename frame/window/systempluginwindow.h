@@ -48,6 +48,10 @@ public:
 
 Q_SIGNALS:
     void itemChanged();
+    void requestDrop(QDropEvent *dropEvent);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void initUi();

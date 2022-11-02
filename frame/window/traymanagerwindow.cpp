@@ -59,9 +59,10 @@ TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     , m_appPluginLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_trayView(new TrayGridView(this))
-    , m_model(new TrayModel(m_trayView, false, true))
+    , m_model(TrayModel::getDockModel())
     , m_delegate(new TrayDelegate(m_trayView, m_trayView))
     , m_position(Dock::Position::Bottom)
+    , m_displayMode(Dock::DisplayMode::Fashion)
     , m_splitLine(new QLabel(m_appPluginDatetimeWidget))
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_singleShow(false)
@@ -120,18 +121,26 @@ void TrayManagerWindow::setPositon(Dock::Position position)
     else
         m_trayView->setOrientation(QListView::Flow::TopToBottom, false);
 
-    QModelIndex index = m_model->index(0, 0);
-    m_trayView->closePersistentEditor(index);
     TrayDelegate *delegate = static_cast<TrayDelegate *>(m_trayView->itemDelegate());
     delegate->setPositon(position);
-    m_trayView->openPersistentEditor(index);
 
     m_trayView->setPosition(position);
     m_quickIconWidget->setPositon(position);
     m_dateTimeWidget->setPositon(position);
     m_systemPluginWidget->setPositon(position);
+    if (m_model->hasExpand()) {
+        // 切换位置的时候，需要先关闭编辑器，然后在model函数的flag方法中打开
+        m_trayView->closePersistentEditor(m_model->index(0, 0));
+    }
 
     updateLayout();
+}
+
+void TrayManagerWindow::setDisplayMode(Dock::DisplayMode displayMode)
+{
+    m_displayMode = displayMode;
+    // 从时尚模式切换到高效模式的时候，需要重新布局
+    onTrayCountChanged();
 }
 
 int TrayManagerWindow::appDatetimeSize(const Dock::Position &position) const
@@ -208,6 +217,24 @@ QPainterPath TrayManagerWindow::roundedPaths()
     return path;
 }
 
+void TrayManagerWindow::onTrayCountChanged()
+{
+    resetChildWidgetSize();
+    Q_EMIT requestUpdate();
+}
+
+void TrayManagerWindow::onRequestUpdateWidget(const QList<int> &idxs)
+{
+    for (int i = 0; i < idxs.size(); i++) {
+         int idx = idxs[i];
+         if (idx < m_model->rowCount()) {
+             QModelIndex index = m_model->index(idx);
+             m_trayView->closePersistentEditor(index);
+             m_trayView->openPersistentEditor(index);
+         }
+    }
+}
+
 void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
@@ -230,11 +257,6 @@ void TrayManagerWindow::initUi()
     m_splitLine->setAutoFillBackground(true);
     m_splitLine->setPalette(pal);
 
-    WinInfo info;
-    info.type = TrayIconType::ExpandIcon;
-    m_model->addRow(info);
-    m_trayView->openPersistentEditor(m_model->index(0, 0));
-
     // 左侧的区域，包括应用托盘插件和下方的日期时间区域
     m_appPluginLayout->setContentsMargins(0, 0, 0, 0);
     m_appPluginLayout->setSpacing(0);
@@ -253,18 +275,9 @@ void TrayManagerWindow::initUi()
 void TrayManagerWindow::initConnection()
 {
     connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
-    connect(m_trayView, &TrayGridView::rowCountChanged, this, [ this ] {
-        if (m_quickIconWidget->x() == 0) {
-            // 在加载界面的时候，会出现快捷设置区域的图标和左侧的托盘图标挤在一起(具体原因未知)，此时需要延时50毫秒重新刷新界面来保证界面布局正常(临时解决方案)
-            QTimer::singleShot(50, this, [ this ] {
-                resetChildWidgetSize();
-                Q_EMIT requestUpdate();
-            });
-        } else {
-            resetChildWidgetSize();
-            Q_EMIT requestUpdate();
-        }
-    });
+    connect(m_model, &TrayModel::rowCountChanged, this, &TrayManagerWindow::onTrayCountChanged);
+    connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
+    connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, [ this ] {
         // 当插件数量发生变化的时候，需要调整尺寸
         m_quickIconWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
@@ -287,28 +300,13 @@ void TrayManagerWindow::initConnection()
         Q_EMIT requestUpdate();
     });
 
-    connect(m_delegate, &TrayDelegate::visibleChanged, this, [ this ](const QModelIndex &index, bool visible) {
-        m_trayView->setRowHidden(index.row(), !visible);
-        resetChildWidgetSize();
-        Q_EMIT requestUpdate();
-    });
-
     connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
         Q_EMIT m_delegate->requestDrag(true);
     });
     connect(m_trayView, &TrayGridView::dragEntered, m_delegate, [ this ]{
         Q_EMIT m_delegate->requestDrag(false);
     });
-    connect(m_model, &TrayModel::requestUpdateWidget, this, [ this ](const QList<int> &idxs) {
-        for (int i = 0; i < idxs.size(); i++) {
-             int idx = idxs[i];
-             if (idx < m_model->rowCount()) {
-                 QModelIndex index = m_model->index(idx);
-                 m_trayView->closePersistentEditor(index);
-                 m_trayView->openPersistentEditor(index);
-             }
-        }
-    });
+    connect(m_model, &TrayModel::requestUpdateWidget, this, &TrayManagerWindow::onRequestUpdateWidget);
     connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &TrayManagerWindow::requestUpdate);
 
     m_trayView->installEventFilter(this);
@@ -475,7 +473,7 @@ void TrayManagerWindow::dropEvent(QDropEvent *e)
     if (!e || !e->mimeData() || e->source() == this)
         return;
 
-    if (qobject_cast<QuickPluginWindow *>(e->source())) {
+    if (qobject_cast<QuickSettingContainer *>(e->source())) {
         const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(e->mimeData());
         if (!mimeData)
             return;

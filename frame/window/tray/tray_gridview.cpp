@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tray_gridview.h"
+#include "settingconfig.h"
 
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -406,18 +407,35 @@ void TrayGridView::handleDropEvent(QDropEvent *e)
             info.key = static_cast<QString>(e->mimeData()->data("key"));
             info.winId = static_cast<quint32>(e->mimeData()->data("winId").toInt());
             info.servicePath = static_cast<QString>(e->mimeData()->data("servicePath"));
+            info.itemKey = static_cast<QString>(e->mimeData()->data("itemKey"));
+            info.isTypeWriting = (static_cast<QString>(e->mimeData()->data("isTypeWritting")) == "1");
+            info.expand = (static_cast<QString>(e->mimeData()->data("expand")) == "1");
+            info.pluginInter = (PluginsItemInterface *)(e->mimeData()->imageData().value<qulonglong>());
             QModelIndex targetIndex = getIndexFromPos(e->pos());
+            int index = -1;
             if (targetIndex.isValid() && targetIndex.row() < dataModel->rowCount() - 1) {
                 // 如果拖动的位置是合法的位置，则让其插入到当前的位置
-                dataModel->insertRow(targetIndex.row(), info);
+                index = targetIndex.row();
+                dataModel->insertRow(index, info);
             } else {
                 // 在其他的情况下，让其插入到最后
                 dataModel->addRow(info);
             }
+
+            dataModel->saveConfig(index, info);
         }
     } else {
         e->ignore();
         DListView::dropEvent(e);
+    }
+}
+
+void TrayGridView::onUpdateEditorView()
+{
+    for (int i = 0; i < model()->rowCount(); i++) {
+        QModelIndex index = model()->index(i, 0);
+        closePersistentEditor(index);
+        openPersistentEditor(index);
     }
 }
 
@@ -451,8 +469,6 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
 
     QRect rectIcon(pixLabel->rect().topLeft(), pixLabel->size());
 
-    listModel->setDragingIndex(modelIndex);
-
     QDrag *drag = new QDrag(this);
     pixmap.scaled(pixmap.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
@@ -469,6 +485,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     setState(DraggingState);
 
     listModel->setDragKey(itemKey);
+    listModel->setDragingIndex(modelIndex);
 
     Qt::DropAction dropAct = drag->exec(supportedActions);
 
@@ -484,6 +501,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
             pixLabel->deleteLater();
             listModel->setDragKey(QString());
             clearDragModelIndex();
+            listModel->setExpandVisible(!TrayModel::getIconModel()->isEmpty());
 
             m_dropPos = QPoint();
             m_dragPos = QPoint();

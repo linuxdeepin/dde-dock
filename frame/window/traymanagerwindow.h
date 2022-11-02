@@ -57,6 +57,7 @@ public:
     void updateBorderRadius(int borderRadius);
     void updateLayout();
     void setPositon(Dock::Position position);
+    void setDisplayMode(Dock::DisplayMode displayMode);
     QSize suitableSize() const;
     QSize suitableSize(const Dock::Position &position) const;
 
@@ -83,6 +84,10 @@ private:
     int appDatetimeSize(const Dock::Position &position) const;
     QPainterPath roundedPaths();
 
+private Q_SLOTS:
+    void onTrayCountChanged();
+    void onRequestUpdateWidget(const QList<int> &idxs);
+
 private:
     QWidget *m_appPluginDatetimeWidget;
     SystemPluginWindow *m_systemPluginWidget;
@@ -95,6 +100,7 @@ private:
     TrayModel *m_model;
     TrayDelegate *m_delegate;
     Dock::Position m_position;
+    Dock::DisplayMode m_displayMode;
     QLabel *m_splitLine;
     DockInter *m_dockInter;
     bool m_singleShow;                              // 用于记录当前日期时间和插件区域是显示一行还是显示多行

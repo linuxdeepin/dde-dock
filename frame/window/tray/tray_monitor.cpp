@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tray_monitor.h"
+#include "quicksettingcontroller.h"
+#include "pluginsiteminterface.h"
 
 TrayMonitor::TrayMonitor(QObject *parent)
     : QObject(parent)
@@ -36,8 +38,54 @@ TrayMonitor::TrayMonitor(QObject *parent)
     connect(m_sniWatcher, &StatusNotifierWatcher::StatusNotifierItemUnregistered, this, &TrayMonitor::onSniItemsChanged, Qt::QueuedConnection);
     QMetaObject::invokeMethod(this, "onSniItemsChanged", Qt::QueuedConnection);
 
+    //-------------------------------System Tray------------------------------------------//
+    QuickSettingController *quickController = QuickSettingController::instance();
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::Tray)
+            return;
+
+        m_systemTrays << itemInter;
+        Q_EMIT systemTrayAdded(itemInter);
+    });
+
+    connect(quickController, &QuickSettingController::pluginRemoved, this, [ = ](PluginsItemInterface *itemInter) {
+        if (!m_systemTrays.contains(itemInter))
+            return;
+
+        m_systemTrays.removeOne(itemInter);
+        Q_EMIT systemTrayRemoved(itemInter);
+    });
+
+    QMetaObject::invokeMethod(this, [ = ] {
+        QList<PluginsItemInterface *> trayPlugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Tray);
+        for (PluginsItemInterface *plugin : trayPlugins) {
+            m_systemTrays << plugin;
+            Q_EMIT systemTrayAdded(plugin);
+        }
+    }, Qt::QueuedConnection);
+
     //-------------------------------Tray Indicator---------------------------------------------//
     QMetaObject::invokeMethod(this, "startLoadIndicators", Qt::QueuedConnection);
+}
+
+QList<quint32> TrayMonitor::trayWinIds() const
+{
+    return m_trayWids;
+}
+
+QStringList TrayMonitor::sniServices() const
+{
+    return m_sniServices;
+}
+
+QStringList TrayMonitor::indicatorNames() const
+{
+    return m_indicatorNames;
+}
+
+QList<PluginsItemInterface *> TrayMonitor::systemTrays() const
+{
+    return m_systemTrays;
 }
 
 void TrayMonitor::onTrayIconsChanged()
@@ -93,6 +141,7 @@ void TrayMonitor::startLoadIndicators()
 
     for (const QFileInfo &fileInfo : indicatorConfDir.entryInfoList({"*.json"}, QDir::Files | QDir::NoDotAndDotDot)) {
         const QString &indicatorName = fileInfo.baseName();
+        m_indicatorNames << indicatorName;
         Q_EMIT indicatorFounded(indicatorName);
     }
 }

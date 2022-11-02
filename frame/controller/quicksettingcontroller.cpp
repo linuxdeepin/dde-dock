@@ -39,12 +39,19 @@ QuickSettingController::~QuickSettingController()
 void QuickSettingController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
-    PluginAttribute pluginClass = getPluginClass(itemInter);
+    PluginAttribute pluginAttr = pluginAttribute(itemInter);
 
-    m_quickPlugins[pluginClass] << itemInter;
+    m_quickPlugins[pluginAttr] << itemInter;
     m_quickPluginsMap[itemInter] = itemKey;
 
-    emit pluginInserted(itemInter, pluginClass);
+    emit pluginInserted(itemInter, pluginAttr);
+}
+
+void QuickSettingController::pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &)
+{
+    updateDockInfo(itemInter, DockPart::QuickPanel);
+    updateDockInfo(itemInter, DockPart::QuickShow);
+    updateDockInfo(itemInter, DockPart::SystemPanel);
 }
 
 void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &)
@@ -72,18 +79,18 @@ void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInt
     Q_EMIT pluginUpdated(itemInter, part);
 }
 
-QuickSettingController::PluginAttribute QuickSettingController::getPluginClass(PluginsItemInterface * const itemInter) const
+QuickSettingController::PluginAttribute QuickSettingController::pluginAttribute(PluginsItemInterface * const itemInter) const
 {
     QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
     if (!pluginLoader)
         return PluginAttribute::Quick;
 
-    if (pluginLoader->fileName().contains("/plugins/system-trays")) {
+    if (pluginLoader->fileName().contains(TRAY_PATH)) {
         // 如果是从系统目录下加载的插件，则认为它是系统插件，此时需要放入到托盘中
         return PluginAttribute::Tray;
     }
 
-    QJsonObject meta = pluginLoader->metaData().value("MetaData").toObject();
+    const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     if (meta.contains("tool") && meta.value("tool").toBool()) {
         // 如果有tool标记，则认为它是工具插件，例如回收站和窗管提供的相关插件
         return PluginAttribute::Tool;
@@ -145,10 +152,10 @@ QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &plugins = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginsMap();
     QList<PluginsItemInterface *> allPlugins = plugins.keys();
     for (PluginsItemInterface *plugin : allPlugins) {
-        PluginAttribute pluginClass = getPluginClass(plugin);
-        if (pluginClass == QuickSettingController::PluginAttribute::Quick
-                || pluginClass == QuickSettingController::PluginAttribute::System
-                || pluginClass == QuickSettingController::PluginAttribute::Tool)
+        PluginAttribute pluginAttr = pluginAttribute(plugin);
+        if (pluginAttr == QuickSettingController::PluginAttribute::Quick
+                || pluginAttr == QuickSettingController::PluginAttribute::System
+                || pluginAttr == QuickSettingController::PluginAttribute::Tool)
             settingPlugins << plugin;
     }
 

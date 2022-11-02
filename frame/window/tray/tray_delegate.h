@@ -45,11 +45,10 @@ public:
 
 Q_SIGNALS:
     void removeRow(const QModelIndex &) const;
-    void visibleChanged(const QModelIndex &, bool) const;
     void requestDrag(bool) const;
 
 private Q_SLOTS:
-    void onRequestDrag(bool on);
+    void onUpdateExpand(bool on);
 
 protected:
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;

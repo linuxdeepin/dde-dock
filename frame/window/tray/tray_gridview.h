@@ -42,20 +42,23 @@ public:
     QSize suitableSize(const Dock::Position &position) const;
     void setDragDistance(int pixel);
     void setAnimationProperty(const QEasingCurve::Type easing, const int duringTime = 250);
-    void moveAnimation();
     const QModelIndex modelIndex(const int index) const;
     const QRect indexRect(const QModelIndex &index) const;
-    void dropSwap();
 
     void handleDropEvent(QDropEvent *e);
+
+public Q_SLOTS:
+    void onUpdateEditorView();
 
 Q_SIGNALS:
     void requestRemove(const QString &);
     void dragLeaved();
     void dragEntered();
 
-public Q_SLOTS:
+private Q_SLOTS:
     void clearDragModelIndex();
+    void dropSwap();
+    void moveAnimation();
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;

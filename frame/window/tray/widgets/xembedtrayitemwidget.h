@@ -43,7 +43,6 @@ public:
     void updateIcon() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
 
-    static QString getWindowProperty(quint32 winId, QString propName);
     static QString toXEmbedKey(quint32 winId);
     static uint getWindowPID(quint32 winId);
     static bool isXEmbedKey(const QString &itemKey);
@@ -59,8 +58,6 @@ private:
     void wrapWindow();
     void sendHoverEvent();
     void refershIconImage();
-
-    static QString getAppNameForWindow(quint32 winId);
 
 private slots:
     void setX11PassMouseEvent(const bool pass);

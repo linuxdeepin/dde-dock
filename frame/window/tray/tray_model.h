@@ -42,16 +42,20 @@ enum TrayIconType {
 struct WinInfo {
     TrayIconType type;
     QString key;
+    QString itemKey;
     quint32 winId;
     QString servicePath;
     bool isTypeWriting;
+    bool expand;
     PluginsItemInterface *pluginInter;
 
     WinInfo() : type(UnKnow)
       , key(QString())
+      , itemKey(QString())
       , winId(0)
       , servicePath(QString())
       , isTypeWriting(false)
+      , expand(false)
       , pluginInter(nullptr) {}
 
     bool operator==(const WinInfo &other) {
@@ -59,6 +63,7 @@ struct WinInfo {
                 && this->key == other.key
                 && this->winId == other.winId
                 && this->servicePath == other.servicePath
+                && this->itemKey == other.itemKey
                 && this->isTypeWriting == other.isTypeWriting
                 && this->pluginInter == other.pluginInter;
     }
@@ -75,12 +80,15 @@ public:
         WinIdRole,
         ServiceRole,
         PluginInterfaceRole,
+        ExpandRole,
+        ItemKeyRole,
         Blank
     };
 
     typedef QList<WinInfo> WinInfos;
 
-    TrayModel(QListView *view, bool isIconTray, bool hasInputMethod, QObject *parent = Q_NULLPTR);
+    static TrayModel *getDockModel();
+    static TrayModel *getIconModel();
 
     void dropSwap(int newPos);
     void dropInsert(int newPos);
@@ -88,6 +96,7 @@ public:
     void clearDragDropIndex();
     void setDragingIndex(const QModelIndex index);
     void setDragDropIndex(const QModelIndex index);
+    void setExpandVisible(bool visible, bool openExpand = false);
 
     void setDragKey(const QString &key);
 
@@ -97,17 +106,26 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     bool isIconTray();
+    bool hasExpand() const;
+    bool isEmpty() const;
 
     void clear();
+    void saveConfig(int index, const WinInfo &winInfo);
 
 Q_SIGNALS:
     void requestUpdateIcon(quint32);
     void requestUpdateWidget(const QList<int> &);
+    void requestOpenEditor(const QModelIndex &index, bool isOpen = true) const;
+    void rowCountChanged();
+    void requestRefreshEditor();
 
 public Q_SLOTS:
     void removeRow(const QString &itemKey);
     void addRow(WinInfo info);
     void insertRow(int index, WinInfo info);
+
+protected:
+    TrayModel(bool isIconTray, QObject *parent = Q_NULLPTR);
 
 private Q_SLOTS:
     void onXEmbedTrayAdded(quint32 winId);
@@ -119,14 +137,24 @@ private Q_SLOTS:
     void onIndicatorAdded(const QString &indicatorName);
     void onIndicatorRemoved(const QString &indicatorName);
 
-    void onSystemItemRemoved(PluginsItemInterface *itemInter);
+    void onSystemTrayAdded(PluginsItemInterface *itemInter);
+    void onSystemTrayRemoved(PluginsItemInterface *itemInter);
+
+    void onSettingChanged(const QString &key, const QVariant &value);
 
 private:
     bool exist(const QString &itemKey);
-    QString fileNameByServiceName(const QString &serviceName);
-    bool isTypeWriting(const QString &servicePath);
+    QString fileNameByServiceName(const QString &serviceName) const;
+    bool isTypeWriting(const QString &servicePath) const;
 
-    void systemItemAdded(PluginsItemInterface *itemInter);
+    bool inTrayConfig(const QString itemKey) const;
+    QString xembedItemKey(quint32 winId) const;
+    bool xembedCanExport(quint32 winId) const;
+    QString sniItemKey(const QString &servicePath) const;
+    bool sniCanExport(const QString &servicePath) const;
+    bool indicatorCanExport(const QString &indicatorName) const;
+    QString systemItemKey(const QString &pluginName) const;
+    bool systemItemCanExport(const QString &pluginName) const;
 
 protected:
     QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
@@ -142,14 +170,13 @@ private:
     QModelIndex m_dragModelIndex;
     QModelIndex m_dropModelIndex;
     WinInfo m_dragInfo;
-    QListView *m_view;
     TrayMonitor *m_monitor;
 
     QString m_dragKey;
 
     QMap<QString, IndicatorPlugin *> m_indicatorMap;
+    QStringList m_fixedTrayNames;
     bool m_isTrayIcon;
-    bool m_hasInputMethod;
 };
 
 Q_DECLARE_METATYPE(TrayIconType);

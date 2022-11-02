@@ -63,6 +63,7 @@ void TrayMainWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
     // 只有在时尚模式下才显示
     setVisible(displayMode == Dock::DisplayMode::Fashion);
     MainWindowBase::setDisplayMode(displayMode);
+    m_trayManager->setDisplayMode(displayMode);
 }
 
 MainWindowBase::DockWindowType TrayMainWindow::windowType() const

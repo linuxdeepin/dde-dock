@@ -58,10 +58,12 @@ Q_SIGNALS:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void initUi();
     void initConnection();
+    void initAttribute();
     void updateLayout(const Dock::Position &position);
     void resizeTool() const;
     bool pluginExists(PluginsItemInterface *itemInter) const;
@@ -71,6 +73,7 @@ private Q_SLOTS:
     void onResetLayout();
     void onItemAdded(PluginsItemInterface *itemInter);
     void onItemRemove(PluginsItemInterface *itemInter);
+    void onDropIcon(QDropEvent *dropEvent);
 
 private:
     DockInter *m_dockInter;

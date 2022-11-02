@@ -41,10 +41,22 @@
 #include <QVBoxLayout>
 #include <QMetaObject>
 #include <QStackedLayout>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
-static const int QuickItemRole = Dtk::UserRole + 10;
+struct QuickDragInfo {
+    QPoint dragPosition;
+    QuickSettingItem *dragItem = nullptr;
+    void reset() {
+        dragPosition.setX(0);
+        dragPosition.setY(0);
+        dragItem = nullptr;
+    }
+    bool isNull() {
+        return !dragItem;
+    }
+} QuickDragInfo;
 
 #define ITEMWIDTH 70
 #define ITEMHEIGHT 60
@@ -71,7 +83,7 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_volumeSettingWidget(new VolumeDevicesWidget(m_volumeModel, this))
     , m_displaySettingWidget(new DisplaySettingWidget(this))
     , m_childPage(new PluginChildPage(this))
-    , m_dragPluginPosition(QPoint(0, 0))
+    , m_dragInfo(new struct QuickDragInfo)
 {
     initUi();
     initConnection();
@@ -81,6 +93,7 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
 
 QuickSettingContainer::~QuickSettingContainer()
 {
+    delete m_dragInfo;
 }
 
 void QuickSettingContainer::showHomePage()
@@ -170,8 +183,29 @@ void QuickSettingContainer::onItemDetailClick(PluginsItemInterface *pluginInter)
 
 bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_childPage && event->type() == QEvent::Resize)
-        onResizeView();
+    switch (event->type()) {
+    case QEvent::Resize: {
+        if (watched == m_childPage)
+            onResizeView();
+        break;
+    }
+    case QEvent::MouseButtonPress: {
+        QuickSettingItem *item = qobject_cast<QuickSettingItem *>(watched);
+        if (!item)
+            break;
+
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        m_dragInfo->dragPosition = mouseEvent->pos();
+        m_dragInfo->dragItem = item;
+        break;
+    }
+    case QEvent::MouseButtonRelease: {
+        m_dragInfo->reset();
+        break;
+    }
+    default:
+        break;
+    }
 
     return QWidget::eventFilter(watched, event);
 }
@@ -181,6 +215,17 @@ void QuickSettingContainer::showWidget(QWidget *widget, const QString &title)
     m_childPage->setTitle(title);
     m_childPage->pushWidget(widget);
     m_switchLayout->setCurrentWidget(m_childPage);
+}
+
+QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
+{
+    if (m_position == Dock::Position::Left)
+        return QPoint(0, pixmap.height());
+
+    if (m_position == Dock::Position::Top)
+        return QPoint(pixmap.width(), 0);
+
+    return QPoint(pixmap.width(), pixmap.height());
 }
 
 void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
@@ -216,51 +261,23 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
     onResizeView();
 }
 
-void QuickSettingContainer::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() != Qt::LeftButton)
-        return QWidget::mousePressEvent(event);
-
-    QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(childAt(event->pos()));
-    if (!moveItem || moveItem->isPrimary())
-        return QWidget::mousePressEvent(event);
-
-    m_dragPluginPosition = event->pos();
-}
-
-void QuickSettingContainer::clearDragPoint()
-{
-    m_dragPluginPosition.setX(0);
-    m_dragPluginPosition.setY(0);
-}
-
-void QuickSettingContainer::mouseReleaseEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event);
-    clearDragPoint();
-}
-
 void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_dragPluginPosition.isNull())
+    if (m_dragInfo->isNull())
         return;
-
-    QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(childAt(m_dragPluginPosition));
-    if (!moveItem) {
-        clearDragPoint();
-        return;
-    }
 
     QPoint pointCurrent = event->pos();
-    if (qAbs(m_dragPluginPosition.x() - pointCurrent.x()) > 5
-            || qAbs(m_dragPluginPosition.y() - pointCurrent.y()) > 5) {
-        clearDragPoint();
+    if (qAbs(m_dragInfo->dragPosition.x() - pointCurrent.x()) > 5
+            || qAbs(m_dragInfo->dragPosition.y() - pointCurrent.y()) > 5) {
+        QuickSettingItem *moveItem = m_dragInfo->dragItem;
+        m_dragInfo->reset();
+
         QDrag *drag = new QDrag(this);
         QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem->pluginItem());
         drag->setMimeData(mimedata);
         QPixmap dragPixmap = moveItem->dragPixmap();
         drag->setPixmap(dragPixmap);
-        drag->setHotSpot(QPoint(dragPixmap.width() / 2, dragPixmap.height() / 2));
+        drag->setHotSpot(hotSpot(dragPixmap));
 
         drag->exec(Qt::MoveAction | Qt::CopyAction);
     }

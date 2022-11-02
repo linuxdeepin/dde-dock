@@ -117,10 +117,19 @@ QSize SystemPluginWindow::suitableSize(const Position &position) const
     return QSize(QWIDGETSIZE_MAX, itemHeight);
 }
 
+bool SystemPluginWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Drop)
+        Q_EMIT requestDrop(static_cast<QDropEvent *>(event));
+
+    return QWidget::eventFilter(watched, event);
+}
+
 void SystemPluginWindow::initUi()
 {
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
+    installEventFilter(this);
 }
 
 void SystemPluginWindow::initConnection()
@@ -161,6 +170,7 @@ void SystemPluginWindow::pluginAdded(PluginsItemInterface *plugin)
     StretchPluginsItem *item = new StretchPluginsItem(plugin, QuickSettingController::instance()->itemKey(plugin));
     item->setDisplayMode(m_displayMode);
     item->setPosition(m_position);
+    item->installEventFilter(this);
     item->setParent(this);
     item->show();
     m_mainLayout->addWidget(item);

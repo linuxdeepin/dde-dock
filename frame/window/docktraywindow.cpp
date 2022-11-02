@@ -27,6 +27,7 @@
 #include "tray_delegate.h"
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
+#include "quicksettingcontainer.h"
 
 #include <DGuiApplicationHelper>
 
@@ -50,15 +51,12 @@ DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     , m_systemPuginWidget(new SystemPluginWindow(this))
     , m_quickIconWidget(new QuickPluginWindow(this))
     , m_trayView(new TrayGridView(this))
-    , m_model(new TrayModel(m_trayView, false, true, this))
+    , m_model(TrayModel::getDockModel())
     , m_delegate(new TrayDelegate(m_trayView, this))
 {
     initUi();
     initConnection();
-
-    m_trayView->setModel(m_model);
-    m_trayView->setItemDelegate(m_delegate);
-    m_trayView->openPersistentEditor(m_model->index(0, 0));
+    initAttribute();
 }
 
 void DockTrayWindow::setPositon(const Dock::Position &position)
@@ -69,9 +67,11 @@ void DockTrayWindow::setPositon(const Dock::Position &position)
     m_quickIconWidget->setPositon(position);
     m_trayView->setPosition(position);
     m_delegate->setPositon(position);
-    QModelIndex index = m_model->index(0, 0);
-    m_trayView->closePersistentEditor(index);
-    m_trayView->openPersistentEditor(index);
+    if (m_model->hasExpand()) {
+        // 切换位置的时候，需要重新关闭编辑器，然后在model的flag函数中再打开，防止图标的方向没有切换过来
+        QModelIndex index = m_model->index(0, 0);
+        m_trayView->closePersistentEditor(index);
+    }
     updateLayout(position);
     onResetLayout();
 }
@@ -151,6 +151,41 @@ void DockTrayWindow::paintEvent(QPaintEvent *event)
     }
 
     painter.fillRect(m_toolLineLabel->geometry(), color);
+}
+
+bool DockTrayWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this || watched == m_toolWidget || watched == m_dateTimeWidget
+            || watched == m_trayView) {
+        switch (event->type()) {
+        case QEvent::Drop: {
+                QDropEvent *dropEvent = static_cast<QDropEvent *>(event);
+                onDropIcon(dropEvent);
+                break;
+            }
+        case QEvent::DragEnter: {
+            QDragEnterEvent *dragEnterEvent = static_cast<QDragEnterEvent *>(event);
+            dragEnterEvent->setDropAction(Qt::CopyAction);
+            dragEnterEvent->accept();
+            return true;
+        }
+        case QEvent::DragMove: {
+            QDragMoveEvent *dragMoveEvent = static_cast<QDragMoveEvent *>(event);
+            dragMoveEvent->setDropAction(Qt::CopyAction);
+            dragMoveEvent->accept();
+            return true;
+        }
+        case QEvent::DragLeave: {
+            QDragLeaveEvent *dragLeaveEvent = static_cast<QDragLeaveEvent *>(event);
+            dragLeaveEvent->accept();
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 /** 根据任务栏的位置来更新布局的方向
@@ -264,11 +299,6 @@ void DockTrayWindow::initUi()
     m_mainBoxLayout->addWidget(m_trayView);
     m_mainBoxLayout->setAlignment(m_toolLineLabel, Qt::AlignCenter);
 
-    WinInfo info;
-    info.type = TrayIconType::ExpandIcon;
-    m_model->addRow(info);
-    m_trayView->openPersistentEditor(m_model->index(0, 0));
-
     m_toolLineLabel->setFixedSize(0, 0);
 
     m_mainBoxLayout->addStretch();
@@ -279,8 +309,20 @@ void DockTrayWindow::initConnection()
     connect(m_systemPuginWidget, &SystemPluginWindow::itemChanged, this, &DockTrayWindow::onResetLayout);
     connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &DockTrayWindow::onResetLayout);
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onResetLayout);
+    connect(m_quickIconWidget, &QuickPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
+    connect(m_systemPuginWidget, &SystemPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
+    connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
     connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onResetLayout);
+    connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onResetLayout);
+    connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
+    connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);
 
+    connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
+        Q_EMIT m_delegate->requestDrag(true);
+    });
+    connect(m_trayView, &TrayGridView::dragEntered, m_delegate, [ this ]{
+        Q_EMIT m_delegate->requestDrag(false);
+    });
     connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
         switch (pluginAttr) {
         case QuickSettingController::PluginAttribute::Tool:
@@ -293,6 +335,24 @@ void DockTrayWindow::initConnection()
     });
 
     connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, &DockTrayWindow::onItemRemove);
+}
+
+void DockTrayWindow::initAttribute()
+{
+    setAcceptDrops(true);
+    setMouseTracking(true);
+
+    m_trayView->setModel(m_model);
+    m_trayView->setItemDelegate(m_delegate);
+    m_trayView->setDragDistance(2);
+    m_trayView->setDragEnabled(true);
+
+    installEventFilter(this);
+    m_toolWidget->installEventFilter(this);
+    m_dateTimeWidget->installEventFilter(this);
+    m_systemPuginWidget->installEventFilter(this);
+    m_quickIconWidget->installEventFilter(this);
+    m_trayView->installEventFilter(this);
 }
 
 void DockTrayWindow::onResetLayout()
@@ -347,5 +407,25 @@ void DockTrayWindow::onItemRemove(PluginsItemInterface *itemInter)
 
         Q_EMIT requestUpdate();
         break;
+    }
+}
+
+void DockTrayWindow::onDropIcon(QDropEvent *dropEvent)
+{
+    if (!dropEvent || !dropEvent->mimeData() || dropEvent->source() == this)
+        return;
+
+    if (qobject_cast<QuickSettingContainer *>(dropEvent->source())) {
+        const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(dropEvent->mimeData());
+        if (!mimeData)
+            return;
+
+        PluginsItemInterface *pluginItem = static_cast<PluginsItemInterface *>(mimeData->pluginItemInterface());
+        if (pluginItem)
+            m_quickIconWidget->dragPlugin(pluginItem);
+    } else if (qobject_cast<TrayGridView *>(dropEvent->source())) {
+        // 将trayView中的dropEvent扩大到整个区域（this），这样便于随意拖动到这个区域都可以捕获。
+        // m_trayView中有e->accept不会导致事件重复处理。
+        m_trayView->handleDropEvent(dropEvent);
     }
 }

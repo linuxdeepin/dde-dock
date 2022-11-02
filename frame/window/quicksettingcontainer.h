@@ -45,6 +45,7 @@ class QLabel;
 class PluginChildPage;
 class QGridLayout;
 class DisplaySettingWidget;
+struct QuickDragInfo;
 
 DWIDGET_USE_NAMESPACE
 
@@ -57,9 +58,8 @@ public:
     static void setPosition(Dock::Position position);
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
     explicit QuickSettingContainer(QWidget *parent = nullptr);
     ~QuickSettingContainer() override;
@@ -69,7 +69,6 @@ private Q_SLOTS:
     void onPluginInsert(PluginsItemInterface * itemInter);
     void onPluginRemove(PluginsItemInterface * itemInter);
     void onItemDetailClick(PluginsItemInterface *pluginInter);
-    bool eventFilter(QObject *watched, QEvent *event) override;
     void onResizeView();
 
 private:
@@ -83,8 +82,8 @@ private:
     void initQuickItem(PluginsItemInterface *plugin);
     // 显示具体的窗体
     void showWidget(QWidget *widget, const QString &title);
-    // 清除移动轨迹
-    void clearDragPoint();
+    // 获取拖动图标的热点
+    QPoint hotSpot(const QPixmap &pixmap);
 
 private:
     static DockPopupWindow *m_popWindow;
@@ -105,7 +104,7 @@ private:
     VolumeDevicesWidget *m_volumeSettingWidget;
     DisplaySettingWidget *m_displaySettingWidget;
     PluginChildPage *m_childPage;
-    QPoint m_dragPluginPosition;
+    QuickDragInfo *m_dragInfo;
     QList<QuickSettingItem *> m_quickSettings;
 };
 

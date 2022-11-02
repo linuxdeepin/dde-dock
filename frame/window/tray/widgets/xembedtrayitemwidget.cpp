@@ -21,6 +21,7 @@
 
 #include "constants.h"
 #include "xembedtrayitemwidget.h"
+#include "platformutils.h"
 //#include "utils.h"
 
 #include <QWindow>
@@ -85,7 +86,7 @@ void sni_cleanup_xcb_image(void *data)
 XEmbedTrayItemWidget::XEmbedTrayItemWidget(quint32 winId, xcb_connection_t *cnn, Display *disp, QWidget *parent)
     : BaseTrayWidget(parent)
     , m_windowId(winId)
-    , m_appName(getAppNameForWindow(winId))
+    , m_appName(PlatformUtils::getAppNameForWindow(winId))
     , m_valid(true)
     , m_xcbCnn(cnn)
     , m_display(disp)
@@ -116,7 +117,7 @@ XEmbedTrayItemWidget::~XEmbedTrayItemWidget()
 
 QString XEmbedTrayItemWidget::itemKeyForConfig()
 {
-    return QString("window:%1").arg(getAppNameForWindow(m_windowId));
+    return QString("window:%1").arg(PlatformUtils::getAppNameForWindow(m_windowId));
 }
 
 void XEmbedTrayItemWidget::showEvent(QShowEvent *e)
@@ -375,45 +376,6 @@ void XEmbedTrayItemWidget::sendClick(uint8_t mouseButton, int x, int y)
     QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
 }
 
-// NOTE: WM_NAME may can not obtain successfully
-QString XEmbedTrayItemWidget::getWindowProperty(quint32 winId, QString propName)
-{
-    const auto display = IS_WAYLAND_DISPLAY ? XOpenDisplay(nullptr) : QX11Info::display();
-    if (!display) {
-        qWarning() << "QX11Info::display() is " << display;
-        return QString();
-    }
-
-    Atom atom_prop = XInternAtom(display, propName.toLocal8Bit(), true);
-    if (!atom_prop) {
-        qDebug() << "Error: get window property failed, invalid property atom";
-        return QString();
-    }
-
-    Atom actual_type_return;
-    int actual_format_return;
-    unsigned long nitems_return;
-    unsigned long bytes_after_return;
-    unsigned char *prop_return;
-
-    int r = XGetWindowProperty(display, winId, atom_prop, 0, 100, false, AnyPropertyType,
-            &actual_type_return, &actual_format_return, &nitems_return,
-            &bytes_after_return, &prop_return);
-
-    Q_UNUSED(r);
-
-//    qDebug() << (r == Success)
-//             << actual_type_return
-//             << actual_format_return
-//             << nitems_return
-//             << bytes_after_return
-//             << QString::fromLocal8Bit((char*)prop_return);
-    if (IS_WAYLAND_DISPLAY)
-        XCloseDisplay(display);
-
-    return QString::fromLocal8Bit((char*)prop_return);
-}
-
 QString XEmbedTrayItemWidget::toXEmbedKey(quint32 winId)
 {
     return QString("window:%1").arg(winId);
@@ -475,29 +437,6 @@ void XEmbedTrayItemWidget::refershIconImage()
     if (!isVisible()) {
         Q_EMIT needAttention();
     }
-}
-
-QString XEmbedTrayItemWidget::getAppNameForWindow(quint32 winId)
-{
-    QString appName;
-    do {
-        // is normal application
-        appName = getWindowProperty(winId, NORMAL_WINDOW_PROP_NAME);
-        if (!appName.isEmpty() && appName != IS_WINE_WINDOW_BY_WM_CLASS) {
-            break;
-        }
-
-        // is wine application
-        appName = getWindowProperty(winId, WINE_WINDOW_PROP_NAME).split("/").last();
-        if (!appName.isEmpty()) {
-            break;
-        }
-
-        // fallback to window id
-        appName = QString::number(winId);
-    } while (false);
-
-    return appName;
 }
 
 //int XEmbedTrayWidget::getTrayWidgetKeySuffix(const QString &appName, quint32 winId)

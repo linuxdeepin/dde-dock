@@ -46,6 +46,7 @@ public:
     QJsonObject metaData(PluginsItemInterface *pluginItem) const;
     PluginsItem *pluginItemWidget(PluginsItemInterface *pluginItem);
     QList<PluginsItemInterface *> pluginInSettings();
+    PluginAttribute pluginAttribute(PluginsItemInterface * const itemInter) const;
 
 Q_SIGNALS:
     void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute &);
@@ -58,16 +59,13 @@ protected:
 
 protected:
     void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &) override {}
+    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
     void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
     void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
     void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) override {}
     void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
 
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
-
-private:
-    PluginAttribute getPluginClass(PluginsItemInterface * const itemInter) const;
 
 private:
     QMap<PluginAttribute, QList<PluginsItemInterface *>> m_quickPlugins;

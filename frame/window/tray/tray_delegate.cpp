@@ -48,6 +48,7 @@ TrayDelegate::TrayDelegate(QListView *view, QObject *parent)
     , m_position(Dock::Position::Bottom)
     , m_listView(view)
 {
+    connect(this, &TrayDelegate::requestDrag, this, &TrayDelegate::onUpdateExpand);
 }
 
 void TrayDelegate::setPositon(Dock::Position position)
@@ -83,11 +84,11 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         trayWidget = new SNITrayItemWidget(servicePath, parent);
     } else if (type == TrayIconType::ExpandIcon) {
         ExpandIconWidget *expandWidget = new ExpandIconWidget(parent);
-        expandWidget->setPositonValue(m_position);
-        connect(expandWidget, &ExpandIconWidget::trayVisbleChanged, this, [ = ](bool visible) {
-            Q_EMIT visibleChanged(index, visible);
-        });
-        connect(this, &TrayDelegate::requestDrag, this, &TrayDelegate::onRequestDrag);
+        expandWidget->setPositon(m_position);
+        bool openExpand = index.data(TrayModel::ExpandRole).toBool();
+        if (openExpand)
+            expandWidget->setTrayPanelVisible(true);
+
         trayWidget = expandWidget;
     } else if (type == TrayIconType::Incicator) {
         QString indicateName = key;
@@ -119,18 +120,23 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     return trayWidget;
 }
 
-void TrayDelegate::onRequestDrag(bool on)
+void TrayDelegate::onUpdateExpand(bool on)
 {
     ExpandIconWidget *expandwidget = expandWidget();
-    if (!expandwidget)
-        return;
 
     if (on) {
-        expandwidget->setTrayPanelVisible(true);
-    } else {
+        if (!expandwidget) {
+            // 如果三角按钮不存在，那么就设置三角按钮可见，此时它会自动创建一个三角按钮
+            TrayModel *model = qobject_cast<TrayModel *>(m_listView->model());
+            if (model)
+                model->setExpandVisible(true, true);
+        } else {
+            expandwidget->setTrayPanelVisible(true);
+        }
+    } else if (expandwidget) {
         // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
         QPoint currentPoint = QCursor::pos();
-        QWidget *view = expandwidget->popupTrayView();
+        TrayGridWidget *view = ExpandIconWidget::popupTrayView();
         expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint));
     }
 }

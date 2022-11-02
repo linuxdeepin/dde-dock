@@ -39,23 +39,18 @@ class ExpandIconWidget : public BaseTrayWidget
 public:
     explicit ExpandIconWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = Qt::WindowFlags());
     ~ExpandIconWidget() override;
-    void setPositonValue(Dock::Position position);
+    void setPositon(Dock::Position position);
 
     void sendClick(uint8_t mouseButton, int x, int y) override;
     void setTrayPanelVisible(bool visible);
     QString itemKeyForConfig() override { return "Expand"; }
     void updateIcon() override {}
     QPixmap icon() override;
-    TrayGridWidget *popupTrayView();
-
-Q_SIGNALS:
-    void trayVisbleChanged(bool);
+    static TrayGridWidget *popupTrayView();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
     const QString dropIconFile() const;
-
-    void resetPosition();
 
 private:
     Dtk::Gui::DRegionMonitor *m_regionInter;
@@ -70,8 +65,11 @@ class TrayGridWidget : public QWidget
 public:
     explicit TrayGridWidget(QWidget *parent);
 
+    static void setPosition(const Dock::Position &position);
     void setTrayGridView(TrayGridView *trayView);
+    void setOwnerWidget(QWidget *widget);
     TrayGridView *trayView() const;
+    void resetPosition();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -82,6 +80,8 @@ private:
 private:
     DockInter *m_dockInter;
     TrayGridView *m_trayGridView;
+    static Dock::Position m_position;
+    QWidget *m_ownerWidget;
 };
 
 #endif // EXPANDICONWIDGET_H

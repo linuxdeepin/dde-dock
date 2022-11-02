@@ -161,7 +161,7 @@ install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
 
 #dconfig
 file(GLOB DCONFIG_FILES "configs/*.json")
-install(FILES ${DCONFIG_FILES} DESTINATION /usr/share/dsg/apps/dde-dock/configs/)
+install(FILES ${DCONFIG_FILES} DESTINATION /usr/share/dsg/configs/dde-dock/)
 
 # Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
