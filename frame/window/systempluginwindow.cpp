@@ -126,8 +126,8 @@ void SystemPluginWindow::initUi()
 void SystemPluginWindow::initConnection()
 {
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
-        if (pluginClass != QuickSettingController::PluginAttribute::Fixed)
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::System)
             return;
 
         pluginAdded(itemInter);
@@ -136,7 +136,7 @@ void SystemPluginWindow::initConnection()
     connect(quickController, &QuickSettingController::pluginRemoved, this, &SystemPluginWindow::onPluginItemRemoved);
     connect(quickController, &QuickSettingController::pluginUpdated, this, &SystemPluginWindow::onPluginItemUpdated);
 
-    QList<PluginsItemInterface *> plugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Fixed);
+    QList<PluginsItemInterface *> plugins = quickController->pluginItems(QuickSettingController::PluginAttribute::System);
     for (int i = 0; i < plugins.size(); i++)
         pluginAdded(plugins[i]);
 }

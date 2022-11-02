@@ -27,6 +27,7 @@
 #include "utils.h"
 #include "appmultiitem.h"
 #include "quicksettingcontroller.h"
+#include "proxyplugincontroller.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -68,6 +69,18 @@ DockItemManager::DockItemManager(QObject *parent)
     }
 
     // 托盘区域和插件区域 由DockPluginsController获取
+    QuickSettingController *quickController = QuickSettingController::instance();
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::Fixed)
+            return;
+
+        m_pluginItems << itemInter;
+        pluginItemInserted(quickController->pluginItemWidget(itemInter));
+    });
+
+    connect(quickController, &QuickSettingController::pluginRemoved, this, &DockItemManager::onPluginItemRemoved);
+    connect(quickController, &QuickSettingController::pluginUpdated, this, &DockItemManager::onPluginUpdate);
+    connect(ProxyPluginController::instance(), &ProxyPluginController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
     // 应用信号
     connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
@@ -84,6 +97,13 @@ DockItemManager::DockItemManager(QObject *parent)
 
     connect(qApp, &QApplication::aboutToQuit, this, &QObject::deleteLater);
 
+    // 读取已经加载的固定区域插件
+    QList<PluginsItemInterface *> plugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Fixed);
+    for (PluginsItemInterface *plugin : plugins) {
+        m_pluginItems << plugin;
+        pluginItemInserted(quickController->pluginItemWidget(plugin));
+    }
+
     // 刷新图标
     QMetaObject::invokeMethod(this, "refreshItemsIcon", Qt::QueuedConnection);
 }
@@ -99,11 +119,6 @@ DockItemManager *DockItemManager::instance(QObject *parent)
 const QList<QPointer<DockItem>> DockItemManager::itemList() const
 {
     return m_itemList;
-}
-
-const QList<PluginsItemInterface *> DockItemManager::pluginList() const
-{
-    return QuickSettingController::instance()->pluginsMap().keys();
 }
 
 bool DockItemManager::appIsOnDock(const QString &appDesktop) const
@@ -277,6 +292,88 @@ void DockItemManager::manageItem(DockItem *item)
 {
     connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
     connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
+}
+
+void DockItemManager::pluginItemInserted(PluginsItem *item)
+{
+    manageItem(item);
+
+    DockItem::ItemType pluginType = item->itemType();
+
+    // find first plugins item position
+    int firstPluginPosition = -1;
+    for (int i(0); i != m_itemList.size(); ++i) {
+        DockItem::ItemType type = m_itemList[i]->itemType();
+        if (type != pluginType)
+            continue;
+
+        firstPluginPosition = i;
+        break;
+    }
+
+    if (firstPluginPosition == -1)
+        firstPluginPosition = m_itemList.size();
+
+    // find insert position
+    int insertIndex = 0;
+    const int itemSortKey = item->itemSortKey();
+    if (itemSortKey == -1 || firstPluginPosition == -1) {
+        insertIndex = m_itemList.size();
+    } else if (itemSortKey == 0) {
+        insertIndex = firstPluginPosition;
+    } else {
+        insertIndex = m_itemList.size();
+        for (int i(firstPluginPosition + 1); i != m_itemList.size() + 1; ++i) {
+            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i - 1].data());
+            Q_ASSERT(pItem);
+
+            const int sortKey = pItem->itemSortKey();
+            if (pluginType == DockItem::FixedPlugin) {
+                if (sortKey != -1 && itemSortKey > sortKey)
+                    continue;
+                insertIndex = i - 1;
+                break;
+            }
+            if (sortKey != -1 && itemSortKey > sortKey && pItem->itemType() != DockItem::FixedPlugin)
+                continue;
+            insertIndex = i - 1;
+            break;
+        }
+    }
+
+    m_itemList.insert(insertIndex, item);
+    if(pluginType == DockItem::FixedPlugin)
+        insertIndex ++;
+
+    if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
+        item->setVisible(false);
+
+    emit itemInserted(insertIndex - firstPluginPosition, item);
+}
+
+void DockItemManager::onPluginItemRemoved(PluginsItemInterface *itemInter)
+{
+    if (!m_pluginItems.contains(itemInter))
+        return;
+
+    PluginsItem *item = QuickSettingController::instance()->pluginItemWidget(itemInter);
+    item->hidePopup();
+
+    emit itemRemoved(item);
+
+    m_itemList.removeOne(item);
+
+    if (m_loadFinished) {
+        updatePluginsItemOrderKey();
+    }
+}
+
+void DockItemManager::onPluginUpdate(PluginsItemInterface *itemInter)
+{
+    if (!m_pluginItems.contains(itemInter))
+        return;
+
+    Q_EMIT itemUpdated(QuickSettingController::instance()->pluginItemWidget(itemInter));
 }
 
 void DockItemManager::onPluginLoadFinished()

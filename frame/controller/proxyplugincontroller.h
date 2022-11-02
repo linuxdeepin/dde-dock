@@ -40,12 +40,11 @@ class ProxyPluginController : public AbstractPluginsController
     Q_OBJECT
 
 public:
-    static ProxyPluginController *instance(PluginType instanceKey);
+    static ProxyPluginController *instance(PluginType instanceKey = PluginType::QuickPlugin);
     static ProxyPluginController *instance(PluginsItemInterface *itemInter);
     void addProxyInterface(AbstractPluginsController *interface);
     void removeProxyInterface(AbstractPluginsController *interface);
     QPluginLoader *pluginLoader(PluginsItemInterface * const itemInter);
-    QList<PluginsItemInterface *> pluginsItems() const;
     QString itemKey(PluginsItemInterface *itemInter) const;
 
 protected:

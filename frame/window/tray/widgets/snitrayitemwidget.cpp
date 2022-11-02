@@ -151,6 +151,23 @@ SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *par
     connect(m_sniInter, &StatusNotifierItem::NewStatus, [ = ] {
         onSNIStatusChanged(m_sniInter->status());
     });
+
+    QMetaObject::invokeMethod(this, [ this ] {
+        m_sniIconName = m_sniInter->iconName();
+        m_sniIconPixmap = m_sniInter->iconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+        m_updateIconTimer->start();
+
+        m_sniOverlayIconName = m_sniInter->overlayIconName();
+        m_sniOverlayIconPixmap = m_sniInter->overlayIconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+        m_updateOverlayIconTimer->start();
+
+        m_sniAttentionIconName = m_sniInter->attentionIconName();
+        m_sniAttentionIconPixmap = m_sniInter->attentionIconPixmap();
+        m_sniIconThemePath = m_sniInter->iconThemePath();
+        m_updateAttentionIconTimer->start();
+    }, Qt::QueuedConnection);
 }
 
 QString SNITrayItemWidget::itemKeyForConfig()

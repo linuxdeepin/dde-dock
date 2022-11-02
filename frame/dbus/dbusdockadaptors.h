@@ -31,6 +31,7 @@
  */
 class QGSettings;
 class WindowManager;
+class PluginsItemInterface;
 
 class DBusDockAdaptors: public QDBusAbstractAdaptor
 {
@@ -100,6 +101,7 @@ signals:
 
 private:
     bool isPluginValid(const QString &name);
+    QList<PluginsItemInterface *> plugins() const;
 
 private:
     QGSettings *m_gsettings;

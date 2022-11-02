@@ -203,6 +203,8 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
     if (!quickItem)
         return;
 
+    m_pluginLayout->removeWidget(quickItem);
+    m_quickSettings.removeOne(quickItem);
     disconnect(quickItem, &QuickSettingItem::detailClicked, this, &QuickSettingContainer::onItemDetailClick);
     quickItem->setParent(nullptr);
     quickItem->removeEventFilter(this);

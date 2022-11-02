@@ -31,6 +31,8 @@
 #include <QObject>
 
 class AppMultiItem;
+class PluginsItem;
+
 /**
  * @brief The DockItemManager class
  * 管理类，管理所有的应用数据，插件数据
@@ -43,7 +45,6 @@ public:
     static DockItemManager *instance(QObject *parent = nullptr);
 
     const QList<QPointer<DockItem> > itemList() const;
-    const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
 
 signals:
@@ -63,6 +64,8 @@ public slots:
 
 private Q_SLOTS:
     void onPluginLoadFinished();
+    void onPluginItemRemoved(PluginsItemInterface *itemInter);
+    void onPluginUpdate(PluginsItemInterface *itemInter);
 
 #ifdef USE_AM
     void onAppWindowCountChanged();
@@ -77,6 +80,7 @@ private:
     void updatePluginsItemOrderKey();
     void reloadAppItems();
     void manageItem(DockItem *item);
+    void pluginItemInserted(PluginsItem *item);
 
 #ifdef USE_AM
     void updateMultiItems(AppItem *appItem, bool emitSignal = false);
@@ -91,6 +95,7 @@ private:
 
     QList<QPointer<DockItem>> m_itemList;
     QList<QString> m_appIDist;
+    QList<PluginsItemInterface *> m_pluginItems;
 
     bool m_loadFinished; // 记录所有插件是否加载完成
 

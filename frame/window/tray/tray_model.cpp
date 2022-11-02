@@ -48,17 +48,19 @@ TrayModel::TrayModel(QListView *view, bool isIconTray, bool hasInputMethod, QObj
     if (isIconTray) {
         connect(m_monitor, &TrayMonitor::xEmbedTrayAdded, this, &TrayModel::onXEmbedTrayAdded);
         connect(m_monitor, &TrayMonitor::indicatorFounded, this, &TrayModel::onIndicatorFounded);
-        connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
-            if (pluginAttr != QuickSettingController::PluginAttribute::System)
+
+        QuickSettingController *quickController = QuickSettingController::instance();
+        connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+            if (pluginAttr != QuickSettingController::PluginAttribute::Tray)
                 return;
 
             systemItemAdded(itemInter);
         });
 
-        connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, &TrayModel::onSystemItemRemoved);
+        connect(quickController, &QuickSettingController::pluginRemoved, this, &TrayModel::onSystemItemRemoved);
         QMetaObject::invokeMethod(this, [ = ] {
-            QList<PluginsItemInterface *> systemPlugins = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::System);
-            for (PluginsItemInterface *plugin : systemPlugins)
+            QList<PluginsItemInterface *> trayPlugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Tray);
+            for (PluginsItemInterface *plugin : trayPlugins)
                 systemItemAdded(plugin);
         }, Qt::QueuedConnection);
     }

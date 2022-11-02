@@ -32,10 +32,11 @@ class QuickSettingController : public AbstractPluginsController
 
 public:
     enum class PluginAttribute {
-        Quick = 0,
-        Tool,
-        Fixed,
-        System
+        Quick = 0,              // 快捷区域插件
+        Tool,                   // 工具插件（回收站和窗管开发的另一套插件）
+        System,                 // 系统插件（关机插件）
+        Tray,                   // 托盘插件（U盘图标等）
+        Fixed                   // 固定区域插件（显示桌面和多任务视图）
     };
 
 public:
@@ -44,6 +45,7 @@ public:
     QString itemKey(PluginsItemInterface *pluginItem) const;
     QJsonObject metaData(PluginsItemInterface *pluginItem) const;
     PluginsItem *pluginItemWidget(PluginsItemInterface *pluginItem);
+    QList<PluginsItemInterface *> pluginInSettings();
 
 Q_SIGNALS:
     void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute &);
@@ -63,6 +65,9 @@ protected:
     void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) override {}
 
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
+
+private:
+    PluginAttribute getPluginClass(PluginsItemInterface * const itemInter) const;
 
 private:
     QMap<PluginAttribute, QList<PluginsItemInterface *>> m_quickPlugins;

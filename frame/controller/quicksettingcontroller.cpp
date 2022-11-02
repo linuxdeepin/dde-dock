@@ -39,20 +39,7 @@ QuickSettingController::~QuickSettingController()
 void QuickSettingController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
-    PluginAttribute pluginClass = PluginAttribute::Quick;
-    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
-    if (pluginLoader) {
-        if (pluginLoader->fileName().contains("/plugins/system-trays")) {
-            // 如果是从系统托盘目录下加载的插件，则认为它是托盘插件，此时需要放入到托盘中
-            pluginClass = PluginAttribute::System;
-        } else {
-            QJsonObject meta = pluginLoader->metaData().value("MetaData").toObject();
-            if (meta.contains("tool") && meta.value("tool").toBool())
-                pluginClass = PluginAttribute::Tool;
-            else if (meta.contains("fixed") && meta.value("fixed").toBool())
-                pluginClass = PluginAttribute::Fixed;
-        }
-    }
+    PluginAttribute pluginClass = getPluginClass(itemInter);
 
     m_quickPlugins[pluginClass] << itemInter;
     m_quickPluginsMap[itemInter] = itemKey;
@@ -83,6 +70,37 @@ void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const item
 void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
 {
     Q_EMIT pluginUpdated(itemInter, part);
+}
+
+QuickSettingController::PluginAttribute QuickSettingController::getPluginClass(PluginsItemInterface * const itemInter) const
+{
+    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
+    if (!pluginLoader)
+        return PluginAttribute::Quick;
+
+    if (pluginLoader->fileName().contains("/plugins/system-trays")) {
+        // 如果是从系统目录下加载的插件，则认为它是系统插件，此时需要放入到托盘中
+        return PluginAttribute::Tray;
+    }
+
+    QJsonObject meta = pluginLoader->metaData().value("MetaData").toObject();
+    if (meta.contains("tool") && meta.value("tool").toBool()) {
+        // 如果有tool标记，则认为它是工具插件，例如回收站和窗管提供的相关插件
+        return PluginAttribute::Tool;
+    }
+
+    if (meta.contains("system") && meta.value("system").toBool()) {
+        // 如果有system标记，则认为它是右侧的关机按钮插件
+        return PluginAttribute::System;
+    }
+
+    if (meta.contains("fixed") && meta.value("fixed").toBool()) {
+        // 如果有fixed标记，则认为它是固定区域的插件，例如显示桌面和多任务视图
+        return PluginAttribute::Fixed;
+    }
+
+    // 其他的都认为是快捷插件
+    return PluginAttribute::Quick;
 }
 
 QuickSettingController *QuickSettingController::instance()
@@ -118,4 +136,21 @@ PluginsItem *QuickSettingController::pluginItemWidget(PluginsItemInterface *plug
     PluginsItem *widget = new PluginsItem(pluginItem, itemKey(pluginItem), metaData(pluginItem));
     m_pluginItemWidgetMap[pluginItem] = widget;
     return widget;
+}
+
+QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
+{
+    QList<PluginsItemInterface *> settingPlugins;
+    // 用于在控制中心显示可改变位置的插件，这里只提供
+    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &plugins = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginsMap();
+    QList<PluginsItemInterface *> allPlugins = plugins.keys();
+    for (PluginsItemInterface *plugin : allPlugins) {
+        PluginAttribute pluginClass = getPluginClass(plugin);
+        if (pluginClass == QuickSettingController::PluginAttribute::Quick
+                || pluginClass == QuickSettingController::PluginAttribute::System
+                || pluginClass == QuickSettingController::PluginAttribute::Tool)
+            settingPlugins << plugin;
+    }
+
+    return settingPlugins;
 }

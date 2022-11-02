@@ -24,6 +24,7 @@
 #include "dockitemmanager.h"
 #include "windowmanager.h"
 #include "proxyplugincontroller.h"
+#include "quicksettingcontroller.h"
 #include "pluginsitem.h"
 
 #include <QScreen>
@@ -47,12 +48,13 @@ DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
         });
     }
 
+    QList<PluginsItemInterface *> allPlugin = plugins();
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, this, [ = ] (const int index, DockItem *item) {
         Q_UNUSED(index);
         if (item->itemType() == DockItem::Plugins
                 || item->itemType() == DockItem::FixedPlugin) {
             PluginsItem *pluginItem = static_cast<PluginsItem *>(item);
-            for (auto *p : DockItemManager::instance()->pluginList()) {
+            for (auto *p : allPlugin) {
                 if (p->pluginName() == pluginItem->pluginName()) {
                     Q_EMIT pluginVisibleChanged(p->pluginDisplayName(), getPluginVisible(p->pluginDisplayName()));
                 }
@@ -64,7 +66,7 @@ DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
         if (item->itemType() == DockItem::Plugins
                 || item->itemType() == DockItem::FixedPlugin) {
             PluginsItem *pluginItem = static_cast<PluginsItem *>(item);
-            for (auto *p : DockItemManager::instance()->pluginList()) {
+            for (auto *p : allPlugin) {
                 if (p->pluginName() == pluginItem->pluginName()) {
                     Q_EMIT pluginVisibleChanged(p->pluginDisplayName(), getPluginVisible(p->pluginDisplayName()));
                 }
@@ -99,10 +101,10 @@ void DBusDockAdaptors::ReloadPlugins()
 
 QStringList DBusDockAdaptors::GetLoadedPlugins()
 {
-    auto pluginList = DockItemManager::instance()->pluginList();
+    QList<PluginsItemInterface *> allPlugin = plugins();
     QStringList nameList;
     QMap<QString, QString> map;
-    for (auto plugin : pluginList) {
+    for (auto plugin : allPlugin) {
         // 托盘本身也是一个插件，这里去除掉这个特殊的插件,还有一些没有实际名字的插件
         if (plugin->pluginName() == "tray"
                 || plugin->pluginDisplayName().isEmpty()
@@ -134,7 +136,8 @@ void DBusDockAdaptors::resizeDock(int offset, bool dragging)
 // 返回每个插件的识别Key(所以此值应始终不变)，供个性化插件根据key去匹配每个插件对应的图标
 QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
 {
-    for (auto plugin : DockItemManager::instance()->pluginList()) {
+    QList<PluginsItemInterface *> allPlugin = plugins();
+    for (auto plugin : allPlugin) {
         if (plugin->pluginDisplayName() == pluginName)
             return plugin->pluginName();
     }
@@ -144,7 +147,8 @@ QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
 
 bool DBusDockAdaptors::getPluginVisible(const QString &pluginName)
 {
-    for (auto *p : DockItemManager::instance()->pluginList()) {
+    QList<PluginsItemInterface *> allPlugin = plugins();
+    for (auto *p : allPlugin) {
         if (!p->pluginIsAllowDisable())
             continue;
 
@@ -165,7 +169,8 @@ bool DBusDockAdaptors::getPluginVisible(const QString &pluginName)
 
 void DBusDockAdaptors::setPluginVisible(const QString &pluginName, bool visible)
 {
-    for (auto *p : DockItemManager::instance()->pluginList()) {
+    QList<PluginsItemInterface *> allPlugin = plugins();
+    for (auto *p : allPlugin) {
         if (!p->pluginIsAllowDisable())
             continue;
 
@@ -222,4 +227,9 @@ bool DBusDockAdaptors::isPluginValid(const QString &name)
         return false;
 
     return true;
+}
+
+QList<PluginsItemInterface *> DBusDockAdaptors::plugins() const
+{
+    return QuickSettingController::instance()->pluginInSettings();
 }

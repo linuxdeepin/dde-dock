@@ -144,11 +144,6 @@ QPluginLoader *ProxyPluginController::pluginLoader(PluginsItemInterface * const 
     return nullptr;
 }
 
-QList<PluginsItemInterface *> ProxyPluginController::pluginsItems() const
-{
-    return m_pluginsItems;
-}
-
 QString ProxyPluginController::itemKey(PluginsItemInterface *itemInter) const
 {
     if (m_pluginsItemKeys.contains(itemInter))
