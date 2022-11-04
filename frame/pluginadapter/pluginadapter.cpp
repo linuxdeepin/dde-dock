@@ -148,6 +148,7 @@ PluginsItemInterface::PluginType PluginAdapter::type()
     case PluginsItemInterface_V20::PluginType::Normal:
         return PluginsItemInterface::PluginType::Normal;
     }
+    return PluginsItemInterface::PluginType::Normal;
 }
 
 PluginsItemInterface::PluginSizePolicy PluginAdapter::pluginSizePolicy() const
@@ -158,6 +159,7 @@ PluginsItemInterface::PluginSizePolicy PluginAdapter::pluginSizePolicy() const
     case PluginsItemInterface_V20::PluginSizePolicy::System:
         return PluginsItemInterface::PluginSizePolicy::System;
     }
+    return PluginsItemInterface::PluginSizePolicy::Custom;
 }
 
 QIcon PluginAdapter::icon(const DockPart &dockPart)

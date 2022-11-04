@@ -27,6 +27,8 @@
 #include "constants.h"
 #include "trashwidget.h"
 
+#include <DDBusSender>
+
 #include <QPainter>
 #include <QIcon>
 #include <QApplication>
@@ -239,13 +241,12 @@ void TrashWidget::setDragging(bool state)
 
 void TrashWidget::removeApp(const QString &appKey)
 {
-    const QString cmd("dbus-send --print-reply --dest=org.deepin.dde.Launcher1 /org/deepin/dde/Launcher1 org.deepin.dde.Launcher1.UninstallApp string:\"" + appKey + "\"");
-
-    QProcess *proc = new QProcess;
-    proc->start(cmd);
-    proc->waitForFinished();
-
-    proc->deleteLater();
+    DDBusSender().service("org.deepin.dde.Launcher1")
+            .path("/org/deepin/dde/Launcher1")
+            .interface("org.deepin.dde.Launcher1")
+            .method("UninstallApp")
+            .arg(appKey)
+            .call();
 }
 
 void TrashWidget::moveToTrash(const QUrl &url)

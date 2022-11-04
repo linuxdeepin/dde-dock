@@ -33,6 +33,7 @@
 class PluginAdapter : public QObject, public PluginsItemInterface
 {
     Q_OBJECT
+    Q_INTERFACES(PluginsItemInterface)
 
 public:
     PluginAdapter(PluginsItemInterface_V20 *pluginInter);

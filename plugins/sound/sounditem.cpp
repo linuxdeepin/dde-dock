@@ -166,7 +166,7 @@ void SoundItem::resizeEvent(QResizeEvent *e)
 
 void SoundItem::wheelEvent(QWheelEvent *e)
 {
-    QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
+    QWheelEvent *event = new QWheelEvent(e->position(), e->angleDelta().y(), e->buttons(), e->modifiers());
     qApp->postEvent(m_applet->mainSlider(), event);
 
     e->accept();

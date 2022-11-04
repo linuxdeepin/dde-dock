@@ -116,7 +116,7 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
     }
 
     // 排序,保持和原先任务栏右键菜单中的插件列表顺序一致
-    qSort(nameList.begin(), nameList.end(), [ = ] (const QString &name1, const QString &name2) {
+    std::sort(nameList.begin(), nameList.end(), [ = ] (const QString &name1, const QString &name2) {
         return name1 > name2;
     });
 

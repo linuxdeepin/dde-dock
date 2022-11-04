@@ -37,7 +37,7 @@ void DesktopWidget::enterEvent(QEvent *event)
 {
     if (checkNeedShowDesktop()) {
         m_needRecoveryWin = true;
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     }
 
     m_isHover = true;

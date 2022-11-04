@@ -71,8 +71,7 @@ void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
-    {
+    if (e->button() == Qt::LeftButton) {
         m_pressed = false;
         emit requestPlaySoundEffect();
     }
@@ -84,7 +83,7 @@ void VolumeSlider::wheelEvent(QWheelEvent *e)
 
     m_timer->start();
 
-    DSlider::setValue(value() + (e->delta() > 0 ? 2 : -2));
+    DSlider::setValue(value() + (e->angleDelta().y() > 0 ? 2 : -2));
 }
 
 void VolumeSlider::onTimeout()

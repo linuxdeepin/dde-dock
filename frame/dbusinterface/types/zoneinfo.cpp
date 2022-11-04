@@ -40,7 +40,7 @@ bool ZoneInfo::operator ==(const ZoneInfo &what) const
 QDebug operator<<(QDebug argument, const ZoneInfo & info)
 {
     argument << info.m_zoneName << ',' << info.m_zoneCity << ',' << info.m_utcOffset << ',';
-    argument << info.i2 << ',' << info.i3 << ',' << info.i4 << endl;
+    argument << info.i2 << ',' << info.i3 << ',' << info.i4 << Qt::endl;
 
     return argument;
 }

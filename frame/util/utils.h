@@ -189,8 +189,8 @@ inline int comparePluginApi(const QString &pluginApi1, const QString &pluginApi2
         return 0;
 
     // 拆分版本号
-    QStringList subPluginApis1 = pluginApi1.split(".", QString::SkipEmptyParts, Qt::CaseSensitive);
-    QStringList subPluginApis2 = pluginApi2.split(".", QString::SkipEmptyParts, Qt::CaseSensitive);
+    QStringList subPluginApis1 = pluginApi1.split(".", Qt::SkipEmptyParts, Qt::CaseSensitive);
+    QStringList subPluginApis2 = pluginApi2.split(".", Qt::SkipEmptyParts, Qt::CaseSensitive);
     for (int i = 0; i < subPluginApis1.size(); ++i) {
         auto subPluginApi1 = subPluginApis1[i];
         if (subPluginApis2.size() > i) {

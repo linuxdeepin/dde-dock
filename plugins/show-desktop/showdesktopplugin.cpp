@@ -87,7 +87,7 @@ bool ShowDesktopPlugin::pluginIsDisable()
 const QString ShowDesktopPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == pluginName())
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
 
     return QString();
 }
@@ -127,7 +127,7 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     Q_UNUSED(checked)
 
     if (menuId == "show-desktop") {
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     } else if (menuId == "remove") {
         pluginStateSwitched();
     }

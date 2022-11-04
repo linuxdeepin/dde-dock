@@ -118,7 +118,7 @@ void AppSnapshot::updateTitle()
     }
 
     QFontMetrics fm(m_3DtitleBtn->font());
-    int textWidth = fm.width(title()) + 10 + BTN_TITLE_MARGIN;
+    int textWidth = fm.horizontalAdvance(title()) + 10 + BTN_TITLE_MARGIN;
     int titleWidth = SNAP_WIDTH - (TITLE_MARGIN * 2  + BORDER_MARGIN);
 
     if (textWidth  < titleWidth) {

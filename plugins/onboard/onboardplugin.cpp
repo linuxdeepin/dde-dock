@@ -126,7 +126,9 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId != "onboard-settings") return;
+    if (menuId != "onboard-settings")
+        return;
+
     if(!m_startupState) {
         QProcess *process = new QProcess;
         connect(process,&QProcess::started, this, [ = ] {
@@ -142,7 +144,7 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
             process->close();
             process->deleteLater();
         });
-        process->start("onboard-settings");
+        process->start("onboard-settings", QStringList());
     }
 
     DBusDock DockInter(serviceName, servicePath, QDBusConnection::sessionBus(), this);

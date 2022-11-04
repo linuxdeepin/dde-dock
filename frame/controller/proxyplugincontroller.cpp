@@ -24,6 +24,7 @@
 
 #include <QSettings>
 
+#ifndef QT_DEBUG
 static QStringList getPathFromConf(const QString &key) {
     QSettings set("/etc/deepin/dde-dock.conf", QSettings::IniFormat);
     auto value = set.value(key).toString();
@@ -33,6 +34,7 @@ static QStringList getPathFromConf(const QString &key) {
 
     return QStringList();
 }
+#endif
 
 // 该方法用来设置所有的需要加载的插件的路径信息
 static QMap<PluginType, QStringList> getPluginPaths()

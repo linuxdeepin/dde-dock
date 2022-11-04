@@ -711,7 +711,7 @@ void TrayModel::insertRow(int index, WinInfo info)
         const WinInfo &wininfo = m_winInfos[i];
         if (wininfo.key == info.key) {
             beginResetModel();
-            m_winInfos.swap(index, i);
+            m_winInfos.swapItemsAt(index, i);
             endResetModel();
             return;
         }
