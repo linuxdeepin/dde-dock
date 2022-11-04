@@ -250,7 +250,7 @@ bool QuickSettingContainer::isApplet(PluginsItemInterface *itemInter) const
     return json.value("applet").toBool();
 }
 
-bool QuickSettingContainer::isQuickPlugin(PluginsItemInterface *itemInter) const
+QWidget *QuickSettingContainer::findPluginWindget(PluginsItemInterface *itemInter) const
 {
     // 先判断是否为快捷面板区域（类似声音、亮度，音乐等）
     QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
@@ -269,7 +269,7 @@ bool QuickSettingContainer::isQuickPlugin(PluginsItemInterface *itemInter) const
                 if (!layoutItem || layoutItem->widget() != itemWidget)
                     continue;
 
-                return true;
+                return itemWidget;
             }
         }
     } else {
@@ -277,13 +277,14 @@ bool QuickSettingContainer::isQuickPlugin(PluginsItemInterface *itemInter) const
             if (settingItem->pluginItem() != itemInter)
                 continue;
 
-            return true;
+            return settingItem;
         }
     }
-    return false;
+
+    return nullptr;
 }
 
-void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
+void QuickSettingContainer::onPluginInsert(PluginsItemInterface *itemInter)
 {
     QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
     if (isApplet(itemInter)) {
@@ -309,7 +310,7 @@ void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
     onResizeView();
 }
 
-void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
+void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
 {
     QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
     if (itemWidget) {
@@ -478,14 +479,16 @@ void QuickSettingContainer::initUi()
 
 void QuickSettingContainer::initConnection()
 {
-    connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
-        if (pluginClass != QuickSettingController::PluginAttribute::Quick)
+    connect(m_pluginLoader, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::Quick)
             return;
 
         onPluginInsert(itemInter);
     });
     connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
     connect(m_pluginLoader, &QuickSettingController::requestAppletShow, this, &QuickSettingContainer::onRequestAppletShow);
+    connect(m_pluginLoader, &QuickSettingController::pluginUpdated, this, &QuickSettingContainer::onPluginUpdated);
+
     connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
@@ -564,4 +567,16 @@ void QuickSettingContainer::onRequestAppletShow(PluginsItemInterface *itemInter,
 
     showWidget(itemApplet, itemInter->pluginDisplayName());
     onResizeView();
+}
+
+void QuickSettingContainer::onPluginUpdated(PluginsItemInterface *itemInter, const DockPart dockPart)
+{
+    if (dockPart != DockPart::QuickPanel)
+        return;
+
+    QWidget *pluginWidget = findPluginWindget(itemInter);
+    if (!pluginWidget)
+        return;
+
+    pluginWidget->update();
 }

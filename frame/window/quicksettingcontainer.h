@@ -64,11 +64,12 @@ protected:
     void showHomePage();
 
 private Q_SLOTS:
-    void onPluginInsert(PluginsItemInterface * itemInter);
-    void onPluginRemove(PluginsItemInterface * itemInter);
+    void onPluginInsert(PluginsItemInterface *itemInter);
+    void onPluginRemove(PluginsItemInterface *itemInter);
     void onItemDetailClick(PluginsItemInterface *pluginInter);
     void onResizeView();
-    void onRequestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
+    void onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey);
+    void onPluginUpdated(PluginsItemInterface *itemInter, const DockPart dockPart);
 
 private:
     // 加载UI
@@ -86,7 +87,7 @@ private:
     // 判断是否支持显示在面板上
     bool isApplet(PluginsItemInterface * itemInter) const;
     // 判断插件是否在当前快捷面板上
-    bool isQuickPlugin(PluginsItemInterface * itemInter) const;
+    QWidget *findPluginWindget(PluginsItemInterface * itemInter) const;
 
 private:
     static DockPopupWindow *m_popWindow;
