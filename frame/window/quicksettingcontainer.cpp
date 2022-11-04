@@ -169,7 +169,7 @@ void QuickSettingContainer::onItemDetailClick(PluginsItemInterface *pluginInter)
     if (!quickItemWidget)
         return;
 
-    QWidget *widget = pluginInter->itemPopupApplet(QUICK_ITEM_DETAIL_KEY);
+    QWidget *widget = pluginInter->itemPopupApplet(QUICK_ITEM_KEY);
     if (!widget)
         return;
 
@@ -198,11 +198,11 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
                 if (!isApplet(plugin))
                     continue;
 
-                if (plugin->itemWidget(QUICK_ITEM_DETAIL_KEY) != watched)
+                if (plugin->itemWidget(QUICK_ITEM_KEY) != watched)
                     continue;
 
                 m_dragInfo->dragPosition = mouseEvent->pos();
-                m_dragInfo->dragItem = plugin->itemWidget(QUICK_ITEM_DETAIL_KEY);
+                m_dragInfo->dragItem = plugin->itemWidget(QUICK_ITEM_KEY);
                 m_dragInfo->pluginInter = plugin;
                 break;
             }
@@ -240,7 +240,7 @@ QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
 
 bool QuickSettingContainer::isApplet(PluginsItemInterface *itemInter) const
 {
-    if (!itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY))
+    if (!itemInter->itemWidget(QUICK_ITEM_KEY))
         return false;
 
     QJsonObject json = QuickSettingController::instance()->metaData(itemInter);
@@ -252,7 +252,7 @@ bool QuickSettingContainer::isApplet(PluginsItemInterface *itemInter) const
 
 void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
 {
-    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY);
+    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
     if (isApplet(itemInter)) {
         // 如果存在这个窗体，就让其显示在下方
         DBlurEffectWidget *effectWidget = new DBlurEffectWidget(m_componentWidget);
@@ -278,7 +278,7 @@ void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
 
 void QuickSettingContainer::onPluginRemove(PluginsItemInterface * itemInter)
 {
-    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_DETAIL_KEY);
+    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
     if (itemWidget) {
         for (int i = 0; i < m_componentWidget->layout()->count(); i++) {
             QLayoutItem *layoutItem = m_componentWidget->layout()->itemAt(i);
@@ -524,7 +524,7 @@ void QuickSettingContainer::onResizeView()
 
 void QuickSettingContainer::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
 {
-    if (itemKey == QUICK_ITEM_DETAIL_KEY) {
+    if (itemKey == QUICK_ITEM_KEY) {
         // 显示弹出的内容
         QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
         if (!itemApplet)

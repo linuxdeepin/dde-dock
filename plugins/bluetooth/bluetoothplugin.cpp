@@ -104,7 +104,7 @@ QWidget *BluetoothPlugin::itemPopupApplet(const QString &itemKey)
         return m_bluetoothItem->popupApplet();
     }
 
-    if (itemKey == QUICK_ITEM_DETAIL_KEY) {
+    if (itemKey == QUICK_ITEM_KEY) {
         return m_bluetoothItem->popupApplet();
     }
 

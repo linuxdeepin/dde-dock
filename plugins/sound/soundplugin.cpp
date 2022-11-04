@@ -63,7 +63,7 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, SOUND_KEY);
         connect(m_soundWidget.data(), &SoundWidget::rightIconClick, this, [ this, proxyInter ] {
-            proxyInter->requestSetAppletVisible(this, QUICK_ITEM_DETAIL_KEY, true);
+            proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
         });
     }
 }
@@ -85,7 +85,7 @@ QWidget *SoundPlugin::itemWidget(const QString &itemKey)
     if (itemKey == SOUND_KEY)
         return m_soundItem.data();
 
-    if (itemKey == QUICK_ITEM_DETAIL_KEY)
+    if (itemKey == QUICK_ITEM_KEY)
         return m_soundWidget.data();
 
     return nullptr;
@@ -104,7 +104,7 @@ QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
     if (itemKey == SOUND_KEY) {
         return m_soundItem->popupApplet();
     }
-    if (itemKey == QUICK_ITEM_DETAIL_KEY)
+    if (itemKey == QUICK_ITEM_KEY)
         return m_soundDeviceWidget.data();
 
     return nullptr;
