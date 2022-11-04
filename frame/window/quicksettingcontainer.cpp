@@ -250,6 +250,39 @@ bool QuickSettingContainer::isApplet(PluginsItemInterface *itemInter) const
     return json.value("applet").toBool();
 }
 
+bool QuickSettingContainer::isQuickPlugin(PluginsItemInterface *itemInter) const
+{
+    // 先判断是否为快捷面板区域（类似声音、亮度，音乐等）
+    QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
+    if (itemWidget) {
+        for (int i = 0; i < m_componentWidget->layout()->count(); i++) {
+            QLayoutItem *layoutItem = m_componentWidget->layout()->itemAt(i);
+            if (!layoutItem)
+                continue;
+
+            DBlurEffectWidget *effectWidget = qobject_cast<DBlurEffectWidget *>(layoutItem->widget());
+            if (!effectWidget || !effectWidget->layout())
+                continue;
+
+            for (int j = 0; j < effectWidget->layout()->count(); j++) {
+                QLayoutItem *layoutItem = effectWidget->layout()->itemAt(i);
+                if (!layoutItem || layoutItem->widget() != itemWidget)
+                    continue;
+
+                return true;
+            }
+        }
+    } else {
+        for (QuickSettingItem *settingItem : m_quickSettings) {
+            if (settingItem->pluginItem() != itemInter)
+                continue;
+
+            return true;
+        }
+    }
+    return false;
+}
+
 void QuickSettingContainer::onPluginInsert(PluginsItemInterface * itemInter)
 {
     QWidget *itemWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
@@ -524,13 +557,11 @@ void QuickSettingContainer::onResizeView()
 
 void QuickSettingContainer::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
 {
-    if (itemKey == QUICK_ITEM_KEY) {
-        // 显示弹出的内容
-        QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
-        if (!itemApplet)
-            return;
+    // 显示弹出的内容
+    QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
+    if (!itemApplet)
+        return;
 
-        showWidget(itemApplet, itemInter->pluginDisplayName());
-        onResizeView();
-    }
+    showWidget(itemApplet, itemInter->pluginDisplayName());
+    onResizeView();
 }

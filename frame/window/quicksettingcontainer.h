@@ -85,6 +85,8 @@ private:
     QPoint hotSpot(const QPixmap &pixmap);
     // 判断是否支持显示在面板上
     bool isApplet(PluginsItemInterface * itemInter) const;
+    // 判断插件是否在当前快捷面板上
+    bool isQuickPlugin(PluginsItemInterface * itemInter) const;
 
 private:
     static DockPopupWindow *m_popWindow;

@@ -77,8 +77,8 @@ bool QuickSettingItem::eventFilter(QObject *obj, QEvent *event)
             if (!command.isEmpty())
                 QProcess::startDetached(command);
 
-            if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey))
-                showPopupApplet(w);
+            if (!isPrimary())
+                Q_EMIT detailClicked(m_pluginInter);
         }
     } else if (event->type() == QEvent::Resize) {
         if (obj == m_nameLabel) {
