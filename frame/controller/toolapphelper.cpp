@@ -32,8 +32,8 @@ ToolAppHelper::ToolAppHelper(QWidget *toolAreaWidget, QObject *parent)
     , m_toolAreaWidget(toolAreaWidget)
     , m_displayMode(DisplayMode::Efficient)
 {
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginClass) {
-        if (pluginClass != QuickSettingController::PluginAttribute::Tool)
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::Tool)
             return;
 
         pluginItemAdded(itemInter);

@@ -135,7 +135,7 @@ void SystemPluginWindow::initUi()
 void SystemPluginWindow::initConnection()
 {
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         if (pluginAttr != QuickSettingController::PluginAttribute::System)
             return;
 

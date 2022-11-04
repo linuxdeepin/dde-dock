@@ -40,7 +40,7 @@ TrayMonitor::TrayMonitor(QObject *parent)
 
     //-------------------------------System Tray------------------------------------------//
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         if (pluginAttr != QuickSettingController::PluginAttribute::Tray)
             return;
 

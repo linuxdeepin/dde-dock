@@ -49,9 +49,9 @@ public:
     PluginAttribute pluginAttribute(PluginsItemInterface * const itemInter) const;
 
 Q_SIGNALS:
-    void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute &);
+    void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute);
     void pluginRemoved(PluginsItemInterface *itemInter);
-    void pluginUpdated(PluginsItemInterface *, const DockPart &);
+    void pluginUpdated(PluginsItemInterface *, const DockPart);
     void requestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
 
 protected:

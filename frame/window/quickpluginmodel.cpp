@@ -162,7 +162,7 @@ void QuickPluginModel::onSettingChanged(const QString &key, const QVariant &valu
 void QuickPluginModel::initConnection()
 {
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &plugAttr) {
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute plugAttr) {
         if (plugAttr != QuickSettingController::PluginAttribute::Quick)
             return;
 

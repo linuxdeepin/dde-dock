@@ -70,7 +70,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 托盘区域和插件区域 由DockPluginsController获取
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         if (pluginAttr != QuickSettingController::PluginAttribute::Fixed)
             return;
 

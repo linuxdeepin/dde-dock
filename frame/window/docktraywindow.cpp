@@ -323,7 +323,7 @@ void DockTrayWindow::initConnection()
     connect(m_trayView, &TrayGridView::dragEntered, m_delegate, [ this ]{
         Q_EMIT m_delegate->requestDrag(false);
     });
-    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute &pluginAttr) {
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         switch (pluginAttr) {
         case QuickSettingController::PluginAttribute::Tool:
             // 下方只处理回收站等插件
