@@ -268,7 +268,7 @@ void MainPanelControl::updateMainPanelLayout()
  */
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
-    if(m_position == Position::Top || m_position == Position::Bottom){
+    if(m_position == Position::Top || m_position == Position::Bottom) {
         wdg->setMaximumSize(height(),height());
     } else {
         wdg->setMaximumSize(width(),width());
@@ -1006,6 +1006,8 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
 
     // 如果是特效模式
     int totalLength = static_cast<int>(screenSize / ratio);
+    // 减去插件区域的尺寸
+    totalLength -= trayAreaSize();
     // 需要参与计算的图标的总数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count() + m_toolSonLayout->count();
     int multiWindowCount = m_multiWindowLayout->count();
@@ -1116,6 +1118,27 @@ int MainPanelControl::getScreenSize() const
     return screenRect.height();
 }
 
+int MainPanelControl::trayAreaSize() const
+{
+    if (m_displayMode == Dock::DisplayMode::Efficient)
+        return (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? m_tray->width() : m_tray->height());
+
+    int length = 0;
+    QWidgetList topLevelWidgets = qApp->topLevelWidgets();
+    for (QWidget *widget : topLevelWidgets) {
+        MainWindowBase *topWindow = qobject_cast<MainWindowBase *>(widget);
+        if (!topWindow)
+            continue;
+
+        if (topWindow->windowType() != MainWindowBase::DockWindowType::MainWindow)
+            length += (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? topWindow->width() : topWindow->height());
+
+        length += topWindow->dockSpace();
+    }
+
+    return length;
+}
+
 /**重新计算任务栏上应用图标、插件图标的大小，并设置
  * @brief MainPanelControl::resizeDockIcon
  */
@@ -1125,10 +1148,8 @@ void MainPanelControl::resizeDockIcon()
     int tray_item_size = 0;
     // 总宽度
     if (m_displayMode == DisplayMode::Fashion) {
-        int iconCount = 0;
         // 时尚模式
-        int totalLength = getScreenSize();
-        iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count();
+        int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count();
         if (m_recentAreaWidget->isVisible())
             iconCount += m_recentLayout->count();
 
@@ -1137,6 +1158,15 @@ void MainPanelControl::resizeDockIcon()
 
         if (iconCount <= 0)
             return;
+
+        int totalLength = getScreenSize() - trayAreaSize();
+
+        if (m_fixedSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
+        if (m_appSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
+        if (m_recentSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
 
         // 余数
         int yu = (totalLength % iconCount);
@@ -1161,9 +1191,14 @@ void MainPanelControl::resizeDockIcon()
         iconSize = (totalLength - yu) / iconCount;
     } else {
         int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
-        totalLength -= m_tray->width();
+        totalLength -= trayAreaSize();
         // 减去3个分割线的宽度
-        totalLength -= 3 * SPLITER_SIZE;
+        if (m_fixedSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
+        if (m_appSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
+        if (m_recentSpliter->isVisible())
+            totalLength -= SPLITER_SIZE;
 
         int pluginItemCount = 0;
         int calcPluginItemCount = 0;
@@ -1220,9 +1255,6 @@ void MainPanelControl::resizeDockIcon()
 
         if (tray_item_size < 20)
             tray_item_size = 20;
-
-        // 减去插件图标的大小后重新计算固定图标和应用图标的平均大小
-        totalLength -= m_tray->width();//tray_item_size * pluginCount;
 
         // 余数
         yu = (totalLength % iconCount);

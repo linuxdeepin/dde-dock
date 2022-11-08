@@ -78,6 +78,7 @@ private:
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
     int getScreenSize() const;
+    int trayAreaSize() const;
 
     // 拖拽相关
     void startDrag(DockItem *);
