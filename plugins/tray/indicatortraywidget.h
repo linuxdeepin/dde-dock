@@ -27,6 +27,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void updateLabelColor();
 
 public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapData(const QByteArray &data);
