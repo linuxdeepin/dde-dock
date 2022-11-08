@@ -64,11 +64,9 @@ protected:
     void showHomePage();
 
 private Q_SLOTS:
-    void onPluginInsert(PluginsItemInterface *itemInter);
     void onPluginRemove(PluginsItemInterface *itemInter);
-    void onItemDetailClick(PluginsItemInterface *pluginInter);
+    void onShowChildWidget(QWidget *childWidget);
     void onResizeView();
-    void onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey);
     void onPluginUpdated(PluginsItemInterface *itemInter, const DockPart dockPart);
 
 private:
@@ -79,15 +77,13 @@ private:
     // 调整控件位置
     void updateItemLayout();
     // 初始化控件项目
-    void initQuickItem(PluginsItemInterface *plugin);
+    // void initQuickItem(PluginsItemInterface *plugin);
     // 显示具体的窗体
     void showWidget(QWidget *widget, const QString &title);
     // 获取拖动图标的热点
     QPoint hotSpot(const QPixmap &pixmap);
-    // 判断是否支持显示在面板上
-    bool isApplet(PluginsItemInterface * itemInter) const;
-    // 判断插件是否在当前快捷面板上
-    QWidget *findPluginWindget(PluginsItemInterface * itemInter) const;
+    // 插入插件
+    void appendPlugin(PluginsItemInterface *itemInter, bool needLayout = true);
 
 private:
     static DockPopupWindow *m_popWindow;

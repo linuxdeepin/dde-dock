@@ -30,62 +30,41 @@ class QuickSettingItem : public DockItem
 {
     Q_OBJECT
 
-Q_SIGNALS:
-    void detailClicked(PluginsItemInterface *);
+public:
+    enum class QuickSettingType {
+        Single = 1,          // 插件的UI显示单列
+        Multi = 2,           // 插件的UI显示双列，例如网络和蓝牙等
+        Full = 4             // 插件的UI整行显示，例如声音，亮度、音乐播放等
+    };
 
 public:
-    QuickSettingItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent = nullptr);
+    QuickSettingItem(PluginsItemInterface *const pluginInter, QWidget *parent = nullptr);
     ~QuickSettingItem() override;
     PluginsItemInterface *pluginItem() const;
     ItemType itemType() const override;
-    const QPixmap dragPixmap();
+    virtual const QPixmap dragPixmap();
     const QString itemKey() const;
-    bool isPrimary() const;
+
+    virtual QuickSettingType type() const = 0;
+
+Q_SIGNALS:
+    void requestShowChildWidget(QWidget *);
 
 protected:
-
-    bool eventFilter(QObject *obj, QEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
     QColor foregroundColor() const;
-
-private:
-    void initUi();
-    QString expandFileName();
-    QPixmap pluginIcon() const;
+    void onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey);
 
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
     QJsonObject m_metaData;
-    QWidget *m_iconWidgetParent;
-    QuickIconWidget *m_iconWidget;
-    QWidget *m_textWidget;
-    QLabel *m_nameLabel;
-    QLabel *m_stateLabel;
 };
 
-/**
- * @brief The QuickIconWidget class
- * 图标的Widget
- */
-class QuickIconWidget : public QWidget
+class QuickSettingFactory
 {
-    Q_OBJECT
-
 public:
-    explicit QuickIconWidget(PluginsItemInterface *pluginInter, const QString &itemKey, bool isPrimary, QWidget *parent = Q_NULLPTR);
-
-protected:
-    void paintEvent(QPaintEvent *event) override;
-
-private:
-    QColor foregroundColor() const;
-    QPixmap pluginIcon() const;
-
-private:
-    PluginsItemInterface *m_pluginInter;
-    QString m_itemKey;
-    bool m_isPrimary;
+    static QuickSettingItem *createQuickWidget(PluginsItemInterface *const pluginInter);
 };
 
 #endif // QUICKSETTINGITEM_H
