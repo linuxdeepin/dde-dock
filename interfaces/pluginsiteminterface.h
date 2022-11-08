@@ -287,7 +287,7 @@ protected:
 
 QT_BEGIN_NAMESPACE
 
-#define ModuleInterface_iid "com.deepin.dock.PluginsItemInterface_2_0_0"
+#define ModuleInterface_iid "com.deepin.dock.PluginsItemInterface"
 
 Q_DECLARE_INTERFACE(PluginsItemInterface, ModuleInterface_iid)
 QT_END_NAMESPACE
