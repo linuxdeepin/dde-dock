@@ -61,9 +61,10 @@ const QString OnboardPlugin::pluginDisplayName() const
 
 QWidget *OnboardPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == pluginName())
+        return m_onboardItem.data();
 
-    return m_onboardItem.data();
+    return nullptr;
 }
 
 QWidget *OnboardPlugin::itemTipsWidget(const QString &itemKey)
@@ -182,6 +183,24 @@ void OnboardPlugin::setSortKey(const QString &itemKey, const int order)
 void OnboardPlugin::pluginSettingsChanged()
 {
     refreshPluginItemsVisible();
+}
+
+QIcon OnboardPlugin::icon(const DockPart &dockPart)
+{
+    if (dockPart == DockPart::QuickPanel)
+        return m_onboardItem->iconPixmap(24);
+
+    return m_onboardItem->iconPixmap(20);
+}
+
+PluginsItemInterface::PluginStatus OnboardPlugin::status() const
+{
+    return PluginsItemInterface::PluginStatus::Active;
+}
+
+QString OnboardPlugin::description() const
+{
+    return pluginDisplayName();
 }
 
 void OnboardPlugin::loadPlugin()

@@ -46,17 +46,22 @@ OnboardItem::OnboardItem(QWidget *parent)
     m_icon = QIcon::fromTheme(":/icons/icon/deepin-virtualkeyboard.svg");
 }
 
+QPixmap OnboardItem::iconPixmap(int iconSize) const
+{
+    QString iconName = "deepin-virtualkeyboard";
+    if (std::min(width(), height()) <= PLUGIN_BACKGROUND_MIN_SIZE
+            || DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    return loadSvg(iconName, QSize(iconSize, iconSize));
+}
+
 void OnboardItem::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    QPixmap pixmap;
-    QString iconName = "deepin-virtualkeyboard";
-    int iconSize = PLUGIN_ICON_MAX_SIZE;
-
     QPainter painter(this);
     if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
-
         QColor color;
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
             color = Qt::black;
@@ -95,12 +100,9 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
-    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 
-    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
-
+    QPixmap pixmap = iconPixmap(PLUGIN_ICON_MAX_SIZE);
     painter.setOpacity(1);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());

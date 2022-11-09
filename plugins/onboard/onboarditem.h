@@ -33,6 +33,7 @@ class OnboardItem : public QWidget
 
 public:
     explicit OnboardItem(QWidget *parent = nullptr);
+    QPixmap iconPixmap(int iconSize) const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;
