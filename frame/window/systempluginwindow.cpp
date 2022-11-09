@@ -51,7 +51,14 @@ SystemPluginWindow::~SystemPluginWindow()
 void SystemPluginWindow::setDisplayMode(const DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
-    StretchPluginsItem::setDisplayMode(displayMode);
+    QObjectList childObjects = children();
+    for (QObject *childObject : childObjects) {
+        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
+        if (!item)
+            continue;
+
+        item->setDisplayMode(displayMode);
+    }
 }
 
 void SystemPluginWindow::setPositon(Position position)
@@ -193,13 +200,13 @@ void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
 #define ICONTEXTSPACE 6
 #define PLUGIN_ITEM_DRAG_THRESHOLD 20
 
-Dock::DisplayMode StretchPluginsItem::m_displayMode = Dock::DisplayMode::Efficient;
 Dock::Position StretchPluginsItem::m_position = Dock::Position::Bottom;
 
 StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
+    , m_displayMode(Dock::DisplayMode::Efficient)
 {
 }
 
