@@ -51,15 +51,7 @@ SystemPluginWindow::~SystemPluginWindow()
 void SystemPluginWindow::setDisplayMode(const DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
-
-    QObjectList childObjects = children();
-    for (QObject *childObject : childObjects) {
-        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
-        if (!item)
-            continue;
-
-        item->setDisplayMode(displayMode);
-    }
+    StretchPluginsItem::setDisplayMode(displayMode);
 }
 
 void SystemPluginWindow::setPositon(Position position)
@@ -74,13 +66,15 @@ void SystemPluginWindow::setPositon(Position position)
     else
         m_mainLayout->setDirection(QBoxLayout::Direction::TopToBottom);
 
+    StretchPluginsItem::setPosition(position);
+
     QObjectList childObjects = children();
     for (QObject *childObject : childObjects) {
         StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
         if (!item)
             continue;
 
-        item->setPosition(m_position);
+        item->update();
     }
 }
 
@@ -199,12 +193,13 @@ void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
 #define ICONTEXTSPACE 6
 #define PLUGIN_ITEM_DRAG_THRESHOLD 20
 
+Dock::DisplayMode StretchPluginsItem::m_displayMode = Dock::DisplayMode::Efficient;
+Dock::Position StretchPluginsItem::m_position = Dock::Position::Bottom;
+
 StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
-    , m_displayMode(Dock::DisplayMode::Efficient)
-    , m_position(Dock::Position::Bottom)
 {
 }
 
@@ -220,7 +215,6 @@ void StretchPluginsItem::setDisplayMode(const DisplayMode &displayMode)
 void StretchPluginsItem::setPosition(Position position)
 {
     m_position = position;
-    update();
 }
 
 QString StretchPluginsItem::itemKey() const
@@ -272,15 +266,19 @@ QSize StretchPluginsItem::suitableSize(const Position &position) const
 {
     int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
     if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
-        int textWidth = QFontMetrics(textFont(position)).boundingRect(m_pluginInter->pluginDisplayName()).width();
-        return QSize(qMax(textWidth, iconSize) + 10 * 2, -1);
+        int textWidth = 0;
+        if (needShowText())
+            textWidth = QFontMetrics(textFont(position)).boundingRect(m_pluginInter->pluginDisplayName()).width();
+
+        return QSize(qMax(textWidth, iconSize) + (m_displayMode == Dock::DisplayMode::Efficient ? 5 : 10) * 2, -1);
     }
 
-    int height = 6;                                         // 图标上边距6
-    height += iconSize;                                     // 图标尺寸20
-    height += ICONTEXTSPACE;                                // 图标与文字间距6
-    height += QFontMetrics(textFont(position)).height();    // 文本高度
-    height += 4;                                            // 下间距4
+    int height = 6;                                             // 图标上边距6
+    height += iconSize;                                         // 图标尺寸20
+    height += ICONTEXTSPACE;                                    // 图标与文字间距6
+    if (needShowText())                                         // 只有在显示文本的时候才计算文本的高度
+        height += QFontMetrics(textFont(position)).height();    // 文本高度
+    height += 4;                                                // 下间距4
     return QSize(-1, height);
 }
 
@@ -373,7 +371,7 @@ void StretchPluginsItem::mouseClick()
 {
     const QString command = m_pluginInter->itemCommand(m_itemKey);
     if (!command.isEmpty()) {
-        QProcess::startDetached(command);
+        QProcess::startDetached(command, QStringList());
         return;
     }
 

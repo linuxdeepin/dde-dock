@@ -77,8 +77,8 @@ class StretchPluginsItem : public DockItem
 public:
     StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
     ~StretchPluginsItem() override;
-    void setDisplayMode(const Dock::DisplayMode &displayMode);
-    void setPosition(Dock::Position position);
+    static void setDisplayMode(const Dock::DisplayMode &displayMode);
+    static void setPosition(Dock::Position position);
     PluginsItemInterface *pluginInter() const;
     QString itemKey() const;
     QSize suitableSize() const;
@@ -105,8 +105,8 @@ private:
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
-    Dock::DisplayMode m_displayMode;
-    Dock::Position m_position;
+    static Dock::DisplayMode m_displayMode;
+    static Dock::Position m_position;
     QPoint m_mousePressPoint;
 };
 
