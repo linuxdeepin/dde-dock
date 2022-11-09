@@ -103,6 +103,8 @@ public:
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
         DockIsShowing = 0x80,               // 任务栏正在显示
+        CheckDockShouldDisplay = 0x100,     // 任务栏已经隐藏时，正在判断是否需要显示
+
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -164,6 +166,7 @@ private slots:
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void onExtralRegionMonitorChanged(int x, int y, const QString &key);
+    void CheckShouldDisplay(int x, int y, const QString &key);
 
     // Animation
     void showAniFinished();
@@ -248,6 +251,8 @@ private:
     // update monitor info
     QTimer *m_monitorUpdateTimer;
     QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
+    QTimer *m_delayDisplay;                     // 任务栏隐藏时，鼠标移动到屏幕边缘，延时唤起任务栏
+    QPoint m_delayDisplayPos;
 
     DockScreen m_ds;                            // 屏幕名称信息
     ScreenChangeMonitor *m_screenMonitor;       // 用于监视屏幕是否为系统先拔再插

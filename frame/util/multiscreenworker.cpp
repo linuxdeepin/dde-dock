@@ -41,6 +41,7 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent)
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
+    , m_delayDisplay(new QTimer(this))
     , m_ds(DIS_INS->primary())
     , m_screenMonitor(new ScreenChangeMonitor(&m_ds, this))
     , m_state(AutoHide)
@@ -193,6 +194,8 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     if (m_registerKey != key || testState(MousePress))
         return;
 
+    CheckShouldDisplay(x, y, key);
+
     tryToShowDock(x, y);
 }
 
@@ -218,6 +221,35 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
         displayAnimation(m_ds.current(), AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
         displayAnimation(m_ds.current(), AniAction::Hide);
+    }
+}
+
+void MultiScreenWorker::CheckShouldDisplay(int x, int y, const QString &key)
+{
+    if(m_registerKey != key) {
+        if(m_delayDisplay->isActive()){
+            qDebug()<<"not in check area....";
+            m_delayDisplay->stop();
+            setStates(CheckDockShouldDisplay, false);
+        }
+        return;
+    }
+
+    if (testState(MousePress)) {
+        if(m_delayDisplay->isActive()) {
+            qDebug()<<"MousePress stop check....";
+            m_delayDisplay->stop();
+            setStates(CheckDockShouldDisplay, false);
+        }
+        return;
+    }
+
+    m_delayDisplayPos = QPoint(x, y);
+
+    if(!m_delayDisplay->isActive() && m_currentHideState == HideState::Hide) {
+        qDebug()<<"start check....";
+        m_delayDisplay->start();
+        setStates(CheckDockShouldDisplay);
     }
 }
 
@@ -938,6 +970,13 @@ void MultiScreenWorker::initMembers()
 
     m_delayWakeTimer->setSingleShot(true);
 
+    m_delayDisplay->setSingleShot(true);
+    // 延时显示配置
+    DConfig *config = DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock");
+    if (config->isValid() && config->keyList().contains("delayDisplay"))
+        m_delayDisplay->setInterval(config->value("delayDisplay").toInt());
+    delete config;
+
     setStates(LauncherDisplay, m_launcherInter->isValid() ? m_launcherInter->visible() : false);
 
     // init check
@@ -986,6 +1025,12 @@ void MultiScreenWorker::initConnection()
 
     // 刷新所有显示的内容，布局，方向，大小，位置等
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, &MultiScreenWorker::updateDisplay);
+
+    // 判断用户是否希望隐藏的任务栏显示
+    connect(m_delayDisplay, &QTimer::timeout, this, [ = ] {
+        setStates(CheckDockShouldDisplay, false);
+        tryToShowDock(m_delayDisplayPos.x(), m_delayDisplayPos.y());
+    });
 }
 
 void MultiScreenWorker::initUI()
@@ -1442,11 +1487,20 @@ void MultiScreenWorker::checkXEventMonitorService()
 {
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
         connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
-        connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
-        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ](int i, int x, int y, const QString &key) {
+        connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ](int i, int x, int y, const QString & key) {
             Q_UNUSED(i);
-            Q_UNUSED(key);
+            setStates(MousePress, true);
+
+            if(m_registerKey == key)
+                CheckShouldDisplay(x, y, key);
+        });
+        connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ](int i, int x, int y, const QString & key) {
+            Q_UNUSED(i);
             setStates(MousePress, false);
+
+            if(m_registerKey == key)
+                CheckShouldDisplay(x, y, key);
+
             // 在鼠标拖动任务栏在最大尺寸的时候，如果当前任务栏为隐藏模式（一直隐藏或智能隐藏），在松开鼠标的那一刻，判断当前
             // 鼠标位置是否在任务栏外面(isCursorOut(x,y)==true)，此时需要触发onExtralRegionMonitorChanged函数，
             // 目的是为了让其触发隐藏
@@ -1469,6 +1523,12 @@ void MultiScreenWorker::checkXEventMonitorService()
                 } else {
                     onExtralRegionMonitorChanged(x, y, key);
                 }
+            }
+
+            if(m_delayDisplay->isActive()) {
+                qWarning()<<"CursorOut  area....";
+                m_delayDisplay->stop();
+                setStates(CheckDockShouldDisplay, false);
             }
         });
 
@@ -1791,6 +1851,11 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
     if (qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
         qWarning() << "dock is draging or animation is running";
+        return;
+    }
+
+    if (hideMode() != HideMode::KeepShowing && testState(CheckDockShouldDisplay)) {
+//        qDebug() << "dock is hidden, check whether the user wants it to display";
         return;
     }
 

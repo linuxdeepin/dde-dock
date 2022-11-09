@@ -37,6 +37,17 @@
             "description":"show(or restore) desktop will toggle after the hover interval (in milliseconds)",
             "permissions":"readwrite",
             "visibility":"private"
+        },
+        "delayDisplay":{
+            "value": 0,
+            "serial": 0,
+            "flags":[],
+            "name":"delayDisplay",
+            "name[zh_CN]":"任务栏延时显示时间",
+            "description[zh_CN]":"任务栏智能隐藏或一直隐藏时，鼠标移动到屏幕边缘过一段时间再唤起任务栏（以毫秒为单位）",
+            "description":"When the dock is hidden, move the mouse to the edge of the screen and then recall the dock (in milliseconds)",
+            "permissions":"readwrite",
+            "visibility":"private"
         }
     }
 }
