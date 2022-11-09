@@ -110,6 +110,21 @@ void DockPluginsController::requestSetAppletVisible(PluginsItemInterface *const 
         return;
 
     if (visible) {
+        // 在弹出界面前先隐藏其他插件的tips
+        QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
+        foreach (auto interface, mPluginsMap.keys()) {
+            if (interface != itemInter) {
+                foreach (auto oldItemKey, mPluginsMap[interface].keys()) {
+                    if (oldItemKey != "pluginloader") {
+                        PluginsItem *oldItem = qobject_cast<PluginsItem *>(pluginItemAt(interface, oldItemKey));
+                        if (oldItem) {
+                            oldItem->hidePopup();
+                        }
+                    }
+                }
+            }
+        }
+
         item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
     } else {
         item->hidePopup();
