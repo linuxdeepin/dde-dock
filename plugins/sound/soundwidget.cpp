@@ -80,7 +80,7 @@ void SoundWidget::initUi()
 
 void SoundWidget::initConnection()
 {
-    connect(m_defaultSink, &DBusSink::VolumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
+    connect(m_defaultSink, &DBusSink::VolumeChanged, this, [ this ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
 
     connect(m_dbusAudio, &DBusAudio::DefaultSinkChanged, this, [ this ](const QDBusObjectPath &value) {
         if (m_defaultSink)
@@ -92,7 +92,7 @@ void SoundWidget::initConnection()
     });
 
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
-        m_defaultSink->SetVolume(value, true);
+        m_defaultSink->SetVolume(value * 0.01, true);
     });
 
     connect(m_defaultSink, &DBusSink::MuteChanged, this, [ this ] {

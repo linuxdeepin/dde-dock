@@ -168,14 +168,14 @@ void SoundDevicesWidget::onAudioDevicesChanged()
 
 void SoundDevicesWidget::initConnection()
 {
-    connect(m_audioSink, &DBusSink::VolumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
+    connect(m_audioSink, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
     connect(m_volumeModel, &DBusAudio::DefaultSinkChanged, this, &SoundDevicesWidget::onDefaultSinkChanged);
     connect(m_delegate, &SettingDelegate::selectIndexChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
     connect(m_volumeModel, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_volumeModel, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
 
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
-        m_audioSink->SetVolume(value, true);
+        m_audioSink->SetVolume(value * 0.01, true);
     });
 }
 

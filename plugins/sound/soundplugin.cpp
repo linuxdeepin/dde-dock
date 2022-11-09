@@ -101,9 +101,9 @@ QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
 
 QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
 {
-    if (itemKey == SOUND_KEY) {
+    if (itemKey == SOUND_KEY)
         return m_soundItem->popupApplet();
-    }
+
     if (itemKey == QUICK_ITEM_KEY)
         return m_soundDeviceWidget.data();
 
