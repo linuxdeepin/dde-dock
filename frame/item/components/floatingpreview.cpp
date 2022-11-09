@@ -14,15 +14,13 @@
 
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent)
-    , m_closeBtn3D(new DIconButton(this))
+    , m_closeBtn3D(new DIconButton(DStyle::StandardPixmap::SP_CloseButton, this))
     , m_titleBtn(new DPushButton(this))
 {
     m_closeBtn3D->setObjectName("closebutton-3d");
     m_closeBtn3D->setFixedSize(24, 24);
     m_closeBtn3D->setIconSize(QSize(24, 24));
-    m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
     m_closeBtn3D->setFlat(true);
-    m_closeBtn3D->installEventFilter(this);
 
     m_titleBtn->setBackgroundRole(QPalette::Base);
     m_titleBtn->setForegroundRole(QPalette::Text);
@@ -119,18 +117,6 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
 
 bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == m_closeBtn3D) {
-        if(watched == m_closeBtn3D && (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverMove)) {
-            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
-        }
-        else if (watched == m_closeBtn3D && event->type() == QEvent::HoverLeave) {
-            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
-        }
-        else if (watched == m_closeBtn3D && event->type() == QEvent::MouseButtonPress) {
-            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_press.svg"));
-        }
-    }
-
     if (watched == m_tracked) {
         if (event->type() == QEvent::Destroy) {
             // 此处需要置空，否则当Destroy事件响应结束后，会在FloatingPreview::hideEvent使用m_tracked野指针
