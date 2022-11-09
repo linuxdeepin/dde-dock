@@ -86,7 +86,6 @@ private:
 
 private Q_SLOTS:
     void onTrayCountChanged();
-    void onRequestUpdateWidget(const QList<int> &idxs);
 
 private:
     QWidget *m_appPluginDatetimeWidget;

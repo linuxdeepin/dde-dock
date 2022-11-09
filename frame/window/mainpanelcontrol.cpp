@@ -205,9 +205,6 @@ void MainPanelControl::initConnection()
  */
 void MainPanelControl::setDisplayMode(DisplayMode dislayMode)
 {
-    if (dislayMode == m_displayMode)
-        return;
-
     m_displayMode = dislayMode;
     m_recentHelper->setDisplayMode(dislayMode);
     m_tray->setDisplayMode(dislayMode);

@@ -340,6 +340,22 @@ void TrayModel::clear()
     Q_EMIT rowCountChanged();
 }
 
+WinInfo TrayModel::takeIndex(const QModelIndex &index)
+{
+    int row = index.row();
+    if (row < 0 || row >= m_winInfos.size())
+        return WinInfo();
+
+    WinInfo win = m_winInfos[row];
+    beginResetModel();
+    m_winInfos.removeAt(row);
+    endResetModel();
+
+    Q_EMIT rowCountChanged();
+
+    return win;
+}
+
 void TrayModel::onXEmbedTrayAdded(quint32 winId)
 {
     if (!xembedCanExport(winId))
@@ -357,6 +373,7 @@ void TrayModel::onXEmbedTrayAdded(quint32 winId)
     info.itemKey = xembedItemKey(winId);
     info.winId = winId;
     m_winInfos.append(info);
+    sortItems();
     endInsertRows();
 
     Q_EMIT rowCountChanged();
@@ -471,22 +488,54 @@ bool TrayModel::systemItemCanExport(const QString &pluginName) const
     return inTrayConfig(systemItemKey(pluginName));
 }
 
+void TrayModel::sortItems()
+{
+    // 如果当前是展开托盘的内容，则无需排序
+    if (m_isTrayIcon)
+        return;
+
+    // 数据排列，展开按钮始终排在最前面，输入法始终排在最后面
+    WinInfos expandWin;
+    WinInfos inputMethodWin;
+    // 从列表中获取输入法和展开按钮
+    for (const WinInfo &winInfo : m_winInfos) {
+        switch (winInfo.type) {
+        case TrayIconType::ExpandIcon: {
+            expandWin << winInfo;
+            break;
+        }
+        case TrayIconType::Sni: {
+            if (winInfo.isTypeWriting)
+                inputMethodWin << winInfo;
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    // 从列表中移除展开按钮
+    for (const WinInfo &winInfo : expandWin)
+        m_winInfos.removeOne(winInfo);
+
+    // 从列表中移除输入法
+    for (const WinInfo &winInfo : inputMethodWin)
+        m_winInfos.removeOne(winInfo);
+
+    // 将展开按钮添加到列表的最前面
+    for (int i = expandWin.size() - 1; i >= 0; i--)
+        m_winInfos.push_front(expandWin[i]);
+
+    // 将输入法添加到列表的最后面
+    for (int i = 0; i < inputMethodWin.size(); i++)
+        m_winInfos.push_back(inputMethodWin[i]);
+}
+
 void TrayModel::onSniTrayAdded(const QString &servicePath)
 {
     if (!sniCanExport(servicePath))
         return;
 
     bool typeWriting = isTypeWriting(servicePath);
-
-    int citxIndex = -1;
-    for (int i = 0; i < m_winInfos.size(); i++) {
-        WinInfo info = m_winInfos[i];
-        if (info.servicePath == servicePath)
-            return;
-
-        if (typeWriting && info.isTypeWriting)
-            citxIndex = i;
-    }
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     WinInfo info;
@@ -495,23 +544,12 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
     info.itemKey = sniItemKey(servicePath);
     info.servicePath = servicePath;
     info.isTypeWriting = typeWriting;    // 是否为输入法
-    if (typeWriting) {
-        if (citxIndex < 0) {
-            m_winInfos.append(info);
-        } else {
-            // 如果输入法在指定位置，则将输入法移动到指定位置
-            m_winInfos[citxIndex] = info;
-            QTimer::singleShot(150, this, [ = ] {
-                 // 对比需要变化的图标
-                 emit requestUpdateWidget({ citxIndex });
-            });
-        }
-    } else {
-        m_winInfos.append(info);
+    m_winInfos.append(info);
 
-        Q_EMIT rowCountChanged();
-    }
+    sortItems();
     endInsertRows();
+
+    Q_EMIT rowCountChanged();
 }
 
 void TrayModel::onSniTrayRemoved(const QString &servicePath)
@@ -584,6 +622,8 @@ void TrayModel::onIndicatorAdded(const QString &indicatorName)
     info.key = itemKey;
     info.itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
     m_winInfos.append(info);
+
+    sortItems();
     endInsertRows();
 
     Q_EMIT rowCountChanged();
@@ -613,6 +653,7 @@ void TrayModel::onSystemTrayAdded(PluginsItemInterface *itemInter)
     info.itemKey = systemItemKey(itemInter->pluginName());
     m_winInfos.append(info);
 
+    sortItems();
     endInsertRows();
 
     Q_EMIT rowCountChanged();
@@ -699,6 +740,7 @@ void TrayModel::addRow(WinInfo info)
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_winInfos.append(info);
+    sortItems();
     endInsertRows();
 
     Q_EMIT requestRefreshEditor();
@@ -718,6 +760,8 @@ void TrayModel::insertRow(int index, WinInfo info)
     }
     beginInsertRows(QModelIndex(), index, index);
     m_winInfos.insert(index, info);
+    sortItems();
+
     endInsertRows();
 
     Q_EMIT requestRefreshEditor();

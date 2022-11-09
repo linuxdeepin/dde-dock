@@ -67,7 +67,7 @@ public:
 
     static void setPosition(const Dock::Position &position);
     void setTrayGridView(TrayGridView *trayView);
-    void setOwnerWidget(QWidget *widget);
+    void setReferGridView(TrayGridView *trayView);
     TrayGridView *trayView() const;
     void resetPosition();
 
@@ -76,12 +76,13 @@ protected:
 
 private:
     QColor maskColor() const;
+    ExpandIconWidget *expandWidget() const;
 
 private:
     DockInter *m_dockInter;
     TrayGridView *m_trayGridView;
+    TrayGridView *m_referGridView;
     static Dock::Position m_position;
-    QWidget *m_ownerWidget;
 };
 
 #endif // EXPANDICONWIDGET_H

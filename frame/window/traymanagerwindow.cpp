@@ -27,6 +27,7 @@
 #include "quicksettingcontainer.h"
 #include "systempluginwindow.h"
 #include "datetimedisplayer.h"
+#include "expandiconwidget.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -141,6 +142,9 @@ void TrayManagerWindow::setDisplayMode(Dock::DisplayMode displayMode)
     m_displayMode = displayMode;
     // 从时尚模式切换到高效模式的时候，需要重新布局
     onTrayCountChanged();
+    // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
+    if (displayMode == Dock::DisplayMode::Fashion)
+        ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
 }
 
 int TrayManagerWindow::appDatetimeSize(const Dock::Position &position) const
@@ -223,18 +227,6 @@ void TrayManagerWindow::onTrayCountChanged()
     Q_EMIT requestUpdate();
 }
 
-void TrayManagerWindow::onRequestUpdateWidget(const QList<int> &idxs)
-{
-    for (int i = 0; i < idxs.size(); i++) {
-         int idx = idxs[i];
-         if (idx < m_model->rowCount()) {
-             QModelIndex index = m_model->index(idx);
-             m_trayView->closePersistentEditor(index);
-             m_trayView->openPersistentEditor(index);
-         }
-    }
-}
-
 void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
@@ -303,10 +295,12 @@ void TrayManagerWindow::initConnection()
     connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
         Q_EMIT m_delegate->requestDrag(true);
     });
-    connect(m_trayView, &TrayGridView::dragEntered, m_delegate, [ this ]{
+    connect(m_trayView, &TrayGridView::dragFinished, this, [ this ] {
+        // 如果拖拽结束，则隐藏托盘
         Q_EMIT m_delegate->requestDrag(false);
     });
-    connect(m_model, &TrayModel::requestUpdateWidget, this, &TrayManagerWindow::onRequestUpdateWidget);
+
+    connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &TrayManagerWindow::requestUpdate);
 
     m_trayView->installEventFilter(this);

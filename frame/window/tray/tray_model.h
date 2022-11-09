@@ -110,11 +110,11 @@ public:
     bool isEmpty() const;
 
     void clear();
+    WinInfo takeIndex(const QModelIndex &index);
     void saveConfig(int index, const WinInfo &winInfo);
 
 Q_SIGNALS:
     void requestUpdateIcon(quint32);
-    void requestUpdateWidget(const QList<int> &);
     void requestOpenEditor(const QModelIndex &index, bool isOpen = true) const;
     void rowCountChanged();
     void requestRefreshEditor();
@@ -142,6 +142,14 @@ private Q_SLOTS:
 
     void onSettingChanged(const QString &key, const QVariant &value);
 
+protected:
+    QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;
+    bool canDropMimeData(const QMimeData *data, Qt::DropAction action,
+                         int row, int column, const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+
 private:
     bool exist(const QString &itemKey);
     QString fileNameByServiceName(const QString &serviceName) const;
@@ -155,14 +163,7 @@ private:
     bool indicatorCanExport(const QString &indicatorName) const;
     QString systemItemKey(const QString &pluginName) const;
     bool systemItemCanExport(const QString &pluginName) const;
-
-protected:
-    QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-    bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;
-    bool canDropMimeData(const QMimeData *data, Qt::DropAction action,
-                         int row, int column, const QModelIndex &parent) const Q_DECL_OVERRIDE;
-    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+    void sortItems();
 
 private:
     WinInfos m_winInfos;

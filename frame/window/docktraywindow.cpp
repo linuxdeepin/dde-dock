@@ -28,6 +28,7 @@
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
 #include "quicksettingcontainer.h"
+#include "expandiconwidget.h"
 
 #include <DGuiApplicationHelper>
 
@@ -80,6 +81,9 @@ void DockTrayWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
     moveToolPlugin();
+    // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
+    if (displayMode == Dock::DisplayMode::Efficient)
+        ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
 }
 
 QSize DockTrayWindow::suitableSize(const Dock::Position &position, const int &, const double &) const
@@ -311,17 +315,18 @@ void DockTrayWindow::initConnection()
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onResetLayout);
     connect(m_quickIconWidget, &QuickPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
     connect(m_systemPuginWidget, &SystemPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
-    connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
-    connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onResetLayout);
     connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onResetLayout);
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);
-
-    connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
-        Q_EMIT m_delegate->requestDrag(true);
-    });
-    connect(m_trayView, &TrayGridView::dragEntered, m_delegate, [ this ]{
+    connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
+    connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onResetLayout);
+    connect(m_trayView, &TrayGridView::dragFinished, this, [ this ] {
+        // 如果拖拽结束，则隐藏托盘
         Q_EMIT m_delegate->requestDrag(false);
+    });
+
+    connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ] {
+        Q_EMIT m_delegate->requestDrag(true);
     });
     connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ this ] (PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         switch (pluginAttr) {

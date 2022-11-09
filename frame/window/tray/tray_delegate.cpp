@@ -125,19 +125,23 @@ void TrayDelegate::onUpdateExpand(bool on)
     ExpandIconWidget *expandwidget = expandWidget();
 
     if (on) {
-        if (!expandwidget) {
+        if (expandwidget) {
+            expandwidget->setTrayPanelVisible(true);
+        } else {
             // 如果三角按钮不存在，那么就设置三角按钮可见，此时它会自动创建一个三角按钮
             TrayModel *model = qobject_cast<TrayModel *>(m_listView->model());
             if (model)
                 model->setExpandVisible(true, true);
-        } else {
-            expandwidget->setTrayPanelVisible(true);
         }
-    } else if (expandwidget) {
-        // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
-        QPoint currentPoint = QCursor::pos();
-        TrayGridWidget *view = ExpandIconWidget::popupTrayView();
-        expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint));
+    } else {
+        if (expandwidget) {
+            // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
+            QPoint currentPoint = QCursor::pos();
+            TrayGridWidget *view = ExpandIconWidget::popupTrayView();
+            expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint));
+        } else {
+            ExpandIconWidget::popupTrayView()->hide();
+        }
     }
 }
 

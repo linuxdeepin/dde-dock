@@ -467,8 +467,6 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     pixLabel->setPixmap(pixmap);
     pixLabel->setFixedSize(indexRect(modelIndex).size() / ratio);
 
-    QRect rectIcon(pixLabel->rect().topLeft(), pixLabel->size());
-
     QDrag *drag = new QDrag(this);
     pixmap.scaled(pixmap.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
@@ -486,6 +484,8 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
 
     listModel->setDragKey(itemKey);
     listModel->setDragingIndex(modelIndex);
+    // 删除当前的图标
+    WinInfo winInfo = listModel->takeIndex(modelIndex);
 
     Qt::DropAction dropAct = drag->exec(supportedActions);
 
@@ -493,18 +493,20 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     m_aniStartTime->stop();
     m_pressed = false;
 
-    Q_EMIT dragEntered();
     if (dropAct == Qt::IgnoreAction) {
         QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-        connect(posAni, &QPropertyAnimation::finished, [ &, listModel, pixLabel ] () {
+        connect(posAni, &QPropertyAnimation::finished, [ this, listModel, pixLabel, modelIndex, winInfo ] () {
             pixLabel->hide();
             pixLabel->deleteLater();
             listModel->setDragKey(QString());
+            listModel->insertRow(modelIndex.row(), winInfo);
             clearDragModelIndex();
             listModel->setExpandVisible(!TrayModel::getIconModel()->isEmpty());
 
             m_dropPos = QPoint();
             m_dragPos = QPoint();
+
+            Q_EMIT dragFinished();
         });
         posAni->setEasingCurve(QEasingCurve::Linear);
         posAni->setDuration(m_aniDuringTime);
@@ -518,8 +520,6 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
 
         m_dropPos = QPoint();
         m_dragPos = QPoint();
-
-        Q_EMIT requestRemove(itemKey);
     }
 
     return true;

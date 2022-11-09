@@ -54,6 +54,7 @@ Q_SIGNALS:
     void requestRemove(const QString &);
     void dragLeaved();
     void dragEntered();
+    void dragFinished();
 
 private Q_SLOTS:
     void clearDragModelIndex();
