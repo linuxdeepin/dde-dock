@@ -232,7 +232,7 @@ void MainWindowBase::updateDragGeometry()
         m_dragWidget->setGeometry(0, height() - DRAG_AREA_SIZE, width(), DRAG_AREA_SIZE);
         break;
     case Dock::Bottom:
-        m_dragWidget->setGeometry(0, 0, width(), 20);
+        m_dragWidget->setGeometry(0, 0, width(), DRAG_AREA_SIZE);
         break;
     case Dock::Left:
         m_dragWidget->setGeometry(width() - DRAG_AREA_SIZE, 0, DRAG_AREA_SIZE, height());
