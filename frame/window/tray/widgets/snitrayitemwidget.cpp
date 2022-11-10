@@ -22,6 +22,7 @@
 #include "snitrayitemwidget.h"
 #include "themeappicon.h"
 #include "tipswidget.h"
+#include "utils.h"
 
 #include <dbusmenu-qt5/dbusmenuimporter.h>
 
@@ -76,6 +77,8 @@ SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *par
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("snitraypopup");
         PopupWindow = arrowRectangle;
+        if (Utils::IS_WAYLAND_DISPLAY)
+            PopupWindow->setWindowFlags(PopupWindow->windowFlags() | Qt::FramelessWindowHint);
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
