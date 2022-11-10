@@ -63,9 +63,12 @@ bool MultiQuickItem::eventFilter(QObject *obj, QEvent *event)
                 Q_EMIT requestShowChildWidget(widget);
 
             } else if (obj == this) {
-                const QString &command = pluginItem()->itemCommand(itemKey());
-                if (!command.isEmpty())
-                    QProcess::startDetached(command, QStringList());
+                QStringList commandArgumend = pluginItem()->itemCommand(itemKey()).split(" ");
+                if (commandArgumend.size() > 0) {
+                    QString command = commandArgumend.first();
+                    commandArgumend.removeFirst();
+                    QProcess::startDetached(command, commandArgumend);
+                }
             }
         } else if (event->type() == QEvent::Resize) {
             QLabel *labelWidget = qobject_cast<QLabel *>(obj);

@@ -376,9 +376,11 @@ void StretchPluginsItem::mouseReleaseEvent(QMouseEvent *e)
 
 void StretchPluginsItem::mouseClick()
 {
-    const QString command = m_pluginInter->itemCommand(m_itemKey);
-    if (!command.isEmpty()) {
-        QProcess::startDetached(command, QStringList());
+    QStringList commandArgument = m_pluginInter->itemCommand(m_itemKey).split(" ");
+    if (commandArgument.size() > 0) {
+        QString command = commandArgument.first();
+        commandArgument.removeFirst();
+        QProcess::startDetached(command, commandArgument);
         return;
     }
 

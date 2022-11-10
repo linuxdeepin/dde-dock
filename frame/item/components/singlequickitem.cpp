@@ -48,9 +48,12 @@ QuickSettingItem::QuickSettingType SingleQuickItem::type() const
 void SingleQuickItem::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    const QString &command = pluginItem()->itemCommand(itemKey());
-    if (!command.isEmpty())
-        QProcess::startDetached(command, QStringList());
+    QStringList commandArgument = pluginItem()->itemCommand(itemKey()).split(" ");
+    if (commandArgument.size() > 0) {
+        QString command = commandArgument.first();
+        commandArgument.removeFirst();
+        QProcess::startDetached(command, commandArgument);
+    }
 
     QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
     if (itemWidget)
