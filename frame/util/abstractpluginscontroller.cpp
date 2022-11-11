@@ -274,12 +274,9 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         pluginIsValid = false;
     }
 
-    PluginsItemInterface *interface = nullptr;
-    // 如果版本是2.0.0，则认为是最新的插件，此时需要转换成v23的插件接口
-    if (pluginApi == "2.0.0") {
-        interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-    } else if (pluginApi < "2.0.0") {
-        // 如果版本号小于2.0.0的，就认为这个插件是v20的插件，将其转换为v20插件接口
+    PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
+    if (!interface) {
+        // 如果识别当前插件失败，就认为这个插件是v20的插件，将其转换为v20插件接口
         PluginsItemInterface_V20 *interface_v20 = qobject_cast<PluginsItemInterface_V20 *>(pluginLoader->instance());
         if (interface_v20) {
             // 将v20插件接口通过适配器转换成v23的接口，方便在后面识别
@@ -289,8 +286,6 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
             m_pluginAdapterMap[(qulonglong)(interface_v20)] = pluginAdapter;
             interface = pluginAdapter;
         }
-    } else {
-        qWarning() << "the plugin is not valid " << pluginFile;
     }
 
     if (!interface) {
