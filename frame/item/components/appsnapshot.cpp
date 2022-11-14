@@ -305,14 +305,10 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         painter.drawRoundedRect(rect(), 5, 5);
     }
 
-    const qreal offset_x = width() / 2.0 - SNAP_WIDTH / ratio / 2;
-    const qreal offset_y = height() / 2.0 - SNAP_HEIGHT / ratio / 2;
-
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
     QRect imageRect(8, 8, width() - 16, height() - 16);
     painter.setPen(Qt::NoPen);
     QPainterPath path;
