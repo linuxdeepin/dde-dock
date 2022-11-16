@@ -169,9 +169,11 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
         if (data.contains("text")) {
             featData("text", data, SLOT(textPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
                 if (v.toString().isEmpty()) {
+                    q->m_isLoaded = false;
                     Q_EMIT q->removed();
                     return;
                 }
+                q->m_isLoaded = true;
                 Q_EMIT q->delayLoaded();
                 indicatorTrayWidget->setText(v.toString());
                 updateContent();
@@ -181,9 +183,11 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
         if (data.contains("icon")) {
             featData("icon", data, SLOT(iconPropertyChanged(QDBusMessage)), [ = ](QVariant v) {
                 if (v.toByteArray().isEmpty()) {
+                    q->m_isLoaded = false;
                     Q_EMIT q->removed();
                     return;
                 }
+                q->m_isLoaded = true;
                 Q_EMIT q->delayLoaded();
                 indicatorTrayWidget->setPixmapData(v.toByteArray());
                 updateContent();
@@ -214,6 +218,7 @@ void IndicatorPluginPrivate::initDBus(const QString &indicatorName)
 IndicatorPlugin::IndicatorPlugin(const QString &indicatorName, QObject *parent)
     : QObject(parent)
     , d_ptr(new IndicatorPluginPrivate(this))
+    , m_isLoaded(false)
 {
     Q_D(IndicatorPlugin);
 
@@ -244,12 +249,18 @@ void IndicatorPlugin::removeWidget()
     d->indicatorTrayWidget = nullptr;
 }
 
+bool IndicatorPlugin::isLoaded()
+{
+    return m_isLoaded;
+}
+
 void IndicatorPlugin::textPropertyChanged(const QDBusMessage &message)
 {
     Q_D(IndicatorPlugin);
 
-    d->propertyChanged("text", message, [=] (const QVariant &value) {
+    d->propertyChanged("text", message, [ = ] (const QVariant &value) {
         if (value.toString().isEmpty()) {
+            m_isLoaded = false;
             Q_EMIT removed();
             return;
         }
@@ -266,8 +277,9 @@ void IndicatorPlugin::iconPropertyChanged(const QDBusMessage &message)
 {
     Q_D(IndicatorPlugin);
 
-    d->propertyChanged("icon", message, [=] (const QVariant &value) {
+    d->propertyChanged("icon", message, [ = ] (const QVariant &value) {
         if (value.toByteArray().isEmpty()) {
+            m_isLoaded = false;
             Q_EMIT removed();
             return;
         }

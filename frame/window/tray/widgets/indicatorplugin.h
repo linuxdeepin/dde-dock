@@ -37,6 +37,8 @@ public:
 
     void removeWidget();
 
+    bool isLoaded();
+
 signals:
     void delayLoaded();
     void removed();
@@ -47,5 +49,6 @@ private slots:
 
 private:
     QScopedPointer<IndicatorPluginPrivate> d_ptr;
+    bool m_isLoaded;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), IndicatorPlugin)
 };

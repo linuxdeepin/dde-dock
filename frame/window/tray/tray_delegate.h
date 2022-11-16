@@ -30,7 +30,6 @@
 #define ICON_SIZE 16
 #define ITEM_SPACING 5
 
-struct WinInfo;
 class ExpandIconWidget;
 class QListView;
 class PluginsItemInterface;

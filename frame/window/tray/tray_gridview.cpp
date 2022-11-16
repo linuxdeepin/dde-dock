@@ -20,6 +20,9 @@
  */
 #include "tray_gridview.h"
 #include "settingconfig.h"
+#include "expandiconwidget.h"
+#include "tray_model.h"
+#include "basetraywidget.h"
 
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -32,9 +35,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QTimer>
-
-#include "tray_model.h"
-#include "basetraywidget.h"
 
 TrayGridView::TrayGridView(QWidget *parent)
     : DListView(parent)
@@ -516,6 +516,14 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     } else {
         listModel->setDragKey(QString());
         clearDragModelIndex();
+        if (listModel->isIconTray()) {
+            // 如果当前是从托盘移动到任务栏，则根据托盘内部是否有应用来决定是否显示展开图标
+            bool hasIcon = (listModel->rowCount() > 0);
+            TrayModel::getDockModel()->setExpandVisible(hasIcon, hasIcon);
+            // 如果没有图标，则隐藏托盘图标
+            if (!hasIcon)
+                ExpandIconWidget::popupTrayView()->hide();
+        }
 
         m_dropPos = QPoint();
         m_dragPos = QPoint();

@@ -148,9 +148,11 @@ void TrayModel::setExpandVisible(bool visible, bool openExpand)
 
     if (visible) {
         // 如果展开图标已经存在，则不添加,
-        for (const WinInfo &winInfo : m_winInfos) {
-            if (winInfo.type == TrayIconType::ExpandIcon)
+        for (WinInfo &winInfo : m_winInfos) {
+            if (winInfo.type == TrayIconType::ExpandIcon) {
+                winInfo.expand = openExpand;
                 return;
+            }
         }
         // 如果是任务栏图标，则添加托盘展开图标
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -431,14 +433,24 @@ bool TrayModel::isTypeWriting(const QString &servicePath) const
 
 void TrayModel::saveConfig(int index, const WinInfo &winInfo)
 {
-    if (m_fixedTrayNames.contains(winInfo.itemKey))
-        return;
+    if (m_isTrayIcon) {
+        // 如果是从任务栏将图标移动到托盘，就从配置中移除
+        if (!m_fixedTrayNames.contains(winInfo.itemKey))
+            return;
 
-    if (index >= 0 && index < m_fixedTrayNames.size()) {
-        m_fixedTrayNames.insert(index, winInfo.itemKey);
+        m_fixedTrayNames.removeOne(winInfo.itemKey);
     } else {
-        m_fixedTrayNames << winInfo.itemKey;
+        // 如果是将图标从托盘移到任务栏上面，就增加到配置中
+        if (m_fixedTrayNames.contains(winInfo.itemKey))
+            return;
+
+        if (index >= 0 && index < m_fixedTrayNames.size()) {
+            m_fixedTrayNames.insert(index, winInfo.itemKey);
+        } else {
+            m_fixedTrayNames << winInfo.itemKey;
+        }
     }
+
     SETTINGCONFIG->setValue(DOCKQUICKTRAYNAME, m_fixedTrayNames);
 }
 
@@ -537,6 +549,11 @@ void TrayModel::onSniTrayAdded(const QString &servicePath)
 {
     if (!sniCanExport(servicePath))
         return;
+
+    for (const WinInfo &winInfo : m_winInfos) {
+        if (winInfo.servicePath == servicePath)
+            return;
+    }
 
     bool typeWriting = isTypeWriting(servicePath);
 
@@ -704,6 +721,13 @@ void TrayModel::onSettingChanged(const QString &key, const QVariant &value)
 
     QStringList indicators = m_monitor->indicatorNames();
     for (const QString &indicatorName : indicators) {
+        if (!m_indicatorMap.contains(indicatorName))
+            continue;
+
+        IndicatorPlugin *plugin = m_indicatorMap[indicatorName];
+        if (!plugin->isLoaded())
+            continue;
+
         if (indicatorCanExport(indicatorName))
             onIndicatorAdded(indicatorName);
         else
