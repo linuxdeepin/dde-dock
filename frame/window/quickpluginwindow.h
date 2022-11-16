@@ -111,6 +111,9 @@ private:
     QPoint topleftPoint() const;
     QPoint popupMarkPoint() const;
 
+private Q_SLOTS:
+    void onMenuActionClicked(QAction *action);
+
 private:
     PluginsItemInterface *m_pluginItem;
     QJsonObject m_metaData;

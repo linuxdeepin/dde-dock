@@ -511,6 +511,7 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject
         m_popupWindow->setWindowFlags(flags);
     }
 
+    connect(m_contextMenu, &QMenu::triggered, this, &QuickDockItem::onMenuActionClicked);
     connect(qApp, &QApplication::aboutToQuit, m_popupWindow, &DockPopupWindow::deleteLater);
 }
 
@@ -674,4 +675,9 @@ QPoint QuickDockItem::popupMarkPoint() const
         break;
     }
     return p;
+}
+
+void QuickDockItem::onMenuActionClicked(QAction *action)
+{
+    m_pluginItem->invokedMenuItem(m_itemKey, action->data().toString(), true);
 }
