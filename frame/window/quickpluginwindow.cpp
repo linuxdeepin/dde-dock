@@ -179,20 +179,26 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() != Qt::LeftButton)
+            break;
+
         QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(watched);
         if (!dockItem)
             break;
 
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         m_dragInfo->dockItem = dockItem;
         m_dragInfo->dragPoint = mouseEvent->pos();
         break;
     }
     case QEvent::MouseButtonRelease: {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() != Qt::LeftButton)
+            break;
+
         if (m_dragInfo->isNull())
             break;
 
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (!m_dragInfo->canDrag(mouseEvent->pos())) {
             // 弹出快捷设置面板
             DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
@@ -541,38 +547,33 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
 
 void QuickDockItem::mousePressEvent(QMouseEvent *event)
 {
-    switch (event->button()) {
-    case Qt::RightButton: {
-        if (m_contextMenu->actions().isEmpty()) {
-            const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
-            if (menuJson.isEmpty())
-                return;
+    if (event->button() != Qt::RightButton)
+        return QWidget::mousePressEvent(event);
 
-            QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
-            if (jsonDocument.isNull())
-                return;
+    if (m_contextMenu->actions().isEmpty()) {
+        const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
+        if (menuJson.isEmpty())
+            return;
 
-            QJsonObject jsonMenu = jsonDocument.object();
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
+        if (jsonDocument.isNull())
+            return;
 
-            QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
-            for (auto item : jsonMenuItems) {
-                QJsonObject itemObj = item.toObject();
-                QAction *action = new QAction(itemObj.value("itemText").toString());
-                action->setCheckable(itemObj.value("isCheckable").toBool());
-                action->setChecked(itemObj.value("checked").toBool());
-                action->setData(itemObj.value("itemId").toString());
-                action->setEnabled(itemObj.value("isActive").toBool());
-                m_contextMenu->addAction(action);
-            }
+        QJsonObject jsonMenu = jsonDocument.object();
+
+        QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
+        for (auto item : jsonMenuItems) {
+            QJsonObject itemObj = item.toObject();
+            QAction *action = new QAction(itemObj.value("itemText").toString());
+            action->setCheckable(itemObj.value("isCheckable").toBool());
+            action->setChecked(itemObj.value("checked").toBool());
+            action->setData(itemObj.value("itemId").toString());
+            action->setEnabled(itemObj.value("isActive").toBool());
+            m_contextMenu->addAction(action);
         }
+    }
 
-        m_contextMenu->exec(QCursor::pos());
-        break;
-    }
-    default:
-        break;
-    }
-    QWidget::mousePressEvent(event);
+    m_contextMenu->exec(QCursor::pos());
 }
 
 void QuickDockItem::enterEvent(QEvent *event)
