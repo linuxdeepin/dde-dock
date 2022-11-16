@@ -98,6 +98,7 @@ public:
     void setPositon(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool isPrimary() const;
+    void hideToolTip();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

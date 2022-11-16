@@ -202,6 +202,20 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
         if (!m_dragInfo->canDrag(mouseEvent->pos())) {
             // 弹出快捷设置面板
             DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
+            if (Utils::IS_WAYLAND_DISPLAY) {
+                // TODO: 临时解决方案，如果是wayland环境，toolTip没有消失，因此，此处直接调用接口来隐藏
+                for (int i = m_mainLayout->count() - 1; i >= 0; i--) {
+                    QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+                    if (!layoutItem)
+                        continue;
+
+                    QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+                    if (!dockItem)
+                        continue;
+
+                    dockItem->hideToolTip();
+                }
+            }
             popWindow->show(popupPoint());
         }
         m_dragInfo->reset();
@@ -531,6 +545,11 @@ bool QuickDockItem::isPrimary() const
         return m_metaData.value("primary").toBool();
 
     return false;
+}
+
+void QuickDockItem::hideToolTip()
+{
+    m_popupWindow->hide();
 }
 
 void QuickDockItem::paintEvent(QPaintEvent *event)
