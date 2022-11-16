@@ -356,8 +356,8 @@ void DateTimeDisplayer::createMenuItem()
         connect(timeSettingAction, &QAction::triggered, this, [ = ] {
             DDBusSender()
                     .service(controllCenterService)
-                    .interface(controllCenterPath)
-                    .path(controllCenterInterface)
+                    .path(controllCenterPath)
+                    .interface(controllCenterInterface)
                     .method(QString("ShowPage"))
                     .arg(QString("datetime"))
                     .call();
