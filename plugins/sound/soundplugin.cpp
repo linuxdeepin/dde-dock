@@ -110,15 +110,6 @@ QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
     return nullptr;
 }
 
-const QString SoundPlugin::itemContextMenu(const QString &itemKey)
-{
-    if (itemKey == SOUND_KEY) {
-        return m_soundItem->contextMenu();
-    }
-
-    return QString();
-}
-
 void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     if (itemKey == SOUND_KEY) {

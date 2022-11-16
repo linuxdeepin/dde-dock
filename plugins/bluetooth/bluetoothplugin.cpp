@@ -111,15 +111,6 @@ QWidget *BluetoothPlugin::itemPopupApplet(const QString &itemKey)
     return nullptr;
 }
 
-const QString BluetoothPlugin::itemContextMenu(const QString &itemKey)
-{
-    if (itemKey == BLUETOOTH_KEY) {
-        return m_bluetoothItem->contextMenu();
-    }
-
-    return QString();
-}
-
 void BluetoothPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     if (itemKey == BLUETOOTH_KEY) {

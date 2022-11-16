@@ -102,26 +102,6 @@ const QString OnboardPlugin::itemCommand(const QString &itemKey)
     return QString("dbus-send --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible");
 }
 
-const QString OnboardPlugin::itemContextMenu(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    QList<QVariant> items;
-
-    QMap<QString, QVariant> onboardSettings;
-    onboardSettings["itemId"] = "onboard-settings";
-    onboardSettings["itemText"] = tr("Settings");
-    onboardSettings["isActive"] = true;
-    items.push_back(onboardSettings);
-
-    QMap<QString, QVariant> menu;
-    menu["items"] = items;
-    menu["checkableMenu"] = false;
-    menu["singleCheck"] = false;
-
-    return QJsonDocument::fromVariant(menu).toJson();
-}
-
 void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey)
