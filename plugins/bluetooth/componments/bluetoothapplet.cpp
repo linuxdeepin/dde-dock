@@ -173,6 +173,11 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 
     m_adapterItems.insert(adapter->id(), adapterItem);
 
+    // 如果开启了飞行模式，置灰蓝牙适配器使能开关
+    foreach (const auto item, m_adapterItems) {
+        item->setEnabled(!m_airPlaneModeInter->enabled());
+    }
+
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
@@ -247,7 +252,6 @@ void BluetoothApplet::initUi()
     updateSize();
 
     setAirplaneModeEnabled(m_airPlaneModeInter->enabled());
-    setDisabled(m_airPlaneModeInter->enabled());
 }
 
 void BluetoothApplet::initConnect()
@@ -266,7 +270,11 @@ void BluetoothApplet::initConnect()
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
-    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setDisabled);
+    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enabled) {
+        foreach (const auto item, m_adapterItems) {
+            item->setEnabled(!enabled);
+        }
+    });
 }
 
 /**
