@@ -149,7 +149,7 @@ void TrayDelegate::setEditorData(QWidget *editor, const QModelIndex &index) cons
 {
     BaseTrayWidget *widget = static_cast<BaseTrayWidget *>(editor);
     if (widget) {
-        widget->setNeedShow(!index.data(TrayModel::Blank).toBool());
+        widget->setNeedShow(true);
     }
 }
 

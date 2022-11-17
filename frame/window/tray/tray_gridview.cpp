@@ -457,10 +457,12 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     if (!widget)
         return false;
 
+    QMimeData *data = model()->mimeData(QModelIndexList() << modelIndex);
+    if (!data)
+        return false;
+
     auto pixmap = widget->icon();
 
-    QString text = modelIndex.data(Qt::DisplayRole).toString();
-    QString itemKey = modelIndex.data(TrayModel::Role::KeyRole).toString();
     qreal ratio = qApp->devicePixelRatio();
     // 创建拖拽释放时的应用图标
     QLabel *pixLabel = new QLabel(this);
@@ -472,17 +474,13 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     pixmap.setDevicePixelRatio(ratio);
     drag->setPixmap(pixmap);
     drag->setHotSpot(pixmap.rect().center() / ratio);
-    QMimeData *data = model()->mimeData(QModelIndexList() << modelIndex);
-    if (!data) {
-        return false;
-    }
 
     data->setImageData(pixmap);
     drag->setMimeData(data);
 
     setState(DraggingState);
 
-    listModel->setDragKey(itemKey);
+    listModel->setDragKey(modelIndex.data(TrayModel::Role::KeyRole).toString());
     listModel->setDragingIndex(modelIndex);
     // 删除当前的图标
     WinInfo winInfo = listModel->takeIndex(modelIndex);
@@ -506,6 +504,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
             m_dropPos = QPoint();
             m_dragPos = QPoint();
 
+            onUpdateEditorView();
             Q_EMIT dragFinished();
         });
         posAni->setEasingCurve(QEasingCurve::Linear);
@@ -520,6 +519,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
 
         m_dropPos = QPoint();
         m_dragPos = QPoint();
+        Q_EMIT dragFinished();
     }
 
     return true;

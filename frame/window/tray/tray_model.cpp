@@ -49,6 +49,9 @@ TrayModel *TrayModel::getDockModel()
         connect(iconModel, &TrayModel::rowsInserted, model, [ = ] {
             model->setExpandVisible(iconModel->rowCount() > 0);
         });
+        connect(iconModel, &TrayModel::rowCountChanged, model, [ = ] {
+            model->setExpandVisible(iconModel->rowCount() > 0);
+        });
     }
 
     return model;
