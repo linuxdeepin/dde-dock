@@ -216,7 +216,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
                     dockItem->hideToolTip();
                 }
             }
-            popWindow->show(popupPoint());
+            popWindow->show(popupPoint(), true);
         }
         m_dragInfo->reset();
         break;

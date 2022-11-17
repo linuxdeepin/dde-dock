@@ -22,12 +22,16 @@
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
+#include "org_deepin_api_xeventmonitor.h"
+
 #include <darrowrectangle.h>
 #include <dregionmonitor.h>
 #include <DWindowManagerHelper>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
+
+using XEventMonitor = ::org::deepin::api::XEventMonitor1;
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 {
@@ -61,15 +65,16 @@ protected:
     void blockButtonRelease();
 
 private slots:
-    void onGlobMouseRelease(const QPoint &mousePos, const int flag);
     void compositeChanged();
     void ensureRaised();
+    void onButtonPress(int type, int x, int y, const QString &key);
 
 private:
     bool m_model;
     QPoint m_lastPoint;
 
-    DRegionMonitor *m_regionInter;
+    XEventMonitor *m_eventMonitor;
+    QString m_eventKey;
     DWindowManagerHelper *m_wmHelper;
     bool m_enableMouseRelease;
 };
