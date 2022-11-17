@@ -39,17 +39,9 @@ public:
     bool releaseSplit() override;
 
 private:
-    quint32 splittingWindowWId();
     uint32_t direction_x11(ScreenSpliter::SplitDirection direction);
     void showSplitScreenEffect(const QRect &rect, bool visible);
-    bool openWindow();
-
-private Q_SLOTS:
-    void onUpdateWindowInfo(const WindowInfoMap &info);
-
-private:
-    bool m_isSplitCreateWindow;
-    QRect m_effectRect;
+    bool windowSupportSplit(quint32 winId);
 };
 
 #endif // SCREENSPLITER_XCB_H

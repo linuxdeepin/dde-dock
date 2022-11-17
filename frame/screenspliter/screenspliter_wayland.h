@@ -63,17 +63,11 @@ public:
 
 private:
     void setMaskVisible(const QRect &rect, bool visible);
-    QString splitUuid() const;
     bool windowSupportSplit(const QString &uuid) const;
-    QString firstWindowUuid() const;
-
-private Q_SLOTS:
-    void onSplitStateChange(const char* uuid, int splitable);
 
 private:
     static SplitWindowManager *m_splitManager;
     QRect m_splitRect;
-    bool m_checkedNotSupport;
 };
 
 class SplitWindowManager : public QObject
@@ -89,9 +83,6 @@ protected:
     bool canSplit(const QString &uuid) const;
     void requestSplitWindow(const char *uuid, const ScreenSpliter::SplitDirection &direction);
 
-Q_SIGNALS:
-    void splitStateChange(const char *, int);
-
 private Q_SLOTS:
     void onConnectionFinished();
 
@@ -99,6 +90,7 @@ private:
     ClientManagement *m_clientManagement;
     QThread *m_connectionThread;
     ConnectionThread *m_connectionThreadObject;
+    QMap<QString, int> m_splitWindowState;
 };
 
 #endif // SCREENSPLITER_WAYLAND_H

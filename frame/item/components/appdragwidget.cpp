@@ -451,51 +451,8 @@ void AppDragWidget::initWaylandEnv()
         return;
 
     // 由于在wayland环境下无法触发drop事件，导致鼠标无法释放，所以这里暂时用XEventMonitor的方式(具体原因待查)
-    Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     XEventMonitor *extralEventInter = new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus());
-    QList<MonitRect> extralRectList;
-    QList<QScreen *> screens = DisplayManager::instance()->screens();
-    for (QScreen *screen : screens) {
-        MonitRect monitorRect;
-        QRect screenRect = screen->geometry();
-        screenRect.setSize(screenRect.size() * screen->devicePixelRatio());
-
-        switch (position) {
-        case Top: {
-            monitorRect.x1 = screenRect.x();
-            monitorRect.y1 = screenRect.y();
-            monitorRect.x2 = screenRect.x() + screenRect.width();
-            monitorRect.y2 = screenRect.y();
-        }
-            break;
-        case Bottom: {
-            monitorRect.x1 = screenRect.x();
-            monitorRect.y1 = screenRect.y() + screenRect.height();
-            monitorRect.x2 = screenRect.x() + screenRect.width();
-            monitorRect.y2 = screenRect.y() + screenRect.height();
-        }
-            break;
-        case Left: {
-            monitorRect.x1 = screenRect.x();
-            monitorRect.y1 = screenRect.y();
-            monitorRect.x2 = screenRect.x();
-            monitorRect.y2 = screenRect.y() + screenRect.height();
-        }
-            break;
-        case Right: {
-            monitorRect.x1 = screenRect.x() + screenRect.width();
-            monitorRect.y1 = screenRect.y();
-            monitorRect.x2 = screenRect.x() + screenRect.width();
-            monitorRect.y2 = screenRect.y() + screenRect.height();
-        }
-            break;
-        }
-
-        if (!extralRectList.contains(monitorRect))
-            extralRectList << monitorRect;
-    }
-
-    QString key = extralEventInter->RegisterAreas(extralRectList, 1 << 1);
+    QString key = extralEventInter->RegisterFullScreen();
     connect(this, &AppDragWidget::destroyed, this, [ key, extralEventInter ] {
         extralEventInter->UnregisterArea(key);
         delete extralEventInter;

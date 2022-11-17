@@ -48,12 +48,9 @@ SplitWindowManager *ScreenSpliter_Wayland::m_splitManager = nullptr;
  */
 ScreenSpliter_Wayland::ScreenSpliter_Wayland(AppItem *appItem, DockEntryInter *entryInter, QObject *parent)
     : ScreenSpliter(appItem, entryInter, parent)
-    , m_checkedNotSupport(false)
 {
     if (!m_splitManager)
         m_splitManager = new SplitWindowManager;
-
-    connect(m_splitManager, &SplitWindowManager::splitStateChange, this, &ScreenSpliter_Wayland::onSplitStateChange);
 }
 
 ScreenSpliter_Wayland::~ScreenSpliter_Wayland()
@@ -62,12 +59,8 @@ ScreenSpliter_Wayland::~ScreenSpliter_Wayland()
 
 void ScreenSpliter_Wayland::startSplit(const QRect &rect)
 {
-    if (entryInter()->windowInfos().size() == 0) {
-        // 如果默认打开的子窗口的数量为0，则无需操作，同时记录标记，在打开新的窗口的时候，设置遮罩
-        m_splitRect = rect;
-        entryInter()->Activate(QX11Info::getTimestamp());
+    if (!suportSplitScreen())
         return;
-    }
 
     setMaskVisible(rect, true);
 }
@@ -92,29 +85,14 @@ void ScreenSpliter_Wayland::setMaskVisible(const QRect &rect, bool visible)
 bool ScreenSpliter_Wayland::split(SplitDirection direction)
 {
    setMaskVisible(QRect(), false);
-   const QString windowUuid = splitUuid();
-   if (windowUuid.isEmpty())
-      return false;
+   // 如果当前不支持分屏，则返回false
+   if (!suportSplitScreen())
+       return false;
 
-   std::string sUuid = windowUuid.toStdString();
-   const char *uuid = sUuid.c_str();
-   m_splitManager->requestSplitWindow(uuid, direction);
+   WindowInfoMap windowInfos = entryInter()->windowInfos();
+   m_splitManager->requestSplitWindow(windowInfos.first().uuid.toStdString().c_str(), direction);
+
    return true;
-}
-
-QString ScreenSpliter_Wayland::splitUuid() const
-{
-#ifdef USE_AM
-    WindowInfoMap windowsInfo = entryInter()->windowInfos();
-    if (windowsInfo.isEmpty())
-        return QString();
-
-    const QString uuid = windowsInfo.values()[0].uuid;
-    if (windowSupportSplit(uuid))
-        return uuid;
-
-#endif
-    return QString();
 }
 
 bool ScreenSpliter_Wayland::windowSupportSplit(const QString &uuid) const
@@ -122,54 +100,17 @@ bool ScreenSpliter_Wayland::windowSupportSplit(const QString &uuid) const
     return m_splitManager->canSplit(uuid);
 }
 
-QString ScreenSpliter_Wayland::firstWindowUuid() const
-{
-#ifdef USE_AM
-    WindowInfoMap winInfos = entryInter()->windowInfos();
-    if (winInfos.size() == 0)
-        return QString();
-
-    return winInfos.begin().value().uuid;
-#else
-    return QString();
-#endif
-}
-
-void ScreenSpliter_Wayland::onSplitStateChange(const char *uuid, int splitable)
-{
-#ifdef USE_AM
-    const QString windowUuid = firstWindowUuid();
-    qDebug() << "Split State Changed, window uuid:" << windowUuid << "split uuid:" << uuid << "split value:" << splitable;
-    if (QString(uuid) != windowUuid)
-        return;
-
-    if (m_splitRect.isEmpty())
-        return;
-
-    if (splitable > 0) {
-        setMaskVisible(m_splitRect, true);
-    } else {
-        // 如果不支持二分屏，则退出当前的窗体，且标记当前不支持二分屏，下次打开的时候不再进行打开窗口来检测
-        entryInter()->ForceQuit();
-        m_checkedNotSupport = true;
-    }
-    m_splitRect = QRect(0, 0, 0, 0);
-#endif
-}
-
 bool ScreenSpliter_Wayland::suportSplitScreen()
 {
-    // 如果之前检测过是否不支持分屏(m_checkedNotSupport默认为false，如果不支持分屏，m_checkedNotSupport就会变为true),则直接返回不支持分屏
-    if (m_checkedNotSupport)
-        return false;
+    // 判断所有打开的窗口列表，只要有一个窗口支持分屏，就认为它支持分屏
+    const WindowInfoMap &windowsInfo = entryInter()->windowInfos();
+    for (const WindowInfo &windowInfo : windowsInfo) {
+        if (windowSupportSplit(windowInfo.uuid))
+            return true;
+    }
 
-    // 如果存在未打开的窗口，就默认让其认为支持，后续会根据这个来打开一个新的窗口
-    if (entryInter()->windowInfos().size() == 0)
-        return true;
-
-    // 如果存在已经打开的窗口
-    m_checkedNotSupport = splitUuid().isEmpty();
-    return (!m_checkedNotSupport);
+    // 如果所有的窗口都不支持分屏，就认为它不支持分屏，包括没有打开窗口的情况
+    return false;
 }
 
 bool ScreenSpliter_Wayland::releaseSplit()
@@ -201,17 +142,10 @@ SplitWindowManager::~SplitWindowManager()
 
 bool SplitWindowManager::canSplit(const QString &uuid) const
 {
-    if (!m_clientManagement)
-        return false;
-
-    const QVector <ClientManagement::WindowState> &clientWindowStates = m_clientManagement->getWindowStates();
-    qInfo() << "client window states count:" << clientWindowStates.size();
-    for (ClientManagement::WindowState windowState : clientWindowStates) {
-        qDebug() << "window uuid:" << uuid << "window state uuid:" << windowState.uuid
-                 << "active:" << windowState.isActive << "resource name:" << windowState.resourceName;
-        if (windowState.splitable > 0 && QString(windowState.uuid) == uuid)
+    const QVector <ClientManagement::WindowState> &windowStates = m_clientManagement->getWindowStates();
+    for (const ClientManagement::WindowState &winState : windowStates)
+        if (winState.uuid == uuid && winState.splitable > 0)
             return true;
-    };
 
     return false;
 }
@@ -245,7 +179,6 @@ void SplitWindowManager::onConnectionFinished()
     Registry *registry = new Registry(this);
     connect(registry, &Registry::clientManagementAnnounced, this, [ this, registry ](quint32 name, quint32 version) {
         m_clientManagement = registry->createClientManagement(name, version, this);
-        connect(m_clientManagement, &ClientManagement::splitStateChange, this, &SplitWindowManager::splitStateChange);
     });
     registry->setEventQueue(eventQueue);
     registry->create(m_connectionThreadObject);
