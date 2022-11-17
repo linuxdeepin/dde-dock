@@ -705,7 +705,7 @@ QString MultiScreenWorker::getValidScreen(const Position &pos)
     if (DIS_INS->canDock(DIS_INS->screen(DOCK_SCREEN->current()), pos))
         return DOCK_SCREEN->current();
 
-    if (DIS_INS->canDock(qApp->primaryScreen(), pos))
+    if (DIS_INS->canDock(DIS_INS->screen(DIS_INS->primary()), pos))
         return DIS_INS->primary();
 
     for (auto s : DIS_INS->screens()) {

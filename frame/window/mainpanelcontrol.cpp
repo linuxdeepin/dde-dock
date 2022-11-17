@@ -1102,8 +1102,8 @@ void MainPanelControl::paintEvent(QPaintEvent *event)
 // 获取当前屏幕的高或者宽(任务栏上下的时候获取宽，左右获取高)
 int MainPanelControl::getScreenSize() const
 {
-    QScreen *currentScreen = qApp->primaryScreen();
     DisplayManager *displayManager = DisplayManager::instance();
+    QScreen *currentScreen = displayManager->screen(displayManager->primary());
     QScreen *screen = displayManager->screen(DockScreen::instance()->current());
     if (screen)
         currentScreen = screen;
