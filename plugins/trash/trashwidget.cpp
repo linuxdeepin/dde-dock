@@ -162,7 +162,7 @@ void TrashWidget::dragLeaveEvent(QDragLeaveEvent *e)
 void TrashWidget::dropEvent(QDropEvent *e)
 {
     if (e->mimeData()->hasFormat("RequestDock"))
-        return removeApp(e->mimeData()->data("AppKey"));
+        return removeApp(e->mimeData()->data("DesktopPath"));
 
     if (!e->mimeData()->hasUrls()) {
         return e->ignore();
