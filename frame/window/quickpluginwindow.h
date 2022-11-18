@@ -76,7 +76,7 @@ private:
     void startDrag(PluginsItemInterface *moveItem);
     PluginsItemInterface *findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems);
     int getDropIndex(QPoint point);
-    QPoint popupPoint() const;
+    QPoint popupPoint(QWidget *widget) const;
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
     QuickDockItem *getActiveDockItem(QPoint point) const;
 

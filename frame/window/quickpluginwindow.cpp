@@ -199,8 +199,14 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
         if (m_dragInfo->isNull())
             break;
 
-        if (!m_dragInfo->canDrag(mouseEvent->pos())) {
-            // 弹出快捷设置面板
+        do {
+            if (m_dragInfo->canDrag(mouseEvent->pos()))
+                break;
+
+            QuickDockItem *releaseItem = qobject_cast<QuickDockItem *>(watched);
+            if (!releaseItem)
+                break;
+
             DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
             if (Utils::IS_WAYLAND_DISPLAY) {
                 // TODO: 临时解决方案，如果是wayland环境，toolTip没有消失，因此，此处直接调用接口来隐藏
@@ -216,9 +222,10 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
                     dockItem->hideToolTip();
                 }
             }
-            popWindow->show(popupPoint(), true);
-        }
+            popWindow->show(popupPoint(releaseItem), true);
+        } while (false);
         m_dragInfo->reset();
+
         break;
     }
     case QEvent::MouseMove: {
@@ -296,31 +303,35 @@ void QuickPluginWindow::onRequestUpdate()
         Q_EMIT itemCountChanged();
 }
 
-QPoint QuickPluginWindow::popupPoint() const
+QPoint QuickPluginWindow::popupPoint(QWidget *widget) const
 {
-    if (!parentWidget())
+    if (!widget)
         return pos();
 
-    QPoint pointCurrent = parentWidget()->mapToGlobal(pos());
+    QPoint pointCurrent = widget->mapToGlobal(QPoint(0, 0));
     switch (m_position) {
     case Dock::Position::Bottom: {
         // 在下方的时候，Y坐标设置在顶层窗口的y值，保证下方对齐
+        pointCurrent.setX(pointCurrent.x() + widget->width() / 2);
         pointCurrent.setY(topLevelWidget()->y());
         break;
     }
     case Dock::Position::Top: {
         // 在上面的时候，Y坐标设置为任务栏的下方，保证上方对齐
+        pointCurrent.setX(pointCurrent.x() + widget->width() / 2);
         pointCurrent.setY(topLevelWidget()->y() + topLevelWidget()->height());
         break;
     }
     case Dock::Position::Left: {
         // 在左边的时候，X坐标设置在顶层窗口的最右侧，保证左对齐
         pointCurrent.setX(topLevelWidget()->x() + topLevelWidget()->width());
+        pointCurrent.setY(pointCurrent.y() + widget->height() / 2);
         break;
     }
     case Dock::Position::Right: {
         // 在右边的时候，X坐标设置在顶层窗口的最左侧，保证右对齐
         pointCurrent.setX(topLevelWidget()->x());
+        pointCurrent.setY(pointCurrent.y() + widget->height() / 2);
     }
     }
     return pointCurrent;
