@@ -32,9 +32,9 @@
 DGUI_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
-static const QString CollaborationService = "com.deepin.Cooperation";
-static const QString CollaborationPath = "/com/deepin/Cooperation";
-static const QString CollaborationInterface = "com.deepin.Cooperation";
+static const QString CollaborationService = "org.deepin.dde.Cooperation1";
+static const QString CollaborationPath = "/org/deepin/dde/Cooperation1";
+static const QString CollaborationInterface = "org.deepin.dde.Cooperation1";
 static const QString ColPropertiesInterface = "org.freedesktop.DBus.Properties";
 
 CollaborationDevModel::CollaborationDevModel(QObject *parent)

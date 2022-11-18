@@ -24,7 +24,7 @@
 #include "constants.h"
 #include "dbusutil.h"
 
-#include "org_deepin_daemon_timedate.h"
+#include "org_deepin_dde_timedate1.h"
 
 #include <QWidget>
 
@@ -33,7 +33,7 @@ namespace Dtk { namespace Gui { class DRegionMonitor; };
 
 using namespace Dtk::Widget;
 
-using Timedate = org::deepin::daemon::Timedate1;
+using Timedate = org::deepin::dde::Timedate1;
 
 class QuickPluginWindow;
 class QBoxLayout;

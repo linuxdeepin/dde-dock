@@ -230,12 +230,12 @@ install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 }
 ```
 
-另外（可选的）还支持指定一个 dbus 服务，dock 在加载插件时会检查此插件所依赖的 dbus 服务，如果服务没有启动则不会初始化这个插件，直到服务启动，如下表示依赖 dbus 地址为 "com.deepin.daemon.Network" 的 dbus 服务。
+另外（可选的）还支持指定一个 dbus 服务，dock 在加载插件时会检查此插件所依赖的 dbus 服务，如果服务没有启动则不会初始化这个插件，直到服务启动，如下表示依赖 dbus 地址为 "org.deepin.dde.Network1" 的 dbus 服务。
 
 ``` json
 {
     "api": "2.0.0",
-    "depends-daemon-dbus-service": "com.deepin.daemon.Network"
+    "depends-daemon-dbus-service": "org.deepin.dde.Network1"
 }
 ```
 
@@ -245,7 +245,7 @@ install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 {
     "api": "2.0.0",
     "order": 1,
-    "depends-daemon-dbus-service": "org.deepin.daemon.Audio1"
+    "depends-daemon-dbus-service": "org.deepin.dde.Audio1"
 }
 ```
 

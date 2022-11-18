@@ -22,7 +22,7 @@
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
-#include "org_deepin_api_xeventmonitor.h"
+#include "org_deepin_dde_xeventmonitor1.h"
 
 #include <darrowrectangle.h>
 #include <dregionmonitor.h>
@@ -31,7 +31,7 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
-using XEventMonitor = ::org::deepin::api::XEventMonitor1;
+using XEventMonitor = org::deepin::dde::XEventMonitor1;
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 {

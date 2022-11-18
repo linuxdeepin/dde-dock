@@ -31,7 +31,7 @@
 
 #define PLUGIN_STATE_KEY    "enable"
 #define OverlayFileSystemType    "overlay"
-#define AuthAgentDbusService "com.deepin.Polkit1AuthAgent"
+#define AuthAgentDbusService "org.deepin.dde.Polkit1.AuthAgent"
 
 DWIDGET_USE_NAMESPACE
 

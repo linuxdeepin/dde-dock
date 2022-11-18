@@ -55,17 +55,11 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
-
-#ifdef USE_AM
         connect(it, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
-#endif
-
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
         m_itemList.append(it);
-#ifdef USE_AM
         updateMultiItems(it);
-#endif
     }
 
     // 托盘区域和插件区域 由DockPluginsController获取
@@ -86,9 +80,7 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
     connect(m_appInter, &DockInter::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
     connect(m_appInter, &DockInter::ServiceRestarted, this, &DockItemManager::reloadAppItems);
-#ifdef USE_AM
     connect(m_appInter, &DockInter::ShowMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
-#endif
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -225,9 +217,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
     connect(item, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
-#ifdef USE_AM
     connect(item, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
-#endif
     connect(this, &DockItemManager::requestUpdateDockItem, item, &AppItem::requestUpdateEntryGeometries);
 
     m_itemList.insert(insertIndex, item);
@@ -239,10 +229,8 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 
     // 插入dockItem
     emit itemInserted(itemIndex, item);
-#ifdef USE_AM
     // 向后插入多开窗口
     updateMultiItems(item, true);
-#endif
 }
 
 void DockItemManager::appItemRemoved(const QString &appId)
@@ -385,7 +373,6 @@ void DockItemManager::onPluginLoadFinished()
     m_loadFinished = true;
 }
 
-#ifdef USE_AM
 void DockItemManager::onAppWindowCountChanged()
 {
     AppItem *appItem = static_cast<AppItem *>(sender());
@@ -496,4 +483,3 @@ void DockItemManager::onShowMultiWindowChanged()
         }
     }
 }
-#endif

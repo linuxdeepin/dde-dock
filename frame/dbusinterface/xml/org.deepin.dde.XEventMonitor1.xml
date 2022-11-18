@@ -1,4 +1,4 @@
-<interface name="org.deepin.api.XEventMonitor1">
+<interface name="org.deepin.dde.XEventMonitor1">
   <method name="RegisterArea">
     <arg type="i" direction="in"/>
     <arg type="i" direction="in"/>

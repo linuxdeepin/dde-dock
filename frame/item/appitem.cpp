@@ -97,11 +97,7 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
-#ifdef USE_AM
     connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, &AppItem::modeChanged);
-#else
-    connect(m_itemEntryInter, &DockEntryInter::IsDockedChanged, this, &AppItem::isDockChanged);
-#endif
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
 
@@ -216,13 +212,11 @@ bool AppItem::splitWindowOnScreen(ScreenSpliter::SplitDirection direction)
     return m_screenSpliter->split(direction);
 }
 
-#ifdef USE_AM
 int AppItem::mode() const
 {
     return m_itemEntryInter->mode();
 }
 
-#endif
 
 DockEntryInter *AppItem::itemEntryInter() const
 {
@@ -296,9 +290,7 @@ void AppItem::paintEvent(QPaintEvent *e)
         path.addRoundedRect(backgroundRect, 8, 8);
 
         // 在没有开启窗口多开的情况下，显示背景色
-#ifdef USE_AM
         if (!m_dockInter->showMultiWindow()) {
-#endif
             if (m_active) {
                 QColor color = Qt::black;
                 color.setAlpha(255 * 0.8);
@@ -312,9 +304,7 @@ void AppItem::paintEvent(QPaintEvent *e)
                     painter.fillPath(path, color);
                 }
             }
-#ifdef USE_AM
         }
-#endif
     } else {
         if (!m_windowInfos.isEmpty()) {
             QPoint p;
@@ -407,21 +397,17 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
-#ifdef USE_AM
         if (m_dockInter->showMultiWindow()) {
             // 如果开启了多窗口显示，则直接新建一个窗口
             m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
         } else {
-#endif
             // 如果没有开启新窗口显示，则
             m_itemEntryInter->Activate(QX11Info::getTimestamp());
             // play launch effect
             if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
                 playSwingEffect();
         }
-#ifdef USE_AM
     }
-#endif
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)

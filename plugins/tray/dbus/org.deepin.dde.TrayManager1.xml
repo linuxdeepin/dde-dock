@@ -1,4 +1,4 @@
-     <interface name="com.deepin.dde.TrayManager">
+     <interface name="org.deepin.dde.TrayManager1">
           <method name="EnableNotification">
                <arg type="u" direction="in"></arg>
                <arg type="b" direction="in"></arg>

@@ -22,8 +22,6 @@
 #ifndef DOCK_ENTRY_H
 #define DOCK_ENTRY_H
 
-#ifdef USE_AM
-
 #define WINDOWLIST_H
 #define WINDOWINFOLIST_H
 
@@ -65,7 +63,7 @@ void registerWindowInfoMetaType();
 void registerWindowInfoMapMetaType();
 
 /*
- * Proxy class for interface com.deepin.dde.daemon.Dock.Entry
+ * Proxy class for interface org.deepin.dde.daemon.Dock1.Entry
  */
 class EntryPrivate;
 
@@ -280,7 +278,5 @@ namespace org {
     }
   }
 }
-
-#endif  // USE_AM
 
 #endif  // DOCK_ENTRY_H

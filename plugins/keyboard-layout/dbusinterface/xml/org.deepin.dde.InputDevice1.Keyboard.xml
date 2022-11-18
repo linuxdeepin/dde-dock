@@ -1,5 +1,5 @@
 <node>
-     <interface name="org.deepin.daemon.InputDevice.Keyboard1">
+     <interface name="org.deepin.dde.InputDevice1.Keyboard1">
           <method name="AddLayoutOption">
                <arg type="s" direction="in"></arg>
           </method>

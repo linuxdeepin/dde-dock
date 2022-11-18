@@ -22,17 +22,17 @@
 
 #include <QMenu>
 #include <QtDBus/QtDBus>
-#include "org_deepin_daemon_inputdevice_keyboard.h"
+#include "org_deepin_dde_inputdevice1_keyboard.h"
 
-using Keyboard = org::deepin::daemon::inputdevice::Keyboard1;
+using Keyboard = org::deepin::dde::inputdevice1::Keyboard1;
 class QGSettings;
 
 class DBusAdaptors : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Keyboard")
+    Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.Dock1.KeyboardLayout")
 //    Q_CLASSINFO("D-Bus Introspection", ""
-//                "  <interface name=\"com.deepin.dde.Keyboard\">\n"
+//                "  <interface name=\"org.deepin.dde.Dock1.KeyboardLayout\">\n"
 //                "    <property access=\"read\" type=\"s\" name=\"layout\"/>\n"
 //                "    <signal name=\"layoutChanged\">"
 //                "        <arg name=\"layout\" type=\"s\"/>"

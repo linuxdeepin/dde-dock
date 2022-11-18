@@ -44,7 +44,7 @@ static QMap<int, QString> timeFormat{{0, "h:mm"}, {1, "hh:mm"}};
 
 DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     : QWidget (parent)
-    , m_timedateInter(new Timedate("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", QDBusConnection::sessionBus(), this))
+    , m_timedateInter(new Timedate("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", QDBusConnection::sessionBus(), this))
     , m_position(Dock::Position::Bottom)
     , m_dateFont(DFontSizeManager::instance()->t10())
     , m_tipsWidget(new Dock::TipsWidget(this))
@@ -156,9 +156,9 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    DDBusSender().service("org.deepin.dde.Widgets")
+    DDBusSender().service("org.deepin.dde.Widgets1")
             .path("/")
-            .interface("org.deepin.dde.Widgets")
+            .interface("org.deepin.dde.Widgets1")
             .method("Toggle").call();
 }
 

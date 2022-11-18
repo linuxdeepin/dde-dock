@@ -24,13 +24,13 @@
 #include "utils.h"
 #include "displaymanager.h"
 
-#include "org_deepin_api_xeventmonitor.h"
+#include "org_deepin_dde_xeventmonitor1.h"
 
 #define SPLIT_NONE 0
 #define SPLIT_LEFT 1
 #define SPLIT_RIGHT 2
 
-using XEventMonitor = ::org::deepin::api::XEventMonitor1;
+using XEventMonitor = ::org::deepin::dde::XEventMonitor1;
 
 AppDragWidget::AppDragWidget(QWidget *parent)
     : QGraphicsView(parent)

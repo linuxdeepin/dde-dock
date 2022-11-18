@@ -43,8 +43,8 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new Dock::TipsWidget(this))
     , m_applet(new AirplaneModeApplet(this))
-    , m_airplaneModeInter(new DBusAirplaneMode("org.deepin.daemon.AirplaneMode1",
-                                               "/org/deepin/daemon/AirplaneMode1",
+    , m_airplaneModeInter(new DBusAirplaneMode("org.deepin.dde.AirplaneMode1",
+                                               "/org/deepin/dde/AirplaneMode1",
                                                QDBusConnection::systemBus(),
                                                this))
 {
@@ -113,7 +113,6 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
     if (menuId == SHIFT)
         m_airplaneModeInter->Enable(!m_airplaneModeInter->enabled());
     else if (menuId == SETTINGS)
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -122,16 +121,6 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
         .arg(QString("network"))
         .arg(QString("Airplane Mode"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("network"))
-        .arg(QString("Airplane Mode"))
-        .call();
-#endif
     */
 }
 

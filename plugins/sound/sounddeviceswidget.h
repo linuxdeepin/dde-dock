@@ -21,8 +21,8 @@
 #ifndef SOUNDDEVICESWIDGET_H
 #define SOUNDDEVICESWIDGET_H
 
-#include "org_deepin_daemon_audio.h"
-#include "org_deepin_daemon_audio_sink.h"
+#include "org_deepin_dde_audio1.h"
+#include "org_deepin_dde_audio1_sink.h"
 
 #include <DStyledItemDelegate>
 
@@ -40,8 +40,8 @@ class AudioSink;
 class SettingDelegate;
 class SoundDevicePort;
 
-using DBusAudio = org::deepin::daemon::Audio1;
-using DBusSink = org::deepin::daemon::audio1::Sink;
+using DBusAudio = org::deepin::dde::Audio1;
+using DBusSink = org::deepin::dde::audio1::Sink;
 
 class SoundDevicesWidget : public QWidget
 {

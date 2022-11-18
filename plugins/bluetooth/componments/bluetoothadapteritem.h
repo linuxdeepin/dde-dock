@@ -32,9 +32,9 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-#include "org_deepin_daemon_bluetooth.h"
+#include "org_deepin_dde_bluetooth1.h"
 
-using  DBusBluetooth = org::deepin::daemon::Bluetooth1;
+using  DBusBluetooth = org::deepin::dde::Bluetooth1;
 
 DWIDGET_USE_NAMESPACE
 

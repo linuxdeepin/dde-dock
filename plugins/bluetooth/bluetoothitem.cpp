@@ -119,7 +119,6 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
     if (menuId == SHIFT) {
         m_applet->setAdapterPowered(!m_adapterPowered);
     } else if (menuId == SETTINGS) {
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -127,15 +126,6 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("bluetooth"))
-        .call();
-#endif
     }
 }
 

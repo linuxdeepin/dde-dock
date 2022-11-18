@@ -40,7 +40,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
     , m_24HourFormat(false)
     , m_timeOffset(false)
-    , m_timedateInter(new Timedate("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", QDBusConnection::sessionBus(), this))
+    , m_timedateInter(new Timedate("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", QDBusConnection::sessionBus(), this))
     , m_shortDateFormat("yyyy-MM-dd")
     , m_shortTimeFormat("hh:mm")
 {

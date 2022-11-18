@@ -57,8 +57,8 @@ IndicatorTrayItem::IndicatorTrayItem(const QString &indicatorName, QWidget *pare
     setLayout(layout);
 
     // register dbus
-    auto path = QString("/com/deepin/dde/Dock/Indicator/") + m_indicatorName;
-    auto interface =  QString("com.deepin.dde.Dock.Indicator.") + m_indicatorName;
+    auto path = QString("/org/deepin/dde/Dock1/Indicator/") + m_indicatorName;
+    auto interface =  QString("org.deepin.dde.Dock1.Indicator.") + m_indicatorName;
     auto sessionBus = QDBusConnection::sessionBus();
     sessionBus.registerObject(path,
                               interface,

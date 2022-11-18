@@ -32,9 +32,9 @@
 #include <QApplication>
 #include <QScreen>
 
-static const QString serviceName("com.deepin.daemon.Display");
-static const QString servicePath("/com/deepin/daemon/Display");
-static const QString serviceInterface("com.deepin.daemon.Display");
+static const QString serviceName("org.deepin.dde.Display1");
+static const QString servicePath("/org/deepin/dde/Display1");
+static const QString serviceInterface("org.deepin.dde.Display1");
 static const QString propertiesInterface("org.freedesktop.DBus.Properties");
 
 BrightnessModel::BrightnessModel(QObject *parent)

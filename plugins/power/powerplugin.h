@@ -26,11 +26,11 @@
 #include "powerstatuswidget.h"
 #include "dbus/dbuspower.h"
 
-#include "org_deepin_system_systempower.h"
+#include "org_deepin_dde_systempower1.h"
 
 #include <QLabel>
 
-using SystemPowerInter = org::deepin::system::Power1;
+using SystemPowerInter = org::deepin::dde::Power1;
 namespace Dock {
 class TipsWidget;
 }

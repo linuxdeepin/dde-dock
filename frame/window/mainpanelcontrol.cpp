@@ -319,10 +319,9 @@ void MainPanelControl::dockRecentApp(DockItem *dockItem)
         return;
 
     // 如果控制中心设置不开启最近应用，则不让其驻留
-#ifdef USE_AM
     if (!m_dockInter->showRecent())
         return;
-#endif
+
     // 如果控制中心开启了最近应用并且当前应用是未驻留应用，则可以驻留
     if (!appItem->isDocked())
         appItem->requestDock();

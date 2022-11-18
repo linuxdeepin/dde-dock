@@ -1,5 +1,4 @@
 #add_subdirectory("datetime")
-#add_subdirectory("disk-mount")
 add_subdirectory("shutdown")
 add_subdirectory("power")
 add_subdirectory("sound")

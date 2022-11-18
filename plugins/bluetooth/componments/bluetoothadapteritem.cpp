@@ -150,7 +150,7 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_itemDelegate(new DStyledItemDelegate(m_deviceListview))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
     , m_refreshBtn(new RefreshButton(this))
-    , m_bluetoothInter(new DBusBluetooth("org.deepin.daemon.Bluetooth1", "/org/deepin/daemon/Bluetooth1", QDBusConnection::sessionBus(), this))
+    , m_bluetoothInter(new DBusBluetooth("org.deepin.dde.Bluetooth1", "/org/deepin/dde/Bluetooth1", QDBusConnection::sessionBus(), this))
     , m_showUnnamedDevices(false)
     , m_seperator(new HorizontalSeperator(this))
 {

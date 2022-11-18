@@ -28,8 +28,8 @@
 #include "xcb_misc.h"
 #include "dbusutil.h"
 
-#include "org_deepin_api_xeventmonitor.h"
-#include "org_deepin_dde_launcher.h"
+#include "org_deepin_dde_xeventmonitor1.h"
+#include "org_deepin_dde_launcher1.h"
 
 #include <DWindowManagerHelper>
 
@@ -53,7 +53,7 @@ DGUI_USE_NAMESPACE
 #define DRAG_AREA_SIZE (5)
 #define DOCKSPACE (WINDOWMARGIN * 2)
 
-using XEventMonitor = ::org::deepin::api::XEventMonitor1;
+using XEventMonitor = ::org::deepin::dde::XEventMonitor1;
 using DBusLuncher = ::org::deepin::dde::Launcher1;
 
 using namespace Dock;
@@ -128,10 +128,6 @@ signals:
 public slots:
     void onAutoHideChanged(const bool autoHide);
     void onRequestUpdateRegionMonitor();
-
-#ifndef USE_AM
-    void handleDbusSignal(QDBusMessage);
-#endif
 
 private slots:
     // Region Monitor

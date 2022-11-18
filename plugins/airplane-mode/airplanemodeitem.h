@@ -23,11 +23,11 @@
 #ifndef AIRPLANEMODEITEM_H
 #define AIRPLANEMODEITEM_H
 
-#include "org_deepin_daemon_airplanemode.h"
+#include "org_deepin_dde_airplanemode1.h"
 
 #include <QWidget>
 
-using DBusAirplaneMode = org::deepin::daemon::AirplaneMode1;
+using DBusAirplaneMode = org::deepin::dde::AirplaneMode1;
 
 namespace Dock {
 class TipsWidget;

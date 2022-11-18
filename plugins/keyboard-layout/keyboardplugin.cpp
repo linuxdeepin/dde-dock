@@ -44,7 +44,7 @@ void KeyboardPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
     if (!m_dbusAdaptors) {
 
-        QString serverName = "com.deepin.daemon.InputDevices";
+        QString serverName = "org.deepin.dde.InputDevices1";
         QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
 
         if (!ifc->isServiceRegistered(serverName)) {
@@ -60,8 +60,8 @@ void KeyboardPlugin::init(PluginProxyInterface *proxyInter)
             m_dbusAdaptors = new DBusAdaptors(this);
         }
 
-        QDBusConnection::sessionBus().registerService("com.deepin.dde.Keyboard");
-        QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Keyboard", "com.deepin.dde.Keyboard", this);
+        QDBusConnection::sessionBus().registerService("org.deepin.dde.Dock1.KeyboardLayout");
+        QDBusConnection::sessionBus().registerObject("/org/deepin/dde/Dock1/KeyboardLayout", "org.deepin.dde.Dock1.KeyboardLayout", this);
     }
 }
 

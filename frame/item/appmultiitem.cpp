@@ -90,9 +90,7 @@ void AppMultiItem::initConnection()
 
 void AppMultiItem::onOpen()
 {
-#ifdef USE_AM
     m_entryInter->ActiveWindow(m_winId);
-#endif
 }
 
 void AppMultiItem::onCurrentWindowChanged(uint32_t value)
@@ -152,9 +150,7 @@ void AppMultiItem::paintEvent(QPaintEvent *)
 void AppMultiItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-#ifdef USE_AM
         m_entryInter->ActiveWindow(m_winId);
-#endif
     } else {
         QPoint currentPoint = QCursor::pos();
         m_menu->exec(currentPoint);

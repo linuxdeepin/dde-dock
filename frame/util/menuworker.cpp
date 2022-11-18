@@ -155,21 +155,12 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
 
 void MenuWorker::onDockSettingsTriggered()
 {
-#ifdef USE_AM
     DDBusSender().service(controllCenterService)
             .path(controllCenterPath)
             .interface(controllCenterInterface)
             .method("ShowPage")
             .arg(QString("personalization/desktop/dock"))
             .call();
-#else
-    DDBusSender().service(controllCenterService)
-            .path("controllCenterPath")
-            .interface(controllCenterInterface)
-            .method("ShowPage")
-            .arg(QString("personalization/dock"))
-            .call();
-#endif
 }
 
 void MenuWorker::exec()

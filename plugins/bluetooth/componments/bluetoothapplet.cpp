@@ -121,7 +121,7 @@ BluetoothApplet::BluetoothApplet(AdaptersManager *adapterManager, QWidget *paren
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
     , m_seperator(new HorizontalSeperator(this))
-    , m_airPlaneModeInter(new DBusAirplaneMode("org.deepin.daemon.AirplaneMode1", "/org/deepin/daemon/AirplaneMode1", QDBusConnection::systemBus(), this))
+    , m_airPlaneModeInter(new DBusAirplaneMode("org.deepin.dde.AirplaneMode1", "/org/deepin/dde/AirplaneMode1", QDBusConnection::systemBus(), this))
     , m_airplaneModeEnable(false)
 {
     initUi();
@@ -283,7 +283,6 @@ void BluetoothApplet::initConnect()
     connect(m_adaptersManager, &AdaptersManager::adapterIncreased, this, &BluetoothApplet::onAdapterAdded);
     connect(m_adaptersManager, &AdaptersManager::adapterDecreased, this, &BluetoothApplet::onAdapterRemoved);
     connect(m_settingLabel, &SettingLabel::clicked, this, [ = ] {
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -291,15 +290,6 @@ void BluetoothApplet::initConnect()
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("bluetooth"))
-        .call();
-#endif
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);

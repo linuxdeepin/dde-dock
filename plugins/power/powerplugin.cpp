@@ -99,11 +99,7 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
 const QString PowerPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-#ifdef USE_AM
         return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowPage \"string:power\"");
-#else
-        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowPage \"string:power\"");
-#endif
 
     return QString();
 }
@@ -114,7 +110,6 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
     Q_UNUSED(checked)
 
     if (menuId == "power") {
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -122,15 +117,6 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
         .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("power"))
-        .call();
-#endif
      }
 }
 
@@ -201,7 +187,7 @@ void PowerPlugin::loadPlugin()
 
     m_powerInter = new DBusPower(this);
 
-    m_systemPowerInter = new SystemPowerInter("org.deepin.system.Power1", "/org/deepin/system/Power1", QDBusConnection::systemBus(), this);
+    m_systemPowerInter = new SystemPowerInter("org.deepin.dde.Power1", "/org/deepin/dde/Power1", QDBusConnection::systemBus(), this);
     m_systemPowerInter->setSync(true);
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &PowerPlugin::onGSettingsChanged);

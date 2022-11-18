@@ -113,35 +113,6 @@ void MultiScreenWorker::onAutoHideChanged(const bool autoHide)
     }
 }
 
-#ifndef USE_AM
-void MultiScreenWorker::handleDbusSignal(QDBusMessage msg)
-{
-    QList<QVariant> arguments = msg.arguments();
-    // 参数固定长度
-    if (3 != arguments.count())
-        return;
-
-    // 返回的数据中,这一部分对应的是数据发送方的interfacename,可判断是否是自己需要的服务
-    QString interfaceName = msg.arguments().at(0).toString();
-    if (interfaceName != DockInter::staticInterfaceName())
-        return;
-
-    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    QStringList keys = changedProps.keys();
-    foreach (const QString &prop, keys) {
-        if (prop == "Position") {
-            onPositionChanged(changedProps.value(prop).toInt());
-        } else if (prop == "DisplayMode") {
-            onDisplayModeChanged(changedProps.value(prop).toInt());
-        } else if (prop == "HideMode") {
-            onHideModeChanged(changedProps.value(prop).toInt());
-        } else if (prop == "HideState") {
-            onHideStateChanged(changedProps.value(prop).toInt());
-        }
-    }
-}
-#endif
-
 void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
 {
     if (m_registerKey != key || testState(MousePress))
@@ -601,18 +572,10 @@ void MultiScreenWorker::initConnection()
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
-#ifdef USE_AM
     connect(m_dockInter, &DockInter::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
     connect(m_dockInter, &DockInter::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
     connect(m_dockInter, &DockInter::HideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
     connect(m_dockInter, &DockInter::HideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
-#else
-    QDBusConnection::sessionBus().connect(dockServiceName(), dockServicePath(),
-                                          "org.freedesktop.DBus.Properties",
-                                          "PropertiesChanged",
-                                          "sa{sv}as",
-                                          this, SLOT(handleDbusSignal(QDBusMessage)));
-#endif
 
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
@@ -734,7 +697,7 @@ void MultiScreenWorker::resetDockScreen()
 
 /**
  * @brief checkDaemonDockService
- * 避免com.deepin.dde.daemon.Dock服务比dock晚启动，导致dock启动后的状态错误
+ * org.deepin.dde.daemon.Dock1服务比dock晚启动，导致dock启动后的状态错误
  */
 void MultiScreenWorker::checkDaemonDockService()
 {
@@ -828,7 +791,7 @@ bool MultiScreenWorker::isCursorOut(int x, int y)
 
 /**
  * @brief checkDaemonXEventMonitorService
- * 避免com.deepin.api.XEventMonitor服务比dock晚启动，导致dock启动后的状态错误
+ * org.deepin.dde.XEventMonitor1服务比dock晚启动，导致dock启动后的状态错误
  */
 void MultiScreenWorker::checkXEventMonitorService()
 {

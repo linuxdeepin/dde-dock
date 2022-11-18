@@ -1,4 +1,4 @@
-     <interface name="com.deepin.daemon.Display">
+     <interface name="org.deepin.dde.Display1">
           <method name="ApplyChanges"></method>
           <method name="AssociateTouch">
                <arg type="s" direction="in"></arg>

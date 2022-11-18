@@ -22,8 +22,6 @@
 #ifndef DOCK_INTERFACE
 #define DOCK_INTERFACE
 
-#ifdef USE_AM
-
 #include "types/dockrect.h"
 
 #include <QObject>
@@ -36,7 +34,7 @@
 #include <QtDBus>
 
 /*
- * Proxy class for interface com.deepin.dde.daemon.Dock
+ * Proxy class for interface org.deepin.dde.daemon.Dock1
  */
 class DockPrivate;
 class WM;
@@ -336,6 +334,5 @@ namespace org {
   }
 }
 
-#endif  // USE_AM
 
 #endif  // DOCK_INTERFACE

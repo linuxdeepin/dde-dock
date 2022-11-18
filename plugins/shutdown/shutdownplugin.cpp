@@ -48,7 +48,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_shutdownWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
-    , m_powerManagerInter(new DBusPowerManager("org.deepin.daemon.PowerManager1", "/org/deepin/daemon/PowerManager1", QDBusConnection::systemBus(), this))
+    , m_powerManagerInter(new DBusPowerManager("org.deepin.dde.PowerManager1", "/org/deepin/dde/PowerManager1", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
     , m_sessionShellGsettings(Utils::SettingsPtr("com.deepin.dde.session-shell", "/com/deepin/dde/session-shell/", this))
 {
@@ -115,7 +115,7 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    return QString("dbus-send --print-reply --dest=org.deepin.dde.ShutdownFront1 /org/deepin/dde/ShutdownFront1 org.deepin.dde.ShutdownFront1.Show");
 }
 
 const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
@@ -186,7 +186,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     items.push_back(logout);
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
-        // 读取com.deepin.dde.session-shell切换用户配置项
+        // com.deepin.dde.session-shell切换用户配置项
         enum SwitchUserConfig {
             AlwaysShow = 0,
             OnDemand,
@@ -236,7 +236,6 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         QCoreApplication::processEvents(QEventLoop::AllEvents, 200);
 
     if (menuId == "power") {
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -244,18 +243,9 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
         .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("power"))
-        .call();
-#endif
     } else if (menuId == "Lock") {
         if (QFile::exists(ICBC_CONF_FILE)) {
-            QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
+            QDBusMessage send = QDBusMessage::createMethodCall("org.deepin.dde.LockFront1", "/org/deepin/dde/LockFront1", "org.deepin.dde.LockFront1", "SwitchTTYAndShow");
             QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus", "unix:path=/run/user/1000/bus");
             QDBusMessage reply = conn.call(send);
 #ifdef QT_DEBUG
@@ -264,17 +254,17 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
         } else {
             DDBusSender()
-            .service("com.deepin.dde.lockFront")
-            .interface("com.deepin.dde.lockFront")
-            .path("/com/deepin/dde/lockFront")
+            .service("org.deepin.dde.LockFront1")
+            .interface("org.deepin.dde.LockFront1")
+            .path("/org/deepin/dde/LockFront1")
             .method(QString("Show"))
             .call();
         }
     } else
         DDBusSender()
-        .service("com.deepin.dde.shutdownFront")
-        .interface("com.deepin.dde.shutdownFront")
-        .path("/com/deepin/dde/shutdownFront")
+        .service("org.deepin.dde.ShutdownFront1")
+        .interface("org.deepin.dde.ShutdownFront1")
+        .path("/org/deepin/dde/ShutdownFront1")
         .method(QString(menuId))
         .call();
 }

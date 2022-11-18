@@ -59,8 +59,8 @@ SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     , m_sliderContainer(new SliderContainer(m_sliderParent))
     , m_descriptionLabel(new QLabel(tr("Output Device"), this))
     , m_deviceList(new DListView(this))
-    , m_soundInter(new DBusAudio("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", QDBusConnection::sessionBus(), this))
-    , m_sinkInter(new DBusSink("org.deepin.daemon.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this))
+    , m_soundInter(new DBusAudio("org.deepin.dde.Audio1", "/org/deepin/dde/Audio1", QDBusConnection::sessionBus(), this))
+    , m_sinkInter(new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this))
     , m_model(new QStandardItemModel(this))
     , m_delegate(new SettingDelegate(m_deviceList))
 {
@@ -456,7 +456,7 @@ void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
 void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
 {
     delete m_sinkInter;
-    m_sinkInter = new DBusSink("org.deepin.daemon.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this);
+    m_sinkInter = new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this);
     connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
     connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
 

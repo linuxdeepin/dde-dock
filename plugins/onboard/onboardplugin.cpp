@@ -22,8 +22,8 @@
 #include "onboardplugin.h"
 #include "../widgets/tipswidget.h"
 
-#include "org_deepin_dde_daemon_dock.h"
-#include "org_deepin_dde_daemon_dock_entry.h"
+#include "org_deepin_dde_daemon_dock1.h"
+#include "org_deepin_dde_daemon_dock1_entry.h"
 
 #include <DGuiApplicationHelper>
 

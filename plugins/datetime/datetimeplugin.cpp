@@ -42,7 +42,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     , m_pluginLoaded(false)
 {
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
-    sessionBus.connect("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
+    sessionBus.connect("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
 
 PluginsItemInterface::PluginSizePolicy DatetimePlugin::pluginSizePolicy() const
@@ -149,7 +149,7 @@ const QString DatetimePlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return "dbus-send --print-reply --dest=org.deepin.dde.Widgets / org.deepin.dde.Widgets.Toggle";
+    return "dbus-send --print-reply --dest=org.deepin.dde.Widgets1 /org/deepin/dde/Widgets1 org.deepin.dde.Widgets1.Toggle";
 }
 
 const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
@@ -190,7 +190,6 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(checked)
 
     if (menuId == "open") {
-#ifdef USE_AM
         DDBusSender()
                 .service("org.deepin.dde.ControlCenter1")
                 .interface("org.deepin.dde.ControlCenter1")
@@ -198,15 +197,6 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
                 .method(QString("ShowPage"))
                 .arg(QString("datetime"))
                 .call();
-#else
-        DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
-                .method(QString("ShowPage"))
-                .arg(QString("datetime"))
-                .call();
-#endif
     } else {
         const bool value = timedateInterface()->property(TIME_FORMAT_KEY).toBool();
         timedateInterface()->setProperty(TIME_FORMAT_KEY, !value);
@@ -268,11 +258,11 @@ void DatetimePlugin::propertiesChanged()
 QDBusInterface* DatetimePlugin::timedateInterface()
 {
     if (!m_interface) {
-        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.deepin.daemon.Timedate1")) {
-            m_interface = new QDBusInterface("org.deepin.daemon.Timedate1", "/org/deepin/daemon/Timedate1", "org.deepin.daemon.Timedate1", QDBusConnection::sessionBus(), this);
+        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.deepin.dde.Timedate1")) {
+            m_interface = new QDBusInterface("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", "org.deepin.dde.Timedate1", QDBusConnection::sessionBus(), this);
         } else {
-            const QString path = QString("/org/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
-            QDBusInterface * systemInterface = new QDBusInterface("org.deepin.daemon.Accounts1", path, "org.deepin.daemon.Accounts.User",
+            const QString path = QString("/org/deepin/dde/Accounts1/User%1").arg(QString::number(getuid()));
+            QDBusInterface * systemInterface = new QDBusInterface("org.deepin.dde.Accounts1", path, "org.deepin.dde.Accounts1.User",
                                                                   QDBusConnection::systemBus(), this);
             return systemInterface;
         }

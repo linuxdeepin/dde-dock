@@ -241,8 +241,8 @@ int main(int argc, char *argv[])
     // 注册任务栏的DBus服务
     DBusDockAdaptors adaptor(&windowManager);
 
-    QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
-    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &windowManager);
+    QDBusConnection::sessionBus().registerService("org.deepin.dde.Dock1");
+    QDBusConnection::sessionBus().registerObject("/org/deepin/dde/Dock1", "org.deepin.dde.Dock1", &windowManager);
 
     // 当任务栏以-r参数启动时，设置CANSHOW未false，之后调用launch不显示任务栏
     qApp->setProperty("CANSHOW", !parser.isSet(runOption));

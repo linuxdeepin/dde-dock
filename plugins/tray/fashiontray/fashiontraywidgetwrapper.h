@@ -24,13 +24,13 @@
 
 #include "../abstracttraywidget.h"
 
-#include "org_deepin_daemon_gesture.h"
+#include "org_deepin_dde_gesture1.h"
 
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPointer>
 
-using Gesture = com::deepin::daemon::Gesture1;
+using Gesture = org::deepin::dde::Gesture1;
 
 #define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 

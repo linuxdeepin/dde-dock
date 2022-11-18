@@ -1,4 +1,4 @@
-  <interface name="org.deepin.daemon.Audio1.Sink">
+  <interface name="org.deepin.dde.Audio1.Sink">
     <method name="GetMeter">
       <arg type="o" direction="out"/>
     </method>

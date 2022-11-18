@@ -1,4 +1,4 @@
-<interface name="org.deepin.daemon.AirplaneMode1">
+<interface name="org.deepin.dde.AirplaneMode1">
     <method name="DumpState" />
     <method name="Enable">
         <arg name="enabled" type="b" direction="in"></arg>

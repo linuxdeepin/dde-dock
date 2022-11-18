@@ -1,4 +1,4 @@
-<interface name="org.deepin.system.Power1">
+<interface name="org.deepin.dde.Power1">
   <method name="GetBatteries">
     <arg name="batteries" type="ao" direction="out"/>
   </method>

@@ -26,7 +26,6 @@
 #include "dockitem.h"
 #include "previewcontainer.h"
 #include "appdrag.h"
-#include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
 #include "dbusutil.h"
 
@@ -59,9 +58,7 @@ public:
     void startSplit(const QRect &rect);
     bool supportSplitWindow();
     bool splitWindowOnScreen(ScreenSpliter::SplitDirection direction);
-#ifdef USE_AM
     int mode() const;
-#endif
     DockEntryInter *itemEntryInter() const;
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
@@ -80,11 +77,7 @@ signals:
 
     void requestUpdateEntryGeometries() const;
     void windowCountChanged() const;
-#ifdef USE_AM
     void modeChanged(int) const;
-#else
-    void isDockChanged(bool) const;
-#endif
 
 private:
     void moveEvent(QMoveEvent *e) override;

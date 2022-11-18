@@ -36,7 +36,7 @@ class DBusMenuImporter;
 namespace Dock {
 class TipsWidget;
 }
-//using namespace com::deepin::dde;
+
 using namespace org::kde;
 
 /**

@@ -67,10 +67,8 @@ private Q_SLOTS:
     void onPluginItemRemoved(PluginsItemInterface *itemInter);
     void onPluginUpdate(PluginsItemInterface *itemInter);
 
-#ifdef USE_AM
     void onAppWindowCountChanged();
     void onShowMultiWindowChanged();
-#endif
 
 private:
     explicit DockItemManager(QObject *parent = nullptr);
@@ -82,11 +80,9 @@ private:
     void manageItem(DockItem *item);
     void pluginItemInserted(PluginsItem *item);
 
-#ifdef USE_AM
     void updateMultiItems(AppItem *appItem, bool emitSignal = false);
     bool multiWindowExist(quint32 winId) const;
     bool needRemoveMultiWindow(AppMultiItem *multiItem) const;
-#endif
 
 private:
     DockInter *m_appInter;

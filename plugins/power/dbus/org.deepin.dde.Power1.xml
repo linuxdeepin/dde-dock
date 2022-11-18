@@ -1,4 +1,4 @@
-     <interface name="com.deepin.daemon.Power">
+     <interface name="org.deepin.dde.Power1">
           <!--method name="Reset"></method>
           <property name="LinePowerScreenBlackDelay" type="i" access="readwrite"></property>
           <property name="LinePowerSleepDelay" type="i" access="readwrite"></property>

@@ -24,9 +24,6 @@
 /*
  * Implementation of interface class __Entry
  */
-
-#ifdef USE_AM
-
 void registerWindowListMetaType()
 {
     qRegisterMetaType<WindowList>();
@@ -296,5 +293,3 @@ void Dock_Entry::onPendingCallFinished(QDBusPendingCallWatcher *w)
     const auto args = d_ptr->m_waittingCalls.take(callName);
     CallQueued(callName, args);
 }
-
-#endif

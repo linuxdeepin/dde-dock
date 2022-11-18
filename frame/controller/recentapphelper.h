@@ -66,27 +66,16 @@ private:
     void removeRecentAreaItem(DockItem *wdg);
     void removeAppAreaItem(DockItem *wdg);
 
-#ifndef USE_AM
-    QList<DockItem *> dockItemToAppArea() const;
-    void resetDockItems();
-    int getDockItemIndex(DockItem *dockItem, bool isRecent) const;
-#endif
     int getEntryIndex(DockItem *dockItem, QWidget *widget) const;
 
     QList<AppItem *> appItems(QWidget *widget) const;
 
 private Q_SLOTS:
-#ifdef USE_AM
     void onModeChanged(int mode);
-#else
-    void onItemChanged();
-#endif
+
 private:
     QWidget *m_appWidget;
     QWidget *m_recentWidget;
-#ifndef USE_AM
-    QList<DockItem *> m_sequentDockItems;
-#endif
     Dock::DisplayMode m_displayMode;
     DockInter *m_dockInter;
 };

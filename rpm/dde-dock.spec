@@ -88,7 +88,7 @@ export PATH=%{_qt5_bindir}:$PATH
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
 %{_datarootdir}/glib-2.0/schemas/com.deepin.dde.dock.module.gschema.xml
-%{_datarootdir}/polkit-1/actions/com.deepin.dde.dock.overlay.policy
+%{_datarootdir}/polkit-1/actions/org.deepin.dde.dock.overlay.policy
 
 %files devel
 %{_includedir}/%{name}/

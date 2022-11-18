@@ -1,4 +1,4 @@
-  <interface name="org.deepin.daemon.Audio1">
+  <interface name="org.deepin.dde.Audio1">
     <method name="Reset"/>
     <method name="SetDefaultSink">
       <arg type="s" direction="in"/>

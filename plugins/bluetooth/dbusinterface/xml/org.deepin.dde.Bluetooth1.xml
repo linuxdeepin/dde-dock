@@ -1,4 +1,4 @@
-<interface name="org.deepin.daemon.Bluetooth1">
+<interface name="org.deepin.dde.Bluetooth1">
     <method name="CancelTransferSession">
         <arg name="sessionPath" type="o" direction="in"></arg>
     </method>

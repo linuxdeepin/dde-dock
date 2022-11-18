@@ -1,4 +1,4 @@
-<interface name="org.deepin.daemon.Timedate1">
+<interface name="org.deepin.dde.Timedate1">
     <signal name="TimeUpdate">
     </signal>
      <method name="AddUserTimezone">

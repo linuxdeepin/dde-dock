@@ -48,7 +48,7 @@ void Test_AppItem::SetUp()
     activeSettings = Utils::ModuleSettingsPtr("activeapp");
     dockedSettings = Utils::ModuleSettingsPtr("dockapp");
 
-    appItem = new AppItem(appSettings, activeSettings, dockedSettings, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
+    appItem = new AppItem(appSettings, activeSettings, dockedSettings, QDBusObjectPath("/org/deepin/dde/daemon/Dock1/entries/e0T6045b766"));
 }
 
 void Test_AppItem::TearDown()

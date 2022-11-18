@@ -21,9 +21,8 @@
 
 #include "dockinterface.h"
 
-#include "com_deepin_dde_daemon_dock.h"
+#include "org_deepin_dde_daemon_dock1.h"
 
-#ifdef USE_AM
 // 因为 types/dockrect.h 文件中定义了DockRect类，而在此处也定义了DockRect，
 // 所以在此处先加上DOCKRECT_H宏(types/dockrect.h文件中定义的宏)来禁止包含types/dockrect.h头文件
 // 否则会出现重复定义的错误
@@ -61,7 +60,7 @@ public:
 
 // 窗管中提供的ActiveWindow接口，MinimizeWindow目前还在开发过程中，因此，关于这两个接口暂时使用v23的后端接口
 // 等窗管完成了这几个接口后，删除此处v20的接口，改成v23提供的新接口即可
-using DockInter = com::deepin::dde::daemon::Dock;
+using DockInter = org::deepin::dde::daemon::Dock1;
 /**
  * @brief 任务栏的部分DBUS接口是通过窗管获取的，由于AM后端并未提供窗管的相关接口，因此，
  * 此处先将窗管的接口集成进来，作为私有类，只提供任务栏接口使用
@@ -106,7 +105,7 @@ private:
 
 WM::WM(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent)
     : QDBusAbstractInterface(service, path, staticInterfaceName(), connection, parent)
-    , m_dockInter(new DockInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_dockInter(new DockInter("org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", QDBusConnection::sessionBus(), this))
 {
 }
 
@@ -338,5 +337,3 @@ void Dde_Dock::onPendingCallFinished(QDBusPendingCallWatcher *w)
     const auto args = d_ptr->m_waittingCalls.take(callName);
     CallQueued(callName, args);
 }
-
-#endif

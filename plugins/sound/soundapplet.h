@@ -24,8 +24,8 @@
 
 #include "componments/volumeslider.h"
 
-#include "org_deepin_daemon_audio.h"
-#include "org_deepin_daemon_audio_sink.h"
+#include "org_deepin_dde_audio1.h"
+#include "org_deepin_dde_audio1_sink.h"
 
 #include <DIconButton>
 #include <DListView>
@@ -38,8 +38,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-using DBusAudio = org::deepin::daemon::Audio1;
-using DBusSink = org::deepin::daemon::audio1::Sink;
+using DBusAudio = org::deepin::dde::Audio1;
+using DBusSink = org::deepin::dde::audio1::Sink;
 
 class HorizontalSeperator;
 class QGSettings;

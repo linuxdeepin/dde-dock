@@ -70,11 +70,7 @@ enum DisplayMode {
 enum HideMode {
     KeepShowing     = 0,
     KeepHidden      = 1,
-#ifdef USE_AM
-    SmartHide       = 2,
-#else
-    SmartHide       = 3,
-#endif
+    SmartHide       = 2
 };
 
 #define PROP_POSITION       "Position"

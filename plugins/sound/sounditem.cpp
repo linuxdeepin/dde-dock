@@ -128,7 +128,6 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
     if (menuId == MUTE)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINGS)
-#ifdef USE_AM
         DDBusSender()
         .service("org.deepin.dde.ControlCenter1")
         .interface("org.deepin.dde.ControlCenter1")
@@ -136,15 +135,6 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
         .method(QString("ShowPage"))
         .arg(QString("sound"))
         .call();
-#else
-        DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowPage"))
-        .arg(QString("sound"))
-        .call();
-#endif
 }
 
 void SoundItem::resizeEvent(QResizeEvent *e)

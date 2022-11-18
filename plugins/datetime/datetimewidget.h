@@ -22,11 +22,11 @@
 #ifndef DATETIMEWIDGET_H
 #define DATETIMEWIDGET_H
 
-#include "org_deepin_daemon_timedate.h"
+#include "org_deepin_dde_timedate1.h"
 
 #include <QWidget>
 
-using Timedate = org::deepin::daemon::Timedate1;
+using Timedate = org::deepin::dde::Timedate1;
 
 class DatetimeWidget : public QWidget
 {

@@ -115,7 +115,7 @@ void WindowManager::sendNotifications()
     QStringList actionButton;
     actionButton << "reload" << tr("Exit Safe Mode");
     QVariantMap hints;
-    hints["x-deepin-action-reload"] = QString("dbus-send,--session,--dest=com.deepin.dde.Dock,--print-reply,/com/deepin/dde/Dock,com.deepin.dde.Dock.ReloadPlugins");
+    hints["x-deepin-action-reload"] = QString("dbus-send,--session,--dest=org.deepin.dde.Dock1,--print-reply,/org/deepin/dde/Dock1,org.deepin.dde.Dock1.ReloadPlugins");
     // 在进入安全模式时，执行此DBUS耗时25S左右，导致任务栏显示阻塞，所以使用线程调用
     QtConcurrent::run(QThreadPool::globalInstance(), [ = ] {
         DDBusSender()
@@ -655,7 +655,7 @@ void WindowManager::onChangeDockPosition(QString fromScreen, QString toScreen, c
 void WindowManager::onRequestUpdateFrontendGeometry()
 {
     QRect rect = getDockGeometry(true);
-    // 向com.deepin.dde.daemon.Dock的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
+    // org.deepin.dde.daemon.Dock1的SetFrontendWindowRect接口设置区域时,此区域的高度或宽度不能为0,否则会导致其HideState属性循环切换,造成任务栏循环显示或隐藏
     if (rect.width() == 0 || rect.height() == 0)
         return;
 

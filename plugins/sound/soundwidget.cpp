@@ -45,9 +45,9 @@ DGUI_USE_NAMESPACE
 
 SoundWidget::SoundWidget(QWidget *parent)
     : QWidget(parent)
-    , m_dbusAudio(new DBusAudio("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", QDBusConnection::sessionBus(), this))
+    , m_dbusAudio(new DBusAudio("org.deepin.dde.Audio1", "/org/deepin/dde/Audio1", QDBusConnection::sessionBus(), this))
     , m_sliderContainer(new SliderContainer(this))
-    , m_defaultSink(new DBusSink("org.deepin.daemon.Audio1", m_dbusAudio->defaultSink().path(), QDBusConnection::sessionBus(), this))
+    , m_defaultSink(new DBusSink("org.deepin.dde.Audio1", m_dbusAudio->defaultSink().path(), QDBusConnection::sessionBus(), this))
 {
     initUi();
     initConnection();
@@ -88,7 +88,7 @@ void SoundWidget::initConnection()
         if (m_defaultSink)
             delete m_defaultSink;
 
-        m_defaultSink = new DBusSink("org.deepin.daemon.Audio1", value.path(), QDBusConnection::sessionBus(), this);
+        m_defaultSink = new DBusSink("org.deepin.dde.Audio1", value.path(), QDBusConnection::sessionBus(), this);
         connect(m_defaultSink, &DBusSink::VolumeChanged, this, [ this ](double value) { m_sliderContainer->updateSliderValue(std::round(value * 100.00)); });
         connect(m_defaultSink, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_defaultSink->volume() * 100); });
 
