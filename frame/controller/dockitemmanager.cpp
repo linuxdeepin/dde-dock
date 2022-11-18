@@ -347,6 +347,8 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 
     if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
         item->setVisible(false);
+    else
+        item->setVisible(true);
 
     emit itemInserted(insertIndex - firstPluginPosition, item);
 }
@@ -358,6 +360,7 @@ void DockItemManager::onPluginItemRemoved(PluginsItemInterface *itemInter)
 
     PluginsItem *item = QuickSettingController::instance()->pluginItemWidget(itemInter);
     item->hidePopup();
+    item->hide();
 
     emit itemRemoved(item);
 
