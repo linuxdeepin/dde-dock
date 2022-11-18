@@ -22,9 +22,10 @@
 #ifndef DBUSDOCKADAPTORS_H
 #define DBUSDOCKADAPTORS_H
 
-#include <QtDBus/QtDBus>
-
 #include "mainwindow.h"
+
+#include <QtDBus/QtDBus>
+#include <QDBusArgument>
 
 /*
  * Adaptor class for interface com.deepin.dde.Dock
@@ -32,6 +33,28 @@
 class QGSettings;
 class WindowManager;
 class PluginsItemInterface;
+
+struct DockItemInfo
+{
+    QString name;
+    QString displayName;
+    QString itemKey;
+    QString settingKey;
+    QByteArray icon;
+    bool visible;
+};
+
+QDebug operator<<(QDebug argument, const DockItemInfo &info);
+QDBusArgument &operator<<(QDBusArgument &arg, const DockItemInfo &info);
+const QDBusArgument &operator>>(const QDBusArgument &arg, DockItemInfo &info);
+
+Q_DECLARE_METATYPE(DockItemInfo)
+
+typedef QList<DockItemInfo> DockItemInfos;
+
+Q_DECLARE_METATYPE(DockItemInfos)
+
+void registerPluginInfoMetaType();
 
 class DBusDockAdaptors: public QDBusAbstractAdaptor
 {
@@ -45,6 +68,10 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "    <method name=\"ReloadPlugins\"/>"
                                        "    <method name=\"GetLoadedPlugins\">"
                                        "        <arg name=\"list\" type=\"as\" direction=\"out\"/>"
+                                       "    </method>"
+                                       "    <method name=\"plugins\">>"
+                                       "        <arg type=\"a(sssssb)\" direction=\"out\"/>"
+                                       "        <annotation value=\"PluginInfos\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
                                        "    </method>"
                                        "    <method name=\"resizeDock\">"
                                        "        <arg name=\"offset\" type=\"i\" direction=\"in\"/>"
@@ -60,6 +87,10 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "    </method>"
                                        "    <method name=\"setPluginVisible\">"
                                        "        <arg name=\"pluginName\" type=\"s\" direction=\"in\"/>"
+                                       "        <arg name=\"visible\" type=\"b\" direction=\"in\"/>"
+                                       "    </method>"
+                                       "    <method name=\"setItemOnDock\">"
+                                       "        <arg name=\"itemKey\" type=\"s\" direction=\"in\"/>"
                                        "        <arg name=\"visible\" type=\"b\" direction=\"in\"/>"
                                        "    </method>"
                                        "    <signal name=\"pluginVisibleChanged\">"
@@ -80,6 +111,7 @@ public Q_SLOTS: // METHODS
     void ReloadPlugins();
 
     QStringList GetLoadedPlugins();
+    DockItemInfos plugins();
 
     void resizeDock(int offset, bool dragging);
 
@@ -87,6 +119,7 @@ public Q_SLOTS: // METHODS
 
     bool getPluginVisible(const QString &pluginName);
     void setPluginVisible(const QString &pluginName, bool visible);
+    void setItemOnDock(const QString settingKey, const QString &itemKey, bool visible);
 
 public: // PROPERTIES
     QRect geometry() const;
@@ -101,7 +134,8 @@ signals:
 
 private:
     bool isPluginValid(const QString &name);
-    QList<PluginsItemInterface *> plugins() const;
+    QList<PluginsItemInterface *> localPlugins() const;
+    QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize) const;
 
 private:
     QGSettings *m_gsettings;

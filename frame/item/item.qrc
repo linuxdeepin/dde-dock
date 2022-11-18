@@ -89,5 +89,6 @@
         <file>resources/ICON_Device_Headphone.svg</file>
         <file>resources/ICON_Device_Laptop_dark.svg</file>
         <file>resources/ICON_Device_Laptop.svg</file>
+        <file>resources/dcc_dock_plug_in.svg</file>
     </qresource>
 </RCC>

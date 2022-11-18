@@ -29,9 +29,10 @@
 
 // 任务栏的部件位置
 enum class DockPart {
-    QuickShow = 0,   // 快捷插件显示区域
-    QuickPanel,      // 快捷面板区域
-    SystemPanel      // 系统插件显示区域
+    QuickShow = 0,    // 快捷插件显示区域
+    QuickPanel,       // 快捷面板区域
+    SystemPanel,      // 系统插件显示区域
+    DCCSetting        // 显示在控制中心个性化设置的图标
 };
 
 // 快捷面板详情页面的itemWidget对应的itemKey

@@ -162,7 +162,8 @@ QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
         PluginAttribute pluginAttr = pluginAttribute(plugin);
         if (pluginAttr == QuickSettingController::PluginAttribute::Quick
                 || pluginAttr == QuickSettingController::PluginAttribute::System
-                || pluginAttr == QuickSettingController::PluginAttribute::Tool)
+                || pluginAttr == QuickSettingController::PluginAttribute::Tool
+                || pluginAttr == QuickSettingController::PluginAttribute::Tray)
             settingPlugins << plugin;
     }
 

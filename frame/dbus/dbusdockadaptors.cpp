@@ -26,10 +26,46 @@
 #include "proxyplugincontroller.h"
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
+#include "settingconfig.h"
 
 #include <QScreen>
 #include <QDebug>
 #include <QGSettings>
+#include <QDBusMetaType>
+
+const QSize defaultIconSize = QSize(20, 20);
+
+QDebug operator<<(QDebug argument, const DockItemInfo &info)
+{
+    argument << "name:" << info.name << ", displayName:" << info.displayName
+             << "itemKey:" << info.itemKey << "SettingKey:" << info.settingKey
+             << "icon:" << info.icon << "visible:" << info.visible;
+    return argument;
+}
+
+QDBusArgument &operator<<(QDBusArgument &arg, const DockItemInfo &info)
+{
+    arg.beginStructure();
+    arg << info.name << info.displayName << info.itemKey << info.settingKey << info.icon << info.visible;
+    arg.endStructure();
+    return arg;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &arg, DockItemInfo &info)
+{
+    arg.beginStructure();
+    arg >> info.name >> info.displayName >> info.itemKey >> info.settingKey >> info.icon >> info.visible;
+    arg.endStructure();
+    return arg;
+}
+
+void registerPluginInfoMetaType()
+{
+    qRegisterMetaType<DockItemInfo>("DockItemInfo");
+    qDBusRegisterMetaType<DockItemInfo>();
+    qRegisterMetaType<DockItemInfos>("DockItemInfos");
+    qDBusRegisterMetaType<DockItemInfos>();
+}
 
 DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
     : QDBusAbstractAdaptor(parent)
@@ -48,7 +84,7 @@ DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
         });
     }
 
-    QList<PluginsItemInterface *> allPlugin = plugins();
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, this, [ = ] (const int index, DockItem *item) {
         Q_UNUSED(index);
         if (item->itemType() == DockItem::Plugins
@@ -73,6 +109,8 @@ DBusDockAdaptors::DBusDockAdaptors(WindowManager* parent)
             }
         }
     });
+
+    registerPluginInfoMetaType();
 }
 
 DBusDockAdaptors::~DBusDockAdaptors()
@@ -101,7 +139,7 @@ void DBusDockAdaptors::ReloadPlugins()
 
 QStringList DBusDockAdaptors::GetLoadedPlugins()
 {
-    QList<PluginsItemInterface *> allPlugin = plugins();
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
     QStringList nameList;
     QMap<QString, QString> map;
     for (auto plugin : allPlugin) {
@@ -128,6 +166,34 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
     return newList;
 }
 
+DockItemInfos DBusDockAdaptors::plugins()
+{
+    // 获取本地加载的插件
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
+    DockItemInfos pluginInfos;
+    QStringList quickSettingKeys = SETTINGCONFIG->value("Dock_Quick_Plugin_Name").toStringList();
+    for (PluginsItemInterface *plugin : allPlugin) {
+        DockItemInfo info;
+        info.name = plugin->pluginName();
+        info.displayName = plugin->pluginDisplayName();
+        info.itemKey = plugin->pluginName();
+        info.settingKey = "Dock_Quick_Plugin_Name";
+        info.visible = quickSettingKeys.contains(info.itemKey);
+        QSize pixmapSize;
+        QIcon icon = getSettingIcon(plugin, pixmapSize);
+        if (!icon.isNull()) {
+            QBuffer buffer(&info.icon);
+            if (buffer.open(QIODevice::WriteOnly)) {
+                QPixmap pixmap = icon.pixmap(pixmapSize);
+                pixmap.save(&buffer, "bmp");
+            }
+        }
+        pluginInfos << info;
+    }
+
+    return pluginInfos;
+}
+
 void DBusDockAdaptors::resizeDock(int offset, bool dragging)
 {
     m_windowManager->resizeDock(offset, dragging);
@@ -136,7 +202,7 @@ void DBusDockAdaptors::resizeDock(int offset, bool dragging)
 // 返回每个插件的识别Key(所以此值应始终不变)，供个性化插件根据key去匹配每个插件对应的图标
 QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
 {
-    QList<PluginsItemInterface *> allPlugin = plugins();
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
     for (auto plugin : allPlugin) {
         if (plugin->pluginDisplayName() == pluginName)
             return plugin->pluginName();
@@ -147,7 +213,7 @@ QString DBusDockAdaptors::getPluginKey(const QString &pluginName)
 
 bool DBusDockAdaptors::getPluginVisible(const QString &pluginName)
 {
-    QList<PluginsItemInterface *> allPlugin = plugins();
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
     for (auto *p : allPlugin) {
         if (!p->pluginIsAllowDisable())
             continue;
@@ -169,7 +235,7 @@ bool DBusDockAdaptors::getPluginVisible(const QString &pluginName)
 
 void DBusDockAdaptors::setPluginVisible(const QString &pluginName, bool visible)
 {
-    QList<PluginsItemInterface *> allPlugin = plugins();
+    QList<PluginsItemInterface *> allPlugin = localPlugins();
     for (auto *p : allPlugin) {
         if (!p->pluginIsAllowDisable())
             continue;
@@ -190,6 +256,17 @@ void DBusDockAdaptors::setPluginVisible(const QString &pluginName, bool visible)
     }
 
     qInfo() << "Unable to set information for this plugin";
+}
+
+void DBusDockAdaptors::setItemOnDock(const QString settingKey, const QString &itemKey, bool visible)
+{
+    QStringList settings = SETTINGCONFIG->value(settingKey).toStringList();
+    if (visible && !settings.contains(itemKey))
+        settings << itemKey;
+    else if (!visible && settings.contains(itemKey))
+        settings.removeOne(itemKey);
+
+    SETTINGCONFIG->setValue(settingKey, settings);
 }
 
 QRect DBusDockAdaptors::geometry() const
@@ -229,7 +306,56 @@ bool DBusDockAdaptors::isPluginValid(const QString &name)
     return true;
 }
 
-QList<PluginsItemInterface *> DBusDockAdaptors::plugins() const
+QList<PluginsItemInterface *> DBusDockAdaptors::localPlugins() const
 {
     return QuickSettingController::instance()->pluginInSettings();
+}
+
+QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize) const
+{
+    auto iconSize = [](const QIcon &icon) {
+        QList<QSize> iconSizes = icon.availableSizes();
+        if (iconSizes.size() > 0)
+            return iconSizes[0];
+
+        return defaultIconSize;
+    };
+    // 先获取控制中心的设置图标
+    QIcon icon = plugin->icon(DockPart::DCCSetting);
+    if (!icon.isNull()) {
+        pixmapSize = iconSize(icon);
+        return icon;
+    }
+
+    // 如果插件中没有设置图标，则根据插件的类型，获取其他的图标
+    QuickSettingController::PluginAttribute pluginAttr = QuickSettingController::instance()->pluginAttribute(plugin);
+    switch(pluginAttr) {
+    case QuickSettingController::PluginAttribute::System: {
+        icon = plugin->icon(DockPart::SystemPanel);
+        pixmapSize = defaultIconSize;
+        QList<QSize> iconSizes = icon.availableSizes();
+        if (iconSizes.size() > 0)
+            pixmapSize = iconSizes[0];
+        break;
+    }
+    case QuickSettingController::PluginAttribute::Quick: {
+        icon = plugin->icon(DockPart::QuickShow);
+        if (icon.isNull())
+            icon = plugin->icon(DockPart::QuickPanel);
+        pixmapSize = defaultIconSize;
+        QList<QSize> iconSizes = icon.availableSizes();
+        if (iconSizes.size() > 0)
+            pixmapSize = iconSizes[0];
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (icon.isNull()) {
+        icon = QIcon(":/icons/resources/dcc_dock_plug_in.svg");
+        pixmapSize = QSize(20, 20);
+    }
+
+    return icon;
 }
