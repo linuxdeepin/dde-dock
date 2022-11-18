@@ -122,6 +122,7 @@ private:
     Dock::Position m_position;
     DockPopupWindow *m_popupWindow;
     QMenu *m_contextMenu;
+    QWidget *m_tipParent;
 };
 
 #endif // QUICKPLUGINWINDOW_H

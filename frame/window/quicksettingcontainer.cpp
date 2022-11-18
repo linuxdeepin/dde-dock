@@ -157,8 +157,7 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::Resize: {
-        if (watched == m_childPage)
-            onResizeView();
+        onResizeView();
         break;
     }
     case QEvent::MouseButtonPress: {
@@ -221,19 +220,23 @@ void QuickSettingContainer::appendPlugin(PluginsItemInterface *itemInter, bool n
 
 void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
 {
-    for (QuickSettingItem *item : m_quickSettings) {
-        if (item->pluginItem() != itemInter)
-            continue;
+    QList<QuickSettingItem *>::Iterator removeItemIter = std::find_if(m_quickSettings.begin(), m_quickSettings.end(), [ = ](QuickSettingItem *item)->bool {
+        return item->pluginItem() == itemInter;
+    });
 
-        if (item->type() == QuickSettingItem::QuickSettingType::Full)
-            m_componentWidget->layout()->removeWidget(item);
-        else
-            m_pluginLayout->removeWidget(item);
+    QuickSettingItem *removeItem = *removeItemIter;
+    if (!removeItem)
+        return;
 
-        m_quickSettings.removeOne(item);
-        break;
-    }
+    if (removeItem->type() == QuickSettingItem::QuickSettingType::Full)
+        m_componentWidget->layout()->removeWidget(removeItem);
+    else
+        m_pluginLayout->removeWidget(removeItem);
 
+    m_quickSettings.removeOne(removeItem);
+    removeItem->deleteLater();
+
+    updateItemLayout();
     onResizeView();
 }
 

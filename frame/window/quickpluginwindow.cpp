@@ -512,6 +512,7 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject
     , m_position(Dock::Position::Bottom)
     , m_popupWindow(new DockPopupWindow)
     , m_contextMenu(new QMenu(this))
+    , m_tipParent(nullptr)
 {
     m_popupWindow->setShadowBlurRadius(20);
     m_popupWindow->setRadius(6);
@@ -531,6 +532,10 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject
 
 QuickDockItem::~QuickDockItem()
 {
+    QWidget *tipWidget = m_pluginItem->itemTipsWidget(m_itemKey);
+    if (tipWidget && tipWidget->parentWidget() == m_popupWindow)
+        tipWidget->setParent(m_tipParent);
+
     m_popupWindow->deleteLater();
 }
 
@@ -603,6 +608,11 @@ void QuickDockItem::enterEvent(QEvent *event)
     QWidget *tipWidget = m_pluginItem->itemTipsWidget(m_itemKey);
     if (!tipWidget)
         return;
+
+    // 记录下toolTip的parent，因为在调用DockPopupWindow的时候会将DockPopupWindow设置为toolTip的parent,
+    // 在DockPopupWindow对象释放的时候, 会将toolTip也一起给释放
+    if (tipWidget->parentWidget() != m_popupWindow)
+        m_tipParent = tipWidget->parentWidget();
 
     switch (m_position) {
     case Top:

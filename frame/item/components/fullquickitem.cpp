@@ -27,6 +27,7 @@ FullQuickItem::FullQuickItem(PluginsItemInterface *const pluginInter, QWidget *p
     , m_effectWidget(new DBlurEffectWidget(this))
 {
     initUi();
+    QMetaObject::invokeMethod(this, &FullQuickItem::resizeSelf, Qt::QueuedConnection);
 }
 
 FullQuickItem::~FullQuickItem()
@@ -42,10 +43,9 @@ QuickSettingItem::QuickSettingType FullQuickItem::type() const
 
 bool FullQuickItem::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == m_centerWidget && event->type() == QEvent::Resize) {
-        m_effectWidget->setFixedHeight(m_centerWidget->height());
-        setFixedHeight(m_centerWidget->height());
-    }
+    if (obj == m_centerWidget && event->type() == QEvent::Resize)
+        resizeSelf();
+
     return QuickSettingItem::eventFilter(obj, event);
 }
 
@@ -73,4 +73,10 @@ void FullQuickItem::initUi()
     mainLayout->addWidget(m_effectWidget);
 
     m_centerWidget->installEventFilter(this);
+}
+
+void FullQuickItem::resizeSelf()
+{
+    m_effectWidget->setFixedHeight(m_centerWidget->height());
+    setFixedHeight(m_centerWidget->height());
 }

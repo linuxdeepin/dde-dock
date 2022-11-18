@@ -38,6 +38,7 @@ protected:
 
 private:
     void initUi();
+    void resizeSelf();
 
 private:
     QWidget *m_centerWidget;
