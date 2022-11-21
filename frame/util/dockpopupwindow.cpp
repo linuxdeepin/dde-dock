@@ -187,7 +187,7 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
     if (!m_enableMouseRelease)
         return;
 
-    QRect popupRect(pos(), size());
+    QRect popupRect(pos() * qApp->devicePixelRatio(), size() * qApp->devicePixelRatio()) ;
     if (popupRect.contains(x, y))
         return;
 
