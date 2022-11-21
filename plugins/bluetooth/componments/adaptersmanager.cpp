@@ -173,6 +173,7 @@ void AdaptersManager::onRemoveAdapter(const QString &json)
     Adapter *adapter = const_cast<Adapter *>(result);
     if (adapter) {
         m_adapters.remove(id);
+        m_adapterIds.removeOne(id);
         emit adapterDecreased(adapter);
         adapter->deleteLater();
     }
@@ -234,21 +235,17 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
             const QString replyStr = reply.value();
             QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
             adapter->initDevicesList(doc);
-
-            QString id = adapter->id();
-            if (!id.isEmpty()) {
-                if (!m_adapters.contains(id)) {
-                    m_adapters[id] = adapter;
-                } else if (!m_adapters[id]) {
-                    m_adapters[id] = adapter;
-                }
-            }
-
             emit this->adapterIncreased(adapter);
         } else {
             qWarning() << call.error().message();
         }
     });
+
+    QString id = adapter->id();
+    if (!id.isEmpty() && (!m_adapters.contains(id) || !m_adapters[id])) {
+        m_adapters[id] = adapter;
+        m_adapterIds << id;
+    }
 }
 
 void AdaptersManager::inflateAdapter(Adapter *adapter, const QJsonObject &adapterObj)
@@ -275,5 +272,9 @@ void AdaptersManager::adapterRefresh(const Adapter *adapter)
 
 QList<const Adapter *> AdaptersManager::adapters()
 {
-    return m_adapters.values();
+    QList<const Adapter *> allAdapter = m_adapters.values();
+    std::sort(allAdapter.begin(), allAdapter.end(), [ & ](const Adapter *adapter1, const Adapter *adapter2) {
+        return m_adapterIds.indexOf(adapter1->id()) < m_adapterIds.indexOf(adapter2->id());
+    });
+    return allAdapter;
 }

@@ -126,6 +126,7 @@ BluetoothApplet::BluetoothApplet(AdaptersManager *adapterManager, QWidget *paren
 {
     initUi();
     initConnect();
+    initAdapters();
 
     QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
     QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();
@@ -202,7 +203,8 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 
     m_adapterItems.insert(adapter->id(), adapterItem);
 
-    m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
+    // 将最新的设备插入到蓝牙设置前面
+    m_contentLayout->insertWidget(m_contentLayout->count() - 1, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
 }
@@ -319,6 +321,13 @@ void BluetoothApplet::updateIconTheme()
     scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);
     m_scroarea->setAutoFillBackground(true);
     m_scroarea->setPalette(scroareaBackgroud);
+}
+
+void BluetoothApplet::initAdapters()
+{
+    QList<const Adapter *> adapters = m_adaptersManager->adapters();
+    for (const Adapter *adapter : adapters)
+        onAdapterAdded(const_cast<Adapter *>(adapter));
 }
 
 void BluetoothApplet::setAirplaneModeEnabled(bool enable)

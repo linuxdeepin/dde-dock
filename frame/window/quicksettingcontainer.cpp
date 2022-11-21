@@ -227,9 +227,10 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
         return item->pluginItem() == itemInter;
     });
 
-    QuickSettingItem *removeItem = *removeItemIter;
-    if (!removeItem)
+    if (removeItemIter == m_quickSettings.end())
         return;
+
+    QuickSettingItem *removeItem = *removeItemIter;
 
     if (removeItem->type() == QuickSettingItem::QuickSettingType::Full)
         m_componentWidget->layout()->removeWidget(removeItem);

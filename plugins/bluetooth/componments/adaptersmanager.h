@@ -61,6 +61,7 @@ private:
 private:
     DBusBluetooth *m_bluetoothInter;
     QMap<QString, const Adapter *> m_adapters;
+    QStringList m_adapterIds;                   // 用于记录蓝牙适配器的排序
 };
 
 #endif // ADAPTERSMANAGER_H

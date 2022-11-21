@@ -115,6 +115,7 @@ private:
     // 更新蓝牙插件主界面大小
     void updateSize();
     void updateIconTheme();
+    void initAdapters();
 
 private:
     QScrollArea *m_scroarea;
