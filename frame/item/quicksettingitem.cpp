@@ -141,6 +141,10 @@ void QuickSettingItem::onRequestAppletShow(PluginsItemInterface *itemInter, cons
 
 QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter)
 {
+    // 如果显示在面板的图标或者Widget为空，则不让显示(例如电池插件)
+    if (pluginInter->icon(DockPart::QuickPanel).isNull() && !pluginInter->itemWidget(QUICK_ITEM_KEY))
+        return nullptr;
+
     const QJsonObject metaData = QuickSettingController::instance()->metaData(pluginInter);
     if (metaData.contains("primary") && metaData.value("primary").toBool())
         return new MultiQuickItem(pluginInter);

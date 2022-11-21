@@ -202,6 +202,9 @@ QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
 void QuickSettingContainer::appendPlugin(PluginsItemInterface *itemInter, bool needLayout)
 {
     QuickSettingItem *quickItem = QuickSettingFactory::createQuickWidget(itemInter);
+    if (!quickItem)
+        return;
+
     quickItem->setParent(m_pluginWidget);
     quickItem->setMouseTracking(true);
     quickItem->installEventFilter(this);
