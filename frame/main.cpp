@@ -195,6 +195,7 @@ int main(int argc, char *argv[])
     QAccessible::installFactory(accessibleFactory);
 
     // 设置日志输出到控制台以及文件
+    DLogManager::setLogFormat("%{time}{yyyyMMdd.HH:mm:ss.zzz}[%{type:1}][%{function:-35} %{line:-4}] %{message}\n");
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
