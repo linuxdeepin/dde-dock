@@ -336,6 +336,7 @@ void MainWindow::initConnections()
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::insertItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemRemoved, m_mainPanel, &MainPanelControl::removeItem, Qt::DirectConnection);
     connect(DockItemManager::instance(), &DockItemManager::itemUpdated, m_mainPanel, &MainPanelControl::itemUpdated, Qt::DirectConnection);
+    connect(DockItemManager::instance(), &DockItemManager::requestUpdateItemMinimizedGeometry, m_mainPanel, &MainPanelControl::setKwinAppItemMinimizedGeometry);
     connect(DockItemManager::instance(), &DockItemManager::trayVisableCountChanged, this, &MainWindow::resizeDockIcon, Qt::QueuedConnection);
     connect(DockItemManager::instance(), &DockItemManager::requestWindowAutoHide, m_menuWorker, &MenuWorker::setAutoHide);
     connect(m_mainPanel, &MainPanelControl::itemMoved, DockItemManager::instance(), &DockItemManager::itemMoved, Qt::DirectConnection);
