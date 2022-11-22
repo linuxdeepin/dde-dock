@@ -131,6 +131,10 @@ QColor QuickSettingItem::foregroundColor() const
 
 void QuickSettingItem::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
 {
+    // 只显示当前的插件的内容
+    if (itemInter != m_pluginInter)
+        return;
+
     // 显示弹出的内容
     QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
     if (!itemApplet)
