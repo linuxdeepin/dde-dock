@@ -37,6 +37,7 @@ public slots:
     void insertItem(const int index, DockItem *item);
     void removeItem(DockItem *item);
     void itemUpdated(DockItem *item);
+    void setKwinAppItemMinimizedGeometry(DockItem *item, const QRect);
 
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);

@@ -16,6 +16,7 @@
 #include <QObject>
 
 using DBusDock = com::deepin::dde::daemon::Dock;
+
 /**
  * @brief The DockItemManager class
  * 管理类，管理所有的应用数据，插件数据
@@ -39,8 +40,8 @@ signals:
     void trayVisableCountChanged(const int &count) const;
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
-
     void requestUpdateDockItem() const;
+    void requestUpdateItemMinimizedGeometry(AppItem *item, const QRect) const;
 
 public slots:
     void refreshItemsIcon();
