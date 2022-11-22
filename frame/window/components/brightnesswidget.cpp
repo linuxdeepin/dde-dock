@@ -73,6 +73,10 @@ void BrightnessWidget::initUi()
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
 
+    // 需求要求调节范围是10%-100%,且调节幅度为1%
+    m_sliderContainer->setRange(10, 100);
+    m_sliderContainer->setPageStep(1);
+
     SliderProxyStyle *style = new SliderProxyStyle;
     m_sliderContainer->setSliderProxyStyle(style);
 
