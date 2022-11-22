@@ -68,13 +68,10 @@ void DockTrayWindow::setPositon(const Dock::Position &position)
     m_quickIconWidget->setPositon(position);
     m_trayView->setPosition(position);
     m_delegate->setPositon(position);
-    if (m_model->hasExpand()) {
-        // 切换位置的时候，需要重新关闭编辑器，然后在model的flag函数中再打开，防止图标的方向没有切换过来
-        QModelIndex index = m_model->index(0, 0);
-        m_trayView->closePersistentEditor(index);
-    }
+    // 改变位置的时候，需要切换编辑器，以适应正确的位置
+    m_trayView->onUpdateEditorView();
     updateLayout(position);
-    onResetLayout();
+    onUpdateComponentSize();
 }
 
 void DockTrayWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
@@ -125,20 +122,10 @@ void DockTrayWindow::layoutWidget()
 
 void DockTrayWindow::resizeEvent(QResizeEvent *event)
 {
-    Q_EMIT requestUpdate();
     // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
     Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
     QWidget::resizeEvent(event);
-    switch (m_position) {
-    case Dock::Position::Left:
-    case Dock::Position::Right:
-        m_toolLineLabel->setFixedSize(width() * 0.6, SPLITERSIZE);
-        break;
-    case Dock::Position::Top:
-    case Dock::Position::Bottom:
-        m_toolLineLabel->setFixedSize(SPLITERSIZE, height() * 0.6);
-        break;
-    }
+    onUpdateComponentSize();
 }
 
 void DockTrayWindow::paintEvent(QPaintEvent *event)
@@ -310,16 +297,16 @@ void DockTrayWindow::initUi()
 
 void DockTrayWindow::initConnection()
 {
-    connect(m_systemPuginWidget, &SystemPluginWindow::itemChanged, this, &DockTrayWindow::onResetLayout);
-    connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &DockTrayWindow::onResetLayout);
-    connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onResetLayout);
+    connect(m_systemPuginWidget, &SystemPluginWindow::itemChanged, this, &DockTrayWindow::onUpdateComponentSize);
+    connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &DockTrayWindow::onUpdateComponentSize);
+    connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_quickIconWidget, &QuickPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
     connect(m_systemPuginWidget, &SystemPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
-    connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onResetLayout);
+    connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
-    connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onResetLayout);
+    connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_trayView, &TrayGridView::dragFinished, this, [ this ] {
         // 如果拖拽结束，则隐藏托盘
         Q_EMIT m_delegate->requestDrag(false);
@@ -360,25 +347,25 @@ void DockTrayWindow::initAttribute()
     m_trayView->installEventFilter(this);
 }
 
-void DockTrayWindow::onResetLayout()
+void DockTrayWindow::onUpdateComponentSize()
 {
-    switch(m_position) {
+    switch (m_position) {
     case Dock::Position::Left:
-    case Dock::Position::Right: {
+    case Dock::Position::Right:
+        m_toolLineLabel->setFixedSize(width() * 0.6, SPLITERSIZE);
         m_dateTimeWidget->setFixedSize(QWIDGETSIZE_MAX, m_dateTimeWidget->suitableSize().height());
         m_systemPuginWidget->setFixedSize(QWIDGETSIZE_MAX, m_systemPuginWidget->suitableSize().height());
         m_quickIconWidget->setFixedSize(QWIDGETSIZE_MAX, m_quickIconWidget->suitableSize().height());
         m_trayView->setFixedSize(QWIDGETSIZE_MAX, m_trayView->suitableSize().height());
         break;
-    }
     case Dock::Position::Top:
-    case Dock::Position::Bottom: {
+    case Dock::Position::Bottom:
+        m_toolLineLabel->setFixedSize(SPLITERSIZE, height() * 0.6);
         m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_systemPuginWidget->setFixedSize(m_systemPuginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_trayView->setFixedSize(m_trayView->suitableSize().width(), QWIDGETSIZE_MAX);
         break;
-    }
     }
     Q_EMIT requestUpdate();
 }

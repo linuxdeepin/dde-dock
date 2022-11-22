@@ -134,12 +134,14 @@ void TrayDelegate::onUpdateExpand(bool on)
                 model->setExpandVisible(true, true);
         }
     } else {
+        // 获取托盘内图标的数量
+        int trayIconCount = TrayModel::getIconModel()->rowCount();
         if (expandwidget) {
             // 如果释放鼠标，则判断当前鼠标的位置是否在托盘内部，如果在，则无需隐藏
             QPoint currentPoint = QCursor::pos();
             TrayGridWidget *view = ExpandIconWidget::popupTrayView();
-            expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint));
-        } else {
+            expandwidget->setTrayPanelVisible(view->geometry().contains(currentPoint) && (trayIconCount > 0));
+        } else if (trayIconCount == 0) {
             ExpandIconWidget::popupTrayView()->hide();
         }
     }

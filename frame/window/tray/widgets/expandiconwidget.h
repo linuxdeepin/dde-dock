@@ -50,10 +50,10 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void moveEvent(QMoveEvent *event) override;
     const QString dropIconFile() const;
 
 private:
-    Dtk::Gui::DRegionMonitor *m_regionInter;
     Dock::Position m_position;
 };
 
@@ -73,8 +73,11 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
+    void initMember();
     QColor maskColor() const;
     ExpandIconWidget *expandWidget() const;
 
@@ -82,6 +85,7 @@ private:
     DockInter *m_dockInter;
     TrayGridView *m_trayGridView;
     TrayGridView *m_referGridView;
+    Dtk::Gui::DRegionMonitor *m_regionInter;
     static Dock::Position m_position;
 };
 

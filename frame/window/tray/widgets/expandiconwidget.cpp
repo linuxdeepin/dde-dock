@@ -37,31 +37,8 @@ DGUI_USE_NAMESPACE
 
 ExpandIconWidget::ExpandIconWidget(QWidget *parent, Qt::WindowFlags f)
     : BaseTrayWidget(parent, f)
-    , m_regionInter(new DRegionMonitor(this))
     , m_position(Dock::Position::Bottom)
 {
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
-        TrayGridWidget *gridView = popupTrayView();
-        // 如果当前是隐藏，那么在点击任何地方都隐藏
-        if (!isVisible()) {
-            gridView->hide();
-            return;
-        }
-
-        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
-            return;
-
-        QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
-        const QRect rect = QRect(ptPos, size());
-        if (rect.contains(mousePos))
-            return;
-
-        const QRect rctView(gridView->pos(), gridView->size());
-        if (rctView.contains(mousePos))
-            return;
-
-        gridView->hide();
-    });
 }
 
 ExpandIconWidget::~ExpandIconWidget()
@@ -94,10 +71,8 @@ void ExpandIconWidget::setTrayPanelVisible(bool visible)
     if (visible) {
         gridParentView->resetPosition();
         gridParentView->show();
-        m_regionInter->registerRegion();
     } else {
         gridParentView->hide();
-        m_regionInter->unregisterRegion();
     }
 }
 
@@ -115,6 +90,17 @@ void ExpandIconWidget::paintEvent(QPaintEvent *event)
                     ICON_SIZE, ICON_SIZE);
 
     painter.drawPixmap(rectOfPixmap, pixmap);
+}
+
+void ExpandIconWidget::moveEvent(QMoveEvent *event)
+{
+    BaseTrayWidget::moveEvent(event);
+    // 当前展开按钮位置发生变化的时候，需要同时改变托盘的位置
+    QMetaObject::invokeMethod(this, [] {
+        TrayGridWidget *gridView = popupTrayView();
+        if (gridView->isVisible())
+            gridView->resetPosition();
+    }, Qt::QueuedConnection);
 }
 
 const QString ExpandIconWidget::dropIconFile() const
@@ -207,7 +193,9 @@ TrayGridWidget::TrayGridWidget(QWidget *parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_trayGridView(nullptr)
     , m_referGridView(nullptr)
+    , m_regionInter(new DRegionMonitor(this))
 {
+    initMember();
     setAttribute(Qt::WA_TranslucentBackground);
 }
 
@@ -276,6 +264,58 @@ void TrayGridWidget::paintEvent(QPaintEvent *event)
     painter.setClipPath(path);
 
     painter.fillPath(path, maskColor());
+}
+
+void TrayGridWidget::showEvent(QShowEvent *event)
+{
+    m_regionInter->registerRegion();
+    QWidget::showEvent(event);
+}
+
+void TrayGridWidget::hideEvent(QHideEvent *event)
+{
+    m_regionInter->unregisterRegion();
+    // 在当前托盘区域隐藏后，需要设置任务栏区域的展开按钮的托盘为隐藏状态
+    TrayModel::getDockModel()->updateOpenExpand(false);
+    QWidget::hideEvent(event);
+}
+
+void TrayGridWidget::initMember()
+{
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
+        // 如果当前是隐藏，那么在点击任何地方都隐藏
+        if (!isVisible()) {
+            hide();
+            return;
+        }
+
+        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
+            return;
+
+        QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
+        const QRect rect = QRect(ptPos, size());
+        if (rect.contains(mousePos))
+            return;
+        // 如果点击的是展开区域，则不做任何处理，因为点击展开区域自己会处理
+        if (m_referGridView) {
+            QAbstractItemModel *model = m_referGridView->model();
+            for (int i = 0; i < model->rowCount(); i++) {
+                ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_referGridView->indexWidget(model->index(i, 0)));
+                if (!widget)
+                    continue;
+
+                QRect rectExpandWidget(widget->mapToGlobal(QPoint(0, 0)), widget->size());
+                if (rectExpandWidget.contains(mousePos))
+                    return;
+            }
+        }
+
+        const QRect rctView(pos(), size());
+        if (rctView.contains(mousePos))
+            return;
+
+        hide();
+    });
 }
 
 QColor TrayGridWidget::maskColor() const

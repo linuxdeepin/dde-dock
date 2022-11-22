@@ -413,7 +413,7 @@ void TrayGridView::handleDropEvent(QDropEvent *e)
             info.pluginInter = (PluginsItemInterface *)(e->mimeData()->imageData().value<qulonglong>());
             QModelIndex targetIndex = getIndexFromPos(e->pos());
             int index = -1;
-            if (targetIndex.isValid() && targetIndex.row() < dataModel->rowCount() - 1) {
+            if (targetIndex.isValid() && targetIndex.row() < dataModel->rowCount()) {
                 // 如果拖动的位置是合法的位置，则让其插入到当前的位置
                 index = targetIndex.row();
                 dataModel->insertRow(index, info);
@@ -435,8 +435,17 @@ void TrayGridView::onUpdateEditorView()
     for (int i = 0; i < model()->rowCount(); i++) {
         QModelIndex index = model()->index(i, 0);
         closePersistentEditor(index);
-        openPersistentEditor(index);
     }
+    // 在关闭QWidget后不要立即调用openPersistentEditor来打开
+    // 因为closePersistentEditor后，异步删除QWidget，在关闭后，如果立即调用openPersistentEditor，在删除的时候，会把
+    // 通过openPersistentEditor新建的QWidget给删除，引起bug，因此，在所有的都closePersistentEditor后，异步来调用
+    // openPersistentEditor就不会出现这种问题
+    QMetaObject::invokeMethod(this, [ = ] {
+        for (int i = 0; i < model()->rowCount(); i++) {
+            QModelIndex index = model()->index(i, 0);
+            openPersistentEditor(index);
+        }
+    }, Qt::QueuedConnection);
 }
 
 bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
@@ -492,27 +501,45 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     m_pressed = false;
 
     if (dropAct == Qt::IgnoreAction) {
-        QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-        connect(posAni, &QPropertyAnimation::finished, [ this, listModel, pixLabel, modelIndex, winInfo ] () {
-            pixLabel->hide();
-            pixLabel->deleteLater();
-            listModel->setDragKey(QString());
-            listModel->insertRow(modelIndex.row(), winInfo);
-            clearDragModelIndex();
-            listModel->setExpandVisible(!TrayModel::getIconModel()->isEmpty());
+        if (listModel->isIconTray()) {
+            // 如果当前是从托盘区域释放，按照原来的流程走
+            QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
+            connect(posAni, &QPropertyAnimation::finished, [ this, listModel, pixLabel, modelIndex, winInfo ] () {
+                pixLabel->hide();
+                pixLabel->deleteLater();
+                listModel->setDragKey(QString());
+                listModel->insertRow(modelIndex.row(), winInfo);
+                clearDragModelIndex();
+                listModel->setExpandVisible(!TrayModel::getIconModel()->isEmpty());
 
-            m_dropPos = QPoint();
-            m_dragPos = QPoint();
+                m_dropPos = QPoint();
+                m_dragPos = QPoint();
 
-            onUpdateEditorView();
+                onUpdateEditorView();
+                Q_EMIT dragFinished();
+            });
+
+            posAni->setEasingCurve(QEasingCurve::Linear);
+            posAni->setDuration(m_aniDuringTime);
+            posAni->setStartValue((QCursor::pos() - QPoint(0, pixLabel->height() / 2)));
+            posAni->setEndValue(mapToGlobal(m_dropPos) - QPoint(0, pixLabel->height() / 2));
+            pixLabel->show();
+            posAni->start(QAbstractAnimation::DeleteWhenStopped);
+
             Q_EMIT dragFinished();
-        });
-        posAni->setEasingCurve(QEasingCurve::Linear);
-        posAni->setDuration(m_aniDuringTime);
-        posAni->setStartValue((QCursor::pos() - QPoint(0, pixLabel->height() / 2)));
-        posAni->setEndValue(mapToGlobal(m_dropPos) - QPoint(0, pixLabel->height() / 2));
-        pixLabel->show();
-        posAni->start(QAbstractAnimation::DeleteWhenStopped);
+        } else {
+            // 如果当前是从任务栏区域释放，则将释放后的图标放到托盘
+            listModel->setDragKey(QString());
+            clearDragModelIndex();
+            TrayModel *trayModel = TrayModel::getIconModel();
+            trayModel->addRow(winInfo);
+
+            m_dragPos = QPoint();
+            m_dropPos = QPoint();
+
+            trayModel->saveConfig(-1, winInfo);
+            Q_EMIT dragFinished();
+        }
     } else {
         listModel->setDragKey(QString());
         clearDragModelIndex();

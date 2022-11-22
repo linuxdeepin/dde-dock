@@ -129,11 +129,7 @@ void TrayManagerWindow::setPositon(Dock::Position position)
     m_quickIconWidget->setPositon(position);
     m_dateTimeWidget->setPositon(position);
     m_systemPluginWidget->setPositon(position);
-    if (m_model->hasExpand()) {
-        // 切换位置的时候，需要先关闭编辑器，然后在model函数的flag方法中打开
-        m_trayView->closePersistentEditor(m_model->index(0, 0));
-    }
-
+    m_trayView->onUpdateEditorView();
     updateLayout();
 }
 

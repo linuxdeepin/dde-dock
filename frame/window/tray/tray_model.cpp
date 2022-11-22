@@ -180,6 +180,14 @@ void TrayModel::setExpandVisible(bool visible, bool openExpand)
     }
 }
 
+void TrayModel::updateOpenExpand(bool openExpand)
+{
+    for (WinInfo &winInfo : m_winInfos) {
+        if (winInfo.type == TrayIconType::ExpandIcon)
+            winInfo.expand = openExpand;
+    }
+}
+
 void TrayModel::setDragKey(const QString &key)
 {
     m_dragKey = key;
@@ -765,10 +773,10 @@ void TrayModel::addRow(WinInfo info)
             return;
     }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    beginResetModel();
     m_winInfos.append(info);
     sortItems();
-    endInsertRows();
+    endResetModel();
 
     Q_EMIT requestRefreshEditor();
     Q_EMIT rowCountChanged();

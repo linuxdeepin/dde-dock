@@ -70,7 +70,7 @@ private:
     void moveToolPlugin();
 
 private Q_SLOTS:
-    void onResetLayout();
+    void onUpdateComponentSize();
     void onItemAdded(PluginsItemInterface *itemInter);
     void onItemRemove(PluginsItemInterface *itemInter);
     void onDropIcon(QDropEvent *dropEvent);

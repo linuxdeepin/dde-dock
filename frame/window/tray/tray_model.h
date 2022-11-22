@@ -97,6 +97,7 @@ public:
     void setDragingIndex(const QModelIndex index);
     void setDragDropIndex(const QModelIndex index);
     void setExpandVisible(bool visible, bool openExpand = false);
+    void updateOpenExpand(bool openExpand);
 
     void setDragKey(const QString &key);
 
