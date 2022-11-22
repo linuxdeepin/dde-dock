@@ -1211,3 +1211,31 @@ bool MainPanelControl::appIsOnDock(const QString &appDesktop)
 {
     return DockItemManager::instance()->appIsOnDock(appDesktop);
 }
+
+void MainPanelControl::setKwinAppItemMinimizedGeometry(DockItem *item, const QRect r)
+{
+    // 只处理wayland窗口
+    if (!Utils::IS_WAYLAND_DISPLAY) {
+        return;
+    }
+
+    // 对于wayland应用窗口，需要将窗口的位置传递给窗管，用于设置窗口最小化的位置
+    auto w = static_cast<QWidget *>(parent());
+    const auto ratio = devicePixelRatioF();
+    if (item->itemType() == DockItem::App && w->windowHandle() && w->windowHandle()->handle()) {
+        AppItem * appItem = dynamic_cast<AppItem *>(item);
+        if (!appItem) {
+            qWarning() << "invalid item";
+            return;
+        }
+
+        QList<QVariant> varList = {0, 0, 0, 0, 0};
+        varList[0] = appItem->getAppItemWindowId();
+        // 此处传给窗管的坐标需要去掉缩放因子，防止最小化窗口位置错误
+        varList[1] = (r.x() - w->geometry().x()) * ratio;
+        varList[2] = (r.y() - w->geometry().y()) * ratio;
+        varList[3] = r.width();
+        varList[4] = r.height();
+        QGuiApplication::platformNativeInterface()->setWindowProperty(w->windowHandle()->handle(), "_d_dwayland_dock-appitem-geometry", varList);
+    }
+}

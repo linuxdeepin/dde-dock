@@ -62,6 +62,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
+    m_currentWindowId = m_itemEntryInter->currentWindow();
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
@@ -77,9 +78,8 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
 
-    connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
-
+    connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
@@ -121,12 +121,14 @@ bool AppItem::isValid() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
-    // wayland没做处理
-    if (Utils::IS_WAYLAND_DISPLAY)
-        return;
-
     const QRect r(mapToGlobal(QPoint(0, 0)),
                   mapToGlobal(QPoint(width(), height())));
+
+    if (Utils::IS_WAYLAND_DISPLAY){
+        Q_EMIT requestUpdateItemMinimizedGeometry(r);
+        return;
+    }
+
     if (!QX11Info::connection()) {
         qWarning() << "QX11Info::connection() is 0x0";
         return;
@@ -455,9 +457,8 @@ QWidget *AppItem::popupTips()
     appNameTips.setObjectName(m_itemEntryInter->name());
 
     if (!m_windowInfos.isEmpty()) {
-        const quint32 currentWindow = m_itemEntryInter->currentWindow();
-        Q_ASSERT(m_windowInfos.contains(currentWindow));
-        appNameTips.setText(m_windowInfos[currentWindow].title.simplified());
+        Q_ASSERT(m_windowInfos.contains(m_currentWindowId));
+        appNameTips.setText(m_windowInfos[m_currentWindowId].title.simplified());
     } else {
         appNameTips.setText(m_itemEntryInter->name().simplified());
     }
@@ -488,6 +489,7 @@ QPoint AppItem::appIconPosition() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
+    m_currentWindowId = info.firstKey();
     if (m_appPreviewTips)
         m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_updateIconGeometryTimer->start();

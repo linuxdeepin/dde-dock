@@ -40,14 +40,15 @@ public:
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName() override;
+    inline quint32 getAppItemWindowId() const { return  m_currentWindowId; }
 
 signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
     void dragReady(QWidget *dragWidget);
-
     void requestUpdateEntryGeometries() const;
+    void requestUpdateItemMinimizedGeometry(const QRect) const;
 
 private:
     void moveEvent(QMoveEvent *e) override;
@@ -105,6 +106,7 @@ private:
     bool m_active;
     int m_retryTimes;
     bool m_iconValid;
+    quint32 m_currentWindowId;
     quint64 m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;

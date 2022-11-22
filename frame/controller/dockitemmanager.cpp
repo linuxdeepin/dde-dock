@@ -35,7 +35,9 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
-
+        connect(it, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
+            Q_EMIT requestUpdateItemMinimizedGeometry(it, r);
+        });
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
         m_itemList.append(it);
@@ -194,6 +196,9 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
     connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
+    connect(item, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
+        Q_EMIT requestUpdateItemMinimizedGeometry(item, r);
+    });
     connect(this, &DockItemManager::requestUpdateDockItem, item, &AppItem::requestUpdateEntryGeometries);
 
     m_itemList.insert(insertIndex, item);
