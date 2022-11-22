@@ -147,6 +147,8 @@ void DevCollaborationWidget::updateDeviceListView()
     QList<CollaborationDevice *> devices = m_deviceModel->devices();
     if (devices.isEmpty()) {
         m_deviceListView->removeItems(0, m_deviceListView->count());
+        m_deviceItemMap.clear();
+        m_connectingDevices.clear();
         return;
     }
 
@@ -209,7 +211,7 @@ void DevCollaborationWidget::itemClicked(const QModelIndex &index)
     }
 
     if (!m_connectingDevices.isEmpty() && !m_refreshTimer->isActive())
-        m_refreshTimer->start(30);
+        m_refreshTimer->start(80);
 }
 
 void DevCollaborationWidget::itemStatusChanged()
@@ -224,12 +226,12 @@ void DevCollaborationWidget::itemStatusChanged()
         // 更新item的连接状态
         int resultState = device->isCooperated() ? DevItemDelegate::Connected : DevItemDelegate::None;
         m_deviceItemMap[machinePath]->setData(resultState, DevItemDelegate::ResultDataRole);
-        if (device->isCooperated())
+        if (device->isCooperated() || !device->isPaired())
             m_deviceItemMap[machinePath]->setData(0, DevItemDelegate::DegreeDataRole);
 
         m_deviceListView->update(m_deviceItemMap[machinePath]->index());
 
-        if (resultState == DevItemDelegate::Connected && m_connectingDevices.contains(machinePath)) {
+        if ((resultState == DevItemDelegate::Connected || !device->isPaired()) && m_connectingDevices.contains(machinePath)) {
             m_connectingDevices.removeAll(machinePath);
         }
     }
