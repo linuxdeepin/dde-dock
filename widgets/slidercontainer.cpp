@@ -181,6 +181,16 @@ void SliderContainer::setIcon(const SliderContainer::IconPosition &iconPosition,
     }
 }
 
+void SliderContainer::setPageStep(int step)
+{
+    return m_slider->setPageStep(step);
+}
+
+void SliderContainer::setRange(int min, int max)
+{
+    return m_slider->setRange(min, max);
+}
+
 bool SliderContainer::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease) {

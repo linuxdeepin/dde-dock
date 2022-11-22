@@ -55,6 +55,9 @@ public:
     void setIcon(const IconPosition &iconPosition, const QIcon &icon);
     void setIcon(const IconPosition &iconPosition, const QPixmap &icon, const QSize &shadowSize, int space);
 
+    void setPageStep(int step);
+    void setRange(int min, int max);
+
 Q_SIGNALS:
     void iconClicked(const IconPosition &);
     void sliderValueChanged(int value);

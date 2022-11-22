@@ -71,6 +71,8 @@ void SoundWidget::initUi()
     QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 12);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
+    m_sliderContainer->setRange(0, 100);
+    m_sliderContainer->setPageStep(2);
 
     SliderProxyStyle *proxy = new SliderProxyStyle;
     m_sliderContainer->setSliderProxyStyle(proxy);
@@ -80,14 +82,14 @@ void SoundWidget::initUi()
 
 void SoundWidget::initConnection()
 {
-    connect(m_defaultSink, &DBusSink::VolumeChanged, this, [ this ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
+    connect(m_defaultSink, &DBusSink::VolumeChanged, this, [ this ](double value) {m_sliderContainer->updateSliderValue(std::round(value * 100.00));});
 
     connect(m_dbusAudio, &DBusAudio::DefaultSinkChanged, this, [ this ](const QDBusObjectPath &value) {
         if (m_defaultSink)
             delete m_defaultSink;
 
         m_defaultSink = new DBusSink("org.deepin.daemon.Audio1", value.path(), QDBusConnection::sessionBus(), this);
-        m_sliderContainer->updateSliderValue(m_defaultSink->volume() * 100);
+        m_sliderContainer->updateSliderValue(std::round(m_defaultSink->volume() * 100.00));
         connect(m_defaultSink, &DBusSink::VolumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
     });
 
