@@ -93,6 +93,10 @@ void SoundWidget::initConnection()
         connect(m_defaultSink, &DBusSink::VolumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
     });
 
+    connect(m_dbusAudio, &DBusAudio::MaxUIVolumeChanged, this, [ = ] (double maxValue) {
+        m_sliderContainer->setRange(0, std::round(maxValue * 100.00));
+    });
+
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         m_defaultSink->SetVolume(value * 0.01, true);
     });
