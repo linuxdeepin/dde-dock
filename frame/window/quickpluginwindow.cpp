@@ -29,6 +29,7 @@
 
 #include <DStyleOption>
 #include <DStandardItem>
+#include <DGuiApplicationHelper>
 
 #include <QDrag>
 #include <QScrollBar>
@@ -655,7 +656,7 @@ void QuickDockItem::leaveEvent(QEvent *event)
 QPixmap QuickDockItem::iconPixmap() const
 {
     int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
-    QIcon icon = m_pluginItem->icon(DockPart::QuickShow);
+    QIcon icon = m_pluginItem->icon(DockPart::QuickShow, DGuiApplicationHelper::instance()->themeType());
     if (!icon.isNull())
         return icon.pixmap(pixmapSize, pixmapSize);
 

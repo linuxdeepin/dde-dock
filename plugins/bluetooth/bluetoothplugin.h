@@ -56,6 +56,7 @@ public:
     void pluginSettingsChanged() override;
 
     QIcon icon(const DockPart &) override;
+    QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginStatus status() const override;
     QString description() const override;
 

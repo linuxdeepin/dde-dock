@@ -167,6 +167,9 @@ void OnboardPlugin::pluginSettingsChanged()
 
 QIcon OnboardPlugin::icon(const DockPart &dockPart)
 {
+    if (dockPart == DockPart::DCCSetting)
+        return QIcon(":/icons/icon/dcc_keyboard.svg");
+
     if (dockPart == DockPart::QuickPanel)
         return m_onboardItem->iconPixmap(24);
 

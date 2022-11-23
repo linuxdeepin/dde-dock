@@ -28,6 +28,8 @@
 #include "pluginsitem.h"
 #include "settingconfig.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QScreen>
 #include <QDebug>
 #include <QGSettings>
@@ -39,14 +41,14 @@ QDebug operator<<(QDebug argument, const DockItemInfo &info)
 {
     argument << "name:" << info.name << ", displayName:" << info.displayName
              << "itemKey:" << info.itemKey << "SettingKey:" << info.settingKey
-             << "icon:" << info.icon << "visible:" << info.visible;
+             << "icon_light:" << info.iconLight << "icon_dark:" << info.iconDark << "visible:" << info.visible;
     return argument;
 }
 
 QDBusArgument &operator<<(QDBusArgument &arg, const DockItemInfo &info)
 {
     arg.beginStructure();
-    arg << info.name << info.displayName << info.itemKey << info.settingKey << info.icon << info.visible;
+    arg << info.name << info.displayName << info.itemKey << info.settingKey << info.iconLight << info.iconDark << info.visible;
     arg.endStructure();
     return arg;
 }
@@ -54,7 +56,7 @@ QDBusArgument &operator<<(QDBusArgument &arg, const DockItemInfo &info)
 const QDBusArgument &operator>>(const QDBusArgument &arg, DockItemInfo &info)
 {
     arg.beginStructure();
-    arg >> info.name >> info.displayName >> info.itemKey >> info.settingKey >> info.icon >> info.visible;
+    arg >> info.name >> info.displayName >> info.itemKey >> info.settingKey >> info.iconLight >> info.iconDark >> info.visible;
     arg.endStructure();
     return arg;
 }
@@ -180,12 +182,20 @@ DockItemInfos DBusDockAdaptors::plugins()
         info.settingKey = "Dock_Quick_Plugin_Name";
         info.visible = quickSettingKeys.contains(info.itemKey);
         QSize pixmapSize;
-        QIcon icon = getSettingIcon(plugin, pixmapSize);
-        if (!icon.isNull()) {
-            QBuffer buffer(&info.icon);
+        QIcon lightIcon = getSettingIcon(plugin, pixmapSize, DGuiApplicationHelper::ColorType::LightType);
+        if (!lightIcon.isNull()) {
+            QBuffer buffer(&info.iconLight);
             if (buffer.open(QIODevice::WriteOnly)) {
-                QPixmap pixmap = icon.pixmap(pixmapSize);
-                pixmap.save(&buffer, "bmp");
+                QPixmap pixmap = lightIcon.pixmap(pixmapSize);
+                pixmap.save(&buffer, "png");
+            }
+        }
+        QIcon darkIcon = getSettingIcon(plugin, pixmapSize, DGuiApplicationHelper::ColorType::DarkType);
+        if (!darkIcon.isNull()) {
+            QBuffer buffer(&info.iconDark);
+            if (buffer.open(QIODevice::WriteOnly)) {
+                QPixmap pixmap = darkIcon.pixmap(pixmapSize);
+                pixmap.save(&buffer, "png");
             }
         }
         pluginInfos << info;
@@ -311,7 +321,7 @@ QList<PluginsItemInterface *> DBusDockAdaptors::localPlugins() const
     return QuickSettingController::instance()->pluginInSettings();
 }
 
-QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize) const
+QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, int colorType) const
 {
     auto iconSize = [](const QIcon &icon) {
         QList<QSize> iconSizes = icon.availableSizes();
@@ -321,7 +331,7 @@ QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixm
         return defaultIconSize;
     };
     // 先获取控制中心的设置图标
-    QIcon icon = plugin->icon(DockPart::DCCSetting);
+    QIcon icon = plugin->icon(DockPart::DCCSetting, colorType);
     if (!icon.isNull()) {
         pixmapSize = iconSize(icon);
         return icon;
@@ -331,7 +341,7 @@ QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixm
     QuickSettingController::PluginAttribute pluginAttr = QuickSettingController::instance()->pluginAttribute(plugin);
     switch(pluginAttr) {
     case QuickSettingController::PluginAttribute::System: {
-        icon = plugin->icon(DockPart::SystemPanel);
+        icon = plugin->icon(DockPart::SystemPanel, colorType);
         pixmapSize = defaultIconSize;
         QList<QSize> iconSizes = icon.availableSizes();
         if (iconSizes.size() > 0)
@@ -339,9 +349,9 @@ QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixm
         break;
     }
     case QuickSettingController::PluginAttribute::Quick: {
-        icon = plugin->icon(DockPart::QuickShow);
+        icon = plugin->icon(DockPart::QuickShow, colorType);
         if (icon.isNull())
-            icon = plugin->icon(DockPart::QuickPanel);
+            icon = plugin->icon(DockPart::QuickPanel, colorType);
         pixmapSize = defaultIconSize;
         QList<QSize> iconSizes = icon.availableSizes();
         if (iconSizes.size() > 0)

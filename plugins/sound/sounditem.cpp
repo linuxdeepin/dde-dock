@@ -254,6 +254,50 @@ QPixmap SoundItem::pixmap() const
     return m_iconPixmap;
 }
 
+QPixmap SoundItem::pixmap(int colorType) const
+{
+    const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
+
+    const double volmue = m_applet->volumeValue();
+    const double maxVolmue = m_applet->maxVolumeValue();
+    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
+
+    QString iconString;
+    if (displayMode == Dock::Fashion) {
+        QString volumeString;
+        if (volmue >= 1000)
+            volumeString = "100";
+        else
+            volumeString = QString("0") + ('0' + int(volmue / 100)) + "0";
+
+        iconString = "audio-volume-" + volumeString;
+
+        if (mute)
+            iconString += "-muted";
+    } else {
+        QString volumeString;
+        if (mute)
+            volumeString = "muted";
+        else if (int(volmue) == 0)
+            volumeString = "off";
+        else if (volmue / maxVolmue > double(2) / 3)
+            volumeString = "high";
+        else if (volmue / maxVolmue > double(1) / 3)
+            volumeString = "medium";
+        else
+            volumeString = "low";
+
+        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+    }
+
+    const auto ratio = devicePixelRatioF();
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
+    if (colorType == DGuiApplicationHelper::LightType)
+        iconString.append(PLUGIN_MIN_ICON_NAME);
+
+    return ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+}
+
 void SoundItem::sinkChanged(DBusSink *sink)
 {
     m_sinkInter = sink;

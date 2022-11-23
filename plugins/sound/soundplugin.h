@@ -52,6 +52,7 @@ public:
     void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
     QIcon icon(const DockPart &) override;
+    QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginStatus status() const override;
 
 private:

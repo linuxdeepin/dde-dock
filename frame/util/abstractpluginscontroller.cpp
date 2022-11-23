@@ -63,6 +63,11 @@ AbstractPluginsController::~AbstractPluginsController()
     }
 }
 
+QList<PluginsItemInterface *> AbstractPluginsController::pluginCurrent() const
+{
+    return m_pluginExists;
+}
+
 void AbstractPluginsController::saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value)
 {
     savePluginValue(getPluginInterface(itemInter), key, value);
@@ -85,6 +90,7 @@ void AbstractPluginsController::itemAdded(PluginsItemInterface * const itemInter
     if (pluginAdapter)
         pluginAdapter->setItemKey(itemKey);
 
+    m_pluginExists << pluginItem;
     pluginItemAdded(pluginItem, itemKey);
 }
 
@@ -95,6 +101,7 @@ void AbstractPluginsController::itemUpdate(PluginsItemInterface * const itemInte
 
 void AbstractPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    m_pluginExists.removeOne(itemInter);
     pluginItemRemoved(getPluginInterface(itemInter), itemKey);
 }
 

@@ -43,6 +43,7 @@ public:
     ~ AbstractPluginsController() override;
 
     void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
+    virtual QList<PluginsItemInterface *> pluginCurrent() const;
 
     virtual bool needLoad(PluginsItemInterface *) { return true; }
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
@@ -101,6 +102,7 @@ private:
 
     // filepath, interface, loaded
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
+    QList<PluginsItemInterface *> m_pluginExists;
 
     QJsonObject m_pluginSettingsObject;
     QMap<qulonglong, PluginAdapter *> m_pluginAdapterMap;

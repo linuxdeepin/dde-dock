@@ -156,14 +156,15 @@ QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
 {
     QList<PluginsItemInterface *> settingPlugins;
     // 用于在控制中心显示可改变位置的插件，这里只提供
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &plugins = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginsMap();
-    QList<PluginsItemInterface *> allPlugins = plugins.keys();
+    QList<PluginsItemInterface *> allPlugins = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginCurrent();
     for (PluginsItemInterface *plugin : allPlugins) {
+        if (plugin->pluginDisplayName().isEmpty())
+            continue;
+
         PluginAttribute pluginAttr = pluginAttribute(plugin);
         if (pluginAttr == QuickSettingController::PluginAttribute::Quick
                 || pluginAttr == QuickSettingController::PluginAttribute::System
-                || pluginAttr == QuickSettingController::PluginAttribute::Tool
-                || pluginAttr == QuickSettingController::PluginAttribute::Tray)
+                || pluginAttr == QuickSettingController::PluginAttribute::Tool)
             settingPlugins << plugin;
     }
 

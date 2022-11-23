@@ -188,6 +188,14 @@ void TrashPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
+QIcon TrashPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    if (dockPart == DockPart::DCCSetting)
+        return QIcon(":/icons/dcc_trash.svg");
+
+    return QIcon();
+}
+
 void TrashPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {

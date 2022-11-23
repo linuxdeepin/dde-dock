@@ -148,6 +148,11 @@ QIcon SoundPlugin::icon(const DockPart &)
     return m_soundItem->pixmap();
 }
 
+QIcon SoundPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    return m_soundItem->pixmap(themeType);
+}
+
 PluginsItemInterface::PluginStatus SoundPlugin::status() const
 {
     return SoundPlugin::Active;

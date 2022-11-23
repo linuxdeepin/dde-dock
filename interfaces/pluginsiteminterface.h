@@ -278,6 +278,12 @@ public:
     ///
     virtual QString description() const { return QString(); }
 
+    ///
+    /// the icon for the plugin
+    /// themeType {0:UnknownType 1:LightType 2:DarkType}
+    ///
+    virtual QIcon icon(const DockPart &dockPart, int themeType) { return icon(dockPart); }
+
 protected:
     ///
     /// \brief m_proxyInter

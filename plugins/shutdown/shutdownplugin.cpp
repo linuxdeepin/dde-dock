@@ -60,7 +60,7 @@ const QString ShutdownPlugin::pluginName() const
 
 const QString ShutdownPlugin::pluginDisplayName() const
 {
-    return tr("Power");
+    return tr("shutdown");
 }
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
@@ -304,7 +304,8 @@ void ShutdownPlugin::pluginSettingsChanged()
 
 QIcon ShutdownPlugin::icon(const DockPart &dockPart)
 {
-    Q_UNUSED(dockPart);
+    if (dockPart == DockPart::DCCSetting)
+        return QIcon(":/icons/resources/icons/dcc_shutdown.svg");
 
     QIcon shutdownIcon;
     shutdownIcon.addPixmap(m_shutdownWidget->loadPixmap());

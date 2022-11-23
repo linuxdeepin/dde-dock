@@ -40,7 +40,8 @@ struct DockItemInfo
     QString displayName;
     QString itemKey;
     QString settingKey;
-    QByteArray icon;
+    QByteArray iconLight;
+    QByteArray iconDark;
     bool visible;
 };
 
@@ -135,7 +136,7 @@ signals:
 private:
     bool isPluginValid(const QString &name);
     QList<PluginsItemInterface *> localPlugins() const;
-    QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize) const;
+    QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, int colorType) const;
 
 private:
     QGSettings *m_gsettings;

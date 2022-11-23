@@ -62,6 +62,7 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
     void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, int themeType) override;
 
 private:
     void refreshPluginItemsVisible();

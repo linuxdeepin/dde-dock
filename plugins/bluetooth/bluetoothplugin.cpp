@@ -24,7 +24,11 @@
 #include "bluetoothwidget.h"
 #include "adaptersmanager.h"
 
+#include <DGuiApplicationHelper>
+
 #define STATE_KEY  "enable"
+
+DGUI_USE_NAMESPACE
 
 BluetoothPlugin::BluetoothPlugin(QObject *parent)
     : QObject(parent)
@@ -148,6 +152,14 @@ QIcon BluetoothPlugin::icon(const DockPart &)
 {
     static QIcon icon(":/bluetooth-active-symbolic.svg");
     return icon;
+}
+
+QIcon BluetoothPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    if (themeType == DGuiApplicationHelper::ColorType::DarkType)
+        return QIcon(":/bluetooth-active-symbolic.svg");
+
+    return QIcon(":/bluetooth-active-symbolic-dark.svg");
 }
 
 PluginsItemInterface::PluginStatus BluetoothPlugin::status() const
