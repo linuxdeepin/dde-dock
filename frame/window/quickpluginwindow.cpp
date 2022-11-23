@@ -63,8 +63,28 @@ typedef struct DragInfo{
         if (dragPoint.isNull())
             return false;
 
-        return (qAbs(currentPoint.x() - dragPoint.x()) >=5 ||
+        if (!dragPixmap())
+            return false;
+
+        return (qAbs(currentPoint.x() - dragPoint.x()) >= 5 ||
                 qAbs(currentPoint.y() - dragPoint.y()) >= 5);
+    }
+
+    QPixmap dragPixmap() const {
+        if (!dockItem)
+            return QPixmap();
+
+        QPixmap pixmap = dockItem->pluginItem()->icon(DockPart::QuickShow).pixmap(QSize(ITEMSIZE, ITEMSIZE));
+        if (!pixmap.isNull())
+            return pixmap;
+
+        QString itemKey = QuickSettingController::instance()->itemKey(dockItem->pluginItem());
+        QWidget *itemWidget = dockItem->pluginItem()->itemWidget(itemKey);
+        if (!itemWidget)
+            return QPixmap();
+
+        itemWidget->setFixedSize(20, 20);
+        return itemWidget->grab();
     }
 } DragInfo;
 
@@ -235,7 +255,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (m_dragInfo->canDrag(mouseEvent->pos())) {
-            startDrag(m_dragInfo->dockItem->pluginItem());
+            startDrag();
             m_dragInfo->reset();
         }
         break;
@@ -349,14 +369,19 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
         dockItem->update();
 }
 
-void QuickPluginWindow::startDrag(PluginsItemInterface *moveItem)
+void QuickPluginWindow::startDrag()
 {
+    if (!m_dragInfo->dockItem)
+        return;
+
+    PluginsItemInterface *moveItem = m_dragInfo->dockItem->pluginItem();
     AppDrag *drag = new AppDrag(this, new QuickDragWidget);
     QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem);
     drag->setMimeData(mimedata);
     drag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
-    QPixmap dragPixmap = moveItem->icon(DockPart::QuickPanel).pixmap(QSize(ITEMSIZE, ITEMSIZE));
+    QPixmap dragPixmap = m_dragInfo->dragPixmap();
     drag->setPixmap(dragPixmap);
+
     drag->setHotSpot(QPoint(0, 0));
 
     connect(drag->appDragWidget(), &AppDragWidget::requestSplitWindow, this, [ this, moveItem ] {

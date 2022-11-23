@@ -73,7 +73,7 @@ private Q_SLOTS:
 private:
     void initUi();
     void initConnection();
-    void startDrag(PluginsItemInterface *moveItem);
+    void startDrag();
     PluginsItemInterface *findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems);
     int getDropIndex(QPoint point);
     QPoint popupPoint(QWidget *widget) const;
@@ -106,11 +106,11 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
-    QPixmap iconPixmap() const;
-
 private:
     QPoint topleftPoint() const;
     QPoint popupMarkPoint() const;
+
+    QPixmap iconPixmap() const;
 
 private Q_SLOTS:
     void onMenuActionClicked(QAction *action);

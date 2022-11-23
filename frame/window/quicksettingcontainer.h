@@ -103,6 +103,7 @@ private:
     PluginChildPage *m_childPage;
     QuickDragInfo *m_dragInfo;
     QList<QuickSettingItem *> m_quickSettings;
+    PluginsItemInterface *m_childShowPlugin;
 };
 
 class QuickPluginMimeData : public QMimeData

@@ -80,6 +80,7 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_displaySettingWidget(new DisplaySettingWidget(this))
     , m_childPage(new PluginChildPage(this))
     , m_dragInfo(new struct QuickDragInfo)
+    , m_childShowPlugin(nullptr)
 {
     initUi();
     initConnection();
@@ -94,6 +95,7 @@ QuickSettingContainer::~QuickSettingContainer()
 
 void QuickSettingContainer::showHomePage()
 {
+    m_childShowPlugin = nullptr;
     m_switchLayout->setCurrentIndex(0);
 }
 
@@ -239,6 +241,8 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
 
     m_quickSettings.removeOne(removeItem);
     removeItem->deleteLater();
+    if (m_childShowPlugin == itemInter)
+        showHomePage();
 
     updateItemLayout();
     onResizeView();
@@ -250,7 +254,8 @@ void QuickSettingContainer::onShowChildWidget(QWidget *childWidget)
     if (!quickWidget)
         return;
 
-    showWidget(childWidget, quickWidget->pluginItem()->pluginDisplayName());
+    m_childShowPlugin = quickWidget->pluginItem();
+    showWidget(childWidget, m_childShowPlugin->pluginDisplayName());
     onResizeView();
 }
 
