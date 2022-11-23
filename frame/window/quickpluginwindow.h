@@ -107,12 +107,18 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
     QPoint topleftPoint() const;
     QPoint popupMarkPoint() const;
 
     QPixmap iconPixmap() const;
+
+    void initUi();
+    void initAttribute();
+    void initConnection();
 
 private Q_SLOTS:
     void onMenuActionClicked(QAction *action);
@@ -125,6 +131,7 @@ private:
     DockPopupWindow *m_popupWindow;
     QMenu *m_contextMenu;
     QWidget *m_tipParent;
+    QHBoxLayout *m_mainLayout;
 };
 
 #endif // QUICKPLUGINWINDOW_H

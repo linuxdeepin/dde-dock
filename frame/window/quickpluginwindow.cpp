@@ -83,7 +83,6 @@ typedef struct DragInfo{
         if (!itemWidget)
             return QPixmap();
 
-        itemWidget->setFixedSize(20, 20);
         return itemWidget->grab();
     }
 } DragInfo;
@@ -568,21 +567,11 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject
     , m_popupWindow(new DockPopupWindow)
     , m_contextMenu(new QMenu(this))
     , m_tipParent(nullptr)
+    , m_mainLayout(nullptr)
 {
-    m_popupWindow->setShadowBlurRadius(20);
-    m_popupWindow->setRadius(6);
-    m_popupWindow->setShadowYOffset(2);
-    m_popupWindow->setShadowXOffset(0);
-    m_popupWindow->setArrowWidth(18);
-    m_popupWindow->setArrowHeight(10);
-    m_popupWindow->setObjectName("quickitempopup");
-    if (Utils::IS_WAYLAND_DISPLAY) {
-        Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
-        m_popupWindow->setWindowFlags(flags);
-    }
-
-    connect(m_contextMenu, &QMenu::triggered, this, &QuickDockItem::onMenuActionClicked);
-    connect(qApp, &QApplication::aboutToQuit, m_popupWindow, &DockPopupWindow::deleteLater);
+    initUi();
+    initConnection();
+    initAttribute();
 }
 
 QuickDockItem::~QuickDockItem()
@@ -696,6 +685,28 @@ void QuickDockItem::leaveEvent(QEvent *event)
     m_popupWindow->hide();
 }
 
+void QuickDockItem::showEvent(QShowEvent *event)
+{
+    if (!m_mainLayout)
+        return QWidget::showEvent(event);
+
+    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+    if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
+        itemWidget->setFixedSize(ICONWIDTH - 2, ICONHEIGHT - 2);
+        m_mainLayout->addWidget(itemWidget);
+    }
+}
+
+void QuickDockItem::hideEvent(QHideEvent *event)
+{
+    if (!m_mainLayout)
+        return QWidget::hideEvent(event);
+
+    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+    if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0)
+        m_mainLayout->removeWidget(m_pluginItem->itemWidget(m_itemKey));
+}
+
 QPixmap QuickDockItem::iconPixmap() const
 {
     int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
@@ -703,13 +714,39 @@ QPixmap QuickDockItem::iconPixmap() const
     if (!icon.isNull())
         return icon.pixmap(pixmapSize, pixmapSize);
 
-    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
-    if (itemWidget) {
-        itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
-        return itemWidget->grab();
-    }
-
     return QPixmap();
+}
+
+void QuickDockItem::initUi()
+{
+    QPixmap pixmap = iconPixmap();
+    if (!pixmap.isNull())
+        return;
+
+    m_mainLayout = new QHBoxLayout(this);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_pluginItem->itemWidget(m_itemKey)->installEventFilter(this);
+}
+
+void QuickDockItem::initAttribute()
+{
+    m_popupWindow->setShadowBlurRadius(20);
+    m_popupWindow->setRadius(6);
+    m_popupWindow->setShadowYOffset(2);
+    m_popupWindow->setShadowXOffset(0);
+    m_popupWindow->setArrowWidth(18);
+    m_popupWindow->setArrowHeight(10);
+    m_popupWindow->setObjectName("quickitempopup");
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
+        m_popupWindow->setWindowFlags(flags);
+    }
+}
+
+void QuickDockItem::initConnection()
+{
+    connect(m_contextMenu, &QMenu::triggered, this, &QuickDockItem::onMenuActionClicked);
+    connect(qApp, &QApplication::aboutToQuit, m_popupWindow, &DockPopupWindow::deleteLater);
 }
 
 QPoint QuickDockItem::topleftPoint() const

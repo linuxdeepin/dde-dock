@@ -54,10 +54,6 @@ void SingleQuickItem::mouseReleaseEvent(QMouseEvent *event)
         commandArgument.removeFirst();
         QProcess::startDetached(command, commandArgument);
     }
-
-    QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
-    if (itemWidget)
-        Q_EMIT requestShowChildWidget(itemWidget);
 }
 
 void SingleQuickItem::resizeEvent(QResizeEvent *event)
