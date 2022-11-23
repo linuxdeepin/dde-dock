@@ -122,31 +122,6 @@ const QString PowerPlugin::itemCommand(const QString &itemKey)
     return QString();
 }
 
-const QString PowerPlugin::itemContextMenu(const QString &itemKey)
-{
-    if (itemKey != POWER_KEY) {
-        return QString();
-    }
-
-    QList<QVariant> items;
-    items.reserve(6);
-
-    if (!QFile::exists(ICBC_CONF_FILE)) {
-        QMap<QString, QVariant> power;
-        power["itemId"] = "power";
-        power["itemText"] = tr("Power settings");
-        power["isActive"] = true;
-        items.push_back(power);
-    }
-
-    QMap<QString, QVariant> menu;
-    menu["items"] = items;
-    menu["checkableMenu"] = false;
-    menu["singleCheck"] = false;
-
-    return QJsonDocument::fromVariant(menu).toJson();
-}
-
 void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey)
