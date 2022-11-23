@@ -190,11 +190,11 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
 {
     QPalette widgetBackgroud;
     if (type == DGuiApplicationHelper::LightType) {
-        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+        m_refreshBtn->setRotateIcon(":/refresh_dark.svg");
         widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
     } else {
         widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+        m_refreshBtn->setRotateIcon(":/refresh.svg");
     }
 
     m_adapterLabel->label()->setAutoFillBackground(true);
