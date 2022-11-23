@@ -69,6 +69,7 @@ private Q_SLOTS:
     void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
     void onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart);
+    void onRequestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
 
 private:
     void initUi();
@@ -79,6 +80,7 @@ private:
     QPoint popupPoint(QWidget *widget) const;
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
     QuickDockItem *getActiveDockItem(QPoint point) const;
+    void showPopup(QuickDockItem *item, QWidget *childPage = nullptr);
 
 private:
     QBoxLayout *m_mainLayout;

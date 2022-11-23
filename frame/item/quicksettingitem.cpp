@@ -55,7 +55,6 @@ QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, QWid
 {
     setAcceptDrops(true);
     this->installEventFilter(this);
-    connect(QuickSettingController::instance(), &QuickSettingController::requestAppletShow, this, &QuickSettingItem::onRequestAppletShow);
 }
 
 QuickSettingItem::~QuickSettingItem()
@@ -127,20 +126,6 @@ QColor QuickSettingItem::foregroundColor() const
         return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
 
     return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
-}
-
-void QuickSettingItem::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
-{
-    // 只显示当前的插件的内容
-    if (itemInter != m_pluginInter)
-        return;
-
-    // 显示弹出的内容
-    QWidget *itemApplet = itemInter->itemPopupApplet(itemKey);
-    if (!itemApplet)
-        return;
-
-    Q_EMIT requestShowChildWidget(itemApplet);
 }
 
 QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter)

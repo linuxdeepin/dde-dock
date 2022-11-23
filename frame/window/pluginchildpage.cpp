@@ -64,6 +64,11 @@ void PluginChildPage::setTitle(const QString &text)
     m_title->setText(text);
 }
 
+void PluginChildPage::setCanBack(bool canBack)
+{
+    m_back->setVisible(canBack);
+}
+
 bool PluginChildPage::isBack()
 {
     return m_isBack;

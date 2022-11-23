@@ -54,6 +54,7 @@ class QuickSettingContainer : public QWidget
 public:
     static DockPopupWindow *popWindow();
     static void setPosition(Dock::Position position);
+    void showPage(QWidget *widget, PluginsItemInterface *pluginInter = nullptr, bool canBack = false);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -61,7 +62,7 @@ protected:
 
     explicit QuickSettingContainer(QWidget *parent = nullptr);
     ~QuickSettingContainer() override;
-    void showHomePage();
+    void showPage(QWidget *widget, const QString &title, bool canBack = false);
 
 private Q_SLOTS:
     void onPluginRemove(PluginsItemInterface *itemInter);
@@ -76,10 +77,6 @@ private:
     void initConnection();
     // 调整控件位置
     void updateItemLayout();
-    // 初始化控件项目
-    // void initQuickItem(PluginsItemInterface *plugin);
-    // 显示具体的窗体
-    void showWidget(QWidget *widget, const QString &title);
     // 获取拖动图标的热点
     QPoint hotSpot(const QPixmap &pixmap);
     // 插入插件

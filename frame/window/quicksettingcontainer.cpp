@@ -93,10 +93,20 @@ QuickSettingContainer::~QuickSettingContainer()
     delete m_dragInfo;
 }
 
-void QuickSettingContainer::showHomePage()
+void QuickSettingContainer::showPage(QWidget *widget, PluginsItemInterface *pluginInter, bool canBack)
 {
-    m_childShowPlugin = nullptr;
-    m_switchLayout->setCurrentIndex(0);
+    if (widget) {
+        m_childShowPlugin = pluginInter;
+        m_childPage->setTitle(pluginInter->pluginDisplayName());
+        m_childPage->setCanBack(canBack);
+        m_childPage->pushWidget(widget);
+        m_switchLayout->setCurrentWidget(m_childPage);
+    } else {
+        m_childShowPlugin = nullptr;
+        m_switchLayout->setCurrentIndex(0);
+    }
+
+    onResizeView();
 }
 
 // 根据位置获取箭头的方向
@@ -120,7 +130,6 @@ DockPopupWindow *QuickSettingContainer::popWindow()
 {
     if (m_popWindow) {
         QuickSettingContainer *container = static_cast<QuickSettingContainer *>(m_popWindow->getContent());
-        container->showHomePage();
         return m_popWindow;
     }
 
@@ -155,6 +164,17 @@ void QuickSettingContainer::setPosition(Position position)
     }
 }
 
+void QuickSettingContainer::showPage(QWidget *widget, const QString &title, bool canBack)
+{
+    m_childShowPlugin = nullptr;
+    m_childPage->setTitle(title);
+    m_childPage->setCanBack(canBack);
+    m_childPage->pushWidget(widget);
+    m_switchLayout->setCurrentWidget(m_childPage);
+
+    onResizeView();
+}
+
 bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
@@ -181,13 +201,6 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
-}
-
-void QuickSettingContainer::showWidget(QWidget *widget, const QString &title)
-{
-    m_childPage->setTitle(title);
-    m_childPage->pushWidget(widget);
-    m_switchLayout->setCurrentWidget(m_childPage);
 }
 
 QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
@@ -242,7 +255,7 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
     m_quickSettings.removeOne(removeItem);
     removeItem->deleteLater();
     if (m_childShowPlugin == itemInter)
-        showHomePage();
+        showPage(nullptr);
 
     updateItemLayout();
     onResizeView();
@@ -254,9 +267,7 @@ void QuickSettingContainer::onShowChildWidget(QWidget *childWidget)
     if (!quickWidget)
         return;
 
-    m_childShowPlugin = quickWidget->pluginItem();
-    showWidget(childWidget, m_childShowPlugin->pluginDisplayName());
-    onResizeView();
+    showPage(childWidget, quickWidget->pluginItem(), true);
 }
 
 void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
@@ -416,8 +427,7 @@ void QuickSettingContainer::initConnection()
     connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
         if (iconPosition == SliderContainer::RightIcon) {
             // 点击右侧的按钮，弹出具体的调节的界面
-            showWidget(m_displaySettingWidget, tr("brightness"));
-            onResizeView();
+            showPage(m_displaySettingWidget, tr("brightness"), true);
         }
     });
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {

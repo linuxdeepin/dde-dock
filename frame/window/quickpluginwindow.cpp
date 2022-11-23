@@ -224,26 +224,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             if (m_dragInfo->canDrag(mouseEvent->pos()))
                 break;
 
-            QuickDockItem *releaseItem = qobject_cast<QuickDockItem *>(watched);
-            if (!releaseItem)
-                break;
-
-            DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
-            if (Utils::IS_WAYLAND_DISPLAY) {
-                // TODO: 临时解决方案，如果是wayland环境，toolTip没有消失，因此，此处直接调用接口来隐藏
-                for (int i = m_mainLayout->count() - 1; i >= 0; i--) {
-                    QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
-                    if (!layoutItem)
-                        continue;
-
-                    QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
-                    if (!dockItem)
-                        continue;
-
-                    dockItem->hideToolTip();
-                }
-            }
-            popWindow->show(popupPoint(releaseItem), true);
+            showPopup(qobject_cast<QuickDockItem *>(watched));
         } while (false);
         m_dragInfo->reset();
 
@@ -369,6 +350,11 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
         dockItem->update();
 }
 
+void QuickPluginWindow::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
+{
+    showPopup(getDockItemByPlugin(itemInter), itemInter->itemPopupApplet(itemKey));
+}
+
 void QuickPluginWindow::startDrag()
 {
     if (!m_dragInfo->dockItem)
@@ -427,6 +413,37 @@ QuickDockItem *QuickPluginWindow::getActiveDockItem(QPoint point) const
         return nullptr;
 
     return selectWidget;
+}
+
+void QuickPluginWindow::showPopup(QuickDockItem *item, QWidget *childPage)
+{
+    if (!isVisible() || !item)
+        return;
+
+    bool canBack = true;
+    DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
+    if (!popWindow->isVisible()) {
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            // TODO: 临时解决方案，如果是wayland环境，toolTip没有消失，因此，此处直接调用接口来隐藏
+            for (int i = m_mainLayout->count() - 1; i >= 0; i--) {
+                QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+                if (!layoutItem)
+                    continue;
+
+                QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+                if (!dockItem)
+                    continue;
+
+                dockItem->hideToolTip();
+            }
+        }
+
+        popWindow->show(popupPoint(item), true);
+        canBack = false;
+    }
+
+    QuickSettingContainer *container = static_cast<QuickSettingContainer *>(popWindow->getContent());
+    container->showPage(childPage, item->pluginItem(), canBack);
 }
 
 int QuickPluginWindow::getDropIndex(QPoint point)
@@ -534,6 +551,7 @@ void QuickPluginWindow::initConnection()
     QuickPluginModel *model = QuickPluginModel::instance();
     connect(model, &QuickPluginModel::requestUpdate, this, &QuickPluginWindow::onRequestUpdate);
     connect(model, &QuickPluginModel::requestUpdatePlugin, this, &QuickPluginWindow::onUpdatePlugin);
+    connect(QuickSettingController::instance(), &QuickSettingController::requestAppletShow, this, &QuickPluginWindow::onRequestAppletShow);
 }
 
 /**

@@ -35,6 +35,7 @@ public:
     ~PluginChildPage() override;
     void pushWidget(QWidget *widget);
     void setTitle(const QString &text);
+    void setCanBack(bool canBack);
     bool isBack();
 
 Q_SIGNALS:

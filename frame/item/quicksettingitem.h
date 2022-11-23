@@ -53,7 +53,6 @@ Q_SIGNALS:
 protected:
     void paintEvent(QPaintEvent *e) override;
     QColor foregroundColor() const;
-    void onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey);
 
 private:
     PluginsItemInterface *m_pluginInter;
