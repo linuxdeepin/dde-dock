@@ -21,7 +21,6 @@
  */
 
 #include "bluetoothplugin.h"
-#include "bluetoothwidget.h"
 #include "adaptersmanager.h"
 
 #include <DGuiApplicationHelper>
@@ -34,7 +33,6 @@ BluetoothPlugin::BluetoothPlugin(QObject *parent)
     : QObject(parent)
     , m_adapterManager(new AdaptersManager(this))
     , m_bluetoothItem(nullptr)
-    , m_bluetoothWidget(new BluetoothWidget(m_adapterManager))
 {
 }
 
