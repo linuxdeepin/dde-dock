@@ -247,7 +247,8 @@ private:
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
-    QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
+    QTimer *m_delayWakeOnScreenSwitchTimer;     // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
+    QTimer *m_delayWakeOnHideTimer;             // 任务栏在同一个屏幕隐藏后再唤出时，需要短暂延时
 
     DockScreen m_ds;                            // 屏幕名称信息
     ScreenChangeMonitor *m_screenMonitor;       // 用于监视屏幕是否为系统先拔再插
