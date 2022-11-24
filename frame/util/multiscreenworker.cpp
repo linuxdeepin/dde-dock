@@ -40,7 +40,8 @@ MultiScreenWorker::MultiScreenWorker(QWidget *parent)
     , m_dockInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
-    , m_delayWakeTimer(new QTimer(this))
+    , m_delayWakeOnScreenSwitchTimer(new QTimer(this))
+    , m_delayWakeOnHideTimer(new QTimer(this))
     , m_ds(DIS_INS->primary())
     , m_screenMonitor(new ScreenChangeMonitor(&m_ds, this))
     , m_state(AutoHide)
@@ -211,7 +212,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
     m_ds.updateDockedScreen(getValidScreen(position()));
 
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
-    m_delayWakeTimer->stop();
+    m_delayWakeOnScreenSwitchTimer->stop();
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {
@@ -936,7 +937,16 @@ void MultiScreenWorker::initMembers()
     m_monitorUpdateTimer->setInterval(100);
     m_monitorUpdateTimer->setSingleShot(true);
 
-    m_delayWakeTimer->setSingleShot(true);
+    // 优化显示方式，隐藏后再显示会延迟一小段时间
+    QScopedPointer<DConfig> config(DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock"));
+    if (config->isValid() && config->keyList().contains("delayIntervalOnHide")) {
+        m_delayWakeOnHideTimer->setInterval(config->value("delayIntervalOnHide").toInt());
+    } else {
+        m_delayWakeOnHideTimer->setInterval(0);
+    }
+    m_delayWakeOnHideTimer->setSingleShot(true);
+
+    m_delayWakeOnScreenSwitchTimer->setSingleShot(true);
 
     setStates(LauncherDisplay, m_launcherInter->isValid() ? m_launcherInter->visible() : false);
 
@@ -979,7 +989,19 @@ void MultiScreenWorker::initConnection()
     connect(this, &MultiScreenWorker::requestNotifyWindowManager, this, &MultiScreenWorker::onRequestNotifyWindowManager);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
 
-    connect(m_delayWakeTimer, &QTimer::timeout, this, &MultiScreenWorker::onRequestDelayShowDock);
+    connect(m_delayWakeOnScreenSwitchTimer, &QTimer::timeout, this, &MultiScreenWorker::onRequestDelayShowDock);
+    connect(m_delayWakeOnHideTimer, &QTimer::timeout, this, [ = ] {
+        // 鼠标处于按下状态，不再显示
+        if (testState(MousePress))
+            return;
+
+        const QRect boundRect = parent()->visibleRegion().boundingRect();
+        qDebug() << "boundRect:" << boundRect;
+        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
+                && (boundRect.size().isEmpty())) {
+            displayAnimation(m_ds.current(), AniAction::Show);
+        }
+    });
 
     //　更新任务栏内容展示方式
     connect(this, &MultiScreenWorker::requestUpdateLayout, this, &MultiScreenWorker::onRequestUpdateLayout);
@@ -1442,11 +1464,18 @@ void MultiScreenWorker::checkXEventMonitorService()
 {
     auto connectionInit = [ = ](XEventMonitor * eventInter, XEventMonitor * extralEventInter, XEventMonitor * touchEventInter) {
         connect(eventInter, &XEventMonitor::CursorMove, this, &MultiScreenWorker::onRegionMonitorChanged);
+        connect(eventInter, &XEventMonitor::CursorOut, this, [ = ] { m_delayWakeOnHideTimer->stop(); });
         connect(eventInter, &XEventMonitor::ButtonPress, this, [ = ] { setStates(MousePress, true); });
         connect(eventInter, &XEventMonitor::ButtonRelease, this, [ = ](int i, int x, int y, const QString &key) {
             Q_UNUSED(i);
             Q_UNUSED(key);
             setStates(MousePress, false);
+
+            // 鼠标松开时，重新计时
+            if (key == m_registerKey) {
+                m_delayWakeOnHideTimer->start();
+            }
+
             // 在鼠标拖动任务栏在最大尺寸的时候，如果当前任务栏为隐藏模式（一直隐藏或智能隐藏），在松开鼠标的那一刻，判断当前
             // 鼠标位置是否在任务栏外面(isCursorOut(x,y)==true)，此时需要触发onExtralRegionMonitorChanged函数，
             // 目的是为了让其触发隐藏
@@ -1821,9 +1850,9 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 
     // 任务栏显示状态，但需要切换屏幕
     if (toScreen != m_ds.current()) {
-        if (!m_delayWakeTimer->isActive()) {
+        if (!m_delayWakeOnScreenSwitchTimer->isActive()) {
             m_delayScreen = toScreen;
-            m_delayWakeTimer->start(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", MonitorsSwitchTime, 2000).toInt());
+            m_delayWakeOnScreenSwitchTimer->start(Utils::SettingValue("com.deepin.dde.dock.mainwindow", "/com/deepin/dde/dock/mainwindow/", MonitorsSwitchTime, 2000).toInt());
         }
     } else {
         // 任务栏隐藏状态，但需要显示
@@ -1838,12 +1867,7 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
             return;
         }
 
-        const QRect boundRect = parent()->visibleRegion().boundingRect();
-        qDebug() << "boundRect:" << boundRect;
-        if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)
-                && (boundRect.size().isEmpty())) {
-            displayAnimation(m_ds.current(), AniAction::Show);
-        }
+        m_delayWakeOnHideTimer->start();
     }
 }
 
