@@ -128,13 +128,10 @@ static DArrowRectangle::ArrowDirection getDirection(const Dock::Position &positi
 
 DockPopupWindow *QuickSettingContainer::popWindow()
 {
-    if (m_popWindow) {
-        QuickSettingContainer *container = static_cast<QuickSettingContainer *>(m_popWindow->getContent());
+    if (m_popWindow)
         return m_popWindow;
-    }
 
     m_popWindow = new DockPopupWindow;
-    m_popWindow->setWindowFlag(Qt::Popup);
     m_popWindow->setShadowBlurRadius(20);
     m_popWindow->setRadius(18);
     m_popWindow->setShadowYOffset(2);
@@ -144,7 +141,7 @@ DockPopupWindow *QuickSettingContainer::popWindow()
     m_popWindow->setArrowDirection(getDirection(m_position));
     m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
     if (Utils::IS_WAYLAND_DISPLAY)
-        m_popWindow->setWindowFlags(m_popWindow->windowFlags() | Qt::FramelessWindowHint | Qt::Popup);
+        m_popWindow->setWindowFlags(m_popWindow->windowFlags() | Qt::FramelessWindowHint);
     return m_popWindow;
 }
 
