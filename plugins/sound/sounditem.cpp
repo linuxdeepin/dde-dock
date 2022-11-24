@@ -195,7 +195,7 @@ void SoundItem::refreshIcon()
 
     const double volmue = m_applet->volumeValue();
     const double maxVolmue = m_applet->maxVolumeValue();
-    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
@@ -241,7 +241,7 @@ void SoundItem::refreshTips(const int volume, const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
     if (mute) {
         m_tipsLabel->setText(QString(tr("Mute")));
     } else {
@@ -260,7 +260,7 @@ QPixmap SoundItem::pixmap(int colorType) const
 
     const double volmue = m_applet->volumeValue();
     const double maxVolmue = m_applet->maxVolumeValue();
-    const bool mute = m_applet->existActiveOutputDevice() ? m_sinkInter->mute() : true;
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
 
     QString iconString;
     if (displayMode == Dock::Fashion) {

@@ -43,57 +43,11 @@ using DBusSink = org::deepin::daemon::audio1::Sink;
 
 class HorizontalSeperator;
 class QGSettings;
+class SoundDevicePort;
 
 namespace Dock {
 class TipsWidget;
 }
-
-class Port : public QObject
-{
-    Q_OBJECT
-public:
-    enum Direction {
-        Out = 1,
-        In = 2
-    };
-
-    explicit Port(QObject *parent = nullptr);
-    virtual ~Port() {}
-
-    inline QString id() const { return m_id; }
-    void setId(const QString &id);
-
-    inline QString name() const { return m_name; }
-    void setName(const QString &name);
-
-    inline QString cardName() const { return m_cardName; }
-    void setCardName(const QString &cardName);
-
-    inline bool isActive() const { return m_isActive; }
-    void setIsActive(bool isActive);
-
-    inline Direction direction() const { return m_direction; }
-    void setDirection(const Direction &direction);
-
-    inline uint cardId() const { return m_cardId; }
-    void setCardId(const uint &cardId);
-
-Q_SIGNALS:
-    void idChanged(QString id) const;
-    void nameChanged(QString name) const;
-    void cardNameChanged(QString name) const;
-    void isActiveChanged(bool ative) const;
-    void directionChanged(Direction direction) const;
-    void cardIdChanged(uint cardId) const;
-
-private:
-    QString m_id;
-    QString m_name;
-    uint m_cardId;
-    QString m_cardName;
-    bool m_isActive;
-    Direction m_direction;
-};
 
 class BackgroundWidget : public QWidget
 {
@@ -128,10 +82,10 @@ public:
     int volumeValue() const;
     int maxVolumeValue() const;
     VolumeSlider *mainSlider();
-    void startAddPort(Port *port);
+    void startAddPort(SoundDevicePort *port);
     void startRemovePort(const QString &portId, const uint &cardId);
-    bool containsPort(const Port *port);
-    Port *findPort(const QString &portId, const uint &cardId) const;
+    bool containsPort(const SoundDevicePort *port);
+    SoundDevicePort *findPort(const QString &portId, const uint &cardId) const;
     void setUnchecked(DStandardItem *pi);
     void initUi();
 
@@ -148,7 +102,7 @@ private slots:
     void increaseVolumeChanged();
     void cardsChanged(const QString &cards);
     void removePort(const QString &portId, const uint &cardId);
-    void addPort(const Port *port);
+    void addPort(const SoundDevicePort *port);
     void activePort(const QString &portId,const uint &cardId);
     void haldleDbusSignal(const QDBusMessage &msg);
     void updateListHeight();
@@ -181,9 +135,9 @@ private:
     DBusSink *m_defSinkInter;
     DTK_WIDGET_NAMESPACE::DListView  *m_listView;
     QStandardItemModel *m_model;
-    QList<Port *> m_ports;
+    QList<SoundDevicePort *> m_ports;
     QString m_deviceInfo;
-    QPointer<Port> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
+    QPointer<SoundDevicePort> m_lastPort;//最后一个因为只有一个设备而被直接移除的设备
     const QGSettings *m_gsettings;
 };
 

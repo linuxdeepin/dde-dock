@@ -38,6 +38,7 @@ class QLabel;
 class VolumeModel;
 class AudioSink;
 class SettingDelegate;
+class SoundDevicePort;
 
 using DBusAudio = org::deepin::daemon::Audio1;
 using DBusSink = org::deepin::daemon::audio1::Sink;
@@ -58,12 +59,24 @@ private:
     void initConnection();
     QString leftIcon();
     QString rightIcon();
-    const QString soundIconFile(const AudioPort port) const;
+    const QString soundIconFile() const;
 
     void resizeHeight();
 
     void resetVolumeInfo();
     uint audioPortCardId(const AudioPort &audioport) const;
+
+    SoundDevicePort *findPort(const QString &portId, const uint &cardId) const;
+    void startAddPort(SoundDevicePort *port);
+    void startRemovePort(const QString &portId, const uint &cardId);
+
+    void addPort(const SoundDevicePort *port);
+    void removePort(const QString &portId, const uint &cardId);
+
+    void activePort(const QString &portId, const uint &cardId);
+
+    void removeLastDevice();
+    void removeDisabledDevice(QString portId, unsigned int cardId);
 
 private Q_SLOTS:
     void onSelectIndexChanged(const QModelIndex &index);
@@ -75,10 +88,12 @@ private:
     SliderContainer *m_sliderContainer;
     QLabel *m_descriptionLabel;
     DListView *m_deviceList;
-    DBusAudio *m_volumeModel;
-    DBusSink *m_audioSink;
+    DBusAudio *m_soundInter;
+    DBusSink *m_sinkInter;
     QStandardItemModel *m_model;
     SettingDelegate *m_delegate;
+    QList<SoundDevicePort *> m_ports;
+    SoundDevicePort *m_lastPort;
 };
 
 #endif // VOLUMEDEVICESWIDGET_H

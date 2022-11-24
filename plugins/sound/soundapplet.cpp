@@ -20,6 +20,7 @@
  */
 
 #include "soundapplet.h"
+#include "sounddeviceport.h"
 #include "util/horizontalseperator.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
@@ -51,64 +52,6 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 using namespace Dock;
-
-Q_DECLARE_METATYPE(const Port *)
-
-Port::Port(QObject *parent)
-    : QObject(parent)
-    , m_isActive(false)
-    , m_direction(Out)
-{
-
-}
-
-void Port::setId(const QString &id)
-{
-    if (id != m_id) {
-        m_id = id;
-        Q_EMIT idChanged(id);
-    }
-}
-
-void Port::setName(const QString &name)
-{
-    if (name != m_name) {
-        m_name = name;
-        Q_EMIT nameChanged(name);
-    }
-}
-
-void Port::setCardName(const QString &cardName)
-{
-    if (cardName != m_cardName) {
-        m_cardName = cardName;
-        Q_EMIT cardNameChanged(cardName);
-    }
-}
-
-void Port::setIsActive(bool isActive)
-{
-    if (isActive != m_isActive) {
-        m_isActive = isActive;
-        Q_EMIT isActiveChanged(isActive);
-    }
-}
-
-void Port::setDirection(const Direction &direction)
-{
-    if (direction != m_direction) {
-        m_direction = direction;
-        Q_EMIT directionChanged(direction);
-    }
-}
-
-void Port::setCardId(const uint &cardId)
-{
-    if (cardId != m_cardId) {
-        m_cardId = cardId;
-        Q_EMIT cardIdChanged(cardId);
-    }
-}
 
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent)
@@ -235,7 +178,7 @@ void SoundApplet::initUi()
         portEnableChange(cardId, portId);
     });;
     connect(m_listView, &DListView::clicked, this, [this](const QModelIndex & idx) {
-        const Port * port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const Port *>();
+        const SoundDevicePort *port = m_listView->model()->data(idx, Qt::WhatsThisPropertyRole).value<const SoundDevicePort *>();
         if (port) {
             m_audioInter->SetPort(port->cardId(), port->id(), int(port->direction()));
             //手动勾选时启用设备
@@ -337,13 +280,13 @@ void SoundApplet::cardsChanged(const QString &cards)
                 const QString portId = jPort["Name"].toString();
                 const QString portName = jPort["Description"].toString();
 
-                Port *port = findPort(portId, cardId);
+                SoundDevicePort *port = findPort(portId, cardId);
                 const bool include = port != nullptr;
-                if (!include) { port = new Port(m_model); }
+                if (!include) { port = new SoundDevicePort(m_model); }
 
                 port->setId(portId);
                 port->setName(portName);
-                port->setDirection(Port::Direction(jPort["Direction"].toDouble()));
+                port->setDirection(SoundDevicePort::Direction(jPort["Direction"].toDouble()));
                 port->setCardId(cardId);
                 port->setCardName(cardName);
 
@@ -360,7 +303,7 @@ void SoundApplet::cardsChanged(const QString &cards)
     onDefaultSinkChanged();//重新获取切换的设备信息
     enableDevice(existActiveOutputDevice());
 
-    for (Port *port : m_ports) {
+    for (SoundDevicePort *port : m_ports) {
         //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
         if (!m_audioInter->IsPortEnabled(port->cardId(), port->id())) {
             removeDisabledDevice(port->id(), port->cardId());
@@ -428,9 +371,9 @@ void SoundApplet::refreshIcon()
  * @brief SoundApplet::startAddPort 添加端口前判断
  * @param port 端口
  */
-void SoundApplet::startAddPort(Port *port)
+void SoundApplet::startAddPort(SoundDevicePort *port)
 {
-    if (!containsPort(port) && port->direction() == Port::Out) {
+    if (!containsPort(port) && port->direction() == SoundDevicePort::Out) {
         m_ports.append(port);
         addPort(port);
     }
@@ -443,7 +386,7 @@ void SoundApplet::startAddPort(Port *port)
  */
 void SoundApplet::startRemovePort(const QString &portId, const uint &cardId)
 {
-    Port *port = findPort(portId, cardId);
+    SoundDevicePort *port = findPort(portId, cardId);
     if (port) {
         m_ports.removeOne(port);
         port->deleteLater();
@@ -451,14 +394,14 @@ void SoundApplet::startRemovePort(const QString &portId, const uint &cardId)
     }
 }
 
-bool SoundApplet::containsPort(const Port *port)
+bool SoundApplet::containsPort(const SoundDevicePort *port)
 {
     return findPort(port->id(), port->cardId()) != nullptr;
 }
 
-Port *SoundApplet::findPort(const QString &portId, const uint &cardId) const
+SoundDevicePort *SoundApplet::findPort(const QString &portId, const uint &cardId) const
 {
-    auto it = std::find_if(m_ports.begin(), m_ports.end(), [ = ] (Port *p) {
+    auto it = std::find_if(m_ports.begin(), m_ports.end(), [ = ] (SoundDevicePort *p) {
         return (p->id() == portId && p->cardId() == cardId);
     });
 
@@ -469,23 +412,23 @@ Port *SoundApplet::findPort(const QString &portId, const uint &cardId) const
     return nullptr;
 }
 
-void SoundApplet::addPort(const Port *port)
+void SoundApplet::addPort(const SoundDevicePort *port)
 {
     DStandardItem *pi = new DStandardItem;
     QString deviceName = port->name() + "(" + port->cardName() + ")";
     pi->setText(deviceName);
     pi->setTextColorRole(QPalette::BrightText);
-    pi->setData(QVariant::fromValue<const Port *>(port), Qt::WhatsThisPropertyRole);
+    pi->setData(QVariant::fromValue<const SoundDevicePort *>(port), Qt::WhatsThisPropertyRole);
 
-    connect(port, &Port::nameChanged, this, [ = ](const QString &str) {
+    connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
         QString devName = str + "(" + port->cardName() + ")";
         pi->setText(devName);
     });
-    connect(port, &Port::cardNameChanged, this, [ = ](const QString &str) {
+    connect(port, &SoundDevicePort::cardNameChanged, this, [ = ](const QString &str) {
         QString devName = port->name() + "(" + str + ")";
         pi->setText(devName);
     });
-    connect(port, &Port::isActiveChanged, this, [ = ](bool isActive) {
+    connect(port, &SoundDevicePort::isActiveChanged, this, [ = ](bool isActive) {
         pi->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
     });
 
@@ -504,7 +447,7 @@ void SoundApplet::removePort(const QString &portId, const uint &cardId)
     auto rmFunc = [ = ](QStandardItemModel * model) {
         for (int i = 0; i < model->rowCount();) {
             auto item = model->item(i);
-            auto port = item->data(Qt::WhatsThisPropertyRole).value<const Port *>();
+            auto port = item->data(Qt::WhatsThisPropertyRole).value<const SoundDevicePort *>();
             if (port->id() == portId && cardId == port->cardId()) {
                 model->removeRow(i);
                 break;
@@ -526,7 +469,7 @@ void SoundApplet::removePort(const QString &portId, const uint &cardId)
  */
 void SoundApplet::activePort(const QString &portId, const uint &cardId)
 {
-    for (Port *it : m_ports) {
+    for (SoundDevicePort *it : m_ports) {
         if (it->id() == portId && it->cardId() == cardId) {
             it->setIsActive(true);
             enableDevice(true);
@@ -562,7 +505,7 @@ void SoundApplet::enableDevice(bool flag)
 
 void SoundApplet::disableAllDevice()
 {
-    for (Port *port : m_ports) {
+    for (SoundDevicePort *port : m_ports) {
         port->setIsActive(false);
     }
 }
@@ -574,7 +517,7 @@ void SoundApplet::disableAllDevice()
 void SoundApplet::removeLastDevice()
 {
     if (m_ports.count() == 1 && m_ports.at(0)) {
-        m_lastPort = new Port(m_model);
+        m_lastPort = new SoundDevicePort(m_model);
         m_lastPort->setId(m_ports.at(0)->id());
         m_lastPort->setName(m_ports.at(0)->name());
         m_lastPort->setDirection(m_ports.at(0)->direction());

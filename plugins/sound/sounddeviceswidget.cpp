@@ -23,6 +23,7 @@
 #include "settingdelegate.h"
 #include "imageutil.h"
 #include "slidercontainer.h"
+#include "sounddeviceport.h"
 
 #include <DListView>
 #include <DPushButton>
@@ -47,7 +48,7 @@ DWIDGET_USE_NAMESPACE
 #define AUDIOPORT 0
 #define AUDIOSETTING 1
 
-const int cardIdRole = itemFlagRole + 1;
+const int sortRole = itemFlagRole + 1;
 
 SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     : QWidget(parent)
@@ -55,10 +56,11 @@ SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     , m_sliderContainer(new SliderContainer(m_sliderParent))
     , m_descriptionLabel(new QLabel(tr("Output Device"), this))
     , m_deviceList(new DListView(this))
-    , m_volumeModel(new DBusAudio("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", QDBusConnection::sessionBus(), this))
-    , m_audioSink(new DBusSink("org.deepin.daemon.Audio1", m_volumeModel->defaultSink().path(), QDBusConnection::sessionBus(), this))
+    , m_soundInter(new DBusAudio("org.deepin.daemon.Audio1", "/org/deepin/daemon/Audio1", QDBusConnection::sessionBus(), this))
+    , m_sinkInter(new DBusSink("org.deepin.daemon.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this))
     , m_model(new QStandardItemModel(this))
     , m_delegate(new SettingDelegate(m_deviceList))
+    , m_lastPort(nullptr)
 {
     initUi();
     initConnection();
@@ -132,32 +134,9 @@ void SoundDevicesWidget::initUi()
     m_deviceList->setSpacing(10);
 
     m_deviceList->setItemDelegate(m_delegate);
-}
+    m_model->setSortRole(sortRole);
 
-void SoundDevicesWidget::onAudioDevicesChanged()
-{
-    QList<AudioPort> ports = m_audioSink->ports();
-    for (AudioPort port : ports) {
-        if (port.availability != 0 && port.availability != 2)
-            continue;
-
-        uint cardId = audioPortCardId(port);
-        if (!m_volumeModel->IsPortEnabled(cardId, port.name))
-            continue;
-
-        DStandardItem *item = new DStandardItem;
-        item->setText(QString("%1(%2)").arg(port.description).arg(port.name));
-        item->setIcon(QIcon(soundIconFile(port)));
-        item->setFlags(Qt::NoItemFlags);
-        item->setData(port.availability == 2, itemCheckRole);
-        item->setData(QVariant::fromValue(port), itemDataRole);
-        item->setData(AUDIOPORT, itemFlagRole);
-        item->setData(cardId, cardIdRole);
-        m_model->appendRow(item);
-        if (port.availability == 2)
-            m_deviceList->setCurrentIndex(m_model->indexFromItem(item));
-    }
-
+    // 增加音量设置
     DStandardItem *settingItem = new DStandardItem;
     settingItem->setText(tr("Sound settings"));
     settingItem->setFlags(Qt::NoItemFlags);
@@ -166,22 +145,202 @@ void SoundDevicesWidget::onAudioDevicesChanged()
     m_model->appendRow(settingItem);
 }
 
+void SoundDevicesWidget::onAudioDevicesChanged()
+{
+    QMap<uint, QStringList> tmpCardIds;
+    const QString cards = m_soundInter->cardsWithoutUnavailable();
+    QJsonDocument doc = QJsonDocument::fromJson(cards.toUtf8());
+        QJsonArray jCards = doc.array();
+        for (QJsonValue cV : jCards) {
+            QJsonObject jCard = cV.toObject();
+            const uint cardId = jCard["Id"].toInt();
+            const QString cardName = jCard["Name"].toString();
+            QJsonArray jPorts = jCard["Ports"].toArray();
+
+            QStringList tmpPorts;
+
+            for (QJsonValue pV : jPorts) {
+                QJsonObject jPort = pV.toObject();
+                const double portAvai = jPort["Available"].toDouble();
+                if (portAvai == 2 || portAvai == 0 ) {
+                    const QString portId = jPort["Name"].toString();
+                    const QString portName = jPort["Description"].toString();
+
+                    SoundDevicePort *port = findPort(portId, cardId);
+                    bool includePort = (port != nullptr);
+                    if (!port)
+                        port = new SoundDevicePort(m_model);
+
+                    port->setId(portId);
+                    port->setName(portName);
+                    port->setDirection(SoundDevicePort::Direction(jPort["Direction"].toDouble()));
+                    port->setCardId(cardId);
+                    port->setCardName(cardName);
+
+                    if (!includePort)
+                        startAddPort(port);
+
+                    tmpPorts << portId;
+                }
+            }
+            tmpCardIds.insert(cardId, tmpPorts);
+        }
+
+        onDefaultSinkChanged(m_soundInter->defaultSink());//重新获取切换的设备信息
+
+        for (SoundDevicePort *port : m_ports) {
+            //只要有一个设备在控制中心被禁用后，在任务栏声音设备列表中该设备会被移除，
+            if (!m_soundInter->IsPortEnabled(port->cardId(), port->id())) {
+                removeDisabledDevice(port->id(), port->cardId());
+            }
+            //判断端口是否在最新的设备列表中
+            if (tmpCardIds.contains(port->cardId())) {
+                if (!tmpCardIds[port->cardId()].contains(port->id())) {
+                    startRemovePort(port->id(), port->cardId());
+                }
+            }
+            else {
+                startRemovePort(port->id(), port->cardId());
+            }
+        }
+        //当只有一个设备剩余时，该设备也需要移除
+        removeLastDevice();
+}
+
 void SoundDevicesWidget::initConnection()
 {
-    connect(m_audioSink, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
-    connect(m_volumeModel, &DBusAudio::DefaultSinkChanged, this, &SoundDevicesWidget::onDefaultSinkChanged);
+    connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
+    connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
+    connect(m_soundInter, &DBusAudio::DefaultSinkChanged, this, &SoundDevicesWidget::onDefaultSinkChanged);
     connect(m_delegate, &SettingDelegate::selectIndexChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
-    connect(m_volumeModel, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
-    connect(m_volumeModel, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
+    connect(m_soundInter, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
+    connect(m_soundInter, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
 
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
-        m_audioSink->SetVolume(value * 0.01, true);
+        m_sinkInter->SetVolume(value * 0.01, true);
     });
+}
+
+/**
+ * @brief SoundApplet::startAddPort 添加端口前判断
+ * @param port 端口
+ */
+void SoundDevicesWidget::startAddPort(SoundDevicePort *port)
+{
+    if (findPort(port->id(), port->cardId()))
+        return;
+
+    if (port->direction() == SoundDevicePort::Out) {
+        m_ports.append(port);
+        addPort(port);
+    }
+}
+
+void SoundDevicesWidget::startRemovePort(const QString &portId, const uint &cardId)
+{
+    SoundDevicePort *port = findPort(portId, cardId);
+    if (port) {
+        m_ports.removeOne(port);
+        port->deleteLater();
+        removePort(portId, cardId);
+    }
+}
+
+void SoundDevicesWidget::addPort(const SoundDevicePort *port)
+{
+    DStandardItem *portItem = new DStandardItem;
+    QString deviceName = port->name() + "(" + port->cardName() + ")";
+    portItem->setIcon(QIcon(soundIconFile()));
+    portItem->setText(deviceName);
+    portItem->setTextColorRole(QPalette::BrightText);
+    portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), itemDataRole);
+    portItem->setData(port->isActive(), itemCheckRole);
+    portItem->setData(AUDIOPORT, itemFlagRole);
+
+    connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
+        QString devName = str + "(" + port->cardName() + ")";
+        portItem->setText(devName);
+    });
+    connect(port, &SoundDevicePort::cardNameChanged, this, [ = ](const QString &str) {
+        QString devName = port->name() + "(" + str + ")";
+        portItem->setText(devName);
+    });
+    connect(port, &SoundDevicePort::isActiveChanged, this, [ = ](bool isActive) {
+        portItem->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+    });
+
+    if (port->isActive()) {
+        portItem->setCheckState(Qt::CheckState::Checked);
+    }
+
+    m_model->appendRow(portItem);
+    // 遍历列表，依次对不同的设备排序
+    int row = 0;
+    int rowCount = m_model->rowCount();
+    for (int i = 0; i < rowCount; i++) {
+        QStandardItem *item = m_model->item(i);
+        if (item->data(itemFlagRole).toInt() == AUDIOSETTING) {
+            item->setData(rowCount - 1, sortRole);
+        } else {
+            item->setData(row, sortRole);
+            row++;
+        }
+    }
+
+    m_model->sort(0);
+}
+
+void SoundDevicesWidget::removePort(const QString &portId, const uint &cardId)
+{
+    int removeRow = -1;
+    for (int i = 0; i < m_model->rowCount(); i++) {
+        QStandardItem *item = m_model->item(i);
+        if (item->data(itemFlagRole).toInt() != AUDIOPORT)
+            continue;
+
+        const SoundDevicePort *port = item->data(itemDataRole).value<const SoundDevicePort *>();
+        if (port && port->id() == portId && cardId == port->cardId()) {
+            removeRow = i;
+            break;
+        }
+    }
+
+    if (removeRow >= 0)
+        m_model->removeRow(removeRow);
+}
+
+void SoundDevicesWidget::activePort(const QString &portId, const uint &cardId)
+{
+    for (SoundDevicePort *it : m_ports)
+        it->setIsActive(it->id() == portId && it->cardId() == cardId);
+}
+
+void SoundDevicesWidget::removeLastDevice()
+{
+    if (m_ports.count() == 1 && m_ports.at(0)) {
+        m_lastPort = new SoundDevicePort(m_model);
+        m_lastPort->setId(m_ports.at(0)->id());
+        m_lastPort->setName(m_ports.at(0)->name());
+        m_lastPort->setDirection(m_ports.at(0)->direction());
+        m_lastPort->setCardId(m_ports.at(0)->cardId());
+        m_lastPort->setCardName(m_ports.at(0)->cardName());
+        startRemovePort(m_ports.at(0)->id(), m_ports.at(0)->cardId());
+        qDebug() << "remove last output device";
+    }
+}
+
+void SoundDevicesWidget::removeDisabledDevice(QString portId, unsigned int cardId)
+{
+    startRemovePort(portId, cardId);
+    if (m_sinkInter->activePort().name == portId && m_sinkInter->card() == cardId) {
+        for (SoundDevicePort *port : m_ports)
+            port->setIsActive(false);
+    }
 }
 
 QString SoundDevicesWidget::leftIcon()
 {
-    QString iconLeft = QString(":/icons/resources/audio-volume-%1").arg(m_audioSink->mute() ? "muted" : "low");
+    QString iconLeft = QString(":/icons/resources/audio-volume-%1").arg(m_sinkInter->mute() ? "muted" : "low");
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconLeft.append("-dark");
 
@@ -197,7 +356,7 @@ QString SoundDevicesWidget::rightIcon()
     return iconRight;
 }
 
-const QString SoundDevicesWidget::soundIconFile(const AudioPort port) const
+const QString SoundDevicesWidget::soundIconFile() const
 {
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         return QString(":/icons/resources/ICON_Device_Laptop_dark.svg");
@@ -217,12 +376,13 @@ void SoundDevicesWidget::resizeHeight()
 
 void SoundDevicesWidget::resetVolumeInfo()
 {
-    m_sliderContainer->updateSliderValue(m_audioSink->volume() * 100);
+    //无声卡状态下，会有伪sink设备，显示音量为0
+    m_sliderContainer->updateSliderValue(findPort(m_sinkInter->activePort().name, m_sinkInter->card()) != nullptr ? m_sinkInter->volume() * 100 : 0);
 }
 
 uint SoundDevicesWidget::audioPortCardId(const AudioPort &audioport) const
 {
-    QString cards = m_volumeModel->cardsWithoutUnavailable();
+    QString cards = m_soundInter->cardsWithoutUnavailable();
     QJsonParseError error;
     QJsonDocument json = QJsonDocument::fromJson(cards.toLocal8Bit(), &error);
     if (error.error != QJsonParseError::NoError)
@@ -250,15 +410,28 @@ uint SoundDevicesWidget::audioPortCardId(const AudioPort &audioport) const
     return -1;
 }
 
+SoundDevicePort *SoundDevicesWidget::findPort(const QString &portId, const uint &cardId) const
+{
+    auto it = std::find_if(m_ports.begin(), m_ports.end(), [ = ] (SoundDevicePort *p) {
+        return (p->id() == portId && p->cardId() == cardId);
+    });
+
+    if (it != m_ports.end()) {
+        return *it;
+    }
+
+    return nullptr;
+}
+
 void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
 {
     int flag = index.data(itemFlagRole).toInt();
     if (flag == AUDIOPORT) {
-        // 如果是点击具体的声音设备
-        AudioPort port = index.data(itemDataRole).value<AudioPort>();
-        uint cardId = index.data(cardIdRole).toUInt();
-        if (cardId >= 0) {
-            m_volumeModel->SetPort(cardId, port.name, 1);
+        const SoundDevicePort *port = m_model->data(index, itemDataRole).value<const SoundDevicePort *>();
+        if (port) {
+            m_soundInter->SetPort(port->cardId(), port->id(), int(port->direction()));
+            //手动勾选时启用设备
+            m_soundInter->SetPortEnabled(port->cardId(), port->id(), true);
             m_deviceList->update();
         }
     } else {
@@ -273,9 +446,27 @@ void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
 
 void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
 {
-    delete m_audioSink;
-    m_audioSink = new DBusSink("org.deepin.daemon.Audio1", m_volumeModel->defaultSink().path(), QDBusConnection::sessionBus(), this);
-    connect(m_audioSink, &DBusSink::VolumeChanged, m_sliderContainer, &SliderContainer::updateSliderValue);
+    delete m_sinkInter;
+    m_sinkInter = new DBusSink("org.deepin.daemon.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this);
+    connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
+    connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
+
+    QString portId = m_sinkInter->activePort().name;
+    uint cardId = m_sinkInter->card();
+    //最后一个设备会被移除，但是当在控制中心选中此设备后需要添加，并勾选
+    if (m_lastPort && m_lastPort->cardId() == cardId && m_lastPort->id() == portId)
+        startAddPort(m_lastPort);
+
+    activePort(portId, cardId);
+
+    for (int i = 0; i < m_model->rowCount() ; i++) {
+        QStandardItem *item = m_model->item(i);
+        if (item->data(itemFlagRole).toInt() != AUDIOPORT)
+            continue;
+
+        const SoundDevicePort *soundPort = item->data(itemDataRole).value<const SoundDevicePort *>();
+        item->setData((soundPort && soundPort->id() == portId && soundPort->cardId() == cardId), itemCheckRole);
+    }
 
     resetVolumeInfo();
     m_deviceList->update();
