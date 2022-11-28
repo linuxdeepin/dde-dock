@@ -68,7 +68,7 @@ void OnboardPlugin::pluginStateSwitched()
 
 bool OnboardPlugin::pluginIsDisable()
 {
-    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
+    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, false).toBool());
 }
 
 const QString OnboardPlugin::itemCommand(const QString &itemKey)
@@ -180,8 +180,7 @@ void OnboardPlugin::loadPlugin()
 
 void OnboardPlugin::refreshPluginItemsVisible()
 {
-    if (pluginIsDisable())
-    {
+    if (pluginIsDisable()) {
         m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {
