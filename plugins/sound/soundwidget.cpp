@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "soundwidget.h"
-#include "brightnessmodel.h"
 #include "imageutil.h"
 #include "imageutil.h"
 #include "slidercontainer.h"

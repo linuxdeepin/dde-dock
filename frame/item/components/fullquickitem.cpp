@@ -55,10 +55,6 @@ void FullQuickItem::initUi()
     m_effectWidget->setBlurRectXRadius(8);
     m_effectWidget->setBlurRectYRadius(8);
 
-    QIcon icon = pluginItem()->icon(DockPart::QuickPanel);
-    if (icon.isNull())
-        return;
-
     // 如果图标不为空
     if (!m_centerWidget)
         return;

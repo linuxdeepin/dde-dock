@@ -62,7 +62,6 @@ protected:
 
     explicit QuickSettingContainer(QWidget *parent = nullptr);
     ~QuickSettingContainer() override;
-    void showPage(QWidget *widget, const QString &title, bool canBack = false);
 
 private Q_SLOTS:
     void onPluginRemove(PluginsItemInterface *itemInter);
@@ -93,10 +92,6 @@ private:
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;
     MediaWidget *m_playerWidget;
-    BrightnessModel *m_brightnessModel;
-    BrightnessWidget *m_brihtnessWidget;
-
-    DisplaySettingWidget *m_displaySettingWidget;
     PluginChildPage *m_childPage;
     QuickDragInfo *m_dragInfo;
     QList<QuickSettingItem *> m_quickSettings;

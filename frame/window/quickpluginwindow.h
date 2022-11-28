@@ -80,7 +80,7 @@ private:
     QPoint popupPoint(QWidget *widget) const;
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
     QuickDockItem *getActiveDockItem(QPoint point) const;
-    void showPopup(QuickDockItem *item, QWidget *childPage = nullptr);
+    void showPopup(QuickDockItem *item, PluginsItemInterface *itemInter = nullptr, QWidget *childPage = nullptr);
 
 private:
     QBoxLayout *m_mainLayout;

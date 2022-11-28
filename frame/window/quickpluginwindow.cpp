@@ -306,33 +306,37 @@ void QuickPluginWindow::onRequestUpdate()
 
 QPoint QuickPluginWindow::popupPoint(QWidget *widget) const
 {
-    if (!widget)
-        return pos();
+    QWidget *itemWidget = widget;
+    if (!itemWidget && m_mainLayout->count() > 0)
+        itemWidget = m_mainLayout->itemAt(0)->widget();
 
-    QPoint pointCurrent = widget->mapToGlobal(QPoint(0, 0));
+    if (!itemWidget)
+        return QPoint();
+
+    QPoint pointCurrent = itemWidget->mapToGlobal(QPoint(0, 0));
     switch (m_position) {
     case Dock::Position::Bottom: {
         // 在下方的时候，Y坐标设置在顶层窗口的y值，保证下方对齐
-        pointCurrent.setX(pointCurrent.x() + widget->width() / 2);
+        pointCurrent.setX(pointCurrent.x() + itemWidget->width() / 2);
         pointCurrent.setY(topLevelWidget()->y());
         break;
     }
     case Dock::Position::Top: {
         // 在上面的时候，Y坐标设置为任务栏的下方，保证上方对齐
-        pointCurrent.setX(pointCurrent.x() + widget->width() / 2);
+        pointCurrent.setX(pointCurrent.x() + itemWidget->width() / 2);
         pointCurrent.setY(topLevelWidget()->y() + topLevelWidget()->height());
         break;
     }
     case Dock::Position::Left: {
         // 在左边的时候，X坐标设置在顶层窗口的最右侧，保证左对齐
         pointCurrent.setX(topLevelWidget()->x() + topLevelWidget()->width());
-        pointCurrent.setY(pointCurrent.y() + widget->height() / 2);
+        pointCurrent.setY(pointCurrent.y() + itemWidget->height() / 2);
         break;
     }
     case Dock::Position::Right: {
         // 在右边的时候，X坐标设置在顶层窗口的最左侧，保证右对齐
         pointCurrent.setX(topLevelWidget()->x());
-        pointCurrent.setY(pointCurrent.y() + widget->height() / 2);
+        pointCurrent.setY(pointCurrent.y() + itemWidget->height() / 2);
     }
     }
     return pointCurrent;
@@ -351,7 +355,7 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
 
 void QuickPluginWindow::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
 {
-    showPopup(getDockItemByPlugin(itemInter), itemInter->itemPopupApplet(itemKey));
+    showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey));
 }
 
 void QuickPluginWindow::startDrag()
@@ -414,9 +418,9 @@ QuickDockItem *QuickPluginWindow::getActiveDockItem(QPoint point) const
     return selectWidget;
 }
 
-void QuickPluginWindow::showPopup(QuickDockItem *item, QWidget *childPage)
+void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *itemInter, QWidget *childPage)
 {
-    if (!isVisible() || !item)
+    if (!isVisible())
         return;
 
     bool canBack = true;
@@ -442,7 +446,7 @@ void QuickPluginWindow::showPopup(QuickDockItem *item, QWidget *childPage)
     }
 
     QuickSettingContainer *container = static_cast<QuickSettingContainer *>(popWindow->getContent());
-    container->showPage(childPage, item->pluginItem(), canBack);
+    container->showPage(childPage, itemInter, canBack);
 }
 
 int QuickPluginWindow::getDropIndex(QPoint point)

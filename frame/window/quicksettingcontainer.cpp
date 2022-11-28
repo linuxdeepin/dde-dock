@@ -19,17 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "quicksettingcontainer.h"
-#include "brightnessmodel.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingitem.h"
 #include "mediawidget.h"
 #include "dockpopupwindow.h"
-#include "brightnesswidget.h"
 #include "slidercontainer.h"
 #include "pluginchildpage.h"
 #include "utils.h"
-#include "displaysettingwidget.h"
 
 #include <DListView>
 #include <DStyle>
@@ -75,9 +72,6 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
     , m_playerWidget(new MediaWidget(m_componentWidget))
-    , m_brightnessModel(new BrightnessModel(this))
-    , m_brihtnessWidget(new BrightnessWidget(m_brightnessModel, m_componentWidget))
-    , m_displaySettingWidget(new DisplaySettingWidget(this))
     , m_childPage(new PluginChildPage(this))
     , m_dragInfo(new struct QuickDragInfo)
     , m_childShowPlugin(nullptr)
@@ -95,7 +89,7 @@ QuickSettingContainer::~QuickSettingContainer()
 
 void QuickSettingContainer::showPage(QWidget *widget, PluginsItemInterface *pluginInter, bool canBack)
 {
-    if (widget) {
+    if (widget && pluginInter && widget != m_mainWidget) {
         m_childShowPlugin = pluginInter;
         m_childPage->setTitle(pluginInter->pluginDisplayName());
         m_childPage->setCanBack(canBack);
@@ -159,17 +153,6 @@ void QuickSettingContainer::setPosition(Position position)
         QWidget *widget = m_popWindow->getContent();
         m_popWindow->setContent(widget);
     }
-}
-
-void QuickSettingContainer::showPage(QWidget *widget, const QString &title, bool canBack)
-{
-    m_childShowPlugin = nullptr;
-    m_childPage->setTitle(title);
-    m_childPage->setCanBack(canBack);
-    m_childPage->pushWidget(widget);
-    m_switchLayout->setCurrentWidget(m_childPage);
-
-    onResizeView();
 }
 
 bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
@@ -361,10 +344,8 @@ void QuickSettingContainer::initUi()
 
     // 添加音乐播放插件
     m_playerWidget->setFixedHeight(ITEMHEIGHT);
-    m_brihtnessWidget->setFixedHeight(ITEMHEIGHT);
 
     setWidgetStyle(m_playerWidget);
-    setWidgetStyle(m_brihtnessWidget);
 
     m_mainlayout->setSpacing(ITEMSPACE);
     m_mainlayout->setContentsMargins(ITEMSPACE, ITEMSPACE, ITEMSPACE, ITEMSPACE);
@@ -383,7 +364,6 @@ void QuickSettingContainer::initUi()
     ctrlLayout->setSpacing(ITEMSPACE);
 
     ctrlLayout->addWidget(m_playerWidget);
-    ctrlLayout->addWidget(m_brihtnessWidget);
 
     m_mainlayout->addWidget(m_componentWidget);
     // 加载所有的插件
@@ -404,8 +384,6 @@ void QuickSettingContainer::initUi()
         onResizeView();
         setFixedWidth(ITEMWIDTH * 4 + (ITEMSPACE * 5));
     }, Qt::QueuedConnection);
-
-    m_displaySettingWidget->setVisible(false);
 }
 
 void QuickSettingContainer::initConnection()
@@ -420,15 +398,8 @@ void QuickSettingContainer::initConnection()
     connect(m_pluginLoader, &QuickSettingController::pluginUpdated, this, &QuickSettingContainer::onPluginUpdated);
 
     connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
-    connect(m_brihtnessWidget, &BrightnessWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
-    connect(m_brihtnessWidget->sliderContainer(), &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition &iconPosition) {
-        if (iconPosition == SliderContainer::RightIcon) {
-            // 点击右侧的按钮，弹出具体的调节的界面
-            showPage(m_displaySettingWidget, tr("brightness"), true);
-        }
-    });
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {
-        m_switchLayout->setCurrentWidget(m_mainWidget);
+        showPage(m_mainWidget);
     });
     connect(m_childPage, &PluginChildPage::closeSelf, this, [ this ] {
         if (!m_childPage->isBack())
@@ -464,11 +435,6 @@ void QuickSettingContainer::onResizeView()
             fullItemHeight += m_playerWidget->height();
             widgetCount++;
         }
-        if (m_brihtnessWidget->isVisible()) {
-            fullItemHeight += m_brihtnessWidget->height();
-            widgetCount++;
-        }
-
         m_componentWidget->setFixedHeight(fullItemHeight + (widgetCount - 1) * ITEMSPACE);
 
         setFixedHeight(ITEMSPACE * 3 + m_pluginWidget->height() + m_componentWidget->height());

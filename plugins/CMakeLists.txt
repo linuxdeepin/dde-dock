@@ -3,6 +3,7 @@
 add_subdirectory("shutdown")
 add_subdirectory("power")
 add_subdirectory("sound")
+add_subdirectory("display")
 #add_subdirectory("tray")
 add_subdirectory("trash")
 add_subdirectory("keyboard-layout")
