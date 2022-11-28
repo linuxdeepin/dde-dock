@@ -55,8 +55,6 @@ public:
 
     PluginsItemInterface *pluginItem() const;
 
-    QJsonObject metaData() const;
-
 public slots:
     void refreshIcon() override;
 

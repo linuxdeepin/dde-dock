@@ -1,5 +1,4 @@
 {
     "api": "2.0.0",
-    "primary" : true,
     "depends-daemon-dbus-service": "org.deepin.daemon.Bluetooth1"
 }

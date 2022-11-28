@@ -51,7 +51,6 @@ QuickSettingItem::QuickSettingItem(PluginsItemInterface *const pluginInter, QWid
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(QuickSettingController::instance()->itemKey(pluginInter))
-    , m_metaData(QuickSettingController::instance()->metaData(pluginInter))
 {
     setAcceptDrops(true);
     this->installEventFilter(this);
@@ -130,16 +129,19 @@ QColor QuickSettingItem::foregroundColor() const
 
 QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter)
 {
+    QuickSettingController *quickController = QuickSettingController::instance();
     // 如果显示在面板的图标或者Widget为空，则不让显示(例如电池插件)
-    if (pluginInter->icon(DockPart::QuickPanel).isNull() && !pluginInter->itemWidget(QUICK_ITEM_KEY))
+    if (!quickController->hasFlag(pluginInter, PluginFlag::Type_Common))
         return nullptr;
 
-    const QJsonObject metaData = QuickSettingController::instance()->metaData(pluginInter);
-    if (metaData.contains("primary") && metaData.value("primary").toBool())
+    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Multi))
         return new MultiQuickItem(pluginInter);
 
-    if (pluginInter->itemWidget(QUICK_ITEM_KEY) && metaData.contains("applet") && metaData.value("applet").toBool())
+    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Full))
         return new FullQuickItem(pluginInter);
 
-    return new SingleQuickItem(pluginInter);
+    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Single))
+        return new SingleQuickItem(pluginInter);
+
+    return nullptr;
 }

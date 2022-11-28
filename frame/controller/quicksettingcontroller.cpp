@@ -20,7 +20,6 @@
  */
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
-#include "pluginsiteminterface.h"
 #include "proxyplugincontroller.h"
 #include "pluginsitem.h"
 
@@ -88,33 +87,33 @@ void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInt
 
 QuickSettingController::PluginAttribute QuickSettingController::pluginAttribute(PluginsItemInterface * const itemInter) const
 {
-    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(itemInter);
-    if (!pluginLoader)
+    // 工具插件，例如回收站
+    if (hasFlag(itemInter, PluginFlag::Type_Tool))
+        return PluginAttribute::Tool;
+
+    // 系统插件，例如关机按钮
+    if (hasFlag(itemInter, PluginFlag::Type_System))
+        return PluginAttribute::System;
+
+    // 托盘插件，例如磁盘图标
+    if (hasFlag(itemInter, PluginFlag::Type_Tray))
+        return PluginAttribute::Tray;
+
+    // 固定插件，例如显示桌面和多任务试图
+    if (hasFlag(itemInter, PluginFlag::Type_Fixed))
+        return PluginAttribute::Fixed;
+
+    // 通用插件，一般的插件都是通用插件，就是放在快捷插件区域的那些插件
+    if (hasFlag(itemInter, PluginFlag::Type_Common))
         return PluginAttribute::Quick;
 
-    if (pluginLoader->fileName().contains(TRAY_PATH)) {
-        // 如果是从系统目录下加载的插件，则认为它是系统插件，此时需要放入到托盘中
-        return PluginAttribute::Tray;
-    }
+    // 基本插件，不在任务栏上显示的插件
+    return PluginAttribute::None;
+}
 
-    const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
-    if (meta.contains("tool") && meta.value("tool").toBool()) {
-        // 如果有tool标记，则认为它是工具插件，例如回收站和窗管提供的相关插件
-        return PluginAttribute::Tool;
-    }
-
-    if (meta.contains("system") && meta.value("system").toBool()) {
-        // 如果有system标记，则认为它是右侧的关机按钮插件
-        return PluginAttribute::System;
-    }
-
-    if (meta.contains("fixed") && meta.value("fixed").toBool()) {
-        // 如果有fixed标记，则认为它是固定区域的插件，例如显示桌面和多任务视图
-        return PluginAttribute::Fixed;
-    }
-
-    // 其他的都认为是快捷插件
-    return PluginAttribute::Quick;
+bool QuickSettingController::hasFlag(PluginsItemInterface *itemInter, PluginFlag flag) const
+{
+    return itemInter->flags() & flag;
 }
 
 QuickSettingController *QuickSettingController::instance()
@@ -161,10 +160,7 @@ QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
         if (plugin->pluginDisplayName().isEmpty())
             continue;
 
-        PluginAttribute pluginAttr = pluginAttribute(plugin);
-        if (pluginAttr == QuickSettingController::PluginAttribute::Quick
-                || pluginAttr == QuickSettingController::PluginAttribute::System
-                || pluginAttr == QuickSettingController::PluginAttribute::Tool)
+        if (hasFlag(plugin, PluginFlag::Attribute_CanSetting))
             settingPlugins << plugin;
     }
 

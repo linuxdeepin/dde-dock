@@ -290,7 +290,7 @@ void QuickPluginWindow::onRequestUpdate()
             if (pluginLoader)
                 metaData = pluginLoader->metaData().value("MetaData").toObject();
 
-            itemWidget = new QuickDockItem(item, metaData, quickController->itemKey(item), this);
+            itemWidget = new QuickDockItem(item, quickController->itemKey(item), this);
             itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
             itemWidget->installEventFilter(this);
             itemWidget->setMouseTracking(true);
@@ -471,7 +471,7 @@ int QuickPluginWindow::getDropIndex(QPoint point)
 
             QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
             QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
-            if (dockItem->isPrimary())
+            if (dockItem->canInsert())
                 continue;
 
             if (dockBeforeItem->geometry().x() > point.x() && dockItem->geometry().right() < point.x())
@@ -485,7 +485,7 @@ int QuickPluginWindow::getDropIndex(QPoint point)
             continue;
 
         QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
-        if (dockBeforeItem->isPrimary())
+        if (dockBeforeItem->canInsert())
             break;
 
         QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
@@ -558,16 +558,17 @@ void QuickPluginWindow::initConnection()
  * @param pluginItem
  * @param parent
  */
-QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, const QString itemKey, QWidget *parent)
+QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent)
     : QWidget(parent)
     , m_pluginItem(pluginItem)
-    , m_metaData(metaData)
     , m_itemKey(itemKey)
     , m_position(Dock::Position::Bottom)
     , m_popupWindow(new DockPopupWindow)
     , m_contextMenu(new QMenu(this))
     , m_tipParent(nullptr)
     , m_mainLayout(nullptr)
+    , m_canInsert(QuickSettingController::instance()->hasFlag(pluginItem, PluginFlag::Attribute_CanInsert))
+    , m_dockItemParent(nullptr)
 {
     initUi();
     initConnection();
@@ -588,12 +589,9 @@ PluginsItemInterface *QuickDockItem::pluginItem()
     return m_pluginItem;
 }
 
-bool QuickDockItem::isPrimary() const
+bool QuickDockItem::canInsert() const
 {
-    if (m_metaData.contains("primary"))
-        return m_metaData.value("primary").toBool();
-
-    return false;
+    return m_canInsert;
 }
 
 void QuickDockItem::hideToolTip()
@@ -703,8 +701,10 @@ void QuickDockItem::hideEvent(QHideEvent *event)
         return QWidget::hideEvent(event);
 
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
-    if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0)
-        m_mainLayout->removeWidget(m_pluginItem->itemWidget(m_itemKey));
+    if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0) {
+        itemWidget->setParent(m_dockItemParent);
+        m_mainLayout->removeWidget(itemWidget);
+    }
 }
 
 QPixmap QuickDockItem::iconPixmap() const
@@ -725,7 +725,11 @@ void QuickDockItem::initUi()
 
     m_mainLayout = new QHBoxLayout(this);
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
-    m_pluginItem->itemWidget(m_itemKey)->installEventFilter(this);
+    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+    if (itemWidget) {
+        m_dockItemParent = itemWidget->parentWidget();
+        itemWidget->installEventFilter(this);
+    }
 }
 
 void QuickDockItem::initAttribute()

@@ -94,12 +94,12 @@ class QuickDockItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit QuickDockItem(PluginsItemInterface *pluginItem, const QJsonObject &metaData, const QString itemKey, QWidget *parent = nullptr);
+    explicit QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
     void setPositon(Dock::Position position);
     PluginsItemInterface *pluginItem();
-    bool isPrimary() const;
+    bool canInsert() const;
     void hideToolTip();
 
 protected:
@@ -125,13 +125,14 @@ private Q_SLOTS:
 
 private:
     PluginsItemInterface *m_pluginItem;
-    QJsonObject m_metaData;
     QString m_itemKey;
     Dock::Position m_position;
     DockPopupWindow *m_popupWindow;
     QMenu *m_contextMenu;
     QWidget *m_tipParent;
     QHBoxLayout *m_mainLayout;
+    bool m_canInsert;
+    QWidget *m_dockItemParent;
 };
 
 #endif // QUICKPLUGINWINDOW_H

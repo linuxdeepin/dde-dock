@@ -136,11 +136,7 @@ bool ToolAppHelper::pluginInTool(DockItem *dockItem) const
     if (!pluginItem)
         return false;
 
-    QJsonObject metaData = pluginItem->metaData();
-    if (metaData.contains("tool"))
-        return metaData.value("tool").toBool();
-
-    return false;
+    return (QuickSettingController::instance()->pluginAttribute(pluginItem->pluginItem()) == QuickSettingController::PluginAttribute::Tool);
 }
 
 void ToolAppHelper::pluginItemAdded(PluginsItemInterface *itemInter)

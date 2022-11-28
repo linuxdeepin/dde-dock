@@ -330,8 +330,3 @@ PluginsItemInterface *PluginsItem::pluginItem() const
 {
     return m_pluginInter;
 }
-
-QJsonObject PluginsItem::metaData() const
-{
-    return m_jsonData;
-}

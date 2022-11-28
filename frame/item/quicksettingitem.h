@@ -57,7 +57,6 @@ protected:
 private:
     PluginsItemInterface *m_pluginInter;
     QString m_itemKey;
-    QJsonObject m_metaData;
 };
 
 class QuickSettingFactory

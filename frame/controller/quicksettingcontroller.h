@@ -22,6 +22,7 @@
 #define QUICKSETTINGCONTROLLER_H
 
 #include "abstractpluginscontroller.h"
+#include "pluginsiteminterface.h"
 
 class QuickSettingItem;
 class PluginsItem;
@@ -32,7 +33,8 @@ class QuickSettingController : public AbstractPluginsController
 
 public:
     enum class PluginAttribute {
-        Quick = 0,              // 快捷区域插件
+        None = 0,               // 不在任何区域显示的插件
+        Quick,                  // 快捷区域插件
         Tool,                   // 工具插件（回收站和窗管开发的另一套插件）
         System,                 // 系统插件（关机插件）
         Tray,                   // 托盘插件（U盘图标等）
@@ -47,6 +49,7 @@ public:
     PluginsItem *pluginItemWidget(PluginsItemInterface *pluginItem);
     QList<PluginsItemInterface *> pluginInSettings();
     PluginAttribute pluginAttribute(PluginsItemInterface * const itemInter) const;
+    bool hasFlag(PluginsItemInterface *itemInter, PluginFlag flag) const;
 
 Q_SIGNALS:
     void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute);
