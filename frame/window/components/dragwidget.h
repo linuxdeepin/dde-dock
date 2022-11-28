@@ -47,9 +47,6 @@ protected:
     void leaveEvent(QEvent *) override;
 
 private:
-    void updateCursor();
-
-private:
     bool m_dragStatus;
     QPoint m_resizePoint;
 };
