@@ -43,6 +43,7 @@ public:
     PluginsItemInterface *pluginItem() const;
     ItemType itemType() const override;
     virtual const QPixmap dragPixmap();
+    virtual void updateShow() {}
     const QString itemKey() const;
 
     virtual QuickSettingType type() const = 0;

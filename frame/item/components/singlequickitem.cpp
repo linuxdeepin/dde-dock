@@ -58,15 +58,7 @@ void SingleQuickItem::mouseReleaseEvent(QMouseEvent *event)
 
 void SingleQuickItem::resizeEvent(QResizeEvent *event)
 {
-    if (property("paint").toBool()) {
-        QLabel *imageLabel = findChildLabel(this, "imageLabel");
-        if (imageLabel) {
-            // 更新图像
-            imageLabel->setPixmap(pixmap());
-        }
-        updatePluginName(findChildLabel(this, "textLabel"));
-    }
-
+    updateShow();
     QuickSettingItem::resizeEvent(event);
 }
 
@@ -180,4 +172,20 @@ void SingleQuickItem::updatePluginName(QLabel *textLabel)
     QFontMetrics ftm(textLabel->font());
     text = ftm.elidedText(text, Qt::TextElideMode::ElideRight, textLabel->width());
     textLabel->setText(text);
+}
+
+void SingleQuickItem::updateShow()
+{
+    if (property("paint").toBool()) {
+        QLabel *imageLabel = findChildLabel(this, "imageLabel");
+        if (imageLabel) {
+            // 更新图像
+            imageLabel->setPixmap(pixmap());
+        }
+        updatePluginName(findChildLabel(this, "textLabel"));
+    } else {
+        QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
+        if (itemWidget)
+            itemWidget->update();
+    }
 }

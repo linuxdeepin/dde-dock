@@ -32,6 +32,7 @@ public:
     ~SingleQuickItem() override;
 
     QuickSettingType type() const override;
+    void updateShow() override;
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;

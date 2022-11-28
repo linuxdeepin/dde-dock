@@ -33,7 +33,9 @@ static QSize expandSize = QSize(20, 20);
 
 MultiQuickItem::MultiQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent)
     : QuickSettingItem(pluginInter, parent)
-    , m_selfDefine(false)
+    , m_iconWidget(nullptr)
+    , m_nameLabel(nullptr)
+    , m_stateLabel(nullptr)
 {
     initUi();
 }
@@ -45,6 +47,21 @@ MultiQuickItem::~MultiQuickItem()
         itemWidget->setParent(nullptr);
 }
 
+void MultiQuickItem::updateShow()
+{
+    if (m_iconWidget && m_nameLabel && m_stateLabel) {
+        m_iconWidget->update();
+        m_nameLabel->setText(QFontMetrics(m_nameLabel->font()).elidedText(pluginItem()->pluginDisplayName(), Qt::TextElideMode::ElideRight, m_nameLabel->width()));
+        m_stateLabel->setText(QFontMetrics(m_stateLabel->font()).elidedText(pluginItem()->description(), Qt::TextElideMode::ElideRight, m_stateLabel->width()));
+    } else {
+        QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
+        if (itemWidget) {
+            // 如果插件没有返回图标的显示，则获取插件的itemWidget
+            itemWidget->update();
+        }
+    }
+}
+
 QuickSettingItem::QuickSettingType MultiQuickItem::type() const
 {
     return QuickSettingItem::QuickSettingType::Multi;
@@ -52,7 +69,7 @@ QuickSettingItem::QuickSettingType MultiQuickItem::type() const
 
 bool MultiQuickItem::eventFilter(QObject *obj, QEvent *event)
 {
-    if (m_selfDefine) {
+    if (m_iconWidget) {
         if (event->type() == QEvent::MouseButtonRelease) {
             if (obj->objectName() == "expandLabel") {
                 // 如果是鼠标的按下事件
@@ -75,9 +92,9 @@ bool MultiQuickItem::eventFilter(QObject *obj, QEvent *event)
             if (!labelWidget)
                 return QuickSettingItem::eventFilter(obj, event);
 
-            if (labelWidget->objectName() == "nameLabel") {
+            if (labelWidget == m_nameLabel) {
                 labelWidget->setText(QFontMetrics(labelWidget->font()).elidedText(pluginItem()->pluginDisplayName(), Qt::TextElideMode::ElideRight, labelWidget->width()));
-            } else if (labelWidget->objectName() == "stateLabel") {
+            } else if (labelWidget == m_stateLabel) {
                 labelWidget->setText(QFontMetrics(labelWidget->font()).elidedText(pluginItem()->description(), Qt::TextElideMode::ElideRight, labelWidget->width()));
             }
         }
@@ -111,38 +128,38 @@ void MultiQuickItem::initUi()
         iconLayout->setSpacing(0);
         iconLayout->setAlignment(Qt::AlignCenter);
 
-        QWidget *iconWidget = new QuickIconWidget(pluginItem(), itemKey(), iconWidgetParent);
-        iconWidget->setFixedSize(BGSIZE, BGSIZE);
-        iconLayout->addWidget(iconWidget);
+        m_iconWidget = new QuickIconWidget(pluginItem(), itemKey(), iconWidgetParent);
+        m_iconWidget->setFixedSize(BGSIZE, BGSIZE);
+        iconLayout->addWidget(m_iconWidget);
         mainLayout->addWidget(iconWidgetParent);
         mainLayout->addSpacing(10);
 
         // 添加中间的名称部分
         QWidget *textWidget = new QWidget(this);
-        QLabel *nameLabel = new QLabel(textWidget);
-        QLabel *stateLabel = new QLabel(textWidget);
-        nameLabel->setObjectName("nameLabel");
-        stateLabel->setObjectName("stateLabel");
+        m_nameLabel = new QLabel(textWidget);
+        m_stateLabel = new QLabel(textWidget);
+        m_nameLabel->setObjectName("nameLabel");
+        m_stateLabel->setObjectName("stateLabel");
 
         // 设置图标和文字的属性
         QFont nameFont = DFontSizeManager::instance()->t6();
         nameFont.setBold(true);
         QPalette pe;
         pe.setColor(QPalette::WindowText, Qt::black);
-        nameLabel->setPalette(pe);
-        stateLabel->setPalette(pe);
-        nameLabel->setFont(nameFont);
-        stateLabel->setFont(DFontSizeManager::instance()->t10());
-        nameLabel->setText(pluginItem()->pluginDisplayName());
-        stateLabel->setText(pluginItem()->description());
-        nameLabel->installEventFilter(this);
-        stateLabel->installEventFilter(this);
+        m_nameLabel->setPalette(pe);
+        m_stateLabel->setPalette(pe);
+        m_nameLabel->setFont(nameFont);
+        m_stateLabel->setFont(DFontSizeManager::instance()->t10());
+        m_nameLabel->setText(pluginItem()->pluginDisplayName());
+        m_stateLabel->setText(pluginItem()->description());
+        m_nameLabel->installEventFilter(this);
+        m_stateLabel->installEventFilter(this);
 
         QVBoxLayout *textLayout = new QVBoxLayout(textWidget);
         textLayout->setContentsMargins(0, 0, 0, 0);
         textLayout->setSpacing(0);
-        textLayout->addWidget(nameLabel);
-        textLayout->addWidget(stateLabel);
+        textLayout->addWidget(m_nameLabel);
+        textLayout->addWidget(m_stateLabel);
         textLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         mainLayout->addWidget(textWidget);
 
@@ -160,7 +177,6 @@ void MultiQuickItem::initUi()
         pe.setBrush(QPalette::Window, Qt::transparent);
         expandLabel->setPalette(pe);
         mainLayout->addWidget(expandWidgetParent);
-        m_selfDefine = true;
     }
 }
 

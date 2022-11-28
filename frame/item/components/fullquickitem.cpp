@@ -36,6 +36,12 @@ FullQuickItem::~FullQuickItem()
         m_centerWidget->setParent(nullptr);
 }
 
+void FullQuickItem::updateShow()
+{
+    if (m_centerWidget)
+        m_centerWidget->update();
+}
+
 QuickSettingItem::QuickSettingType FullQuickItem::type() const
 {
     return QuickSettingItem::QuickSettingType::Full;

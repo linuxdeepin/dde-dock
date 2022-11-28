@@ -452,7 +452,7 @@ void QuickSettingContainer::onPluginUpdated(PluginsItemInterface *itemInter, con
         if (settingItem->pluginItem() != itemInter)
             continue;
 
-        settingItem->update();
+        settingItem->updateShow();
         break;
     }
 }

@@ -30,6 +30,7 @@ class FullQuickItem : public QuickSettingItem
 public:
     FullQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent = nullptr);
     ~FullQuickItem() override;
+    void updateShow() override;
 
     QuickSettingType type() const override;
 

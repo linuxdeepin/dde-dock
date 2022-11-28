@@ -23,6 +23,8 @@
 
 #include <quicksettingitem.h>
 
+class QuickIconWidget;
+
 class MultiQuickItem : public QuickSettingItem
 {
     Q_OBJECT
@@ -30,6 +32,7 @@ class MultiQuickItem : public QuickSettingItem
 public:
     MultiQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent = nullptr);
     ~MultiQuickItem() override;
+    void updateShow() override;
 
     QuickSettingType type() const override;
 
@@ -41,7 +44,9 @@ private:
     QString expandFileName() const;
 
 private:
-    bool m_selfDefine;
+    QuickIconWidget *m_iconWidget;
+    QLabel *m_nameLabel;
+    QLabel *m_stateLabel;
 };
 
 /**
