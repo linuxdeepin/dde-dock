@@ -121,7 +121,7 @@ void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 bool TrashPlugin::pluginIsDisable()
 {
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, false).toBool();
 }
 
 void TrashPlugin::pluginStateSwitched()
