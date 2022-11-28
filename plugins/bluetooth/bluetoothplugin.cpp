@@ -22,6 +22,7 @@
 
 #include "bluetoothplugin.h"
 #include "adaptersmanager.h"
+#include "bluetoothmainwidget.h"
 
 #include <DGuiApplicationHelper>
 
@@ -33,6 +34,7 @@ BluetoothPlugin::BluetoothPlugin(QObject *parent)
     : QObject(parent)
     , m_adapterManager(new AdaptersManager(this))
     , m_bluetoothItem(nullptr)
+    , m_bluetoothWidget(nullptr)
 {
 }
 
@@ -55,6 +57,8 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
 
     m_bluetoothItem.reset(new BluetoothItem(m_adapterManager));
 
+    m_bluetoothWidget.reset(new BluetoothMainWidget(m_adapterManager));
+
     connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
         m_enableState = true;
         refreshPluginItemsVisible();
@@ -62,6 +66,9 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
         m_enableState = false;
         refreshPluginItemsVisible();
+    });
+    connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ = ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
     });
 
     m_enableState = m_bluetoothItem->hasAdapter();
@@ -87,6 +94,9 @@ QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
     if (itemKey == BLUETOOTH_KEY) {
         return m_bluetoothItem.data();
     }
+
+    if (itemKey == QUICK_ITEM_KEY)
+        return m_bluetoothWidget.data();
 
     return nullptr;
 }
@@ -146,14 +156,20 @@ void BluetoothPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon BluetoothPlugin::icon(const DockPart &)
+QIcon BluetoothPlugin::icon(const DockPart &dockPart)
 {
+    if (dockPart == DockPart::QuickPanel)
+        return QIcon();
+
     static QIcon icon(":/bluetooth-active-symbolic.svg");
     return icon;
 }
 
 QIcon BluetoothPlugin::icon(const DockPart &dockPart, int themeType)
 {
+    if (dockPart == DockPart::QuickPanel)
+        return QIcon();
+
     if (themeType == DGuiApplicationHelper::ColorType::DarkType)
         return QIcon(":/bluetooth-active-symbolic.svg");
 

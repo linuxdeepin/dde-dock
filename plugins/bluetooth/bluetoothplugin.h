@@ -28,6 +28,8 @@
 
 #include <QScopedPointer>
 
+class BluetoothMainWidget;
+
 class AdaptersManager;
 
 class BluetoothPlugin : public QObject, PluginsItemInterface
@@ -65,6 +67,7 @@ private:
 private:
     AdaptersManager *m_adapterManager;
     QScopedPointer<BluetoothItem> m_bluetoothItem;
+    QScopedPointer<BluetoothMainWidget> m_bluetoothWidget;
     bool m_enableState = true;
 };
 
