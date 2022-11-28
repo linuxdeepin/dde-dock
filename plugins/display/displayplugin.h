@@ -59,7 +59,7 @@ private:
     QScopedPointer<BrightnessWidget> m_displayWidget;
     QScopedPointer<DisplaySettingWidget> m_displaySettingWidget;
     QScopedPointer<Dock::TipsWidget> m_displayTips;
-    BrightnessModel *m_model;
+    QScopedPointer<BrightnessModel> m_model;
 };
 
 #endif // DATETIMEPLUGIN_H

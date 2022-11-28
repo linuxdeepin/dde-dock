@@ -43,16 +43,12 @@ BrightnessModel::BrightnessModel(QObject *parent)
     QDBusInterface dbusInter(serviceName, servicePath, serviceInterface, QDBusConnection::sessionBus());
     if (dbusInter.isValid()) {
         // 读取所有的屏幕的信息
-        QString primaryScreenName = dbusInter.property("Primary").value<QString>();
-        QList<QDBusObjectPath> paths = dbusInter.property("Monitors").value<QList<QDBusObjectPath>>();
-        for (QDBusObjectPath path : paths) {
-            BrightMonitor *monitor = new BrightMonitor(path.path(), this);
-            monitor->setPrimary(primaryScreenName == monitor->name());
-            m_monitor << monitor;
-        }
-    }
+        m_primaryScreenName = dbusInter.property("Primary").value<QString>();
+        m_monitor = readMonitors(dbusInter.property("Monitors").value<QList<QDBusObjectPath>>());
 
-    connect(qApp, &QApplication::primaryScreenChanged, this, &BrightnessModel::primaryScreenChanged);
+        QDBusConnection::sessionBus().connect(serviceName, servicePath, propertiesInterface,
+                         "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
+    }
 }
 
 BrightnessModel::~BrightnessModel()
@@ -85,6 +81,51 @@ void BrightnessModel::primaryScreenChanged(QScreen *screen)
 
     if (defaultMonitor)
         Q_EMIT primaryChanged(defaultMonitor);
+}
+
+void BrightnessModel::onPropertyChanged(const QDBusMessage &msg)
+{
+    QList<QVariant> arguments = msg.arguments();
+    if (3 != arguments.count())
+        return;
+
+    QString interfaceName = msg.arguments().at(0).toString();
+    if (interfaceName != serviceInterface)
+        return;
+
+    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
+    if (changedProps.contains("Primary")) {
+        m_primaryScreenName = changedProps.value("Primary").toString();
+        BrightMonitor *defaultMonitor = nullptr;
+        for (BrightMonitor *monitor : m_monitor) {
+            monitor->setPrimary(monitor->name() == m_primaryScreenName);
+            if (monitor->isPrimary())
+                defaultMonitor = monitor;
+        }
+
+        if (defaultMonitor)
+            Q_EMIT primaryChanged(defaultMonitor);
+    } else if (changedProps.contains("Monitors")) {
+        int oldSize = m_monitor.size();
+        qDeleteAll(m_monitor);
+        m_monitor = readMonitors(changedProps.value("Monitors").value<QList<QDBusObjectPath>>());
+        if (oldSize == 1 && m_monitor.size() == 0) {
+            Q_EMIT screenVisibleChanged(false);
+        } else if (oldSize == 0 && m_monitor.size() == 1) {
+            Q_EMIT screenVisibleChanged(true);
+        }
+    }
+}
+
+QList<BrightMonitor *> BrightnessModel::readMonitors(const QList<QDBusObjectPath> &paths)
+{
+    QList<BrightMonitor *> monitors;
+    for (QDBusObjectPath path : paths) {
+        BrightMonitor *monitor = new BrightMonitor(path.path(), this);
+        monitor->setPrimary(m_primaryScreenName == monitor->name());
+        monitors << monitor;
+    }
+    return monitors;
 }
 
 /**

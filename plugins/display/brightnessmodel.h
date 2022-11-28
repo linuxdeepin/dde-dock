@@ -22,6 +22,7 @@
 #ifndef BRIGHTNESSMODEL_H
 #define BRIGHTNESSMODEL_H
 
+#include <QDBusObjectPath>
 #include <QObject>
 
 class BrightMonitor;
@@ -41,12 +42,18 @@ public:
 
 Q_SIGNALS:
     void primaryChanged(BrightMonitor *);
+    void screenVisibleChanged(bool);
 
 protected Q_SLOTS:
     void primaryScreenChanged(QScreen *screen);
+    void onPropertyChanged(const QDBusMessage &msg);
+
+private:
+    QList<BrightMonitor *> readMonitors(const QList<QDBusObjectPath> &paths);
 
 private:
     QList<BrightMonitor *> m_monitor;
+    QString m_primaryScreenName;
 };
 
 class BrightMonitor : public QObject

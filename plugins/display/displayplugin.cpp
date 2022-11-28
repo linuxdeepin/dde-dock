@@ -35,15 +35,13 @@
 
 #include <unistd.h>
 
-#define PLUGIN_STATE_KEY "enable"
-#define TIME_FORMAT_KEY "Use24HourFormat"
 using namespace Dock;
 DisplayPlugin::DisplayPlugin(QObject *parent)
     : QObject(parent)
     , m_displayWidget(nullptr)
     , m_displaySettingWidget(nullptr)
     , m_displayTips(nullptr)
-    , m_model(new BrightnessModel(this))
+    , m_model(nullptr)
 {
 }
 
@@ -64,14 +62,22 @@ void DisplayPlugin::init(PluginProxyInterface *proxyInter)
 
     m_proxyInter = proxyInter;
     m_displayTips.reset(new TipsWidget);
-    m_displayWidget.reset(new BrightnessWidget(m_model));
+    m_model.reset(new BrightnessModel);
+    m_displayWidget.reset(new BrightnessWidget(m_model.data()));
     m_displayWidget->setFixedHeight(60);
     m_displaySettingWidget.reset(new DisplaySettingWidget);
 
-    m_proxyInter->itemAdded(this, pluginName());
+    if (m_model->monitors().size() > 0)
+        m_proxyInter->itemAdded(this, pluginName());
 
     connect(m_displayWidget.data(), &BrightnessWidget::brightClicked, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
+    });
+    connect(m_model.data(), &BrightnessModel::screenVisibleChanged, this, [ this ](bool visible) {
+        if (visible)
+            m_proxyInter->itemAdded(this, pluginName());
+        else
+            m_proxyInter->itemRemoved(this, pluginName());
     });
 }
 

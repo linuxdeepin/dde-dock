@@ -48,14 +48,6 @@ void BrightnessWidget::showEvent(QShowEvent *event)
 
     // 显示的时候更新一下slider的主屏幕亮度值
     updateSliderValue();
-    Q_EMIT visibleChanged(true);
-}
-
-void BrightnessWidget::hideEvent(QHideEvent *event)
-{
-    QWidget::hideEvent(event);
-
-    Q_EMIT visibleChanged(true);
 }
 
 void BrightnessWidget::initUi()

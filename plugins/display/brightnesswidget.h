@@ -38,12 +38,10 @@ public:
     ~BrightnessWidget() override;
 
 Q_SIGNALS:
-    void visibleChanged(bool);
     void brightClicked();
 
 protected:
     void showEvent(QShowEvent *event) override;
-    void hideEvent(QHideEvent *event) override;
 
 private:
     void initUi();
