@@ -100,8 +100,8 @@ protected:
     void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const override;
 
 private:
-    void drawNormalSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, QWidget *wigdet) const;
-    void drawRoundSlider(QPainter *painter, QRect rectGroove, QRect rectHandle) const;
+    void drawNormalSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, const QWidget *wigdet) const;
+    void drawRoundSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, const QWidget *wigdet) const;
 
 private:
     StyleType m_drawSpecial;

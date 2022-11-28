@@ -51,6 +51,9 @@ public:
     explicit SoundDevicesWidget(QWidget *parent = nullptr);
     ~SoundDevicesWidget() override;
 
+Q_SIGNALS:
+    void enableChanged(bool);
+
 protected:
     bool eventFilter(QObject *watcher, QEvent *event) override;
 
@@ -75,8 +78,9 @@ private:
 
     void activePort(const QString &portId, const uint &cardId);
 
-    void removeLastDevice();
     void removeDisabledDevice(QString portId, unsigned int cardId);
+
+    void deviceEnabled(bool enable);
 
 private Q_SLOTS:
     void onSelectIndexChanged(const QModelIndex &index);
@@ -93,7 +97,6 @@ private:
     QStandardItemModel *m_model;
     SettingDelegate *m_delegate;
     QList<SoundDevicePort *> m_ports;
-    SoundDevicePort *m_lastPort;
 };
 
 #endif // VOLUMEDEVICESWIDGET_H

@@ -239,29 +239,36 @@ void SliderProxyStyle::drawComplexControl(QStyle::ComplexControl control, const 
     QRect rectGroove = subControlRect(CC_Slider, sliderOption, SC_SliderGroove, widget);
     QRect rectHandle = subControlRect(CC_Slider, sliderOption, SC_SliderHandle, widget);
     if (m_drawSpecial == RoundHandler)
-        drawRoundSlider(painter, rectGroove, rectHandle);
+        drawRoundSlider(painter, rectGroove, rectHandle, widget);
     else
-        drawNormalSlider(painter, rectGroove, rectHandle, const_cast<QWidget *>(widget));
+        drawNormalSlider(painter, rectGroove, rectHandle, widget);
 
     painter->restore();
 }
 
 // 绘制通用的滑动条
-void SliderProxyStyle::drawNormalSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, QWidget *wigdet) const
+void SliderProxyStyle::drawNormalSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, const QWidget *wigdet) const
 {
     DPalette dpa = DPaletteHelper::instance()->palette(wigdet);
-    QPen penLine = QPen(dpa.color(DPalette::Highlight), 2);
+    QColor color = dpa.color(DPalette::Highlight);
+    QColor rightColor(Qt::gray);
+    if (!wigdet->isEnabled()) {
+        color.setAlphaF(0.8);
+        rightColor.setAlphaF(0.8);
+    }
+
+    QPen penLine = QPen(color, 2);
     // 绘制上下的竖线，一根竖线的宽度是2，+4个像素刚好保证中间也是间隔2个像素
     for (int i = rectGroove.x(); i < rectGroove.x() + rectGroove.width(); i = i + 4) {
         if (i < rectHandle.x())
             painter->setPen(penLine);
         else
-            painter->setPen(QPen(Qt::gray, 2));
+            painter->setPen(QPen(rightColor, 2));
 
         painter->drawLine(i, rectGroove.y() + 2, i, rectGroove.y() + rectGroove.height() - 2);
     }
     // 绘制滚动区域
-    painter->setBrush(dpa.color(DPalette::Highlight));
+    painter->setBrush(color);
     painter->setPen(Qt::NoPen);
     QPainterPath path;
     path.addRoundedRect(rectHandle, 6, 6);
@@ -269,10 +276,12 @@ void SliderProxyStyle::drawNormalSlider(QPainter *painter, QRect rectGroove, QRe
 }
 
 // 绘制设计师定义的那种圆形滑块，黑色的滑条
-void SliderProxyStyle::drawRoundSlider(QPainter *painter, QRect rectGroove, QRect rectHandle) const
+void SliderProxyStyle::drawRoundSlider(QPainter *painter, QRect rectGroove, QRect rectHandle, const QWidget *wigdet) const
 {
     // 深色背景下，滑块和滑动条白色，浅色背景下，滑块和滑动条黑色
-    QBrush brush(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType() ? Qt::white : Qt::black);
+    QColor color = wigdet->isEnabled() ? (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType() ? Qt::white : Qt::black) : Qt::gray;
+
+    QBrush brush(color);
     // 此处中绘制圆形滑动条，需要绘制圆角，圆角大小为其高度的一半
     QPainterPath pathGroove;
     int radius = rectGroove.height() / 2;
