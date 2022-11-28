@@ -54,6 +54,7 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
     void pluginSettingsChanged() override;
     PluginType type() override;
+    PluginFlags flags() const override;
 
 private:
     void updateVisible();

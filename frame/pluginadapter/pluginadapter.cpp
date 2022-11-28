@@ -25,8 +25,9 @@
 #define ICONWIDTH 24
 #define ICONHEIGHT 24
 
-PluginAdapter::PluginAdapter(PluginsItemInterface_V20 *pluginInter)
+PluginAdapter::PluginAdapter(PluginsItemInterface_V20 *pluginInter, QPluginLoader *pluginLoader)
     : m_pluginInter(pluginInter)
+    , m_pluginLoader(pluginLoader)
 {
 }
 
@@ -191,7 +192,15 @@ PluginsItemInterface::PluginStatus PluginAdapter::status() const
 
 QString PluginAdapter::description() const
 {
-    return tr("actived");
+    return m_pluginInter->pluginDisplayName();
+}
+
+PluginFlags PluginAdapter::flags() const
+{
+    if (m_pluginLoader->fileName().contains(TRAY_PATH))
+        return PluginFlag::Type_Tray | PluginFlag::Attribute_CanDrag | PluginFlag::Attribute_CanInsert;
+
+    return PluginsItemInterface::flags();
 }
 
 void PluginAdapter::setItemKey(const QString &itemKey)

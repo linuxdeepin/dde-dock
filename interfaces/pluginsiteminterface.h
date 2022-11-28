@@ -35,6 +35,28 @@ enum class DockPart {
     DCCSetting        // 显示在控制中心个性化设置的图标
 };
 
+enum PluginFlag {
+    Type_NoneFlag = 0x1,                 // 插件类型-没有任何的属性，不在任何地方显示
+    Type_Common = 0x2,                   // 插件类型-快捷插件区
+    Type_Tool = 0x4,                     // 插件类型-工具插件，例如回收站
+    Type_System = 0x8,                   // 插件类型-系统插件，例如关机插件
+    Type_Tray = 0x10,                    // 插件类型-托盘区，例如U盘插件
+    Type_Fixed = 0x20,                   // 插件类型-固定区域,例如多任务视图和显示桌面
+
+    Quick_Single = 0x40,                 // 当插件类型为Common时,快捷插件区域只有一列的那种插件
+    Quick_Multi = 0x80,                  // 当插件类型为Common时,快捷插件区占两列的那种插件
+    Quick_Full = 0x100,                  // 当插件类型为Common时,快捷插件区占用4列的那种插件，例如声音、亮度设置和音乐等
+
+    Attribute_CanDrag = 0x200,           // 插件属性-是否支持拖动
+    Attribute_CanInsert = 0x400,         // 插件属性-是否支持在其前面插入其他的插件，普通的快捷插件是支持的
+    Attribute_CanSetting = 0x800,        // 插件属性-是否可以在控制中心设置显示或隐藏
+
+    FlagMask = 0xffffffff                // 掩码
+};
+
+Q_DECLARE_FLAGS(PluginFlags, PluginFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PluginFlags)
+
 // 快捷面板详情页面的itemWidget对应的itemKey
 #define QUICK_ITEM_KEY "quick_item_key"
 ///
@@ -283,6 +305,12 @@ public:
     /// themeType {0:UnknownType 1:LightType 2:DarkType}
     ///
     virtual QIcon icon(const DockPart &dockPart, int themeType) { return icon(dockPart); }
+
+    ///
+    /// \brief m_proxyInter
+    /// return the falgs for current plugin
+    ///
+    virtual PluginFlags flags() const { return PluginFlag::Type_Common | PluginFlag::Quick_Single | PluginFlag::Attribute_CanDrag | PluginFlag::Attribute_CanInsert | PluginFlag::Attribute_CanSetting; }
 
 protected:
     ///

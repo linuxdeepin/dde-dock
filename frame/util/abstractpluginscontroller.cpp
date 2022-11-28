@@ -287,7 +287,7 @@ void AbstractPluginsController::loadPlugin(const QString &pluginFile)
         PluginsItemInterface_V20 *interface_v20 = qobject_cast<PluginsItemInterface_V20 *>(pluginLoader->instance());
         if (interface_v20) {
             // 将v20插件接口通过适配器转换成v23的接口，方便在后面识别
-            PluginAdapter *pluginAdapter = new PluginAdapter(interface_v20);
+            PluginAdapter *pluginAdapter = new PluginAdapter(interface_v20, pluginLoader);
             // 将适配器的地址保存到map列表中，因为适配器自己会调用itemAdded方法，转换成PluginsItemInterface类，但是实际上它
             // 对应的是PluginAdapter类，因此，这个map用于在后面的itemAdded方法中用来查找
             m_pluginAdapterMap[(qulonglong)(interface_v20)] = pluginAdapter;

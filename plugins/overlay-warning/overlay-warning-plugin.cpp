@@ -132,6 +132,11 @@ void OverlayWarningPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+PluginFlags OverlayWarningPlugin::flags() const
+{
+    return PluginFlag::Type_NoneFlag;
+}
+
 void OverlayWarningPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {

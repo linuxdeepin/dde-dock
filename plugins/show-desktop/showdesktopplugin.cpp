@@ -164,6 +164,11 @@ PluginsItemInterface::PluginType ShowDesktopPlugin::type()
     return PluginType::Fixed;
 }
 
+PluginFlags ShowDesktopPlugin::flags() const
+{
+    return PluginFlag::Type_Fixed;
+}
+
 void ShowDesktopPlugin::updateVisible()
 {
     if (pluginIsDisable())

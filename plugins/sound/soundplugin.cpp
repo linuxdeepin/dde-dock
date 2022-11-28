@@ -160,6 +160,15 @@ PluginsItemInterface::PluginStatus SoundPlugin::status() const
     return SoundPlugin::Active;
 }
 
+PluginFlags SoundPlugin::flags() const
+{
+    return PluginFlag::Type_Common
+            | PluginFlag::Quick_Full
+            | PluginFlag::Attribute_CanDrag
+            | PluginFlag::Attribute_CanInsert
+            | PluginFlag::Attribute_CanSetting;
+}
+
 void SoundPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable())

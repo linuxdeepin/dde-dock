@@ -187,6 +187,15 @@ QIcon PowerPlugin::icon(const DockPart &dockPart)
     return batteryIcon;
 }
 
+PluginFlags PowerPlugin::flags() const
+{
+    // 电池插件只在任务栏上面展示，不在快捷面板展示，并且可以拖动，可以在其前面插入其他插件，可以在控制中心设置是否显示隐藏
+    return PluginFlag::Type_Common
+            | PluginFlag::Attribute_CanDrag
+            | PluginFlag::Attribute_CanInsert
+            | PluginFlag::Attribute_CanSetting;
+}
+
 void PowerPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();

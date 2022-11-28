@@ -54,6 +54,7 @@ public:
     QIcon icon(const DockPart &) override;
     QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginStatus status() const override;
+    PluginFlags flags() const override;
 
 private:
     void refreshPluginItemsVisible();

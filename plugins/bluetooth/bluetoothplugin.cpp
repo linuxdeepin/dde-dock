@@ -192,6 +192,15 @@ QString BluetoothPlugin::description() const
     return tr("close");
 }
 
+PluginFlags BluetoothPlugin::flags() const
+{
+    return PluginFlag::Type_Common
+            | PluginFlag::Quick_Multi
+            | PluginFlag::Attribute_CanDrag
+            | PluginFlag::Attribute_CanInsert
+            | PluginFlag::Attribute_CanSetting;
+}
+
 void BluetoothPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable())

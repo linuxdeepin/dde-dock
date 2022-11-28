@@ -312,6 +312,11 @@ QIcon ShutdownPlugin::icon(const DockPart &dockPart)
     return shutdownIcon;
 }
 
+PluginFlags ShutdownPlugin::flags() const
+{
+    return PluginFlag::Type_System | PluginFlag::Attribute_CanSetting;
+}
+
 void ShutdownPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {

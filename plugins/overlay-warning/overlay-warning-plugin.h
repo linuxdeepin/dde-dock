@@ -59,6 +59,7 @@ public:
 
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
+    PluginFlags flags() const override;
 
 private:
     void loadPlugin();

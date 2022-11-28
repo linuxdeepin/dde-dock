@@ -63,6 +63,7 @@ public:
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
     void pluginSettingsChanged() override;
     QIcon icon(const DockPart &dockPart, int themeType) override;
+    PluginFlags flags() const override;
 
 private:
     void refreshPluginItemsVisible();

@@ -184,6 +184,11 @@ PluginsItemInterface::PluginType MultitaskingPlugin::type()
     return PluginType::Fixed;
 }
 
+PluginFlags MultitaskingPlugin::flags() const
+{
+    return PluginFlag::Type_Fixed;
+}
+
 void MultitaskingPlugin::updateVisible()
 {
     if (pluginIsDisable() || !DWindowManagerHelper::instance()->hasComposite()) {

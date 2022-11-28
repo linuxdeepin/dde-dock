@@ -196,6 +196,12 @@ QIcon TrashPlugin::icon(const DockPart &dockPart, int themeType)
     return QIcon();
 }
 
+PluginFlags TrashPlugin::flags() const
+{
+    return PluginFlag::Type_Tool
+            | PluginFlag::Attribute_CanSetting;
+}
+
 void TrashPlugin::refreshPluginItemsVisible()
 {
     if (pluginIsDisable()) {

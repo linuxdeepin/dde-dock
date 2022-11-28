@@ -36,7 +36,7 @@ class PluginAdapter : public QObject, public PluginsItemInterface
     Q_INTERFACES(PluginsItemInterface)
 
 public:
-    PluginAdapter(PluginsItemInterface_V20 *pluginInter);
+    PluginAdapter(PluginsItemInterface_V20 *pluginInter, QPluginLoader *pluginLoader);
     ~PluginAdapter();
 
     const QString pluginName() const override;
@@ -68,12 +68,14 @@ public:
     QIcon icon(const DockPart &dockPart) override;
     PluginStatus status() const override;
     QString description() const override;
+    PluginFlags flags() const override;
 
     void setItemKey(const QString &itemKey);
 
 private:
     PluginsItemInterface_V20 *m_pluginInter;
     QString m_itemKey;
+    QPluginLoader *m_pluginLoader;
 };
 
 #endif // PLUGINADAPTER_H
