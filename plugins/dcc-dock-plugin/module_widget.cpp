@@ -93,7 +93,7 @@ void ModuleWidget::initUI()
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(10, 10, 10, 10);
-    layout->setSpacing(10);
+    layout->setSpacing(0);
 
     static QMap<QString, int> g_modeMap = {{tr("Fashion mode"), Fashion}
                                            , {tr("Efficient mode"), Efficient}};
@@ -144,6 +144,7 @@ void ModuleWidget::initUI()
 
             m_positionComboxWidget->setCurrentText(g_positionMap.key(pos));
         });
+        layout->addSpacing(10);
         layout->addWidget(m_positionComboxWidget);
         m_dconfigWatcher->bind("dockLocation", m_positionComboxWidget);
     } else {
@@ -172,6 +173,7 @@ void ModuleWidget::initUI()
 
             m_stateComboxWidget->setCurrentText(g_stateMap.key(mode));
         });
+        layout->addSpacing(10);
         layout->addWidget(m_stateComboxWidget);
         m_dconfigWatcher->bind("dockState", m_stateComboxWidget);
     } else {
@@ -209,6 +211,7 @@ void ModuleWidget::initUI()
     updateSliderValue();
     m_dconfigWatcher->bind("dockSize", m_sizeSlider);
 
+    layout->addSpacing(10);
     layout->addWidget(m_sizeSlider);
 
     // 多屏显示设置
@@ -246,6 +249,7 @@ void ModuleWidget::initUI()
             m_screenSettingComboxWidget->setCurrentText(g_screenSettingMap.key(showInPrimary));
             m_screenSettingComboxWidget->blockSignals(false);
         });
+        layout->addSpacing(10);
         layout->addWidget(m_screenSettingComboxWidget);
         m_dconfigWatcher->bind("multiscreen", m_screenSettingTitle);
         m_dconfigWatcher->bind("multiscreen", m_screenSettingComboxWidget);
@@ -276,15 +280,16 @@ void ModuleWidget::initUI()
                                                        , {"trash",          "dcc_dock_trash"}
                                                        , {"shot-start-plugin",  "shot-start-plugin"}};
         if (plugins.size() != 0) {
-            layout->addSpacing(10);
+            layout->addSpacing(20);
             layout->addWidget(m_pluginAreaTitle);
             m_dconfigWatcher->bind("dockPlugins", m_pluginAreaTitle);
 
             DFontSizeManager::instance()->bind(m_pluginTips, DFontSizeManager::T8);
             m_pluginTips->adjustSize();
             m_pluginTips->setWordWrap(true);
-            m_pluginTips->setContentsMargins(10, 5, 10, 5);
+            m_pluginTips->setContentsMargins(10, 0, 10, 0);
             m_pluginTips->setAlignment(Qt::AlignLeft);
+            layout->addSpacing(2);
             layout->addWidget(m_pluginTips);
             m_dconfigWatcher->bind("dockPlugins", m_pluginTips);
 
@@ -309,6 +314,7 @@ void ModuleWidget::initUI()
 
             m_pluginView->setModel(m_pluginModel);
 
+            layout->addSpacing(10);
             layout->addWidget(m_pluginView);
             m_dconfigWatcher->bind("dockPlugins", m_pluginView);
 
