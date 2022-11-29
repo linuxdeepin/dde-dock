@@ -70,7 +70,7 @@ void SoundWidget::initUi()
     QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 12);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
-    m_sliderContainer->setRange(0, 100);
+    m_sliderContainer->setRange(0, std::round(m_dbusAudio->maxUIVolume() * 100.00));
     m_sliderContainer->setPageStep(2);
 
     SliderProxyStyle *proxy = new SliderProxyStyle;
