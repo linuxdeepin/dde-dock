@@ -173,6 +173,43 @@ int MainWindowBase::getBorderRadius() const
     return qMin(MAX_MIN_RADIUS_DIFFVALUE, qMax(size - MIN_RADIUS_WINDOWSIZE, 0)) + MIN_RADIUS;
 }
 
+QRect MainWindowBase::getAnimationRect(const QRect &sourceRect, const Dock::Position &pos) const
+{
+    if (!Utils::IS_WAYLAND_DISPLAY
+            || m_multiScreenWorker->hideMode() == HideMode::KeepShowing
+            || m_multiScreenWorker->displayMode() == Dock::DisplayMode::Fashion)
+        return sourceRect;
+
+    // 在wayland环境下，如果任务栏状态为智能隐藏或者一直隐藏，那么在高效模式下，任务栏距离边缘的距离如果为0
+    // 会导致在WindowManager类中设置窗管的_d_dwayland_dockstrut属性失效，因此，此处将动画位置距离边缘设置为1
+    // 此时就不会出现_d_dwayland_dockstrut属性失效的情况（1个像素并不影响动画效果）
+    // 在时尚模式下无需做这个设置，因为时尚模式下距离边缘的距离为10
+    QRect animationRect = sourceRect;
+    switch (pos) {
+    case Dock::Position::Bottom: {
+        animationRect.setTop(animationRect.top() - 1);
+        animationRect.setHeight(sourceRect.height());
+        break;
+    }
+    case Dock::Position::Left: {
+        animationRect.setLeft(1);
+        animationRect.setWidth(sourceRect.width());
+        break;
+    }
+    case Dock::Position::Top: {
+        animationRect.setTop(1);
+        animationRect.setHeight(sourceRect.height());
+        break;
+    }
+    case Dock::Position::Right: {
+        animationRect.setLeft(animationRect.left() - 1);
+        animationRect.setWidth(sourceRect.width());
+        break;
+    }
+    }
+    return animationRect;
+}
+
 /**
  * @brief MainWindow::onMainWindowSizeChanged 任务栏拖拽过程中会不停调用此方法更新自身大小
  * @param offset 拖拽时的坐标偏移量
@@ -462,8 +499,8 @@ QVariantAnimation *MainWindowBase::createAnimation(QScreen *screen, const Dock::
      * 正常屏幕情况下是没有这个问题的
      */
     QRect mainwindowRect = geometry();
-    const QRect dockShowRect = getDockGeometry(screen, pos, m_multiScreenWorker->displayMode(), Dock::HideState::Show);
-    const QRect &dockHideRect = getDockGeometry(screen, pos, m_multiScreenWorker->displayMode(), Dock::HideState::Hide);
+    const QRect dockShowRect = getAnimationRect(getDockGeometry(screen, pos, m_multiScreenWorker->displayMode(), Dock::HideState::Show), pos);
+    const QRect &dockHideRect = getAnimationRect(getDockGeometry(screen, pos, m_multiScreenWorker->displayMode(), Dock::HideState::Hide), pos);
     if (act == Dock::AniAction::Show) {
         if (pos == Position::Top || pos == Position::Bottom) {
             if (qAbs(dockShowRect.height() - mainwindowRect.height()) <= 1

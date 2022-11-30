@@ -92,6 +92,7 @@ private:
     void updateDragGeometry();
 
     int getBorderRadius() const;
+    QRect getAnimationRect(const QRect &sourceRect, const Dock::Position &pos) const;
 
 private Q_SLOTS:
     void onMainWindowSizeChanged(QPoint offset);
