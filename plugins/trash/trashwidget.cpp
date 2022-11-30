@@ -195,7 +195,8 @@ void TrashWidget::updateIcon()
     QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
 
     const auto ratio = devicePixelRatioF();
-    m_icon = icon.pixmap(size * ratio, size * ratio);
+    int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
+    m_icon = icon.pixmap(pixmapSize, pixmapSize);
     m_icon.setDevicePixelRatio(ratio);
 }
 

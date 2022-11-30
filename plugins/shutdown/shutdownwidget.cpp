@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "shutdownwidget.h"
+#include "../frame/util/imageutil.h"
 
 #include <QSvgRenderer>
 #include <QPainter>
@@ -99,7 +100,8 @@ const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size
     const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap;
-    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(size * ratio);
+    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : (size * ratio);
+    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(pixmapSize);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
