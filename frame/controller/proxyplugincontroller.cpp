@@ -137,6 +137,11 @@ ProxyPluginController::ProxyPluginController(QObject *parent)
         QMetaObject::invokeMethod(this, &ProxyPluginController::startLoader, Qt::QueuedConnection);
 }
 
+bool ProxyPluginController::pluginIsLoaded(PluginsItemInterface *itemInter)
+{
+    return m_pluginsItems.contains(itemInter);
+}
+
 QPluginLoader *ProxyPluginController::pluginLoader(PluginsItemInterface * const itemInter)
 {
     QMap<PluginsItemInterface *, QMap<QString, QObject *> > &plugin = pluginsMap();

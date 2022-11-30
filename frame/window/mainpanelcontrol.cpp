@@ -371,6 +371,7 @@ void MainPanelControl::setPositonValue(Dock::Position position)
 
     m_position = position;
     m_tray->setPositon(position);
+    m_toolHelper->setPosition(position);
 
     QMetaObject::invokeMethod(this, &MainPanelControl::updateMainPanelLayout, Qt::QueuedConnection);
 }
@@ -427,9 +428,6 @@ void MainPanelControl::removeItem(DockItem *item)
     case DockItem::App:
     case DockItem::Placeholder:
         m_recentHelper->removeAppItem(item);
-        break;
-    case DockItem::Plugins:
-        m_toolHelper->removePluginItem(item);
         break;
     case DockItem::AppMultiWindow:
         m_multiHelper->removeMultiWindow(static_cast<AppMultiItem *>(item));
@@ -908,7 +906,6 @@ DockItem *MainPanelControl::dropTargetItem(DockItem *sourceItem, QPoint point)
     return targetItem;
 }
 
-
 void MainPanelControl::updateDisplayMode()
 {
     updateModeChange();
@@ -918,7 +915,6 @@ void MainPanelControl::updateDisplayMode()
 void MainPanelControl::updateModeChange()
 {
     m_toolAreaWidget->setVisible(m_displayMode == DisplayMode::Fashion);
-    m_toolSonAreaWidget->setVisible(m_displayMode == DisplayMode::Fashion);
     onRecentVisibleChanged(m_recentHelper->recentIsVisible());
     onDockAppVisibleChanged(m_recentHelper->dockAppIsVisible());
     onToolVisibleChanged(m_toolHelper->toolIsVisible());

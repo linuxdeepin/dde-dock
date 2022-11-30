@@ -24,6 +24,7 @@
 #include "pluginsiteminterface_v20.h"
 #include "pluginadapter.h"
 #include "utils.h"
+#include "settingconfig.h"
 
 #include <DNotifySender>
 #include <DSysInfo>
@@ -49,6 +50,7 @@ AbstractPluginsController::AbstractPluginsController(QObject *parent)
 
     refreshPluginSettings();
 
+    connect(SETTINGCONFIG, &SettingConfig::valueChanged, this, &AbstractPluginsController::onConfigChanged);
     connect(m_dockDaemonInter, &DockInter::PluginSettingsSynced, this, &AbstractPluginsController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
@@ -95,7 +97,9 @@ void AbstractPluginsController::itemAdded(PluginsItemInterface * const itemInter
         pluginAdapter->setItemKey(itemKey);
 
     m_pluginExists << pluginItem;
-    pluginItemAdded(pluginItem, itemKey);
+    m_pluginItemKeyMap[pluginItem] = itemKey;
+    if (canAddedPlugin(pluginItem))
+        pluginItemAdded(pluginItem, itemKey);
 }
 
 void AbstractPluginsController::itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -106,6 +110,7 @@ void AbstractPluginsController::itemUpdate(PluginsItemInterface * const itemInte
 void AbstractPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     m_pluginExists.removeOne(itemInter);
+    m_pluginItemKeyMap.remove(itemInter);
     pluginItemRemoved(getPluginInterface(itemInter), itemKey);
 }
 
@@ -482,4 +487,57 @@ bool AbstractPluginsController::eventFilter(QObject *o, QEvent *e)
         displayModeChanged();
 
     return false;
+}
+
+bool AbstractPluginsController::canAddRemove(PluginsItemInterface *plugin) const
+{
+    if (!plugin->flags() & PluginFlag::Attribute_CanSetting)
+        return false;
+
+    if (plugin->flags() & PluginFlag::Type_Tool)
+        return true;
+
+    if (plugin->flags() & PluginFlag::Type_System)
+        return true;
+
+    return false;
+}
+
+bool AbstractPluginsController::canAddedPlugin(PluginsItemInterface *plugin) const
+{
+    if (!canAddRemove(plugin))
+        return true;
+
+    const QStringList configPlugins = SETTINGCONFIG->value("Dock_Quick_Plugin_Name").toStringList();
+    return configPlugins.contains(plugin->pluginName());
+}
+
+void AbstractPluginsController::onConfigChanged(const QString &key, const QVariant &value)
+{
+    QStringList pluginNames = value.toStringList();
+    if (key == "Dock_Quick_Plugin_Name") {
+        // 这里只处理工具插件(回收站)和系统插件(电源插件)
+        for (PluginsItemInterface *plugin : pluginCurrent()) {
+            if (!canAddRemove(plugin))
+                continue;
+
+            const QString itemKey = m_pluginItemKeyMap.value(plugin);
+            if (!pluginNames.contains(plugin->pluginName()) && pluginIsLoaded(plugin)) {
+                // 如果当前配置中不包含当前插件，但是当前插件已经加载，那么就移除该插件
+                pluginItemRemoved(plugin, itemKey);
+                QWidget *itemWidget = plugin->itemWidget(itemKey);
+                if (itemWidget)
+                    itemWidget->setVisible(false);
+            } else if (pluginNames.contains(plugin->pluginName()) && !pluginIsLoaded(plugin)) {
+                // 如果当前配置中包含当前插件，但是当前插件并未加载，那么就加载该插件
+                pluginItemAdded(plugin, itemKey);
+                // 只有工具插件是通过QWidget的方式进行显示的，因此，这里只处理工具插件
+                if (plugin->flags() & PluginFlag::Type_Tool) {
+                    QWidget *itemWidget = plugin->itemWidget(itemKey);
+                    if (itemWidget)
+                        itemWidget->setVisible(true);
+                }
+            }
+        }
+    }
 }

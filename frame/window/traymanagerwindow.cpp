@@ -177,14 +177,22 @@ QSize TrayManagerWindow::suitableSize(const Dock::Position &position) const
 {
     QMargins m = m_mainLayout->contentsMargins();
     if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
-        return QSize(appDatetimeSize(position) +
-                     m_systemPluginWidget->suitableSize(position).width() + m_mainLayout->spacing() +
-                     m.left() + m.right(), QWIDGETSIZE_MAX);
+        int width = appDatetimeSize(position);
+        int systemWidgetWidth = m_systemPluginWidget->suitableSize(position).width();
+        if (systemWidgetWidth > 0) {
+            width += systemWidgetWidth + m_mainLayout->spacing();
+        }
+        width += m.left() + m.right();
+        return QSize(width, QWIDGETSIZE_MAX);
     }
 
-    return QSize(QWIDGETSIZE_MAX, appDatetimeSize(position) +
-                 m_systemPluginWidget->suitableSize(position).height() + m_mainLayout->spacing() +
-                 m.top() + m.bottom());
+    int height = appDatetimeSize(position);
+    int systemWidgetHeight = m_systemPluginWidget->suitableSize(position).height();
+    if (systemWidgetHeight > 0) {
+        height += systemWidgetHeight + m_mainLayout->spacing();
+    }
+    height += m.top() + m.bottom();
+    return QSize(QWIDGETSIZE_MAX, height);
 }
 
 // 用于返回需要绘制的圆形区域

@@ -51,6 +51,8 @@ protected:
     explicit ProxyPluginController(QObject *parent = nullptr);
     ~ProxyPluginController() override {}
 
+    bool pluginIsLoaded(PluginsItemInterface *itemInter) override;
+
     void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;

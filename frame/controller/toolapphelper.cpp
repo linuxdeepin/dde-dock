@@ -31,6 +31,7 @@ ToolAppHelper::ToolAppHelper(QWidget *toolAreaWidget, QObject *parent)
     : QObject(parent)
     , m_toolAreaWidget(toolAreaWidget)
     , m_displayMode(DisplayMode::Efficient)
+    , m_position(Dock::Position::Bottom)
 {
     connect(QuickSettingController::instance(), &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
         if (pluginAttr != QuickSettingController::PluginAttribute::Tool)
@@ -38,27 +39,28 @@ ToolAppHelper::ToolAppHelper(QWidget *toolAreaWidget, QObject *parent)
 
         pluginItemAdded(itemInter);
     });
+    connect(QuickSettingController::instance(), &QuickSettingController::pluginRemoved, this, [ = ](PluginsItemInterface *itemInter) {
+        pluginItemRemoved(itemInter);
+    });
 
     QList<PluginsItemInterface *> pluginItems = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::Tool);
     for (PluginsItemInterface *pluginItem : pluginItems)
         pluginItemAdded(pluginItem);
+
+    updateToolArea();
 }
 
 void ToolAppHelper::setDisplayMode(DisplayMode displayMode)
 {
     m_displayMode = displayMode;
-    updateWidgetStatus();
     moveToolWidget();
+    updateWidgetStatus();
 }
 
-void ToolAppHelper::removePluginItem(DockItem *dockItem)
+void ToolAppHelper::setPosition(Position position)
 {
-    removeToolArea(dockItem);
-
-    if (m_toolAreaWidget->layout()->count() == 0 && toolIsVisible())
-        updateWidgetStatus();
-
-    Q_EMIT requestUpdate();
+    m_toolAreaWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    m_position = position;
 }
 
 bool ToolAppHelper::toolIsVisible() const
@@ -78,11 +80,12 @@ void ToolAppHelper::appendToToolArea(int index, DockItem *dockItem)
     Q_EMIT requestUpdate();
 }
 
-bool ToolAppHelper::removeToolArea(DockItem *dockItem)
+bool ToolAppHelper::removeToolArea(PluginsItemInterface *itemInter)
 {
     QBoxLayout *boxLayout = static_cast<QBoxLayout *>(m_toolAreaWidget->layout());
     for (int i = 0; i < boxLayout->count(); i++) {
-        if (boxLayout->itemAt(i)->widget() == dockItem) {
+        PluginsItem *dockItem = qobject_cast<PluginsItem *>(boxLayout->itemAt(i)->widget());
+        if (dockItem && dockItem->pluginItem() == itemInter) {
             boxLayout->removeWidget(dockItem);
             return true;
         }
@@ -115,6 +118,38 @@ void ToolAppHelper::moveToolWidget()
     }
 }
 
+void ToolAppHelper::updateToolArea()
+{
+    bool oldVisible = m_toolAreaWidget->isVisible();
+    QLayout *layout = m_toolAreaWidget->layout();
+    if (m_position == Dock::Position::Bottom || m_position == Dock::Position::Top) {
+        int size = 0;
+        for (int i = 0; i < layout->count(); i++) {
+            PluginsItem *dockItem = qobject_cast<PluginsItem *>(layout->itemAt(i)->widget());
+            if (!dockItem)
+                continue;
+
+            size += dockItem->width();
+        }
+        m_toolAreaWidget->setFixedWidth(size);
+        m_toolAreaWidget->setVisible(size > 0);
+    } else {
+        int size = 0;
+        for (int i = 0; i < layout->count(); i++) {
+            PluginsItem *dockItem = qobject_cast<PluginsItem *>(layout->itemAt(i)->widget());
+            if (!dockItem)
+                continue;
+
+            size += dockItem->height();
+        }
+        m_toolAreaWidget->setFixedHeight(size);
+        m_toolAreaWidget->setVisible(size > 0);
+    }
+    bool isVisible = m_toolAreaWidget->isVisible();
+    if (oldVisible != isVisible)
+        Q_EMIT toolVisibleChanged(isVisible);
+}
+
 void ToolAppHelper::updateWidgetStatus()
 {
     bool oldVisible = toolIsVisible();
@@ -130,13 +165,9 @@ void ToolAppHelper::updateWidgetStatus()
         Q_EMIT toolVisibleChanged(visible);
 }
 
-bool ToolAppHelper::pluginInTool(DockItem *dockItem) const
+bool ToolAppHelper::pluginInTool(PluginsItemInterface *itemInter) const
 {
-    PluginsItem *pluginItem = qobject_cast<PluginsItem *>(dockItem);
-    if (!pluginItem)
-        return false;
-
-    return (QuickSettingController::instance()->pluginAttribute(pluginItem->pluginItem()) == QuickSettingController::PluginAttribute::Tool);
+    return (QuickSettingController::instance()->pluginAttribute(itemInter) == QuickSettingController::PluginAttribute::Tool);
 }
 
 void ToolAppHelper::pluginItemAdded(PluginsItemInterface *itemInter)
@@ -145,9 +176,23 @@ void ToolAppHelper::pluginItemAdded(PluginsItemInterface *itemInter)
         return;
 
     QuickSettingController *quickController = QuickSettingController::instance();
-    PluginsItem *pluginItem = quickController->pluginItemWidget(itemInter);
-    if (pluginInTool(pluginItem))
+    if (pluginInTool(itemInter)) {
+        PluginsItem *pluginItem = quickController->pluginItemWidget(itemInter);
         appendToToolArea(0, pluginItem);
+        updateToolArea();
+        Q_EMIT requestUpdate();
+    }
+}
+
+void ToolAppHelper::pluginItemRemoved(PluginsItemInterface *itemInter)
+{
+    QuickSettingController *quickController = QuickSettingController::instance();
+    if (pluginInTool(itemInter)) {
+        PluginsItem *pluginItem = quickController->pluginItemWidget(itemInter);
+        removeToolArea(pluginItem->pluginItem());
+        updateToolArea();
+        Q_EMIT requestUpdate();
+    }
 }
 
 bool ToolAppHelper::pluginExists(PluginsItemInterface *itemInter) const

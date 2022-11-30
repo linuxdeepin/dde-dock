@@ -62,6 +62,17 @@ public:
 Q_SIGNALS:
     void pluginLoaderFinished();
 
+protected:
+    virtual bool pluginIsLoaded(PluginsItemInterface *itemInter) { return true; }
+
+    QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
+    PluginsItemInterface *pluginInterAt(const QString &itemKey);
+    PluginsItemInterface *pluginInterAt(QObject *destItem);
+    bool eventFilter(QObject *o, QEvent *e) override;
+
+    bool canAddRemove(PluginsItemInterface *plugin) const;
+    bool canAddedPlugin(PluginsItemInterface *plugin) const;
+
 private:
     // implements PluginProxyInterface
     void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
@@ -74,14 +85,7 @@ private:
     void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
     void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
     void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
-
     PluginsItemInterface *getPluginInterface(PluginsItemInterface * const itemInter);
-
-protected:
-    QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
-    PluginsItemInterface *pluginInterAt(const QString &itemKey);
-    PluginsItemInterface *pluginInterAt(QObject *destItem);
-    bool eventFilter(QObject *o, QEvent *e) override;
 
 protected Q_SLOTS:
     void startLoader(PluginLoader *loader);
@@ -92,6 +96,7 @@ private slots:
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
+    void onConfigChanged(const QString &key, const QVariant &value);
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
@@ -103,6 +108,7 @@ private:
     // filepath, interface, loaded
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
     QList<PluginsItemInterface *> m_pluginExists;
+    QMap<PluginsItemInterface *, QString> m_pluginItemKeyMap;
 
     QJsonObject m_pluginSettingsObject;
     QMap<qulonglong, PluginAdapter *> m_pluginAdapterMap;

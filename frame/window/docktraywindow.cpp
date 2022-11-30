@@ -45,6 +45,7 @@ DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     , m_position(Dock::Position::Bottom)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::RightToLeft, this))
+    , m_frontWidget(new QWidget(this))
     , m_toolWidget(new QWidget(this))
     , m_toolLayout(new QBoxLayout(QBoxLayout::RightToLeft, m_toolWidget))
     , m_toolLineLabel(new QLabel(this))
@@ -78,6 +79,7 @@ void DockTrayWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
     moveToolPlugin();
+    updateToolWidget();
     // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
     if (displayMode == Dock::DisplayMode::Efficient)
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
@@ -131,6 +133,9 @@ void DockTrayWindow::resizeEvent(QResizeEvent *event)
 void DockTrayWindow::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
+    if (!m_toolLineLabel->isVisible())
+        return;
+
     QPainter painter(this);
     QColor color;
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
@@ -271,6 +276,13 @@ void DockTrayWindow::moveToolPlugin()
     }
 }
 
+void DockTrayWindow::updateToolWidget()
+{
+    m_toolWidget->setVisible(m_toolLayout->count() > 0);
+    m_toolLineLabel->setVisible(m_toolLayout->count() > 0);
+    m_frontWidget->setVisible(m_toolLayout->count() > 0);
+}
+
 void DockTrayWindow::initUi()
 {
     m_toolLayout->setContentsMargins(0, 0, 0, 0);
@@ -279,7 +291,7 @@ void DockTrayWindow::initUi()
     m_systemPuginWidget->setDisplayMode(Dock::DisplayMode::Efficient);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_mainBoxLayout->setSpacing(0);
-    m_mainBoxLayout->addSpacing(FRONTSPACING);
+    m_mainBoxLayout->addWidget(m_frontWidget);
     m_mainBoxLayout->addWidget(m_toolWidget);
     m_mainBoxLayout->addSpacing(SPLITESPACE);
     m_mainBoxLayout->addWidget(m_toolLineLabel);
@@ -293,6 +305,7 @@ void DockTrayWindow::initUi()
     m_toolLineLabel->setFixedSize(0, 0);
 
     m_mainBoxLayout->addStretch();
+    updateToolWidget();
 }
 
 void DockTrayWindow::initConnection()
@@ -353,6 +366,7 @@ void DockTrayWindow::onUpdateComponentSize()
     case Dock::Position::Left:
     case Dock::Position::Right:
         m_toolLineLabel->setFixedSize(width() * 0.6, SPLITERSIZE);
+        m_frontWidget->setFixedSize(QWIDGETSIZE_MAX, FRONTSPACING);
         m_dateTimeWidget->setFixedSize(QWIDGETSIZE_MAX, m_dateTimeWidget->suitableSize().height());
         m_systemPuginWidget->setFixedSize(QWIDGETSIZE_MAX, m_systemPuginWidget->suitableSize().height());
         m_quickIconWidget->setFixedSize(QWIDGETSIZE_MAX, m_quickIconWidget->suitableSize().height());
@@ -361,6 +375,7 @@ void DockTrayWindow::onUpdateComponentSize()
     case Dock::Position::Top:
     case Dock::Position::Bottom:
         m_toolLineLabel->setFixedSize(SPLITERSIZE, height() * 0.6);
+        m_frontWidget->setFixedSize(FRONTSPACING, QWIDGETSIZE_MAX);
         m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_systemPuginWidget->setFixedSize(m_systemPuginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
@@ -380,6 +395,7 @@ void DockTrayWindow::onItemAdded(PluginsItemInterface *itemInter)
     pluginItem->setVisible(true);
 
     m_toolLayout->addWidget(pluginItem);
+    updateToolWidget();
 
     Q_EMIT requestUpdate();
 }
@@ -396,6 +412,7 @@ void DockTrayWindow::onItemRemove(PluginsItemInterface *itemInter)
             continue;
 
         m_toolLayout->removeWidget(pluginItem);
+        updateToolWidget();
 
         Q_EMIT requestUpdate();
         break;

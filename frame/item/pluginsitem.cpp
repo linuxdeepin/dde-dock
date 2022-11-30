@@ -48,17 +48,19 @@ PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString 
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
-    m_centralWidget->setParent(this);
-    m_centralWidget->setVisible(true);
-    m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
-    m_centralWidget->installEventFilter(this);
+    if (m_centralWidget) {
+        m_centralWidget->setParent(this);
+        m_centralWidget->setVisible(true);
+        m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
+        m_centralWidget->installEventFilter(this);
 
-    QBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(m_centralWidget);
-    hLayout->setSpacing(0);
-    hLayout->setMargin(0);
+        QBoxLayout *hLayout = new QHBoxLayout;
+        hLayout->addWidget(m_centralWidget);
+        hLayout->setSpacing(0);
+        hLayout->setMargin(0);
 
-    setLayout(hLayout);
+        setLayout(hLayout);
+    }
     setAccessibleName(pluginInter->pluginName());
     setAttribute(Qt::WA_TranslucentBackground);
 

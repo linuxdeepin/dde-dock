@@ -41,7 +41,7 @@ public:
     explicit ToolAppHelper(QWidget *toolAreaWidget, QObject *parent = nullptr);
 
     void setDisplayMode(DisplayMode displayMode);
-    void removePluginItem(DockItem *dockItem);
+    void setPosition(Dock::Position position);
     bool toolIsVisible() const;
 
 Q_SIGNALS:
@@ -50,17 +50,20 @@ Q_SIGNALS:
 
 private:
     void appendToToolArea(int index, DockItem *dockItem);
-    bool removeToolArea(DockItem *dockItem);
+    bool removeToolArea(PluginsItemInterface *itemInter);
     void moveToolWidget();
+    void updateToolArea();
 
     void updateWidgetStatus();
-    bool pluginInTool(DockItem *dockItem) const;
+    bool pluginInTool(PluginsItemInterface *itemInter) const;
     void pluginItemAdded(PluginsItemInterface *itemInter);
+    void pluginItemRemoved(PluginsItemInterface *itemInter);
     bool pluginExists(PluginsItemInterface *itemInter) const;
 
 private:
     QWidget *m_toolAreaWidget;
     DisplayMode m_displayMode;
+    Dock::Position m_position;
     QList<DockItem *> m_sequentPluginItems;
 };
 

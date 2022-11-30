@@ -68,6 +68,7 @@ private:
     void resizeTool() const;
     bool pluginExists(PluginsItemInterface *itemInter) const;
     void moveToolPlugin();
+    void updateToolWidget();
 
 private Q_SLOTS:
     void onUpdateComponentSize();
@@ -80,6 +81,7 @@ private:
     Dock::Position m_position;
     Dock::DisplayMode m_displayMode;
     QBoxLayout *m_mainBoxLayout;
+    QWidget *m_frontWidget;
     QWidget *m_toolWidget;
     QBoxLayout *m_toolLayout;
     QLabel *m_toolLineLabel;
