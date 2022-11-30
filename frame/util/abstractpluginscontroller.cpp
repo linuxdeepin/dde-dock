@@ -86,6 +86,10 @@ void AbstractPluginsController::removeValue(PluginsItemInterface *const itemInte
 void AbstractPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     PluginsItemInterface *pluginItem = getPluginInterface(itemInter);
+
+    if (m_pluginExists.contains(pluginItem))
+        return;
+
     PluginAdapter *pluginAdapter = dynamic_cast<PluginAdapter *>(pluginItem);
     if (pluginAdapter)
         pluginAdapter->setItemKey(itemKey);
