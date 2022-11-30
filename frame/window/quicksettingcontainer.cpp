@@ -22,7 +22,6 @@
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingitem.h"
-#include "mediawidget.h"
 #include "dockpopupwindow.h"
 #include "slidercontainer.h"
 #include "pluginchildpage.h"
@@ -71,7 +70,6 @@ QuickSettingContainer::QuickSettingContainer(QWidget *parent)
     , m_componentWidget(new QWidget(m_mainWidget))
     , m_mainlayout(new QVBoxLayout(m_mainWidget))
     , m_pluginLoader(QuickSettingController::instance())
-    , m_playerWidget(new MediaWidget(m_componentWidget))
     , m_childPage(new PluginChildPage(this))
     , m_dragInfo(new struct QuickDragInfo)
     , m_childShowPlugin(nullptr)
@@ -208,6 +206,7 @@ void QuickSettingContainer::appendPlugin(PluginsItemInterface *itemInter, bool n
     if (quickItem->type() == QuickSettingItem::QuickSettingType::Full) {
         // 插件位置占据整行，例如声音、亮度和音乐等
         m_componentWidget->layout()->addWidget(quickItem);
+        updateFullItemLayout();
     } else if (needLayout) {
         // 插件占据两行或者一行
         updateItemLayout();
@@ -226,6 +225,7 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
         return;
 
     QuickSettingItem *removeItem = *removeItemIter;
+    removeItem->detachPlugin();
 
     if (removeItem->type() == QuickSettingItem::QuickSettingType::Full)
         m_componentWidget->layout()->removeWidget(removeItem);
@@ -238,6 +238,7 @@ void QuickSettingContainer::onPluginRemove(PluginsItemInterface *itemInter)
         showPage(nullptr);
 
     updateItemLayout();
+    updateFullItemLayout();
     onResizeView();
 }
 
@@ -319,6 +320,7 @@ void QuickSettingContainer::updateItemLayout()
         int usedColumn = (type == QuickSettingItem::QuickSettingType::Multi ? 2 : 1);
         QList<QuickSettingItem *> quickPlugins = quickSettings[type];
         for (QuickSettingItem *quickItem : quickPlugins) {
+            quickItem->setVisible(true);
             m_pluginLayout->addWidget(quickItem, row, column, 1, usedColumn);
             column += usedColumn;
             if (column >= COLUMNCOUNT) {
@@ -334,19 +336,48 @@ void QuickSettingContainer::updateItemLayout()
     insertQuickSetting(QuickSettingItem::QuickSettingType::Single, row, column);
 }
 
+void QuickSettingContainer::updateFullItemLayout()
+{
+    while (m_componentWidget->layout()->count() > 0)
+        m_componentWidget->layout()->takeAt(0);
+
+    QuickSettingController *quickController = QuickSettingController::instance();
+    QList<QuickSettingItem *> fullItems;
+    QMap<QuickSettingItem *, int> fullItemOrder;
+    for (QuickSettingItem *item : m_quickSettings) {
+        if (item->type() != QuickSettingItem::QuickSettingType::Full)
+            continue;
+
+        fullItems << item;
+        int order = -1;
+        QJsonObject metaData = quickController->metaData(item->pluginItem());
+        if (metaData.contains("order"))
+            order = metaData.value("order").toInt();
+
+        fullItemOrder[item] = order;
+    }
+
+    std::sort(fullItems.begin(), fullItems.end(), [ fullItemOrder ](QuickSettingItem *item1, QuickSettingItem *item2) {
+        int order1 = fullItemOrder.value(item1, -1);
+        int order2 = fullItemOrder.value(item2, -1);
+        if (order1 == order2)
+            return true;
+        if (order1 == -1)
+            return false;
+        if (order2 == -1)
+            return true;
+
+        return order1 < order2;
+    });
+
+    for (QuickSettingItem *item : fullItems) {
+        item->setVisible(true);
+        m_componentWidget->layout()->addWidget(item);
+    }
+}
+
 void QuickSettingContainer::initUi()
 {
-    auto setWidgetStyle = [](DBlurEffectWidget *widget) {
-        widget->setMaskColor(QColor(239, 240, 245));
-        widget->setBlurRectXRadius(8);
-        widget->setBlurRectYRadius(8);
-    };
-
-    // 添加音乐播放插件
-    m_playerWidget->setFixedHeight(ITEMHEIGHT);
-
-    setWidgetStyle(m_playerWidget);
-
     m_mainlayout->setSpacing(ITEMSPACE);
     m_mainlayout->setContentsMargins(ITEMSPACE, ITEMSPACE, ITEMSPACE, ITEMSPACE);
 
@@ -362,8 +393,7 @@ void QuickSettingContainer::initUi()
     QVBoxLayout *ctrlLayout = new QVBoxLayout(m_componentWidget);
     ctrlLayout->setContentsMargins(0, 0, 0, 0);
     ctrlLayout->setSpacing(ITEMSPACE);
-
-    ctrlLayout->addWidget(m_playerWidget);
+    ctrlLayout->setDirection(QBoxLayout::BottomToTop);
 
     m_mainlayout->addWidget(m_componentWidget);
     // 加载所有的插件
@@ -378,8 +408,10 @@ void QuickSettingContainer::initUi()
     setAcceptDrops(true);
 
     QMetaObject::invokeMethod(this, [ = ] {
-        if (plugins.size() > 0)
+        if (plugins.size() > 0) {
             updateItemLayout();
+            updateFullItemLayout();
+        }
         // 设置当前窗口的大小
         onResizeView();
         setFixedWidth(ITEMWIDTH * 4 + (ITEMSPACE * 5));
@@ -397,7 +429,6 @@ void QuickSettingContainer::initConnection()
     connect(m_pluginLoader, &QuickSettingController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
     connect(m_pluginLoader, &QuickSettingController::pluginUpdated, this, &QuickSettingContainer::onPluginUpdated);
 
-    connect(m_playerWidget, &MediaWidget::visibleChanged, this, &QuickSettingContainer::onResizeView);
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {
         showPage(m_mainWidget);
     });
@@ -430,11 +461,6 @@ void QuickSettingContainer::onResizeView()
             rowCount++;
 
         m_pluginWidget->setFixedHeight(ITEMHEIGHT * rowCount + ITEMSPACE * (rowCount - 1));
-
-        if (m_playerWidget->isVisible()) {
-            fullItemHeight += m_playerWidget->height();
-            widgetCount++;
-        }
         m_componentWidget->setFixedHeight(fullItemHeight + (widgetCount - 1) * ITEMSPACE);
 
         setFixedHeight(ITEMSPACE * 3 + m_pluginWidget->height() + m_componentWidget->height());

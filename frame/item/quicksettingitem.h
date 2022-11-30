@@ -44,6 +44,7 @@ public:
     ItemType itemType() const override;
     virtual const QPixmap dragPixmap();
     virtual void updateShow() {}
+    virtual void detachPlugin() {}
     const QString itemKey() const;
 
     virtual QuickSettingType type() const = 0;

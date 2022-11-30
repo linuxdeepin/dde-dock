@@ -33,6 +33,7 @@ public:
 
     QuickSettingType type() const override;
     void updateShow() override;
+    void detachPlugin() override;
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
@@ -44,6 +45,9 @@ private:
     QPixmap pixmap() const;
     QLabel *findChildLabel(QWidget *parent, const QString &childObjectName) const;
     void updatePluginName(QLabel *textLabel);
+
+private:
+    QWidget *m_itemParentWidget;
 };
 
 #endif // SINGLEQUICKITEM_H

@@ -23,6 +23,8 @@
 #include "quicksettingcontroller.h"
 #include "settingconfig.h"
 
+#include <QWidget>
+
 static QStringList fixedPluginNames { "network", "sound", "power" };
 #define PLUGINNAMEKEY "Dock_Quick_Plugin_Name"
 
@@ -165,6 +167,10 @@ void QuickPluginModel::initConnection()
     connect(quickController, &QuickSettingController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute plugAttr) {
         if (plugAttr != QuickSettingController::PluginAttribute::Quick)
             return;
+
+        QWidget *quickWidget = itemInter->itemWidget(QUICK_ITEM_KEY);
+        if (quickWidget && !quickWidget->parentWidget())
+            quickWidget->setVisible(false);
 
         // 用来读取已经固定在下方的插件
         if (!m_dockedPluginIndex.contains(itemInter->pluginName()))

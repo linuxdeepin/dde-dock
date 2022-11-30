@@ -32,7 +32,6 @@
 class DockItem;
 class QVBoxLayout;
 class QuickSettingController;
-class MediaWidget;
 class BrightnessModel;
 class BrightnessWidget;
 class QuickSettingItem;
@@ -76,6 +75,8 @@ private:
     void initConnection();
     // 调整控件位置
     void updateItemLayout();
+    // 调整全列插件的位置
+    void updateFullItemLayout();
     // 获取拖动图标的热点
     QPoint hotSpot(const QPixmap &pixmap);
     // 插入插件
@@ -91,7 +92,6 @@ private:
     QWidget *m_componentWidget;
     QVBoxLayout *m_mainlayout;
     QuickSettingController *m_pluginLoader;
-    MediaWidget *m_playerWidget;
     PluginChildPage *m_childPage;
     QuickDragInfo *m_dragInfo;
     QList<QuickSettingItem *> m_quickSettings;

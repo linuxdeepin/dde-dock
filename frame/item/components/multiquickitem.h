@@ -24,6 +24,7 @@
 #include <quicksettingitem.h>
 
 class QuickIconWidget;
+class QWidget;
 
 class MultiQuickItem : public QuickSettingItem
 {
@@ -33,6 +34,7 @@ public:
     MultiQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent = nullptr);
     ~MultiQuickItem() override;
     void updateShow() override;
+    void detachPlugin() override;
 
     QuickSettingType type() const override;
 
@@ -47,6 +49,7 @@ private:
     QuickIconWidget *m_iconWidget;
     QLabel *m_nameLabel;
     QLabel *m_stateLabel;
+    QWidget *m_itemWidgetParent;
 };
 
 /**

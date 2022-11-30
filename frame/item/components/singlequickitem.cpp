@@ -29,15 +29,13 @@
 
 SingleQuickItem::SingleQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent)
     : QuickSettingItem(pluginInter, parent)
+    , m_itemParentWidget(nullptr)
 {
     initUi();
 }
 
 SingleQuickItem::~SingleQuickItem()
 {
-    QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
-    if (itemWidget)
-        itemWidget->setParent(nullptr);
 }
 
 QuickSettingItem::QuickSettingType SingleQuickItem::type() const
@@ -80,10 +78,12 @@ QWidget *SingleQuickItem::iconWidget(QWidget *parent)
         // 如果图标为空，则将获取itemWidget作为它的显示
         QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
         if (itemWidget) {
+            m_itemParentWidget = itemWidget->parentWidget();
             QHBoxLayout *layout = new QHBoxLayout(widget);
             layout->setContentsMargins(0, 0, 0 ,0);
             itemWidget->setParent(widget);
             layout->addWidget(itemWidget);
+            itemWidget->setVisible(true);
             childIsEmpty = false;
         }
     }
@@ -188,4 +188,11 @@ void SingleQuickItem::updateShow()
         if (itemWidget)
             itemWidget->update();
     }
+}
+
+void SingleQuickItem::detachPlugin()
+{
+    QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
+    if (itemWidget && !property("paint").toBool())
+        itemWidget->setParent(m_itemParentWidget);
 }

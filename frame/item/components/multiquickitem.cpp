@@ -36,6 +36,7 @@ MultiQuickItem::MultiQuickItem(PluginsItemInterface *const pluginInter, QWidget 
     , m_iconWidget(nullptr)
     , m_nameLabel(nullptr)
     , m_stateLabel(nullptr)
+    , m_itemWidgetParent(nullptr)
 {
     initUi();
 }
@@ -60,6 +61,13 @@ void MultiQuickItem::updateShow()
             itemWidget->update();
         }
     }
+}
+
+void MultiQuickItem::detachPlugin()
+{
+    QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
+    if (itemWidget && itemWidget->parentWidget() == this)
+        itemWidget->setParent(m_itemWidgetParent);
 }
 
 QuickSettingItem::QuickSettingType MultiQuickItem::type() const
@@ -107,8 +115,10 @@ void MultiQuickItem::initUi()
 {
     QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
     if (pluginItem()->icon(DockPart::QuickPanel).isNull() && itemWidget) {
+        m_itemWidgetParent = itemWidget->parentWidget();
         // 如果插件没有返回图标的显示，则获取插件的itemWidget
         QHBoxLayout *mainLayout = new QHBoxLayout(this);
+        itemWidget->setVisible(true);
         itemWidget->setParent(this);
         mainLayout->setContentsMargins(0, 0, 0, 0);
         mainLayout->addWidget(itemWidget);

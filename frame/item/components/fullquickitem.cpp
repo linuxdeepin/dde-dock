@@ -24,6 +24,7 @@
 FullQuickItem::FullQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent)
     : QuickSettingItem(pluginInter, parent)
     , m_centerWidget(pluginInter->itemWidget(QUICK_ITEM_KEY))
+    , m_centerParentWidget(nullptr)
     , m_effectWidget(new DBlurEffectWidget(this))
 {
     initUi();
@@ -40,6 +41,12 @@ void FullQuickItem::updateShow()
 {
     if (m_centerWidget)
         m_centerWidget->update();
+}
+
+void FullQuickItem::detachPlugin()
+{
+    if (m_centerWidget)
+        m_centerWidget->setParent(m_centerParentWidget);
 }
 
 QuickSettingItem::QuickSettingType FullQuickItem::type() const
@@ -65,6 +72,9 @@ void FullQuickItem::initUi()
     if (!m_centerWidget)
         return;
 
+    m_centerWidget->setVisible(true);
+    m_centerParentWidget = m_centerWidget->parentWidget();
+
     QHBoxLayout *layout = new QHBoxLayout(m_effectWidget);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setAlignment(Qt::AlignHCenter);
@@ -79,6 +89,9 @@ void FullQuickItem::initUi()
 
 void FullQuickItem::resizeSelf()
 {
+    if (!m_centerWidget)
+        return;
+
     m_effectWidget->setFixedHeight(m_centerWidget->height());
     setFixedHeight(m_centerWidget->height());
 }

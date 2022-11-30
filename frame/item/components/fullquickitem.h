@@ -31,6 +31,7 @@ public:
     FullQuickItem(PluginsItemInterface *const pluginInter, QWidget *parent = nullptr);
     ~FullQuickItem() override;
     void updateShow() override;
+    void detachPlugin() override;
 
     QuickSettingType type() const override;
 
@@ -43,6 +44,7 @@ private:
 
 private:
     QWidget *m_centerWidget;
+    QWidget *m_centerParentWidget;
     DBlurEffectWidget *m_effectWidget;
 };
 
