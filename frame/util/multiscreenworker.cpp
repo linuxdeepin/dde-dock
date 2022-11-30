@@ -302,7 +302,7 @@ void MultiScreenWorker::onHideStateChanged(int state)
         Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Show);
     } else if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Hide) {
         // 最后一个参数，当任务栏的隐藏状态发生变化的时候（从一直显示变成一直隐藏或者智能隐藏），需要考虑鼠标是否在任务栏上，如果在任务栏上，此时无需执行隐藏动画
-        Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Hide, true);
+        Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Hide);
     }
 }
 
