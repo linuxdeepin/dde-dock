@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     app.setApplicationVersion("2.0");
     app.loadTranslator();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // 自动化标记由此开始
     QAccessible::installFactory(accessibleFactory);
