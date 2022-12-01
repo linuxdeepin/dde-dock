@@ -151,7 +151,7 @@ void TrayDelegate::setEditorData(QWidget *editor, const QModelIndex &index) cons
 {
     BaseTrayWidget *widget = static_cast<BaseTrayWidget *>(editor);
     if (widget) {
-        widget->setNeedShow(true);
+        widget->setNeedShow(!index.data(TrayModel::Blank).toBool());
     }
 }
 
@@ -222,7 +222,7 @@ ExpandIconWidget *TrayDelegate::expandWidget()
     if (!dataModel)
         return nullptr;
 
-    for (int i = 0; i < dataModel->rowCount() - 1; i++) {
+    for (int i = 0; i < dataModel->rowCount(); i++) {
         QModelIndex index = dataModel->index(i, 0);
         ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_listView->indexWidget(index));
         if (widget)

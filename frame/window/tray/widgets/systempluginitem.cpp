@@ -47,9 +47,11 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
-    m_centralWidget->setParent(this);
-    m_centralWidget->setVisible(true);
-    m_centralWidget->installEventFilter(this);
+    if (m_centralWidget) {
+        m_centralWidget->setParent(this);
+        m_centralWidget->setVisible(true);
+        m_centralWidget->installEventFilter(this);
+    }
 
     QBoxLayout *hLayout = new QHBoxLayout(this);
     hLayout->addWidget(m_centralWidget);
@@ -88,6 +90,8 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
 
     m_popupAdjustDelayTimer->setInterval(10);
     m_popupAdjustDelayTimer->setSingleShot(true);
+
+    installEventFilter(this);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &SystemPluginItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &SystemPluginItem::updatePopupPosition, Qt::QueuedConnection);
@@ -186,6 +190,14 @@ bool SystemPluginItem::event(QEvent *event)
         gestureEvent(static_cast<QGestureEvent *>(event));
 
     return BaseTrayWidget::event(event);
+}
+
+bool SystemPluginItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this && event->type() == QEvent::DeferredDelete)
+        m_centralWidget->setParent(nullptr);
+
+    return BaseTrayWidget::eventFilter(watched, event);
 }
 
 void SystemPluginItem::enterEvent(QEvent *event)

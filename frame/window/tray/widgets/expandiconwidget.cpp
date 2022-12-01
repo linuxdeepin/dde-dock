@@ -171,7 +171,6 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
     connect(trayDelegate, &TrayDelegate::removeRow, trayView, [ = ](const QModelIndex &index) {
         trayView->model()->removeRow(index.row(),index.parent());
     });
-    connect(trayView, &TrayGridView::requestRemove, trayModel, &TrayModel::removeRow);
     connect(trayModel, &TrayModel::requestOpenEditor, trayView, [ trayView ](const QModelIndex &index) {
         trayView->openPersistentEditor(index);
     });
@@ -335,7 +334,7 @@ ExpandIconWidget *TrayGridWidget::expandWidget() const
     if (!dataModel)
         return nullptr;
 
-    for (int i = 0; i < dataModel->rowCount() - 1; i++) {
+    for (int i = 0; i < dataModel->rowCount(); i++) {
         QModelIndex index = dataModel->index(i, 0);
         ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_referGridView->indexWidget(index));
         if (widget)

@@ -388,6 +388,26 @@ const QModelIndex TrayGridView::getIndexFromPos(QPoint currentPoint) const
     return QModelIndex();
 }
 
+bool TrayGridView::mouseInDock()
+{
+    QPoint mousePosition = QCursor::pos();
+    QRect dockRect(topLevelWidget()->pos(), topLevelWidget()->size());
+    switch (m_positon) {
+    case Dock::Position::Bottom: {
+        return mousePosition.y() > dockRect.top();
+    }
+    case Dock::Position::Left: {
+        return mousePosition.x() < dockRect.right();
+    }
+    case Dock::Position::Top: {
+        return mousePosition.y() < dockRect.bottom();
+    }
+    case Dock::Position::Right: {
+        return mousePosition.x() > dockRect.left();
+    }
+    }
+}
+
 void TrayGridView::handleDropEvent(QDropEvent *e)
 {
     setState(DListView::NoState);
@@ -492,7 +512,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
     listModel->setDragKey(modelIndex.data(TrayModel::Role::KeyRole).toString());
     listModel->setDragingIndex(modelIndex);
     // 删除当前的图标
-    WinInfo winInfo = listModel->takeIndex(modelIndex);
+    WinInfo winInfo = listModel->getWinInfo(modelIndex);
 
     Qt::DropAction dropAct = drag->exec(supportedActions);
 
@@ -504,12 +524,15 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
         if (listModel->isIconTray()) {
             // 如果当前是从托盘区域释放，按照原来的流程走
             QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-            connect(posAni, &QPropertyAnimation::finished, [ this, listModel, pixLabel, modelIndex, winInfo ] () {
+            connect(posAni, &QPropertyAnimation::finished, [ this, listModel, pixLabel, winInfo ] () {
                 pixLabel->hide();
                 pixLabel->deleteLater();
                 listModel->setDragKey(QString());
-                listModel->insertRow(modelIndex.row(), winInfo);
                 clearDragModelIndex();
+                QModelIndex dropIndex = indexAt(m_dropPos);
+                // 拖转完成后，将拖动的图标插入到新的位置
+                //listModel->moveToIndex(winInfo, dropIndex.row());
+                listModel->dropSwap(dropIndex.row());
                 listModel->setExpandVisible(!TrayModel::getIconModel()->isEmpty());
 
                 m_dropPos = QPoint();
@@ -518,7 +541,7 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
                 onUpdateEditorView();
                 Q_EMIT dragFinished();
             });
-
+            // 拖拽完成后，将当前拖拽的item从原来的列表中移除，后来会根据实际情况将item插入到特定的列表中
             posAni->setEasingCurve(QEasingCurve::Linear);
             posAni->setDuration(m_aniDuringTime);
             posAni->setStartValue((QCursor::pos() - QPoint(0, pixLabel->height() / 2)));
@@ -528,19 +551,25 @@ bool TrayGridView::beginDrag(Qt::DropActions supportedActions)
 
             Q_EMIT dragFinished();
         } else {
-            // 如果当前是从任务栏区域释放，则将释放后的图标放到托盘
             listModel->setDragKey(QString());
             clearDragModelIndex();
             TrayModel *trayModel = TrayModel::getIconModel();
-            trayModel->addRow(winInfo);
+            if (!mouseInDock()) {
+                listModel->removeWinInfo(winInfo);
+                trayModel->addRow(winInfo);
+                trayModel->saveConfig(-1, winInfo);
+            }
+            // 如果是任务栏的的托盘区，则更新是否显示展开入口
+            listModel->setExpandVisible(trayModel->rowCount() > 0, false);
 
             m_dragPos = QPoint();
             m_dropPos = QPoint();
-
-            trayModel->saveConfig(-1, winInfo);
             Q_EMIT dragFinished();
         }
     } else {
+        // 拖拽完成后，将当前拖拽的item从原来的列表中移除，后来会根据实际情况将item插入到特定的列表中
+        listModel->removeWinInfo(winInfo);
+        // 这里是将图标从一个区域移动到另外一个区域
         listModel->setDragKey(QString());
         clearDragModelIndex();
         if (listModel->isIconTray()) {

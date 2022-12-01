@@ -51,7 +51,6 @@ public Q_SLOTS:
     void onUpdateEditorView();
 
 Q_SIGNALS:
-    void requestRemove(const QString &);
     void dragLeaved();
     void dragEntered();
     void dragFinished();
@@ -76,6 +75,7 @@ private:
     void initUi();
     void createAnimation(const int pos, const bool moveNext, const bool isLastAni);
     const QModelIndex getIndexFromPos(QPoint currentPoint) const;
+    bool mouseInDock();
 
 private:
     QEasingCurve::Type m_aniCurveType;

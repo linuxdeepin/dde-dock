@@ -91,7 +91,6 @@ public:
     static TrayModel *getIconModel();
 
     void dropSwap(int newPos);
-    void dropInsert(int newPos);
 
     void clearDragDropIndex();
     void setDragingIndex(const QModelIndex index);
@@ -111,8 +110,9 @@ public:
     bool isEmpty() const;
 
     void clear();
-    WinInfo takeIndex(const QModelIndex &index);
+    WinInfo getWinInfo(const QModelIndex &index);
     void saveConfig(int index, const WinInfo &winInfo);
+    void removeWinInfo(WinInfo winInfo);
 
 Q_SIGNALS:
     void requestUpdateIcon(quint32);
@@ -121,7 +121,6 @@ Q_SIGNALS:
     void requestRefreshEditor();
 
 public Q_SLOTS:
-    void removeRow(const QString &itemKey);
     void addRow(WinInfo info);
     void insertRow(int index, WinInfo info);
 
@@ -152,6 +151,7 @@ protected:
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 private:
+    void removeRow(const QString &itemKey);
     bool exist(const QString &itemKey);
     QString fileNameByServiceName(const QString &serviceName) const;
     bool isTypeWriting(const QString &servicePath) const;

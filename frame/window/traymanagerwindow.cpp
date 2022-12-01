@@ -270,7 +270,6 @@ void TrayManagerWindow::initUi()
 
 void TrayManagerWindow::initConnection()
 {
-    connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
     connect(m_model, &TrayModel::rowCountChanged, this, &TrayManagerWindow::onTrayCountChanged);
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);

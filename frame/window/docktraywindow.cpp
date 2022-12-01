@@ -318,8 +318,6 @@ void DockTrayWindow::initConnection()
     connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_model, &TrayModel::requestRefreshEditor, m_trayView, &TrayGridView::onUpdateEditorView);
-    connect(m_trayView, &TrayGridView::requestRemove, m_model, &TrayModel::removeRow);
-    connect(m_trayView, &TrayGridView::requestRemove, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_trayView, &TrayGridView::dragFinished, this, [ this ] {
         // 如果拖拽结束，则隐藏托盘
         Q_EMIT m_delegate->requestDrag(false);

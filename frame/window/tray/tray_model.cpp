@@ -93,19 +93,16 @@ void TrayModel::dropSwap(int newPos)
     if (!m_dragModelIndex.isValid())
         return;
 
-    removeRows(m_dragModelIndex.row(), 1, QModelIndex());
-    dropInsert(newPos);
+    int row = m_dragModelIndex.row();
 
-    emit QAbstractItemModel::dataChanged(m_dragModelIndex, m_dropModelIndex);
-}
+    if (row < m_winInfos.size())
+        m_dragInfo = m_winInfos.takeAt(row);
 
-void TrayModel::dropInsert(int newPos)
-{
-    beginInsertRows(QModelIndex(), newPos, newPos);
     WinInfo name = m_dragInfo;
     m_winInfos.insert(newPos, name);
-    // 更新输入法的位置
-    endInsertRows();
+
+    emit QAbstractItemModel::dataChanged(m_dragModelIndex, m_dropModelIndex);
+    requestRefreshEditor();
 }
 
 void TrayModel::clearDragDropIndex()
@@ -115,7 +112,6 @@ void TrayModel::clearDragDropIndex()
 
     m_dragModelIndex = m_dropModelIndex = QModelIndex();
 
-    Q_EMIT requestRefreshEditor();
     emit QAbstractItemModel::dataChanged(startIndex, endIndex);
     emit QAbstractItemModel::dataChanged(endIndex, startIndex);
 }
@@ -125,7 +121,6 @@ void TrayModel::setDragingIndex(const QModelIndex index)
     m_dragModelIndex = index;
     m_dropModelIndex = index;
 
-    Q_EMIT requestRefreshEditor();
     emit QAbstractListModel::dataChanged(index, index);
 }
 
@@ -278,7 +273,6 @@ QVariant TrayModel::data(const QModelIndex &index, int role) const
 bool TrayModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(count);
-    Q_UNUSED(parent);
 
     if (m_winInfos.size() - 1 < row)
         return false;
@@ -353,20 +347,13 @@ void TrayModel::clear()
     Q_EMIT rowCountChanged();
 }
 
-WinInfo TrayModel::takeIndex(const QModelIndex &index)
+WinInfo TrayModel::getWinInfo(const QModelIndex &index)
 {
     int row = index.row();
     if (row < 0 || row >= m_winInfos.size())
         return WinInfo();
 
-    WinInfo win = m_winInfos[row];
-    beginResetModel();
-    m_winInfos.removeAt(row);
-    endResetModel();
-
-    Q_EMIT rowCountChanged();
-
-    return win;
+    return m_winInfos[row];
 }
 
 void TrayModel::onXEmbedTrayAdded(quint32 winId)
@@ -460,6 +447,21 @@ void TrayModel::saveConfig(int index, const WinInfo &winInfo)
     }
 
     SETTINGCONFIG->setValue(DOCKQUICKTRAYNAME, m_fixedTrayNames);
+}
+
+void TrayModel::removeWinInfo(WinInfo winInfo)
+{
+    for (const WinInfo &info : m_winInfos) {
+        if (winInfo == info) {
+            int index = m_winInfos.indexOf(info);
+            beginRemoveRows(QModelIndex(),  index, index);
+            m_winInfos.removeOne(info);
+            endRemoveRows();
+
+            Q_EMIT rowCountChanged();
+            break;
+        }
+    }
 }
 
 bool TrayModel::inTrayConfig(const QString itemKey) const
@@ -640,7 +642,7 @@ void TrayModel::onIndicatorAdded(const QString &indicatorName)
 
     const QString &itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
     for (const WinInfo &info : m_winInfos) {
-        if (info.key == itemKey)
+        if (info.itemKey == itemKey)
             return;
     }
 
@@ -648,7 +650,7 @@ void TrayModel::onIndicatorAdded(const QString &indicatorName)
     WinInfo info;
     info.type = Incicator;
     info.key = itemKey;
-    info.itemKey = IndicatorTrayItem::toIndicatorKey(indicatorName);
+    info.itemKey = itemKey;
     m_winInfos.append(info);
 
     sortItems();
@@ -754,7 +756,7 @@ void TrayModel::onSettingChanged(const QString &key, const QVariant &value)
 void TrayModel::removeRow(const QString &itemKey)
 {
     for (const WinInfo &info : m_winInfos) {
-        if (info.key == itemKey) {
+        if (info.itemKey == itemKey) {
             int index = m_winInfos.indexOf(info);
             beginRemoveRows(QModelIndex(),  index, index);
             m_winInfos.removeOne(info);
