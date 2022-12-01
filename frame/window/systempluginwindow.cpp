@@ -24,6 +24,8 @@
 #include "quicksettingcontroller.h"
 
 #include <DListView>
+#include <DGuiApplicationHelper>
+
 #include <QBoxLayout>
 #include <QDir>
 #include <QMetaObject>
@@ -243,7 +245,7 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel);
+    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel, DGuiApplicationHelper::instance()->themeType());
 
     QRect rctPixmap(rect());
     if (needShowText()) {

@@ -74,7 +74,7 @@ typedef struct DragInfo{
         if (!dockItem)
             return QPixmap();
 
-        QPixmap pixmap = dockItem->pluginItem()->icon(DockPart::QuickShow).pixmap(QSize(ITEMSIZE, ITEMSIZE));
+        QPixmap pixmap = dockItem->pluginItem()->icon(DockPart::QuickShow, DGuiApplicationHelper::instance()->themeType()).pixmap(QSize(ITEMSIZE, ITEMSIZE));
         if (!pixmap.isNull())
             return pixmap;
 

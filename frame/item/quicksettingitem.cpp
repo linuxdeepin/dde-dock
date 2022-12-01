@@ -72,7 +72,7 @@ DockItem::ItemType QuickSettingItem::itemType() const
 
 const QPixmap QuickSettingItem::dragPixmap()
 {
-    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
+    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType()).pixmap(ICONWIDTH, ICONHEIGHT);
 
     QPainter pa(&pm);
     pa.setPen(foregroundColor());
