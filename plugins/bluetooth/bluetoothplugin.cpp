@@ -60,33 +60,17 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
     m_bluetoothWidget.reset(new BluetoothMainWidget(m_adapterManager));
 
     connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
-        m_enableState = true;
-        refreshPluginItemsVisible();
+        m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
-        m_enableState = false;
-        refreshPluginItemsVisible();
+        m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ = ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
     });
 
-    m_enableState = m_bluetoothItem->hasAdapter();
-
-    if (!pluginIsDisable())
+    if (m_bluetoothItem->hasAdapter())
         m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
-}
-
-void BluetoothPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool BluetoothPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, STATE_KEY, m_enableState).toBool();
 }
 
 QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
@@ -151,11 +135,6 @@ void BluetoothPlugin::refreshIcon(const QString &itemKey)
     }
 }
 
-void BluetoothPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
-}
-
 QIcon BluetoothPlugin::icon(const DockPart &dockPart)
 {
     if (dockPart == DockPart::QuickPanel)
@@ -201,10 +180,3 @@ PluginFlags BluetoothPlugin::flags() const
             | PluginFlag::Attribute_CanSetting;
 }
 
-void BluetoothPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
-    else
-        m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
-}

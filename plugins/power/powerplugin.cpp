@@ -93,21 +93,7 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable()) {
-        loadPlugin();
-    }
-}
-
-void PowerPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool PowerPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
+    loadPlugin();
 }
 
 const QString PowerPlugin::itemCommand(const QString &itemKey)
@@ -169,11 +155,6 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void PowerPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
-}
-
 QIcon PowerPlugin::icon(const DockPart &dockPart, int themeType)
 {
     // 电池插件不显示在快捷面板上，因此此处返回空图标
@@ -197,10 +178,10 @@ void PowerPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();
 
-    if (!exist)
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    else if (exist && !pluginIsDisable())
+    if (exist)
         m_proxyInter->itemAdded(this, POWER_KEY);
+    else
+        m_proxyInter->itemRemoved(this, POWER_KEY);
 }
 
 void PowerPlugin::loadPlugin()
@@ -237,19 +218,6 @@ void PowerPlugin::loadPlugin()
     updateBatteryVisible();
 
     onGSettingsChanged("showtimetofull");
-}
-
-void PowerPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        updateBatteryVisible();
-    }
 }
 
 void PowerPlugin::onGSettingsChanged(const QString &key)

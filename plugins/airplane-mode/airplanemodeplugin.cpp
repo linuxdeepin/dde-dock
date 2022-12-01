@@ -45,24 +45,19 @@ const QString AirplaneModePlugin::pluginDisplayName() const
 
 void AirplaneModePlugin::init(PluginProxyInterface *proxyInter)
 {
+    if (m_proxyInter == proxyInter)
+        return;
+
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable())
-        m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
+    m_proxyInter->itemAdded(this, AIRPLANEMODE_KEY);
 
     refreshAirplaneEnableState();
 }
 
 void AirplaneModePlugin::pluginStateSwitched()
 {
-    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
-
     refreshAirplaneEnableState();
-}
-
-bool AirplaneModePlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, STATE_KEY, true).toBool();
 }
 
 QWidget *AirplaneModePlugin::itemWidget(const QString &itemKey)

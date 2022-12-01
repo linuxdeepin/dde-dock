@@ -44,9 +44,7 @@ public:
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
-    void pluginStateSwitched() override;
     bool pluginIsAllowDisable() override { return true; }
-    bool pluginIsDisable() override;
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     QWidget *itemPopupApplet(const QString &itemKey) override;
@@ -54,16 +52,12 @@ public:
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
     void refreshIcon(const QString &itemKey) override;
-    void pluginSettingsChanged() override;
 
     QIcon icon(const DockPart &) override;
     QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginStatus status() const override;
     QString description() const override;
     PluginFlags flags() const override;
-
-private:
-    void refreshPluginItemsVisible();
 
 private:
     AdaptersManager *m_adapterManager;

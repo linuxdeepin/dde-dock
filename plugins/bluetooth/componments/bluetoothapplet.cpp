@@ -186,11 +186,10 @@ AdaptersManager *BluetoothApplet::adaptersManager()
 
 void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 {
-    if (!m_adapterItems.size()) {
-        emit justHasAdapter();
-    }
+    bool needJustHasAdapter = (m_adapterItems.size() == 0);
     if (m_adapterItems.contains(adapter->id())) {
         onAdapterRemoved(m_adapterItems.value(adapter->id())->adapter());
+        needJustHasAdapter = (m_adapterItems.size() == 0);
     }
 
     BluetoothAdapterItem *adapterItem = new BluetoothAdapterItem(adapter, this);
@@ -207,6 +206,9 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
     m_contentLayout->insertWidget(m_contentLayout->count() - 1, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
+
+    if (needJustHasAdapter)
+        emit justHasAdapter();
 }
 
 void BluetoothApplet::onAdapterRemoved(Adapter *adapter)

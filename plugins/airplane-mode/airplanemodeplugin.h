@@ -40,7 +40,6 @@ public:
     void init(PluginProxyInterface *proxyInter) Q_DECL_OVERRIDE;
     void pluginStateSwitched() Q_DECL_OVERRIDE;
     bool pluginIsAllowDisable() Q_DECL_OVERRIDE { return true; }
-    bool pluginIsDisable() Q_DECL_OVERRIDE;
     QWidget *itemWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     QWidget *itemTipsWidget(const QString &itemKey) Q_DECL_OVERRIDE;
     int itemSortKey(const QString &itemKey) Q_DECL_OVERRIDE;
