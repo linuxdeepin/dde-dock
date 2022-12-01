@@ -24,7 +24,11 @@
 
 #include <QWidget>
 
+#include <DGuiApplicationHelper>
+
 #define POWER_KEY "power"
+
+DGUI_USE_NAMESPACE
 
 class DBusPower;
 
@@ -43,7 +47,7 @@ class PowerStatusWidget : public QWidget
 
 public:
     explicit PowerStatusWidget(QWidget *parent = 0);
-    QPixmap getBatteryIcon();
+    QPixmap getBatteryIcon(int themeType);
 
 public Q_SLOTS:
     void refreshIcon();

@@ -29,10 +29,14 @@
 
 #include <DApplication>
 #include <DDesktopServices>
+#include <DGuiApplicationHelper>
+
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY    "enable"
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 using namespace Dock;
 
@@ -190,8 +194,16 @@ void TrashPlugin::pluginSettingsChanged()
 
 QIcon TrashPlugin::icon(const DockPart &dockPart, int themeType)
 {
-    if (dockPart == DockPart::DCCSetting)
-        return QIcon(":/icons/dcc_trash.svg");
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/dcc_trash.svg");
+
+        QPixmap pixmap(":/icons/dcc_trash.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+        return pixmap;
+    }
 
     return QIcon();
 }

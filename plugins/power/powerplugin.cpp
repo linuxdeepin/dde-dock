@@ -174,14 +174,11 @@ void PowerPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon PowerPlugin::icon(const DockPart &dockPart)
+QIcon PowerPlugin::icon(const DockPart &dockPart, int themeType)
 {
     // 电池插件不显示在快捷面板上，因此此处返回空图标
-    if (dockPart == DockPart::QuickPanel)
-        return QIcon();
-
     static QIcon batteryIcon;
-    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon();
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
     batteryIcon.detach();
     batteryIcon.addPixmap(pixmap);
     return batteryIcon;

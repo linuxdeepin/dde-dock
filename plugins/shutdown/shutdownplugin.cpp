@@ -27,9 +27,11 @@
 
 #include <DSysInfo>
 #include <DDBusSender>
+#include <DGuiApplicationHelper>
 
 #include <QIcon>
 #include <QSettings>
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY "enable"
 #define GSETTING_SHOW_SUSPEND "showSuspend"
@@ -38,6 +40,7 @@
 #define GSETTING_SHOW_LOCK "showLock"
 
 DCORE_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 using namespace Dock;
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
@@ -310,6 +313,32 @@ QIcon ShutdownPlugin::icon(const DockPart &dockPart)
     QIcon shutdownIcon;
     shutdownIcon.addPixmap(m_shutdownWidget->loadPixmap());
     return shutdownIcon;
+}
+
+QIcon ShutdownPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/resources/icons/dcc_shutdown.svg");
+
+        QPixmap pixmap(":/icons/resources/icons/dcc_shutdown.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+
+        return pixmap;
+    }
+
+    QString iconName = "system-shutdown";
+
+    if (themeType == DGuiApplicationHelper::LightType)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    const auto ratio = qApp->devicePixelRatio();
+    QPixmap pixmap;
+    pixmap = QIcon::fromTheme(iconName, QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg")).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
+    pixmap.setDevicePixelRatio(ratio);
+    return pixmap;
 }
 
 PluginFlags ShutdownPlugin::flags() const

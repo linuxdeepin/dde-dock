@@ -25,10 +25,15 @@
 #include "org_deepin_dde_daemon_dock.h"
 #include "org_deepin_dde_daemon_dock_entry.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QIcon>
 #include <QSettings>
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY    "enable"
+
+DGUI_USE_NAMESPACE
 
 using DBusDock = org::deepin::dde::daemon::Dock1;
 using DockEntryInter = org::deepin::dde::daemon::dock1::Entry;
@@ -165,10 +170,18 @@ void OnboardPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon OnboardPlugin::icon(const DockPart &dockPart)
+QIcon OnboardPlugin::icon(const DockPart &dockPart, int themeType)
 {
-    if (dockPart == DockPart::DCCSetting)
-        return QIcon(":/icons/icon/dcc_keyboard.svg");
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/icon/dcc_keyboard.svg");
+
+        QPixmap pixmap(":/icons/icon/dcc_keyboard.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+        return pixmap;
+    }
 
     if (dockPart == DockPart::QuickPanel)
         return m_onboardItem->iconPixmap(24);

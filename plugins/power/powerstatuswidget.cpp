@@ -54,7 +54,10 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const QPixmap icon = getBatteryIcon();
+    int themeType = DGuiApplicationHelper::instance()->themeType();
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && themeType == DGuiApplicationHelper::LightType)
+        themeType = DGuiApplicationHelper::DarkType;
+    const QPixmap icon = getBatteryIcon(themeType);
     const auto ratio = devicePixelRatioF();
 
     QPainter painter(this);
@@ -63,7 +66,7 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
 }
 
-QPixmap PowerStatusWidget::getBatteryIcon()
+QPixmap PowerStatusWidget::getBatteryIcon(int themeType)
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint value = uint(qMin(100.0, qMax(0.0, data.value("Display"))));
@@ -108,7 +111,7 @@ QPixmap PowerStatusWidget::getBatteryIcon()
                   .arg(plugged ? "plugged-symbolic" : "symbolic");
     }
 
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+    if (themeType == DGuiApplicationHelper::ColorType::LightType)
         iconStr.append(PLUGIN_MIN_ICON_NAME);
 
     const auto ratio = devicePixelRatioF();

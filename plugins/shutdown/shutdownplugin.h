@@ -62,6 +62,7 @@ public:
 
     void pluginSettingsChanged() override;
     QIcon icon(const DockPart &dockPart) override;
+    QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginFlags flags() const override;
 
     // 休眠待机配置，保持和sessionshell一致
