@@ -112,6 +112,8 @@ void SoundDevicesWidget::initUi()
 
     SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
     m_sliderContainer->setSliderProxyStyle(proxy);
+    m_sliderContainer->setRange(0, std::round(m_soundInter->maxUIVolume() * 100.00));
+    m_sliderContainer->setPageStep(2);
     sliderLayout->addWidget(m_sliderContainer);
 
     QHBoxLayout *topLayout = new QHBoxLayout(this);
@@ -212,7 +214,9 @@ void SoundDevicesWidget::initConnection()
     connect(m_delegate, &SettingDelegate::selectIndexChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
     connect(m_soundInter, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_soundInter, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
-
+    connect(m_soundInter, &DBusAudio::MaxUIVolumeChanged, this, [ = ] (double maxValue) {
+        m_sliderContainer->setRange(0, std::round(maxValue * 100.00));
+    });
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         m_sinkInter->SetVolume(value * 0.01, true);
     });

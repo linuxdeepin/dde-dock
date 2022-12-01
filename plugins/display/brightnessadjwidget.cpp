@@ -52,7 +52,9 @@ void BrightnessAdjWidget::loadBrightnessItem()
         QPixmap rightPixmap = ImageUtil::loadSvg(":/icons/resources/brightnesshigh", QSize(20, 20));
         sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon,leftPixmap, QSize(), 12);
         sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(), 12);
-
+        // 需求要求调节范围是10%-100%,且调节幅度为1%
+        sliderContainer->setRange(10, 100);
+        sliderContainer->setPageStep(1);
         sliderContainer->setFixedWidth(310);
         sliderContainer->setFixedHeight(itemHeight);
         sliderContainer->updateSliderValue(monitor->brightness());
