@@ -32,9 +32,11 @@ public:
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 
     QIcon icon(const DockPart &) override;
-    PluginStatus status() const override;
-    bool isPrimary() const override;
+    PluginMode status() const override;
     QString description() const override;
+
+    QIcon icon(const DockPart &dockPart, int themeType) override;
+    PluginFlags flags() const override;
 
 private:
     InformationWidget *m_pluginWidget;

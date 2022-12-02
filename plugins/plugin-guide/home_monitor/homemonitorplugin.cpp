@@ -151,16 +151,9 @@ QIcon HomeMonitorPlugin::icon(const DockPart &)
     return pixMapIcon;
 }
 
-PluginsItemInterface::PluginStatus HomeMonitorPlugin::status() const
+PluginsItemInterface::PluginMode HomeMonitorPlugin::status() const
 {
-    return PluginStatus::Active;
-}
-
-bool HomeMonitorPlugin::isPrimary() const
-{
-    // 如果当前插件是在快捷设置区域最上方显示的大图标且可以展开查看详情的，则返回true
-    // 否则，返回false
-    return false;
+    return PluginMode::Active;
 }
 
 QString HomeMonitorPlugin::description() const
@@ -168,8 +161,30 @@ QString HomeMonitorPlugin::description() const
     // 当isPrimary()返回值为true的时候，这个值用于返回在大图标下面的状态信息,
     // 例如，如果当前图标是网络图标，下面则显示连接的网络信息，或者如果是其他的图标，下面显示连接的
     // 状态等（开启或者关闭）
-    if (status() == PluginStatus::Active)
+    if (status() == PluginMode::Active)
         return tr("Enabled");
 
     return tr("Disabled");
+}
+
+QIcon HomeMonitorPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    if (dockPart == DockPart::QuickShow) {
+        QIcon icon;
+        return icon;
+    }
+
+    return QIcon();
+}
+
+PluginFlags HomeMonitorPlugin::flags() const
+{
+    // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
+    // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
+    // Attribute_CanSetting该插件支持在控制中心设置显示或隐藏
+    return PluginFlags::Type_Common
+        | PluginFlags::Quick_Multi
+        | PluginFlags::Attribute_CanDrag
+        | PluginFlags::Attribute_CanInsert
+        | PluginFlags::Attribute_CanSetting;
 }
