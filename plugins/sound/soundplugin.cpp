@@ -145,17 +145,12 @@ void SoundPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon SoundPlugin::icon(const DockPart &)
-{
-    return m_soundItem->pixmap();
-}
-
-QIcon SoundPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon SoundPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     return m_soundItem->pixmap(themeType);
 }
 
-PluginsItemInterface::PluginStatus SoundPlugin::status() const
+PluginsItemInterface::PluginMode SoundPlugin::status() const
 {
     return SoundPlugin::Active;
 }

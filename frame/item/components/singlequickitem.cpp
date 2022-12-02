@@ -74,7 +74,7 @@ QWidget *SingleQuickItem::iconWidget(QWidget *parent)
     // 显示图标的窗体
     QWidget *widget = new QWidget(parent);
     bool childIsEmpty = true;
-    QIcon icon = pluginItem()->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType());
+    QIcon icon = pluginItem()->icon(DockPart::QuickPanel);
     if (icon.isNull()) {
         // 如果图标为空，则将获取itemWidget作为它的显示
         QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
@@ -119,7 +119,7 @@ QWidget *SingleQuickItem::iconWidget(QWidget *parent)
 QPixmap SingleQuickItem::pixmap() const
 {
     // 如果快捷面板区域的图标为空，那么就获取itemWidget的截图
-    QIcon icon = pluginItem()->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType());
+    QIcon icon = pluginItem()->icon(DockPart::QuickPanel);
     if (icon.isNull()) {
         QWidget *itemWidget = pluginItem()->itemWidget(itemKey());
         if (itemWidget) {

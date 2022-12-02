@@ -254,7 +254,7 @@ QPixmap SoundItem::pixmap() const
     return m_iconPixmap;
 }
 
-QPixmap SoundItem::pixmap(int colorType) const
+QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType) const
 {
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 

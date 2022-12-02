@@ -54,7 +54,7 @@ public:
     void refreshIcon(const QString &itemKey) override;
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
-    QIcon icon(const DockPart &dockPart, int themeType) override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
     PluginFlags flags() const override;
 
 private:

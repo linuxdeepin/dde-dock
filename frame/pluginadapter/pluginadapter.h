@@ -65,8 +65,8 @@ public:
     PluginType type() override;
     PluginSizePolicy pluginSizePolicy() const override;
 
-    QIcon icon(const DockPart &dockPart) override;
-    PluginStatus status() const override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginMode status() const override;
     QString description() const override;
     PluginFlags flags() const override;
 

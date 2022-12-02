@@ -321,7 +321,7 @@ QList<PluginsItemInterface *> DBusDockAdaptors::localPlugins() const
     return QuickSettingController::instance()->pluginInSettings();
 }
 
-QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, int colorType) const
+QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, DGuiApplicationHelper::ColorType colorType) const
 {
     auto iconSize = [](const QIcon &icon) {
         QList<QSize> iconSizes = icon.availableSizes();

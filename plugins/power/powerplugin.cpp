@@ -155,7 +155,7 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-QIcon PowerPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     // 电池插件不显示在快捷面板上，因此此处返回空图标
     static QIcon batteryIcon;

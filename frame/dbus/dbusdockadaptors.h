@@ -136,7 +136,7 @@ signals:
 private:
     bool isPluginValid(const QString &name);
     QList<PluginsItemInterface *> localPlugins() const;
-    QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, int colorType) const;
+    QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, DGuiApplicationHelper::ColorType colorType) const;
 
 private:
     QGSettings *m_gsettings;

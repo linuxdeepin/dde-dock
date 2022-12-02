@@ -72,7 +72,7 @@ DockItem::ItemType QuickSettingItem::itemType() const
 
 const QPixmap QuickSettingItem::dragPixmap()
 {
-    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType()).pixmap(ICONWIDTH, ICONHEIGHT);
+    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
 
     QPainter pa(&pm);
     pa.setPen(foregroundColor());
@@ -118,10 +118,10 @@ QColor QuickSettingItem::foregroundColor() const
 {
     DPalette dpa = DPaletteHelper::instance()->palette(this);
     // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
+    if (m_pluginInter->status() == PluginsItemInterface::PluginMode::Active)
         return dpa.color(DPalette::ColorGroup::Active, DPalette::ColorRole::Text);
 
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Deactive)
+    if (m_pluginInter->status() == PluginsItemInterface::PluginMode::Deactive)
         return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
 
     return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);

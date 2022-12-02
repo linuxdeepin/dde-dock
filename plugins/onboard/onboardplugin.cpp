@@ -170,7 +170,7 @@ void OnboardPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon OnboardPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon OnboardPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
         if (themeType == DGuiApplicationHelper::ColorType::LightType)
@@ -189,9 +189,9 @@ QIcon OnboardPlugin::icon(const DockPart &dockPart, int themeType)
     return m_onboardItem->iconPixmap(20);
 }
 
-PluginsItemInterface::PluginStatus OnboardPlugin::status() const
+PluginsItemInterface::PluginMode OnboardPlugin::status() const
 {
-    return PluginsItemInterface::PluginStatus::Active;
+    return PluginsItemInterface::PluginMode::Active;
 }
 
 QString OnboardPlugin::description() const

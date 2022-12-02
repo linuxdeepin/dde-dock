@@ -192,7 +192,7 @@ void TrashPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon TrashPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon TrashPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
         if (themeType == DGuiApplicationHelper::ColorType::LightType)

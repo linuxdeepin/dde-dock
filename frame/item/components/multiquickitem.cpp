@@ -114,7 +114,7 @@ bool MultiQuickItem::eventFilter(QObject *obj, QEvent *event)
 void MultiQuickItem::initUi()
 {
     QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
-    if (pluginItem()->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType()).isNull() && itemWidget) {
+    if (pluginItem()->icon(DockPart::QuickPanel).isNull() && itemWidget) {
         m_itemWidgetParent = itemWidget->parentWidget();
         // 如果插件没有返回图标的显示，则获取插件的itemWidget
         QHBoxLayout *mainLayout = new QHBoxLayout(this);
@@ -240,10 +240,10 @@ QColor QuickIconWidget::foregroundColor() const
 {
     DPalette dpa = DPaletteHelper::instance()->palette(this);
     // 此处的颜色是临时获取的，后期需要和设计师确认，改成正规的颜色
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Active)
+    if (m_pluginInter->status() == PluginsItemInterface::PluginMode::Active)
         return dpa.color(DPalette::ColorGroup::Active, DPalette::ColorRole::Text);
 
-    if (m_pluginInter->status() == PluginsItemInterface::PluginStatus::Deactive)
+    if (m_pluginInter->status() == PluginsItemInterface::PluginMode::Deactive)
         return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
 
     return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
@@ -251,7 +251,7 @@ QColor QuickIconWidget::foregroundColor() const
 
 QPixmap QuickIconWidget::pluginIcon(bool contailGrab) const
 {
-    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType());
+    QIcon icon = m_pluginInter->icon(DockPart::QuickPanel);
     if (icon.isNull() && contailGrab) {
         // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
         QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);

@@ -24,8 +24,12 @@
 
 #include "pluginproxyinterface.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QIcon>
 #include <QtCore>
+
+DGUI_USE_NAMESPACE
 
 // 任务栏的部件位置
 enum class DockPart {
@@ -81,7 +85,7 @@ public:
         Custom = 1 << 1  // The custom
     };
 
-    enum PluginStatus {
+    enum PluginMode {
         Deactive = 0,
         Active,
         Disabled
@@ -283,16 +287,10 @@ public:
     virtual PluginSizePolicy pluginSizePolicy() const { return System; }
 
     ///
-    /// the icon display on plugin panel
-    ///
-    ///
-    virtual QIcon icon(const DockPart &) { return QIcon(); }
-
-    ///
     /// the plugin status
     ///
     ///
-    virtual PluginStatus status() const { return PluginStatus::Deactive; }
+    virtual PluginMode status() const { return PluginMode::Deactive; }
 
     ///
     /// return the detail value, it will display in the center
@@ -304,13 +302,19 @@ public:
     /// the icon for the plugin
     /// themeType {0:UnknownType 1:LightType 2:DarkType}
     ///
-    virtual QIcon icon(const DockPart &dockPart, int themeType) { return icon(dockPart); }
+    virtual QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) { return QIcon(); }
 
     ///
     /// \brief m_proxyInter
     /// return the falgs for current plugin
     ///
     virtual PluginFlags flags() const { return PluginFlag::Type_Common | PluginFlag::Quick_Single | PluginFlag::Attribute_CanDrag | PluginFlag::Attribute_CanInsert | PluginFlag::Attribute_CanSetting; }
+
+    ///
+    /// \brief m_proxyInter
+    ///
+    ///
+    virtual bool eventHandler(QEvent *event) { return false; }
 
 protected:
     ///

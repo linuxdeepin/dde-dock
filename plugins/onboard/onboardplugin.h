@@ -58,8 +58,8 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
 
     void pluginSettingsChanged() override;
-    QIcon icon(const DockPart &dockPart, int themeType) override;
-    PluginStatus status() const override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginMode status() const override;
     QString description() const override;
 
 private:

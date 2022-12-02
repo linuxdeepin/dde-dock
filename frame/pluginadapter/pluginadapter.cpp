@@ -163,7 +163,7 @@ PluginsItemInterface::PluginSizePolicy PluginAdapter::pluginSizePolicy() const
     return PluginsItemInterface::PluginSizePolicy::Custom;
 }
 
-QIcon PluginAdapter::icon(const DockPart &dockPart)
+QIcon PluginAdapter::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
     if (!itemWidget)
@@ -185,9 +185,9 @@ QIcon PluginAdapter::icon(const DockPart &dockPart)
     return QIcon();
 }
 
-PluginsItemInterface::PluginStatus PluginAdapter::status() const
+PluginsItemInterface::PluginMode PluginAdapter::status() const
 {
-    return PluginStatus::Active;
+    return PluginMode::Active;
 }
 
 QString PluginAdapter::description() const

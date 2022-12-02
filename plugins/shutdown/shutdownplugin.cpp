@@ -305,17 +305,7 @@ void ShutdownPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon ShutdownPlugin::icon(const DockPart &dockPart)
-{
-    if (dockPart == DockPart::DCCSetting)
-        return QIcon(":/icons/resources/icons/dcc_shutdown.svg");
-
-    QIcon shutdownIcon;
-    shutdownIcon.addPixmap(m_shutdownWidget->loadPixmap());
-    return shutdownIcon;
-}
-
-QIcon ShutdownPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon ShutdownPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
         if (themeType == DGuiApplicationHelper::ColorType::LightType)

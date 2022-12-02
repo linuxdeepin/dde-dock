@@ -245,7 +245,7 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel, DGuiApplicationHelper::instance()->themeType());
+    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel);
 
     QRect rctPixmap(rect());
     if (needShowText()) {

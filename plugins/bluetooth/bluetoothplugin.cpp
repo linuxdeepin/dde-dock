@@ -135,16 +135,7 @@ void BluetoothPlugin::refreshIcon(const QString &itemKey)
     }
 }
 
-QIcon BluetoothPlugin::icon(const DockPart &dockPart)
-{
-    if (dockPart == DockPart::QuickPanel)
-        return QIcon();
-
-    static QIcon icon(":/bluetooth-active-symbolic.svg");
-    return icon;
-}
-
-QIcon BluetoothPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::QuickPanel)
         return QIcon();
@@ -155,12 +146,12 @@ QIcon BluetoothPlugin::icon(const DockPart &dockPart, int themeType)
     return QIcon(":/bluetooth-active-symbolic-dark.svg");
 }
 
-PluginsItemInterface::PluginStatus BluetoothPlugin::status() const
+PluginsItemInterface::PluginMode BluetoothPlugin::status() const
 {
     if (m_bluetoothItem.data()->isPowered())
-        return PluginStatus::Active;
+        return PluginMode::Active;
 
-    return PluginStatus::Deactive;
+    return PluginMode::Deactive;
 }
 
 QString BluetoothPlugin::description() const
