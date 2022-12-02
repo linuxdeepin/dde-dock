@@ -54,6 +54,7 @@ public:
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
     PluginMode status() const override;
     PluginFlags flags() const override;
+    bool eventHandler(QEvent *event) override;
 
 private:
     void refreshPluginItemsVisible();

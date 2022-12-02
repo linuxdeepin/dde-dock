@@ -109,6 +109,7 @@ protected:
     void leaveEvent(QEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     QPoint topleftPoint() const;

@@ -24,6 +24,8 @@
 #include "soundwidget.h"
 #include "sounddeviceswidget.h"
 
+#include <DDBusSender>
+
 #include <QDebug>
 #include <QAccessible>
 
@@ -162,6 +164,46 @@ PluginFlags SoundPlugin::flags() const
             | PluginFlag::Attribute_CanDrag
             | PluginFlag::Attribute_CanInsert
             | PluginFlag::Attribute_CanSetting;
+}
+
+bool SoundPlugin::eventHandler(QEvent *event)
+{
+    // 当前只处理鼠标滚轮事件
+    if (event->type() != QEvent::Wheel)
+        return PluginsItemInterface::eventHandler(event);
+
+    // 获取当前默认的声音设备
+    QDBusPendingCall defaultSinkCall = DDBusSender().service("org.deepin.daemon.Audio1")
+            .path("/org/deepin/daemon/Audio1")
+            .interface("org.deepin.daemon.Audio1")
+            .property("DefaultSink").get();
+    defaultSinkCall.waitForFinished();
+    QDBusReply<QVariant> path = defaultSinkCall.reply();
+    const QString defaultSinkPath = path.value().value<QDBusObjectPath>().path();
+    if (defaultSinkPath.isNull())
+        return false;
+
+    // 获取当前默认声音设备的音量
+    DDBusSender sinkDBus = DDBusSender().service("org.deepin.daemon.Audio1")
+            .path(defaultSinkPath).interface("org.deepin.daemon.Audio1.Sink");
+    QDBusPendingCall volumeCall = sinkDBus.property("Volume").get();
+    volumeCall.waitForFinished();
+    QDBusReply<QVariant> volumePath = volumeCall.reply();
+    double volume = volumePath.value().value<double>();
+
+    // 根据滚轮的动作来增加音量或者减小音量
+    QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
+    if (wheelEvent->angleDelta().y() > 0) {
+        // 向上滚动，增大音量
+        if (volume < 1)
+            sinkDBus.method("SetVolume").arg(volume + 0.02).arg(true).call();
+    } else {
+        // 向下滚动，调小音量
+        if (volume > 0)
+            sinkDBus.method("SetVolume").arg(volume - 0.02).arg(true).call();
+    }
+
+    return true;
 }
 
 void SoundPlugin::refreshPluginItemsVisible()

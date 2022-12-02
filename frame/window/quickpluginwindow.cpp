@@ -711,6 +711,14 @@ void QuickDockItem::hideEvent(QHideEvent *event)
     }
 }
 
+bool QuickDockItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this)
+        return m_pluginItem->eventHandler(event);
+
+    return QWidget::eventFilter(watched, event);
+}
+
 QPixmap QuickDockItem::iconPixmap() const
 {
     int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
@@ -749,6 +757,8 @@ void QuickDockItem::initAttribute()
         Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
         m_popupWindow->setWindowFlags(flags);
     }
+
+    this->installEventFilter(this);
 }
 
 void QuickDockItem::initConnection()
