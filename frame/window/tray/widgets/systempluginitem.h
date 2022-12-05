@@ -31,6 +31,7 @@
 class QGSettings;
 class QMenu;
 class DockPopupWindow;
+class QHBoxLayout;
 
 class SystemPluginItem : public BaseTrayWidget
 {
@@ -72,7 +73,9 @@ protected:
     void leaveEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 protected:
     const QPoint popupMarkPoint() const;
@@ -95,6 +98,7 @@ private:
     void onGSettingsChanged(const QString &key);
     bool checkGSettingsControl() const;
     void menuActionClicked(QAction *action);
+    void showCentralWidget();
 
 private:
     bool m_popupShown;

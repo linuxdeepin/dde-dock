@@ -97,7 +97,6 @@ public:
     explicit QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
-    void setPositon(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool canInsert() const;
     void hideToolTip();

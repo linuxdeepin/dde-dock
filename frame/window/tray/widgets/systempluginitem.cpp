@@ -47,18 +47,20 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
 {
     qDebug() << "load tray plugins item: " << m_pluginInter->pluginName() << itemKey << m_centralWidget;
 
+    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel);
     if (m_centralWidget) {
-        m_centralWidget->setParent(this);
-        m_centralWidget->setVisible(true);
-        m_centralWidget->installEventFilter(this);
+        if (icon.isNull()) {
+            // 此处先创建一个Layout，在该窗体show的时候将m_centralWidget添加到layout上面
+            QBoxLayout *hLayout = new QHBoxLayout(this);
+            hLayout->setSpacing(0);
+            hLayout->setMargin(0);
+            setLayout(hLayout);
+            m_centralWidget->installEventFilter(this);
+        } else {
+            m_centralWidget->setVisible(false);
+        }
     }
 
-    QBoxLayout *hLayout = new QHBoxLayout(this);
-    hLayout->addWidget(m_centralWidget);
-    hLayout->setSpacing(0);
-    hLayout->setMargin(0);
-
-    setLayout(hLayout);
     setAccessibleName(m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -194,8 +196,11 @@ bool SystemPluginItem::event(QEvent *event)
 
 bool SystemPluginItem::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == this && event->type() == QEvent::DeferredDelete)
+    if (watched == this && event->type() == QEvent::DeferredDelete
+            && m_centralWidget && m_centralWidget->parentWidget()) {
         m_centralWidget->setParent(nullptr);
+        m_centralWidget->setVisible(false);
+    }
 
     return BaseTrayWidget::eventFilter(watched, event);
 }
@@ -280,6 +285,43 @@ void SystemPluginItem::showEvent(QShowEvent *event)
     });
 
     return BaseTrayWidget::showEvent(event);
+}
+
+void SystemPluginItem::hideEvent(QHideEvent *event)
+{
+    if (m_pluginInter->icon(DockPart::SystemPanel).isNull()
+            && m_centralWidget && m_centralWidget->parentWidget() == this) {
+        layout()->removeWidget(m_centralWidget);
+        m_centralWidget->setParent(nullptr);
+        m_centralWidget->setVisible(false);
+    }
+    BaseTrayWidget::hideEvent(event);
+}
+
+void SystemPluginItem::paintEvent(QPaintEvent *event)
+{
+    QIcon icon = m_pluginInter->icon(DockPart::SystemPanel);
+    if (icon.isNull()) {
+        showCentralWidget();
+        return BaseTrayWidget::paintEvent(event);
+    }
+
+    int x = 0;
+    int y = 0;
+    QSize iconSize = this->size();
+    QList<QSize> sizes = icon.availableSizes();
+    if (sizes.size() > 0) {
+        QSize availableSize = sizes.first();
+        if (iconSize.width() > availableSize.width()) {
+            x = (iconSize.width() - availableSize.width()) / 2;
+            y = (iconSize.height() - availableSize.height()) / 2;
+            iconSize = availableSize;
+        }
+    }
+
+    QPixmap pixmap = icon.pixmap(iconSize);
+    QPainter painter(this);
+    painter.drawPixmap(QRect(QPoint(x, y), iconSize), pixmap);
 }
 
 const QPoint SystemPluginItem::popupMarkPoint() const
@@ -478,6 +520,16 @@ void SystemPluginItem::showContextMenu()
 void SystemPluginItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
+}
+
+void SystemPluginItem::showCentralWidget()
+{
+    if (!m_pluginInter->icon(DockPart::SystemPanel).isNull() || !m_centralWidget)
+        return;
+
+    m_centralWidget->setParent(this);
+    m_centralWidget->setVisible(true);
+    layout()->addWidget(m_centralWidget);
 }
 
 void SystemPluginItem::onContextMenuAccepted()

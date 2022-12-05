@@ -172,6 +172,10 @@ QIcon PluginAdapter::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     switch (dockPart) {
     case DockPart::QuickPanel:
     case DockPart::SystemPanel: {
+        // 如果是托盘插件，则让他返回空图标，直接将QWidget展示
+        if (m_pluginLoader->fileName().contains(TRAY_PATH))
+            return QIcon();
+
         // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
         QSize oldSize = itemWidget->size();
         itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);

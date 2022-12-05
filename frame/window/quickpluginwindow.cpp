@@ -234,10 +234,10 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (m_dragInfo->canDrag(mouseEvent->pos())) {
+        if (m_dragInfo->canDrag(mouseEvent->pos()))
             startDrag();
-            m_dragInfo->reset();
-        }
+
+        m_dragInfo->reset();
         break;
     }
     case QEvent::Drop: {
@@ -694,7 +694,8 @@ void QuickDockItem::showEvent(QShowEvent *event)
 
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
-        itemWidget->setFixedSize(ICONWIDTH - 2, ICONHEIGHT - 2);
+        itemWidget->show();
+        itemWidget->setFixedSize(size());
         m_mainLayout->addWidget(itemWidget);
     }
 }
@@ -707,6 +708,7 @@ void QuickDockItem::hideEvent(QHideEvent *event)
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0) {
         itemWidget->setParent(m_dockItemParent);
+        itemWidget->hide();
         m_mainLayout->removeWidget(itemWidget);
     }
 }
