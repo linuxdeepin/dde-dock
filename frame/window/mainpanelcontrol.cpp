@@ -175,6 +175,7 @@ void MainPanelControl::initUI()
     m_toolSonAreaWidget->setLayout(m_toolSonLayout);
     m_toolSonLayout->setSpacing(0);
     m_toolSonLayout->setContentsMargins(0, 0, 0, 0);
+    m_toolSonLayout->setAlignment(Qt::AlignCenter);
     m_toolAreaLayout->addWidget(m_toolSonAreaWidget);
 
     // 添加托盘区域（包括托盘图标和插件）等
@@ -265,7 +266,7 @@ void MainPanelControl::updateMainPanelLayout()
  */
 void MainPanelControl::addFixedAreaItem(int index, QWidget *wdg)
 {
-    if(m_position == Position::Top || m_position == Position::Bottom) {
+    if (m_position == Position::Top || m_position == Position::Bottom) {
         wdg->setMaximumSize(height(),height());
     } else {
         wdg->setMaximumSize(width(),width());
@@ -349,11 +350,9 @@ void MainPanelControl::updateAppAreaSonWidgetSize()
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         m_appAreaSonWidget->setMaximumHeight(height());
         m_appAreaSonWidget->setMaximumWidth(m_appAreaWidget->width());
-        m_recentAreaWidget->setFixedHeight(height());
     } else {
         m_appAreaSonWidget->setMaximumWidth(width());
         m_appAreaSonWidget->setMaximumHeight(m_appAreaWidget->height());
-        m_recentAreaWidget->setFixedWidth(width());
     }
 
     m_appAreaSonWidget->adjustSize();
@@ -1299,9 +1298,9 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
 
             // 时尚模式下计算最近打开应用区域的尺寸
             if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-                m_recentAreaWidget->setFixedWidth(appItemSize * m_recentLayout->count());
+                m_recentAreaWidget->setFixedSize(appItemSize * m_recentLayout->count(), QWIDGETSIZE_MAX);
             else
-                m_recentAreaWidget->setFixedHeight(appItemSize * m_recentLayout->count());
+                m_recentAreaWidget->setFixedSize(QWIDGETSIZE_MAX, appItemSize * m_recentLayout->count());
         }
 
         if (m_multiWindowLayout->count() > 0) {
@@ -1338,16 +1337,16 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
                 m_toolSonLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
 
             if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-                m_toolSonAreaWidget->setFixedWidth(appItemSize * m_toolSonLayout->count());
+                m_toolSonAreaWidget->setFixedSize(appItemSize * m_toolSonLayout->count(), QWIDGETSIZE_MAX);
             } else {
-                m_toolSonAreaWidget->setFixedHeight(appItemSize * m_toolSonLayout->count());
+                m_toolSonAreaWidget->setFixedSize(QWIDGETSIZE_MAX, appItemSize * m_toolSonLayout->count());
             }
         }
 
         if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-            m_toolAreaWidget->setFixedWidth(m_multiWindowWidget->width() + m_toolSonAreaWidget->width());
+            m_toolAreaWidget->setFixedSize(m_multiWindowWidget->width() + m_toolSonAreaWidget->width(), QWIDGETSIZE_MAX);
         else
-            m_toolAreaWidget->setFixedHeight(m_multiWindowWidget->height() + m_toolSonAreaWidget->height());
+            m_toolAreaWidget->setFixedSize(QWIDGETSIZE_MAX, m_multiWindowWidget->height() + m_toolSonAreaWidget->height());
     } else {
         for (int i = 0; i < m_appAreaSonLayout->count(); ++i) {
             DockItem *dockItem = qobject_cast<DockItem *>(m_appAreaSonLayout->itemAt(i)->widget());

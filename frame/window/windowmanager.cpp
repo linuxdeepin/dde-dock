@@ -67,7 +67,9 @@ WindowManager::~WindowManager()
 
 void WindowManager::addWindow(MainWindowBase *window)
 {
-    connect(window, &MainWindowBase::requestUpdate, this, &WindowManager::onRequestUpdate);
+    connect(window, &MainWindowBase::requestUpdate, this, [ window, this ] {
+        updateDockGeometry(window->geometry());
+    });
 
     window->setPosition(m_multiScreenWorker->position());
     window->setDisplayMode(m_multiScreenWorker->displayMode());
@@ -405,6 +407,57 @@ void WindowManager::RegisterDdeSession()
     }
 }
 
+void WindowManager::updateDockGeometry(const QRect &rect)
+{
+    // 如果当前正在执行动画，则无需设置
+    if (m_multiScreenWorker->testState(MultiScreenWorker::ChangePositionAnimationStart)
+            || m_multiScreenWorker->testState(MultiScreenWorker::ShowAnimationStart)
+            || m_multiScreenWorker->testState(MultiScreenWorker::HideAnimationStart))
+        return;
+
+    QScreen *screen = DIS_INS->screen(DOCKSCREEN_INS->current());
+
+    for (MainWindowBase *mainWindow : m_topWindows) {
+        if (!mainWindow->isVisible())
+            continue;
+
+        QRect windowShowSize = mainWindow->getDockGeometry(screen, m_multiScreenWorker->position(),
+                                                            m_multiScreenWorker->displayMode(), Dock::HideState::Show);
+        switch(m_position) {
+        case Dock::Position::Top: {
+            windowShowSize.setHeight(rect.height());
+            break;
+        }
+        case Dock::Position::Bottom: {
+            int bottomY = windowShowSize.y() + windowShowSize.height();
+            windowShowSize.setY(bottomY - rect.height());
+            windowShowSize.setHeight(rect.height());
+            break;
+        }
+        case Dock::Position::Left: {
+            windowShowSize.setWidth(rect.width());
+            break;
+        }
+        case Dock::Position::Right: {
+            int righyX = windowShowSize.x() + windowShowSize.width();
+            windowShowSize.setX(righyX - rect.width());
+            windowShowSize.setWidth(rect.width());
+            break;
+        }
+        }
+
+        mainWindow->blockSignals(true);
+        mainWindow->raise();
+        mainWindow->setFixedSize(windowShowSize.size());
+        mainWindow->move(windowShowSize.topLeft());
+        mainWindow->resetPanelGeometry();
+        mainWindow->blockSignals(false);
+    }
+
+    // 抛出geometry变化的信号，通知控制中心调整尺寸
+    Q_EMIT panelGeometryChanged();
+}
+
 void WindowManager::initConnection()
 {
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &WindowManager::onDbusNameOwnerChanged);
@@ -503,7 +556,7 @@ void WindowManager::onPlayAnimation(const QString &screenName, const Dock::Posit
             showAniFinish();
             if (updatePos)
                 onPositionChanged(m_multiScreenWorker->position());
-             m_multiScreenWorker->setStates(MultiScreenWorker::ShowAnimationStart, false);
+            m_multiScreenWorker->setStates(MultiScreenWorker::ShowAnimationStart, false);
             break;
         case Dock::AniAction::Hide:
             hideAniFinish();
@@ -751,60 +804,4 @@ void WindowManager::onRequestNotifyWindowManager()
                                                static_cast<uint>(strutStart),                                   // 设置任务栏起点坐标（上下为x，左右为y）
                                                static_cast<uint>(strutEnd));                                    // 设置任务栏终点坐标（上下为x，左右为y）
     }
-}
-
-void WindowManager::onRequestUpdate()
-{
-    // 如果当前正在执行动画，则无需设置
-    if (m_multiScreenWorker->testState(MultiScreenWorker::ChangePositionAnimationStart)
-            || m_multiScreenWorker->testState(MultiScreenWorker::ShowAnimationStart)
-            || m_multiScreenWorker->testState(MultiScreenWorker::HideAnimationStart))
-        return;
-
-    QScreen *screen = DIS_INS->screen(DOCKSCREEN_INS->current());
-    // 查找发送信号的窗口
-    MainWindowBase *dragWindow = qobject_cast<MainWindowBase *>(sender());
-    if (!dragWindow || !screen)
-        return;
-
-    QRect dragGeometry = dragWindow->geometry();
-    for (MainWindowBase *mainWindow : m_topWindows) {
-        if (!mainWindow->isVisible())
-            continue;
-
-        QRect windowShowSize = mainWindow->getDockGeometry(screen, m_multiScreenWorker->position(),
-                                                            m_multiScreenWorker->displayMode(), Dock::HideState::Show);
-        switch(m_position) {
-        case Dock::Position::Top: {
-            windowShowSize.setHeight(dragGeometry.height());
-            break;
-        }
-        case Dock::Position::Bottom: {
-            int bottomY = windowShowSize.y() + windowShowSize.height();
-            windowShowSize.setY(bottomY - dragGeometry.height());
-            windowShowSize.setHeight(dragGeometry.height());
-            break;
-        }
-        case Dock::Position::Left: {
-            windowShowSize.setWidth(dragGeometry.width());
-            break;
-        }
-        case Dock::Position::Right: {
-            int righyX = windowShowSize.x() + windowShowSize.width();
-            windowShowSize.setX(righyX - dragGeometry.width());
-            windowShowSize.setWidth(dragGeometry.width());
-            break;
-        }
-        }
-
-        mainWindow->blockSignals(true);
-        mainWindow->raise();
-        mainWindow->setFixedSize(windowShowSize.size());
-        mainWindow->move(windowShowSize.topLeft());
-        mainWindow->resetPanelGeometry();
-        mainWindow->blockSignals(false);
-    }
-
-    // 抛出geometry变化的信号，通知控制中心调整尺寸
-    Q_EMIT panelGeometryChanged();
 }

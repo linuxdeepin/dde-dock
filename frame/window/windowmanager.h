@@ -67,10 +67,9 @@ private:
     QRect getDockGeometry(bool withoutScale = false) const;         // 计算左右侧加起来的区域大小
 
     void RegisterDdeSession();
+    void updateDockGeometry(const QRect &rect);
 
 private Q_SLOTS:
-    void onRequestUpdate();          // 调整尺寸的时候
-
     void onUpdateDockGeometry(const Dock::HideMode &hideMode);
     void onPositionChanged(const Dock::Position &position);
     void onDisplayModeChanged(const Dock::DisplayMode &displayMode);

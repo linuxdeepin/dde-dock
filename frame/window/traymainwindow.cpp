@@ -115,6 +115,7 @@ void TrayMainWindow::updateParentGeometry(const Dock::Position &position, const 
     // 引起无限循环，因此，在设置尺寸的时候阻塞信号，防止进入死循环
     m_trayManager->blockSignals(true);
     m_trayManager->setFixedSize(panelRect.size());
+    m_trayManager->updateLayout();
     m_trayManager->blockSignals(false);
 }
 
@@ -127,6 +128,7 @@ void TrayMainWindow::resetPanelGeometry()
 {
     m_trayManager->setFixedSize(size());
     m_trayManager->move(0, 0);
+    m_trayManager->updateLayout();
 }
 
 int TrayMainWindow::dockSpace() const
