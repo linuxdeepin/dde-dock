@@ -1267,8 +1267,6 @@ void MainPanelControl::resizeDockIcon()
             calcuDockIconSize(width(), iconSize, tray_item_size);
         }
     }
-
-    Q_EMIT requestUpdate();
 }
 
 void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
@@ -1408,13 +1406,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
 
     m_fixedAreaLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
     m_appAreaSonLayout->setContentsMargins(appLeftAndRightMargin, appTopAndBottomMargin, appLeftAndRightMargin, appTopAndBottomMargin);
-}
-
-void MainPanelControl::onRequestUpdate()
-{
-    // 在插件区域界面发生变化后(新增插件、删除插件、时间长度变化，新增托盘等)，会触发当前的信号，此时当前类
-    // 的尺寸还未变化，因此在此处发送requestUpdate信号，通知外面来调整任务栏右侧的大小，同时计算整个任务栏的大小
-    Q_EMIT requestUpdate();
 }
 
 void MainPanelControl::onRecentVisibleChanged(bool visible)
