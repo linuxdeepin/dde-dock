@@ -22,6 +22,7 @@ public:
     virtual ~AbstractTrayWidget();
 
     virtual QString itemKeyForConfig() = 0;
+    QString accessibleName() {return itemKeyForConfig().replace("sni:", "");}
     virtual void updateIcon() = 0;
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
     virtual inline TrayType trayType() const { return TrayType::ApplicationTray; } // default is ApplicationTray

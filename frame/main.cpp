@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    // 自动化标记由此开始
+    // 自动化标记
     QAccessible::installFactory(accessibleFactory);
 
     // 设置日志输出到控制台以及文件
