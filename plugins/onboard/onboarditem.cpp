@@ -26,7 +26,7 @@ OnboardItem::OnboardItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
-    m_icon = QIcon::fromTheme(":/icons/icon/deepin-virtualkeyboard.svg");
+    m_icon = QIcon::fromTheme(":/icons/icon/keyboard-symbolic.svg");
 }
 
 void OnboardItem::paintEvent(QPaintEvent *e)
@@ -34,7 +34,7 @@ void OnboardItem::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     QPixmap pixmap;
-    QString iconName = "deepin-virtualkeyboard";
+    QString iconName = "keyboard-symbolic";
     int iconSize = PLUGIN_ICON_MAX_SIZE;
 
     QPainter painter(this);
