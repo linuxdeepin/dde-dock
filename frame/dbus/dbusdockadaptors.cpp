@@ -16,6 +16,16 @@ DBusDockAdaptors::DBusDockAdaptors(MainWindow* parent)
 {
     connect(parent, &MainWindow::panelGeometryChanged, this, [=] {
         emit DBusDockAdaptors::geometryChanged(geometry());
+
+        // 手动触发PropertiesChanged信号，可能是qt不支持属性自动触发
+        QDBusMessage msg = QDBusMessage::createSignal("/com/deepin/dde/Dock", "org.freedesktop.DBus.Properties", "PropertiesChanged");
+        QList<QVariant> arguments;
+        arguments.push_back("com.deepin.dde.Dock");
+        QVariantMap changedProps;
+        changedProps.insert("geometry", geometry());
+        arguments.push_back(changedProps);
+        msg.setArguments(arguments);
+        QDBusConnection::connectToBus(QDBusConnection::SessionBus, "com.deepin.dde.Dock").send(msg);
     });
 
     if (m_gsettings) {
