@@ -157,7 +157,7 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
     Q_UNUSED(event);
 
     DDBusSender().service("org.deepin.dde.Widgets1")
-            .path("/")
+            .path("/org/deepin/dde/Widgets1")
             .interface("org.deepin.dde.Widgets1")
             .method("Toggle").call();
 }
