@@ -173,9 +173,9 @@ bool SoundPlugin::eventHandler(QEvent *event)
         return PluginsItemInterface::eventHandler(event);
 
     // 获取当前默认的声音设备
-    QDBusPendingCall defaultSinkCall = DDBusSender().service("org.deepin.daemon.Audio1")
-            .path("/org/deepin/daemon/Audio1")
-            .interface("org.deepin.daemon.Audio1")
+    QDBusPendingCall defaultSinkCall = DDBusSender().service("org.deepin.dde.Audio1")
+            .path("/org/deepin/dde/Audio1")
+            .interface("org.deepin.dde.Audio1")
             .property("DefaultSink").get();
     defaultSinkCall.waitForFinished();
     QDBusReply<QVariant> path = defaultSinkCall.reply();
@@ -184,8 +184,8 @@ bool SoundPlugin::eventHandler(QEvent *event)
         return false;
 
     // 获取当前默认声音设备的音量
-    DDBusSender sinkDBus = DDBusSender().service("org.deepin.daemon.Audio1")
-            .path(defaultSinkPath).interface("org.deepin.daemon.Audio1.Sink");
+    DDBusSender sinkDBus = DDBusSender().service("org.deepin.dde.Audio1")
+            .path(defaultSinkPath).interface("org.deepin.dde.Audio1.Sink");
     QDBusPendingCall volumeCall = sinkDBus.property("Volume").get();
     volumeCall.waitForFinished();
     QDBusReply<QVariant> volumePath = volumeCall.reply();
