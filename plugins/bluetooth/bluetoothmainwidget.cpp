@@ -83,7 +83,7 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
         case QEvent::MouseButtonRelease: {
             bool status = !(isOpen());
             for (const Adapter *adapter : m_adapterManager->adapters())
-                const_cast<Adapter *>(adapter)->setPowered(status);
+                m_adapterManager->setAdapterPowered(adapter, status);
 
             return true;
         }
