@@ -325,6 +325,16 @@ void WindowManager::showAniFinish()
     onRequestNotifyWindowManager();
 }
 
+void WindowManager::animationFinish(bool showOrHide)
+{
+    for (MainWindowBase *mainWindow : m_topWindows) {
+        if (!mainWindow->isVisible())
+            continue;
+
+        mainWindow->animationFinished(showOrHide);
+    }
+}
+
 void WindowManager::hideAniFinish()
 {
     DockItem::setDockPosition(m_position);
@@ -416,6 +426,8 @@ void WindowManager::updateDockGeometry(const QRect &rect)
         return;
 
     QScreen *screen = DIS_INS->screen(DOCKSCREEN_INS->current());
+    if (!screen || m_position == Dock::Position(-1))
+        return;
 
     for (MainWindowBase *mainWindow : m_topWindows) {
         if (!mainWindow->isVisible())
@@ -444,6 +456,7 @@ void WindowManager::updateDockGeometry(const QRect &rect)
             windowShowSize.setWidth(rect.width());
             break;
         }
+        default: break;
         }
 
         mainWindow->blockSignals(true);
@@ -462,11 +475,12 @@ void WindowManager::initConnection()
 {
     connect(m_dbusDaemonInterface, &QDBusConnectionInterface::serviceOwnerChanged, this, &WindowManager::onDbusNameOwnerChanged);
 
-    connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDockGeometry, this, &WindowManager::onUpdateDockGeometry);
+    connect(m_multiScreenWorker, &MultiScreenWorker::serviceRestart, this, &WindowManager::onServiceRestart);
     connect(m_multiScreenWorker, &MultiScreenWorker::positionChanged, this, &WindowManager::onPositionChanged);
     connect(m_multiScreenWorker, &MultiScreenWorker::displayModeChanged, this, &WindowManager::onDisplayModeChanged);
     connect(m_multiScreenWorker, &MultiScreenWorker::requestPlayAnimation, this, &WindowManager::onPlayAnimation);
     connect(m_multiScreenWorker, &MultiScreenWorker::requestChangeDockPosition, this, &WindowManager::onChangeDockPosition);
+    connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateDockGeometry, this, &WindowManager::onUpdateDockGeometry);
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateFrontendGeometry, this, &WindowManager::onRequestUpdateFrontendGeometry);
     connect(m_multiScreenWorker, &MultiScreenWorker::requestNotifyWindowManager, this, &WindowManager::onRequestNotifyWindowManager);
     connect(m_multiScreenWorker, &MultiScreenWorker::requestUpdateFrontendGeometry, DockItemManager::instance(), &DockItemManager::requestUpdateDockItem);
@@ -557,12 +571,14 @@ void WindowManager::onPlayAnimation(const QString &screenName, const Dock::Posit
             if (updatePos)
                 onPositionChanged(m_multiScreenWorker->position());
             m_multiScreenWorker->setStates(MultiScreenWorker::ShowAnimationStart, false);
+            animationFinish(true);
             break;
         case Dock::AniAction::Hide:
             hideAniFinish();
             if (updatePos)
                 onPositionChanged(m_multiScreenWorker->position());
             m_multiScreenWorker->setStates(MultiScreenWorker::HideAnimationStart, false);
+            animationFinish(false);
             break;
         }
     });
@@ -642,6 +658,7 @@ void WindowManager::onChangeDockPosition(QString fromScreen, QString toScreen, c
         // 结束之后需要根据确定需要再隐藏
         showAniFinish();
         m_multiScreenWorker->setStates(MultiScreenWorker::ChangePositionAnimationStart, false);
+        animationFinish(true);
     });
 
     for (QParallelAnimationGroup *ani : animations) {
@@ -804,4 +821,10 @@ void WindowManager::onRequestNotifyWindowManager()
                                                static_cast<uint>(strutStart),                                   // 设置任务栏起点坐标（上下为x，左右为y）
                                                static_cast<uint>(strutEnd));                                    // 设置任务栏终点坐标（上下为x，左右为y）
     }
+}
+
+void WindowManager::onServiceRestart()
+{
+    for (MainWindowBase *mainWindow : m_topWindows)
+        mainWindow->serviceRestart();
 }

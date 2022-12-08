@@ -54,7 +54,6 @@ MainWindowBase::MainWindowBase(MultiScreenWorker *multiScreenWorker, QWidget *pa
     : DBlurEffectWidget(parent)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
-    , m_dockInter(multiScreenWorker->dockInter())
     , m_dragWidget(new DragWidget(this))
     , m_multiScreenWorker(multiScreenWorker)
     , m_updateDragAreaTimer(new QTimer(this))
@@ -571,9 +570,9 @@ Dock::Position MainWindowBase::position() const
 int MainWindowBase::windowSize() const
 {
     if (m_displayMode == Dock::DisplayMode::Efficient)
-        return m_dockInter->windowSizeEfficient();
+        return m_multiScreenWorker->dockInter()->windowSizeEfficient();
 
-    return m_dockInter->windowSizeFashion();
+    return m_multiScreenWorker->dockInter()->windowSizeFashion();
 }
 
 bool MainWindowBase::isDraging() const
@@ -633,7 +632,7 @@ void MainWindowBase::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && geometry().contains(QCursor::pos())) {
         m_multiScreenWorker->onAutoHideChanged(false);
-        MenuWorker menuWorker;
+        MenuWorker menuWorker(m_multiScreenWorker->dockInter());
         menuWorker.exec();
         m_multiScreenWorker->onAutoHideChanged(true);
     }

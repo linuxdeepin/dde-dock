@@ -87,6 +87,11 @@ bool RecentAppHelper::dockAppIsVisible() const
             || m_appWidget->layout()->count() > 0);
 }
 
+void RecentAppHelper::updateDockInter(DockInter *dockInter)
+{
+    m_dockInter = dockInter;
+}
+
 bool RecentAppHelper::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_appWidget || watched == m_recentWidget) {

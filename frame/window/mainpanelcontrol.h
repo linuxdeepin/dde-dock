@@ -52,6 +52,7 @@ public:
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
     void updatePluginsLayout();
+    void updateDockInter(DockInter *dockInter);
 
     QSize suitableSize(const Position &position, int screenSize, double deviceRatio) const;
 

@@ -60,6 +60,7 @@ MainWindow::MainWindow(MultiScreenWorker *multiScreenWorker, QWidget *parent)
     : MainWindowBase(multiScreenWorker, parent)
     , m_mainPanel(new MainPanelControl(multiScreenWorker->dockInter(), this))
     , m_multiScreenWorker(multiScreenWorker)
+    , m_needUpdateUi(false)
 {
     m_mainPanel->setDisplayMode(m_multiScreenWorker->displayMode());
 
@@ -168,4 +169,21 @@ void MainWindow::resetPanelGeometry()
 {
     m_mainPanel->setFixedSize(size());
     m_mainPanel->move(0, 0);
+}
+
+void MainWindow::serviceRestart()
+{
+    m_mainPanel->updateDockInter(m_multiScreenWorker->dockInter());
+    // 在重启服务后，MultiScreenWorker会通知WindowManager类执行PositionChanged动画，在执行此动作过程中
+    // 会执行动画，动画需要消耗时间，因此， 在重启服务后，需要标记更新UI,在稍后动画执行结束后，需要重新刷新界面的显示，否则任务栏显示错误
+    m_needUpdateUi = true;
+}
+
+void MainWindow::animationFinished(bool showOrHide)
+{
+    if (m_needUpdateUi) {
+        // 在动画执行结束后，如果收到需要更新UI的标记，那么则需要重新请求更新界面，在更新结束后，再将更新UI标记为false,那么在下次进来的时候，无需再次更新UI
+        Q_EMIT requestUpdate();
+        m_needUpdateUi = false;
+    }
 }

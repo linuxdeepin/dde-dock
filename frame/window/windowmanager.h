@@ -63,6 +63,7 @@ private:
     QParallelAnimationGroup *createAnimationGroup(const Dock::AniAction &aniAction, const QString &screenName, const Dock::Position &position) const;
 
     void showAniFinish();
+    void animationFinish(bool showOrHide);
     void hideAniFinish();
     QRect getDockGeometry(bool withoutScale = false) const;         // 计算左右侧加起来的区域大小
 
@@ -80,6 +81,8 @@ private Q_SLOTS:
     void onChangeDockPosition(QString fromScreen, QString toScreen, const Dock::Position &fromPos, const Dock::Position &toPos);
     void onRequestUpdateFrontendGeometry();
     void onRequestNotifyWindowManager();
+
+    void onServiceRestart();
 
 private:
     MultiScreenWorker *m_multiScreenWorker;

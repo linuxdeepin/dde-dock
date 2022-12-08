@@ -971,6 +971,12 @@ void MainPanelControl::updatePluginsLayout()
     }
 }
 
+void MainPanelControl::updateDockInter(DockInter *dockInter)
+{
+    m_dockInter = dockInter;
+    m_recentHelper->updateDockInter(dockInter);
+}
+
 QSize MainPanelControl::suitableSize(const Position &position, int screenSize, double deviceRatio) const
 {
     if (screenSize <= 0)

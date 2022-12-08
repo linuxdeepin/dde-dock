@@ -63,16 +63,15 @@ MultiScreenWorker::MultiScreenWorker(QObject *parent)
     , m_appearanceInter(new Appearance("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
-    , m_position(Dock::Position::Bottom)
-    , m_hideMode(Dock::HideMode::KeepShowing)
-    , m_hideState(Dock::HideState::Show)
-    , m_displayMode(Dock::DisplayMode::Efficient)
+    , m_position(Dock::Position(-1))
+    , m_hideMode(Dock::HideMode(-1))
+    , m_hideState(Dock::HideState(-1))
+    , m_displayMode(Dock::DisplayMode(-1))
     , m_state(AutoHide)
 {
     initConnection();
     initMembers();
     initDockMode();
-    initUI();
     QMetaObject::invokeMethod(this, &MultiScreenWorker::initDisplayData, Qt::QueuedConnection);
 }
 
@@ -252,7 +251,7 @@ void MultiScreenWorker::onHideModeChanged(int hideMode)
 
 void MultiScreenWorker::onHideStateChanged(int state)
 {
-    if (state == Dock::Unknown)
+    if (state == m_hideState)
         return;
 
     m_hideState = static_cast<HideState>(state);
@@ -573,11 +572,6 @@ void MultiScreenWorker::initConnection()
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
 
-    connect(m_dockInter, &DockInter::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
-    connect(m_dockInter, &DockInter::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
-    connect(m_dockInter, &DockInter::HideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
-    connect(m_dockInter, &DockInter::HideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
-
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
 
@@ -587,22 +581,14 @@ void MultiScreenWorker::initConnection()
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, &MultiScreenWorker::updateDisplay);
 }
 
-void MultiScreenWorker::initUI()
-{
-    onPositionChanged(dockInter()->position());
-    onDisplayModeChanged(dockInter()->displayMode());
-    onHideModeChanged(dockInter()->hideMode());
-    onOpacityChanged(m_appearanceInter->opacity());
-}
-
 void MultiScreenWorker::initDockMode()
 {
     if (m_dockInter->isValid()) {
-        m_position = static_cast<Dock::Position >(m_dockInter->position());
-        m_hideMode = static_cast<Dock::HideMode >(m_dockInter->hideMode());
-        m_hideState = static_cast<Dock::HideState >(m_dockInter->hideState());
-        m_displayMode = static_cast<Dock::DisplayMode >(m_dockInter->displayMode());
-        m_opacity = m_dockInter->opacity();
+        onPositionChanged(dockInter()->position());
+        onDisplayModeChanged(dockInter()->displayMode());
+        onHideModeChanged(dockInter()->hideMode());
+        onHideStateChanged(m_dockInter->hideState());
+        onOpacityChanged(m_dockInter->opacity());
 
         DockItem::setDockPosition(m_position);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
@@ -714,6 +700,10 @@ void MultiScreenWorker::checkDaemonDockService()
         });
         connect(dockInter, &DockInter::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
         connect(dockInter, &DockInter::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+        connect(dockInter, &DockInter::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
+        connect(dockInter, &DockInter::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
+        connect(dockInter, &DockInter::HideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
+        connect(dockInter, &DockInter::HideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
     };
 
     QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
@@ -727,6 +717,9 @@ void MultiScreenWorker::checkDaemonDockService()
                 m_dockInter = new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this);
                 // connect
                 connectionInit(m_dockInter);
+
+                // 通知主窗体服务已经重启了，需要重新获取DockInter
+                emit serviceRestart();
 
                 // reinit data
                 reInitDisplayData();

@@ -47,6 +47,7 @@ public:
     void removeAppItem(DockItem *dockItem);
     bool recentIsVisible() const;
     bool dockAppIsVisible() const;
+    void updateDockInter(DockInter *dockInter);
 
 Q_SIGNALS:
     void requestUpdate();

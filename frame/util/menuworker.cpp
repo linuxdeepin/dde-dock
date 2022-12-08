@@ -32,9 +32,9 @@
 
 #define DIS_INS DisplayManager::instance()
 
-MenuWorker::MenuWorker(QObject *parent)
+MenuWorker::MenuWorker(DockInter *dockInter, QObject *parent)
     : QObject(parent)
-    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    , m_dockInter(dockInter)
 {
 }
 

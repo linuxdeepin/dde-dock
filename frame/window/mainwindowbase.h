@@ -63,6 +63,8 @@ public:
     QVariantAnimation *createAnimation(QScreen *screen, const Dock::Position &pos, const Dock::AniAction &act);
     virtual void resetPanelGeometry() {}                        // 重置内部区域，为了让内部区域和当前区域始终保持一致
     virtual int dockSpace() const;                              // 与后面窗体之间的间隔
+    virtual void serviceRestart() {}                            // 服务重新启动后的操作
+    virtual void animationFinished(bool showOrHide) {}
 
 Q_SIGNALS:
     void requestUpdate();
@@ -105,7 +107,6 @@ private Q_SLOTS:
 private:
     Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
-    DockInter *m_dockInter;
     DragWidget *m_dragWidget;
     MultiScreenWorker *m_multiScreenWorker;
     QTimer *m_updateDragAreaTimer;

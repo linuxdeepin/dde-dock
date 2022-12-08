@@ -127,6 +127,9 @@ signals:
     void requestPlayAnimation(const QString &screenName, const Position &position, const Dock::AniAction &animation, bool containMouse = false, bool updatePos = false);
     void requestChangeDockPosition(const QString &fromScreen, const QString &toScreen, const Position &fromPos, const Position &toPos);
 
+    // 服务重新启动的信号
+    void serviceRestart();
+
 public slots:
     void onAutoHideChanged(const bool autoHide);
     void onRequestUpdateRegionMonitor();
@@ -163,7 +166,6 @@ private:
     void initMembers();
     void initDockMode();
     void initConnection();
-    void initUI();
 
     void initDisplayData();
     void reInitDisplayData();

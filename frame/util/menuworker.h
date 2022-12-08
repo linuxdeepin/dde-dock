@@ -35,7 +35,7 @@ class MenuWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuWorker(QObject *parent = nullptr);
+    explicit MenuWorker(DockInter *dockInter, QObject *parent = nullptr);
 
     void exec();
 

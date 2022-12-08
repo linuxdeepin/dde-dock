@@ -59,6 +59,8 @@ public:
     void updateParentGeometry(const Dock::Position &pos, const QRect &rect) override;
     QSize suitableSize(const Dock::Position &pos, const int &screenSize, const double &deviceRatio) const override;
     void resetPanelGeometry() override;
+    void serviceRestart() override;
+    void animationFinished(bool showOrHide) override;
 
 private:
     using QWidget::show;
@@ -74,6 +76,7 @@ private:
 
     QString m_registerKey;
     QStringList m_registerKeys;
+    bool m_needUpdateUi;
 };
 
 #endif // MAINWINDOW_H
