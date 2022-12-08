@@ -28,6 +28,7 @@
 #include <QStandardItemModel>
 
 #include <dtkwidget_global.h>
+#include <DGuiApplicationHelper>
 
 #include "org_deepin_dde_airplanemode1.h"
 
@@ -47,6 +48,7 @@ class DListView;
 DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 using DBusAirplaneMode = org::deepin::dde::AirplaneMode1;
 
@@ -67,6 +69,9 @@ protected:
     void changeEvent(QEvent *event) override;
 
     void updateEnabledStatus();
+
+private Q_SLOTS:
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     DLabel *m_label;

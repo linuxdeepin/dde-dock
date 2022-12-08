@@ -60,8 +60,9 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     p.setColor(QPalette::Background, Qt::transparent);
     this->setPalette(p);
 
-    m_label->setForegroundRole(QPalette::BrightText);
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
     updateEnabledStatus();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SettingLabel::onThemeTypeChanged);
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
@@ -78,6 +79,17 @@ void SettingLabel::updateEnabledStatus()
     else
         p.setColor(QPalette::BrightText, QColor(51, 51, 51));
     m_label->setPalette(p);
+}
+
+void SettingLabel::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    QPalette palette = m_label->palette();
+    if (themeType == DGuiApplicationHelper::ColorType::LightType)
+        palette.setColor(QPalette::BrightText, Qt::black);
+    else
+        palette.setColor(QPalette::BrightText, Qt::white);
+
+    m_label->setPalette(palette);
 }
 
 void SettingLabel::changeEvent(QEvent *event)
