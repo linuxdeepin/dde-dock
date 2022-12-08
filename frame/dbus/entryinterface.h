@@ -32,7 +32,7 @@
 #include <QString>
 #include <QStringList>
 #include <QVariant>
-#include <DBusExtendedAbstractInterface>
+#include <DDBusExtendedAbstractInterface>
 #include <QtDBus>
 
 typedef QList<quint32> WindowList;
