@@ -24,7 +24,7 @@
 #include <QtDBus/QtDBus>
 #include "org_deepin_dde_inputdevice1_keyboard.h"
 
-using Keyboard = org::deepin::dde::inputdevice1::Keyboard1;
+using Keyboard = org::deepin::dde::inputdevice1::Keyboard;
 class QGSettings;
 
 class DBusAdaptors : public QDBusAbstractAdaptor

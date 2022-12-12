@@ -27,7 +27,9 @@ QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
 {
     // 加载本地插件
-    ProxyPluginController::instance(PluginType::QuickPlugin)->addProxyInterface(this);
+    ProxyPluginController *contoller = ProxyPluginController::instance(PluginType::QuickPlugin);
+    contoller->addProxyInterface(this);
+    connect(contoller, &ProxyPluginController::pluginLoaderFinished, this, &QuickSettingController::pluginLoaderFinished);
 }
 
 QuickSettingController::~QuickSettingController()

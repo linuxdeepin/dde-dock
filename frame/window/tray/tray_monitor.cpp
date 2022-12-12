@@ -56,6 +56,12 @@ TrayMonitor::TrayMonitor(QObject *parent)
         Q_EMIT systemTrayRemoved(itemInter);
     });
 
+    //-------------------------------Tray Indicator---------------------------------------------//
+    // Indicators服务是集成在插件中的，因此需要在所有的插件加载完成后再加载Indicators服务
+    connect(quickController, &QuickSettingController::pluginLoaderFinished, this, [ this ] {
+        startLoadIndicators();
+    });
+
     QMetaObject::invokeMethod(this, [ = ] {
         QList<PluginsItemInterface *> trayPlugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Tray);
         for (PluginsItemInterface *plugin : trayPlugins) {
@@ -63,9 +69,6 @@ TrayMonitor::TrayMonitor(QObject *parent)
             Q_EMIT systemTrayAdded(plugin);
         }
     }, Qt::QueuedConnection);
-
-    //-------------------------------Tray Indicator---------------------------------------------//
-    QMetaObject::invokeMethod(this, "startLoadIndicators", Qt::QueuedConnection);
 }
 
 QList<quint32> TrayMonitor::trayWinIds() const
