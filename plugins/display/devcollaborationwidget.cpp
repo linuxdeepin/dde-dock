@@ -69,7 +69,7 @@ void DevCollaborationWidget::initUI()
 {
     m_deviceListView->setModel(m_viewItemModel);
 
-    QLabel *title = new QLabel(tr("Cross-end Collaboration"), this);
+    QLabel *title = new QLabel(tr("PC collaboration"), this);
     title->setFixedHeight(TITLE_HEIGHT);
 
     QHBoxLayout *hLayout = new QHBoxLayout();

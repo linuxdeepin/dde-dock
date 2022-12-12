@@ -196,6 +196,6 @@ QString BluetoothMainWidget::bluetoothIcon(bool isOpen) const
 void BluetoothMainWidget::onAdapterChanged()
 {
     bool bluetoothIsOpen = isOpen();
-    m_stateLabel->setText(bluetoothIsOpen ? tr("open") : tr("close"));
+    m_stateLabel->setText(bluetoothIsOpen ? tr("Turn on") : tr("Turn off"));
     m_iconWidget->update();
 }

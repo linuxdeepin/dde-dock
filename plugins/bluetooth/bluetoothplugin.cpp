@@ -157,9 +157,9 @@ PluginsItemInterface::PluginMode BluetoothPlugin::status() const
 QString BluetoothPlugin::description() const
 {
     if (m_bluetoothItem.data()->isPowered())
-        return tr("open");
+        return tr("Turn on");
 
-    return tr("close");
+    return tr("Turn off");
 }
 
 PluginFlags BluetoothPlugin::flags() const

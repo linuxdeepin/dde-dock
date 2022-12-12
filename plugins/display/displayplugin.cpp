@@ -52,7 +52,7 @@ const QString DisplayPlugin::pluginName() const
 
 const QString DisplayPlugin::pluginDisplayName() const
 {
-    return tr("brightness");
+    return "Brightness";
 }
 
 void DisplayPlugin::init(PluginProxyInterface *proxyInter)

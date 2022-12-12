@@ -63,7 +63,7 @@ const QString ShutdownPlugin::pluginName() const
 
 const QString ShutdownPlugin::pluginDisplayName() const
 {
-    return tr("shutdown");
+    return tr("Plugged In");
 }
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
@@ -79,7 +79,7 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 
     // reset text every time to avoid size of LabelWidget not change after
     // font size be changed in ControlCenter
-    m_tipsLabel->setText(tr("Power"));
+    m_tipsLabel->setText(tr("Plugged In"));
 
     return m_tipsLabel.data();
 }

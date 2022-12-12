@@ -37,7 +37,7 @@ const QString MediaPlugin::pluginName() const
 
 const QString MediaPlugin::pluginDisplayName() const
 {
-    return tr("media");
+    return "Media";
 }
 
 void MediaPlugin::init(PluginProxyInterface *proxyInter)

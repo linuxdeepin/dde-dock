@@ -33,7 +33,7 @@ DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
     : QWidget(parent)
     , m_brightnessAdjWidget(new BrightnessAdjWidget(this))
     , m_collaborationWidget(new DevCollaborationWidget(this))
-    , m_settingBtn(new QPushButton(tr("Display setting"), this))
+    , m_settingBtn(new QPushButton(tr("Multi-Screen Collaboration"), this))
 {
     initUI();
 
