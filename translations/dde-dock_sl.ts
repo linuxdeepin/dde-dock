@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Odstrani</translation>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Dodaj razpored tipk</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -122,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -129,7 +185,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Prekliči</translation>
+        <translation>Prekini</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -141,29 +197,21 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Neznana naprava</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Neznan prostor</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Odpri</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Odklopi vse</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -171,21 +219,6 @@
     <message>
         <source>Launcher</source>
         <translation>Zaganjalnik</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Zapri varni način</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Varni način sidrišča</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Sidrišče deluje v varnem načinu. Izhod za pravilen prikaz</translation>
     </message>
 </context>
 <context>
@@ -244,93 +277,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Velikost</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Več zaslonov</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Način</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Vrh</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Dno</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Levo</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Desno</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Položaj</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Majhno</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Veliko</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Na zaslonu s kurzorjem</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Zgolj na glavnem zaslonu</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -347,20 +293,12 @@
         <source>Onboard</source>
         <translation>Na plošči</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Nastavitve</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
         <translation>Napajanje</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Nastavitve energijske porabe</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -396,14 +334,6 @@
     </message>
 </context>
 <context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>Zasidraj</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-</context>
-<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -417,12 +347,8 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Napajanje</translation>
-    </message>
-    <message>
         <source>Shut down</source>
-        <translation>Zaustavitev sistema</translation>
+        <translation>zaustavitev sistema</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -430,7 +356,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Spanje</translation>
+        <translation>spanje</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -438,7 +364,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Izpis</translation>
+        <translation>Odjava</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -452,12 +378,27 @@
         <source>Reboot</source>
         <translation>Ponovni zagon</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>Naprava</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,6 +455,21 @@
     <message>
         <source>Empty</source>
         <translation>Prazno</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

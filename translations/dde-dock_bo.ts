@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>སྤོ་འབུད།</translation>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>སོ་སྔོན།</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>མཐེབ་གཞོང་བཀོད་པ་སྣོན་པ།</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -122,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -141,29 +197,21 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>མ་ཤེས་པའི་སྒྲིག་ཆས།</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>ཤོང་ཚད་མ་ཤེས་པ།</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>སྡུད་སྡེར།</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>ཁ་ཕྱེ་བ།</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>ཚང་མ་བཤིག་འདོན་བྱེད།</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -171,21 +219,6 @@
     <message>
         <source>Launcher</source>
         <translation>འགོ་སློང་ཆས།</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་པ།</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>ལས་འགན་ཚན་བྱང་གི་བདེ་འཇགས་དཔེ་རྣམ།</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>ལས་འགན་ཚན་བྱང་བདེ་འཇགས་དཔེ་རྣམ་ནང་མཛུལ་ཟིན་པས། བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་རྗེས་རྒྱུན་ལྡན་ལྟར་ཤར་ཐུབ།</translation>
     </message>
 </context>
 <context>
@@ -244,93 +277,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>ཆེ་ཆུང་།</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>བརྙན་མང་མངོན་སྟོན་སྒྲིག་འགོད།</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>ལྷུ་ལག་ཁུལ་ཁོངས།</translation>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>ལས་འགན་ཚན་བྱང་གི་ལྷུ་ལག་ཁུལ་དུ་མངོན་པའི་པར་རིས་འདེམས་པ།</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>དར་སྲོལ་དཔེ་རྣམ།</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>ལས་ཆོད་ཆེ་བའི་དཔེ་རྣམ།</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>དཔེ་རྣམ།</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>གོང་།</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>འོག</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>གཡོན།</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>གཡས།</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>གནས་ས།</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>རྟག་ཏུ་མངོན་པ།</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>རྟག་ཏུ་ཡིབ་པ།</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>རིག་ནུས་གབ་ཡིབ།</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>རྣམ་པ།</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>ཆུང་ངུ།</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>ཆེ་བ།</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>ལས་འགན་ཚན་བྱང་གི་གནས་ས།</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>ཙི་གུའི་གནས་ཡུལ་ལྟར་མངོན་པ།</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>བརྙན་ཡོལ་ཨ་མ་ཁོ་ན་མངོན་པ།</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -347,20 +293,12 @@
         <source>Onboard</source>
         <translation>བརྙན་ཡོལ་མཐེབ་གཞོང་།</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>སྒྲིག་འགོད།</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
         <translation>གློག་ཁུངས་དོ་དམ།</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>གློག་ཁུངས་སྒིག་འགོད།</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -396,14 +334,6 @@
     </message>
 </context>
 <context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>ལས་འགན་ཚན་བྱང་།</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-</context>
-<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -417,12 +347,8 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>གློག་ཁུངས་དོ་དམ།</translation>
-    </message>
-    <message>
         <source>Shut down</source>
-        <translation>ཁ་བརྒྱབ།</translation>
+        <translation>རྩིས་འཁོར་གློག་གསོད།</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -452,12 +378,27 @@
         <source>Reboot</source>
         <translation>བསྐྱར་སློང་།</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>སྒྲིག་ཆས།</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,6 +455,21 @@
     <message>
         <source>Empty</source>
         <translation>གསལ་ཐོ་གཙང་སེལ།</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

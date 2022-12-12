@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Modo avião ativado</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Modo avião desativado</translation>
     </message>
 </context>
 <context>
@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Remover</translation>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -69,7 +80,7 @@
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation>Configurações de Bluetooth</translation>
+        <translation>Configurações do Bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
@@ -89,17 +100,55 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
-        <translation>Adicionar o layout de teclado</translation>
+        <translation>Adicionar layout de teclado</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -118,7 +167,14 @@
     </message>
     <message>
         <source>Time settings</source>
-        <translation>Configurações de Data e Hora</translation>
+        <translation>Configurações de data e hora</translation>
+    </message>
+</context>
+<context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -137,33 +193,25 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>Esta ação não pode ser desfeita</translation>
+        <translation>Esta ação não pode ser revertida</translation>
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Dispositivo desconhecido</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Volume desconhecido</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>Dispositivos</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Abrir</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Desmontar todos</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -171,21 +219,6 @@
     <message>
         <source>Launcher</source>
         <translation>Lançador</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Sair do Modo de Segurança</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Dock - Modo de Segurança</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>A Dock está em modo de segurança; saia para exibi-lo corretamente</translation>
     </message>
 </context>
 <context>
@@ -244,93 +277,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Tamanho</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Múltiplas telas</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Área de plugins</translation>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Selecione quais ícones aparecem na Dock</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Modo Fashion</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Modo Eficiente</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Modo</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Superior</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Inferior</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Esquerda</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Direita</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Local</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Manter exibindo</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Manter oculta</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Ocultar inteligente</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Estado</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pequeno</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Exibir Dock</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Na tela onde está o cursor</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Apenas na tela principal</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -338,18 +284,14 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da Dock</translation>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Teclado Virtual</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Configurações</translation>
+        <translation>Teclado virtual</translation>
     </message>
 </context>
 <context>
@@ -357,10 +299,6 @@
     <message>
         <source>Power</source>
         <translation>Energia</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Configurações de energia</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -396,14 +334,6 @@
     </message>
 </context>
 <context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>Dock</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-</context>
-<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -411,15 +341,11 @@
     </message>
     <message>
         <source>Undock</source>
-        <translation>Remover da Dock</translation>
+        <translation>Remover da dock</translation>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energia</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Desligar</translation>
@@ -438,7 +364,7 @@
     </message>
     <message>
         <source>Log out</source>
-        <translation>Encerrar sessão</translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Switch account</source>
@@ -452,6 +378,10 @@
         <source>Reboot</source>
         <translation>Reiniciar</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -461,10 +391,21 @@
     </message>
 </context>
 <context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SoundItem</name>
     <message>
         <source>Unmute</source>
-        <translation>Com Áudio</translation>
+        <translation>Com áudio</translation>
     </message>
     <message>
         <source>Mute</source>
@@ -472,7 +413,7 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation>Configurações de Som</translation>
+        <translation>Configurações de som</translation>
     </message>
     <message>
         <source>Volume %1</source>
@@ -514,6 +455,21 @@
     <message>
         <source>Empty</source>
         <translation>Esvaziar</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

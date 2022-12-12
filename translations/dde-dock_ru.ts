@@ -10,14 +10,14 @@
     <name>AirplaneModeApplet</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Авиарежим</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Авиарежим включён</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -29,25 +29,36 @@
     </message>
     <message>
         <source>Airplane Mode settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки Авиарежима</translation>
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Авиарежим выключен</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModePlugin</name>
     <message>
         <source>Airplane Mode</source>
+        <translation>Авиарежим</translation>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>BloothAdapterWidget</name>
     <message>
-        <source>Remove</source>
-        <translation>Удалить</translation>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Добавить раскладку клавиатуры</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -122,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -141,51 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Неизвестное устройство</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Неизвестный объем</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Открыть</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Отмонтировать все</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Выбор Программ</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Выйти из Безопасного Режима</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Dock - Безопасный Режим</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Dock находится в безопасном режиме, пожалуйста, выйдите, чтобы показать ее нормально</translation>
+        <translation>Запуск программ</translation>
     </message>
 </context>
 <context>
@@ -240,95 +273,7 @@
     </message>
     <message>
         <source>Dock settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Размер</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Несколько Дисплеев</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Область Плагина</translation>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Выбрать значки появляющиеся в Dock</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Стильный режим</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Эффективный режим</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Режим</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>На верху</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Внизу</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Слева
-</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Справа</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Расположение</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Отображать</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Скрывать</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Умное скрытие</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Статус</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Маленький</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Большой</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Показывать Dock</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>На экране, где располагается курсор</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Только на главном экране</translation>
+        <translation>Настройки Dock</translation>
     </message>
 </context>
 <context>
@@ -348,20 +293,12 @@
         <source>Onboard</source>
         <translation>Экранная Клавиатура</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Настройки</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
         <translation>Питание</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Параметры питания</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -397,14 +334,6 @@
     </message>
 </context>
 <context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>Dock</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-</context>
-<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -418,10 +347,6 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Питание</translation>
-    </message>
-    <message>
         <source>Shut down</source>
         <translation>Выключить</translation>
     </message>
@@ -431,7 +356,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>Спящий Режим</translation>
+        <translation>Спящий режим</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -453,12 +378,27 @@
         <source>Reboot</source>
         <translation>Перезагрузить</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>Устройство</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -515,6 +455,21 @@
     <message>
         <source>Empty</source>
         <translation>Очистить</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

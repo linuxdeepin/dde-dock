@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Уклони</translation>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Блутут</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Блутут</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Додај распоред тастатуре</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -122,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -141,51 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Непознат уређај</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Непознат систем</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Покрени</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Демонтирај све</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
         <source>Launcher</source>
-        <translation>Покретач Програма</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Изађи из безбедног режима</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Док - Безбедни режим</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Док је у безбедном режиму, изађите за нормалан приказ</translation>
+        <translation>Покретач програма</translation>
     </message>
 </context>
 <context>
@@ -244,93 +277,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Величина</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Вишеструки прикази</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Режим</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Врх</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Дно</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Лево</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Десно</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Позиција</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Стање</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Мала</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Велика</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>На екрану где је показивач</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Само на главном екрану</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -347,20 +293,12 @@
         <source>Onboard</source>
         <translation>Онборд</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Подeшавања</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
         <translation>Напајање</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Управљање напајањем</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -396,14 +334,6 @@
     </message>
 </context>
 <context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>Закачи</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-</context>
-<context>
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
@@ -417,12 +347,8 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Напајање</translation>
-    </message>
-    <message>
         <source>Shut down</source>
-        <translation>Искључи</translation>
+        <translation>Искључивање</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -452,12 +378,27 @@
         <source>Reboot</source>
         <translation>Поново покрени</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>Уређај</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,6 +455,21 @@
     <message>
         <source>Empty</source>
         <translation>Испразни</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

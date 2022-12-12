@@ -1,8 +1,131 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ml" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ml">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ബ്ലൂടൂത്ത്</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ബ്ലൂടൂത്ത്</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ബ്ലൂടൂത്ത്</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -14,36 +137,43 @@
     </message>
 </context>
 <context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>12 Hour Time</source>
+        <source>12-hour time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
+        <source>24-hour time</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
+        <source>Time settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Enable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Network settings</source>
+        <source>PC collaboration</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -67,33 +197,32 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>അറിയാത്ത ഉപകരണം</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>അറിയാത്ത വോള്യം</translation>
-    </message>
-</context>
-<context>
-    <name>DiskMountPlugin</name>
-    <message>
-        <source>Disk</source>
-        <translation>ഡിസ്ക്</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unmount all</source>
+        <source>Multi-Screen Collaboration</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>ലോഞ്ചർ</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>ഫാഷൻ രീതി</translation>
@@ -143,15 +272,8 @@
         <translation>അവസ്ഥ</translation>
     </message>
     <message>
-        <source>Plugins</source>
+        <source>Dock settings</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>ലോഞ്ചർ</translation>
     </message>
 </context>
 <context>
@@ -166,20 +288,9 @@
     </message>
 </context>
 <context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -187,10 +298,6 @@
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -202,10 +309,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
@@ -214,7 +317,19 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -232,16 +347,8 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Shut down</source>
         <translation>നിർത്തുക</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
@@ -267,6 +374,14 @@
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -274,9 +389,16 @@
         <source>Device</source>
         <translation>ഉപകരണം</translation>
     </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
     <message>
-        <source>Application</source>
-        <translation>പ്രയോഗം</translation>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -290,11 +412,11 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Audio Settings</source>
+        <source>Sound settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
+        <source>Volume %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -319,6 +441,10 @@
         <source>Trash - %1 files</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Move to Trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -332,46 +458,17 @@
     </message>
 </context>
 <context>
-    <name>TrayPlugin</name>
+    <name>WindowManager</name>
     <message>
-        <source>System Tray</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
+        <source>Exit Safe Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
+        <source>Dock - Safe Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation type="unfinished"/>
     </message>
 </context>

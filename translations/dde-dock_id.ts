@@ -1,8 +1,131 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="id">
 <context>
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -14,37 +137,44 @@
     </message>
 </context>
 <context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DatetimePlugin</name>
     <message>
         <source>Datetime</source>
         <translation>Tanggalwaktu</translation>
     </message>
     <message>
-        <source>12 Hour Time</source>
-        <translation>Waktu 12 Jam</translation>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>24 Hour Time</source>
-        <translation>Waktu 24 Jam</translation>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Time Settings</source>
-        <translation>Pengaturan Waktu</translation>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Enable network</source>
-        <translation>Aktifkan jaringan</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>Matikan jaringan</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>Pengaturan jaringan</translation>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -67,33 +197,32 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Perangkat tidak diketahui</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Volume tidak diketahui</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>Diska</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Terbuka</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Lepaskan semua</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>Peluncur</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>Mode fasion</translation>
@@ -143,15 +272,8 @@
         <translation>Status</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>Plugin</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>Peluncur</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -166,21 +288,10 @@
     </message>
 </context>
 <context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>Jaringan</translation>
-    </message>
-</context>
-<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
         <translation>Pada papan</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Pengaturan</translation>
     </message>
 </context>
 <context>
@@ -188,10 +299,6 @@
     <message>
         <source>Power</source>
         <translation>Daya</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Pengaturan daya</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -202,10 +309,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged %1</source>
-        <translation type="vanished">Terisi %1</translation>
-    </message>
-    <message>
         <source>Charging %1, %2 min until full</source>
         <translation type="unfinished"/>
     </message>
@@ -214,11 +317,19 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charging %1 ....</source>
+        <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Charged</source>
+        <source>Charging %1</source>
+        <translation>Mengisi %1</translation>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -236,16 +347,8 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Daya</translation>
-    </message>
-    <message>
         <source>Shut down</source>
         <translation>Matikan</translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation>Nyalakan ulang</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -271,6 +374,14 @@
         <source>Power settings</source>
         <translation>Pengaturan daya</translation>
     </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Boot ulang</translation>
+    </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -278,9 +389,16 @@
         <source>Device</source>
         <translation>Perangkat</translation>
     </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
     <message>
-        <source>Application</source>
-        <translation>Aplikasi</translation>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -294,12 +412,12 @@
         <translation>Senyap</translation>
     </message>
     <message>
-        <source>Audio Settings</source>
-        <translation>Pengaturan Audio</translation>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current Volume %1</source>
-        <translation>Volume Saat ini %1</translation>
+        <source>Volume %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -323,6 +441,10 @@
         <source>Trash - %1 files</source>
         <translation>Tong sampah - %1 berkas</translation>
     </message>
+    <message>
+        <source>Move to Trash</source>
+        <translation>Pindah ke tempat sampah</translation>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -336,47 +458,18 @@
     </message>
 </context>
 <context>
-    <name>TrayPlugin</name>
+    <name>WindowManager</name>
     <message>
-        <source>System Tray</source>
-        <translation>Baki sistem</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>Tidak diketahui</translation>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wired connection: %1</source>
-        <translation>Koneksi kabel: %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>Tidak ada jaringan</translation>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wireless Connection: %1</source>
-        <translation>Koneksi nirkabel: %1</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>Terhubung tetapi tidak ada akses Internet</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <source>Wireless Network</source>
-        <translation>Jaringan Nirkabel</translation>
-    </message>
-    <message>
-        <source>Wireless Network %1</source>
-        <translation>Jaringan Nirkabel %1</translation>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

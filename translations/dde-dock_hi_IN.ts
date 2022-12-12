@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hi_IN">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -7,9 +7,57 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AirplaneModeApplet</name>
     <message>
-        <source>Remove</source>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>ऑफ करें</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>ऑन करें</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -52,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ब्लूटुथ </translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>ब्लूटूथ</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -63,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>कुंजीपटल अभिन्यास जोड़ें</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -85,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -100,33 +193,25 @@
     </message>
     <message>
         <source>This action cannot be restored</source>
-        <translation>इस कार्रवाई को पुनः स्थापित नहीं किया जा सकता है</translation>
+        <translation>यह कार्य पूर्ववत नहीं हो सकता है</translation>
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>अज्ञात डिवाइस</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>अज्ञात वॉल्यूम</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <source>Disk</source>
-        <translation>डिस्क</translation>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>खोलें</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>सभी को माउंट से हटाएँ</translation>
+        <source>Disabled</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -134,21 +219,6 @@
     <message>
         <source>Launcher</source>
         <translation>लॉन्चर </translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,19 +272,7 @@
         <translation>स्थिति</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>प्लगिन</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show the Dock</source>
+        <source>Dock settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -235,20 +293,12 @@
         <source>Onboard</source>
         <translation>ऑनबोर्ड</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>सेटिंग्स</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
         <source>Power</source>
         <translation>पॉवर</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>पॉवर सेटिंग्स</translation>
     </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
@@ -297,10 +347,6 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>पॉवर</translation>
-    </message>
-    <message>
         <source>Shut down</source>
         <translation>बंद करें</translation>
     </message>
@@ -310,7 +356,7 @@
     </message>
     <message>
         <source>Hibernate</source>
-        <translation>हाइबरनेट</translation>
+        <translation>सुप्त करें</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -322,7 +368,7 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>खाता बदलें</translation>
+        <translation>अकाउंट बदलें</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -332,12 +378,27 @@
         <source>Reboot</source>
         <translation>पुनः आरंभ करें</translation>
     </message>
+    <message>
+        <source>Plugged In</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
-        <translation>डिवाइस</translation>
+        <translation>उपकरण</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -370,15 +431,15 @@
     <name>TrashPlugin</name>
     <message>
         <source>Trash</source>
-        <translation>रद्दी</translation>
+        <translation>ट्रैश</translation>
     </message>
     <message>
         <source>Trash - %1 file</source>
-        <translation>कचरा - %1 फ़ाइल</translation>
+        <translation>ट्रैश - %1 फाइल</translation>
     </message>
     <message>
         <source>Trash - %1 files</source>
-        <translation>कचरा - %1 फ़ाइलें</translation>
+        <translation>ट्रैश - %1 फाइलें</translation>
     </message>
     <message>
         <source>Move to Trash</source>
@@ -393,7 +454,22 @@
     </message>
     <message>
         <source>Empty</source>
-        <translation>खाली </translation>
+        <translation>खाली करें </translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
