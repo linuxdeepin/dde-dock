@@ -25,7 +25,6 @@
 
 #include <QWidget>
 
-static QStringList fixedPluginNames { "network", "sound", "power" };
 #define PLUGINNAMEKEY "Dock_Quick_Plugin_Name"
 
 QuickPluginModel *QuickPluginModel::instance()
@@ -40,17 +39,15 @@ void QuickPluginModel::addPlugin(PluginsItemInterface *itemInter, int index)
     if (QuickSettingController::instance()->pluginAttribute(itemInter) != QuickSettingController::PluginAttribute::Quick)
         return;
 
-    if (index < 0) {
-        // 如果索引值小于0，则认为它插在最后面
-        index = m_dockedPluginIndex.size();
-    }
-
-    // 如果插入的插件在原来的插件列表中存在，并且位置相同，则不做任何的处理
-    int oldIndex = m_dockedPluginIndex.contains(itemInter->pluginName());
+    // 获取当前插件在插件区的位置索引(所有在任务栏上显示的插件)
+    int oldIndex = getCurrentIndex(itemInter);
+    // 计算插入之前的顺序
     if (oldIndex == index && m_dockedPluginsItems.contains(itemInter))
         return;
 
-    m_dockedPluginIndex[itemInter->pluginName()] = index;
+    // 根据插件区域的位置计算新的索引值
+    int newIndex = generaIndex(index, oldIndex);
+    m_dockedPluginIndex[itemInter->pluginName()] = newIndex;
     if (!m_dockedPluginsItems.contains(itemInter)) {
         m_dockedPluginsItems << itemInter;
         // 保存配置到dConfig中
@@ -83,10 +80,10 @@ QList<PluginsItemInterface *> QuickPluginModel::dockedPluginItems() const
     QList<PluginsItemInterface *> dockedItems;
     QList<PluginsItemInterface *> activedItems;
     for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
-        if (fixedPluginNames.contains(itemInter->pluginName()))
-            dockedItems << itemInter;
-        else
+        if (isFixed(itemInter))
             activedItems << itemInter;
+        else
+            dockedItems << itemInter;
     }
     std::sort(dockedItems.begin(), dockedItems.end(), [ this ](PluginsItemInterface *item1, PluginsItemInterface *item2) {
         return m_dockedPluginIndex.value(item1->pluginName()) < m_dockedPluginIndex.value(item2->pluginName());
@@ -104,7 +101,7 @@ bool QuickPluginModel::isDocked(PluginsItemInterface *itemInter) const
 
 bool QuickPluginModel::isFixed(PluginsItemInterface *itemInter) const
 {
-    return fixedPluginNames.contains(itemInter->pluginName());
+    return !(itemInter->flags() & PluginFlag::Attribute_CanInsert);
 }
 
 QuickPluginModel::QuickPluginModel(QObject *parent)
@@ -205,4 +202,87 @@ void QuickPluginModel::saveConfig()
         return m_dockedPluginIndex.value(p1) < m_dockedPluginIndex.value(p2);
     });
     SETTINGCONFIG->setValue(PLUGINNAMEKEY, plugins);
+}
+
+int QuickPluginModel::getCurrentIndex(PluginsItemInterface *itemInter)
+{
+    QList<PluginsItemInterface *> dockedPluginsItems = m_dockedPluginsItems;
+    std::sort(dockedPluginsItems.begin(), dockedPluginsItems.end(), [ this ](PluginsItemInterface *plugin1, PluginsItemInterface *plugin2) {
+        return m_dockedPluginIndex.value(plugin1->pluginName()) < m_dockedPluginIndex.value(plugin2->pluginName());
+    });
+    return dockedPluginItems().indexOf(itemInter);
+}
+
+int QuickPluginModel::generaIndex(int insertIndex, int oldIndex)
+{
+    int newIndex = insertIndex;
+    if (oldIndex < 0) {
+        newIndex = insertIndex + 1;
+        // 如果该插件在列表中存在，则需要将原来的索引值加一
+        if (insertIndex < 0) {
+            // 如果新插入的索引值为-1,则表示需要插入到末尾的位置，此时需要从索引值中找到最大值
+            int lastIndex = -1;
+            for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
+                int index = m_dockedPluginIndex.value(itemInter->pluginName());
+                if (lastIndex < index)
+                    lastIndex = index;
+            }
+            newIndex = lastIndex + 1;
+        }
+        if (m_dockedPluginIndex.values().contains(newIndex)) {
+            // 遍历map列表，检查列表中是否存在等于新索引的插件，如果存在，将其后面的索引值向后加一
+            for (auto it = m_dockedPluginIndex.begin(); it != m_dockedPluginIndex.end(); it++) {
+                if (it.value() < newIndex)
+                    continue;
+
+                m_dockedPluginIndex[it.key()] = it.value() + 1;
+            }
+        }
+    } else {
+        newIndex = insertIndex;
+        // 如果该插件已经存在于下面的列表中，则分两种情况
+        if (insertIndex < 0) {
+            // 如果插入在末尾，则计算最大值
+            if (m_dockedPluginIndex.size() > 0) {
+                int maxIndex = m_dockedPluginIndex.first();
+                for (auto it = m_dockedPluginIndex.begin(); it != m_dockedPluginIndex.end(); it++) {
+                    if (maxIndex < it.value())
+                        maxIndex = it.value();
+                }
+                return maxIndex;
+            }
+            return 0;
+        }
+        if (insertIndex > oldIndex) {
+            int minIndex = NGROUPS_MAX;
+            // 新的位置的索引值大于原来位置的索引值，则认为插入在原来的任务栏的后面，将前面的插件的索引值减去1
+            for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
+                int pluginDockIndex = getCurrentIndex(itemInter);
+                qInfo() << itemInter->pluginDisplayName() << m_dockedPluginIndex[itemInter->pluginName()] << pluginDockIndex;
+                if (pluginDockIndex > oldIndex) {
+                    if (pluginDockIndex <= insertIndex) {
+                        int tmpIndex = m_dockedPluginIndex[itemInter->pluginName()];
+                        if (tmpIndex < minIndex)
+                            minIndex = tmpIndex;
+                    }
+                    m_dockedPluginIndex[itemInter->pluginName()]--;
+                }
+                qInfo() << itemInter->pluginDisplayName() << m_dockedPluginIndex[itemInter->pluginName()];
+            }
+
+            if (minIndex != NGROUPS_MAX)
+                newIndex = minIndex;
+        } else {
+            // 新的位置索引小于原来的索引值，则认为是插在任务栏的前面，将任务栏后面的插件的索引值加一
+            for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
+                int pluginDockIndex = getCurrentIndex(itemInter);
+                if (pluginDockIndex >= insertIndex) {
+                    m_dockedPluginIndex[itemInter->pluginName()]++;
+                }
+                qInfo() << itemInter->pluginDisplayName() << m_dockedPluginIndex[itemInter->pluginName()];
+            }
+        }
+    }
+
+    return newIndex;
 }

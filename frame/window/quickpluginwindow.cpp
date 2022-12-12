@@ -26,6 +26,7 @@
 #include "appdrag.h"
 #include "proxyplugincontroller.h"
 #include "quickpluginmodel.h"
+#include "quickdragcore.h"
 
 #include <DStyleOption>
 #include <DStandardItem>
@@ -39,6 +40,7 @@
 #include <QBoxLayout>
 #include <QGuiApplication>
 #include <QMenu>
+#include <QDragLeaveEvent>
 
 #define ITEMSIZE 22
 #define ITEMSPACE 6
@@ -66,8 +68,8 @@ typedef struct DragInfo{
         if (!dragPixmap())
             return false;
 
-        return (qAbs(currentPoint.x() - dragPoint.x()) >= 5 ||
-                qAbs(currentPoint.y() - dragPoint.y()) >= 5);
+        return (qAbs(currentPoint.x() - dragPoint.x()) >= 1 ||
+                qAbs(currentPoint.y() - dragPoint.y()) >= 1);
     }
 
     QPixmap dragPixmap() const {
@@ -94,10 +96,12 @@ QuickPluginWindow::QuickPluginWindow(QWidget *parent)
     , m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this))
     , m_position(Dock::Position::Bottom)
     , m_dragInfo(new DragInfo)
+    , m_dragEnterMimeData(nullptr)
 {
     initUi();
     initConnection();
 
+    topLevelWidget()->installEventFilter(this);
     installEventFilter(this);
     setAcceptDrops(true);
     setMouseTracking(true);
@@ -197,6 +201,22 @@ PluginsItemInterface *QuickPluginWindow::findQuickSettingItem(const QPoint &mous
 
 bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == topLevelWidget()) {
+        switch (event->type()) {
+        case QEvent::DragEnter: {
+            QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(event);
+            dragEnterEvent(dragEvent);
+            break;
+        }
+        case QEvent::DragLeave: {
+            QDragLeaveEvent *dragEvent = static_cast<QDragLeaveEvent *>(event);
+            dragLeaveEvent(dragEvent);
+            break;
+        }
+        default:
+            break;
+        }
+    }
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -223,7 +243,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             if (m_dragInfo->canDrag(mouseEvent->pos()))
                 break;
 
-            showPopup(qobject_cast<QuickDockItem *>(watched));
+            showPopup(m_dragInfo->dockItem);
         } while (false);
         m_dragInfo->reset();
 
@@ -241,13 +261,48 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
         break;
     }
     case QEvent::Drop: {
-        Q_EMIT requestDrop(static_cast<QDropEvent *>(event));
+        m_dragEnterMimeData = nullptr;
+        QDropEvent *dropEvent = static_cast<QDropEvent *>(event);
+        if (qobject_cast<QuickSettingContainer *>(dropEvent->source())) {
+            const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(dropEvent->mimeData());
+            if (mimeData)
+                dragPlugin(mimeData->pluginItemInterface());
+        }
         break;
     }
     default:
         break;
     }
     return QWidget::eventFilter(watched, event);
+}
+
+void QuickPluginWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    m_dragEnterMimeData = const_cast<QuickPluginMimeData *>(qobject_cast<const QuickPluginMimeData *>(event->mimeData()));
+    if (m_dragEnterMimeData) {
+        QIcon icon = m_dragEnterMimeData->pluginItemInterface()->icon(DockPart::QuickShow);
+        QuickIconDrag *drag = qobject_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
+        if (drag && !icon.isNull()) {
+            QPixmap pixmap = icon.pixmap(QSize(16, 16));
+            drag->updatePixmap(pixmap);
+        }
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void QuickPluginWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    if (m_dragEnterMimeData) {
+        QPoint mousePos = topLevelWidget()->mapFromGlobal(QCursor::pos());
+        QuickIconDrag *drag = static_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
+        if (!topLevelWidget()->rect().contains(mousePos) && drag) {
+            static_cast<QuickIconDrag *>(m_dragEnterMimeData->drag())->useSourcePixmap();
+        }
+        m_dragEnterMimeData = nullptr;
+    }
+    event->accept();
 }
 
 void QuickPluginWindow::onRequestUpdate()
@@ -364,24 +419,22 @@ void QuickPluginWindow::startDrag()
         return;
 
     PluginsItemInterface *moveItem = m_dragInfo->dockItem->pluginItem();
-    AppDrag *drag = new AppDrag(this, new QuickDragWidget);
-    QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem);
+    //AppDrag *drag = new AppDrag(this, new QuickDragWidget);
+    QDrag *drag = new QDrag(this);
+    QuickPluginMimeData *mimedata = new QuickPluginMimeData(moveItem, drag);
     drag->setMimeData(mimedata);
-    drag->appDragWidget()->setDockInfo(m_position, QRect(mapToGlobal(pos()), size()));
     QPixmap dragPixmap = m_dragInfo->dragPixmap();
     drag->setPixmap(dragPixmap);
 
-    drag->setHotSpot(QPoint(0, 0));
+    drag->setHotSpot(dragPixmap.rect().center());
+    //connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDropItem, this, &QuickPluginWindow::onPluginDropItem);
+    //connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDragMove, this, &QuickPluginWindow::onPluginDragMove);
 
-    connect(drag->appDragWidget(), &AppDragWidget::requestSplitWindow, this, [ this, moveItem ] {
-        QuickPluginModel::instance()->removePlugin(moveItem);
-        Q_EMIT itemCountChanged();
-    });
-
-    connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDropItem, this, &QuickPluginWindow::onPluginDropItem);
-    connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDragMove, this, &QuickPluginWindow::onPluginDragMove);
-
-    drag->exec(Qt::MoveAction | Qt::CopyAction);
+    drag->exec(Qt::CopyAction);
+    // 获取当前鼠标在任务栏快捷图标区域的位置
+    QPoint currentPoint = mapFromGlobal(QCursor::pos());
+    // 获取区域图标插入的位置
+    QuickPluginModel::instance()->addPlugin(mimedata->pluginItemInterface(), getDropIndex(currentPoint));
 }
 
 QuickDockItem *QuickPluginWindow::getDockItemByPlugin(PluginsItemInterface *item)
@@ -447,62 +500,69 @@ void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *ite
 
     QuickSettingContainer *container = static_cast<QuickSettingContainer *>(popWindow->getContent());
     container->showPage(childPage, itemInter, canBack);
+    popWindow->raise();
+}
+
+QList<QuickDockItem *> QuickPluginWindow::quickDockItems()
+{
+    QList<QuickDockItem *> dockItems;
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
+        if (!layoutItem)
+            continue;
+
+        QuickDockItem *dockedItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
+        if (!dockedItem)
+            continue;
+
+        dockItems << dockedItem;
+    }
+
+    return dockItems;
 }
 
 int QuickPluginWindow::getDropIndex(QPoint point)
 {
+    QList<QuickDockItem *> dockedItems = quickDockItems();
     QuickDockItem *targetItem = getActiveDockItem(point);
     if (targetItem) {
-        for (int i = 0; i < m_mainLayout->count(); i++) {
-            QLayoutItem *layoutItem = m_mainLayout->itemAt(i);
-            if (!layoutItem)
-                continue;
-
-            if (layoutItem->widget() == targetItem)
+        for (int i = 0; i < dockedItems.count(); i++) {
+            if (dockedItems[i] == targetItem)
                 return i;
         }
 
         return -1;
     }
 
-    // 上下方向从右向左排列
+    QList<PluginsItemInterface *> dockItemInter = QuickPluginModel::instance()->dockedPluginItems();
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        for (int i = 0; i < m_mainLayout->count() - 1; i++) {
-            QLayoutItem *layoutBefore = m_mainLayout->itemAt(i);
-            QLayoutItem *layoutItem = m_mainLayout->itemAt(i + 1);
-            if (!layoutBefore || !layoutItem)
-                continue;
-
-            QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
-            QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
-            if (dockItem->canInsert())
+        // 上下方向从右向左排列
+        for (int i = 0; i < dockItemInter.count() - 1; i++) {
+            QuickDockItem *dockBeforeItem = dockedItems[i];
+            QuickDockItem *dockItem = dockedItems[i + 1];
+            if (!dockItem->canInsert())
                 continue;
 
             if (dockBeforeItem->geometry().x() > point.x() && dockItem->geometry().right() < point.x())
                 return i;
         }
-    }
-    for (int i = 0; i < m_mainLayout->count() - 1; i++) {
-        QLayoutItem *layoutBefore = m_mainLayout->itemAt(i);
-        QLayoutItem *layoutItem = m_mainLayout->itemAt(i + 1);
-        if (!layoutBefore || !layoutItem)
-            continue;
+    } else {
+        // 左右方向从下向上排列
+        for (int i = 0; i < dockItemInter.count() - 1; i++) {
+            QuickDockItem *dockBeforeItem = dockedItems[i];
+            QuickDockItem *dockItem = dockedItems[i + 1];
+            if (!dockItem->canInsert())
+                continue;
 
-        QuickDockItem *dockBeforeItem = qobject_cast<QuickDockItem *>(layoutBefore->widget());
-        if (dockBeforeItem->canInsert())
-            break;
-
-        QuickDockItem *dockItem = qobject_cast<QuickDockItem *>(layoutItem->widget());
-
-        // 从上向下排列
-        if (dockBeforeItem->geometry().bottom() < point.y() && dockItem->geometry().top() > point.y())
-            return i;
+            if (dockBeforeItem->geometry().bottom() > point.y() && dockItem->geometry().top() < point.y())
+                return i;
+        }
     }
     // 如果都没有找到，直接插入到最后
     return -1;
 }
 
-void QuickPluginWindow::onPluginDropItem(QDropEvent *event)
+/*void QuickPluginWindow::onPluginDropItem(QDropEvent *event)
 {
     const QuickPluginMimeData *data = qobject_cast<const QuickPluginMimeData *>(event->mimeData());
     if (!data)
@@ -512,7 +572,7 @@ void QuickPluginWindow::onPluginDropItem(QDropEvent *event)
     QPoint currentPoint = mapFromGlobal(QCursor::pos());
     // 获取区域图标插入的位置
     QuickPluginModel::instance()->addPlugin(data->pluginItemInterface(), getDropIndex(currentPoint));
-}
+}*/
 
 void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
 {
@@ -549,6 +609,11 @@ void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
     event->accept();
 }
 
+void QuickPluginWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->accept();
+}
+
 void QuickPluginWindow::initConnection()
 {
     QuickPluginModel *model = QuickPluginModel::instance();
@@ -571,7 +636,6 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &it
     , m_contextMenu(new QMenu(this))
     , m_tipParent(nullptr)
     , m_mainLayout(nullptr)
-    , m_canInsert(QuickSettingController::instance()->hasFlag(pluginItem, PluginFlag::Attribute_CanInsert))
     , m_dockItemParent(nullptr)
 {
     initUi();
@@ -595,7 +659,7 @@ PluginsItemInterface *QuickDockItem::pluginItem()
 
 bool QuickDockItem::canInsert() const
 {
-    return m_canInsert;
+    return (m_pluginItem->flags() & PluginFlag::Attribute_CanInsert);
 }
 
 void QuickDockItem::hideToolTip()

@@ -120,13 +120,8 @@ QPixmap SingleQuickItem::pixmap() const
 {
     // 如果快捷面板区域的图标为空，那么就获取itemWidget的截图
     QIcon icon = pluginItem()->icon(DockPart::QuickPanel);
-    if (icon.isNull()) {
-        QWidget *itemWidget = pluginItem()->itemWidget(itemKey());
-        if (itemWidget) {
-            itemWidget->setFixedSize(24, 24);
-            icon = itemWidget->grab();
-        }
-    }
+    if (icon.isNull())
+        return QPixmap();
 
     int pixmapWidth = width();
     int pixmapHeight = height();

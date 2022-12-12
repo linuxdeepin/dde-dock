@@ -34,6 +34,8 @@
 #include <QPainterPath>
 #include <QPushButton>
 #include <QFontMetrics>
+#include <QPainterPath>
+#include <QBitmap>
 
 #define ICONWIDTH 24
 #define ICONHEIGHT 24
@@ -72,27 +74,7 @@ DockItem::ItemType QuickSettingItem::itemType() const
 
 const QPixmap QuickSettingItem::dragPixmap()
 {
-    QPixmap pm = m_pluginInter->icon(DockPart::QuickPanel).pixmap(ICONWIDTH, ICONHEIGHT);
-
-    QPainter pa(&pm);
-    pa.setPen(foregroundColor());
-    pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    pa.fillRect(pm.rect(), foregroundColor());
-
-    QPixmap pmRet(ICONWIDTH + ICONSPACE + FONTSIZE * 2, ICONHEIGHT + ICONSPACE + FONTSIZE * 2);
-    pmRet.fill(Qt::transparent);
-    QPainter paRet(&pmRet);
-    paRet.drawPixmap(QPoint((ICONSPACE + FONTSIZE * 2) / 2, 0), pm);
-    paRet.setPen(pa.pen());
-
-    QFont ft;
-    ft.setPixelSize(FONTSIZE);
-    paRet.setFont(ft);
-    QTextOption option;
-    option.setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    paRet.drawText(QRect(QPoint(0, ICONHEIGHT + ICONSPACE),
-                           QPoint(pmRet.width(), pmRet.height())), m_pluginInter->pluginDisplayName(), option);
-    return pmRet;
+    return grab();
 }
 
 const QString QuickSettingItem::itemKey() const

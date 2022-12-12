@@ -36,6 +36,7 @@ class QBoxLayout;
 class QuickDockItem;
 class DockPopupWindow;
 class QMenu;
+class QuickPluginMimeData;
 enum class DockPart;
 
 namespace Dtk { namespace Gui { class DRegionMonitor; }
@@ -59,14 +60,16 @@ public:
 
 Q_SIGNALS:
     void itemCountChanged();
-    void requestDrop(QDropEvent *dropEvent);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
 
 private Q_SLOTS:
     void onRequestUpdate();
-    void onPluginDropItem(QDropEvent *event);
+    //void onPluginDropItem(QDropEvent *event);
     void onPluginDragMove(QDragMoveEvent *event);
     void onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart);
     void onRequestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
@@ -81,11 +84,13 @@ private:
     QuickDockItem *getDockItemByPlugin(PluginsItemInterface *item);
     QuickDockItem *getActiveDockItem(QPoint point) const;
     void showPopup(QuickDockItem *item, PluginsItemInterface *itemInter = nullptr, QWidget *childPage = nullptr);
+    QList<QuickDockItem *> quickDockItems();
 
 private:
     QBoxLayout *m_mainLayout;
     Dock::Position m_position;
     struct DragInfo *m_dragInfo;
+    QuickPluginMimeData *m_dragEnterMimeData;
 };
 
 // 用于在任务栏上显示的插件
@@ -131,7 +136,6 @@ private:
     QMenu *m_contextMenu;
     QWidget *m_tipParent;
     QHBoxLayout *m_mainLayout;
-    bool m_canInsert;
     QWidget *m_dockItemParent;
 };
 

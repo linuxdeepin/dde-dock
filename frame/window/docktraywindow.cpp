@@ -29,6 +29,7 @@
 #include "pluginsitem.h"
 #include "quicksettingcontainer.h"
 #include "expandiconwidget.h"
+#include "quickdragcore.h"
 
 #include <DGuiApplicationHelper>
 
@@ -313,7 +314,6 @@ void DockTrayWindow::initConnection()
     connect(m_systemPuginWidget, &SystemPluginWindow::itemChanged, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_quickIconWidget, &QuickPluginWindow::itemCountChanged, this, &DockTrayWindow::onUpdateComponentSize);
-    connect(m_quickIconWidget, &QuickPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
     connect(m_systemPuginWidget, &SystemPluginWindow::requestDrop, this, &DockTrayWindow::onDropIcon);
     connect(m_model, &TrayModel::rowCountChanged, this, &DockTrayWindow::onUpdateComponentSize);
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);

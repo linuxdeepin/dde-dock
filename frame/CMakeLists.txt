@@ -73,6 +73,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     window/components
     window/tray
     window/tray/widgets
+    drag
     xcb
     ../plugins/tray
     ../plugins/show-desktop

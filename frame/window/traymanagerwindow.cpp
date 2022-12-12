@@ -28,6 +28,7 @@
 #include "systempluginwindow.h"
 #include "datetimedisplayer.h"
 #include "expandiconwidget.h"
+#include "quickdragcore.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -40,7 +41,6 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#define MAXFIXEDSIZE 999999
 #define CRITLCALHEIGHT 42
 #define CONTENTSPACE 7
 // 高度小于等于这个值的时候，间距最小值

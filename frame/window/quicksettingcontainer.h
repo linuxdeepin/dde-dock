@@ -77,8 +77,6 @@ private:
     void updateItemLayout();
     // 调整全列插件的位置
     void updateFullItemLayout();
-    // 获取拖动图标的热点
-    QPoint hotSpot(const QPixmap &pixmap);
     // 插入插件
     void appendPlugin(PluginsItemInterface *itemInter, bool needLayout = true);
 
@@ -96,19 +94,6 @@ private:
     QuickDragInfo *m_dragInfo;
     QList<QuickSettingItem *> m_quickSettings;
     PluginsItemInterface *m_childShowPlugin;
-};
-
-class QuickPluginMimeData : public QMimeData
-{
-    Q_OBJECT
-
-public:
-    explicit QuickPluginMimeData(PluginsItemInterface *item) : QMimeData(), m_item(item) {}
-    ~QuickPluginMimeData() {}
-    PluginsItemInterface *pluginItemInterface() const { return m_item; }
-
-private:
-     PluginsItemInterface *m_item;
 };
 
 #endif // PLUGINCONTAINER_H

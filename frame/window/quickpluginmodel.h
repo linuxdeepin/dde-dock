@@ -60,6 +60,8 @@ private:
     void initConnection();
     void initConfig();
     void saveConfig();
+    int getCurrentIndex(PluginsItemInterface *itemInter);
+    int generaIndex(int sourceIndex, int oldIndex);
 
 private:
     QList<PluginsItemInterface *> m_dockedPluginsItems;

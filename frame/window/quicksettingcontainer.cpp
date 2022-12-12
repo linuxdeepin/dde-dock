@@ -26,6 +26,7 @@
 #include "slidercontainer.h"
 #include "pluginchildpage.h"
 #include "utils.h"
+#include "quickdragcore.h"
 
 #include <DListView>
 #include <DStyle>
@@ -35,6 +36,9 @@
 #include <QMetaObject>
 #include <QStackedLayout>
 #include <QMouseEvent>
+#include <QLabel>
+#include <QBitmap>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 
@@ -132,8 +136,7 @@ DockPopupWindow *QuickSettingContainer::popWindow()
     m_popWindow->setArrowHeight(10);
     m_popWindow->setArrowDirection(getDirection(m_position));
     m_popWindow->setContent(new QuickSettingContainer(m_popWindow));
-    if (Utils::IS_WAYLAND_DISPLAY)
-        m_popWindow->setWindowFlags(m_popWindow->windowFlags() | Qt::FramelessWindowHint);
+    m_popWindow->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     return m_popWindow;
 }
 
@@ -179,17 +182,6 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
-}
-
-QPoint QuickSettingContainer::hotSpot(const QPixmap &pixmap)
-{
-    if (m_position == Dock::Position::Left)
-        return QPoint(0, pixmap.height());
-
-    if (m_position == Dock::Position::Top)
-        return QPoint(pixmap.width(), 0);
-
-    return QPoint(pixmap.width(), pixmap.height());
 }
 
 void QuickSettingContainer::appendPlugin(PluginsItemInterface *itemInter, bool needLayout)
@@ -259,24 +251,14 @@ void QuickSettingContainer::mouseMoveEvent(QMouseEvent *event)
     QPoint pointCurrent = event->pos();
     if (qAbs(m_dragInfo->dragPosition.x() - pointCurrent.x()) > 5
             || qAbs(m_dragInfo->dragPosition.y() - pointCurrent.y()) > 5) {
-
-        QDrag *drag = new QDrag(this);
         QuickSettingItem *moveItem = qobject_cast<QuickSettingItem *>(m_dragInfo->dragItem);
-        QuickPluginMimeData *mimedata = new QuickPluginMimeData(m_dragInfo->pluginInter);
+        QuickIconDrag *drag = new QuickIconDrag(this, moveItem->dragPixmap());
+        QuickPluginMimeData *mimedata = new QuickPluginMimeData(m_dragInfo->pluginInter, drag);
         drag->setMimeData(mimedata);
-        if (moveItem) {
-            QPixmap dragPixmap = moveItem->dragPixmap();
-            drag->setPixmap(dragPixmap);
-            drag->setHotSpot(hotSpot(dragPixmap));
-        } else {
-            // 如果拖动的是声音等插件
-            QPixmap dragPixmap = m_dragInfo->dragItem->grab();
-            drag->setPixmap(dragPixmap);
-            drag->setHotSpot(hotSpot(dragPixmap));
-        }
+        drag->setDragHotPot(m_dragInfo->dragPosition);
 
         m_dragInfo->reset();
-        drag->exec(Qt::MoveAction | Qt::CopyAction);
+        drag->exec(Qt::CopyAction);
     }
 }
 
