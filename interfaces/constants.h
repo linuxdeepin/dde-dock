@@ -30,6 +30,7 @@ namespace Dock {
 #define DOCK_PLUGIN_API_VERSION    "2.0.0"
 
 #define PROP_DISPLAY_MODE   "DisplayMode"
+#define PROP_DOCK_DRAGING   "isDraging"
 
 #define PLUGIN_BACKGROUND_MAX_SIZE 40
 #define PLUGIN_BACKGROUND_MIN_SIZE 20

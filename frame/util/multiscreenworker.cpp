@@ -674,7 +674,7 @@ void MultiScreenWorker::resetDockScreen()
     if (testState(ChangePositionAnimationStart)
             || testState(HideAnimationStart)
             || testState(ShowAnimationStart)
-            || testState(DockIsDraging))
+            || Utils::isDraging())
         return;
 
     DOCK_SCREEN->updateDockedScreen(getValidScreen(position()));

@@ -22,6 +22,7 @@
 #include "systemplugincontroller.h"
 #include "systempluginitem.h"
 #include "quicksettingcontroller.h"
+#include "utils.h"
 
 #include <DListView>
 #include <DGuiApplicationHelper>
@@ -35,12 +36,13 @@
 #define MINICONSIZE 24
 #define ICONMARGIN 8
 
-SystemPluginWindow::SystemPluginWindow(QWidget *parent)
+SystemPluginWindow::SystemPluginWindow(DockInter *dockInter, QWidget *parent)
     : QWidget(parent)
     , m_listView(new DListView(this))
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
+    , m_dockInter(dockInter)
 {
     initUi();
     initConnection();
@@ -53,13 +55,20 @@ SystemPluginWindow::~SystemPluginWindow()
 void SystemPluginWindow::setDisplayMode(const DisplayMode &displayMode)
 {
     m_displayMode = displayMode;
-    QObjectList childObjects = children();
-    for (QObject *childObject : childObjects) {
-        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
-        if (!item)
-            continue;
-
-        item->setDisplayMode(displayMode);
+    QList<StretchPluginsItem *> items = stretchItems();
+    switch (m_position) {
+    case Dock::Position::Top:
+    case Dock::Position::Bottom: {
+        for (StretchPluginsItem *item : items)
+            item->setDisplayMode(displayMode);
+        break;
+    }
+    case Dock::Position::Left:
+    case Dock::Position::Right: {
+        for (StretchPluginsItem *item : items)
+            item->setDisplayMode(displayMode);
+        break;
+    }
     }
 }
 
@@ -94,28 +103,18 @@ QSize SystemPluginWindow::suitableSize() const
 
 QSize SystemPluginWindow::suitableSize(const Position &position) const
 {
-    QObjectList childs = children();
+    QList<StretchPluginsItem *> items = stretchItems();
     if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         int itemWidth = 0;
-        for (QObject *childObject : childs) {
-            StretchPluginsItem *childItem = qobject_cast<StretchPluginsItem *>(childObject);
-            if (!childItem)
-                continue;
-
-            itemWidth += childItem->suitableSize(position).width();
-        }
+        for (StretchPluginsItem *item : items)
+            itemWidth += item->suitableSize(position).width();
 
         return QSize(itemWidth, QWIDGETSIZE_MAX);
     }
 
     int itemHeight = 0;
-    for (QObject *childObject : childs) {
-        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
-        if (!item)
-            continue;
-
+    for (StretchPluginsItem *item : items)
         itemHeight += item->suitableSize(position).height();
-    }
 
     return QSize(QWIDGETSIZE_MAX, itemHeight);
 }
@@ -170,7 +169,7 @@ StretchPluginsItem *SystemPluginWindow::findPluginItemWidget(PluginsItemInterfac
 
 void SystemPluginWindow::pluginAdded(PluginsItemInterface *plugin)
 {
-    StretchPluginsItem *item = new StretchPluginsItem(plugin, QuickSettingController::instance()->itemKey(plugin));
+    StretchPluginsItem *item = new StretchPluginsItem(m_dockInter, plugin, QuickSettingController::instance()->itemKey(plugin));
     item->setDisplayMode(m_displayMode);
     item->setPosition(m_position);
     item->installEventFilter(this);
@@ -178,6 +177,20 @@ void SystemPluginWindow::pluginAdded(PluginsItemInterface *plugin)
     item->show();
     m_mainLayout->addWidget(item);
     Q_EMIT itemChanged();
+}
+
+QList<StretchPluginsItem *> SystemPluginWindow::stretchItems() const
+{
+    QList<StretchPluginsItem *> items;
+    QObjectList childObjects = children();
+    for (QObject *childObject : childObjects) {
+        StretchPluginsItem *item = qobject_cast<StretchPluginsItem *>(childObject);
+        if (!item)
+            continue;
+
+        items << item;
+    }
+    return items;
 }
 
 void SystemPluginWindow::onPluginItemRemoved(PluginsItemInterface *pluginItem)
@@ -204,11 +217,12 @@ void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
 
 Dock::Position StretchPluginsItem::m_position = Dock::Position::Bottom;
 
-StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
+StretchPluginsItem::StretchPluginsItem(DockInter *dockInter, PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
     , m_displayMode(Dock::DisplayMode::Efficient)
+    , m_dockInter(dockInter)
 {
 }
 
@@ -278,7 +292,6 @@ QSize StretchPluginsItem::suitableSize(const Position &position) const
         int textWidth = 0;
         if (needShowText())
             textWidth = QFontMetrics(textFont(position)).boundingRect(m_pluginInter->pluginDisplayName()).width();
-
         return QSize(qMax(textWidth, iconSize) + (m_displayMode == Dock::DisplayMode::Efficient ? 5 : 10) * 2, -1);
     }
 
@@ -318,9 +331,20 @@ bool StretchPluginsItem::needShowText() const
     // 如果是高效模式，则不需要显示下面的文本
     if (m_displayMode == Dock::DisplayMode::Efficient)
         return false;
+
+    // 图标的尺寸
+#define ICONSIZE 20
+    // 图标与文本，图标距离上方和文本距离下方的尺寸
+#define SPACEMARGIN 6
+    // 文本的高度
+#define TEXTSIZE 14
+    // 当前插件父窗口与顶层窗口的上下边距
+#define OUTMARGIN 7
+
     // 任务栏在上方或者下方显示的时候，根据设计图，只有在当前区域高度大于50的时候才同时显示文本和图标
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        return height() >= 50;
+        return ((Utils::isDraging() ? topLevelWidget()->height() : m_dockInter->windowSizeFashion()) >=
+                                    (OUTMARGIN * 2 + SPACEMARGIN * 3 + ICONSIZE + TEXTSIZE));
 
     return true;
 }

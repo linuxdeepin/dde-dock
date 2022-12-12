@@ -35,6 +35,19 @@ namespace Utils {
 
 const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
 
+inline bool isDraging()
+{
+    if (!qApp->property("isDraging").isValid())
+        return false;
+
+    return qApp->property("isDraging").toBool();
+}
+
+inline void setIsDraging(bool isDraging)
+{
+    qApp->setProperty("isDraging", isDraging);
+}
+
 /**
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param schema_id The id of the schema

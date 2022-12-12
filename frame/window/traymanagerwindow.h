@@ -83,12 +83,14 @@ private:
 
     int appDatetimeSize(const Dock::Position &position) const;
     QPainterPath roundedPaths();
+    void updateItemLayout(int dockSize);
 
 private Q_SLOTS:
     void onTrayCountChanged();
 
 private:
     QWidget *m_appPluginDatetimeWidget;
+    DockInter *m_dockInter;
     SystemPluginWindow *m_systemPluginWidget;
     QWidget *m_appPluginWidget;
     QuickPluginWindow *m_quickIconWidget;
@@ -101,7 +103,6 @@ private:
     Dock::Position m_position;
     Dock::DisplayMode m_displayMode;
     QLabel *m_splitLine;
-    DockInter *m_dockInter;
     bool m_singleShow;                              // 用于记录当前日期时间和插件区域是显示一行还是显示多行
     int m_borderRadius;                             // 圆角的值
 };

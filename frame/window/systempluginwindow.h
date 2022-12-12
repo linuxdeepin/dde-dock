@@ -23,6 +23,7 @@
 
 #include "constants.h"
 #include "dockitem.h"
+#include "dbusutil.h"
 
 #include <QWidget>
 
@@ -39,7 +40,7 @@ class SystemPluginWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit SystemPluginWindow(QWidget *parent = nullptr);
+    explicit SystemPluginWindow(DockInter *dockInter, QWidget *parent = nullptr);
     ~SystemPluginWindow() override;
     void setDisplayMode(const Dock::DisplayMode &displayMode);
     void setPositon(Dock::Position position);
@@ -58,6 +59,7 @@ private:
     void initConnection();
     StretchPluginsItem *findPluginItemWidget(PluginsItemInterface *pluginItem);
     void pluginAdded(PluginsItemInterface *plugin);
+    QList<StretchPluginsItem *> stretchItems() const;
 
 private Q_SLOTS:
     void onPluginItemRemoved(PluginsItemInterface *pluginItem);
@@ -68,6 +70,7 @@ private:
     Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
     QBoxLayout *m_mainLayout;
+    DockInter *m_dockInter;
 };
 
 class StretchPluginsItem : public DockItem
@@ -75,7 +78,7 @@ class StretchPluginsItem : public DockItem
     Q_OBJECT
 
 public:
-    StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    StretchPluginsItem(DockInter *dockInter, PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
     ~StretchPluginsItem() override;
     void setDisplayMode(const Dock::DisplayMode &displayMode);
     static void setPosition(Dock::Position position);
@@ -108,6 +111,7 @@ private:
     Dock::DisplayMode m_displayMode;
     static Dock::Position m_position;
     QPoint m_mousePressPoint;
+    DockInter *m_dockInter;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H

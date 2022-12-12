@@ -129,7 +129,7 @@ void MainWindowBase::initConnection()
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::windowRadiusChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] {
-        m_multiScreenWorker->setStates(MultiScreenWorker::DockIsDraging, false);
+        Utils::setIsDraging(false);
     });
 
     // -拖拽任务栏改变高度或宽度-------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ void MainWindowBase::onMainWindowSizeChanged(QPoint offset)
         break;
     }
 
-    m_multiScreenWorker->setStates(MultiScreenWorker::DockIsDraging, true);
+    Utils::setIsDraging(true);
 
     setFixedSize(newRect.size());
     move(newRect.topLeft());

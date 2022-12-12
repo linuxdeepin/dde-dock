@@ -392,16 +392,6 @@ void DateTimeDisplayer::leaveEvent(QEvent *event)
     m_tipPopupWindow->hide();
 }
 
-void DateTimeDisplayer::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-
-    int oldSize = m_currentSize;
-    m_currentSize = (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) ? width() : height();
-    if (oldSize != m_currentSize)
-        Q_EMIT requestUpdate();
-}
-
 void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
 {
     m_lastDateString = info.m_date;

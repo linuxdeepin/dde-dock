@@ -29,6 +29,7 @@
 #include "datetimedisplayer.h"
 #include "expandiconwidget.h"
 #include "quickdragcore.h"
+#include "utils.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -43,6 +44,7 @@
 
 #define CRITLCALHEIGHT 42
 #define CONTENTSPACE 7
+#define SINGLEROWSPACE 4
 // 高度小于等于这个值的时候，间距最小值
 #define MINHIGHT 46
 // 最小值与最大值的差值
@@ -53,7 +55,8 @@
 TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     : QWidget(parent)
     , m_appPluginDatetimeWidget(new QWidget(this))
-    , m_systemPluginWidget(new SystemPluginWindow(this))
+    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    , m_systemPluginWidget(new SystemPluginWindow(m_dockInter, this))
     , m_appPluginWidget(new QWidget(m_appPluginDatetimeWidget))
     , m_quickIconWidget(new QuickPluginWindow(m_appPluginWidget))
     , m_dateTimeWidget(new DateTimeDisplayer(false, m_appPluginDatetimeWidget))
@@ -65,7 +68,6 @@ TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     , m_position(Dock::Position::Bottom)
     , m_displayMode(Dock::DisplayMode::Fashion)
     , m_splitLine(new QLabel(m_appPluginDatetimeWidget))
-    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_singleShow(false)
     , m_borderRadius(0)
 {
@@ -90,11 +92,33 @@ void TrayManagerWindow::updateBorderRadius(int borderRadius)
 
 void TrayManagerWindow::updateLayout()
 {
+    if (!isVisible())
+        return;
+
+    int dockSize = 0;
+    if (Utils::isDraging()) {
+        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+            dockSize = topLevelWidget()->height();
+        else
+            dockSize = topLevelWidget()->width();
+    } else {
+        dockSize = m_dockInter->windowSizeFashion();
+    }
+
     bool lastIsSingle = m_singleShow;
-    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        m_singleShow = (height() <= CRITLCALHEIGHT);
-    else
+    updateItemLayout(dockSize);
+    // 当插件区域从单行变成两行或者两行变成单行的时候，发送该信号，通知外部重新调整区域大小
+    if (lastIsSingle != m_singleShow)
+        Q_EMIT requestUpdate();
+}
+
+void TrayManagerWindow::updateItemLayout(int dockSize)
+{
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        m_singleShow = (dockSize <= CRITLCALHEIGHT);
+    } else {
         m_singleShow = true;
+    }
 
     if (m_singleShow)
         resetSingleDirection();
@@ -104,10 +128,6 @@ void TrayManagerWindow::updateLayout()
     resetChildWidgetSize();
     // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
     Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
-
-    // 当插件区域从单行变成两行或者两行变成单行的时候，发送该信号，通知外部重新调整区域大小
-    if (lastIsSingle != m_singleShow)
-        Q_EMIT requestUpdate();
 }
 
 void TrayManagerWindow::setPositon(Dock::Position position)
@@ -136,11 +156,12 @@ void TrayManagerWindow::setPositon(Dock::Position position)
 void TrayManagerWindow::setDisplayMode(Dock::DisplayMode displayMode)
 {
     m_displayMode = displayMode;
-    // 从时尚模式切换到高效模式的时候，需要重新布局
-    onTrayCountChanged();
+    m_systemPluginWidget->setDisplayMode(displayMode);
     // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
-    if (displayMode == Dock::DisplayMode::Fashion)
+    if (displayMode == Dock::DisplayMode::Fashion) {
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
+        updateItemLayout(m_dockInter->windowSizeFashion());
+    }
 }
 
 int TrayManagerWindow::appDatetimeSize(const Dock::Position &position) const
@@ -285,11 +306,9 @@ void TrayManagerWindow::initConnection()
     });
 
     connect(m_systemPluginWidget, &SystemPluginWindow::itemChanged, this, [ this ] {
-        // 当系统插件发生变化的时候，同样需要调整尺寸
-        m_systemPluginWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
             m_systemPluginWidget->setFixedWidth(m_systemPluginWidget->suitableSize().width());
-        else
+         else
             m_systemPluginWidget->setFixedHeight(m_systemPluginWidget->suitableSize().height());
 
         Q_EMIT requestUpdate();
@@ -335,10 +354,8 @@ void TrayManagerWindow::resetChildWidgetSize()
             m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), trayHeight);
             // 设置右侧的电源按钮的尺寸
             m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize());
-            // 如果顶层窗体的高度为0，则直接让其间距为0，否则就会出现隐藏模式下，有8个像素的高度依然显示
-            int space = topLevelWidget()->height() == 0 ? 0 : 4;
-            m_mainLayout->setContentsMargins(space, space, space ,space);
-            m_mainLayout->setSpacing(space);
+            m_mainLayout->setContentsMargins(SINGLEROWSPACE, SINGLEROWSPACE, SINGLEROWSPACE, SINGLEROWSPACE);
+            m_mainLayout->setSpacing(SINGLEROWSPACE);
             // 单行显示需要重新设置插件和时间日期的位置,不显示分割线
             m_splitLine->setVisible(false);
             m_appPluginWidget->move(0, 0);
@@ -354,7 +371,7 @@ void TrayManagerWindow::resetChildWidgetSize()
             int dateTimeHeight = m_appPluginDatetimeWidget->height() - - m.top() - m.bottom() - trayHeight;
             m_dateTimeWidget->setFixedSize(dateTimeWidth, dateTimeHeight);
             m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize());
-            int contentSpace = qMin(MAXDIFF, qMax(height() - MINHIGHT, 0)) + MINSPACE;
+            int contentSpace = qMin(MAXDIFF, qMax(((Utils::isDraging() ? height() : (int)m_dockInter->windowSizeFashion()) - MINHIGHT), 0)) + MINSPACE;
             m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
             m_mainLayout->setSpacing(contentSpace);
 
@@ -391,7 +408,7 @@ void TrayManagerWindow::resetChildWidgetSize()
         m_appPluginWidget->setFixedSize(sizeWidth, trayHeight + quickAreaHeight);
         m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize());
 
-        int contentSpace = (qMin(MAXDIFF, qMax(width() - MINHIGHT, 0)) + MINSPACE);
+        int contentSpace = (qMin(MAXDIFF, qMax((Utils::isDraging() ? width() : (int)m_dockInter->windowSizeFashion()) - MINHIGHT, 0)) + MINSPACE);
         m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
         m_mainLayout->setSpacing(contentSpace);
 

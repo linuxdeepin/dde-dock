@@ -86,7 +86,6 @@ public:
         MousePress = 0x10,                  // 当前鼠标是否被按下
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
-        DockIsDraging = 0x80,               // 任务栏正在拖拽
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,

@@ -64,7 +64,6 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void updatePolicy();

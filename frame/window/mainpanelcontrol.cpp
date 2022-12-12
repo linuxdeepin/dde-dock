@@ -986,13 +986,9 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
     if (ratio <= 0)
         ratio = qApp->devicePixelRatio();
 
-    int dockSize = ((position == Position::Top || position == Position::Bottom) ? height() : width());
-    // 如果实际的尺寸超过了任务栏允许的最大尺寸，此时可能是在发生位置变换，这个时候使用接口获取的尺寸即可
-    // 如果任务栏在隐藏状态，那么此时获取到的高度为0，此时从后端获取任务栏的实际高度
-    HideState hideState = static_cast<HideState>(qApp->property(PROP_HIDE_STATE).toInt());
-    if (dockSize > DOCK_MAX_SIZE || hideState == HideState::Hide)
-        dockSize = static_cast<int>((m_displayMode == DisplayMode::Efficient ? m_dockInter->windowSizeEfficient() : m_dockInter->windowSizeFashion()) * qApp->devicePixelRatio());
-
+    // 如果当前任务栏正在调整大小，就以当前任务栏的实际尺寸作为它的尺寸，否则，就以后端存储的尺寸作为它计算宽度（上下）或高度（左右）的参考
+    int dockSize = Utils::isDraging() ? ((position == Position::Top || position == Position::Bottom) ? height() : width())
+                                      : (static_cast<int>((m_displayMode == DisplayMode::Efficient ? m_dockInter->windowSizeEfficient() : m_dockInter->windowSizeFashion()) * qApp->devicePixelRatio()));
     if (m_displayMode == DisplayMode::Efficient) {
         // 如果是高效模式
         if (position == Position::Top || position == Position::Bottom)

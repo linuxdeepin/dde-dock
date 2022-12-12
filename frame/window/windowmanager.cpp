@@ -170,7 +170,7 @@ void WindowManager::resizeDock(int offset, bool dragging)
     if (!screen)
         return;
 
-    m_multiScreenWorker->setStates(MultiScreenWorker::DockIsDraging, dragging);
+    Utils::setIsDraging(dragging);
 
     int dockSize = qBound(DOCK_MIN_SIZE, offset, DOCK_MAX_SIZE);
     for (MainWindowBase *mainWindow : m_topWindows) {
