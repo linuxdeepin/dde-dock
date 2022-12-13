@@ -60,6 +60,7 @@ MultiScreenWorker::MultiScreenWorker(QObject *parent)
     , m_touchEventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher(launcherService, launcherPath, QDBusConnection::sessionBus(), this))
+    , m_appearanceInter(new Appearance("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
     , m_delayWakeTimer(new QTimer(this))
     , m_position(Dock::Position::Bottom)
@@ -591,7 +592,7 @@ void MultiScreenWorker::initUI()
     onPositionChanged(dockInter()->position());
     onDisplayModeChanged(dockInter()->displayMode());
     onHideModeChanged(dockInter()->hideMode());
-    onOpacityChanged(m_dockInter->opacity());
+    onOpacityChanged(m_appearanceInter->opacity());
 }
 
 void MultiScreenWorker::initDockMode()
@@ -707,7 +708,10 @@ void MultiScreenWorker::checkDaemonDockService()
 
             emit requestUpdateFrontendGeometry();
         });
-        connect(dockInter, &DockInter::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
+        connect(m_appearanceInter, &Appearance::Changed, this, [ this ](const QString &ty, const QString &value) {
+            if (ty == "windowopacity")
+                onOpacityChanged(value.toDouble());
+        });
         connect(dockInter, &DockInter::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
         connect(dockInter, &DockInter::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
     };
@@ -732,7 +736,7 @@ void MultiScreenWorker::checkDaemonDockService()
                 onDisplayModeChanged(dockInter()->displayMode());
                 onHideModeChanged(dockInter()->hideMode());
                 onHideStateChanged(dockInter()->hideState());
-                onOpacityChanged(m_dockInter->opacity());
+                onOpacityChanged(m_appearanceInter->opacity());
 
                 disconnect(ifc);
             }

@@ -30,6 +30,7 @@
 
 #include "org_deepin_dde_xeventmonitor1.h"
 #include "org_deepin_dde_launcher1.h"
+#include "org_deepin_dde_appearance1.h"
 
 #include <DWindowManagerHelper>
 
@@ -55,6 +56,7 @@ DGUI_USE_NAMESPACE
 
 using XEventMonitor = ::org::deepin::dde::XEventMonitor1;
 using DBusLuncher = ::org::deepin::dde::Launcher1;
+using Appearance = org::deepin::dde::Appearance1;
 
 using namespace Dock;
 class QVariantAnimation;
@@ -191,6 +193,7 @@ private:
     // DBus interface
     DockInter *m_dockInter;
     DBusLuncher *m_launcherInter;
+    Appearance *m_appearanceInter;
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;

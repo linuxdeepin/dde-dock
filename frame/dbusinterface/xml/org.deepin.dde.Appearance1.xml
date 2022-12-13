@@ -1,0 +1,101 @@
+   <interface name="org.deepin.dde.Appearance1">
+<!--      
+     <method name="Delete">
+       <arg direction="in" type="s" name="ty"/>
+       <arg direction="in" type="s" name="name"/>
+     </method>
+     <method name="GetScaleFactor">
+       <arg direction="out" type="d" name="scaleFactor"/>
+     </method>
+
+     <method name="GetScreenScaleFactors">
+       <arg direction="out" type="a{sd}" name="scaleFactor"/>
+       <annotation value="ScaleFactors" 
+ name="org.qtproject.QtDBus.QtTypeName.Out0"/>
+     </method>
+     <method name="GetWallpaperSlideShow">
+       <arg direction="in" type="s" name="monitorName"/>
+       <arg direction="out" type="s" name="slideShow"/>
+     </method>
+     <method name="List">
+       <arg direction="in" type="s" name="ty"/>
+       <arg direction="out" type="s" name="list"/>
+     </method>
+     <method name="Reset"/>
+     <method name="Set">
+       <arg direction="in" type="s" name="ty"/>
+       <arg direction="in" type="s" name="value"/>
+     </method>
+     <method name="SetMonitorBackground">
+       <arg direction="in" type="s" name="monitorName"/>
+       <arg direction="in" type="s" name="imageGile"/>
+     </method>
+     <method name="SetScaleFactor">
+       <arg direction="in" type="d" name="scale"/>
+     </method>
+     <method name="SetScreenScaleFactors">
+       <arg direction="in" type="a{sd}" name="scaleFactor"/>
+       <annotation value="ScaleFactors" 
+ name="org.qtproject.QtDBus.QtTypeName.In0"/>
+     </method>
+     <method name="SetWallpaperSlideShow">
+       <arg direction="in" type="s" name="monitorName"/>
+       <arg direction="in" type="s" name="slideShow"/>
+     </method>
+     <method name="Show">
+       <arg direction="in" type="s" name="ty"/>
+       <arg direction="in" type="as" name="names"/>
+       <arg direction="out" type="s" name="detail"/>
+     </method>
+     <method name="Thumbnail">
+       <arg direction="in" type="s" name="ty"/>
+       <arg direction="in" type="s" name="name"/>
+       <arg direction="out" type="s" name="file"/>
+     </method>
+     <method name="SetCurrentWorkspaceBackground">
+       <arg direction="in" type="s" name="uri"/>
+     </method>
+     <method name="GetCurrentWorkspaceBackground">
+       <arg direction="out" type="s" name="uri"/>
+     </method>
+     <method name="SetCurrentWorkspaceBackgroundForMonitor">
+       <arg direction="in" type="s" name="uri"/>
+       <arg direction="in" type="s" name="strMonitorName"/>
+     </method>
+     <method name="GetCurrentWorkspaceBackgroundForMonitor">
+       <arg direction="in" type="s" name="strMonitorName"/>
+       <arg direction="out" type="s" name="uri"/>
+     </method>
+     <method name="SetWorkspaceBackgroundForMonitor">
+       <arg direction="in" type="i" name="index"/>
+       <arg direction="in" type="s" name="strMonitorName"/>
+       <arg direction="in" type="s" name="uri"/>
+     </method>
+     <method name="GetWorkspaceBackgroundForMonitor">
+       <arg direction="in" type="i" name="index"/>
+       <arg direction="in" type="s" name="strMonitorName"/>
+       <arg direction="out" type="s" name="uri"/>
+     </method>
+-->
+     <property access="readwrite" type="d" name="FontSize"/>
+     <property access="readwrite" type="d" name="Opacity"/>
+     <property access="readwrite" type="i" name="WindowRadius"/>
+     <property access="read" type="s" name="Background"/>
+     <property access="read" type="s" name="GlobalTheme"/>
+     <property access="read" type="s" name="GtkTheme"/>
+     <property access="read" type="s" name="IconTheme"/>
+     <property access="read" type="s" name="CursorTheme"/>
+     <property access="read" type="s" name="MonospaceFont"/>
+     <property access="readwrite" type="s" name="QtActiveColor"/>
+     <property access="read" type="s" name="StandardFont"/>
+     <property access="readwrite" type="s" name="WallpaperSlideShow"/>
+     <property access="read" type="s" name="WallpaperURls"/>
+     <signal name="Changed">
+       <arg type="s" name="ty"/>
+       <arg type="s" name="value"/>
+     </signal>
+     <signal name="Refreshed">
+       <arg type="s" name="type"/>
+     </signal>
+   </interface>
+  
