@@ -274,7 +274,7 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
 
 void BluetoothAdapterItem::onDeviceRemoved(const Device *device)
 {
-    if (m_deviceItems.isEmpty())
+    if (m_deviceItems.isEmpty() || !m_deviceItems.keys().contains(device->id()))
         return;
 
     m_deviceModel->removeRow(m_deviceItems.value(device->id())->standardItem()->row());
