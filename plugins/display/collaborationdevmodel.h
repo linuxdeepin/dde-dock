@@ -76,7 +76,7 @@ signals:
 
 public:
     bool isValid() const;
-    void pair() const;
+    void connect() const;
     void requestCooperate() const;
     void disconnectDevice() const;
 
@@ -84,7 +84,7 @@ public:
     QString uuid() const;
     QString machinePath() const;
     QString deviceIcon() const;
-    bool isPaired() const;
+    bool isConnected() const;
     bool isCooperated() const;
     void setDeviceIsCooperating(bool isCooperating);
 
@@ -109,7 +109,7 @@ private:
     QString m_uuid;
     int m_OS;
 
-    bool m_isPaired;
+    bool m_isConnected;
     bool m_isCooperated;
     bool m_isValid;
 

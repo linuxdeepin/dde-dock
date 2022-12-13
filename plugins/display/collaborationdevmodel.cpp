@@ -135,7 +135,7 @@ CollaborationDevice::CollaborationDevice(const QString &devPath, QObject *parent
     : QObject(parent)
     , m_path(devPath)
     , m_OS(-1)
-    , m_isPaired(false)
+    , m_isConnected(false)
     , m_isCooperated(false)
     , m_isValid(false)
     , m_isCooperating(false)
@@ -145,8 +145,8 @@ CollaborationDevice::CollaborationDevice(const QString &devPath, QObject *parent
     if (m_devDbusInter->isValid()) {
         m_name = m_devDbusInter->property("Name").toString();
         m_OS = m_devDbusInter->property("OS").toInt();
-        m_isPaired = m_devDbusInter->property("Paired").toBool();
-        m_isCooperated = m_devDbusInter->property("Cooperating").toBool();
+        m_isConnected = m_devDbusInter->property("Connected").toBool();
+        m_isCooperated = m_devDbusInter->property("DeviceSharing").toBool();
         m_uuid = m_devDbusInter->property("UUID").toString();
         m_isValid = true;
     } else {
@@ -182,22 +182,22 @@ QString CollaborationDevice::deviceIcon() const
     switch (m_OS) {
         case DeviceType::Android: {
             if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-                return QString(":/icons/resources/ICON_Device_Headphone_dark.svg");
+                return QString(":/ICON_Device_Headphone_dark.svg");
 
-            return QString(":/icons/resources/ICON_Device_Headphone.svg");
+            return QString(":/ICON_Device_Headphone.svg");
         }
         default: {
             if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-                return QString(":/icons/resources/ICON_Device_Laptop_dark.svg");
+                return QString(":/ICON_Device_Laptop_dark.svg");
 
-            return QString(":/icons/resources/ICON_Device_Laptop.svg");
+            return QString(":/ICON_Device_Laptop.svg");
         }
     }
 }
 
-bool CollaborationDevice::isPaired() const
+bool CollaborationDevice::isConnected() const
 {
-    return m_isPaired;
+    return m_isConnected;
 }
 
 bool CollaborationDevice::isCooperated() const
@@ -221,19 +221,19 @@ void CollaborationDevice::onPropertyChanged(const QDBusMessage &msg)
         return;
 
     QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    if (changedProps.contains("Paired")) {
-        bool isPaired = changedProps.value("Paired").value<bool>();
-        m_isPaired = isPaired;
-        if (isPaired && m_isCooperating) {
+    if (changedProps.contains("Connected")) {
+        bool isConnected = changedProps.value("Connected").value<bool>();
+        m_isConnected = isConnected;
+        if (isConnected && m_isCooperating) {
             // paired 成功之后再去请求cooperate
             requestCooperate();
         }
 
-        if (!isPaired){
+        if (!isConnected){
             Q_EMIT pairedStateChanged(false);
         }
-    } else if (changedProps.contains("Cooperating")) {
-        m_isCooperated = changedProps.value("Cooperating").value<bool>();
+    } else if (changedProps.contains("DeviceSharing")) {
+        m_isCooperated = changedProps.value("DeviceSharing").value<bool>();
 
         Q_EMIT pairedStateChanged(m_isCooperated);
     }
@@ -241,7 +241,7 @@ void CollaborationDevice::onPropertyChanged(const QDBusMessage &msg)
 
 void CollaborationDevice::requestCooperate() const
 {
-    callMethod("RequestCooperate");
+    callMethod("RequestDeviceSharing");
 }
 
 void CollaborationDevice::disconnectDevice() const
@@ -249,9 +249,9 @@ void CollaborationDevice::disconnectDevice() const
     callMethod("Disconnect");
 }
 
-void CollaborationDevice::pair() const
+void CollaborationDevice::connect() const
 {
-    callMethod("Pair");
+    callMethod("Connect");
 }
 
 QDBusMessage CollaborationDevice::callMethod(const QString &methodName) const

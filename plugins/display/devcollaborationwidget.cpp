@@ -195,9 +195,9 @@ void DevCollaborationWidget::itemClicked(const QModelIndex &index)
     if (!device)
         return;
 
-    if (!device->isPaired()) {
+    if (!device->isConnected()) {
         device->setDeviceIsCooperating(true);
-        device->pair();
+        device->connect();
         if (!m_connectingDevices.contains(machinePath))
             m_connectingDevices.append(machinePath);
     } else if (!device->isCooperated()) {
@@ -226,12 +226,12 @@ void DevCollaborationWidget::itemStatusChanged()
         // 更新item的连接状态
         int resultState = device->isCooperated() ? DevItemDelegate::Connected : DevItemDelegate::None;
         m_deviceItemMap[machinePath]->setData(resultState, DevItemDelegate::ResultDataRole);
-        if (device->isCooperated() || !device->isPaired())
+        if (device->isCooperated() || !device->isConnected())
             m_deviceItemMap[machinePath]->setData(0, DevItemDelegate::DegreeDataRole);
 
         m_deviceListView->update(m_deviceItemMap[machinePath]->index());
 
-        if ((resultState == DevItemDelegate::Connected || !device->isPaired()) && m_connectingDevices.contains(machinePath)) {
+        if ((resultState == DevItemDelegate::Connected || !device->isConnected()) && m_connectingDevices.contains(machinePath)) {
             m_connectingDevices.removeAll(machinePath);
         }
     }
