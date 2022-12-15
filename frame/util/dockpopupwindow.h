@@ -44,6 +44,7 @@ public:
     bool model() const;
 
     void setContent(QWidget *content);
+    void setExtendWidget(QWidget *widget);
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
@@ -60,6 +61,7 @@ signals:
 
 protected:
     void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *event);
     void enterEvent(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
     void blockButtonRelease();
@@ -77,6 +79,7 @@ private:
     QString m_eventKey;
     DWindowManagerHelper *m_wmHelper;
     bool m_enableMouseRelease;
+    QWidget *m_extendWidget;
 };
 
 #endif // DOCKPOPUPWINDOW_H

@@ -416,7 +416,7 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
 
 void QuickPluginWindow::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
 {
-    showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey));
+    showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey), false);
 }
 
 void QuickPluginWindow::startDrag()
@@ -433,8 +433,6 @@ void QuickPluginWindow::startDrag()
     drag->setPixmap(dragPixmap);
 
     drag->setHotSpot(dragPixmap.rect().center());
-    //connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDropItem, this, &QuickPluginWindow::onPluginDropItem);
-    //connect(static_cast<QuickDragWidget *>(drag->appDragWidget()), &QuickDragWidget::requestDragMove, this, &QuickPluginWindow::onPluginDragMove);
 
     drag->exec(Qt::CopyAction);
     // 获取当前鼠标在任务栏快捷图标区域的位置
@@ -477,13 +475,19 @@ QuickDockItem *QuickPluginWindow::getActiveDockItem(QPoint point) const
     return selectWidget;
 }
 
-void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *itemInter, QWidget *childPage)
+void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *itemInter, QWidget *childPage, bool isClicked)
 {
     if (!isVisible())
         return;
 
     bool canBack = true;
     DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
+    if (isClicked && popWindow->isVisible()) {
+        // 如果是点击插件，并且该插件曾经打开快捷面板且已经是显示状态，那么就直接隐藏快捷面板
+        popWindow->hide();
+        return;
+    }
+
     if (!popWindow->isVisible()) {
         if (Utils::IS_WAYLAND_DISPLAY) {
             // TODO: 临时解决方案，如果是wayland环境，toolTip没有消失，因此，此处直接调用接口来隐藏
@@ -500,6 +504,7 @@ void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *ite
             }
         }
 
+        popWindow->setExtendWidget(item);
         popWindow->show(popupPoint(item), true);
         canBack = false;
     }
@@ -566,53 +571,6 @@ int QuickPluginWindow::getDropIndex(QPoint point)
     }
     // 如果都没有找到，直接插入到最后
     return -1;
-}
-
-/*void QuickPluginWindow::onPluginDropItem(QDropEvent *event)
-{
-    const QuickPluginMimeData *data = qobject_cast<const QuickPluginMimeData *>(event->mimeData());
-    if (!data)
-        return;
-
-    // 获取当前鼠标在任务栏快捷图标区域的位置
-    QPoint currentPoint = mapFromGlobal(QCursor::pos());
-    // 获取区域图标插入的位置
-    QuickPluginModel::instance()->addPlugin(data->pluginItemInterface(), getDropIndex(currentPoint));
-}*/
-
-void QuickPluginWindow::onPluginDragMove(QDragMoveEvent *event)
-{
-    QPoint currentPoint = mapFromGlobal(QCursor::pos());
-    const QuickPluginMimeData *data = qobject_cast<const QuickPluginMimeData *>(event->mimeData());
-    if (!data)
-        return;
-
-    // 查找移动的
-    PluginsItemInterface *sourceItem = data->pluginItemInterface();
-    if (!sourceItem)
-        return;
-
-    QuickDockItem *sourceMoveWidget = getDockItemByPlugin(sourceItem);
-    QuickDockItem *targetItem = getActiveDockItem(currentPoint);
-    // 如果未找到要移动的目标位置，或者移动的目标位置是固定插件，或者原插件和目标插件是同一个插件，则不做任何操作
-    if (!sourceMoveWidget || !targetItem || sourceMoveWidget == targetItem)
-        return;
-
-    // 重新对所有的插件进行排序
-    QMap<QWidget *, int> allItems;
-    for (int i = 0; i < m_mainLayout->count(); i++) {
-        QWidget *childWidget = m_mainLayout->itemAt(i)->widget();
-        allItems[childWidget] = i;
-    }
-    // 调整列表中的位置
-/*    int sourceIndex = m_activeSettingItems.indexOf(sourceItem);
-    int targetIndex = m_activeSettingItems.indexOf(targetItem->pluginItem());
-    if (sourceIndex >= 0)
-        m_activeSettingItems.move(sourceIndex, targetIndex);
-    else
-        m_activeSettingItems.insert(targetIndex, sourceItem);
-*/
-    event->accept();
 }
 
 void QuickPluginWindow::dragMoveEvent(QDragMoveEvent *event)

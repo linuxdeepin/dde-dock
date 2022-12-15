@@ -39,6 +39,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     , m_model(false)
     , m_eventMonitor(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_enableMouseRelease(true)
+    , m_extendWidget(nullptr)
 {
     setMargin(0);
     m_wmHelper = DWindowManagerHelper::instance();
@@ -83,6 +84,11 @@ void DockPopupWindow::setContent(QWidget *content)
         setAccessibleName(content->objectName() + "-popup");
 
     DArrowRectangle::setContent(content);
+}
+
+void DockPopupWindow::setExtendWidget(QWidget *widget)
+{
+    m_extendWidget = widget;
 }
 
 void DockPopupWindow::show(const QPoint &pos, const bool model)
@@ -141,6 +147,12 @@ void DockPopupWindow::showEvent(QShowEvent *e)
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
 
+void DockPopupWindow::hideEvent(QHideEvent *event)
+{
+    m_extendWidget = nullptr;
+    Dtk::Widget::DArrowRectangle::hideEvent(event);
+}
+
 void DockPopupWindow::enterEvent(QEvent *e)
 {
     DArrowRectangle::enterEvent(e);
@@ -190,6 +202,14 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
     QRect popupRect(pos() * qApp->devicePixelRatio(), size() * qApp->devicePixelRatio()) ;
     if (popupRect.contains(x, y))
         return;
+
+    if (m_extendWidget) {
+        // 计算额外添加的区域，如果鼠标的点击点在额外的区域内，也无需隐藏
+        QPoint extendPoint = m_extendWidget->mapToGlobal(QPoint(0, 0));
+        QRect extendRect(extendPoint * qApp->devicePixelRatio(), m_extendWidget->size() * qApp->devicePixelRatio());
+        if (extendRect.contains(QPoint(x, y)))
+            return;
+    }
 
     emit accept();
     hide();
