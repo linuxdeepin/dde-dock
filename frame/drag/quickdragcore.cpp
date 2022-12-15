@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QDragEnterEvent>
+#include <QGuiApplication>
 
 QuickPluginMimeData::QuickPluginMimeData(PluginsItemInterface *item, QDrag *drag)
     : QMimeData()
@@ -46,7 +47,7 @@ QuickIconDrag::QuickIconDrag(QObject *dragSource, const QPixmap &pixmap)
     connect(m_timer, &QTimer::timeout, this, &QuickIconDrag::onDragMove);
     m_timer->start();
 
-    m_imageWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
+    m_imageWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowDoesNotAcceptFocus);
     m_imageWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
     m_imageWidget->installEventFilter(this);
     useSourcePixmap();
@@ -64,7 +65,7 @@ void QuickIconDrag::updatePixmap(QPixmap pixmap)
 
     m_pixmap = pixmap;
     m_useSourcePixmap = false;
-    m_imageWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    m_imageWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
     m_imageWidget->setFixedSize(pixmap.size());
     m_imageWidget->show();
     m_imageWidget->raise();
@@ -74,7 +75,7 @@ void QuickIconDrag::updatePixmap(QPixmap pixmap)
 void QuickIconDrag::useSourcePixmap()
 {
     m_useSourcePixmap = true;
-    m_imageWidget->setFixedSize(m_sourcePixmap.size());
+    m_imageWidget->setFixedSize(m_sourcePixmap.size() / qApp->devicePixelRatio());
     m_imageWidget->show();
     m_imageWidget->raise();
     m_imageWidget->update();

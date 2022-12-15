@@ -280,7 +280,13 @@ void QuickPluginWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     m_dragEnterMimeData = const_cast<QuickPluginMimeData *>(qobject_cast<const QuickPluginMimeData *>(event->mimeData()));
     if (m_dragEnterMimeData) {
-        QIcon icon = m_dragEnterMimeData->pluginItemInterface()->icon(DockPart::QuickShow);
+        PluginsItemInterface *plugin = m_dragEnterMimeData->pluginItemInterface();
+        QIcon icon = plugin->icon(DockPart::QuickShow);
+        if (icon.isNull()) {
+            QWidget *widget = plugin->itemWidget(QuickSettingController::instance()->itemKey(plugin));
+            if (widget)
+                icon = widget->grab();
+        }
         QuickIconDrag *drag = qobject_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
         if (drag && !icon.isNull()) {
             QPixmap pixmap = icon.pixmap(QSize(16, 16));

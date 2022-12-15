@@ -134,7 +134,7 @@ QPixmap SingleQuickItem::pixmap() const
         }
     }
 
-    return icon.pixmap(pixmapWidth, pixmapHeight);
+    return icon.pixmap(pixmapWidth / qApp->devicePixelRatio(), pixmapHeight / qApp->devicePixelRatio());
 }
 
 QLabel *SingleQuickItem::findChildLabel(QWidget *parent, const QString &childObjectName) const

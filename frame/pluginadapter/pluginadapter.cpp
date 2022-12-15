@@ -178,7 +178,7 @@ QIcon PluginAdapter::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
 
         // 如果图标为空，就使用itemWidget的截图作为它的图标，这种一般是适用于老版本插件或者没有实现v23接口的插件
         QSize oldSize = itemWidget->size();
-        itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+        itemWidget->setFixedSize(ICONWIDTH / qApp->devicePixelRatio(), ICONHEIGHT / qApp->devicePixelRatio());
         QPixmap pixmap = itemWidget->grab();
         itemWidget->setFixedSize(oldSize);
         return pixmap;
