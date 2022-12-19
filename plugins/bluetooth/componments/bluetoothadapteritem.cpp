@@ -139,6 +139,7 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_refreshBtn(new RefreshButton(this))
     , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this))
     , m_showUnnamedDevices(false)
+    , m_stateBtnEnabled(true)
     , m_seperator(new HorizontalSeperator(this))
 {
     initData();
@@ -224,6 +225,17 @@ QStringList BluetoothAdapterItem::connectedDevicesName()
     }
 
     return devsName;
+}
+
+void BluetoothAdapterItem::setStateBtnEnabled(bool enable)
+{
+    if (m_stateBtnEnabled != enable) {
+        m_stateBtnEnabled = enable;
+    }
+
+    if (m_adapterStateBtn) {
+        m_adapterStateBtn->setEnabled(m_stateBtnEnabled);
+    }
 }
 
 void BluetoothAdapterItem::initData()
@@ -381,7 +393,7 @@ void BluetoothAdapterItem::initConnect()
         m_deviceListview->setVisible(state);
         m_seperator->setVisible(state);
         m_adapterStateBtn->setChecked(state);
-        m_adapterStateBtn->setEnabled(true);
+        m_adapterStateBtn->setEnabled(m_stateBtnEnabled);
         emit adapterPowerChanged();
     });
     connect(m_adapterStateBtn, &DSwitchButton::clicked, this, [ = ](bool state) {
