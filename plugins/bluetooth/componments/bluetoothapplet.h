@@ -46,9 +46,6 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *ev) override;
     void paintEvent(QPaintEvent *event) override;
-    void changeEvent(QEvent *event) override;
-
-    void updateEnabledStatus();
 
 private:
     DLabel *m_label;

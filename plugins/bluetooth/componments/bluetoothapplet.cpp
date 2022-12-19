@@ -43,31 +43,12 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     this->setPalette(p);
 
     m_label->setForegroundRole(QPalette::BrightText);
-    updateEnabledStatus();
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
 {
     m_layout->addWidget(button, 0, Qt::AlignRight | Qt::AlignHCenter);
     m_layout->addSpacing(space);
-}
-
-void SettingLabel::updateEnabledStatus()
-{
-    QPalette p = m_label->palette();
-    if (m_label->isEnabled())
-        p.setColor(QPalette::BrightText, QColor(0, 0, 0));
-    else
-        p.setColor(QPalette::BrightText, QColor(51, 51, 51));
-    m_label->setPalette(p);
-}
-
-void SettingLabel::changeEvent(QEvent *event)
-{
-    if (event->type() == QEvent::EnabledChange)
-        updateEnabledStatus();
-
-    QWidget::changeEvent(event);
 }
 
 void SettingLabel::mousePressEvent(QMouseEvent *ev)
@@ -175,7 +156,7 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 
     // 如果开启了飞行模式，置灰蓝牙适配器使能开关
     foreach (const auto item, m_adapterItems) {
-        item->setEnabled(!m_airPlaneModeInter->enabled());
+        item->setStateBtnEnabled(!m_airPlaneModeInter->enabled());
     }
 
     m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
@@ -272,7 +253,7 @@ void BluetoothApplet::initConnect()
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enabled) {
         foreach (const auto item, m_adapterItems) {
-            item->setEnabled(!enabled);
+            item->setStateBtnEnabled(!enabled);
         }
     });
 }
