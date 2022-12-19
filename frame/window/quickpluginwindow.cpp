@@ -751,7 +751,7 @@ bool QuickDockItem::eventFilter(QObject *watched, QEvent *event)
 
 QPixmap QuickDockItem::iconPixmap() const
 {
-    int pixmapSize = static_cast<int>(ICONHEIGHT * qApp->devicePixelRatio());
+    int pixmapSize = static_cast<int>(ICONHEIGHT * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
     QIcon icon = m_pluginItem->icon(DockPart::QuickShow);
     if (!icon.isNull())
         return icon.pixmap(pixmapSize, pixmapSize);

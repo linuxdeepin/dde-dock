@@ -30,6 +30,7 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QPainterPath>
+#include <DStyle>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -166,12 +167,8 @@ void BluetoothMainWidget::initConnection()
 
 void BluetoothMainWidget::updateExpandIcon()
 {
-    QString expandIconFile = ":/arrow-right";
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
-         expandIconFile += "-dark";
-    expandIconFile += ".svg";
-
-    m_expandLabel->setPixmap(expandIconFile);
+    QPixmap enterPixmap = DStyle::standardIcon(style(), DStyle::SP_ArrowEnter).pixmap(QSize(16, 16));
+    m_expandLabel->setPixmap(enterPixmap);
 }
 
 bool BluetoothMainWidget::isOpen() const

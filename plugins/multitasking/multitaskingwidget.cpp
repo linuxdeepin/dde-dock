@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+#include <imageutil.h>
 
 MultitaskingWidget::MultitaskingWidget(QWidget *parent)
     : QWidget(parent)
@@ -46,9 +47,9 @@ void MultitaskingWidget::paintEvent(QPaintEvent *e)
     QPixmap icon;
 
     if (Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) {
-        icon = QIcon::fromTheme("deepin-multitasking-view", m_icon).pixmap(size() * 0.8 * ratio);
+        icon = ImageUtil::loadSvg("deepin-multitasking-view", QString(":/icons/"), int(size().width() * 0.8), ratio);
     } else {
-        icon = QIcon::fromTheme("deepin-multitasking-view", m_icon).pixmap(size() * 0.7 * ratio);
+        icon = ImageUtil::loadSvg("deepin-multitasking-view", QString(":/icons/"), int(size().width() * 0.7), ratio);
     }
 
     icon.setDevicePixelRatio(ratio);

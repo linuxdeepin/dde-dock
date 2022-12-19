@@ -115,8 +115,8 @@ QPixmap PowerStatusWidget::getBatteryIcon(int themeType)
         iconStr.append(PLUGIN_MIN_ICON_NAME);
 
     const auto ratio = devicePixelRatioF();
-    QPixmap pix = QIcon::fromTheme(iconStr,
-                                   QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(QSize(20, 20) * ratio);
+    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
+    QPixmap pix = QIcon::fromTheme(iconStr, QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(pixmapSize);
     pix.setDevicePixelRatio(ratio);
 
     return pix;

@@ -281,7 +281,7 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
     }
 
     // 绘制图标
-    int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
+    int iconSize = static_cast<int>(ICONSIZE * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
     painter.drawPixmap(rctPixmap, icon.pixmap(iconSize, iconSize));
 }
 
