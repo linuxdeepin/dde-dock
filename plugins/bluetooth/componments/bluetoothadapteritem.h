@@ -84,6 +84,7 @@ public:
     ~BluetoothAdapterItem();
     Adapter *adapter() { return m_adapter; }
     QStringList connectedDevicesName();
+    void setStateBtnEnabled(bool);
 
 public slots:
     // 添加蓝牙设备
@@ -125,6 +126,7 @@ private:
     RefreshButton *m_refreshBtn;
     DBusBluetooth *m_bluetoothInter;
     bool m_showUnnamedDevices;
+    bool m_stateBtnEnabled;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
     HorizontalSeperator *m_seperator;
