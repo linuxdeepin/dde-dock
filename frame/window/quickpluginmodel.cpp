@@ -169,8 +169,8 @@ void QuickPluginModel::initConnection()
         if (quickWidget && !quickWidget->parentWidget())
             quickWidget->setVisible(false);
 
-        // 用来读取已经固定在下方的插件
-        if (!m_dockedPluginIndex.contains(itemInter->pluginName()))
+        // 用来读取已经固定在下方的插件或者强制显示的插件
+        if (!m_dockedPluginIndex.contains(itemInter->pluginName()) && !(itemInter->flags() & Attribute_ForceDock))
             return;
 
         m_dockedPluginsItems << itemInter;
@@ -279,7 +279,6 @@ int QuickPluginModel::generaIndex(int insertIndex, int oldIndex)
                 if (pluginDockIndex >= insertIndex) {
                     m_dockedPluginIndex[itemInter->pluginName()]++;
                 }
-                qInfo() << itemInter->pluginDisplayName() << m_dockedPluginIndex[itemInter->pluginName()];
             }
         }
     }

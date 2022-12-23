@@ -54,6 +54,7 @@ enum PluginFlag {
     Attribute_CanDrag = 0x200,           // 插件属性-是否支持拖动
     Attribute_CanInsert = 0x400,         // 插件属性-是否支持在其前面插入其他的插件，普通的快捷插件是支持的
     Attribute_CanSetting = 0x800,        // 插件属性-是否可以在控制中心设置显示或隐藏
+    Attribute_ForceDock = 0x1000,        // 插件属性-强制显示在任务栏上
 
     FlagMask = 0xffffffff                // 掩码
 };
