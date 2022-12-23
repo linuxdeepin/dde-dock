@@ -191,16 +191,24 @@ bool SoundPlugin::eventHandler(QEvent *event)
     QDBusReply<QVariant> volumePath = volumeCall.reply();
     double volume = volumePath.value().value<double>();
 
+    // 获取当前默认声音设备的最大音量
+    DDBusSender audioDBus = DDBusSender().service("org.deepin.dde.Audio1")
+            .path("/org/deepin/dde/Audio1").interface("org.deepin.dde.Audio1");
+    QDBusPendingCall call = audioDBus.property("MaxUIVolume").get();
+    call.waitForFinished();
+    QDBusReply<QVariant> maxVolumeReply = call.reply();
+    double maxVolume = maxVolumeReply.value().value<double>();
+
     // 根据滚轮的动作来增加音量或者减小音量
     QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
     if (wheelEvent->angleDelta().y() > 0) {
         // 向上滚动，增大音量
-        if (volume < 1)
-            sinkDBus.method("SetVolume").arg(volume + 0.02).arg(true).call();
+        if (volume < maxVolume)
+            sinkDBus.method("SetVolume").arg(qMin(volume + 0.02, maxVolume)).arg(true).call();
     } else {
         // 向下滚动，调小音量
         if (volume > 0)
-            sinkDBus.method("SetVolume").arg(volume - 0.02).arg(true).call();
+            sinkDBus.method("SetVolume").arg(qMax(volume - 0.02, 0.0)).arg(true).call();
     }
 
     return true;
