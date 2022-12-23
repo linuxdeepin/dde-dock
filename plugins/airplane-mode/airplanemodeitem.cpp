@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QJsonDocument>
 #include <QDBusConnection>
+#include <QIcon>
 
 DGUI_USE_NAMESPACE
 
@@ -112,11 +113,14 @@ void AirplaneModeItem::refreshIcon()
     else
         iconString = "airplane-off";
 
-    const auto ratio = devicePixelRatioF();
-    int iconSize = PLUGIN_ICON_MAX_SIZE;
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
-    m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+
+    const auto ratio = devicePixelRatioF();
+    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
+    m_iconPixmap = QIcon::fromTheme(iconString, QIcon::fromTheme("://" + iconString + ".svg")).pixmap(pixmapSize);
+    m_iconPixmap.setDevicePixelRatio(ratio);
+
     update();
 }
 
@@ -153,8 +157,10 @@ void AirplaneModeItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
+    const auto ratio = devicePixelRatioF();
+
     QPainter painter(this);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
-    painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
+    painter.drawPixmap(rf.center() - rfp.center() / ratio, m_iconPixmap);
 }
