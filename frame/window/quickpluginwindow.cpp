@@ -302,9 +302,9 @@ void QuickPluginWindow::dragLeaveEvent(QDragLeaveEvent *event)
 {
     if (m_dragEnterMimeData) {
         QPoint mousePos = topLevelWidget()->mapFromGlobal(QCursor::pos());
-        QuickIconDrag *drag = static_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
+        QuickIconDrag *drag = qobject_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
         if (!topLevelWidget()->rect().contains(mousePos) && drag) {
-            static_cast<QuickIconDrag *>(m_dragEnterMimeData->drag())->useSourcePixmap();
+            drag->useSourcePixmap();
         }
         m_dragEnterMimeData = nullptr;
     }
