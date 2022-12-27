@@ -34,6 +34,7 @@
 #include <QScreen>
 #include <QX11Info>
 #include <QtConcurrent>
+#include <QScreen>
 
 #include <qpa/qplatformscreen.h>
 #include <qpa/qplatformnativeinterface.h>
@@ -676,8 +677,18 @@ void WindowManager::onRequestUpdateFrontendGeometry()
     if (rect.width() == 0 || rect.height() == 0)
         return;
 
+    int x = rect.x();
+    int y = rect.y();
+    QScreen *screen = DIS_INS->screen(DOCKSCREEN_INS->current());
+    if (screen) {
+        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+            x = (screen->handle()->geometry().width() - (rect.width() * qApp->devicePixelRatio())) / 2;
+        else
+            y = (screen->handle()->geometry().height() - (rect.height() * qApp->devicePixelRatio())) / 2;
+    }
+
     DockInter dockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus());
-    dockInter.SetFrontendWindowRect(int(rect.x()), int(rect.y()), uint(rect.width()), uint(rect.height()));
+    dockInter.SetFrontendWindowRect(x, y, uint(rect.width()), uint(rect.height()));
 }
 
 void WindowManager::onRequestNotifyWindowManager()

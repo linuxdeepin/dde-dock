@@ -1255,6 +1255,7 @@ void MainPanelControl::resizeDockIcon()
         iconSize = (totalLength - yu) / iconCount;
     }
 
+    iconSize = iconSize / qApp->devicePixelRatio();
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         if (iconSize >= height()) {
             calcuDockIconSize(height(), height(), tray_item_size);
