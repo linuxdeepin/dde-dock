@@ -1,3 +1,13 @@
+dde-dock (6.0.6.1) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复向上拖动图标引起任务栏崩溃的问题(Bug: 179427)(Influence: 从任务栏向上拖动快捷图标，观察任务栏是否正常)
+  * fix: 声音插件滚轮调节音量(Bug: 172417)(Influence: 将鼠标放在任务栏声音图标上，滚动滚轮，观察音量大小是否调节)
+  * fix: 增加强制在任务栏显示插件的接口(Task: 226407)(Bug: 179083)(Influence: 截图，观察任务栏是否有计时的图标)
+  * fix: 修复高缩放率下显示问题(Bug: 176421)(Influence: 设置高缩放率，观察开始菜单的位置，任务栏图标占满区域，左右位置，观察任务栏图标是否拥挤)
+
+ -- zhaoyingzhen <zhaoyingzhen@uniontech.com>  Thu, 29 Dec 2022 15:13:58 +0800
+
 dde-dock (6.0.5.1) unstable; urgency=medium
 
   [ TagBuilder ]
