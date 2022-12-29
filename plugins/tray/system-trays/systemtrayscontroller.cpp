@@ -32,7 +32,7 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
         else {
             emit pluginItemRemoved(itemKey, item);
         }
-    }, Qt::QueuedConnection);
+    });
 
     mPluginsMap[itemInter][itemKey] = item;
 
@@ -69,7 +69,10 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->centralWidget()->setParent(nullptr);
 
     // just delete our wrapper object(PluginsItem)
-    item->deleteLater();
+    // 直接删除，item被用到的地方太多，且很多地方没判断是否为空，不应该用deleteLater
+    //    item->deleteLater();
+    delete item;
+    item = nullptr;
 }
 
 void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
