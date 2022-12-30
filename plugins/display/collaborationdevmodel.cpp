@@ -173,7 +173,8 @@ CollaborationDevice::CollaborationDevice(const QString &devPath, QObject *parent
 
 bool CollaborationDevice::isValid() const
 {
-    return m_isValid;
+    // not show android device
+    return m_isValid && m_OS != Android;
 }
 
 QString CollaborationDevice::name() const
