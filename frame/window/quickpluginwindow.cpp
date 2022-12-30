@@ -128,6 +128,7 @@ void QuickPluginWindow::setPositon(Position position)
 
     m_position = position;
     QuickSettingContainer::setPosition(position);
+    QuickDockItem::setPosition(position);
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         m_mainLayout->setDirection(QBoxLayout::RightToLeft);
         m_mainLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -169,19 +170,27 @@ QSize QuickPluginWindow::suitableSize() const
 
 QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
 {
-    if (position == Dock::Position::Top || position == Dock::Position::Bottom)
-        return QSize((ITEMSPACE + ICONWIDTH) * m_mainLayout->count() + ITEMSPACE, ITEMSIZE);
+    if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
+        int itemWidth = 0;
+        for (int i = 0; i < m_mainLayout->count(); i++) {
+            QWidget *itemWidget = m_mainLayout->itemAt(i)->widget();
+            if (itemWidget)
+                itemWidth += itemWidget->width() + ITEMSPACE;
+        }
+        itemWidth += ITEMSPACE;
 
-    int height = 0;
-    int itemCount = m_mainLayout->count();
-    if (itemCount > 0) {
-        // 每个图标占据的高度
-        height += ICONHEIGHT * itemCount;
-        // 图标间距占据的高度
-        height += ITEMSPACE * itemCount;
+        return QSize(itemWidth, ITEMSIZE);
     }
 
-    return QSize(ITEMSIZE, height);
+    int itemHeight = 0;
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QWidget *itemWidget = m_mainLayout->itemAt(i)->widget();
+        if (itemWidget)
+            itemHeight += itemWidget->height() + ITEMSPACE;
+    }
+    itemHeight += ITEMSPACE;
+
+    return QSize(ITEMSIZE, itemHeight);
 }
 
 PluginsItemInterface *QuickPluginWindow::findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems)
@@ -346,13 +355,8 @@ void QuickPluginWindow::onRequestUpdate()
         if (pluginItems.contains(item)) {
             itemWidget = pluginItems[item];
         } else {
-            QJsonObject metaData;
-            QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(item);
-            if (pluginLoader)
-                metaData = pluginLoader->metaData().value("MetaData").toObject();
-
             itemWidget = new QuickDockItem(item, quickController->itemKey(item), this);
-            itemWidget->setFixedSize(ICONWIDTH, ICONHEIGHT);
+            itemWidget->setFixedSize(itemWidget->suitableSize());
             itemWidget->installEventFilter(this);
             itemWidget->setMouseTracking(true);
             countChanged = true;
@@ -409,9 +413,11 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
     if (dockPart != DockPart::QuickShow)
         return;
 
-    QuickDockItem *dockItem = getDockItemByPlugin(itemInter);
-    if (dockItem)
-        dockItem->update();
+    QuickDockItem *quickDockItem = getDockItemByPlugin(itemInter);
+    if (quickDockItem) {
+        quickDockItem->setFixedSize(quickDockItem->suitableSize());
+        quickDockItem->update();
+    }
 }
 
 void QuickPluginWindow::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
@@ -591,11 +597,13 @@ void QuickPluginWindow::initConnection()
  * @param pluginItem
  * @param parent
  */
+
+Dock::Position QuickDockItem::m_position(Dock::Position::Bottom);
+
 QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent)
     : QWidget(parent)
     , m_pluginItem(pluginItem)
     , m_itemKey(itemKey)
-    , m_position(Dock::Position::Bottom)
     , m_popupWindow(new DockPopupWindow)
     , m_contextMenu(new QMenu(this))
     , m_tipParent(nullptr)
@@ -616,6 +624,11 @@ QuickDockItem::~QuickDockItem()
     m_popupWindow->deleteLater();
 }
 
+void QuickDockItem::setPosition(Dock::Position position)
+{
+    m_position = position;
+}
+
 PluginsItemInterface *QuickDockItem::pluginItem()
 {
     return m_pluginItem;
@@ -629,6 +642,37 @@ bool QuickDockItem::canInsert() const
 void QuickDockItem::hideToolTip()
 {
     m_popupWindow->hide();
+}
+
+QSize QuickDockItem::suitableSize() const
+{
+    if (m_pluginItem->pluginSizePolicy() == PluginsItemInterface::PluginSizePolicy::Custom) {
+        QPixmap pixmap = iconPixmap();
+        if (!pixmap.isNull())
+            return pixmap.size();
+
+        QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+        if (itemWidget) {
+            int itemWidth = ICONWIDTH;
+            int itemHeight = ICONHEIGHT;
+            QSize itemSize = itemWidget->sizeHint();
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+                if (itemSize.width() > 0)
+                    itemWidth = itemSize.width();
+                if (itemSize.height() > 0 && itemSize.height() <= topLevelWidget()->height())
+                    itemHeight = itemSize.height();
+            } else {
+                if (itemSize.width() > 0 && itemSize.width() < topLevelWidget()->width())
+                    itemWidth = itemSize.width();
+                if (itemSize.height() > 0 && itemSize.height() < ICONHEIGHT)
+                    itemHeight = itemSize.height();
+            }
+
+            return QSize(itemWidth, itemHeight);
+        }
+    }
+
+    return QSize(ICONWIDTH, ICONHEIGHT);
 }
 
 void QuickDockItem::paintEvent(QPaintEvent *event)

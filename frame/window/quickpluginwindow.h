@@ -100,9 +100,12 @@ public:
     explicit QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
+    static void setPosition(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool canInsert() const;
     void hideToolTip();
+
+    QSize suitableSize() const;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -129,7 +132,7 @@ private Q_SLOTS:
 private:
     PluginsItemInterface *m_pluginItem;
     QString m_itemKey;
-    Dock::Position m_position;
+    static Dock::Position m_position;
     DockPopupWindow *m_popupWindow;
     QMenu *m_contextMenu;
     QWidget *m_tipParent;
