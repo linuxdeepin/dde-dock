@@ -60,6 +60,7 @@ public:
 
 Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
+    void requestShowMenu(int x, int y);
 
 private Q_SLOTS:
     void initSNIPropertys();
