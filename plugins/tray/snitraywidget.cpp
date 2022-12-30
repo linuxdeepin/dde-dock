@@ -108,6 +108,8 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::OverlayIconPixmapChanged, this, &SNITrayWidget::onSNIOverlayIconPixmapChanged);
     connect(m_sniInter, &StatusNotifierItem::StatusChanged, this, &SNITrayWidget::onSNIStatusChanged);
 
+    connect(this, &SNITrayWidget::requestShowMenu, this, &SNITrayWidget::showContextMenu);
+
     // the following signals can be emit automatically
     // need refresh cached properties in these slots
     connect(m_sniInter, &StatusNotifierItem::NewIcon, [ = ] {
@@ -160,7 +162,7 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
             // primarily work for apps using libappindicator.
             reply.waitForFinished();
             if (reply.isError()) {
-                showContextMenu(x,y);
+                Q_EMIT requestShowMenu(x, y);
             }
         });
     }
