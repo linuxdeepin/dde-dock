@@ -53,6 +53,7 @@ private slots:
 
 private:
     void updateDevice(const QStringList &devPaths);
+    void clear();
 
 private:
     QDBusInterface *m_colDbusInter;

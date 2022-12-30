@@ -26,6 +26,7 @@
 #include <QDBusArgument>
 #include <QDBusInterface>
 #include <QDBusPendingCall>
+#include <QDBusServiceWatcher>
 
 #include <DGuiApplicationHelper>
 
@@ -56,16 +57,19 @@ CollaborationDevModel::CollaborationDevModel(QObject *parent)
 
     m_colDbusInter->connection().connect(CollaborationService, CollaborationPath, ColPropertiesInterface,
                                          "PropertiesChanged", "sa{sv}as", this, SLOT(onPropertyChanged(QDBusMessage)));
+
+    auto *dbusWatcher = new QDBusServiceWatcher(CollaborationService, m_colDbusInter->connection(),
+                                                QDBusServiceWatcher::WatchForUnregistration, this);
+    connect(dbusWatcher, &QDBusServiceWatcher::serviceUnregistered, this, [this](){
+        qWarning() << CollaborationService << "unregistered";
+        clear();
+    });
 }
 
 void CollaborationDevModel::checkServiceValid()
 {
     if (!m_colDbusInter->isValid()) {
-        for (CollaborationDevice *device : m_devices) {
-            device->deleteLater();
-        }
-        m_devices.clear();
-        Q_EMIT devicesChanged();
+        clear();
     }
 }
 
@@ -124,6 +128,16 @@ void CollaborationDevModel::updateDevice(const QStringList &devPaths)
     }
 
     emit devicesChanged();
+}
+
+void CollaborationDevModel::clear()
+{
+    for (CollaborationDevice *device : m_devices) {
+        device->deleteLater();
+    }
+    m_devices.clear();
+
+    Q_EMIT devicesChanged();
 }
 
 CollaborationDevice *CollaborationDevModel::getDevice(const QString &machinePath)
