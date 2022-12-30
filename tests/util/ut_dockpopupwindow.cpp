@@ -13,7 +13,7 @@
 
 #include <DRegionMonitor>
 
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class Test_DockPopupWindow : public QObject, public ::testing::Test
 {
