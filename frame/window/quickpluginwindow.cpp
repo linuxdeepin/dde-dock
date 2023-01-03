@@ -681,8 +681,13 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
         return QWidget::paintEvent(event);
 
     QPixmap pixmap = iconPixmap();
-    QRect pixmapRect = QRect((rect().width() - ICONHEIGHT) / 2, (rect().height() - ICONHEIGHT) / 2,
-                             ICONHEIGHT, ICONHEIGHT);
+    int width = ICONWIDTH;
+    int height = ICONHEIGHT;
+    if (m_pluginItem->pluginSizePolicy() == PluginsItemInterface::PluginSizePolicy::Custom) {
+        width = pixmap.width();
+        height = pixmap.height();
+    }
+    QRect pixmapRect = QRect(QPoint((rect().width() - width) / 2, (rect().height() - height) / 2), pixmap.size());
 
     QPainter painter(this);
     painter.drawPixmap(pixmapRect, pixmap);
