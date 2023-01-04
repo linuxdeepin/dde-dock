@@ -47,7 +47,7 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>খুলুন</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
     <name>BluetoothMainWidget</name>
     <message>
         <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>ব্লুটুথ</translation>
     </message>
     <message>
         <source>Turn on</source>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>অক্ষম</translation>
     </message>
 </context>
 <context>

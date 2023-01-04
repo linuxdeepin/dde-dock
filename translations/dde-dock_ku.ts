@@ -103,7 +103,7 @@
     <name>BluetoothMainWidget</name>
     <message>
         <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>Turn on</source>

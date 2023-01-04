@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Odpri</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Moje naprave</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Druge naprave</translation>
     </message>
 </context>
 <context>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Vklopi</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Izklopi</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Vklopi</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Izklopi</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12 urni čas</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24 urni čas</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavitve časa</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Onemogočeno</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>Priključeno na el.omrežje</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Izhodna naprava</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavitve zvoka</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Zapri varni način</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Varni način sidrišča</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Sidrišče deluje v varnem načinu. Izhod za pravilen prikaz</translation>
     </message>
 </context>
 </TS>

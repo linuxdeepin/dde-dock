@@ -47,7 +47,7 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>ತೆರೆಯಿರಿ</translation>
     </message>
 </context>
 <context>

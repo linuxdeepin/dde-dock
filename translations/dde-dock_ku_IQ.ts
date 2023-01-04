@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>ناچالاککراو</translation>
     </message>
 </context>
 <context>

@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Открыть</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Мои устройства</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Другие устройства</translation>
     </message>
 </context>
 <context>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Включить</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Выключить</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Включить</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Выключить</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12-часовой формат времени</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24-часовой формат времени</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки времени</translation>
     </message>
 </context>
 <context>
@@ -207,11 +207,11 @@
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Включено</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Отключено</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>От сети</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Выходное устройство</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки звука</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Выйти из Безопасного Режима</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Безопасный Режим</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dock находится в безопасном режиме, пожалуйста, выйдите, чтобы показать ее нормально</translation>
     </message>
 </context>
 </TS>

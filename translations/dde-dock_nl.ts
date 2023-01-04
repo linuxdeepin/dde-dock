@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Openen</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Mijn apparaten</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Andere apparaten</translation>
     </message>
 </context>
 <context>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Inschakelen</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Uitschakelen</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Inschakelen</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Uitschakelen</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12-uursklok</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24-uursklok</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Tijdinstellingen</translation>
     </message>
 </context>
 <context>
@@ -200,7 +200,7 @@
     <name>DisplaySettingWidget</name>
     <message>
         <source>Multi-Screen Collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Samenwerken op meerdere schermen</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Uitgeschakeld</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>Op netstroom</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Uitvoerapparaat</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Geluidsinstellingen</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Veilige modus afsluiten</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dock - Veilige modus</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Het dock draait in de veilige modus. Sluit af om het dock correct te tonen.</translation>
     </message>
 </context>
 </TS>

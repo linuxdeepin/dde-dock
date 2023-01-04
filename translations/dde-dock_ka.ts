@@ -54,11 +54,11 @@
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>ჩემი მოწყობილობები</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>სხვა მოწყობილობები</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
     <name>BluetoothMainWidget</name>
     <message>
         <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>Turn on</source>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>გაუქმებულია</translation>
     </message>
 </context>
 <context>

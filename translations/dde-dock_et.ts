@@ -47,7 +47,7 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Ava</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
     <name>BluetoothMainWidget</name>
     <message>
         <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>Turn on</source>
@@ -148,7 +148,7 @@
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Kellaaja seaded</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>Võrgutoitel</translation>
     </message>
 </context>
 <context>
@@ -398,7 +398,7 @@
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Heli seaded</translation>
     </message>
 </context>
 <context>

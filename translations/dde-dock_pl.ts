@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Otwórz</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Moje urządzenia</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Inne urządzenia</translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation>Podłączono %1</translation>
+        <translation>%1 połączono</translation>
     </message>
     <message>
         <source>Connecting...</source>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Włącz</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Wyłącz</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Włącz</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Wyłącz</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>Format 12-godzinny</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>Format 24-godzinny</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia czasu</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Kolaboracja PC</translation>
     </message>
 </context>
 <context>
@@ -200,18 +200,18 @@
     <name>DisplaySettingWidget</name>
     <message>
         <source>Multi-Screen Collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Kolaboracja wieloekranowa</translation>
     </message>
 </context>
 <context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Włączone</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Wyłączone</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>Podłączony</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Urządzenie wyjściowe</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Ustawienia dźwięku</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Wyjdź z trybu bezpiecznego</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dok - Tryb bezpieczny</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dok jest w trybie bezpiecznym, wyjdź z niego, aby wyświetlić go poprawnie</translation>
     </message>
 </context>
 </TS>

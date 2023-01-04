@@ -379,8 +379,8 @@
         <translation>重启</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>使用电源</translation>
+        <source>Power</source>
+        <translation>电源</translation>
     </message>
 </context>
 <context>

@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Aç</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Mənim cihazlarım</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Digər cihazlar</translation>
     </message>
 </context>
 <context>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Açmaq</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Söndürmək</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Açmaq</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Söndürmək</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>12 saat vaxt formatı</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>24 saat vaxt formatı</translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>Vaxt ayarları</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>
-        <translation type="unfinished"/>
+        <translation>PC ilə əməkdaşlıq</translation>
     </message>
 </context>
 <context>
@@ -200,18 +200,18 @@
     <name>DisplaySettingWidget</name>
     <message>
         <source>Multi-Screen Collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Çoxekranlı mübadilə</translation>
     </message>
 </context>
 <context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Aktivdir</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Aktiv deyil</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>Elektrik şəbəkəsinə qoşulu</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Çıxış cihazı</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>Səs ayarları</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Təhlükəsiz rejimdən çıxın</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Dok - Təhlükəsiz rejim</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>Dok təhlükəsiz rejimdədir, onun düzgün göstərilməsi üçün çıxın</translation>
     </message>
 </context>
 </TS>

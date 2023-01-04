@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -379,8 +381,8 @@
         <translation>Reboot</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>Plugged In</translation>
+        <source>Power</source>
+        <translation>Power</translation>
     </message>
 </context>
 <context>

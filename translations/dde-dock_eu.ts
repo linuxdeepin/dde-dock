@@ -337,7 +337,7 @@
     <name>ShowDesktopPlugin</name>
     <message>
         <source>Show Desktop</source>
-        <translation type="unfinished"/>
+        <translation>Erakutsi mahaigaina</translation>
     </message>
     <message>
         <source>Undock</source>

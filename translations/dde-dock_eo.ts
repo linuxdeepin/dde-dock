@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Malŝaltita</translation>
     </message>
 </context>
 <context>

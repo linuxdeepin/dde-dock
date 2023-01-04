@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Անջատված է</translation>
     </message>
 </context>
 <context>

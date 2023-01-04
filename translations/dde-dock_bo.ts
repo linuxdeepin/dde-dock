@@ -47,18 +47,18 @@
     <name>AppMultiItem</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>ཁ་ཕྱེ་བ།</translation>
     </message>
 </context>
 <context>
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>ངའི་སྒྲིག་ཆས།</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>སྒྲིག་ཆས་གཞན།</translation>
     </message>
 </context>
 <context>
@@ -103,15 +103,15 @@
     <name>BluetoothMainWidget</name>
     <message>
         <source>Bluetooth</source>
-        <translation type="unfinished"/>
+        <translation>སོ་སྔོན།</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>སོ་སྔོན་ཁ་ཕྱེ།</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>སོ་སྔོན་ཁ་རྒྱོབ།</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>སོ་སྔོན་ཁ་ཕྱེ།</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>སོ་སྔོན་ཁ་རྒྱོབ།</translation>
     </message>
 </context>
 <context>
@@ -140,15 +140,15 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation type="unfinished"/>
+        <translation>ཆུ་ཚོད་12ཀྱི་ལུགས།</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation type="unfinished"/>
+        <translation>ཆུ་ཚོད་24ཡི་ལུགས། </translation>
     </message>
     <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
+        <translation>དུས་ཚོད་སྒྲིག་འགོད།</translation>
     </message>
 </context>
 <context>
@@ -200,18 +200,18 @@
     <name>DisplaySettingWidget</name>
     <message>
         <source>Multi-Screen Collaboration</source>
-        <translation type="unfinished"/>
+        <translation>གློག་ཀླད་མཐུན་སྦྱོར་སྒྲིག་འགོད།</translation>
     </message>
 </context>
 <context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>འགོ་སློང་།</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>སྤྱོད་མི་ཆོག</translation>
     </message>
 </context>
 <context>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Plugged In</source>
-        <translation type="unfinished"/>
+        <translation>གློག་ཁུངས་སྤྱོད་པ།</translation>
     </message>
 </context>
 <context>
@@ -394,11 +394,11 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>ཕྱིར་འདྲེན་སྒྲིག་ཆས།</translation>
     </message>
     <message>
         <source>Sound settings</source>
-        <translation type="unfinished"/>
+        <translation>སྐད་གདངས་སྒྲིག་འགོད།</translation>
     </message>
 </context>
 <context>
@@ -461,15 +461,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་པ།</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>ལས་འགན་ཚན་བྱང་གི་བདེ་འཇགས་དཔེ་རྣམ།</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
+        <translation>ལས་འགན་ཚན་བྱང་བདེ་འཇགས་དཔེ་རྣམ་ནང་མཛུལ་ཟིན་པས། བདེ་འཇགས་དཔེ་རྣམ་ལས་ཕྱིར་དོན་རྗེས་རྒྱུན་ལྡན་ལྟར་ཤར་ཐུབ།</translation>
     </message>
 </context>
 </TS>
