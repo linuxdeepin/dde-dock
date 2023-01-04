@@ -51,7 +51,7 @@ public:
     void refreshIcon();
     void refreshTips(const int volume, const bool force = false);
     QPixmap pixmap() const;
-    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType) const;
+    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const;
 
 signals:
     void requestContextMenu() const;

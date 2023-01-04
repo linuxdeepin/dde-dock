@@ -23,6 +23,7 @@
 #include "bluetoothplugin.h"
 #include "adaptersmanager.h"
 #include "bluetoothmainwidget.h"
+#include "imageutil.h"
 
 #include <DGuiApplicationHelper>
 
@@ -140,10 +141,22 @@ QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Col
     if (dockPart == DockPart::QuickPanel)
         return QIcon();
 
+    QString iconFile;
     if (themeType == DGuiApplicationHelper::ColorType::DarkType)
-        return QIcon(":/bluetooth-active-symbolic.svg");
+        iconFile = ":/bluetooth-active-symbolic.sv";
+    else
+        iconFile = ":/bluetooth-active-symbolic-dark.svg";
 
-    return QIcon(":/bluetooth-active-symbolic-dark.svg");
+    switch (dockPart) {
+    case DockPart::DCCSetting:
+        return ImageUtil::loadSvg(iconFile, QSize(18, 18));
+    case DockPart::QuickShow:
+        return ImageUtil::loadSvg(iconFile, QSize(18, 16));
+    default:
+        break;
+    }
+
+    return QIcon();
 }
 
 PluginsItemInterface::PluginMode BluetoothPlugin::status() const

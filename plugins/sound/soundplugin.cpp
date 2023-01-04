@@ -149,7 +149,15 @@ void SoundPlugin::pluginSettingsChanged()
 
 QIcon SoundPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    return m_soundItem->pixmap(themeType);
+    switch (dockPart) {
+    case DockPart::QuickShow:
+        return m_soundItem->pixmap(themeType, 18, 16);
+    case DockPart::DCCSetting:
+        return m_soundItem->pixmap(themeType, 18, 18);
+    default:
+        break;
+    }
+    return QIcon();
 }
 
 PluginsItemInterface::PluginMode SoundPlugin::status() const

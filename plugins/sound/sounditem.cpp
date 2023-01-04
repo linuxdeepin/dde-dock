@@ -244,7 +244,7 @@ QPixmap SoundItem::pixmap() const
     return m_iconPixmap;
 }
 
-QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType) const
+QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const
 {
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
@@ -280,12 +280,10 @@ QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType) const
         iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
     }
 
-    const auto ratio = devicePixelRatioF();
-    int iconSize = PLUGIN_ICON_MAX_SIZE;
     if (colorType == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
-    return ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
+    return ImageUtil::loadSvg(":/" + iconString, QSize(iconWidth, iconHeight));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
