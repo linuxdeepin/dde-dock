@@ -63,7 +63,7 @@ const QString ShutdownPlugin::pluginName() const
 
 const QString ShutdownPlugin::pluginDisplayName() const
 {
-    return tr("Plugged In");
+    return tr("Power");
 }
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
@@ -79,7 +79,7 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 
     // reset text every time to avoid size of LabelWidget not change after
     // font size be changed in ControlCenter
-    m_tipsLabel->setText(tr("Plugged In"));
+    m_tipsLabel->setText(tr("Power"));
 
     return m_tipsLabel.data();
 }
@@ -102,8 +102,6 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 void ShutdownPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
-
-    refreshPluginItemsVisible();
 }
 
 bool ShutdownPlugin::pluginIsDisable()
@@ -290,11 +288,6 @@ void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void ShutdownPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
-}
-
 QIcon ShutdownPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
@@ -401,17 +394,4 @@ bool ShutdownPlugin::checkSwap()
     }
 
     return hasSwap;
-}
-
-void ShutdownPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        m_proxyInter->itemAdded(this, pluginName());
-    }
 }

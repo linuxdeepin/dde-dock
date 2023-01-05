@@ -60,7 +60,6 @@ public:
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
 
-    void pluginSettingsChanged() override;
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
     PluginFlags flags() const override;
 
@@ -108,7 +107,6 @@ public:
 private:
     void loadPlugin();
     bool checkSwap();
-    void refreshPluginItemsVisible();
 
 private:
     bool m_pluginLoaded;
