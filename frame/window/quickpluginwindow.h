@@ -28,7 +28,6 @@
 class QuickSettingItem;
 class PluginsItemInterface;
 class QHBoxLayout;
-class QuickSettingContainer;
 class QStandardItemModel;
 class QStandardItem;
 class QMouseEvent;
@@ -57,6 +56,8 @@ public:
     QSize suitableSize() const;
     QSize suitableSize(const Dock::Position &position) const;
 
+    bool isQuickWindow(QObject *object) const;
+
 Q_SIGNALS:
     void itemCountChanged();
 
@@ -65,6 +66,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private Q_SLOTS:
     void onRequestUpdate();
@@ -82,6 +84,9 @@ private:
     QuickDockItem *getActiveDockItem(QPoint point) const;
     void showPopup(QuickDockItem *item, PluginsItemInterface *itemInter = nullptr, QWidget *childPage = nullptr, bool isClicked = true);
     QList<QuickDockItem *> quickDockItems();
+    DockPopupWindow *getPopWindow() const;
+    void updateDockItemSize(QuickDockItem *dockItem);
+    void resizeDockItem();
 
 private:
     QBoxLayout *m_mainLayout;
@@ -99,9 +104,10 @@ public:
     explicit QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent = nullptr);
     ~QuickDockItem();
 
-    static void setPosition(Dock::Position position);
+    void setPosition(Dock::Position position);
     PluginsItemInterface *pluginItem();
     bool canInsert() const;
+    bool canMove() const;
     void hideToolTip();
 
     QSize suitableSize() const;
@@ -114,6 +120,7 @@ protected:
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     QPoint topleftPoint() const;
@@ -125,16 +132,20 @@ private:
     void initAttribute();
     void initConnection();
 
+    void updateWidgetSize();
+
 private Q_SLOTS:
     void onMenuActionClicked(QAction *action);
 
 private:
     PluginsItemInterface *m_pluginItem;
     QString m_itemKey;
-    static Dock::Position m_position;
+    Dock::Position m_position;
     DockPopupWindow *m_popupWindow;
     QMenu *m_contextMenu;
     QWidget *m_tipParent;
+    QHBoxLayout *m_topLayout;
+    QWidget *m_mainWidget;
     QHBoxLayout *m_mainLayout;
     QWidget *m_dockItemParent;
 };
