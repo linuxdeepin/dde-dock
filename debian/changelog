@@ -1,3 +1,13 @@
+dde-dock (6.0.7) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复插件显示尺寸问题(Bug: 179083)(Influence: 截图-查看截图计时插件是否正常显示)
+  * fix: 任务栏协同不显示安卓设备。(Task: 233323)(Influence: 设备列表不显示安卓设备。)
+  * fix: 修复文案显示错误(Bug: 180959)(Influence: 任务栏最右侧的电源按钮)
+  * fix: 更新翻译文件(Bug: 180959)(Influence: 任务栏-电源，观察电源的文本)
+
+ -- lvpeilong <lvpeilong@uniontech.com>  Fri, 06 Jan 2023 16:32:53 +0800
+
 dde-dock (6.0.6.1) unstable; urgency=medium
 
   [ TagBuilder ]
