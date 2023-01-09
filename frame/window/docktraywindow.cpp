@@ -29,6 +29,7 @@
 #include "pluginsitem.h"
 #include "expandiconwidget.h"
 #include "quickdragcore.h"
+#include "desktop_widget.h"
 
 #include <DGuiApplicationHelper>
 
@@ -45,7 +46,7 @@ DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     , m_position(Dock::Position::Bottom)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::RightToLeft, this))
-    , m_frontWidget(new QWidget(this))
+    , m_showDesktopWidget(new DesktopWidget(this))
     , m_toolWidget(new QWidget(this))
     , m_toolLayout(new QBoxLayout(QBoxLayout::RightToLeft, m_toolWidget))
     , m_toolLineLabel(new QLabel(this))
@@ -280,7 +281,7 @@ void DockTrayWindow::updateToolWidget()
 {
     m_toolWidget->setVisible(m_toolLayout->count() > 0);
     m_toolLineLabel->setVisible(m_toolLayout->count() > 0);
-    m_frontWidget->setVisible(m_toolLayout->count() > 0);
+    m_showDesktopWidget->setVisible(m_toolLayout->count() > 0);
 }
 
 void DockTrayWindow::initUi()
@@ -291,7 +292,7 @@ void DockTrayWindow::initUi()
     m_systemPuginWidget->setDisplayMode(Dock::DisplayMode::Efficient);
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_mainBoxLayout->setSpacing(0);
-    m_mainBoxLayout->addWidget(m_frontWidget);
+    m_mainBoxLayout->addWidget(m_showDesktopWidget);
     m_mainBoxLayout->addWidget(m_toolWidget);
     m_mainBoxLayout->addSpacing(SPLITESPACE);
     m_mainBoxLayout->addWidget(m_toolLineLabel);
@@ -363,7 +364,7 @@ void DockTrayWindow::onUpdateComponentSize()
     case Dock::Position::Left:
     case Dock::Position::Right:
         m_toolLineLabel->setFixedSize(width() * 0.6, SPLITERSIZE);
-        m_frontWidget->setFixedSize(QWIDGETSIZE_MAX, FRONTSPACING);
+        m_showDesktopWidget->setFixedSize(QWIDGETSIZE_MAX, FRONTSPACING);
         m_dateTimeWidget->setFixedSize(QWIDGETSIZE_MAX, m_dateTimeWidget->suitableSize().height());
         m_systemPuginWidget->setFixedSize(QWIDGETSIZE_MAX, m_systemPuginWidget->suitableSize().height());
         m_quickIconWidget->setFixedSize(QWIDGETSIZE_MAX, m_quickIconWidget->suitableSize().height());
@@ -372,7 +373,7 @@ void DockTrayWindow::onUpdateComponentSize()
     case Dock::Position::Top:
     case Dock::Position::Bottom:
         m_toolLineLabel->setFixedSize(SPLITERSIZE, height() * 0.6);
-        m_frontWidget->setFixedSize(FRONTSPACING, QWIDGETSIZE_MAX);
+        m_showDesktopWidget->setFixedSize(FRONTSPACING, QWIDGETSIZE_MAX);
         m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_systemPuginWidget->setFixedSize(m_systemPuginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
