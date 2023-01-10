@@ -20,7 +20,6 @@
  */
 #include "quickpluginwindow.h"
 #include "quicksettingcontroller.h"
-#include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
 #include "appdrag.h"
 #include "quickpluginmodel.h"
