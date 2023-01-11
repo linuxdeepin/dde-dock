@@ -39,8 +39,7 @@ class QMenu;
 class QuickPluginMimeData;
 enum class DockPart;
 
-namespace Dtk { namespace Gui { class DRegionMonitor; }
-                namespace Widget { class DListView; class DStandardItem; } }
+namespace Dtk { namespace Widget { class DListView; class DStandardItem; } }
 
 using namespace Dtk::Widget;
 

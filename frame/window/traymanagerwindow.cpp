@@ -32,7 +32,6 @@
 #include "utils.h"
 
 #include <DGuiApplicationHelper>
-#include <DRegionMonitor>
 
 #include <QDropEvent>
 #include <QBoxLayout>

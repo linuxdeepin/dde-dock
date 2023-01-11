@@ -406,6 +406,7 @@ bool TrayGridView::mouseInDock()
         return mousePosition.x() > dockRect.left();
     }
     }
+    return false;
 }
 
 void TrayGridView::handleDropEvent(QDropEvent *e)

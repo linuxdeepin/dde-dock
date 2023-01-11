@@ -28,8 +28,7 @@
 
 #include <QWidget>
 
-namespace Dtk { namespace Gui { class DRegionMonitor; };
-                namespace Widget { class DBlurEffectWidget; } }
+namespace Dtk { namespace Widget { class DBlurEffectWidget; } }
 
 using namespace Dtk::Widget;
 

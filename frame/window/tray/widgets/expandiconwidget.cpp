@@ -35,6 +35,8 @@
 
 DGUI_USE_NAMESPACE
 
+using RegionMonitor = Dtk::Gui::DRegionMonitor;
+
 ExpandIconWidget::ExpandIconWidget(QWidget *parent, Qt::WindowFlags f)
     : BaseTrayWidget(parent, f)
     , m_position(Dock::Position::Bottom)
@@ -192,7 +194,7 @@ TrayGridWidget::TrayGridWidget(QWidget *parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_trayGridView(nullptr)
     , m_referGridView(nullptr)
-    , m_regionInter(new DRegionMonitor(this))
+    , m_regionInter(new RegionMonitor(this))
 {
     initMember();
     setAttribute(Qt::WA_TranslucentBackground);
@@ -281,14 +283,14 @@ void TrayGridWidget::hideEvent(QHideEvent *event)
 
 void TrayGridWidget::initMember()
 {
-    connect(m_regionInter, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
+    connect(m_regionInter, &RegionMonitor::buttonPress, this, [ = ](const QPoint &mousePos, const int flag) {
         // 如果当前是隐藏，那么在点击任何地方都隐藏
         if (!isVisible()) {
             hide();
             return;
         }
 
-        if ((flag != DRegionMonitor::WatchedFlags::Button_Left) && (flag != DRegionMonitor::WatchedFlags::Button_Right))
+        if ((flag != RegionMonitor::WatchedFlags::Button_Left) && (flag != RegionMonitor::WatchedFlags::Button_Right))
             return;
 
         QPoint ptPos = parentWidget()->mapToGlobal(this->pos());
