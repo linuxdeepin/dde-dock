@@ -270,6 +270,7 @@ void IndicatorPlugin::textPropertyChanged(const QDBusMessage &message)
         }
 
         d->indicatorTrayWidget->setText(value.toByteArray());
+        Q_EMIT delayLoaded();
     });
 }
 
@@ -289,5 +290,6 @@ void IndicatorPlugin::iconPropertyChanged(const QDBusMessage &message)
         }
 
         d->indicatorTrayWidget->setPixmapData(value.toByteArray());
+        Q_EMIT delayLoaded();
     });
 }

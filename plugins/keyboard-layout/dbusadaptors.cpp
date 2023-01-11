@@ -24,12 +24,12 @@
 #include <QDebug>
 
 DBusAdaptors::DBusAdaptors(QObject *parent)
-    : QDBusAbstractAdaptor(parent),
-      m_keyboard(new Keyboard("org.deepin.dde.InputDevices1",
+    : QDBusAbstractAdaptor(parent)
+    , m_keyboard(new Keyboard("org.deepin.dde.InputDevices1",
                               "/org/deepin/dde/InputDevice1/Keyboard",
-                              QDBusConnection::sessionBus(), this)),
-    m_menu(new QMenu()),
-    m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this))
+                              QDBusConnection::sessionBus(), this))
+    , m_menu(new QMenu)
+    , m_gsettings(Utils::ModuleSettingsPtr("keyboard", QByteArray(), this))
 {
     m_keyboard->setSync(false);
 
@@ -49,6 +49,7 @@ DBusAdaptors::DBusAdaptors(QObject *parent)
 
 DBusAdaptors::~DBusAdaptors()
 {
+    delete m_menu;
 }
 
 QString DBusAdaptors::layout() const
@@ -178,8 +179,7 @@ void DBusAdaptors::handleActionTriggered(QAction *action)
                 .interface("org.deepin.dde.ControlCenter1")
                 .path("/org/deepin/dde/ControlCenter1")
                 .method("ShowPage")
-                .arg(QString("keyboard"))
-                .arg(QString("Keyboard Layout/Add Keyboard Layout"))
+                .arg(QString("keyboard/keyboardGeneral/keyboardLayout"))
                 .call();
     }
 
