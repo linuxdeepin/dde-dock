@@ -37,7 +37,8 @@ public:
     explicit IconManager(DockPluginController *pluginController, QObject *parent = nullptr);
     void updateSize(QSize size);
     void setPosition(Dock::Position position);
-    QPixmap pixmap() const;
+    void setDisplayMode(Dock::DisplayMode displayMode);
+    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType) const;
     bool isFixedPlugin(PluginsItemInterface *plugin) const;
 
 private:
@@ -47,6 +48,7 @@ private:
     DockPluginController *m_pluginController;
     QSize m_size;
     Dock::Position m_position;
+    Dock::DisplayMode m_displayMode;
 };
 
 #endif // ICONMANAGER_H

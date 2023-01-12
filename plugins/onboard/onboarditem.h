@@ -24,8 +24,12 @@
 
 #include "constants.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QWidget>
 #include <QIcon>
+
+DGUI_USE_NAMESPACE
 
 class OnboardItem : public QWidget
 {
@@ -33,7 +37,7 @@ class OnboardItem : public QWidget
 
 public:
     explicit OnboardItem(QWidget *parent = nullptr);
-    QPixmap iconPixmap(int iconWidth, int iconHeight) const;
+    QPixmap iconPixmap(QSize size, DGuiApplicationHelper::ColorType themeType) const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;

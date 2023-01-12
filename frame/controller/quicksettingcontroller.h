@@ -59,6 +59,9 @@ Q_SIGNALS:
 protected:
     explicit QuickSettingController(QObject *parent = Q_NULLPTR);
     ~QuickSettingController() override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+    void startLoader();
 
 protected:
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;

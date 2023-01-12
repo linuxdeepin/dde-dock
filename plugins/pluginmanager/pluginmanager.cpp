@@ -52,6 +52,7 @@ void PluginManager::init(PluginProxyInterface *proxyInter)
     m_quickContainer.reset(new QuickSettingContainer(m_dockController.data()));
     m_iconManager.reset(new IconManager(m_dockController.data()));
     m_iconManager->setPosition(position());
+    m_iconManager->setDisplayMode(displayMode());
 
     connect(m_dockController.data(), &DockPluginController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter) {
         if (m_iconManager->isFixedPlugin(itemInter)) {
@@ -105,7 +106,7 @@ QWidget *PluginManager::itemPopupApplet(const QString &itemKey)
 QIcon PluginManager::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::QuickShow) {
-        return m_iconManager->pixmap();
+        return m_iconManager->pixmap(themeType);
     }
 
     return QIcon();
@@ -134,6 +135,12 @@ bool PluginManager::eventHandler(QEvent *event)
 void PluginManager::positionChanged(const Dock::Position position)
 {
     m_iconManager->setPosition(position);
+    m_proxyInter->itemUpdate(this, pluginName());
+}
+
+void PluginManager::displayModeChanged(const Dock::DisplayMode displayMode)
+{
+    m_iconManager->setDisplayMode(displayMode);
     m_proxyInter->itemUpdate(this, pluginName());
 }
 

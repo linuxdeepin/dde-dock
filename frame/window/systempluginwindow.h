@@ -93,6 +93,8 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
     const QString contextMenu() const override;
     void invokedMenuItem(const QString &itemId, const bool checked) override;
@@ -112,6 +114,7 @@ private:
     static Dock::Position m_position;
     QPoint m_mousePressPoint;
     DockInter *m_dockInter;
+    bool m_isEnter;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H

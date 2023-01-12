@@ -27,6 +27,7 @@
 #include "widgets/snitrayitemwidget.h"
 #include "widgets/expandiconwidget.h"
 #include "utils.h"
+#include "constants.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingcontroller.h"
 #include "systempluginitem.h"
@@ -186,31 +187,76 @@ void TrayDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 {
     Q_UNUSED(index);
 
-    if (!isPopupTray())
-        return;
-
-    QColor borderColor;
-    QColor backColor;
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        // 白色主题的情况下
-        borderColor = Qt::black;
-        borderColor.setAlpha(static_cast<int>(255 * 0.05));
-        backColor = Qt::white;
-        backColor.setAlpha(static_cast<int>(255 * 0.4));
-    } else {
-        borderColor = Qt::black;
-        borderColor.setAlpha(static_cast<int>(255 * 0.2));
-        backColor = Qt::black;
-        backColor.setAlpha(static_cast<int>(255 * 0.4));
-    }
+    // 如果不是弹出菜单（在任务栏上显示的），在鼠标没有移入的时候无需绘制背景
+    if (!isPopupTray() && !(option.state & QStyle::State_MouseOver))
+        return QStyledItemDelegate::paint(painter, option, index);
 
     painter->save();
-    QPainterPath path;
-    path.addRoundedRect(option.rect, 8, 8);
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->fillPath(path, backColor);
-    painter->setPen(borderColor);
-    painter->drawPath(path);
+
+    if (isPopupTray()) {
+        QPainterPath path;
+        path.addRoundedRect(option.rect, 8, 8);
+        QColor borderColor;
+        QColor backColor;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            // 白色主题的情况下
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.05));
+            backColor = Qt::white;
+            if (option.state & QStyle::State_MouseOver) {
+                backColor.setAlphaF(0.4);
+            } else
+                backColor.setAlphaF(0.2);
+        } else {
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.2));
+            backColor = Qt::black;
+            if (option.state & QStyle::State_MouseOver)
+                backColor.setAlphaF(0.4);
+            else
+                backColor.setAlphaF(0.2);
+        }
+
+        painter->fillPath(path, backColor);
+        painter->setPen(borderColor);
+        painter->drawPath(path);
+    } else {
+        // 如果是任务栏上面的托盘图标，则绘制背景色
+        int borderRadius = 8;
+        if (qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>() == Dock::DisplayMode::Fashion) {
+            borderRadius = qApp->property("trayBorderRadius").toInt() - 4;
+        }
+        QRect rectBackground;
+        QPainterPath path;
+        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+            int backHeight = qBound(20, option.rect.height() - 4, 30);
+            rectBackground.setLeft(option.rect.left());
+            rectBackground.setTop(option.rect.top() + (option.rect.height() - backHeight) / 2);
+            rectBackground.setHeight(backHeight);
+            rectBackground.setWidth(option.rect.width());
+            path.addRoundedRect(rectBackground, borderRadius, borderRadius);
+        } else {
+            int backWidth = qBound(20, option.rect.width() - 4, 30);
+            rectBackground.setLeft(option.rect.left() + (option.rect.width() - backWidth) / 2);
+            rectBackground.setTop(option.rect.top());
+            rectBackground.setWidth(backWidth);
+            rectBackground.setHeight(option.rect.height());
+            path.addRoundedRect(rectBackground, borderRadius, borderRadius);
+        }
+        QColor backColor;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            // 白色主题的情况下
+            backColor = Qt::white;
+            backColor.setAlphaF(0.2);
+        } else {
+            backColor = QColor(20, 20, 20);
+            backColor.setAlphaF(0.2);
+        }
+
+        painter->fillPath(path, backColor);
+    }
+
     painter->restore();
 }
 

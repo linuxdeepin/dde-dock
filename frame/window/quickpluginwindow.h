@@ -133,6 +133,8 @@ private:
     void initConnection();
 
     void updateWidgetSize();
+    int shadowRadius() const;
+    int iconSize() const;
 
 private Q_SLOTS:
     void onMenuActionClicked(QAction *action);
@@ -148,6 +150,7 @@ private:
     QWidget *m_mainWidget;
     QHBoxLayout *m_mainLayout;
     QWidget *m_dockItemParent;
+    bool m_isEnter;
 };
 
 #endif // QUICKPLUGINWINDOW_H

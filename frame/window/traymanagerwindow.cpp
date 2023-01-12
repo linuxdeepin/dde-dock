@@ -86,6 +86,7 @@ void TrayManagerWindow::updateBorderRadius(int borderRadius)
 {
     m_borderRadius = borderRadius;
     update();
+    qApp->setProperty("trayBorderRadius", pathRadius());
 }
 
 void TrayManagerWindow::updateLayout()
@@ -126,6 +127,12 @@ void TrayManagerWindow::updateItemLayout(int dockSize)
     resetChildWidgetSize();
     // 当尺寸发生变化的时候，通知托盘区域刷新尺寸，让托盘图标始终保持居中显示
     Q_EMIT m_delegate->sizeHintChanged(m_model->index(0, 0));
+}
+
+int TrayManagerWindow::pathRadius() const
+{
+    QMargins mainMargin = m_mainLayout->contentsMargins();
+    return m_borderRadius - mainMargin.top();
 }
 
 void TrayManagerWindow::setPositon(Dock::Position position)
@@ -218,7 +225,7 @@ QSize TrayManagerWindow::suitableSize(const Dock::Position &position) const
 QPainterPath TrayManagerWindow::roundedPaths()
 {
     QMargins mainMargin = m_mainLayout->contentsMargins();
-    int radius = m_borderRadius - mainMargin.top();
+    int radius = pathRadius();
     QPainterPath path;
     if ((m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
             && m_singleShow) {

@@ -83,6 +83,7 @@ private:
     int appDatetimeSize(const Dock::Position &position) const;
     QPainterPath roundedPaths();
     void updateItemLayout(int dockSize);
+    int pathRadius() const;
 
 private Q_SLOTS:
     void onTrayCountChanged();
