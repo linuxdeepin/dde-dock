@@ -1,6 +1,7 @@
 usr/share
 usr/bin
 etc/dde-dock
+usr/lib/dde-dock/plugins/loader/libpluginmanager.so
 usr/lib/dde-dock/plugins/libshutdown.so
 usr/lib/dde-dock/plugins/libtrash.so
 usr/lib/dde-dock/plugins/liboverlay-warning.so
