@@ -87,41 +87,65 @@ QPixmap IconManager::pixmap(DGuiApplicationHelper::ColorType colorType) const
     // 组合图标
     QPixmap pixmap;
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        if (m_displayMode == Dock::DisplayMode::Efficient) {
-            // 高效模式下，高度固定为30,圆角固定为8
-            pixmap = QPixmap(ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1), 30);
-        } else {
-            // 时尚模式下，高度随着任务栏的大小变化而变化
-            pixmap = QPixmap(ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1), m_size.height() - 8);
+        // 高效模式下，高度固定为30, 时尚模式下，高度随着任务栏的大小变化而变化
+        int iconHeight = (m_displayMode == Dock::DisplayMode::Efficient ? 30 : m_size.height() - 8);
+        int iconWidth = ITEMSPACE;
+        for (PluginsItemInterface *plugin : plugins) {
+            QIcon icon = plugin->icon(DockPart::QuickShow);
+            QSize iconSize(ITEMWIDTH, ITEMHEIGHT);
+            QList<QSize> iconSizes = icon.availableSizes();
+            if (iconSizes.size() > 0)
+                iconSize = iconSizes.first() / qApp->devicePixelRatio();
+            iconWidth += iconSize.width() + ITEMSPACE;
         }
+        iconWidth += ITEMSPACE;
+        pixmap = QPixmap(iconWidth, iconHeight);
     } else {
-        if (m_displayMode == Dock::DisplayMode::Efficient) {
-            // 高校模式下，宽度固定
-            pixmap = QPixmap(30, ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1));
-        } else {
-            pixmap = QPixmap(m_size.width() - 8, ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1));
+        // 左右方向，高效模式下，宽度固定为30，时尚模式下，宽度随任务栏的大小变化而变化
+        int iconWidth = m_displayMode == Dock::DisplayMode::Efficient ? 30 : m_size.width() - 8;
+        int iconHeight = ITEMHEIGHT;
+        for (PluginsItemInterface *plugin : plugins) {
+            QIcon icon = plugin->icon(DockPart::QuickShow);
+            QSize iconSize(ITEMWIDTH, ITEMHEIGHT);
+            QList<QSize> iconSizes = icon.availableSizes();
+            if (iconSizes.size() > 0)
+                iconSize = iconSizes.first() / qApp->devicePixelRatio();
+            iconHeight += iconSize.height() + ITEMSPACE;
         }
+        pixmap = QPixmap(iconWidth, iconHeight);
     }
 
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        QPoint pointPixmap(ITEMSPACE, (pixmap.height() - ITEMHEIGHT) / 2);
+        int x = ITEMSPACE;
         for (PluginsItemInterface *plugin : plugins) {
             QIcon icon = plugin->icon(DockPart::QuickShow);
-             QPixmap pixmapDraw = icon.pixmap(ITEMHEIGHT, ITEMHEIGHT);
-             painter.drawPixmap(pointPixmap, pixmapDraw);
-             pointPixmap.setX(pointPixmap.x() + ITEMWIDTH + ITEMSPACE);
+            QSize iconSize = QSize(ITEMWIDTH, ITEMHEIGHT) * qApp->devicePixelRatio();
+            QList<QSize> iconSizes = icon.availableSizes();
+            if (iconSizes.size() > 0)
+                iconSize = iconSizes.first();
+            QPixmap pixmapDraw = icon.pixmap(iconSize);
+            QSize realIconSize = iconSize / qApp->devicePixelRatio();
+            QRect rectPixmap(QPoint(x, (pixmap.height() - realIconSize.height()) / 2), realIconSize);
+            painter.drawPixmap(rectPixmap, pixmapDraw);
+            x += ITEMWIDTH + ITEMSPACE;
          }
      } else {
-         QPoint pointPixmap((pixmap.width() - ITEMWIDTH) / 2, ITEMSPACE);
-         for (PluginsItemInterface *plugin : plugins) {
-             QIcon icon = plugin->icon(DockPart::QuickShow);
-             QPixmap pixmapDraw = icon.pixmap(ITEMHEIGHT, ITEMHEIGHT);
-             painter.drawPixmap(pointPixmap, pixmapDraw);
-             pointPixmap.setY(pointPixmap.y() + ITEMWIDTH + ITEMSPACE);
-         }
+        int y = ITEMSPACE;
+        for (PluginsItemInterface *plugin : plugins) {
+            QIcon icon = plugin->icon(DockPart::QuickShow);
+            QSize iconSize(ITEMWIDTH, ITEMHEIGHT);
+            QList<QSize> iconSizes = icon.availableSizes();
+            if (iconSizes.size() > 0)
+                iconSize = iconSizes.first() / qApp->devicePixelRatio();
+
+            QPixmap pixmapDraw = icon.pixmap(iconSize);
+            QRect rectPixmap(QPoint((pixmap.width() - ITEMWIDTH) / 2, y), iconSize);
+            painter.drawPixmap(rectPixmap, pixmapDraw);
+            y += ITEMHEIGHT + ITEMSPACE;
+        }
      }
      painter.end();
      return pixmap;

@@ -116,6 +116,7 @@ const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) c
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : (size * ratio);
     QPixmap pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(pixmapSize);
     pixmap.setDevicePixelRatio(ratio);
+    pixmap = pixmap.scaled(size * ratio);
 
     return pixmap;
 }
