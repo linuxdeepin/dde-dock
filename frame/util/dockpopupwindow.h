@@ -45,6 +45,7 @@ public:
 
     void setContent(QWidget *content);
     void setExtendWidget(QWidget *widget);
+    QWidget *extengWidget() const;
 
 public slots:
     void show(const QPoint &pos, const bool model = false);

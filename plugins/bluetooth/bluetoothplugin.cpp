@@ -64,6 +64,8 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
         m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+        m_proxyInter->requestSetAppletVisible(this, BLUETOOTH_KEY, false);
         m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ = ] {
