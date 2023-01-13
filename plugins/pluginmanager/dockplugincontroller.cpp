@@ -661,10 +661,13 @@ bool DockPluginController::eventFilter(QObject *object, QEvent *event)
 
 bool DockPluginController::pluginCanDock(PluginsItemInterface *plugin) const
 {
-    // 观察插件是否已经驻留在任务栏上，如果已经驻留在任务栏，则始终显示
-    if (plugin->flags() & PluginFlag::Attribute_ForceDock)
+    // 1、如果插件是强制驻留任务栏，则始终显示
+    // 2、如果插件是托盘插件，例如U盘插件，则始终显示
+    if ((plugin->flags() & PluginFlag::Attribute_ForceDock)
+            || (plugin->flags() & PluginFlag::Type_Tray))
         return true;
 
+    // 3、插件已经驻留在任务栏，则始终显示
     const QStringList configPlugins = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
     return configPlugins.contains(plugin->pluginName());
 }

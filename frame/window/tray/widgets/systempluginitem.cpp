@@ -37,7 +37,7 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
     : BaseTrayWidget(parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
-    , m_contextMenu(new QMenu(this))
+    , m_contextMenu(new QMenu)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
     , m_popupTipsDelayTimer(new QTimer(this))
@@ -81,6 +81,11 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
+    if (Utils::IS_WAYLAND_DISPLAY) {
+        Qt::WindowFlags flags = m_contextMenu->windowFlags() | Qt::FramelessWindowHint;
+        m_contextMenu->setWindowFlags(flags);
+    }
+
     // 必须初始化父窗口，否则当主题切换之后再设置父窗口的时候palette会更改为主题切换前的palette
     if (QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey)) {
         w->setParent(PopupWindow.data());
@@ -109,6 +114,7 @@ SystemPluginItem::~SystemPluginItem()
 {
     if (m_popupShown)
         popupWindowAccept();
+    m_contextMenu->deleteLater();
 }
 
 QString SystemPluginItem::itemKeyForConfig()
@@ -379,6 +385,21 @@ void SystemPluginItem::hidePopup()
     emit requestWindowAutoHide(true);
 }
 
+bool SystemPluginItem::containsPoint(QPoint pos)
+{
+    QPoint ptGlobal = mapToGlobal(QPoint(0, 0));
+    QRect rectGlobal(ptGlobal, this->size());
+    if (rectGlobal.contains(pos))
+        return true;
+
+    // 如果菜单列表隐藏，则认为不在区域内
+    if (!m_contextMenu->isVisible())
+        return false;
+
+    // 判断鼠标是否在菜单区域
+    return m_contextMenu->geometry().contains(pos);
+}
+
 void SystemPluginItem::hideNonModel()
 {
     // auto hide if popup is not model window
@@ -501,7 +522,7 @@ void SystemPluginItem::showContextMenu()
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
         QJsonObject itemObj = item.toObject();
-        QAction *action = new QAction(itemObj.value("itemText").toString());
+        QAction *action = new QAction(itemObj.value("itemText").toString(), m_contextMenu);
         action->setCheckable(itemObj.value("isCheckable").toBool());
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
@@ -520,6 +541,7 @@ void SystemPluginItem::showContextMenu()
 void SystemPluginItem::menuActionClicked(QAction *action)
 {
     invokedMenuItem(action->data().toString(), true);
+    Q_EMIT execActionFinished();
 }
 
 void SystemPluginItem::showCentralWidget()

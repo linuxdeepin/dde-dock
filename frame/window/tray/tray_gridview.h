@@ -54,6 +54,7 @@ Q_SIGNALS:
     void dragLeaved();
     void dragEntered();
     void dragFinished();
+    void requestHide();
 
 private Q_SLOTS:
     void clearDragModelIndex();

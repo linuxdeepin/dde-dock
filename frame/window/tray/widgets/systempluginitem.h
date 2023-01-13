@@ -62,9 +62,11 @@ public:
 
     void showPopupApplet(QWidget * const applet);
     void hidePopup();
+    bool containsPoint(QPoint pos);
 
 signals:
     void itemVisibleChanged(bool visible);
+    void execActionFinished();
 
 protected:
     bool event(QEvent *event) override;

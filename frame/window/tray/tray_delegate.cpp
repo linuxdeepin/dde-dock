@@ -112,7 +112,9 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         PluginsItemInterface *pluginInter = (PluginsItemInterface *)(index.data(TrayModel::PluginInterfaceRole).toULongLong());
         if (pluginInter) {
             const QString itemKey = QuickSettingController::instance()->itemKey(pluginInter);
-            trayWidget = new SystemPluginItem(pluginInter, itemKey, parent);
+            SystemPluginItem *trayItem = new SystemPluginItem(pluginInter, itemKey, parent);
+            connect(trayItem, &SystemPluginItem::execActionFinished, this, &TrayDelegate::requestHide);
+            trayWidget = trayItem;
         }
     }
 
