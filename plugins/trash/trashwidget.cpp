@@ -221,6 +221,7 @@ void TrashWidget::updateIcon()
     int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
     m_icon = icon.pixmap(pixmapSize, pixmapSize);
     m_icon.setDevicePixelRatio(ratio);
+    m_icon = m_icon.scaled(pixmapSize * ratio, pixmapSize * ratio);
 }
 
 void TrashWidget::updateIconAndRefresh()

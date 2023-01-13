@@ -169,5 +169,5 @@ PluginsItemInterface::PluginType MultitaskingPlugin::type()
 
 PluginFlags MultitaskingPlugin::flags() const
 {
-    return PluginFlag::Type_Fixed;
+    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
 }
