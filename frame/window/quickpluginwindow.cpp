@@ -136,6 +136,20 @@ void QuickPluginWindow::setPositon(Position position)
     } else {
         m_mainLayout->setDirection(QBoxLayout::BottomToTop);
     }
+    switch(m_position) {
+    case Dock::Position::Top:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowTop);
+        break;
+    case Dock::Position::Right:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowRight);
+        break;
+    case Dock::Position::Bottom:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowBottom);
+        break;
+    case Dock::Position::Left:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowLeft);
+        break;
+    }
 }
 
 void QuickPluginWindow::dragPlugin(PluginsItemInterface *item)

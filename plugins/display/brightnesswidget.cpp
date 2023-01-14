@@ -23,11 +23,15 @@
 #include "imageutil.h"
 #include "slidercontainer.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QHBoxLayout>
 #include <QDebug>
 
 #define BACKSIZE 36
 #define IMAGESIZE 18
+
+DGUI_USE_NAMESPACE
 
 BrightnessWidget::BrightnessWidget(BrightnessModel *model, QWidget *parent)
     : QWidget(parent)
@@ -55,11 +59,7 @@ void BrightnessWidget::initUi()
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(15, 0, 12, 0);
 
-    QPixmap leftPixmap = ImageUtil::loadSvg(":/brightness.svg", QSize(IMAGESIZE, IMAGESIZE));
-    QPixmap rightPixmap = ImageUtil::loadSvg(":/ICON_Device_Laptop.svg", QSize(IMAGESIZE, IMAGESIZE));
-    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
-    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
-
+    onThemeTypeChanged();
     // 需求要求调节范围是10%-100%,且调节幅度为1%
     m_sliderContainer->setRange(10, 100);
     m_sliderContainer->setPageStep(1);
@@ -83,6 +83,7 @@ void BrightnessWidget::initConnection()
             Q_EMIT brightClicked();
     });
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BrightnessWidget::onThemeTypeChanged);
     updateSliderValue();
 }
 
@@ -92,4 +93,27 @@ void BrightnessWidget::updateSliderValue()
     if (monitor) {
         m_sliderContainer->updateSliderValue(monitor->brightness());
     }
+}
+
+void BrightnessWidget::convertThemePixmap(QPixmap &pixmap)
+{
+    // 图片是黑色的，如果当前主题为白色主题，则无需转换
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+        return;
+
+    // 如果是黑色主题，则转换成白色图像
+    QPainter painter(&pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.end();
+}
+
+void BrightnessWidget::onThemeTypeChanged()
+{
+    QPixmap leftPixmap = ImageUtil::loadSvg(":/brightness.svg", QSize(IMAGESIZE, IMAGESIZE));
+    QPixmap rightPixmap = ImageUtil::loadSvg(":/ICON_Device_Laptop.svg", QSize(IMAGESIZE, IMAGESIZE));
+    convertThemePixmap(leftPixmap);
+    convertThemePixmap(rightPixmap);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
 }

@@ -37,6 +37,7 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QMetaMethod>
+#include <QPainter>
 
 DGUI_USE_NAMESPACE
 
@@ -66,10 +67,7 @@ void SoundWidget::initUi()
     mainLayout->setContentsMargins(17, 0, 12, 0);
     mainLayout->addWidget(m_sliderContainer);
 
-    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
-    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
-    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
-    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
+    onThemeTypeChanged();
     m_sliderContainer->setRange(0, std::round(m_dbusAudio->maxUIVolume() * 100.00));
     m_sliderContainer->setPageStep(2);
 
@@ -107,6 +105,8 @@ void SoundWidget::initConnection()
         m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, QIcon(leftIcon()));
     });
 
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundWidget::onThemeTypeChanged);
+
     connect(m_sliderContainer, &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition icon) {
         switch (icon) {
         case SliderContainer::IconPosition::LeftIcon: {
@@ -126,15 +126,35 @@ void SoundWidget::initConnection()
 const QString SoundWidget::leftIcon()
 {
     const bool mute = existActiveOutputDevice() ? m_defaultSink->mute() : true;
-    if (mute)
-        return QString(":/icons/resources/audio-volume-muted-dark.svg");
+    if (mute) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+            return QString(":/audio-volume-muted-symbolic-dark.svg");
 
-    return QString(":/icons/resources/volume.svg");
+        return QString(":/audio-volume-muted-symbolic.svg");
+    }
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+        return QString(":/audio-volume-medium-symbolic-dark.svg");
+
+    return QString(":/audio-volume-medium-symbolic.svg");
 }
 
 const QString SoundWidget::rightIcon()
 {
     return QString(":/icons/resources/broadcast.svg");
+}
+
+void SoundWidget::convertThemePixmap(QPixmap &pixmap)
+{
+    // 图片是黑色的，如果当前主题为白色主题，则无需转换
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+        return;
+
+    // 如果是黑色主题，则转换成白色图像
+    QPainter painter(&pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pixmap.rect(), Qt::white);
+    painter.end();
 }
 
 /** 判断是否存在未禁用的声音输出设备
@@ -159,4 +179,13 @@ bool SoundWidget::existActiveOutputDevice() const
     }
 
     return false;
+}
+
+void SoundWidget::onThemeTypeChanged()
+{
+    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
+    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
+    convertThemePixmap(rightPixmap);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
 }

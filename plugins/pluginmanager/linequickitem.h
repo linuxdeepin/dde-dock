@@ -23,11 +23,15 @@
 
 #include "quicksettingitem.h"
 
+#include <DGuiApplicationHelper>
+
 namespace Dtk {
 namespace Widget {
 class DBlurEffectWidget;
 }
 }
+
+DGUI_USE_NAMESPACE
 
 // 插件在快捷面板中的展示的样式，这个为整行显示的插件，例如声音，亮度调整和音乐播放等
 class LineQuickItem : public QuickSettingItem
@@ -47,7 +51,11 @@ protected:
 
 private:
     void initUi();
+    void initConnection();
     void resizeSelf();
+
+private Q_SLOTS:
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     QWidget *m_centerWidget;
