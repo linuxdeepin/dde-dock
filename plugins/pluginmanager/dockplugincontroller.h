@@ -69,6 +69,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
     bool pluginCanDock(PluginsItemInterface *plugin) const;
+    bool pluginCanDock(const QStringList &config, PluginsItemInterface *plugin) const;
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:

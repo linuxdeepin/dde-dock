@@ -59,6 +59,7 @@ private:
     QLabel *m_nameLabel;
     QLabel *m_stateLabel;
     QLabel *m_expandLabel;
+    bool m_mouseEnter;
 };
 
 #endif // BLUETOOTHMAINWIDGET_H

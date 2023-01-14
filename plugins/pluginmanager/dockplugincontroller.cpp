@@ -661,6 +661,12 @@ bool DockPluginController::eventFilter(QObject *object, QEvent *event)
 
 bool DockPluginController::pluginCanDock(PluginsItemInterface *plugin) const
 {
+    const QStringList configPlugins = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
+    return pluginCanDock(configPlugins, plugin);
+}
+
+bool DockPluginController::pluginCanDock(const QStringList &config, PluginsItemInterface *plugin) const
+{
     // 1、如果插件是强制驻留任务栏，则始终显示
     // 2、如果插件是托盘插件，例如U盘插件，则始终显示
     if ((plugin->flags() & PluginFlag::Attribute_ForceDock)
@@ -668,8 +674,7 @@ bool DockPluginController::pluginCanDock(PluginsItemInterface *plugin) const
         return true;
 
     // 3、插件已经驻留在任务栏，则始终显示
-    const QStringList configPlugins = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
-    return configPlugins.contains(plugin->pluginName());
+    return config.contains(plugin->pluginName());
 }
 
 void DockPluginController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
@@ -687,13 +692,14 @@ void DockPluginController::onConfigChanged(const QString &key, const QVariant &v
     // 这里只处理工具插件(回收站)和系统插件(电源插件)
     for (PluginsItemInterface *plugin : plugins()) {
         QString itemKey = this->itemKey(plugin);
-        if (!pluginNames.contains(plugin->pluginName()) && isPluginLoaded(plugin)) {
+        bool canDock = pluginCanDock(pluginNames, plugin);
+        if (!canDock && isPluginLoaded(plugin)) {
             // 如果当前配置中不包含当前插件，但是当前插件已经加载，那么就移除该插件
             removePluginItem(plugin, itemKey);
             QWidget *itemWidget = plugin->itemWidget(itemKey);
             if (itemWidget)
                 itemWidget->setVisible(false);
-        } else if (pluginNames.contains(plugin->pluginName()) && !isPluginLoaded(plugin)) {
+        } else if (canDock && !isPluginLoaded(plugin)) {
             // 如果当前配置中包含当前插件，但是当前插件并未加载，那么就加载该插件
             addPluginItem(plugin, itemKey);
             // 只有工具插件是通过QWidget的方式进行显示的，因此，这里只处理工具插件

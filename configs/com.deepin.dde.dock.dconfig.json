@@ -27,7 +27,7 @@
 			"visibility": "private"
 		},
 		"Dock_Quick_Tray_Name": {
-			"value": ["fcitx"],
+			"value": ["fcitx", "indicator:keybord_layout"],
 			"serial": 0,
 			"flags": [],
 			"name": "显示在任务栏上的托盘图标",
