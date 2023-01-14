@@ -302,6 +302,7 @@ void BluetoothApplet::initConnect()
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
+        emit requestHide();
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);

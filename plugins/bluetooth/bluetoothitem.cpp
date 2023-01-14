@@ -67,6 +67,7 @@ BluetoothItem::BluetoothItem(AdaptersManager *adapterManager, QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::noAdapter, this, &BluetoothItem::noAdapter);
     connect(m_applet, &BluetoothApplet::justHasAdapter, this, &BluetoothItem::justHasAdapter);
+    connect(m_applet, &BluetoothApplet::requestHide, this, &BluetoothItem::requestHide);
 }
 
 QWidget *BluetoothItem::tipsWidget()

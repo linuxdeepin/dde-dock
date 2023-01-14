@@ -53,6 +53,7 @@ public:
 
 Q_SIGNALS:
     void enableChanged(bool);
+    void requestHide();
 
 protected:
     bool eventFilter(QObject *watcher, QEvent *event) override;

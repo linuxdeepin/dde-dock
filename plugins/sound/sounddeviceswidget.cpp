@@ -449,7 +449,7 @@ void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
                 .path("/org/deepin/dde/ControlCenter1")
                 .interface("org.deepin.dde.ControlCenter1")
                 .method("ShowPage").arg(QString("sound")).call();
-        hide();
+        emit requestHide();
     }
 }
 

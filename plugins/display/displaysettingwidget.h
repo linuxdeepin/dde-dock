@@ -34,8 +34,12 @@ class DevCollaborationWidget;
 class DisplaySettingWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit DisplaySettingWidget(QWidget *parent = nullptr);
+
+Q_SIGNALS:
+    void requestHide();
 
 private:
     void initUI();

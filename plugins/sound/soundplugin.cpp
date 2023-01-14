@@ -70,6 +70,9 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     }
 
     connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::enableChanged, m_soundWidget.data(), &SoundWidget::setEnabled);
+    connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::requestHide, this, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
 }
 
 void SoundPlugin::pluginStateSwitched()

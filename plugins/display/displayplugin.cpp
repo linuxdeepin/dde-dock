@@ -73,6 +73,9 @@ void DisplayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_displayWidget.data(), &BrightnessWidget::brightClicked, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
     });
+    connect(m_displaySettingWidget.data(), &DisplaySettingWidget::requestHide, this, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
     connect(m_model.data(), &BrightnessModel::screenVisibleChanged, this, [ this ](bool visible) {
         if (visible)
             m_proxyInter->itemAdded(this, pluginName());

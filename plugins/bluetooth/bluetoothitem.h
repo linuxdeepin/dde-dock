@@ -62,6 +62,7 @@ signals:
     void requestContextMenu() const;
     void noAdapter();
     void justHasAdapter();
+    void requestHide();
 
 private:
     Dock::TipsWidget *m_tipsLabel;

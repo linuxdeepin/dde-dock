@@ -42,7 +42,7 @@ DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
                 .path("/org/deepin/dde/ControlCenter1")
                 .interface("org.deepin.dde.ControlCenter1")
                 .method("ShowPage").arg(QString("display")).call();
-        hide();
+        Q_EMIT requestHide();
     });
 }
 

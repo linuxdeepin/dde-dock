@@ -60,15 +60,18 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
 
     m_bluetoothWidget.reset(new BluetoothMainWidget(m_adapterManager));
 
-    connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
+    connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [ this ] {
         m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
     });
-    connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
+    connect(m_bluetoothItem.data(), &BluetoothItem::requestHide, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
+    connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
         m_proxyInter->requestSetAppletVisible(this, BLUETOOTH_KEY, false);
         m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
     });
-    connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ = ] {
+    connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
     });
 
