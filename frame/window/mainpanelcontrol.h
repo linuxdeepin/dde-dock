@@ -6,13 +6,19 @@
 #define MAINPANELCONTROL_H
 
 #include "constants.h"
-
+#include <DWidget>
 #include <QWidget>
 
 #include <com_deepin_daemon_gesture.h>
-
 using namespace Dock;
 
+DWIDGET_BEGIN_NAMESPACE
+class DIconButton;
+DWIDGET_END_NAMESPACE
+
+DWIDGET_USE_NAMESPACE
+
+class QScrollArea;
 class QBoxLayout;
 class QLabel;
 class TrayPluginItem;
@@ -21,6 +27,7 @@ class DockItem;
 class PlaceholderItem;
 class AppDragWidget;
 class DesktopWidget;
+class OverflowItem;
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -43,6 +50,7 @@ signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
 
+    void updateLayout();
 private:
     void initUI();
     void updateAppAreaSonWidgetSize();
@@ -64,12 +72,15 @@ private:
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
-    void calcuDockIconSize(int w, int h, int traySize);
+    void calcuDockIconSize(int appItemSize, int maxcount ,int showtype, int traySize);
     void resizeDesktopWidget();
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
 
     int getItemIndex(DockItem *targetItem) const;
+
+    // about resize
+    void resizeLayout();
 
 protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
@@ -82,22 +93,38 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
+// state
+private:
+    int m_maxcount = -1;
+    int m_showtype = -1;
+    int m_appItemSize = 0;
+    QSize m_trayareaSize = QSize(0, 0);
+    QSize m_pluginareaSize = QSize(0, 0);
+
 private:
     QBoxLayout *m_mainPanelLayout;
 
-    QWidget *m_fixedAreaWidget;     // 固定区域
-    QBoxLayout *m_fixedAreaLayout;  //
-    QLabel *m_fixedSpliter;         // 固定区域与应用区域间的分割线
-    QWidget *m_appAreaWidget;       // 应用区域
-    QWidget *m_appAreaSonWidget;    // 子应用区域，所在位置根据显示模式手动指定
-    QBoxLayout *m_appAreaSonLayout; //
-    QLabel *m_appSpliter;           // 应用区域与托盘区域间的分割线
-    QWidget *m_trayAreaWidget;      // 托盘区域
-    QBoxLayout *m_trayAreaLayout;   //
-    QLabel *m_traySpliter;          // 托盘区域与插件区域间的分割线
-    QWidget *m_pluginAreaWidget;    // 插件区域
-    QBoxLayout *m_pluginLayout;     //
-    DesktopWidget *m_desktopWidget; // 桌面预览区域
+    QWidget *m_fixedAreaWidget;      // 固定区域
+    QBoxLayout *m_fixedAreaLayout;   //
+    QLabel *m_fixedSpliter;          // 固定区域与应用区域间的分割线
+    QWidget *m_appAreaWidget;        // 应用区域
+                                     //
+    QWidget *m_appAreaSonWidget;     // 子应用区域，所在位置根据显示模式手动指定
+    QBoxLayout *m_appAreaSonLayout;  //
+    QLabel *m_appSpliter;            // 应用区域与托盘区域间的分割线
+
+    QWidget *m_appOverflowWidget;    // 溢出区域
+    QBoxLayout *m_appOverflowLayout;
+    OverflowItem *m_overflowBtn;     // 溢出按钮
+    QBoxLayout *m_overflowAreaLayout;// 
+    QLabel *m_overflowSpliter;       // 溢出区域和应用区域分割线
+
+    QWidget *m_trayAreaWidget;       // 托盘区域
+    QBoxLayout *m_trayAreaLayout;    //
+    QLabel *m_traySpliter;           // 托盘区域与插件区域间的分割线
+    QWidget *m_pluginAreaWidget;     // 插件区域
+    QBoxLayout *m_pluginLayout;      //
+    DesktopWidget *m_desktopWidget;  // 桌面预览区域
 
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
@@ -106,9 +133,9 @@ private:
     DisplayMode m_dislayMode;
     QPoint m_mousePressPos;
     TrayPluginItem *m_tray;
-    int m_dragIndex = -1;   // 记录应用区域被拖拽图标的位置
+    int m_dragIndex = -1;  // 记录应用区域被拖拽图标的位置
 
-    PluginsItem *m_trashItem;       // 垃圾箱插件（需要特殊处理一下）
+    PluginsItem *m_trashItem;  // 垃圾箱插件（需要特殊处理一下）
 };
 
-#endif // MAINPANELCONTROL_H
+#endif  // MAINPANELCONTROL_H
