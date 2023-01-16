@@ -28,6 +28,7 @@ public:
         Plugins,
         FixedPlugin,
         Placeholder,
+        OverflowIcon,
         TrayPlugin,
     };
 
@@ -43,6 +44,10 @@ public:
 
     QSize sizeHint() const override;
     virtual QString accessibleName();
+
+    inline int getClickedCount() const {
+        return m_clickedcount;
+    }
 
 public slots:
     virtual void refreshIcon() {}
@@ -88,6 +93,9 @@ protected slots:
 private:
     void updatePopupPosition();
     void menuActionClicked(QAction *action);
+
+private:
+    int  m_clickedcount = 0; // caculate the time be clicked
 
 protected:
     bool m_hover;

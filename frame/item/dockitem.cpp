@@ -150,7 +150,7 @@ void DockItem::mousePressEvent(QMouseEvent *e)
             return showContextMenu();
         }
     }
-
+    m_clickedcount += 1;
     // same as e->ignore above
     QWidget::mousePressEvent(e);
 }
