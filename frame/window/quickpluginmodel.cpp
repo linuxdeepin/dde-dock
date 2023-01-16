@@ -121,39 +121,6 @@ void QuickPluginModel::onPluginRemoved(PluginsItemInterface *itemInter)
     Q_EMIT requestUpdate();
 }
 
-void QuickPluginModel::onSettingChanged(const QString &key, const QVariant &value)
-{
-    if (key != PLUGINNAMEKEY)
-        return;
-    QStringList localOrder = m_dockedPluginIndex.keys();
-    std::sort(localOrder.begin(), localOrder.end(), [ = ](const QString &key1, const QString &key2) {
-        return m_dockedPluginIndex.value(key1) < m_dockedPluginIndex.value(key2);
-    });
-    if (localOrder == value.toStringList())
-        return;
-
-    // 当配置发生变化的时候，更新任务栏的插件显示
-    // 1、将当前现有的插件列表中不在配置中的插件移除
-    localOrder = value.toStringList();
-    for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
-        if (localOrder.contains(itemInter->pluginName()))
-            continue;
-
-        m_dockedPluginsItems.removeOne(itemInter);
-        m_dockedPluginIndex.remove(itemInter->pluginName());
-    }
-    // 2、将配置中已有的但是插件列表中没有的插件移动到任务栏上
-    QList<PluginsItemInterface *> plugins = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::Quick);
-    for (PluginsItemInterface *plugin : plugins)
-        m_dockedPluginsItems << plugin;
-
-    m_dockedPluginIndex.clear();
-    for (int i = 0; i < localOrder.size(); i++)
-        m_dockedPluginIndex[localOrder[i]] = i;
-
-    Q_EMIT requestUpdate();
-}
-
 void QuickPluginModel::initConnection()
 {
     QuickSettingController *quickController = QuickSettingController::instance();
@@ -179,7 +146,6 @@ void QuickPluginModel::initConnection()
 
     connect(quickController, &QuickSettingController::pluginRemoved, this, &QuickPluginModel::onPluginRemoved);
     connect(quickController, &QuickSettingController::pluginUpdated, this, &QuickPluginModel::requestUpdatePlugin);
-    connect(SETTINGCONFIG, &SettingConfig::valueChanged, this, &QuickPluginModel::onSettingChanged);
 }
 
 void QuickPluginModel::initConfig()

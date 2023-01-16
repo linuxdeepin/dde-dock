@@ -306,7 +306,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
         m_dragEnterMimeData = nullptr;
         QDropEvent *dropEvent = static_cast<QDropEvent *>(event);
         if (isQuickWindow(dropEvent->source())) {
-            const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(dropEvent->mimeData());
+            QuickPluginMimeData *mimeData = static_cast<QuickPluginMimeData *>(const_cast<QMimeData *>(dropEvent->mimeData()));
             if (mimeData)
                 dragPlugin(mimeData->pluginItemInterface());
         }
@@ -320,7 +320,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
 
 void QuickPluginWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    m_dragEnterMimeData = const_cast<QuickPluginMimeData *>(qobject_cast<const QuickPluginMimeData *>(event->mimeData()));
+    m_dragEnterMimeData = static_cast<QuickPluginMimeData *>(const_cast<QMimeData *>(event->mimeData()));
     if (m_dragEnterMimeData) {
         PluginsItemInterface *plugin = m_dragEnterMimeData->pluginItemInterface();
         QIcon icon = plugin->icon(DockPart::QuickShow);

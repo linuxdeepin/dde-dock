@@ -54,7 +54,6 @@ protected:
 
 private Q_SLOTS:
     void onPluginRemoved(PluginsItemInterface *itemInter);
-    void onSettingChanged(const QString &key, const QVariant &value);
 
 private:
     void initConnection();

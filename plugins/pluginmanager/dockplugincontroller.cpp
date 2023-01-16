@@ -673,7 +673,21 @@ bool DockPluginController::pluginCanDock(const QStringList &config, PluginsItemI
             || (plugin->flags() & PluginFlag::Type_Tray))
         return true;
 
-    // 3、插件已经驻留在任务栏，则始终显示
+    // 3、如果该插件并未加载（未调用itemAdde或已经调用itemRemoved)，则该插件不显示
+    if (!m_pluginsMap.contains(plugin))
+        return false;
+
+    const QMap<QString, QObject *> &pluginMap = m_pluginsMap[plugin];
+    // 如果不包含PLUGININFO，说明该插件从未调用itemAdded方法，无需加载
+    if (!pluginMap.contains(PLUGININFO))
+        return false;
+
+    // 如果该插件信息的m_loaded为true,说明已经调用过itemAdded方法，并且之后又调用了itemRemoved方法,则插件也无需加载
+    PluginInfo *pluginInfo = static_cast<PluginInfo *>(pluginMap[PLUGININFO]);
+    if (!pluginInfo->m_loaded)
+        return false;
+
+    // 4、插件已经驻留在任务栏，则始终显示
     return config.contains(plugin->pluginName());
 }
 

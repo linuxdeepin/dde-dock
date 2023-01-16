@@ -69,27 +69,7 @@ PluginsItemInterface *QuickSettingItem::pluginItem() const
 
 const QPixmap QuickSettingItem::dragPixmap()
 {
-    QPixmap pluginPixmap = m_pluginInter->icon(DockPart::QuickPanel, DGuiApplicationHelper::instance()->themeType()).pixmap(ICONWIDTH, ICONHEIGHT);
-
-    QPainter foregroundPainter(&pluginPixmap);
-    foregroundPainter.setPen(foregroundColor());
-    foregroundPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    foregroundPainter.fillRect(pluginPixmap.rect(), foregroundColor());
-
-    QPixmap pixmapDrag(ICONWIDTH + ICONSPACE + FONTSIZE * 2, ICONHEIGHT + ICONSPACE + FONTSIZE * 2);
-    pixmapDrag.fill(Qt::transparent);
-    QPainter painter(&pixmapDrag);
-    painter.drawPixmap(QPoint((ICONSPACE + FONTSIZE * 2) / 2, 0), pluginPixmap);
-    painter.setPen(foregroundPainter.pen());
-
-    QFont font;
-    font.setPixelSize(FONTSIZE);
-    painter.setFont(font);
-    QTextOption option;
-    option.setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    painter.drawText(QRect(QPoint(0, ICONHEIGHT + ICONSPACE),
-                           QPoint(pixmapDrag.width(), pixmapDrag.height())), m_pluginInter->pluginDisplayName(), option);
-    return pixmapDrag;
+    return grab();
 }
 
 const QString QuickSettingItem::itemKey() const
