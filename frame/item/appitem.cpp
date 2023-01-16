@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "appitem.h"
+#include "itemconsts.h"
 #include "themeappicon.h"
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
@@ -351,7 +352,8 @@ void AppItem::wheelEvent(QWheelEvent *e)
 
     QWidget::wheelEvent(e);
 
-    if (qAbs(e->angleDelta().y()) > 20) {
+    QString parentaccessname = static_cast<QWidget *>(this->parent())->accessibleName();
+    if (qAbs(e->angleDelta().y()) > 20 && parentaccessname != OVERFLOWWIDGET_ACCESS_NAME) {
         m_itemEntryInter->PresentWindows();
     }
 }
@@ -570,6 +572,9 @@ void AppItem::onResetPreview()
 void AppItem::activeChanged()
 {
     m_active = !m_active;
+    if (isActive()) {
+        emit requestActive();
+    }
 }
 
 void AppItem::showPreview()
@@ -707,4 +712,8 @@ void AppItem::showEvent(QShowEvent *e)
     });
 
     refreshIcon();
+}
+
+bool AppItem::isActive() const {
+    return hasAttention() || m_active;
 }

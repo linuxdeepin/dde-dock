@@ -32,6 +32,7 @@ public:
     void checkEntry() override;
     const QString appId() const;
     bool isValid() const;
+    bool isActive() const;
     void updateWindowIconGeometries();
     void undock();
     QWidget *appDragWidget();
@@ -49,7 +50,7 @@ signals:
     void dragReady(QWidget *dragWidget);
     void requestUpdateEntryGeometries() const;
     void requestUpdateItemMinimizedGeometry(const QRect) const;
-
+    void requestActive();
 private:
     void moveEvent(QMoveEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
