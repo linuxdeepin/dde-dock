@@ -67,5 +67,6 @@
         <file>resources/week5.svg</file>
         <file>resources/week6.svg</file>
         <file>resources/week7.svg</file>
+        <file>resources/overflow-more.svg</file>
     </qresource>
 </RCC>
