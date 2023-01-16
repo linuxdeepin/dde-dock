@@ -657,10 +657,9 @@ int QuickPluginWindow::getDropIndex(QPoint point)
         return -1;
     }
 
-    QList<PluginsItemInterface *> dockItemInter = QuickPluginModel::instance()->dockedPluginItems();
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         // 上下方向从右向左排列
-        for (int i = 0; i < dockItemInter.count() - 1; i++) {
+        for (int i = 0; i < dockedItems.count() - 1; i++) {
             QuickDockItem *dockBeforeItem = dockedItems[i];
             QuickDockItem *dockItem = dockedItems[i + 1];
             if (!dockItem->canInsert())
@@ -671,7 +670,7 @@ int QuickPluginWindow::getDropIndex(QPoint point)
         }
     } else {
         // 左右方向从下向上排列
-        for (int i = 0; i < dockItemInter.count() - 1; i++) {
+        for (int i = 0; i < dockedItems.count() - 1; i++) {
             QuickDockItem *dockBeforeItem = dockedItems[i];
             QuickDockItem *dockItem = dockedItems[i + 1];
             if (!dockItem->canInsert())

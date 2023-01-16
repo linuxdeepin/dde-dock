@@ -69,7 +69,7 @@ void QuickPluginModel::removePlugin(PluginsItemInterface *itemInter)
     }
 
     if (m_dockedPluginsItems.contains(itemInter)) {
-        m_dockedPluginsItems.removeOne(itemInter);
+        m_dockedPluginsItems.removeAll(itemInter);
         Q_EMIT requestUpdate();
     }
 }
@@ -116,7 +116,7 @@ void QuickPluginModel::onPluginRemoved(PluginsItemInterface *itemInter)
     // 如果插件移除，无需移除下方的排序设置，因为下次插件插入的时候还会插入到下方任务栏
     // 因此，此处只需要从列表中移除当前插件
     if (m_dockedPluginsItems.contains(itemInter))
-        m_dockedPluginsItems.removeOne(itemInter);
+        m_dockedPluginsItems.removeAll(itemInter);
     // 向外发送更新列表的信号
     Q_EMIT requestUpdate();
 }
@@ -222,7 +222,6 @@ int QuickPluginModel::generaIndex(int insertIndex, int oldIndex)
             // 新的位置的索引值大于原来位置的索引值，则认为插入在原来的任务栏的后面，将前面的插件的索引值减去1
             for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
                 int pluginDockIndex = getCurrentIndex(itemInter);
-                qInfo() << itemInter->pluginDisplayName() << m_dockedPluginIndex[itemInter->pluginName()] << pluginDockIndex;
                 if (pluginDockIndex > oldIndex) {
                     if (pluginDockIndex <= insertIndex) {
                         int tmpIndex = m_dockedPluginIndex[itemInter->pluginName()];
