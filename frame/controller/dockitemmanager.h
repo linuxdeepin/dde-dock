@@ -41,6 +41,7 @@ signals:
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
     void requestUpdateDockItem() const;
+    void requestUpdateActiveApp() const;
     void requestUpdateItemMinimizedGeometry(AppItem *item, const QRect) const;
 
 public slots:

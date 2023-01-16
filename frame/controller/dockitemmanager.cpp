@@ -38,6 +38,9 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
             Q_EMIT requestUpdateItemMinimizedGeometry(it, r);
         });
+        connect(it, &AppItem::requestActive, this, [=]{
+            emit requestUpdateActiveApp();
+        });
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
         m_itemList.append(it);
