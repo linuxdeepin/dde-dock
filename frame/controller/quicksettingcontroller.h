@@ -44,36 +44,32 @@ public:
 public:
     static QuickSettingController *instance();
     QList<PluginsItemInterface *> pluginItems(const PluginAttribute &pluginClass) const;
-    QString itemKey(PluginsItemInterface *pluginItem) const;
-    QJsonObject metaData(PluginsItemInterface *pluginItem) const;
+    QJsonObject metaData(PluginsItemInterface *pluginItem);
     PluginsItem *pluginItemWidget(PluginsItemInterface *pluginItem);
     QList<PluginsItemInterface *> pluginInSettings();
     PluginAttribute pluginAttribute(PluginsItemInterface * const itemInter) const;
-    bool hasFlag(PluginsItemInterface *itemInter, PluginFlag flag) const;
+    QString itemKey(PluginsItemInterface *pluginItem) const;
 
 Q_SIGNALS:
     void pluginInserted(PluginsItemInterface *itemInter, const PluginAttribute);
     void pluginRemoved(PluginsItemInterface *itemInter);
     void pluginUpdated(PluginsItemInterface *, const DockPart);
-    void requestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
+    void requestAppletVisible(PluginsItemInterface * itemInter, const QString &itemKey, bool visible);
 
 protected:
     explicit QuickSettingController(QObject *parent = Q_NULLPTR);
     ~QuickSettingController() override;
 
 protected:
-    void pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
-    void pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
-    void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) override {}
-    void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) override {}
-    void requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool show) override;
+    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &) override;
+    void itemRemoved(PluginsItemInterface * const itemInter, const QString &) override;
+    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
 
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:
     QMap<PluginAttribute, QList<PluginsItemInterface *>> m_quickPlugins;
-    QMap<PluginsItemInterface *, QString> m_quickPluginsMap;
     QMap<PluginsItemInterface *, PluginsItem *> m_pluginItemWidgetMap;
 };
 

@@ -16,8 +16,8 @@
             "permissions":"readwrite",
             "visibility":"public"
         },
-		"Dock_Quick_Plugin_Name": {
-			"value": ["network", "sound", "power", "shutdown", "trash"],
+		"Dock_Quick_Plugins": {
+			"value": ["shutdown", "trash"],
 			"serial": 0,
 			"flags": [],
 			"name": "显示在任务栏上的快捷插件",

@@ -69,7 +69,7 @@ protected:
 private Q_SLOTS:
     void onRequestUpdate();
     void onUpdatePlugin(PluginsItemInterface *itemInter, const DockPart &dockPart);
-    void onRequestAppletShow(PluginsItemInterface * itemInter, const QString &itemKey);
+    void onRequestAppletVisible(PluginsItemInterface * itemInter, const QString &itemKey, bool visible);
 
 private:
     void initUi();

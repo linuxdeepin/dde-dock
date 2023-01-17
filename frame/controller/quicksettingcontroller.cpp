@@ -20,42 +20,46 @@
  */
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
-#include "proxyplugincontroller.h"
 #include "pluginsitem.h"
+#include "pluginmanagerinterface.h"
+
+#include <QMetaObject>
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
 {
-    // 加载本地插件
-    ProxyPluginController *contoller = ProxyPluginController::instance(PluginType::QuickPlugin);
-    contoller->addProxyInterface(this);
-    connect(contoller, &ProxyPluginController::pluginLoaderFinished, this, &QuickSettingController::pluginLoaderFinished);
+    // 只有在非安全模式下才加载插件，安全模式会在等退出安全模式后通过接受事件的方式来加载插件
+    if (!qApp->property("safeMode").toBool())
+        QMetaObject::invokeMethod(this, [ = ] {
+#ifdef QT_DEBUG
+        AbstractPluginsController::startLoader(new PluginLoader(QString("%1/..%2").arg(qApp->applicationDirPath()).arg("/plugins/loader"), this));
+#else
+        AbstractPluginsController::startLoader(new PluginLoader("/usr/lib/dde-dock/plugins/loader", this));
+#endif
+        }, Qt::QueuedConnection);
 }
 
 QuickSettingController::~QuickSettingController()
 {
-    ProxyPluginController::instance(PluginType::QuickPlugin)->removeProxyInterface(this);
 }
 
-void QuickSettingController::pluginItemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
     PluginAttribute pluginAttr = pluginAttribute(itemInter);
-
     m_quickPlugins[pluginAttr] << itemInter;
-    m_quickPluginsMap[itemInter] = itemKey;
 
     emit pluginInserted(itemInter, pluginAttr);
 }
 
-void QuickSettingController::pluginItemUpdate(PluginsItemInterface * const itemInter, const QString &)
+void QuickSettingController::itemUpdate(PluginsItemInterface * const itemInter, const QString &)
 {
     updateDockInfo(itemInter, DockPart::QuickPanel);
     updateDockInfo(itemInter, DockPart::QuickShow);
     updateDockInfo(itemInter, DockPart::SystemPanel);
 }
 
-void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const itemInter, const QString &)
+void QuickSettingController::itemRemoved(PluginsItemInterface * const itemInter, const QString &)
 {
     for (auto it = m_quickPlugins.begin(); it != m_quickPlugins.end(); it++) {
         QList<PluginsItemInterface *> &plugins = m_quickPlugins[it.key()];
@@ -71,15 +75,13 @@ void QuickSettingController::pluginItemRemoved(PluginsItemInterface * const item
         break;
     }
 
-    m_quickPluginsMap.remove(itemInter);
     Q_EMIT pluginRemoved(itemInter);
 }
 
-void QuickSettingController::requestSetPluginAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool show)
+void QuickSettingController::requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible)
 {
     // 设置插件列表可见事件
-    if (show)
-        Q_EMIT requestAppletShow(itemInter, itemKey);
+    Q_EMIT requestAppletVisible(itemInter, itemKey, visible);
 }
 
 void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part)
@@ -90,32 +92,36 @@ void QuickSettingController::updateDockInfo(PluginsItemInterface * const itemInt
 QuickSettingController::PluginAttribute QuickSettingController::pluginAttribute(PluginsItemInterface * const itemInter) const
 {
     // 工具插件，例如回收站
-    if (hasFlag(itemInter, PluginFlag::Type_Tool))
+    if (itemInter->flags() & PluginFlag::Type_Tool)
         return PluginAttribute::Tool;
 
     // 系统插件，例如关机按钮
-    if (hasFlag(itemInter, PluginFlag::Type_System))
+    if (itemInter->flags() & PluginFlag::Type_System)
         return PluginAttribute::System;
 
     // 托盘插件，例如磁盘图标
-    if (hasFlag(itemInter, PluginFlag::Type_Tray))
+    if (itemInter->flags() & PluginFlag::Type_Tray)
         return PluginAttribute::Tray;
 
     // 固定插件，例如显示桌面和多任务试图
-    if (hasFlag(itemInter, PluginFlag::Type_Fixed))
+    if (itemInter->flags() & PluginFlag::Type_Fixed)
         return PluginAttribute::Fixed;
 
     // 通用插件，一般的插件都是通用插件，就是放在快捷插件区域的那些插件
-    if (hasFlag(itemInter, PluginFlag::Type_Common))
+    if (itemInter->flags() & PluginFlag::Type_Common)
         return PluginAttribute::Quick;
 
     // 基本插件，不在任务栏上显示的插件
     return PluginAttribute::None;
 }
 
-bool QuickSettingController::hasFlag(PluginsItemInterface *itemInter, PluginFlag flag) const
+QString QuickSettingController::itemKey(PluginsItemInterface *pluginItem) const
 {
-    return itemInter->flags() & flag;
+    PluginManagerInterface *pManager = pluginManager();
+    if (pManager)
+        return pManager->itemKey(pluginItem);
+
+    return QString();
 }
 
 QuickSettingController *QuickSettingController::instance()
@@ -129,18 +135,13 @@ QList<PluginsItemInterface *> QuickSettingController::pluginItems(const PluginAt
     return m_quickPlugins.value(pluginClass);
 }
 
-QString QuickSettingController::itemKey(PluginsItemInterface *pluginItem) const
+QJsonObject QuickSettingController::metaData(PluginsItemInterface *pluginItem)
 {
-    return m_quickPluginsMap.value(pluginItem);
-}
+    PluginManagerInterface *pManager = pluginManager();
+    if (pManager)
+        return pManager->metaData(pluginItem);
 
-QJsonObject QuickSettingController::metaData(PluginsItemInterface *pluginItem) const
-{
-    QPluginLoader *pluginLoader = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginLoader(pluginItem);
-    if (!pluginLoader)
-        return QJsonObject();
-
-    return pluginLoader->metaData().value("MetaData").toObject();
+    return QJsonObject();
 }
 
 PluginsItem *QuickSettingController::pluginItemWidget(PluginsItemInterface *pluginItem)
@@ -155,16 +156,10 @@ PluginsItem *QuickSettingController::pluginItemWidget(PluginsItemInterface *plug
 
 QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
 {
-    QList<PluginsItemInterface *> settingPlugins;
-    // 用于在控制中心显示可改变位置的插件，这里只提供
-    QList<PluginsItemInterface *> allPlugins = ProxyPluginController::instance(PluginType::QuickPlugin)->pluginCurrent();
-    for (PluginsItemInterface *plugin : allPlugins) {
-        if (plugin->pluginDisplayName().isEmpty())
-            continue;
+    PluginManagerInterface *pManager = pluginManager();
+    if (!pManager)
+        return QList<PluginsItemInterface *>();
 
-        if (hasFlag(plugin, PluginFlag::Attribute_CanSetting))
-            settingPlugins << plugin;
-    }
-
-    return settingPlugins;
+    // 返回可用于在控制中心显示的插件
+    return pManager->pluginsInSetting();
 }
