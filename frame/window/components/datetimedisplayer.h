@@ -98,6 +98,7 @@ private:
     int m_currentSize;
     bool m_oneRow;
     bool m_showMultiRow;
+    bool m_isEnter;
 };
 
-#endif // DATETIMEDISPLAYER_H
+#endif // 

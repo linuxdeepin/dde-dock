@@ -145,7 +145,7 @@ QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Col
 
     QString iconFile;
     if (themeType == DGuiApplicationHelper::ColorType::DarkType)
-        iconFile = ":/bluetooth-active-symbolic.sv";
+        iconFile = ":/bluetooth-active-symbolic.svg";
     else
         iconFile = ":/bluetooth-active-symbolic-dark.svg";
 
@@ -164,4 +164,4 @@ QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Col
 PluginsItemInterface::PluginMode BluetoothPlugin::status() const
 {
     if (m_bluetoothItem.data()->isPowered())
-        return PluginM
+        return Plugin

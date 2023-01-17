@@ -133,6 +133,7 @@ private:
     void initConnection();
 
     void updateWidgetSize();
+    int shadowRadius() const;
+    int iconSize() const;
 
-private Q_SLOTS:
-    void onMenuActionClicked(QAction *action);
+private

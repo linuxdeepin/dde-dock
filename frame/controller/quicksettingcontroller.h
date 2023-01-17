@@ -59,6 +59,9 @@ Q_SIGNALS:
 protected:
     explicit QuickSettingController(QObject *parent = Q_NULLPTR);
     ~QuickSettingController() override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+    void startLoader();
 
 protected:
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
@@ -70,7 +73,4 @@ protected:
 
 private:
     QMap<PluginAttribute, QList<PluginsItemInterface *>> m_quickPlugins;
-    QMap<PluginsItemInterface *, PluginsItem *> m_pluginItemWidgetMap;
-};
-
-#endif // CONTAINERPLUGINSCONTROLLER_H
+    QMap<PluginsItemInter

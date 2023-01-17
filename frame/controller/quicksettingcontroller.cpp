@@ -23,23 +23,38 @@
 #include "pluginmanagerinterface.h"
 
 #include <QMetaObject>
+#include <customevent.h>
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
 {
+    qApp->installEventFilter(this);
     // 只有在非安全模式下才加载插件，安全模式会在等退出安全模式后通过接受事件的方式来加载插件
     if (!qApp->property("safeMode").toBool())
-        QMetaObject::invokeMethod(this, [ = ] {
+        QMetaObject::invokeMethod(this, &QuickSettingController::startLoader, Qt::QueuedConnection);
+}
+
+QuickSettingController::~QuickSettingController()
+{
+}
+
+bool QuickSettingController::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == qApp && event->type() == PluginLoadEvent::eventType()) {
+        // 如果收到的是重新加载插件的消息（一般是在退出安全模式后），则直接加载插件即可
+        startLoader();
+    }
+
+    return AbstractPluginsController::eventFilter(watched, event);
+}
+
+void QuickSettingController::startLoader()
+{
 #ifdef QT_DEBUG
         AbstractPluginsController::startLoader(new PluginLoader(QString("%1/..%2").arg(qApp->applicationDirPath()).arg("/plugins/loader"), this));
 #else
         AbstractPluginsController::startLoader(new PluginLoader("/usr/lib/dde-dock/plugins/loader", this));
 #endif
-        }, Qt::QueuedConnection);
-}
-
-QuickSettingController::~QuickSettingController()
-{
 }
 
 void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -146,19 +161,4 @@ QJsonObject QuickSettingController::metaData(PluginsItemInterface *pluginItem)
 PluginsItem *QuickSettingController::pluginItemWidget(PluginsItemInterface *pluginItem)
 {
     if (m_pluginItemWidgetMap.contains(pluginItem))
-        return m_pluginItemWidgetMap[pluginItem];
-
-    PluginsItem *widget = new PluginsItem(pluginItem, itemKey(pluginItem), metaData(pluginItem));
-    m_pluginItemWidgetMap[pluginItem] = widget;
-    return widget;
-}
-
-QList<PluginsItemInterface *> QuickSettingController::pluginInSettings()
-{
-    PluginManagerInterface *pManager = pluginManager();
-    if (!pManager)
-        return QList<PluginsItemInterface *>();
-
-    // 返回可用于在控制中心显示的插件
-    return pManager->pluginsInSetting();
-}
+        

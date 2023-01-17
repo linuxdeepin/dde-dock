@@ -27,6 +27,7 @@
 #include "widgets/snitrayitemwidget.h"
 #include "widgets/expandiconwidget.h"
 #include "utils.h"
+#include "constants.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingcontroller.h"
 #include "systempluginitem.h"
@@ -186,61 +187,41 @@ void TrayDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 {
     Q_UNUSED(index);
 
-    if (!isPopupTray())
-        return;
-
-    QColor borderColor;
-    QColor backColor;
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        // 白色主题的情况下
-        borderColor = Qt::black;
-        borderColor.setAlpha(static_cast<int>(255 * 0.05));
-        backColor = Qt::white;
-        backColor.setAlpha(static_cast<int>(255 * 0.4));
-    } else {
-        borderColor = Qt::black;
-        borderColor.setAlpha(static_cast<int>(255 * 0.2));
-        backColor = Qt::black;
-        backColor.setAlpha(static_cast<int>(255 * 0.4));
-    }
+    // 如果不是弹出菜单（在任务栏上显示的），在鼠标没有移入的时候无需绘制背景
+    if (!isPopupTray() && !(option.state & QStyle::State_MouseOver))
+        return QStyledItemDelegate::paint(painter, option, index);
 
     painter->save();
-    QPainterPath path;
-    path.addRoundedRect(option.rect, 8, 8);
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->fillPath(path, backColor);
-    painter->setPen(borderColor);
-    painter->drawPath(path);
-    painter->restore();
-}
 
-ExpandIconWidget *TrayDelegate::expandWidget()
-{
-    if (!m_listView)
-        return nullptr;
+    if (isPopupTray()) {
+        QPainterPath path;
+        path.addRoundedRect(option.rect, 8, 8);
+        QColor borderColor;
+        QColor backColor;
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            // 白色主题的情况下
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.05));
+            backColor = Qt::white;
+            if (option.state & QStyle::State_MouseOver) {
+                backColor.setAlphaF(0.4);
+            } else
+                backColor.setAlphaF(0.2);
+        } else {
+            borderColor = Qt::black;
+            borderColor.setAlpha(static_cast<int>(255 * 0.2));
+            backColor = Qt::black;
+            if (option.state & QStyle::State_MouseOver)
+                backColor.setAlphaF(0.4);
+            else
+                backColor.setAlphaF(0.2);
+        }
 
-    QAbstractItemModel *dataModel = m_listView->model();
-    if (!dataModel)
-        return nullptr;
-
-    for (int i = 0; i < dataModel->rowCount(); i++) {
-        QModelIndex index = dataModel->index(i, 0);
-        ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_listView->indexWidget(index));
-        if (widget)
-            return widget;
-    }
-
-    return nullptr;
-}
-
-bool TrayDelegate::isPopupTray() const
-{
-    if (!m_listView)
-        return false;
-
-    TrayModel *dataModel = qobject_cast<TrayModel *>(m_listView->model());
-    if (!dataModel)
-        return false;
-
-    return dataModel->isIconTray();
-}
+        painter->fillPath(path, backColor);
+        painter->setPen(borderColor);
+        painter->drawPath(path);
+    } else {
+        // 如果是任务栏上面的托盘图标，则绘制背景色
+        int borderRadius = 8;
+        if (qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>() == Dock::DisplayMode::Fashion) 
