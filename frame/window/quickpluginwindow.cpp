@@ -320,7 +320,9 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
 
 void QuickPluginWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    m_dragEnterMimeData = static_cast<QuickPluginMimeData *>(const_cast<QMimeData *>(event->mimeData()));
+    // 由于QuickPluginMimeData和QuickIconDrag的来源是pluginManager插件，dock和插件中都使用了这两个类，但是这个两个类
+    // 是各自编译的，相当于编译了两份，所以使用qobject_cast会导致转换失败，因此，此处使用dynamic_cast来保证转换成功
+    m_dragEnterMimeData = dynamic_cast<QuickPluginMimeData *>(const_cast<QMimeData *>(event->mimeData()));
     if (m_dragEnterMimeData) {
         PluginsItemInterface *plugin = m_dragEnterMimeData->pluginItemInterface();
         QIcon icon = plugin->icon(DockPart::QuickShow);
@@ -329,7 +331,7 @@ void QuickPluginWindow::dragEnterEvent(QDragEnterEvent *event)
             if (widget)
                 icon = widget->grab();
         }
-        QuickIconDrag *drag = qobject_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
+        QuickIconDrag *drag = dynamic_cast<QuickIconDrag *>(m_dragEnterMimeData->drag());
         if (drag && !icon.isNull()) {
             QPixmap pixmap = icon.pixmap(QSize(16, 16));
             drag->updatePixmap(pixmap);

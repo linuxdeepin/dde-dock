@@ -50,6 +50,4 @@ private:
     bool m_useSourcePixmap;
 };
 
-Q_DECLARE_INTERFACE(QuickIconDrag, "QuickIconDrag")
-
 #endif // QUICKDRAGCORE_H
