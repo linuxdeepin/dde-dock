@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "systempluginwindow.h"
-#include "systemplugincontroller.h"
 #include "systempluginitem.h"
 #include "quicksettingcontroller.h"
 #include "utils.h"

@@ -23,10 +23,10 @@
 #include "utils.h"
 #include "dockitemmanager.h"
 #include "windowmanager.h"
-#include "proxyplugincontroller.h"
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
 #include "settingconfig.h"
+#include "customevent.h"
 
 #include <DGuiApplicationHelper>
 
@@ -170,16 +170,17 @@ QStringList DBusDockAdaptors::GetLoadedPlugins()
 
 DockItemInfos DBusDockAdaptors::plugins()
 {
+#define DOCK_QUICK_PLUGINS "Dock_Quick_Plugins"
     // 获取本地加载的插件
     QList<PluginsItemInterface *> allPlugin = localPlugins();
     DockItemInfos pluginInfos;
-    QStringList quickSettingKeys = SETTINGCONFIG->value("Dock_Quick_Plugin_Name").toStringList();
+    QStringList quickSettingKeys = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
     for (PluginsItemInterface *plugin : allPlugin) {
         DockItemInfo info;
         info.name = plugin->pluginName();
         info.displayName = plugin->pluginDisplayName();
         info.itemKey = plugin->pluginName();
-        info.settingKey = "Dock_Quick_Plugin_Name";
+        info.settingKey = DOCK_QUICK_PLUGINS;
         info.visible = quickSettingKeys.contains(info.itemKey);
         QSize pixmapSize;
         QIcon lightIcon = getSettingIcon(plugin, pixmapSize, DGuiApplicationHelper::ColorType::LightType);

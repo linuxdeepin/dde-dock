@@ -26,7 +26,6 @@
 #include "dockitemmanager.h"
 #include "dockscreen.h"
 #include "displaymanager.h"
-#include "proxyplugincontroller.h"
 
 #include <DWindowManagerHelper>
 #include <DDBusSender>

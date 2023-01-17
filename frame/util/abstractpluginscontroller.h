@@ -33,6 +33,7 @@
 
 class PluginsItemInterface;
 class PluginAdapter;
+class PluginManagerInterface;
 
 class AbstractPluginsController : public QObject, PluginProxyInterface
 {
@@ -43,49 +44,22 @@ public:
     ~ AbstractPluginsController() override;
 
     void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
-    virtual QList<PluginsItemInterface *> pluginCurrent() const;
-
-    virtual bool needLoad(PluginsItemInterface *) { return true; }
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
-
-    virtual void savePluginValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value);
-    virtual const QVariant getPluginValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant());
-    virtual void removePluginValue(PluginsItemInterface * const itemInter, const QStringList &keyList);
-
-    virtual void pluginItemAdded(PluginsItemInterface * const, const QString &) = 0;
-    virtual void pluginItemUpdate(PluginsItemInterface * const, const QString &) = 0;
-    virtual void pluginItemRemoved(PluginsItemInterface * const, const QString &) = 0;
-    virtual void requestPluginWindowAutoHide(PluginsItemInterface * const, const QString &, const bool) {}
-    virtual void requestRefreshPluginWindowVisible(PluginsItemInterface * const, const QString &) {}
-    virtual void requestSetPluginAppletVisible(PluginsItemInterface * const, const QString &, const bool) {}
 
 Q_SIGNALS:
     void pluginLoaderFinished();
 
 protected:
-    virtual bool pluginIsLoaded(PluginsItemInterface *itemInter) { return true; }
+    bool eventFilter(QObject *object, QEvent *event) override;
 
-    QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
-    PluginsItemInterface *pluginInterAt(const QString &itemKey);
-    PluginsItemInterface *pluginInterAt(QObject *destItem);
-    bool eventFilter(QObject *o, QEvent *e) override;
-
-    bool canAddRemove(PluginsItemInterface *plugin) const;
-    bool canAddedPlugin(PluginsItemInterface *plugin) const;
+    PluginManagerInterface *pluginManager() const;
 
 private:
     // implements PluginProxyInterface
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
-    void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
-
-    void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override;
-    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override;
-    void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible) override;
-    PluginsItemInterface *getPluginInterface(PluginsItemInterface * const itemInter);
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override {}
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override {}
+    void saveValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value) override {}
+    void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) override {}
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override { return QVariant(); }
 
 protected Q_SLOTS:
     void startLoader(PluginLoader *loader);
@@ -95,23 +69,15 @@ private slots:
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
-    void refreshPluginSettings();
-    void onConfigChanged(const QString &key, const QVariant &value);
 
 private:
-    QDBusConnectionInterface *m_dbusDaemonInterface;
-    DockInter *m_dockDaemonInter;
-
-    // interface,  "pluginloader", PluginLoader指针对象
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;
 
     // filepath, interface, loaded
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
-    QList<PluginsItemInterface *> m_pluginExists;
-    QMap<PluginsItemInterface *, QString> m_pluginItemKeyMap;
 
     QJsonObject m_pluginSettingsObject;
-    QMap<qulonglong, PluginAdapter *> m_pluginAdapterMap;
+    PluginManagerInterface *m_pluginManager;
 };
 
 #endif // ABSTRACTPLUGINSCONTROLLER_H

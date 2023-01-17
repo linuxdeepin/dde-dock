@@ -24,7 +24,6 @@
 #include "mainpanelcontrol.h"
 #include "dockitemmanager.h"
 #include "menuworker.h"
-#include "proxyplugincontroller.h"
 #include "windowmanager.h"
 #include "dockscreen.h"
 #include "dragwidget.h"

@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-#define PLUGINNAMEKEY "Dock_Quick_Plugin_Name"
+#define PLUGINNAMEKEY "Dock_Quick_Plugins"
 
 QuickPluginModel *QuickPluginModel::instance()
 {
@@ -81,9 +81,9 @@ QList<PluginsItemInterface *> QuickPluginModel::dockedPluginItems() const
     QList<PluginsItemInterface *> activedItems;
     for (PluginsItemInterface *itemInter : m_dockedPluginsItems) {
         if (isFixed(itemInter))
-            activedItems << itemInter;
-        else
             dockedItems << itemInter;
+        else
+            activedItems << itemInter;
     }
     std::sort(dockedItems.begin(), dockedItems.end(), [ this ](PluginsItemInterface *item1, PluginsItemInterface *item2) {
         return m_dockedPluginIndex.value(item1->pluginName()) < m_dockedPluginIndex.value(item2->pluginName());
@@ -144,12 +144,8 @@ void QuickPluginModel::onSettingChanged(const QString &key, const QVariant &valu
     }
     // 2、将配置中已有的但是插件列表中没有的插件移动到任务栏上
     QList<PluginsItemInterface *> plugins = QuickSettingController::instance()->pluginItems(QuickSettingController::PluginAttribute::Quick);
-    for (PluginsItemInterface *plugin : plugins) {
-        if (m_dockedPluginsItems.contains(plugin) || !localOrder.contains(plugin->pluginName()))
-            continue;
-
+    for (PluginsItemInterface *plugin : plugins)
         m_dockedPluginsItems << plugin;
-    }
 
     m_dockedPluginIndex.clear();
     for (int i = 0; i < localOrder.size(); i++)
@@ -161,7 +157,7 @@ void QuickPluginModel::onSettingChanged(const QString &key, const QVariant &valu
 void QuickPluginModel::initConnection()
 {
     QuickSettingController *quickController = QuickSettingController::instance();
-    connect(quickController, &QuickSettingController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute plugAttr) {
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ this, quickController ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute plugAttr) {
         if (plugAttr != QuickSettingController::PluginAttribute::Quick)
             return;
 
@@ -169,9 +165,11 @@ void QuickPluginModel::initConnection()
         if (quickWidget && !quickWidget->parentWidget())
             quickWidget->setVisible(false);
 
-        // 用来读取已经固定在下方的插件或者强制显示的插件
-        if (!m_dockedPluginIndex.contains(itemInter->pluginName()) && !(itemInter->flags() & Attribute_ForceDock))
-            return;
+        if (!m_dockedPluginIndex.contains(itemInter->pluginName())) {
+            QJsonObject json = quickController->metaData(itemInter);
+            if (json.contains("order"))
+                m_dockedPluginIndex[itemInter->pluginName()] = json.value("order").toInt();
+        }
 
         m_dockedPluginsItems << itemInter;
 

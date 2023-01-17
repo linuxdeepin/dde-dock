@@ -27,7 +27,6 @@
 #include "utils.h"
 #include "appmultiitem.h"
 #include "quicksettingcontroller.h"
-#include "proxyplugincontroller.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -74,7 +73,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     connect(quickController, &QuickSettingController::pluginRemoved, this, &DockItemManager::onPluginItemRemoved);
     connect(quickController, &QuickSettingController::pluginUpdated, this, &DockItemManager::onPluginUpdate);
-    connect(ProxyPluginController::instance(), &ProxyPluginController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
+    connect(quickController, &QuickSettingController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
     // 应用信号
     connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);

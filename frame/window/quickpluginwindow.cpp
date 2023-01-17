@@ -24,7 +24,6 @@
 #include "pluginsiteminterface.h"
 #include "quicksettingcontainer.h"
 #include "appdrag.h"
-#include "proxyplugincontroller.h"
 #include "quickpluginmodel.h"
 #include "quickdragcore.h"
 
@@ -88,8 +87,6 @@ typedef struct DragInfo{
         return itemWidget->grab();
     }
 } DragInfo;
-
-static QStringList fixedPluginNames{ "network", "sound", "power" };
 
 QuickPluginWindow::QuickPluginWindow(QWidget *parent)
     : QWidget(parent)
@@ -420,9 +417,10 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
     }
 }
 
-void QuickPluginWindow::onRequestAppletShow(PluginsItemInterface *itemInter, const QString &itemKey)
+void QuickPluginWindow::onRequestAppletVisible(PluginsItemInterface *itemInter, const QString &itemKey, bool visible)
 {
-    showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey), false);
+    if (visible)
+        showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey), false);
 }
 
 void QuickPluginWindow::startDrag()
@@ -589,7 +587,7 @@ void QuickPluginWindow::initConnection()
     QuickPluginModel *model = QuickPluginModel::instance();
     connect(model, &QuickPluginModel::requestUpdate, this, &QuickPluginWindow::onRequestUpdate);
     connect(model, &QuickPluginModel::requestUpdatePlugin, this, &QuickPluginWindow::onUpdatePlugin);
-    connect(QuickSettingController::instance(), &QuickSettingController::requestAppletShow, this, &QuickPluginWindow::onRequestAppletShow);
+    connect(QuickSettingController::instance(), &QuickSettingController::requestAppletVisible, this, &QuickPluginWindow::onRequestAppletVisible);
 }
 
 /**
@@ -800,10 +798,15 @@ bool QuickDockItem::eventFilter(QObject *watched, QEvent *event)
 
 QPixmap QuickDockItem::iconPixmap() const
 {
-    int pixmapSize = static_cast<int>(ICONHEIGHT * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
     QIcon icon = m_pluginItem->icon(DockPart::QuickShow);
-    if (!icon.isNull())
+    if (!icon.isNull()) {
+        if (icon.availableSizes().size() > 0) {
+            QSize size = icon.availableSizes().first();
+            return icon.pixmap(size);
+        }
+        int pixmapSize = static_cast<int>(ICONHEIGHT * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
         return icon.pixmap(pixmapSize, pixmapSize);
+    }
 
     return QPixmap();
 }

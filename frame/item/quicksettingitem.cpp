@@ -111,18 +111,17 @@ QColor QuickSettingItem::foregroundColor() const
 
 QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter)
 {
-    QuickSettingController *quickController = QuickSettingController::instance();
     // 如果显示在面板的图标或者Widget为空，则不让显示(例如电池插件)
-    if (!quickController->hasFlag(pluginInter, PluginFlag::Type_Common))
+    if (!(pluginInter->flags() & PluginFlag::Type_Common))
         return nullptr;
 
-    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Multi))
+    if (pluginInter->flags() & PluginFlag::Quick_Multi)
         return new MultiQuickItem(pluginInter);
 
-    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Full))
+    if (pluginInter->flags() & PluginFlag::Quick_Full)
         return new FullQuickItem(pluginInter);
 
-    if (quickController->hasFlag(pluginInter, PluginFlag::Quick_Single))
+    if (pluginInter->flags() & PluginFlag::Quick_Single)
         return new SingleQuickItem(pluginInter);
 
     return nullptr;
