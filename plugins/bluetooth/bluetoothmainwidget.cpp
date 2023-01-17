@@ -42,6 +42,7 @@ BluetoothMainWidget::BluetoothMainWidget(AdaptersManager *adapterManager, QWidge
     , m_nameLabel(new QLabel(this))
     , m_stateLabel(new QLabel(this))
     , m_expandLabel(new QLabel(this))
+    , m_mouseEnter(false)
 {
     initUi();
     initConnection();
@@ -66,8 +67,11 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
             QPainterPath path;
             path.addEllipse(ptCenter, size / 2 - 1, size / 2 - 1);
             // 设置黑色背景色
-            QColor backColor(Qt::black);
-            backColor.setAlphaF(0.1);
+            QColor backColor = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType ? Qt::black : Qt::white);
+            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+                backColor.setAlphaF(m_mouseEnter ? 0.2 : 0.1);
+            else
+                backColor.setAlphaF(m_mouseEnter ? 0.1 : 0.2);
             painter.setBrush(backColor);
             painter.fillPath(path, backColor);
             // 添加图标
@@ -80,6 +84,16 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
             }
             painter.drawPixmap(QPoint(ptCenter.x() - pixmap.size().width() / 2, ptCenter.y() - pixmap.size().height() / 2), pixmap);
             return true;
+        }
+        case QEvent::Enter: {
+            m_mouseEnter = true;
+            m_iconWidget->update();
+            break;
+        }
+        case QEvent::Leave: {
+            m_mouseEnter = false;
+            m_iconWidget->update();
+            break;
         }
         case QEvent::MouseButtonRelease: {
             bool status = !(isOpen());
@@ -115,10 +129,7 @@ void BluetoothMainWidget::initUi()
     QFont nameFont = DFontSizeManager::instance()->t6();
     nameFont.setBold(true);
 
-    QPalette pe;
-    pe.setColor(QPalette::WindowText, Qt::black);
     m_nameLabel->setParent(textWidget);
-    m_nameLabel->setPalette(pe);
     m_nameLabel->setFont(nameFont);
 
     m_stateLabel->setParent(textWidget);
@@ -182,17 +193,4 @@ bool BluetoothMainWidget::isOpen() const
     return false;
 }
 
-QString BluetoothMainWidget::bluetoothIcon(bool isOpen) const
-{
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
-        return isOpen ? ":/bluetooth-active-symbolic-dark.svg" : ":/bluetooth-disable-symbolic-dark.svg";
-
-    return isOpen ? ":/bluetooth-active-symbolic.svg" : ":/bluetooth-disable-symbolic.svg";
-}
-
-void BluetoothMainWidget::onAdapterChanged()
-{
-    bool bluetoothIsOpen = isOpen();
-    m_stateLabel->setText(bluetoothIsOpen ? tr("Turn on") : tr("Turn off"));
-    m_iconWidget->update();
-}
+QString BluetoothMainWidget::bluetoothIcon(bool is
