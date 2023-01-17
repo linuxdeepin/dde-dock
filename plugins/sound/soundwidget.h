@@ -55,12 +55,12 @@ protected:
 private:
     const QString leftIcon();
     const QString rightIcon();
+    void convertThemePixmap(QPixmap &pixmap);
     bool existActiveOutputDevice() const;
+
+private Q_SLOTS:
+    void onThemeTypeChanged();
 
 private:
     DBusAudio *m_dbusAudio;
-    SliderContainer *m_sliderContainer;
-    DBusSink *m_defaultSink;
-};
-
-#endif // VOLUMEWIDGET_H
+   

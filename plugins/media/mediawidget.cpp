@@ -21,6 +21,7 @@
 #include "mediawidget.h"
 
 #include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -31,6 +32,7 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 #define PAUSEHEIGHT 21
 #define PLAYHEIGHT 18
@@ -175,11 +177,12 @@ void MusicButton::paintEvent(QPaintEvent *event)
     int height = this->height();
     int startX = 2;
     int startY = (height - ctrlHeight) / 2;
+    QColor color = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType ? Qt::black : Qt::white;
     QPainter painter(this);
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::black);
+    painter.setPen(color);
+    painter.setBrush(color);
     if (m_buttonType == ButtonType::Pause) {
         painter.drawRect(QRect(startX, startY, ICOMMARGIN, ctrlHeight));
         painter.drawRect(QRect(width - ICOMMARGIN - ICONSPACE, startY, ICOMMARGIN, ctrlHeight));
@@ -191,13 +194,4 @@ void MusicButton::paintEvent(QPaintEvent *event)
         trianglePath.lineTo(startX, startY);
         painter.drawPath(trianglePath);
         if (m_buttonType == ButtonType::Next)
-            painter.drawRect(width - ICOMMARGIN, startY, 2, ctrlHeight);
-    }
-    painter.restore();
-}
-
-void MusicButton::mouseReleaseEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event);
-    Q_EMIT clicked();
-}
+            painter.drawRe

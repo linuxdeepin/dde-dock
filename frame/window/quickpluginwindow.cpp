@@ -136,6 +136,20 @@ void QuickPluginWindow::setPositon(Position position)
     } else {
         m_mainLayout->setDirection(QBoxLayout::BottomToTop);
     }
+    switch(m_position) {
+    case Dock::Position::Top:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowTop);
+        break;
+    case Dock::Position::Right:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowRight);
+        break;
+    case Dock::Position::Bottom:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowBottom);
+        break;
+    case Dock::Position::Left:
+        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowLeft);
+        break;
+    }
 }
 
 void QuickPluginWindow::dragPlugin(PluginsItemInterface *item)
@@ -835,19 +849,4 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
 
     QPixmap pixmap = iconPixmap();
     if (pixmap.isNull())
-        return QWidget::paintEvent(event);
-
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
-
-    QSize size = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? pixmap.size() / qApp->devicePixelRatio(): pixmap.size();
-    QRect pixmapRect = QRect(QPoint((rect().width() - size.width()) / 2, (rect().height() - size.height()) / 2), size);
-    painter.drawPixmap(pixmapRect, pixmap);
-}
-
-void QuickDockItem::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() != Qt::RightButton)
-        return QWidget::mousePressEvent(event);
-
-    if (m_contextMenu->actions().isEmpty()) {
- 
+        return QWidget::paintEvent(
