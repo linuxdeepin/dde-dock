@@ -24,7 +24,6 @@
 #include "tray_delegate.h"
 #include "tray_model.h"
 #include "constants.h"
-#include "quicksettingcontainer.h"
 #include "systempluginwindow.h"
 #include "datetimedisplayer.h"
 #include "expandiconwidget.h"
@@ -486,7 +485,7 @@ void TrayManagerWindow::dropEvent(QDropEvent *e)
     if (!e || !e->mimeData() || e->source() == this)
         return;
 
-    if (qobject_cast<QuickSettingContainer *>(e->source())) {
+    if (m_quickIconWidget->isQuickWindow(e->source())) {
         const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(e->mimeData());
         if (!mimeData)
             return;

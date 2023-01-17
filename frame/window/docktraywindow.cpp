@@ -27,7 +27,6 @@
 #include "tray_delegate.h"
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
-#include "quicksettingcontainer.h"
 #include "expandiconwidget.h"
 #include "quickdragcore.h"
 
@@ -422,7 +421,7 @@ void DockTrayWindow::onDropIcon(QDropEvent *dropEvent)
     if (!dropEvent || !dropEvent->mimeData() || dropEvent->source() == this)
         return;
 
-    if (qobject_cast<QuickSettingContainer *>(dropEvent->source())) {
+    if (m_quickIconWidget->isQuickWindow(dropEvent->source())) {
         const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(dropEvent->mimeData());
         if (!mimeData)
             return;

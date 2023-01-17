@@ -21,9 +21,6 @@
 #include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
 #include "imageutil.h"
-#include "multiquickitem.h"
-#include "singlequickitem.h"
-#include "fullquickitem.h"
 #include "quicksettingcontroller.h"
 
 #include <DGuiApplicationHelper>
@@ -107,22 +104,4 @@ QColor QuickSettingItem::foregroundColor() const
         return dpa.color(DPalette::ColorGroup::Disabled, DPalette::ColorRole::Text);
 
     return dpa.color(DPalette::ColorGroup::Normal, DPalette::ColorRole::Text);
-}
-
-QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter)
-{
-    // 如果显示在面板的图标或者Widget为空，则不让显示(例如电池插件)
-    if (!(pluginInter->flags() & PluginFlag::Type_Common))
-        return nullptr;
-
-    if (pluginInter->flags() & PluginFlag::Quick_Multi)
-        return new MultiQuickItem(pluginInter);
-
-    if (pluginInter->flags() & PluginFlag::Quick_Full)
-        return new FullQuickItem(pluginInter);
-
-    if (pluginInter->flags() & PluginFlag::Quick_Single)
-        return new SingleQuickItem(pluginInter);
-
-    return nullptr;
 }

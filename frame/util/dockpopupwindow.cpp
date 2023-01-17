@@ -214,3 +214,41 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
     emit accept();
     hide();
 }
+
+PopupSwitchWidget::PopupSwitchWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_containerLayout(new QVBoxLayout(this))
+    , m_topWidget(nullptr)
+{
+    m_containerLayout->setContentsMargins(0, 0, 0, 0);
+    m_containerLayout->setSpacing(0);
+}
+
+PopupSwitchWidget::~PopupSwitchWidget()
+{
+}
+
+void PopupSwitchWidget::pushWidget(QWidget *widget)
+{
+    // 首先将界面其他的窗体移除
+    for (int i = m_containerLayout->count() - 1; i >= 0; i--) {
+        QLayoutItem *item = m_containerLayout->itemAt(i);
+        item->widget()->removeEventFilter(this);
+        item->widget()->hide();
+        m_containerLayout->removeItem(item);
+    }
+    m_topWidget = widget;
+    setFixedSize(widget->size());
+    widget->installEventFilter(this);
+    m_containerLayout->addWidget(widget);
+    widget->show();
+}
+
+bool PopupSwitchWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_topWidget && event->type() == QEvent::Resize) {
+        setFixedSize(m_topWidget->size());
+    }
+
+    return QWidget::eventFilter(watched, event);
+}

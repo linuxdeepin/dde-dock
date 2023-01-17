@@ -61,10 +61,4 @@ private:
     QString m_itemKey;
 };
 
-class QuickSettingFactory
-{
-public:
-    static QuickSettingItem *createQuickWidget(PluginsItemInterface *const pluginInter);
-};
-
 #endif // QUICKSETTINGITEM_H
