@@ -89,6 +89,12 @@ void DockPopupWindow::setContent(QWidget *content)
 void DockPopupWindow::setExtendWidget(QWidget *widget)
 {
     m_extendWidget = widget;
+    connect(widget, &QWidget::destroyed, this, [ this ] { m_extendWidget = nullptr; }, Qt::UniqueConnection);
+}
+
+QWidget *DockPopupWindow::extengWidget() const
+{
+    return m_extendWidget;
 }
 
 void DockPopupWindow::show(const QPoint &pos, const bool model)
