@@ -184,9 +184,9 @@ QIcon OnboardPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Color
     }
 
     if (dockPart == DockPart::QuickPanel)
-        return m_onboardItem->iconPixmap(24, 24);
+        return m_onboardItem->iconPixmap(QSize(24, 24), themeType);
 
-    return m_onboardItem->iconPixmap(18, 16);
+    return m_onboardItem->iconPixmap(QSize(18, 16), themeType);
 }
 
 PluginsItemInterface::PluginMode OnboardPlugin::status() const
@@ -224,4 +224,4 @@ void OnboardPlugin::refreshPluginItemsVisible()
             loadPlugin();
             return;
         }
-        m_proxyInter->itemAdded(this, pluginName());
+        m_proxyIn

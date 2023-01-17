@@ -51,6 +51,7 @@ public:
 protected:
     bool eventHandler(QEvent *event) override;
     void positionChanged(const Dock::Position position) override;
+    void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
 protected:
     // 实现PluginManagerInterface接口，用于向dock提供所有已经加载的插件
@@ -66,7 +67,4 @@ private:
 private:
     QSharedPointer<DockPluginController> m_dockController;
     QSharedPointer<QuickSettingContainer> m_quickContainer;
-    QSharedPointer<IconManager> m_iconManager;
-};
-
-#endif // PLUGINMANAGER_H
+  

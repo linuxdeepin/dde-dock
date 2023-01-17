@@ -40,7 +40,8 @@
 #include <QDragLeaveEvent>
 
 #define ITEMSIZE 22
-#define ITEMSPACE 6
+#define STARTSPACE 6
+#define ITEMSPACE 0
 #define ICONWIDTH 18
 #define ICONHEIGHT 16
 
@@ -114,6 +115,7 @@ void QuickPluginWindow::initUi()
     m_mainLayout->setDirection(QBoxLayout::RightToLeft);
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(ITEMSPACE);
+    m_mainLayout->addSpacing(STARTSPACE);
 }
 
 void QuickPluginWindow::setPositon(Position position)
@@ -169,7 +171,7 @@ QSize QuickPluginWindow::suitableSize() const
 QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
 {
     if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
-        int itemWidth = 0;
+        int itemWidth = STARTSPACE;
         for (int i = 0; i < m_mainLayout->count(); i++) {
             QWidget *itemWidget = m_mainLayout->itemAt(i)->widget();
             if (itemWidget)
@@ -180,7 +182,7 @@ QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
         return QSize(itemWidth, QWIDGETSIZE_MAX);
     }
 
-    int itemHeight = 0;
+    int itemHeight = STARTSPACE;
     for (int i = 0; i < m_mainLayout->count(); i++) {
         QWidget *itemWidget = m_mainLayout->itemAt(i)->widget();
         if (itemWidget)
@@ -447,6 +449,8 @@ void QuickPluginWindow::onRequestAppletVisible(PluginsItemInterface *itemInter, 
 {
     if (visible)
         showPopup(getDockItemByPlugin(itemInter), itemInter, itemInter->itemPopupApplet(itemKey), false);
+    else
+        getPopWindow()->hide();
 }
 
 void QuickPluginWindow::startDrag()
@@ -703,6 +707,7 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &it
     , m_mainWidget(nullptr)
     , m_mainLayout(nullptr)
     , m_dockItemParent(nullptr)
+    , m_isEnter(false)
 {
     initUi();
     initConnection();
@@ -712,9 +717,14 @@ QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &it
 QuickDockItem::~QuickDockItem()
 {
     QWidget *tipWidget = m_pluginItem->itemTipsWidget(m_itemKey);
-    if (tipWidget && tipWidget->parentWidget() == m_popupWindow)
+    if (tipWidget && (tipWidget->parentWidget() == m_popupWindow || tipWidget->parentWidget() == this))
         tipWidget->setParent(m_tipParent);
 
+    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+    if (itemWidget) {
+        itemWidget->setParent(nullptr);
+        itemWidget->hide();
+    }
     m_popupWindow->deleteLater();
 }
 
@@ -722,6 +732,12 @@ void QuickDockItem::setPosition(Dock::Position position)
 {
     m_position = position;
     updateWidgetSize();
+    if (m_mainLayout) {
+        QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
+        if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
+            itemWidget->setFixedSize(suitableSize());
+        }
+    }
 }
 
 PluginsItemInterface *QuickDockItem::pluginItem()
@@ -746,25 +762,35 @@ void QuickDockItem::hideToolTip()
 
 QSize QuickDockItem::suitableSize() const
 {
+    int widgetSize = (m_pluginItem->displayMode() == Dock::DisplayMode::Efficient) ? 24 : 30;
     if (m_pluginItem->pluginSizePolicy() == PluginsItemInterface::PluginSizePolicy::Custom) {
         QPixmap pixmap = iconPixmap();
-        if (!pixmap.isNull())
-            return pixmap.size();
+        if (!pixmap.isNull()) {
+            QSize size = pixmap.size();
+            if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+                if (size.width() < widgetSize)
+                    size.setWidth(widgetSize);
+                return size;
+            }
+            if (size.height() < widgetSize)
+                size.setHeight(widgetSize);
+            return size;
+        }
 
         QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
         if (itemWidget) {
-            int itemWidth = ICONWIDTH;
+            int itemWidth = widgetSize;
             int itemHeight = ICONHEIGHT;
             QSize itemSize = itemWidget->sizeHint();
             if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-                if (itemSize.width() > 0)
+                if (itemSize.width() > widgetSize)
                     itemWidth = itemSize.width();
                 if (itemSize.height() > 0 && itemSize.height() <= topLevelWidget()->height())
                     itemHeight = itemSize.height();
             } else {
                 if (itemSize.width() > 0 && itemSize.width() < topLevelWidget()->width())
                     itemWidth = itemSize.width();
-                if (itemSize.height() > 0 && itemSize.height() < ICONHEIGHT)
+                if (itemSize.height() > widgetSize && itemSize.height() < ICONHEIGHT)
                     itemHeight = itemSize.height();
             }
 
@@ -772,7 +798,10 @@ QSize QuickDockItem::suitableSize() const
         }
     }
 
-    return QSize(ICONWIDTH, ICONHEIGHT);
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
+        return QSize(widgetSize, ICONHEIGHT);
+
+    return QSize(ICONWIDTH, widgetSize);
 }
 
 void QuickDockItem::paintEvent(QPaintEvent *event)
@@ -780,14 +809,37 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
     if (!m_pluginItem)
         return QWidget::paintEvent(event);
 
+    QPainter painter(this);
+    QColor backColor = DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType() ? QColor(20, 20, 20) : Qt::white;
+    backColor.setAlphaF(0.2);
+    if (m_isEnter) {
+        // 鼠标进入的时候，绘制底色
+        QPainterPath path;
+        int borderRadius = shadowRadius();
+        QRect rectBackground;
+        if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+            int backHeight = qBound(20, height() - 4, 30);
+            rectBackground.setTop((height() - backHeight) / 2);
+            rectBackground.setHeight(backHeight);
+            rectBackground.setWidth(width());
+            path.addRoundedRect(rectBackground, borderRadius, borderRadius);
+        } else {
+            int backWidth = qBound(20, width() - 4, 30);
+            rectBackground.setLeft((width() - backWidth) / 2);
+            rectBackground.setWidth(backWidth);
+            rectBackground.setHeight(height());
+            path.addRoundedRect(rectBackground, borderRadius, borderRadius);
+        }
+        painter.fillPath(path, backColor);
+    }
+
     QPixmap pixmap = iconPixmap();
     if (pixmap.isNull())
         return QWidget::paintEvent(event);
 
-    QSize size = suitableSize();
+    QSize size = pixmap.size();
     QRect pixmapRect = QRect(QPoint((rect().width() - size.width()) / 2, (rect().height() - size.height()) / 2), pixmap.size());
 
-    QPainter painter(this);
     painter.drawPixmap(pixmapRect, pixmap);
 }
 
@@ -801,73 +853,4 @@ void QuickDockItem::mousePressEvent(QMouseEvent *event)
         if (menuJson.isEmpty())
             return;
 
-        QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
-        if (jsonDocument.isNull())
-            return;
-
-        QJsonObject jsonMenu = jsonDocument.object();
-
-        QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
-        for (auto item : jsonMenuItems) {
-            QJsonObject itemObj = item.toObject();
-            QAction *action = new QAction(itemObj.value("itemText").toString());
-            action->setCheckable(itemObj.value("isCheckable").toBool());
-            action->setChecked(itemObj.value("checked").toBool());
-            action->setData(itemObj.value("itemId").toString());
-            action->setEnabled(itemObj.value("isActive").toBool());
-            m_contextMenu->addAction(action);
-        }
-    }
-
-    m_contextMenu->exec(QCursor::pos());
-}
-
-void QuickDockItem::enterEvent(QEvent *event)
-{
-    QWidget::enterEvent(event);
-
-    QWidget *tipWidget = m_pluginItem->itemTipsWidget(m_itemKey);
-    if (!tipWidget)
-        return;
-
-    // 记录下toolTip的parent，因为在调用DockPopupWindow的时候会将DockPopupWindow设置为toolTip的parent,
-    // 在DockPopupWindow对象释放的时候, 会将toolTip也一起给释放
-    if (tipWidget->parentWidget() != m_popupWindow)
-        m_tipParent = tipWidget->parentWidget();
-
-    switch (m_position) {
-    case Top:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowTop);
-        break;
-    case Bottom:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowBottom);
-        break;
-    case Left:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowLeft);
-        break;
-    case Right:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowRight);
-        break;
-    }
-
-    m_popupWindow->resize(tipWidget->sizeHint());
-    m_popupWindow->setContent(tipWidget);
-
-    m_popupWindow->show(popupMarkPoint());
-}
-
-void QuickDockItem::leaveEvent(QEvent *event)
-{
-    QWidget::leaveEvent(event);
-    m_popupWindow->hide();
-}
-
-void QuickDockItem::showEvent(QShowEvent *event)
-{
-    if (!m_mainLayout)
-        return QWidget::showEvent(event);
-
-    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
-    if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
-        itemWidget->show();
-        itemWidget->setFixedS
+        QJsonDocument js

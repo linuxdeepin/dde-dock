@@ -23,6 +23,9 @@
 #include "pluginsiteminterface.h"
 
 #include <DDciIcon>
+#include <DWindowManagerHelper>
+#include <DSysInfo>
+#include <DPlatformTheme>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -30,6 +33,7 @@
 #define ITEMSPACE 6
 #define ITEMHEIGHT 16
 #define ITEMWIDTH 18
+
 static QStringList pluginNames = {"power", "sound", "network"};
 
 DGUI_USE_NAMESPACE
@@ -39,6 +43,7 @@ IconManager::IconManager(DockPluginController *pluginController, QObject *parent
     , m_pluginController(pluginController)
     , m_size(QSize(ITEMWIDTH, ITEMHEIGHT))
     , m_position(Dock::Position::Bottom)
+    , m_displayMode(Dock::DisplayMode::Efficient)
 {
 }
 
@@ -52,7 +57,12 @@ void IconManager::setPosition(Dock::Position position)
     m_position = position;
 }
 
-QPixmap IconManager::pixmap() const
+void IconManager::setDisplayMode(Dock::DisplayMode displayMode)
+{
+    m_displayMode = displayMode;
+}
+
+QPixmap IconManager::pixmap(DGuiApplicationHelper::ColorType colorType) const
 {
     QList<PluginsItemInterface *> plugins;
     for (const QString &pluginName : pluginNames) {
@@ -65,25 +75,37 @@ QPixmap IconManager::pixmap() const
         // 缺省图标
         DDciIcon::Theme theme = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType ? DDciIcon::Light : DDciIcon::Dark;
         DDciIcon dciIcon(QString(":/resources/dock_control.dci"));
-        return dciIcon.pixmap(QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio(), ITEMHEIGHT, theme, DDciIcon::Normal);
+        QPixmap pixmap = dciIcon.pixmap(QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio(), ITEMHEIGHT, theme, DDciIcon::Normal);
+        QColor foreColor = (colorType == DGuiApplicationHelper::ColorType::DarkType ? Qt::white : Qt::black);
+        foreColor.setAlphaF(0.8);
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), foreColor);
+        return pixmap;
     }
 
     // 组合图标
     QPixmap pixmap;
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-        pixmap = QPixmap(ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1), m_size.height() - 8);
+        if (m_displayMode == Dock::DisplayMode::Efficient) {
+            // 高效模式下，高度固定为30,圆角固定为8
+            pixmap = QPixmap(ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1), 30);
+        } else {
+            // 时尚模式下，高度随着任务栏的大小变化而变化
+            pixmap = QPixmap(ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1), m_size.height() - 8);
+        }
     } else {
-        pixmap = QPixmap(m_size.width() - 8, ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1));
+        if (m_displayMode == Dock::DisplayMode::Efficient) {
+            // 高校模式下，宽度固定
+            pixmap = QPixmap(30, ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1));
+        } else {
+            pixmap = QPixmap(m_size.width() - 8, ITEMWIDTH * plugins.size() + ITEMSPACE * (plugins.size() + 1));
+        }
     }
 
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
-    QColor backColor = DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType() ? QColor(20, 20, 20) : Qt::white;
-    backColor.setAlphaF(0.2);
-    QPainterPath path;
-    path.addRoundedRect(pixmap.rect(), 5, 5);
-    painter.fillPath(path, backColor);
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         QPoint pointPixmap(ITEMSPACE, (pixmap.height() - ITEMHEIGHT) / 2);
         for (PluginsItemInterface *plugin : plugins) {
@@ -93,30 +115,4 @@ QPixmap IconManager::pixmap() const
              pointPixmap.setX(pointPixmap.x() + ITEMWIDTH + ITEMSPACE);
          }
      } else {
-         QPoint pointPixmap((pixmap.width() - ITEMWIDTH) / 2, ITEMSPACE);
-         for (PluginsItemInterface *plugin : plugins) {
-             QIcon icon = plugin->icon(DockPart::QuickShow);
-             QPixmap pixmapDraw = icon.pixmap(ITEMHEIGHT, ITEMHEIGHT);
-             painter.drawPixmap(pointPixmap, pixmapDraw);
-             pointPixmap.setY(pointPixmap.y() + ITEMWIDTH + ITEMSPACE);
-         }
-     }
-     painter.end();
-     return pixmap;
-}
-
-bool IconManager::isFixedPlugin(PluginsItemInterface *plugin) const
-{
-    return pluginNames.contains(plugin->pluginName());
-}
-
-PluginsItemInterface *IconManager::findPlugin(const QString &pluginName) const
-{
-    QList<PluginsItemInterface *> plugins = m_pluginController->currentPlugins();
-    for (PluginsItemInterface *plugin : plugins) {
-        if (plugin->pluginName() == pluginName)
-            return plugin;
-    }
-
-    return nullptr;
-}
+         QPoint pointP
