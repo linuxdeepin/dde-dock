@@ -839,18 +839,10 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
 
     QSize size = pixmap.size();
     QRect pixmapRect = QRect(QPoint((rect().width() - size.width()) / 2, (rect().height() - size.height()) / 2), pixmap.size());
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
 
-    painter.drawPixmap(pixmapRect, pixmap);
-}
-
-void QuickDockItem::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() != Qt::RightButton)
-        return QWidget::mousePressEvent(event);
-
-    if (m_contextMenu->actions().isEmpty()) {
-        const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
-        if (menuJson.isEmpty())
-            return;
-
-        QJsonDocument js
+    if (m_pluginItem->pluginSizePolicy() == PluginsItemInterface::PluginSizePolicy::System) {
+        size = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size / qApp->devicePixelRatio(): size;
+        pixmapRect = QRect(QPoint((rect().width() - size.width()) / 2, (rect().height() - size.height()) / 2), size);
+    }
+    pa
