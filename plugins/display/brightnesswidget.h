@@ -47,10 +47,10 @@ private:
     void initUi();
     void initConnection();
     void updateSliderValue();
+    void convertThemePixmap(QPixmap &pixmap);
+
+private Q_SLOTS:
+    void onThemeTypeChanged();
 
 private:
-    SliderContainer *m_sliderContainer;
-    BrightnessModel *m_model;
-};
-
-#endif // LIGHTSETTINGWIDGET_H
+    Slider

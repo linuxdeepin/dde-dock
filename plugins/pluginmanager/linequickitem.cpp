@@ -34,6 +34,7 @@ LineQuickItem::LineQuickItem(PluginsItemInterface *const pluginInter, const QStr
     , m_effectWidget(new DBlurEffectWidget(this))
 {
     initUi();
+    initConnection();
     QMetaObject::invokeMethod(this, &LineQuickItem::resizeSelf, Qt::QueuedConnection);
 }
 
@@ -70,11 +71,9 @@ bool LineQuickItem::eventFilter(QObject *obj, QEvent *event)
 
 void LineQuickItem::initUi()
 {
-    QColor maskColor(Qt::white);
-    maskColor.setAlphaF(0.8);
-    m_effectWidget->setMaskColor(maskColor);
     m_effectWidget->setBlurRectXRadius(8);
     m_effectWidget->setBlurRectYRadius(8);
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 
     // 如果图标不为空
     if (!m_centerWidget)
@@ -95,11 +94,9 @@ void LineQuickItem::initUi()
     m_centerWidget->installEventFilter(this);
 }
 
-void LineQuickItem::resizeSelf()
+void LineQuickItem::initConnection()
 {
-    if (!m_centerWidget)
-        return;
-
-    m_effectWidget->setFixedHeight(m_centerWidget->height());
-    setFixedHeight(m_centerWidget->height());
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &LineQuickItem::onThemeTypeChanged);
 }
+
+void LineQuickItem::resizeS
