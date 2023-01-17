@@ -149,7 +149,15 @@ void SoundPlugin::pluginSettingsChanged()
 
 QIcon SoundPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    return m_soundItem->pixmap(themeType);
+    switch (dockPart) {
+    case DockPart::QuickShow:
+        return m_soundItem->pixmap(themeType, 18, 16);
+    case DockPart::DCCSetting:
+        return m_soundItem->pixmap(themeType, 18, 18);
+    default:
+        break;
+    }
+    return QIcon();
 }
 
 PluginsItemInterface::PluginMode SoundPlugin::status() const
@@ -211,13 +219,4 @@ bool SoundPlugin::eventHandler(QEvent *event)
             sinkDBus.method("SetVolume").arg(qMax(volume - 0.02, 0.0)).arg(true).call();
     }
 
-    return true;
-}
-
-void SoundPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, SOUND_KEY);
-    else
-        m_proxyInter->itemAdded(this, SOUND_KEY);
-}
+  

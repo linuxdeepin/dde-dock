@@ -51,7 +51,7 @@ public:
     void refreshIcon();
     void refreshTips(const int volume, const bool force = false);
     QPixmap pixmap() const;
-    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType) const;
+    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const;
 
 signals:
     void requestContextMenu() const;
@@ -69,7 +69,4 @@ private:
     Dock::TipsWidget *m_tipsLabel;
     QScopedPointer<SoundApplet> m_applet;
     DBusSink *m_sinkInter;
-    QPixmap m_iconPixmap;
-};
-
-#endif // SOUNDITEM_H
+    QPixmap m_iconPix
