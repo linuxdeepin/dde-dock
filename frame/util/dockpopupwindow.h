@@ -82,4 +82,4 @@ private:
     QWidget *m_extendWidget;
 };
 
-#endif // DOCKPOPUPWINDOW_H
+class PopupSwitchWidget : pu

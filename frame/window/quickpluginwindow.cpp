@@ -22,7 +22,6 @@
 #include "quicksettingcontroller.h"
 #include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
-#include "quicksettingcontainer.h"
 #include "appdrag.h"
 #include "quickpluginmodel.h"
 #include "quickdragcore.h"
@@ -112,9 +111,9 @@ QuickPluginWindow::~QuickPluginWindow()
 void QuickPluginWindow::initUi()
 {
     setAcceptDrops(true);
-    m_mainLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_mainLayout->setAlignment(Qt::AlignCenter);
     m_mainLayout->setDirection(QBoxLayout::RightToLeft);
-    m_mainLayout->setContentsMargins(ITEMSPACE, 0, ITEMSPACE, 0);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(ITEMSPACE);
 }
 
@@ -124,14 +123,17 @@ void QuickPluginWindow::setPositon(Position position)
         return;
 
     m_position = position;
-    QuickSettingContainer::setPosition(position);
-    QuickDockItem::setPosition(position);
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QuickDockItem *dockItemWidget = qobject_cast<QuickDockItem *>(m_mainLayout->itemAt(i)->widget());
+        if (dockItemWidget) {
+            dockItemWidget->setPosition(position);
+        }
+    }
+    resizeDockItem();
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
         m_mainLayout->setDirection(QBoxLayout::RightToLeft);
-        m_mainLayout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     } else {
         m_mainLayout->setDirection(QBoxLayout::BottomToTop);
-        m_mainLayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     }
 }
 
@@ -176,7 +178,7 @@ QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
         }
         itemWidth += ITEMSPACE;
 
-        return QSize(itemWidth, ITEMSIZE);
+        return QSize(itemWidth, QWIDGETSIZE_MAX);
     }
 
     int itemHeight = 0;
@@ -187,7 +189,18 @@ QSize QuickPluginWindow::suitableSize(const Dock::Position &position) const
     }
     itemHeight += ITEMSPACE;
 
-    return QSize(ITEMSIZE, itemHeight);
+    return QSize(QWIDGETSIZE_MAX, itemHeight);
+}
+
+bool QuickPluginWindow::isQuickWindow(QObject *object) const
+{
+    QList<PluginsItemInterface *> dockPlugins = QuickPluginModel::instance()->dockedPluginItems();
+    for (PluginsItemInterface *plugin : dockPlugins) {
+        if (plugin->pluginName() == QString("pluginManager") && plugin->itemPopupApplet(QUICK_ITEM_KEY) == object)
+            return true;
+   }
+
+    return false;
 }
 
 PluginsItemInterface *QuickPluginWindow::findQuickSettingItem(const QPoint &mousePoint, const QList<PluginsItemInterface *> &settingItems)
@@ -223,6 +236,14 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             break;
         }
     }
+    if (watched == getPopWindow()->getContent()) {
+#define ITEMWIDTH 70
+#define QUICKITEMSPACE 10
+        int maxWidth = ITEMWIDTH * 4 + (QUICKITEMSPACE * 5);
+        int contentWidget = getPopWindow()->getContent()->width();
+        if (contentWidget > maxWidth || contentWidget <= 0)
+            getPopWindow()->getContent()->setFixedWidth(maxWidth);
+    }
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -249,7 +270,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             if (m_dragInfo->canDrag(mouseEvent->pos()))
                 break;
 
-            showPopup(m_dragInfo->dockItem);
+            showPopup(m_dragInfo->dockItem, m_dragInfo->dockItem->pluginItem(), m_dragInfo->dockItem->pluginItem()->itemPopupApplet(QUICK_ITEM_KEY), true);
         } while (false);
         m_dragInfo->reset();
 
@@ -260,7 +281,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
             break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (m_dragInfo->canDrag(mouseEvent->pos()))
+        if (m_dragInfo->canDrag(mouseEvent->pos()) && m_dragInfo->dockItem->canMove())
             startDrag();
 
         m_dragInfo->reset();
@@ -269,7 +290,7 @@ bool QuickPluginWindow::eventFilter(QObject *watched, QEvent *event)
     case QEvent::Drop: {
         m_dragEnterMimeData = nullptr;
         QDropEvent *dropEvent = static_cast<QDropEvent *>(event);
-        if (qobject_cast<QuickSettingContainer *>(dropEvent->source())) {
+        if (isQuickWindow(dropEvent->source())) {
             const QuickPluginMimeData *mimeData = qobject_cast<const QuickPluginMimeData *>(dropEvent->mimeData());
             if (mimeData)
                 dragPlugin(mimeData->pluginItemInterface());
@@ -353,7 +374,7 @@ void QuickPluginWindow::onRequestUpdate()
             itemWidget = pluginItems[item];
         } else {
             itemWidget = new QuickDockItem(item, quickController->itemKey(item), this);
-            itemWidget->setFixedSize(itemWidget->suitableSize());
+            updateDockItemSize(itemWidget);
             itemWidget->installEventFilter(this);
             itemWidget->setMouseTracking(true);
             countChanged = true;
@@ -412,7 +433,7 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
 
     QuickDockItem *quickDockItem = getDockItemByPlugin(itemInter);
     if (quickDockItem) {
-        quickDockItem->setFixedSize(quickDockItem->suitableSize());
+        updateDockItemSize(quickDockItem);
         quickDockItem->update();
     }
 }
@@ -481,11 +502,21 @@ QuickDockItem *QuickPluginWindow::getActiveDockItem(QPoint point) const
 
 void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *itemInter, QWidget *childPage, bool isClicked)
 {
-    if (!isVisible())
+    if (!isVisible() || !item)
         return;
 
-    bool canBack = true;
-    DockPopupWindow *popWindow = QuickSettingContainer::popWindow();
+    if (!childPage) {
+        const QString itemKey = QuickSettingController::instance()->itemKey(itemInter);
+        QStringList commandArgument = itemInter->itemCommand(itemKey).split(" ");
+        if (commandArgument.size() > 0) {
+            QString command = commandArgument.first();
+            commandArgument.removeFirst();
+            QProcess::startDetached(command, commandArgument);
+        }
+        return;
+    }
+
+    DockPopupWindow *popWindow = getPopWindow();
     if (isClicked && popWindow->isVisible()) {
         // 如果是点击插件，并且该插件曾经打开快捷面板且已经是显示状态，那么就直接隐藏快捷面板
         popWindow->hide();
@@ -508,14 +539,12 @@ void QuickPluginWindow::showPopup(QuickDockItem *item, PluginsItemInterface *ite
             }
         }
 
+        PopupSwitchWidget *switchWidget = static_cast<PopupSwitchWidget *>(popWindow->getContent());
+        switchWidget->installEventFilter(this);
+        switchWidget->pushWidget(childPage);
         popWindow->setExtendWidget(item);
         popWindow->show(popupPoint(item), true);
-        canBack = false;
     }
-
-    QuickSettingContainer *container = static_cast<QuickSettingContainer *>(popWindow->getContent());
-    container->showPage(childPage, itemInter, canBack);
-    popWindow->raise();
 }
 
 QList<QuickDockItem *> QuickPluginWindow::quickDockItems()
@@ -534,6 +563,62 @@ QList<QuickDockItem *> QuickPluginWindow::quickDockItems()
     }
 
     return dockItems;
+}
+
+// 根据位置获取箭头的方向
+static DArrowRectangle::ArrowDirection getDirection(const Dock::Position &position)
+{
+    switch (position) {
+    case Dock::Position::Top:
+        return DArrowRectangle::ArrowDirection::ArrowTop;
+    case Dock::Position::Left:
+        return DArrowRectangle::ArrowDirection::ArrowLeft;
+    case Dock::Position::Right:
+        return DArrowRectangle::ArrowDirection::ArrowRight;
+    default:
+        return DArrowRectangle::ArrowDirection::ArrowBottom;
+    }
+
+    return DArrowRectangle::ArrowDirection::ArrowBottom;
+}
+
+DockPopupWindow *QuickPluginWindow::getPopWindow() const
+{
+    static DockPopupWindow *popWindow = nullptr;
+    if (popWindow)
+        return popWindow;
+
+    popWindow = new DockPopupWindow;
+    popWindow->setShadowBlurRadius(20);
+    popWindow->setRadius(18);
+    popWindow->setShadowYOffset(2);
+    popWindow->setShadowXOffset(0);
+    popWindow->setArrowWidth(18);
+    popWindow->setArrowHeight(10);
+    popWindow->setArrowDirection(getDirection(m_position));
+    popWindow->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    PopupSwitchWidget *content = new PopupSwitchWidget(popWindow);
+    popWindow->setContent(content);
+    return popWindow;
+}
+
+void QuickPluginWindow::updateDockItemSize(QuickDockItem *dockItem)
+{
+    if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
+        dockItem->setFixedSize(dockItem->suitableSize().width(), height());
+    } else {
+        dockItem->setFixedSize(width(), dockItem->suitableSize().height());
+    }
+}
+
+void QuickPluginWindow::resizeDockItem()
+{
+    for (int i = 0; i < m_mainLayout->count(); i++) {
+        QuickDockItem *dockItemWidget = qobject_cast<QuickDockItem *>(m_mainLayout->itemAt(i)->widget());
+        if (dockItemWidget) {
+            updateDockItemSize(dockItemWidget);
+        }
+    }
 }
 
 int QuickPluginWindow::getDropIndex(QPoint point)
@@ -582,6 +667,12 @@ void QuickPluginWindow::dragMoveEvent(QDragMoveEvent *event)
     event->accept();
 }
 
+void QuickPluginWindow::resizeEvent(QResizeEvent *event)
+{
+    resizeDockItem();
+    QWidget::resizeEvent(event);
+}
+
 void QuickPluginWindow::initConnection()
 {
     QuickPluginModel *model = QuickPluginModel::instance();
@@ -596,15 +687,15 @@ void QuickPluginWindow::initConnection()
  * @param parent
  */
 
-Dock::Position QuickDockItem::m_position(Dock::Position::Bottom);
-
 QuickDockItem::QuickDockItem(PluginsItemInterface *pluginItem, const QString &itemKey, QWidget *parent)
     : QWidget(parent)
     , m_pluginItem(pluginItem)
     , m_itemKey(itemKey)
+    , m_position(Dock::Position::Bottom)
     , m_popupWindow(new DockPopupWindow)
     , m_contextMenu(new QMenu(this))
     , m_tipParent(nullptr)
+    , m_mainWidget(nullptr)
     , m_mainLayout(nullptr)
     , m_dockItemParent(nullptr)
 {
@@ -625,6 +716,7 @@ QuickDockItem::~QuickDockItem()
 void QuickDockItem::setPosition(Dock::Position position)
 {
     m_position = position;
+    updateWidgetSize();
 }
 
 PluginsItemInterface *QuickDockItem::pluginItem()
@@ -635,6 +727,11 @@ PluginsItemInterface *QuickDockItem::pluginItem()
 bool QuickDockItem::canInsert() const
 {
     return (m_pluginItem->flags() & PluginFlag::Attribute_CanInsert);
+}
+
+bool QuickDockItem::canMove() const
+{
+    return (m_pluginItem->flags() & PluginFlag::Attribute_CanDrag);
 }
 
 void QuickDockItem::hideToolTip()
@@ -679,13 +776,11 @@ void QuickDockItem::paintEvent(QPaintEvent *event)
         return QWidget::paintEvent(event);
 
     QPixmap pixmap = iconPixmap();
-    int width = ICONWIDTH;
-    int height = ICONHEIGHT;
-    if (m_pluginItem->pluginSizePolicy() == PluginsItemInterface::PluginSizePolicy::Custom) {
-        width = pixmap.width();
-        height = pixmap.height();
-    }
-    QRect pixmapRect = QRect(QPoint((rect().width() - width) / 2, (rect().height() - height) / 2), pixmap.size());
+    if (pixmap.isNull())
+        return QWidget::paintEvent(event);
+
+    QSize size = suitableSize();
+    QRect pixmapRect = QRect(QPoint((rect().width() - size.width()) / 2, (rect().height() - size.height()) / 2), pixmap.size());
 
     QPainter painter(this);
     painter.drawPixmap(pixmapRect, pixmap);
@@ -770,7 +865,7 @@ void QuickDockItem::showEvent(QShowEvent *event)
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
         itemWidget->show();
-        itemWidget->setFixedSize(size());
+        itemWidget->setFixedSize(suitableSize());
         m_mainLayout->addWidget(itemWidget);
     }
 }
@@ -782,123 +877,4 @@ void QuickDockItem::hideEvent(QHideEvent *event)
 
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0) {
-        itemWidget->setParent(m_dockItemParent);
-        itemWidget->hide();
-        m_mainLayout->removeWidget(itemWidget);
-    }
-}
-
-bool QuickDockItem::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == this)
-        return m_pluginItem->eventHandler(event);
-
-    return QWidget::eventFilter(watched, event);
-}
-
-QPixmap QuickDockItem::iconPixmap() const
-{
-    QIcon icon = m_pluginItem->icon(DockPart::QuickShow);
-    if (!icon.isNull()) {
-        if (icon.availableSizes().size() > 0) {
-            QSize size = icon.availableSizes().first();
-            return icon.pixmap(size);
-        }
-        int pixmapSize = static_cast<int>(ICONHEIGHT * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
-        return icon.pixmap(pixmapSize, pixmapSize);
-    }
-
-    return QPixmap();
-}
-
-void QuickDockItem::initUi()
-{
-    QPixmap pixmap = iconPixmap();
-    if (!pixmap.isNull())
-        return;
-
-    m_mainLayout = new QHBoxLayout(this);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
-    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
-    if (itemWidget) {
-        m_dockItemParent = itemWidget->parentWidget();
-        itemWidget->installEventFilter(this);
-    }
-}
-
-void QuickDockItem::initAttribute()
-{
-    m_popupWindow->setShadowBlurRadius(20);
-    m_popupWindow->setRadius(6);
-    m_popupWindow->setShadowYOffset(2);
-    m_popupWindow->setShadowXOffset(0);
-    m_popupWindow->setArrowWidth(18);
-    m_popupWindow->setArrowHeight(10);
-    m_popupWindow->setObjectName("quickitempopup");
-    if (Utils::IS_WAYLAND_DISPLAY) {
-        Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
-        m_popupWindow->setWindowFlags(flags);
-    }
-
-    this->installEventFilter(this);
-}
-
-void QuickDockItem::initConnection()
-{
-    connect(m_contextMenu, &QMenu::triggered, this, &QuickDockItem::onMenuActionClicked);
-    connect(qApp, &QApplication::aboutToQuit, m_popupWindow, &DockPopupWindow::deleteLater);
-}
-
-QPoint QuickDockItem::topleftPoint() const
-{
-    QPoint p = this->pos();
-    /* 由于点击范围的问题，在图标的外面加了一层布局，这个布局的边距需要考虑 */
-    switch (m_position) {
-    case Top:
-        p.setY(p.y() * 2);
-        break;
-    case Bottom:
-        p.setY(0);
-        break;
-    case Left:
-        p.setX(p.x() * 2);
-        break;
-    case Right:
-        p.setX(0);
-        break;
-    }
-
-    QWidget *w = qobject_cast<QWidget *>(this->parent());
-    while (w) {
-        p += w->pos();
-        w = qobject_cast<QWidget *>(w->parent());
-    }
-
-    return p;
-}
-
-QPoint QuickDockItem::popupMarkPoint() const
-{
-    QPoint p(topleftPoint());
-    const QRect r = rect();
-    switch (m_position) {
-    case Top:
-        p += QPoint(r.width() / 2, r.height());
-        break;
-    case Bottom:
-        p += QPoint(r.width() / 2, 0);
-        break;
-    case Left:
-        p += QPoint(r.width(), r.height() / 2);
-        break;
-    case Right:
-        p += QPoint(0, r.height() / 2);
-        break;
-    }
-    return p;
-}
-
-void QuickDockItem::onMenuActionClicked(QAction *action)
-{
-    m_pluginItem->invokedMenuItem(m_itemKey, action->data().toString(), true);
-}
+        it
