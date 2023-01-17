@@ -20,7 +20,6 @@
  */
 #include "quickpluginwindow.h"
 #include "quicksettingcontroller.h"
-#include "quicksettingitem.h"
 #include "pluginsiteminterface.h"
 #include "appdrag.h"
 #include "quickpluginmodel.h"
@@ -877,4 +876,4 @@ void QuickDockItem::hideEvent(QHideEvent *event)
 
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0) {
-        it
+        itemWidget->setParent(m_dockItem
