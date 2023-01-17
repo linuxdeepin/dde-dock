@@ -81,7 +81,7 @@ private:
     Dock::Position m_position;
     Dock::DisplayMode m_displayMode;
     QBoxLayout *m_mainBoxLayout;
-    QWidget *m_frontWidget;
+    QWidget *m_showDesktopWidget;
     QWidget *m_toolWidget;
     QBoxLayout *m_toolLayout;
     QLabel *m_toolLineLabel;
@@ -93,4 +93,4 @@ private:
     TrayDelegate *m_delegate;                       // 托盘区域的视图代理
 };
 
-#endif // DOCKTRAYWINDOW_H
+#endif // DOCKTRAYWIN
