@@ -24,6 +24,7 @@
 #include "tray_delegate.h"
 #include "dockpopupwindow.h"
 #include "imageutil.h"
+#include "systempluginitem.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -170,6 +171,7 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
     connect(trayModel, &TrayModel::rowCountChanged, gridParentView, rowCountChanged);
     connect(trayModel, &TrayModel::requestRefreshEditor, trayView, &TrayGridView::onUpdateEditorView);
 
+    connect(trayDelegate, &TrayDelegate::requestHide, trayView, &TrayGridView::requestHide);
     connect(trayDelegate, &TrayDelegate::removeRow, trayView, [ = ](const QModelIndex &index) {
         trayView->model()->removeRow(index.row(),index.parent());
     });
@@ -208,6 +210,7 @@ void TrayGridWidget::setPosition(const Dock::Position &position)
 void TrayGridWidget::setTrayGridView(TrayGridView *trayView)
 {
     m_trayGridView = trayView;
+    connect(m_trayGridView, &TrayGridView::requestHide, this, &TrayGridWidget::hide);
 }
 
 void TrayGridWidget::setReferGridView(TrayGridView *trayView)
@@ -315,33 +318,10 @@ void TrayGridWidget::initMember()
         if (rctView.contains(mousePos))
             return;
 
-        hide();
-    });
-}
-
-QColor TrayGridWidget::maskColor() const
-{
-    QColor color = DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::instance()->themeType()).window().color();
-    int maskAlpha(static_cast<int>(255 * m_dockInter->opacity()));
-    color.setAlpha(maskAlpha);
-    return color;
-}
-
-ExpandIconWidget *TrayGridWidget::expandWidget() const
-{
-    if (!m_referGridView)
-        return nullptr;
-
-    QAbstractItemModel *dataModel = m_referGridView->model();
-    if (!dataModel)
-        return nullptr;
-
-    for (int i = 0; i < dataModel->rowCount(); i++) {
-        QModelIndex index = dataModel->index(i, 0);
-        ExpandIconWidget *widget = qobject_cast<ExpandIconWidget *>(m_referGridView->indexWidget(index));
-        if (widget)
-            return widget;
-    }
-
-    return nullptr;
-}
+        // 查看是否存在SystemPluginItem插件，在此处判断的原因是因为当弹出右键菜单的时候，如果鼠标在菜单上点击
+        // 刚好把托盘区域给隐藏了，导致菜单也跟着隐藏，导致点击菜单的时候不生效
+        QAbstractItemModel *dataModel = m_trayGridView->model();
+        for (int i = 0; i < dataModel->rowCount(); i++) {
+            QModelIndex index = dataModel->index(i, 0);
+            SystemPluginItem *widget = qobject_cast<SystemPluginItem *>(m_trayGridView->indexWidget(index));
+            if (widget && widget->containsPoint(mouseP

@@ -112,7 +112,9 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         PluginsItemInterface *pluginInter = (PluginsItemInterface *)(index.data(TrayModel::PluginInterfaceRole).toULongLong());
         if (pluginInter) {
             const QString itemKey = QuickSettingController::instance()->itemKey(pluginInter);
-            trayWidget = new SystemPluginItem(pluginInter, itemKey, parent);
+            SystemPluginItem *trayItem = new SystemPluginItem(pluginInter, itemKey, parent);
+            connect(trayItem, &SystemPluginItem::execActionFinished, this, &TrayDelegate::requestHide);
+            trayWidget = trayItem;
         }
     }
 
@@ -222,6 +224,4 @@ void TrayDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         painter->setPen(borderColor);
         painter->drawPath(path);
     } else {
-        // 如果是任务栏上面的托盘图标，则绘制背景色
-        int borderRadius = 8;
-        if (qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>() == Dock::DisplayMode::Fashion) 
+        // 如果是任务栏上面的托盘图标�
