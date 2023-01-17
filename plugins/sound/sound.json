@@ -1,5 +1,5 @@
 {
     "api": "2.0.0",
-    "order": 1,
+    "order": 2,
     "depends-daemon-dbus-service": "org.deepin.dde.Audio1"
 }
