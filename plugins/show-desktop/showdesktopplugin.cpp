@@ -166,7 +166,7 @@ PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 
 PluginFlags ShowDesktopPlugin::flags() const
 {
-    return PluginFlag::Type_Fixed;
+    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
 }
 
 void ShowDesktopPlugin::updateVisible()
@@ -201,6 +201,3 @@ void ShowDesktopPlugin::refreshPluginItemsVisible()
             loadPlugin();
             return;
         }
-        updateVisible();
-    }
-}
