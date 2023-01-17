@@ -45,6 +45,7 @@ public:
 Q_SIGNALS:
     void removeRow(const QModelIndex &) const;
     void requestDrag(bool) const;
+    void requestHide();
 
 private Q_SLOTS:
     void onUpdateExpand(bool on);
@@ -65,4 +66,4 @@ private:
     QListView *m_listView;
 };
 
-#endif // TRAYDELEGATE_H
+#

@@ -54,6 +54,7 @@ Q_SIGNALS:
     void dragLeaved();
     void dragEntered();
     void dragFinished();
+    void requestHide();
 
 private Q_SLOTS:
     void clearDragModelIndex();
@@ -90,6 +91,4 @@ private:
     bool m_pressed;
     bool m_aniRunning;
     Dock::Position m_positon;
-};
-
-#endif // GRIDVIEW_H
+}
