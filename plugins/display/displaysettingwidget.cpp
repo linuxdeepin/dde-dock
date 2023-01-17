@@ -42,7 +42,7 @@ DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
                 .path("/org/deepin/dde/ControlCenter1")
                 .interface("org.deepin.dde.ControlCenter1")
                 .method("ShowPage").arg(QString("display")).call();
-        hide();
+        Q_EMIT requestHide();
     });
 }
 
@@ -69,5 +69,4 @@ void DisplaySettingWidget::resizeWidgetHeight()
 {
     QMargins margins = this->contentsMargins();
     setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height() +
-                   m_collaborationWidget->height() + m_settingBtn->height() + ItemSpacing * 2);
-}
+                   m_collaborationWidget->height() + m_settingBtn->height() + ItemSp

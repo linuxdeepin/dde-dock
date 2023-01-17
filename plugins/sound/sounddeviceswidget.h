@@ -53,6 +53,7 @@ public:
 
 Q_SIGNALS:
     void enableChanged(bool);
+    void requestHide();
 
 protected:
     bool eventFilter(QObject *watcher, QEvent *event) override;
@@ -99,4 +100,4 @@ private:
     QList<SoundDevicePort *> m_ports;
 };
 
-#endif // VOLUMEDEVICESWIDGET_H
+#endif /

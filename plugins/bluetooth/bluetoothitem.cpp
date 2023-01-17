@@ -67,6 +67,7 @@ BluetoothItem::BluetoothItem(AdaptersManager *adapterManager, QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::noAdapter, this, &BluetoothItem::noAdapter);
     connect(m_applet, &BluetoothApplet::justHasAdapter, this, &BluetoothItem::justHasAdapter);
+    connect(m_applet, &BluetoothApplet::requestHide, this, &BluetoothItem::requestHide);
 }
 
 QWidget *BluetoothItem::tipsWidget()
@@ -224,5 +225,4 @@ void BluetoothItem::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
-    painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
-}
+    painter.dr

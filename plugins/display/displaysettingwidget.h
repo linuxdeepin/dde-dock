@@ -34,8 +34,12 @@ class DevCollaborationWidget;
 class DisplaySettingWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit DisplaySettingWidget(QWidget *parent = nullptr);
+
+Q_SIGNALS:
+    void requestHide();
 
 private:
     void initUI();
@@ -46,6 +50,3 @@ private:
     DevCollaborationWidget *m_collaborationWidget;  // 跨端协同
     QPushButton *m_settingBtn;                      // 设置按钮
 };
-
-
-#endif // DISPLAY_SETTING_WIDGET_H

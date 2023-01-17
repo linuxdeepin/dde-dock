@@ -73,6 +73,9 @@ void DisplayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_displayWidget.data(), &BrightnessWidget::brightClicked, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
     });
+    connect(m_displaySettingWidget.data(), &DisplaySettingWidget::requestHide, this, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
     connect(m_model.data(), &BrightnessModel::screenVisibleChanged, this, [ this ](bool visible) {
         if (visible)
             m_proxyInter->itemAdded(this, pluginName());
@@ -99,13 +102,4 @@ QWidget *DisplayPlugin::itemTipsWidget(const QString &itemKey)
 
 QWidget *DisplayPlugin::itemPopupApplet(const QString &itemKey)
 {
-    if (itemKey == QUICK_ITEM_KEY)
-        return m_displaySettingWidget.data();
-
-    return nullptr;
-}
-
-PluginFlags DisplayPlugin::flags() const
-{
-    return PluginFlag::Type_Common | PluginFlag::Quick_Full;
-}
+    if (itemKey == QUICK_ITEM_K

@@ -70,6 +70,9 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     }
 
     connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::enableChanged, m_soundWidget.data(), &SoundWidget::setEnabled);
+    connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::requestHide, this, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
 }
 
 void SoundPlugin::pluginStateSwitched()
@@ -213,10 +216,3 @@ bool SoundPlugin::eventHandler(QEvent *event)
         // 向上滚动，增大音量
         if (volume < maxVolume)
             sinkDBus.method("SetVolume").arg(qMin(volume + 0.02, maxVolume)).arg(true).call();
-    } else {
-        // 向下滚动，调小音量
-        if (volume > 0)
-            sinkDBus.method("SetVolume").arg(qMax(volume - 0.02, 0.0)).arg(true).call();
-    }
-
-  

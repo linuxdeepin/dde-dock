@@ -62,6 +62,7 @@ signals:
     void requestContextMenu() const;
     void noAdapter();
     void justHasAdapter();
+    void requestHide();
 
 private:
     Dock::TipsWidget *m_tipsLabel;
@@ -72,4 +73,4 @@ private:
     bool m_adapterPowered;
 };
 
-#endif // BLUETOOTHITEM_H
+#e
