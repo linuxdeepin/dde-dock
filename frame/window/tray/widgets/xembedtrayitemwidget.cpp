@@ -124,6 +124,13 @@ void XEmbedTrayItemWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
+    xcb_connection_t *connection = IS_WAYLAND_DISPLAY ? m_xcbCnn : QX11Info::connection();
+    if (connection) {
+        xcb_map_window(connection, m_containerWid);
+
+        xcb_reparent_window(connection, m_windowId, m_containerWid, 0, 0);
+    }
+
     m_updateTimer->start();
 }
 
@@ -260,11 +267,13 @@ void XEmbedTrayItemWidget::wrapWindow()
 
     xcb_flush(c);
 
-    xcb_map_window(c, m_containerWid);
+    if (isVisible()) {
+        xcb_map_window(c, m_containerWid);
 
-    xcb_reparent_window(c, m_windowId,
-                        m_containerWid,
-                        0, 0);
+        xcb_reparent_window(c, m_windowId,
+                            m_containerWid,
+                            0, 0);
+    }
 
     /*
      * Render the embedded window offscreen
