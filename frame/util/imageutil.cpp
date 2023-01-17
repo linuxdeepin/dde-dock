@@ -47,7 +47,9 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
-        return pixmap;
+        if (ratio == 1)
+            return pixmap;
+        return pixmap.scaled(size * ratio, size * ratio);
     }
 
     QPixmap pixmap(pixmapSize, pixmapSize);
@@ -61,7 +63,10 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
     painter.end();
     pixmap.setDevicePixelRatio(ratio);
 
-    return pixmap;
+    if (ratio == 1)
+        return pixmap;
+
+    return pixmap.scaled(size * ratio, size * ratio);
 }
 
 const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, const qreal ratio)
@@ -70,6 +75,14 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, cons
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : QSize(size * ratio));
         pixmap.setDevicePixelRatio(ratio);
+        if (ratio == 1)
+            return pixmap;
+
+        if (pixmap.size().width() > size.width() * ratio)
+            pixmap = pixmap.scaledToWidth(size.width() * ratio);
+        if (pixmap.size().height() > size.height() * ratio)
+            pixmap = pixmap.scaledToHeight(size.height() * ratio);
+
         return pixmap;
     }
     return QPixmap();
