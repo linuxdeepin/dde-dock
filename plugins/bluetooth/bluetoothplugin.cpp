@@ -64,6 +64,8 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
         m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+        m_proxyInter->requestSetAppletVisible(this, BLUETOOTH_KEY, false);
         m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
     });
     connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ = ] {
@@ -162,12 +164,4 @@ QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Col
 PluginsItemInterface::PluginMode BluetoothPlugin::status() const
 {
     if (m_bluetoothItem.data()->isPowered())
-        return PluginMode::Active;
-
-    return PluginMode::Deactive;
-}
-
-QString BluetoothPlugin::description() const
-{
-    if (m_bluetoothItem.data()->isPowered())
-        r
+        return PluginM

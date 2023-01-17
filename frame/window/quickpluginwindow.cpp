@@ -359,6 +359,12 @@ void QuickPluginWindow::onRequestUpdate()
             // 如果该插件在任务栏上，则先将其添加到临时列表中
             pluginItems[dockItem->pluginItem()] = dockItem;
         } else {
+            DockPopupWindow *popupWindow = getPopWindow();
+            if (popupWindow->isVisible()) {
+                // 该插件被移除的情况下，判断弹出窗口是否在当前的插件中打开的，如果是，则隐藏该窗口
+                if (popupWindow->extengWidget() == dockItem)
+                    popupWindow->hide();
+            }
             // 如果该插件不在任务栏上，则先删除
             dockItem->deleteLater();
             countChanged = true;
@@ -864,16 +870,4 @@ void QuickDockItem::showEvent(QShowEvent *event)
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
         itemWidget->show();
-        itemWidget->setFixedSize(suitableSize());
-        m_mainLayout->addWidget(itemWidget);
-    }
-}
-
-void QuickDockItem::hideEvent(QHideEvent *event)
-{
-    if (!m_mainLayout)
-        return QWidget::hideEvent(event);
-
-    QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
-    if (itemWidget && m_mainLayout->indexOf(itemWidget) >= 0) {
-        itemWidget->setParent(m_dockItem
+        itemWidget->setFixedS

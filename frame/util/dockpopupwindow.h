@@ -45,6 +45,7 @@ public:
 
     void setContent(QWidget *content);
     void setExtendWidget(QWidget *widget);
+    QWidget *extengWidget() const;
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
@@ -82,4 +83,22 @@ private:
     QWidget *m_extendWidget;
 };
 
-class PopupSwitchWidget : pu
+class PopupSwitchWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit PopupSwitchWidget(QWidget *parent = nullptr);
+    ~PopupSwitchWidget();
+
+    void pushWidget(QWidget *widget);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
+    QVBoxLayout *m_containerLayout;
+    QWidget *m_topWidget;
+};
+
+#endif // DOCKPOPUPWINDOW_H
