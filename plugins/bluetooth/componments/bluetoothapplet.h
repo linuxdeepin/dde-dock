@@ -102,6 +102,7 @@ signals:
     void justHasAdapter();
     void powerChanged(bool state);
     void deviceStateChanged(const Device *device);
+    void requestHide();
 
 public slots:
     // 蓝牙适配器增加
@@ -137,4 +138,4 @@ private:
     bool m_airplaneModeEnable;
 };
 
-#endif // BLUETOOTHAPPLET_H
+#end

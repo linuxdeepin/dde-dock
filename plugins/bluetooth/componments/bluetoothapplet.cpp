@@ -302,6 +302,7 @@ void BluetoothApplet::initConnect()
         .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
+        emit requestHide();
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
@@ -356,6 +357,4 @@ void BluetoothApplet::updateSize()
 
     static const int maxHeight = (TitleHeight + TitleSpace) + MaxDeviceCount * DeviceItemHeight;
 
-    setFixedSize(ItemWidth, qMin(maxHeight, height));
-}
-
+    setFixedSize(ItemWidth, q
