@@ -40,7 +40,7 @@
 
 DGUI_USE_NAMESPACE
 
-#define ICON_SIZE 24
+#define ICON_SIZE 18
 #define BACKSIZE 36
 
 SoundWidget::SoundWidget(QWidget *parent)
@@ -68,7 +68,7 @@ void SoundWidget::initUi()
 
     QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
     QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
-    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 12);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
     m_sliderContainer->setRange(0, std::round(m_dbusAudio->maxUIVolume() * 100.00));
     m_sliderContainer->setPageStep(2);
@@ -127,14 +127,14 @@ const QString SoundWidget::leftIcon()
 {
     const bool mute = existActiveOutputDevice() ? m_defaultSink->mute() : true;
     if (mute)
-        return QString(":/icons/resources/audio-volume-muted-dark");
+        return QString(":/icons/resources/audio-volume-muted-dark.svg");
 
-    return QString(":/icons/resources/volume");
+    return QString(":/icons/resources/volume.svg");
 }
 
 const QString SoundWidget::rightIcon()
 {
-    return QString(":/icons/resources/broadcast");
+    return QString(":/icons/resources/broadcast.svg");
 }
 
 /** 判断是否存在未禁用的声音输出设备
@@ -158,5 +158,4 @@ bool SoundWidget::existActiveOutputDevice() const
         }
     }
 
-    return false;
-}
+    retu
