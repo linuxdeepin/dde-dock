@@ -27,14 +27,11 @@
 			"visibility": "private"
 		},
 		"Dock_Quick_Tray_Name": {
-			"value": ["fcitx"],
+			"value": ["fcitx", "indicator:keybord_layout"],
 			"serial": 0,
 			"flags": [],
 			"name": "显示在任务栏上的托盘图标",
 			"name[zh_CN]": "任务栏上固定的托盘图标",
 			"description": "记录哪些托盘的图标在任务栏启动的时候显示在任务栏上",
 			"permissions": "readwrite",
-			"visibility": "private"
-		}
-    }
-}
+			"visibi

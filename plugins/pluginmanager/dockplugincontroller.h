@@ -69,6 +69,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
     bool pluginCanDock(PluginsItemInterface *plugin) const;
+    bool pluginCanDock(const QStringList &config, PluginsItemInterface *plugin) const;
     void updateDockInfo(PluginsItemInterface * const itemInter, const DockPart &part) override;
 
 private:
@@ -108,9 +109,4 @@ private:
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
 
     QJsonObject m_pluginSettingsObject;
-    QMap<qulonglong, PluginAdapter *> m_pluginAdapterMap;
-
-    PluginProxyInterface *m_proxyInter;
-};
-
-#endif // ABSTRACTPLUGINSCONTROLLER_H
+    QMap<qulonglong, PluginAdapter *> m_pluginAdapterM
