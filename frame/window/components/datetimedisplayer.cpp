@@ -224,20 +224,29 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
         info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, textWidth, DATETIMESIZE / 2);
         return info;
     }
-    int timeWidth = QFontMetrics(timeFont()).boundingRect(info.m_time).width() + 3;
-    int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width() + 2;
+    int timeWidth = QFontMetrics(timeFont()).boundingRect(info.m_time).width();
+    int dateWidth = QFontMetrics(m_dateFont).boundingRect(info.m_date).width();
+
     // 如果是上下方向
     if (m_showMultiRow) {
-        // 日期时间多行显示（一般是高效模式下）
-        info.m_timeRect = QRect(0, 0, timeWidth, height() / 2);
-        info.m_dateRect = QRect(0, height() / 2, dateWidth, height() / 2);
+        // 日期时间多行显示（一般是高效模式下，向下和向上偏移2个像素）
+        info.m_timeRect = QRect(0, 2, timeWidth, height() / 2);
+        info.m_dateRect = QRect(0, height() / 2 -2, dateWidth, height() / 2);
     } else {
-        info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
-        int dateX = rect().width() - QFontMetrics(m_dateFont).width(info.m_date) - 2 - ITEMSPACE;
-        // 如果时间的X坐标小于日期的X坐标，需要手动设置坐标在日期坐标的右侧
-        if (dateX < info.m_timeRect.right())
-            dateX = info.m_timeRect.right();
-        info.m_dateRect = QRect(dateX, 0, dateWidth, height());
+        // 3:时间和日期3部分间隔
+        if (rect().width() > (ITEMSPACE * 3 + timeWidth + dateWidth)) {
+            info.m_timeRect = QRect(ITEMSPACE, 0, timeWidth, height());
+
+            int dateX = info.m_timeRect.right() + (rect().width() -(ITEMSPACE * 2 + timeWidth + dateWidth));
+            info.m_dateRect = QRect(dateX, 0, dateWidth, height());
+        } else {
+            // 宽度不满足间隔为ITEMSPACE的，需要自己计算间隔。
+            int itemSpace = (rect().width() - timeWidth - dateWidth) / 3;
+            info.m_timeRect = QRect(itemSpace, 0, timeWidth, height());
+
+            int dateX = info.m_timeRect.right() + itemSpace;
+            info.m_dateRect = QRect(dateX, 0, dateWidth, height());
+        }
     }
 
     return info;
@@ -287,12 +296,20 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
 
     int timeAlignFlag = Qt::AlignCenter;
     int dateAlignFlag = Qt::AlignCenter;
+
+    QFont strTimeFont = timeFont();
+
     if (m_showMultiRow) {
         timeAlignFlag = Qt::AlignHCenter | Qt::AlignBottom;
         dateAlignFlag = Qt::AlignHCenter | Qt::AlignTop;
+    } else {
+        if (strTimeFont.pixelSize() >= rect().height()) {
+            strTimeFont.setPixelSize(rect().height() - 2);
+            m_dateFont.setPixelSize(rect().height() - 2);
+        }
     }
 
-    painter.setFont(timeFont());
+    painter.setFont(strTimeFont);
     painter.drawText(textRect(info.m_timeRect), timeAlignFlag, info.m_time);
     painter.setFont(m_dateFont);
     painter.drawText(textRect(info.m_dateRect), dateAlignFlag, info.m_date);
@@ -333,18 +350,17 @@ QFont DateTimeDisplayer::timeFont() const
     if (m_position == Dock::Position::Left || m_position == Dock::Position::Right)
         return DFontSizeManager::instance()->t6();
 
+#define MINHEIGHT 40
+
     // 如果是上下方向，且当前只有一行，则始终显示小号字体
-    if (m_oneRow)
+    if (m_oneRow || rect().height() <= MINHEIGHT)
         return DFontSizeManager::instance()->t10();
 
     static QList<QFont> dateFontSize = { DFontSizeManager::instance()->t10(),
                 DFontSizeManager::instance()->t9(),
                 DFontSizeManager::instance()->t8(),
-                DFontSizeManager::instance()->t7(),
-                DFontSizeManager::instance()->t6() };
+                DFontSizeManager::instance()->t7() };
 
-#define MINHEIGHT 16
-    // 获取最低高度为16，找到对应的索引值
     int index = qMin(qMax(static_cast<int>((rect().height() - MINHEIGHT) / 3), 0), dateFontSize.size() - 1);
     return dateFontSize[index];
 }
@@ -381,27 +397,4 @@ void DateTimeDisplayer::createMenuItem()
 QRect DateTimeDisplayer::textRect(const QRect &sourceRect) const
 {
     // 如果是上下，则不做任何变化
-    if (!m_showMultiRow && (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom))
-        return sourceRect;
-
-    QRect resultRect = sourceRect;
-    QSize size = suitableSize();
-    // 如果是左右或者上下多行显示，设置宽度
-    resultRect.setWidth(size.width());
-    return resultRect;
-}
-
-void DateTimeDisplayer::enterEvent(QEvent *event)
-{
-    Q_UNUSED(event);
-    m_isEnter = true;
-    update();
-    m_tipPopupWindow->show(tipsPoint());
-}
-
-void DateTimeDisplayer::leaveEvent(QEvent *event)
-{
-    Q_UNUSED(event);
-    m_isEnter = false;
-    update();
-    m_t
+    if (!m_showMultiRow && (m_position == Dock::Position::Top || m_position == Dock::
