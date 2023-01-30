@@ -35,10 +35,10 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
-        connect(it, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
+        connect(it, &AppItem::requestUpdateItemMinimizedGeometry, this, [ = ](const QRect r){
             Q_EMIT requestUpdateItemMinimizedGeometry(it, r);
         });
-        connect(it, &AppItem::requestActive, this, [=]{
+        connect(it, &AppItem::requestActive, this, [ = ]{
             emit requestUpdateActiveApp();
         });
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);

@@ -491,7 +491,9 @@ QPoint AppItem::appIconPosition() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
-    if(info.size()>0) {
+
+    // check info size, check if firstKey is exist
+    if (info.size() > 0) {
         m_currentWindowId = info.firstKey();
     }
     if (m_appPreviewTips)

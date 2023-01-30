@@ -14,16 +14,20 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QScrollBar>
+
 const QString ICON_DEFAULT = QStringLiteral(":/icons/resources/application-x-desktop");
 const QString OVERFLOW_MORE_LIGHT = QStringLiteral(":/icons/resources/overflow-more-light");
 const QString OVERFLOW_MORE_DARK = QStringLiteral(":/icons/resources/overflow-more-dark");
+
+// Min distance to hide btn
+const int SCROLL_MIN_RANGE = 10;
 
 const QString ARROW_UP = QStringLiteral(":/icons/resources/arrow-up");
 const QString ARROW_DOWN = QStringLiteral(":/icons/resources/arrow-down");
 const QString ARROW_LEFT = QStringLiteral(":/icons/resources/arrow-left");
 const QString ARROW_RIGHT = QStringLiteral(":/icons/resources/arrow-right");
 
-// INFO: check if is darktheme
+// check if is darktheme
 inline bool isDarkTheme() {
     return DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
 }
@@ -42,7 +46,8 @@ OverflowItem::OverflowItem(QWidget *parent)
     , m_right(new DIconButton)
 {
     initUI();
-    initSlots();
+    initLBtnSlot();
+    initRBtnSlot();
     setbtnsVisible();
 
     m_centerScroll->installEventFilter(this);
@@ -92,56 +97,59 @@ void OverflowItem::initUI() {
     DPaletteHelper::instance()->setPalette(m_right, pa_r);
 }
 
-void OverflowItem::initSlots() {
-    connect(m_left, &QPushButton::clicked, this, [this ]{
+void OverflowItem::initLBtnSlot() {
+    connect(m_left, &QPushButton::clicked, this, [ this ]{
         switch (m_popuplayout->direction()) {
-            case QBoxLayout::LeftToRight: {
-                    int scroll_len = m_scrollarea->horizontalScrollBar()->value() - 50;
-                    if (scroll_len <= 10) {
-                        m_scrollarea->horizontalScrollBar()->setValue(0);
-                    } else {
-                        m_scrollarea->horizontalScrollBar()->setValue(scroll_len);
-                    }
+        case QBoxLayout::LeftToRight: {
+                int scroll_len = m_scrollarea->horizontalScrollBar()->value() - 50;
+                if (scroll_len <= SCROLL_MIN_RANGE) {
+                    m_scrollarea->horizontalScrollBar()->setValue(0);
+                } else {
+                    m_scrollarea->horizontalScrollBar()->setValue(scroll_len);
                 }
-                break;
-            case QBoxLayout::TopToBottom: {
-                    int scroll_len = m_scrollarea->verticalScrollBar()->value() - 50;
-                    if (scroll_len <= 10) {
-                        m_scrollarea->verticalScrollBar()->setValue(0);
-                    } else {
-                        m_scrollarea->verticalScrollBar()->setValue(scroll_len);
-                    }
+            }
+            break;
+        case QBoxLayout::TopToBottom: {
+                int scroll_len = m_scrollarea->verticalScrollBar()->value() - 50;
+                if (scroll_len <= SCROLL_MIN_RANGE) {
+                    m_scrollarea->verticalScrollBar()->setValue(0);
+                } else {
+                    m_scrollarea->verticalScrollBar()->setValue(scroll_len);
                 }
-                break;
-            default:
-                break;
+            }
+            break;
+        default:
+            break;
         }
         setbtnsVisible();
     });
-    connect(m_right, &QPushButton::clicked, this, [this ]{
+}
+
+void OverflowItem::initRBtnSlot() {
+    connect(m_right, &QPushButton::clicked, this, [ this ]{
         switch (m_popuplayout->direction()) {
-            case QBoxLayout::LeftToRight: {
-                    int maxlen = m_scrollarea->horizontalScrollBar()->maximum();
-                    int scroll_len = m_scrollarea->horizontalScrollBar()->value() + 50;
-                    if (scroll_len > maxlen - 10) {
-                        m_scrollarea->horizontalScrollBar()->setValue(maxlen);
-                    } else {
-                        m_scrollarea->horizontalScrollBar()->setValue(scroll_len);
-                    }
+        case QBoxLayout::LeftToRight: {
+                int maxlen = m_scrollarea->horizontalScrollBar()->maximum();
+                int scroll_len = m_scrollarea->horizontalScrollBar()->value() + 50;
+                if (scroll_len > maxlen - SCROLL_MIN_RANGE) {
+                    m_scrollarea->horizontalScrollBar()->setValue(maxlen);
+                } else {
+                    m_scrollarea->horizontalScrollBar()->setValue(scroll_len);
                 }
-                break;
-            case QBoxLayout::TopToBottom: {
-                    int maxlen = m_scrollarea->verticalScrollBar()->maximum();
-                    int scroll_len = m_scrollarea->verticalScrollBar()->value() + 50;
-                    if (scroll_len > maxlen - 10) {
-                        m_scrollarea->verticalScrollBar()->setValue(maxlen);
-                    } else {
-                        m_scrollarea->verticalScrollBar()->setValue(scroll_len);
-                    }
+            }
+            break;
+        case QBoxLayout::TopToBottom: {
+                int maxlen = m_scrollarea->verticalScrollBar()->maximum();
+                int scroll_len = m_scrollarea->verticalScrollBar()->value() + 50;
+                if (scroll_len > maxlen - SCROLL_MIN_RANGE) {
+                    m_scrollarea->verticalScrollBar()->setValue(maxlen);
+                } else {
+                    m_scrollarea->verticalScrollBar()->setValue(scroll_len);
                 }
-                break;
-            default:
-                break;
+            }
+            break;
+        default:
+            break;
         }
         setbtnsVisible();
     });
@@ -151,26 +159,26 @@ void OverflowItem::setbtnsVisible() {
     bool leftshow = true;
     bool rightshow = true;
     switch (m_popuplayout->direction()) {
-        case QBoxLayout::LeftToRight:
-            if (m_scrollarea->horizontalScrollBar()->value() <= 10) {
-                leftshow = false;
-            }
-            if (m_scrollarea->horizontalScrollBar()->value() >=
-                    m_scrollarea->horizontalScrollBar()->maximum() - 10) {
-                rightshow = false;
-            }
-            break;
-        case QBoxLayout::TopToBottom:
-            if (m_scrollarea->verticalScrollBar()->value() <= 10) {
-                leftshow = false;
-            }
-            if (m_scrollarea->verticalScrollBar()->value() >=
-                    m_scrollarea->verticalScrollBar()->maximum() - 10) {
-                rightshow = false;
-            }
-            break;
-        default:
-            break;
+    case QBoxLayout::LeftToRight:
+        if (m_scrollarea->horizontalScrollBar()->value() <= SCROLL_MIN_RANGE) {
+            leftshow = false;
+        }
+        if (m_scrollarea->horizontalScrollBar()->value() >=
+                m_scrollarea->horizontalScrollBar()->maximum() - SCROLL_MIN_RANGE) {
+            rightshow = false;
+        }
+        break;
+    case QBoxLayout::TopToBottom:
+        if (m_scrollarea->verticalScrollBar()->value() <= SCROLL_MIN_RANGE) {
+            leftshow = false;
+        }
+        if (m_scrollarea->verticalScrollBar()->value() >=
+                m_scrollarea->verticalScrollBar()->maximum() - SCROLL_MIN_RANGE) {
+            rightshow = false;
+        }
+        break;
+    default:
+        break;
     }
     m_left->setVisible(leftshow);
     m_right->setVisible(rightshow);
@@ -178,16 +186,16 @@ void OverflowItem::setbtnsVisible() {
 
 void OverflowItem::setbtnsShape() {
     switch (m_popupbtnslayout->direction()) {
-        case QBoxLayout::LeftToRight:
-            m_left->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
-            m_right->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
-            break;
-        case QBoxLayout::TopToBottom:
-            m_left->setFixedSize(m_width * 3 / 4 , m_width * 2 / 5);
-            m_right->setFixedSize(m_width * 3 / 4  , m_width * 2 / 5);
-            break;
-        default:
-            break;
+    case QBoxLayout::LeftToRight:
+        m_left->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
+        m_right->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
+        break;
+    case QBoxLayout::TopToBottom:
+        m_left->setFixedSize(m_width * 3 / 4 , m_width * 2 / 5);
+        m_right->setFixedSize(m_width * 3 / 4  , m_width * 2 / 5);
+        break;
+    default:
+        break;
     }
 }
 
@@ -217,7 +225,6 @@ QPoint OverflowItem::OverflowIconPosition(const QPixmap &pixmap) const {
 }
 
 void OverflowItem::paintEvent(QPaintEvent *e) {
-
     DockItem::paintEvent(e);
 
     if (!isVisible()) {
@@ -231,8 +238,8 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
         image = static_cast<AppItem *>(m_popuplayout->itemAt(0)->widget())->appIcon();
     }
     image = image.scaled(width() * 0.7 , height() * 0.7, Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-    QPoint realsize = OverflowIconPosition(image);
-    painter.drawPixmap(realsize, image);
+    QPoint realpos = OverflowIconPosition(image);
+    painter.drawPixmap(realpos, image);
     // Paint End
 
     // Add Shadow
@@ -259,12 +266,10 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
     painter.fillPath(path, QColor(0, 0, 0, 255 * 0.8));
 
     painter.setOpacity(1);
-    QPixmap moreicons;
-    if (isDarkTheme()) {
-        moreicons = QIcon(OVERFLOW_MORE_DARK).pixmap(QSize(width() * 0.5, height() * 0.5));
-    } else {
-        moreicons = QIcon(OVERFLOW_MORE_LIGHT).pixmap(QSize(width() * 0.5, height() * 0.5));
-    }
+    QPixmap moreicons = isDarkTheme() ?
+        QIcon(OVERFLOW_MORE_DARK).pixmap(QSize(width() * 0.5, height() * 0.5)) :
+        QIcon(OVERFLOW_MORE_LIGHT).pixmap(QSize(width() * 0.5, height() * 0.5));
+
     QPoint realsize_more = OverflowIconPosition(moreicons);
     painter.drawPixmap(realsize_more, moreicons);
     // Paint "More" End
@@ -274,20 +279,20 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
 // INFO: public, be set in mainpanelcontrol.cpp, not use it in this cpp
 void OverflowItem::setLayoutPosition(Dock::Position position) {
     switch (position) {
-        case Top:
-        case Bottom:
-            m_popuplayout->setDirection(QBoxLayout::LeftToRight);
-            m_popupbtnslayout->setDirection(QBoxLayout::LeftToRight);
-            m_left->setIcon(QIcon(ARROW_LEFT));
-            m_right->setIcon(QIcon(ARROW_RIGHT));
-            break;
-        case Left:
-        case Right:
-            m_popuplayout->setDirection(QBoxLayout::TopToBottom);
-            m_popupbtnslayout->setDirection(QBoxLayout::TopToBottom);
-            m_left->setIcon(QIcon(ARROW_UP));
-            m_right->setIcon(QIcon(ARROW_DOWN));
-            break;
+    case Top:
+    case Bottom:
+        m_popuplayout->setDirection(QBoxLayout::LeftToRight);
+        m_popupbtnslayout->setDirection(QBoxLayout::LeftToRight);
+        m_left->setIcon(QIcon(ARROW_LEFT));
+        m_right->setIcon(QIcon(ARROW_RIGHT));
+        break;
+    case Left:
+    case Right:
+        m_popuplayout->setDirection(QBoxLayout::TopToBottom);
+        m_popupbtnslayout->setDirection(QBoxLayout::TopToBottom);
+        m_left->setIcon(QIcon(ARROW_UP));
+        m_right->setIcon(QIcon(ARROW_DOWN));
+        break;
     }
     setbtnsShape();
     setbtnsVisible();
@@ -324,7 +329,6 @@ void OverflowItem::leaveEvent(QEvent *e) {
 }
 
 void OverflowItem::showPopupWindow(QWidget *const content, const bool model, const int radius) {
-
     m_popupShown = true;
     m_lastPopupWidget = content;
 

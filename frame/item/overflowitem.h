@@ -7,7 +7,6 @@
 
 #include "dockitem.h"
 
-#include <QWidget>
 #include <DWidget>
 
 QT_USE_NAMESPACE
@@ -20,9 +19,11 @@ class DIconButton;
 DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
+
 class OverflowItem : public DockItem
 {
     Q_OBJECT
+
 public:
     explicit OverflowItem(QWidget *parent = nullptr);
     inline ItemType itemType() const override { return OverflowIcon; }
@@ -30,6 +31,7 @@ public:
     void addItem(QWidget *item);
     void hidePopUpWindow();
     void setLayoutPosition(Dock::Position position);
+
 protected:
     void enterEvent(QEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
@@ -37,6 +39,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
     void leaveEvent(QEvent *e) override;
     bool eventFilter(QObject *watched, QEvent *e) override;
+
 private:
     void paintEvent(QPaintEvent *e) override;
     void showPopupWindow(QWidget *const content, const bool model = false, const int radius = 6) override;
@@ -44,18 +47,17 @@ private:
 private:
     QPoint OverflowIconPosition(const QPixmap &pixmap) const;
     void initUI();
-    void initSlots();
+    void initLBtnSlot();
+    void initRBtnSlot();
     void setbtnsVisible();
     void setbtnsShape();
 
-// status
 private:
+// status
     int m_width;
     bool m_clicked;
     bool m_showpopup;
-
 // widgets
-private:
     QScrollArea *m_scrollarea;
     QWidget *m_centerScroll;
     QBoxLayout *m_popuplayout;

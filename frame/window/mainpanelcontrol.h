@@ -6,8 +6,8 @@
 #define MAINPANELCONTROL_H
 
 #include "constants.h"
+
 #include <DWidget>
-#include <QWidget>
 
 #include <com_deepin_daemon_gesture.h>
 using namespace Dock;
@@ -28,6 +28,7 @@ class PlaceholderItem;
 class AppDragWidget;
 class DesktopWidget;
 class OverflowItem;
+
 class MainPanelControl : public QWidget
 {
     Q_OBJECT
@@ -49,8 +50,8 @@ public slots:
 signals:
     void itemMoved(DockItem *sourceItem, DockItem *targetItem);
     void itemAdded(const QString &appDesktop, int idx);
-
     void updateLayout();
+
 private:
     void initUI();
     void updateAppAreaSonWidgetSize();
@@ -93,15 +94,16 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
-// state
+
 private:
+    // state
     int m_maxcount = -1;
     int m_showtype = -1;
     int m_appItemSize = 0;
     QSize m_trayareaSize = QSize(0, 0);
     QSize m_pluginareaSize = QSize(0, 0);
-
-private:
+ 
+    // widgets
     QBoxLayout *m_mainPanelLayout;
 
     QWidget *m_fixedAreaWidget;      // 固定区域
