@@ -49,7 +49,6 @@ public:
     PluginSizePolicy pluginSizePolicy() const override;
 
 protected:
-    bool eventHandler(QEvent *event) override;
     void positionChanged(const Dock::Position position) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 

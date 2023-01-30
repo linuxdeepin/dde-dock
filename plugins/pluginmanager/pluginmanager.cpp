@@ -54,21 +54,6 @@ void PluginManager::init(PluginProxyInterface *proxyInter)
     m_iconManager->setPosition(position());
     m_iconManager->setDisplayMode(displayMode());
 
-    connect(m_dockController.data(), &DockPluginController::pluginInserted, this, [ this ](PluginsItemInterface *itemInter) {
-        if (m_iconManager->isFixedPlugin(itemInter)) {
-            m_proxyInter->itemUpdate(this, pluginName());
-        }
-    });
-    connect(m_dockController.data(), &DockPluginController::pluginUpdated, this, [ this ](PluginsItemInterface *itemInter) {
-        if (m_iconManager->isFixedPlugin(itemInter)) {
-            m_proxyInter->itemUpdate(this, pluginName());
-        }
-    });
-    connect(m_dockController.data(), &DockPluginController::pluginRemoved, this, [ this ](PluginsItemInterface *itemInter) {
-        if (m_iconManager->isFixedPlugin(itemInter)) {
-            m_proxyInter->itemUpdate(this, pluginName());
-        }
-    });
     connect(m_dockController.data(), &DockPluginController::requestAppletVisible, this, [ this ](PluginsItemInterface *itemInter, const QString &itemKey, bool visible) {
         if (visible) {
             QWidget *appletWidget = itemInter->itemPopupApplet(itemKey);
@@ -121,15 +106,6 @@ PluginFlags PluginManager::flags() const
 PluginsItemInterface::PluginSizePolicy PluginManager::pluginSizePolicy() const
 {
     return PluginSizePolicy::Custom;
-}
-
-bool PluginManager::eventHandler(QEvent *event)
-{
-    if (event->type() == QEvent::Resize) {
-        QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
-        m_iconManager->updateSize(resizeEvent->size());
-    }
-    return PluginsItemInterface::eventHandler(event);
 }
 
 void PluginManager::positionChanged(const Dock::Position position)

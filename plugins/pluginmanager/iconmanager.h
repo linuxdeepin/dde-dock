@@ -35,18 +35,15 @@ class IconManager : public QObject
 
 public:
     explicit IconManager(DockPluginController *pluginController, QObject *parent = nullptr);
-    void updateSize(QSize size);
     void setPosition(Dock::Position position);
     void setDisplayMode(Dock::DisplayMode displayMode);
     QPixmap pixmap(DGuiApplicationHelper::ColorType colorType) const;
-    bool isFixedPlugin(PluginsItemInterface *plugin) const;
 
 private:
     PluginsItemInterface *findPlugin(const QString &pluginName) const;
 
 private:
     DockPluginController *m_pluginController;
-    QSize m_size;
     Dock::Position m_position;
     Dock::DisplayMode m_displayMode;
 };

@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>resources/dock_control.dci</file>
-    </qresource>
-</RCC>

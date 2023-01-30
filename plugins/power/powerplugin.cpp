@@ -26,7 +26,9 @@
 
 #include <QIcon>
 #include <QGSettings>
+#include <QHBoxLayout>
 
+#include <DFontSizeManager>
 #include <DDBusSender>
 
 #define PLUGIN_STATE_KEY    "enable"
@@ -48,11 +50,13 @@ PowerPlugin::PowerPlugin(QObject *parent)
     , m_systemPowerInter(nullptr)
     , m_powerInter(nullptr)
     , m_preChargeTimer(new QTimer(this))
+    , m_quickPanel(nullptr)
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setObjectName("power");
     m_preChargeTimer->setInterval(DELAYTIME);
     m_preChargeTimer->setSingleShot(true);
+    initQuickPanel();
     connect(m_preChargeTimer,&QTimer::timeout,this,&PowerPlugin::refreshTipsData);
 }
 
@@ -70,6 +74,8 @@ QWidget *PowerPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
         return m_powerStatusWidget.data();
+    if (itemKey == QUICK_ITEM_KEY)
+        return m_quickPanel;
 
     return nullptr;
 }
@@ -99,7 +105,7 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
 const QString PowerPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-        return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowPage \"string:power\"");
+        return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowPage string:power");
 
     return QString();
 }
@@ -143,9 +149,14 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 
 QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    // 电池插件不显示在快捷面板上，因此此处返回空图标
-    static QIcon batteryIcon;
     const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
+    // 快捷面板使用m_quickPanel
+    if (dockPart == DockPart::QuickPanel) {
+        m_imageLabel->setPixmap(pixmap);
+        return QIcon();
+    }
+
+    static QIcon batteryIcon;
     batteryIcon.detach();
     batteryIcon.addPixmap(pixmap);
     return batteryIcon;
@@ -153,11 +164,12 @@ QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorTy
 
 PluginFlags PowerPlugin::flags() const
 {
-    // 电池插件只在任务栏上面展示，不在快捷面板展示，并且可以拖动，可以在其前面插入其他插件，不能在控制中心设置是否显示隐藏
+    // 电池插件在任务栏上面展示，在快捷面板展示，并且可以拖动，可以在其前面插入其他插件，能在控制中心设置是否显示隐藏
     return PluginFlag::Type_Common
             | PluginFlag::Attribute_CanDrag
             | PluginFlag::Attribute_CanInsert
-            | PluginFlag::Attribute_ForceDock;
+            | PluginFlag::Attribute_CanSetting
+            | PluginFlag::Quick_Single;
 }
 
 void PowerPlugin::updateBatteryVisible()
@@ -182,6 +194,8 @@ void PowerPlugin::loadPlugin()
     m_powerStatusWidget.reset(new PowerStatusWidget);
 
     connect(m_powerStatusWidget.get(), &PowerStatusWidget::iconChanged, this, [ this ] {
+        m_proxyInter->updateDockInfo(this, DockPart::QuickPanel);
+        m_proxyInter->updateDockInfo(this, DockPart::QuickShow);
         m_proxyInter->itemUpdate(this, POWER_KEY);
     });
 
@@ -226,7 +240,7 @@ void PowerPlugin::refreshTipsData()
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
-
+    m_labelText->setText(value);
     if (m_preChargeTimer->isActive() && m_showTimeToFull) {
         // 插入电源后，20秒内算作预充电时间，此时计算剩余充电时间是不准确的
         QString tips = tr("Capacity %1 ...").arg(value);
@@ -273,4 +287,26 @@ void PowerPlugin::refreshTipsData()
         }
         m_tipsLabel->setText(tips);
     }
+}
+
+void PowerPlugin::initQuickPanel()
+{
+    m_quickPanel = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(m_quickPanel);
+    layout->setAlignment(Qt::AlignVCenter);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    m_imageLabel = new QLabel(m_quickPanel);
+    m_imageLabel->setObjectName("imageLabel");
+    m_imageLabel->setFixedHeight(24);
+    m_imageLabel->setAlignment(Qt::AlignCenter);
+
+    m_labelText = new QLabel(m_quickPanel);
+    m_labelText->setObjectName("textLabel");
+    m_labelText->setFixedHeight(11);
+    m_labelText->setAlignment(Qt::AlignCenter);
+    m_labelText->setFont(Dtk::Widget::DFontSizeManager::instance()->t10());
+    layout->addWidget(m_imageLabel);
+    layout->addSpacing(7);
+    layout->addWidget(m_labelText);
 }

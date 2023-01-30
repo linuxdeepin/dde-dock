@@ -62,6 +62,7 @@ private:
     void loadPlugin();
     void onGSettingsChanged(const QString &key);
     void refreshTipsData();
+    void initQuickPanel();
 
 private:
     bool m_pluginLoaded;
@@ -73,6 +74,9 @@ private:
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
     QTimer *m_preChargeTimer;
+    QWidget *m_quickPanel;
+    QLabel *m_imageLabel;
+    QLabel *m_labelText;
 };
 
 #endif // POWERPLUGIN_H

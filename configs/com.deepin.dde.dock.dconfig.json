@@ -17,7 +17,7 @@
             "visibility":"public"
         },
 		"Dock_Quick_Plugins": {
-			"value": ["shutdown", "trash"],
+                        "value": ["power", "network", "shutdown", "trash"],
 			"serial": 0,
 			"flags": [],
 			"name": "显示在任务栏上的快捷插件",
