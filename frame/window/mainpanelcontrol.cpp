@@ -1168,12 +1168,12 @@ void MainPanelControl::resizeLayout() {
     for (auto child : children) {
         if (child->itemType() == DockItem::ItemType::App) {
             if (index < m_maxcount) {
-                child->setFixedSize(m_appItemSize, m_appItemSize);
+                //child->setFixedSize(m_appItemSize, m_appItemSize);
                 child->setParent(m_appAreaSonWidget);
                 child->setVisible(true);
                 addAppAreaItem(-1, child);
             } else {
-                child->setFixedSize(m_appItemSize , m_appItemSize);
+                //child->setFixedSize(m_appItemSize , m_appItemSize);
                 m_overflowBtn->addItem(child);
                 overflowcount += 1;
                 if (static_cast<AppItem *>(child.data())->isActive()) {
@@ -1232,6 +1232,14 @@ void MainPanelControl::calcuDockIconSize(int appItemSize, int maxcount, int show
     // set origin one size
     for (int i = 0; i < m_fixedAreaLayout->count(); ++i) {
         m_fixedAreaLayout->itemAt(i)->widget()->setFixedSize(appItemSize, appItemSize);
+    }
+
+    // resize All AppItem
+    auto children = DockItemManager::instance()->itemList();
+    for (auto child :children) {
+        if (child->itemType() == DockItem::ItemType::App) {
+            child->setFixedSize(appItemSize, appItemSize);
+        }
     }
 
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {

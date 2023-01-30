@@ -8,13 +8,15 @@
 #include "appitem.h"
 
 #include <DGuiApplicationHelper>
-
+#include <DPaletteHelper>
+#include <DPalette>
 #include <QBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
 #include <QScrollBar>
 const QString ICON_DEFAULT = QStringLiteral(":/icons/resources/application-x-desktop");
-const QString OVERFLOW_MORE = QStringLiteral(":/icons/resources/overflow-more");
+const QString OVERFLOW_MORE_LIGHT = QStringLiteral(":/icons/resources/overflow-more-light");
+const QString OVERFLOW_MORE_DARK = QStringLiteral(":/icons/resources/overflow-more-dark");
 
 const QString ARROW_UP = QStringLiteral(":/icons/resources/arrow-up");
 const QString ARROW_DOWN = QStringLiteral(":/icons/resources/arrow-down");
@@ -77,6 +79,17 @@ void OverflowItem::initUI() {
 
     m_left->setIcon(QIcon(ARROW_LEFT));
     m_right->setIcon(QIcon(ARROW_RIGHT));
+
+    m_left->setBackgroundRole(QPalette::Highlight);
+    m_right->setBackgroundRole(QPalette::Highlight);
+
+    // set background color
+    DPalette pa_l = DPaletteHelper::instance()->palette(m_left);
+    pa_l.setBrush(QPalette::Highlight, QColor(0, 0 ,0, 200));
+    DPaletteHelper::instance()->setPalette(m_left, pa_l);
+    DPalette pa_r = DPaletteHelper::instance()->palette(m_right);
+    pa_r.setBrush(QPalette::Highlight, QColor(0, 0, 0, 200));
+    DPaletteHelper::instance()->setPalette(m_right, pa_r);
 }
 
 void OverflowItem::initSlots() {
@@ -166,12 +179,12 @@ void OverflowItem::setbtnsVisible() {
 void OverflowItem::setbtnsShape() {
     switch (m_popupbtnslayout->direction()) {
         case QBoxLayout::LeftToRight:
-            m_left->setFixedSize(m_width / 3, m_width * 3 / 4);
-            m_right->setFixedSize(m_width / 3, m_width * 3 / 4);
+            m_left->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
+            m_right->setFixedSize(m_width * 2 / 5, m_width * 3 / 4);
             break;
         case QBoxLayout::TopToBottom:
-            m_left->setFixedSize(m_width * 3 / 4 , m_width / 3);
-            m_right->setFixedSize(m_width * 3 / 4  , m_width / 3);
+            m_left->setFixedSize(m_width * 3 / 4 , m_width * 2 / 5);
+            m_right->setFixedSize(m_width * 3 / 4  , m_width * 2 / 5);
             break;
         default:
             break;
@@ -203,7 +216,6 @@ QPoint OverflowItem::OverflowIconPosition(const QPixmap &pixmap) const {
     return QPoint(iconX, iconY);
 }
 
-// FIXME: the size of app sometime cannot be controled
 void OverflowItem::paintEvent(QPaintEvent *e) {
 
     DockItem::paintEvent(e);
@@ -218,6 +230,7 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
     if (m_popuplayout->count() != 0) {
         image = static_cast<AppItem *>(m_popuplayout->itemAt(0)->widget())->appIcon();
     }
+    image = image.scaled(width() * 0.7 , height() * 0.7, Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     QPoint realsize = OverflowIconPosition(image);
     painter.drawPixmap(realsize, image);
     // Paint End
@@ -236,7 +249,7 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
     }
     qreal min = qMin(rect().width(), rect().height());
     QRectF backgroundRect = QRectF(rect().x(), rect().y(), min, min);
-    backgroundRect = backgroundRect.marginsRemoved(QMargins(2, 2, 2, 2));
+    backgroundRect = backgroundRect.marginsRemoved(QMargins(3, 3, 3, 3));
     backgroundRect.moveCenter(rect().center());
     // Shadow end
 
@@ -246,9 +259,13 @@ void OverflowItem::paintEvent(QPaintEvent *e) {
     painter.fillPath(path, QColor(0, 0, 0, 255 * 0.8));
 
     painter.setOpacity(1);
-    QPixmap moreicons(OVERFLOW_MORE);
+    QPixmap moreicons;
+    if (isDarkTheme()) {
+        moreicons = QIcon(OVERFLOW_MORE_DARK).pixmap(QSize(width() * 0.5, height() * 0.5));
+    } else {
+        moreicons = QIcon(OVERFLOW_MORE_LIGHT).pixmap(QSize(width() * 0.5, height() * 0.5));
+    }
     QPoint realsize_more = OverflowIconPosition(moreicons);
-    moreicons.scaled(realsize.x(), realsize.y());
     painter.drawPixmap(realsize_more, moreicons);
     // Paint "More" End
 

@@ -491,7 +491,9 @@ QPoint AppItem::appIconPosition() const
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
     m_windowInfos = info;
-    m_currentWindowId = info.firstKey();
+    if(info.size()>0) {
+        m_currentWindowId = info.firstKey();
+    }
     if (m_appPreviewTips)
         m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_updateIconGeometryTimer->start();
