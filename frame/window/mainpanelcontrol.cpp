@@ -89,7 +89,6 @@ MainPanelControl::MainPanelControl(DockInter *dockInter, QWidget *parent)
     , m_multiWindowLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_multiWindowWidget))
     , m_toolSonAreaWidget(new QWidget(m_toolAreaWidget))
     , m_toolSonLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_toolSonAreaWidget))
-    , m_pluginLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_position(Position::Bottom)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
@@ -226,13 +225,11 @@ void MainPanelControl::updateMainPanelLayout()
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_mainPanelLayout->setDirection(QBoxLayout::LeftToRight);
         m_fixedAreaLayout->setDirection(QBoxLayout::LeftToRight);
-        m_pluginLayout->setDirection(QBoxLayout::LeftToRight);
         m_appAreaSonLayout->setDirection(QBoxLayout::LeftToRight);
         m_recentLayout->setDirection(QBoxLayout::LeftToRight);
         m_multiWindowLayout->setDirection(QBoxLayout::LeftToRight);
         m_toolAreaLayout->setDirection(QBoxLayout::LeftToRight);
         m_toolSonLayout->setDirection(QBoxLayout::LeftToRight);
-        m_pluginLayout->setContentsMargins(10, 0, 10, 0);
         m_multiWindowLayout->setContentsMargins(0, 2, 0, 2);
         break;
     case Position::Right:
@@ -241,13 +238,11 @@ void MainPanelControl::updateMainPanelLayout()
         m_appAreaWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_mainPanelLayout->setDirection(QBoxLayout::TopToBottom);
         m_fixedAreaLayout->setDirection(QBoxLayout::TopToBottom);
-        m_pluginLayout->setDirection(QBoxLayout::TopToBottom);
         m_appAreaSonLayout->setDirection(QBoxLayout::TopToBottom);
         m_recentLayout->setDirection(QBoxLayout::TopToBottom);
         m_multiWindowLayout->setDirection(QBoxLayout::TopToBottom);
         m_toolAreaLayout->setDirection(QBoxLayout::TopToBottom);
         m_toolSonLayout->setDirection(QBoxLayout::TopToBottom);
-        m_pluginLayout->setContentsMargins(0, 10, 0, 10);
         m_multiWindowLayout->setContentsMargins(2, 0, 2, 0);
         break;
     }
@@ -409,7 +404,6 @@ void MainPanelControl::insertItem(int index, DockItem *item)
         resizeDockIcon();
 
     item->checkEntry();
-    QTimer::singleShot(0, this, &MainPanelControl::updatePluginsLayout);
 }
 
 /**从任务栏移除某一应用，并更新任务栏图标大小
@@ -455,17 +449,7 @@ void MainPanelControl::moveItem(DockItem *sourceItem, DockItem *targetItem)
     int idx = -1;
     if (targetItem->itemType() == DockItem::App)
         idx = m_appAreaSonLayout->indexOf(targetItem);
-    else if (targetItem->itemType() == DockItem::Plugins){
-        //因为日期时间插件大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-        //因此有拖动图标时，需要从多的一层布局中判断是否相同插件而获取插件位置顺序
-        for (int i = 0; i < m_pluginLayout->count(); ++i) {
-            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (layout && layout->itemAt(0)->widget() == targetItem) {
-                idx = i;
-                break;
-            }
-        }
-    } else if (targetItem->itemType() == DockItem::FixedPlugin)
+    else if (targetItem->itemType() == DockItem::FixedPlugin)
         idx = m_fixedAreaLayout->indexOf(targetItem);
     else
         return;
@@ -955,22 +939,6 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
-/**通知布局器，控件已发生变化，需要重新设置几何位置
- * @brief MainPanelControl::updatePluginsLayout
- */
-void MainPanelControl::updatePluginsLayout()
-{
-    for (int i = 0; i < m_pluginLayout->count(); ++i) {
-        QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-        if (layout) {
-            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-            if (pItem && pItem->sizeHint().width() != -1) {
-                pItem->updateGeometry();
-            }
-        }
-    }
-}
-
 void MainPanelControl::updateDockInter(DockInter *dockInter)
 {
     m_dockInter = dockInter;
@@ -998,21 +966,30 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
     }
 
     // 如果是特效模式
-    int totalLength = static_cast<int>(screenSize / ratio);
+    int totalLength = getScreenSize();
     // 减去插件区域的尺寸
-    totalLength -= trayAreaSize();
+    totalLength -= trayAreaSize(ratio);
+
+    if (m_fixedSpliter->isVisible())
+        totalLength -= SPLITER_SIZE;
+    if (m_appSpliter->isVisible())
+        totalLength -= SPLITER_SIZE;
+    if (m_recentSpliter->isVisible())
+        totalLength -= SPLITER_SIZE;
+
     // 需要参与计算的图标的总数
     int iconCount = m_fixedAreaLayout->count() + m_appAreaSonLayout->count() + m_recentLayout->count() + m_toolSonLayout->count();
     int multiWindowCount = m_multiWindowLayout->count();
     if (iconCount <= 0 && multiWindowCount <= 0) {
         if (position == Position::Top || position == Position::Bottom)
-            return QSize((static_cast<int>(dockSize / ratio)), dockSize);
+            return QSize((static_cast<int>(dockSize)), dockSize);
 
-        return QSize(dockSize, static_cast<int>(dockSize / ratio));
+        return QSize(dockSize, static_cast<int>(dockSize));
     }
+
     int redundantLength = (totalLength % iconCount);
     // icon宽度 = (总宽度-余数)/icon个数
-    int iconSize = qMin(((totalLength - redundantLength) / iconCount), dockSize);
+    int iconSize = qMin((static_cast<int>((totalLength - redundantLength) / iconCount / ratio)), dockSize);
 
     if (position == Position::Top || position == Position::Bottom) {
         int spliterWidth = m_fixedSpliter->isVisible() ? SPLITER_SIZE : 0;
@@ -1034,10 +1011,10 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
             }
         }
 
-        int panelWidth = qMin(iconSize * iconCount + multiSize + static_cast<int>(spliterWidth / ratio),
-                              static_cast<int>((screenSize - DOCKSPACE) / deviceRatio));
+        int panelWidth = qMin(iconSize * iconCount + multiSize + static_cast<int>(spliterWidth),
+                              static_cast<int>((screenSize - DOCKSPACE)));
 
-        return QSize(panelWidth, static_cast<int>(dockSize / ratio));
+        return QSize(panelWidth, static_cast<int>(dockSize));
     }
 
     int spliterHeight = m_fixedSpliter->isVisible() ? SPLITER_SIZE : 0;
@@ -1059,8 +1036,8 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
         }
     }
 
-    int panelHeight = qMin(iconSize * iconCount + multiSize + static_cast<int>(spliterHeight / ratio),
-                           static_cast<int>((screenSize - DOCKSPACE)/ deviceRatio));
+    int panelHeight = qMin(iconSize * iconCount + multiSize + static_cast<int>(spliterHeight),
+                           static_cast<int>((screenSize - DOCKSPACE)));
 
     return QSize(dockSize, panelHeight);
 }
@@ -1111,10 +1088,10 @@ int MainPanelControl::getScreenSize() const
     return screenRect.height();
 }
 
-int MainPanelControl::trayAreaSize() const
+int MainPanelControl::trayAreaSize(qreal ratio) const
 {
     if (m_displayMode == Dock::DisplayMode::Efficient)
-        return (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? m_tray->width() : m_tray->height());
+        return (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? m_tray->width() * ratio: m_tray->height() * ratio);
 
     int length = 0;
     QWidgetList topLevelWidgets = qApp->topLevelWidgets();
@@ -1123,10 +1100,11 @@ int MainPanelControl::trayAreaSize() const
         if (!topWindow)
             continue;
 
-        if (topWindow->windowType() != MainWindowBase::DockWindowType::MainWindow)
-            length += (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? topWindow->width() : topWindow->height());
+        if (topWindow->windowType() != MainWindowBase::DockWindowType::MainWindow) {
+            length += (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? topWindow->width() * ratio : topWindow->height() * ratio);
+        }
 
-        length += topWindow->dockSpace();
+        length += topWindow->dockSpace() * ratio;
     }
 
     return length;
@@ -1138,7 +1116,6 @@ int MainPanelControl::trayAreaSize() const
 void MainPanelControl::resizeDockIcon()
 {
     int iconSize = 0;
-    int tray_item_size = 0;
     // 总宽度
     if (m_displayMode == DisplayMode::Fashion) {
         // 时尚模式
@@ -1152,7 +1129,7 @@ void MainPanelControl::resizeDockIcon()
         if (iconCount <= 0)
             return;
 
-        int totalLength = getScreenSize() - trayAreaSize();
+        int totalLength = getScreenSize() - trayAreaSize(qApp->devicePixelRatio());
 
         if (m_fixedSpliter->isVisible())
             totalLength -= SPLITER_SIZE;
@@ -1165,26 +1142,8 @@ void MainPanelControl::resizeDockIcon()
         int yu = (totalLength % iconCount);
         // icon宽度 = (总宽度-余数)/icon个数
         iconSize = (totalLength - yu) / iconCount;
-        // 计算插件图标的最大或最小值
-        tray_item_size = qBound(20, iconSize, 40);
-        if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-            tray_item_size = qMin(tray_item_size, height());
-            tray_item_size = std::min(tray_item_size, height() - 20);
-        } else {
-            tray_item_size = qMin(tray_item_size,width());
-            tray_item_size = std::min(tray_item_size, width() - 20);
-        }
-
-        if (tray_item_size < 20)
-            tray_item_size = 20;
-
-        // 余数
-        yu = (totalLength % iconCount);
-        // icon宽度 = (总宽度-余数)/icon个数
-        iconSize = (totalLength - yu) / iconCount;
     } else {
-        int totalLength = ((m_position == Position::Top) || (m_position == Position::Bottom)) ? width() : height();
-        totalLength -= trayAreaSize();
+        int totalLength = getScreenSize() - trayAreaSize(qApp->devicePixelRatio());
         // 减去3个分割线的宽度
         if (m_fixedSpliter->isVisible())
             totalLength -= SPLITER_SIZE;
@@ -1193,34 +1152,8 @@ void MainPanelControl::resizeDockIcon()
         if (m_recentSpliter->isVisible())
             totalLength -= SPLITER_SIZE;
 
-        int pluginItemCount = 0;
-        int calcPluginItemCount = 0;
-        // 因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-        // 因此需要通过多一层布局来获取各插件
-        for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (layout) {
-                PluginsItem *w = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-                if (w) {
-                    // 如果插件大小由自己决定,则不参与计算需要减去其宽度,其他插件则需要参与计算并计数
-                    if ((m_position == Position::Top || m_position == Position::Bottom) && (w->sizeHint().height() != -1)) {
-                        totalLength -= w->width();
-                    } else if ((m_position == Position::Top || m_position == Position::Bottom) && (w->sizeHint().width() != -1)) {
-                        totalLength -= w->height();
-                    } else {
-                        calcPluginItemCount ++;
-                    }
-
-                    // 所有插件个数,用于计算插件之间的间隔之和
-                    pluginItemCount ++;
-                }
-            }
-        }
         // 减去插件间隔大小, 只有一个插件或没有插件都是间隔20,2个或以上每多一个插件多间隔10
-        if (pluginItemCount > 1)
-           totalLength -= (pluginItemCount + 1) * 10;
-        else
-           totalLength -= 20;
+        totalLength -= 20;
 
         if (totalLength < 0)
             return;
@@ -1236,19 +1169,6 @@ void MainPanelControl::resizeDockIcon()
         // icon宽度 = (总宽度-余数)/icon个数
         iconSize = (totalLength - yu) / iconCount;
 
-        // 计算插件图标的最大或最小值
-        tray_item_size = qBound(20, iconSize, 40);
-        if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-            tray_item_size = qMin(tray_item_size,height());
-            tray_item_size = std::min(tray_item_size, height() - 20);
-        } else {
-            tray_item_size = qMin(tray_item_size,width());
-            tray_item_size = std::min(tray_item_size, width() - 20);
-        }
-
-        if (tray_item_size < 20)
-            tray_item_size = 20;
-
         // 余数
         yu = (totalLength % iconCount);
         // icon宽度 = (总宽度-余数)/icon个数
@@ -1258,20 +1178,20 @@ void MainPanelControl::resizeDockIcon()
     iconSize = iconSize / qApp->devicePixelRatio();
     if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
         if (iconSize >= height()) {
-            calcuDockIconSize(height(), height(), tray_item_size);
+            calcuDockIconSize(height(), height());
         } else {
-            calcuDockIconSize(iconSize, height(), tray_item_size);
+            calcuDockIconSize(iconSize, height());
         }
     } else {
         if (iconSize >= width()) {
-            calcuDockIconSize(width(), width(), tray_item_size);
+            calcuDockIconSize(width(), width());
         } else {
-            calcuDockIconSize(width(), iconSize, tray_item_size);
+            calcuDockIconSize(width(), iconSize);
         }
     }
 }
 
-void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
+void MainPanelControl::calcuDockIconSize(int w, int h)
 {
     int appItemSize = qMin(w, h);
     for (int i = 0; i < m_fixedAreaLayout->count(); ++i)
@@ -1358,42 +1278,6 @@ void MainPanelControl::calcuDockIconSize(int w, int h, int traySize)
             } else {
                 dockItem->setFixedSize(appItemSize, appItemSize);
             }
-        }
-    }
-
-    // 因为日期时间大小和其他插件大小有异，为了设置边距，在各插件中增加了一层布局
-    // 因此需要通过多一层布局来获取各插件
-    if ((m_position == Position::Top) || (m_position == Position::Bottom)) {
-        // 三方插件
-        for (int i = 0; i < m_pluginLayout->count(); ++ i) {
-            QLayout *layout = m_pluginLayout->itemAt(i)->layout();
-            if (!layout || !layout->itemAt(0))
-                continue;
-
-            PluginsItem *pItem = static_cast<PluginsItem *>(layout->itemAt(0)->widget());
-            if (!pItem)
-                continue;
-
-            if (pItem->sizeHint().height() == -1)
-                pItem->setFixedSize(traySize, traySize);
-            else if (pItem->sizeHint().height() > height())
-                pItem->resize(pItem->width(), height());
-        }
-    } else {
-        // 三方插件
-        for (int i = 0; i < m_pluginLayout->count(); i++) {
-            QLayout *layout =  m_pluginLayout->itemAt(i)->layout();
-            if (!layout || !layout->itemAt(0))
-                continue;
-
-            PluginsItem *pItem = qobject_cast<PluginsItem *>(layout->itemAt(0)->widget());
-            if (!pItem)
-                continue;
-
-            if (pItem->sizeHint().width() == -1)
-                pItem->setFixedSize(traySize, traySize);
-            else if (pItem->sizeHint().width() > width())
-                pItem->resize(width(), pItem->height());
         }
     }
 

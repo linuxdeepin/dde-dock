@@ -64,7 +64,6 @@ public:
 
 private:
     using QWidget::show;
-    void resizeEvent(QResizeEvent *event) override;
     void initConnections();
     void resizeDockIcon();
 

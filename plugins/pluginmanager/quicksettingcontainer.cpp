@@ -109,7 +109,7 @@ bool QuickSettingContainer::eventFilter(QObject *watched, QEvent *event)
     case QEvent::MouseButtonPress: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QuickSettingItem *item = qobject_cast<QuickSettingItem *>(watched);
-        if (item) {
+        if (item && item->pluginItem()->flags() & PluginFlag::Attribute_CanDrag) {
             m_dragInfo->dragPosition = mouseEvent->pos();
             m_dragInfo->dragItem = item;
             m_dragInfo->pluginInter = item->pluginItem();

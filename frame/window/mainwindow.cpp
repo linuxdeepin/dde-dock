@@ -69,13 +69,6 @@ MainWindow::MainWindow(MultiScreenWorker *multiScreenWorker, QWidget *parent)
         m_mainPanel->insertItem(-1, item);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    MainWindowBase::resizeEvent(event);
-
-    m_mainPanel->updatePluginsLayout();
-}
-
 void MainWindow::initConnections()
 {
     connect(DockItemManager::instance(), &DockItemManager::itemInserted, m_mainPanel, &MainPanelControl::insertItem, Qt::DirectConnection);

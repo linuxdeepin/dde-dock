@@ -87,12 +87,13 @@ typedef struct DragInfo{
     }
 } DragInfo;
 
-QuickPluginWindow::QuickPluginWindow(QWidget *parent)
+QuickPluginWindow::QuickPluginWindow(Dock::DisplayMode displayMode, QWidget *parent)
     : QWidget(parent)
     , m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this))
     , m_position(Dock::Position::Bottom)
     , m_dragInfo(new DragInfo)
     , m_dragEnterMimeData(nullptr)
+    , m_displayMode(displayMode)
 {
     initUi();
     initConnection();
@@ -115,7 +116,9 @@ void QuickPluginWindow::initUi()
     m_mainLayout->setDirection(QBoxLayout::RightToLeft);
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(ITEMSPACE);
-    m_mainLayout->addSpacing(STARTSPACE);
+    // 时尚模式下的插件右侧的区域增加空白的间隔
+    if (m_displayMode == Dock::DisplayMode::Fashion)
+        m_mainLayout->addSpacing(STARTSPACE);
 }
 
 void QuickPluginWindow::setPositon(Position position)
@@ -397,6 +400,7 @@ void QuickPluginWindow::onRequestUpdate()
             itemWidget = pluginItems[item];
         } else {
             itemWidget = new QuickDockItem(item, quickController->itemKey(item), this);
+            itemWidget->setPosition(m_position);
             updateDockItemSize(itemWidget);
             itemWidget->installEventFilter(this);
             itemWidget->setMouseTracking(true);
@@ -783,12 +787,20 @@ QSize QuickDockItem::suitableSize() const
         if (!pixmap.isNull()) {
             QSize size = pixmap.size();
             if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) {
-                if (size.width() < widgetSize)
+                if (size.width() < widgetSize) {
                     size.setWidth(widgetSize);
+                } else {
+                    int scaleWidth = size.width() / (size.height() / (widgetSize * 1.0f));
+                    size.setWidth(scaleWidth);
+                }
                 return size;
             }
-            if (size.height() < widgetSize)
+            if (size.height() < widgetSize) {
                 size.setHeight(widgetSize);
+            } else {
+                int scaleHeight = size.height() / (size.width() / (widgetSize * 1.0f));
+                size.setHeight(scaleHeight);
+            }
             return size;
         }
 

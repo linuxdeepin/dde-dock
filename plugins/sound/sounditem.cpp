@@ -283,6 +283,8 @@ QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType, int iconWi
     if (colorType == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
 
+    iconString.append(".svg");
+
     return ImageUtil::loadSvg(":/" + iconString, QSize(iconWidth, iconHeight));
 }
 

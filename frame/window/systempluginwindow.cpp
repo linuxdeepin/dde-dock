@@ -210,6 +210,7 @@ void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
         item->update();
 }
 
+// 图标的尺寸
 #define ICONSIZE 20
 #define ICONTEXTSPACE 6
 #define PLUGIN_ITEM_DRAG_THRESHOLD 20
@@ -293,20 +294,21 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
 
 QSize StretchPluginsItem::suitableSize(const Position &position) const
 {
-    int iconSize = static_cast<int>(ICONSIZE * (qApp->devicePixelRatio()));
     if (position == Dock::Position::Top || position == Dock::Position::Bottom) {
         int textWidth = 0;
         if (needShowText())
             textWidth = QFontMetrics(textFont(position)).boundingRect(m_pluginInter->pluginDisplayName()).width();
-        return QSize(qMax(textWidth, iconSize) + (m_displayMode == Dock::DisplayMode::Efficient ? 5 : 10) * 2, -1);
+        return QSize(qMax(textWidth, ICONSIZE) + (m_displayMode == Dock::DisplayMode::Efficient ? 5 : 10) * 2, -1);
     }
 
-    int height = 6;                                             // 图标上边距6
-    height += iconSize;                                         // 图标尺寸20
-    height += ICONTEXTSPACE;                                    // 图标与文字间距6
-    if (needShowText())                                         // 只有在显示文本的时候才计算文本的高度
-        height += QFontMetrics(textFont(position)).height();    // 文本高度
-    height += 4;                                                // 下间距4
+    int height = 6;                                                 // 图标上边距6
+    height += ICONSIZE;                                             // 图标尺寸20
+    if (m_displayMode == Dock::DisplayMode::Fashion) {
+        height += ICONTEXTSPACE;                                    // 图标与文字间距6
+        if (needShowText())                                         // 只有在显示文本的时候才计算文本的高度
+            height += QFontMetrics(textFont(position)).height();    // 文本高度
+    }
+    height += 4;                                                    // 下间距4
     return QSize(-1, height);
 }
 
@@ -338,8 +340,6 @@ bool StretchPluginsItem::needShowText() const
     if (m_displayMode == Dock::DisplayMode::Efficient)
         return false;
 
-    // 图标的尺寸
-#define ICONSIZE 20
     // 图标与文本，图标距离上方和文本距离下方的尺寸
 #define SPACEMARGIN 6
     // 文本的高度

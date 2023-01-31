@@ -47,7 +47,7 @@ class QuickPluginWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit QuickPluginWindow(QWidget *parent = nullptr);
+    explicit QuickPluginWindow(Dock::DisplayMode displayMode, QWidget *parent = nullptr);
     ~QuickPluginWindow() override;
 
     void setPositon(Dock::Position position);
@@ -93,6 +93,7 @@ private:
     Dock::Position m_position;
     struct DragInfo *m_dragInfo;
     QuickPluginMimeData *m_dragEnterMimeData;
+    Dock::DisplayMode m_displayMode;
 };
 
 // 用于在任务栏上显示的插件

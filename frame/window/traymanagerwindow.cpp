@@ -56,7 +56,7 @@ TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_systemPluginWidget(new SystemPluginWindow(m_dockInter, this))
     , m_appPluginWidget(new QWidget(m_appPluginDatetimeWidget))
-    , m_quickIconWidget(new QuickPluginWindow(m_appPluginWidget))
+    , m_quickIconWidget(new QuickPluginWindow(Dock::DisplayMode::Fashion, m_appPluginWidget))
     , m_dateTimeWidget(new DateTimeDisplayer(false, m_appPluginDatetimeWidget))
     , m_appPluginLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
@@ -161,7 +161,6 @@ void TrayManagerWindow::setPositon(Dock::Position position)
 void TrayManagerWindow::setDisplayMode(Dock::DisplayMode displayMode)
 {
     m_displayMode = displayMode;
-    m_systemPluginWidget->setDisplayMode(displayMode);
     // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
     if (displayMode == Dock::DisplayMode::Fashion) {
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);

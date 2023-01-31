@@ -51,7 +51,6 @@ public:
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
-    void updatePluginsLayout();
     void updateDockInter(DockInter *dockInter);
 
     QSize suitableSize(const Position &position, int screenSize, double deviceRatio) const;
@@ -79,14 +78,14 @@ private:
     void removeFixedAreaItem(QWidget *wdg);
     void removeAppAreaItem(QWidget *wdg);
     int getScreenSize() const;
-    int trayAreaSize() const;
+    int trayAreaSize(qreal ratio) const;
 
     // 拖拽相关
     void startDrag(DockItem *);
     DockItem *dropTargetItem(DockItem *sourceItem, QPoint point);
     void moveItem(DockItem *sourceItem, DockItem *targetItem);
     void handleDragMove(QDragMoveEvent *e, bool isFilter);
-    void calcuDockIconSize(int w, int h, int traySize);
+    void calcuDockIconSize(int w, int h);
     bool checkNeedShowDesktop();
     bool appIsOnDock(const QString &appDesktop);
     void dockRecentApp(DockItem *dockItem);
@@ -128,8 +127,6 @@ private:
     QBoxLayout *m_multiWindowLayout;// 用来存放多开窗口的布局
     QWidget *m_toolSonAreaWidget;   // 工具区域，用来存放回收站等工具
     QBoxLayout *m_toolSonLayout;    // 工具区域布局
-
-    QBoxLayout *m_pluginLayout;     // 插件区域布局
 
     Position m_position;
     QPointer<PlaceholderItem> m_placeholderItem;
