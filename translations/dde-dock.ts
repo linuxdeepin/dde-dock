@@ -206,6 +206,13 @@
     </message>
 </context>
 <context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished">The plugin %1 is not compatible with the system.</translation>
+    </message>
+</context>
+<context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
@@ -299,10 +306,6 @@
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Power</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacity %1, %2 min remaining</translation>
     </message>
@@ -333,6 +336,10 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Capacity %1, fully charged</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -174,7 +174,7 @@
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Computersamenwerking</translation>
     </message>
 </context>
 <context>
@@ -204,10 +204,17 @@
     </message>
 </context>
 <context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Ingeschakeld</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -297,10 +304,6 @@
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Energie</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capaciteit: %1 - %2 min resterend</translation>
     </message>
@@ -331,6 +334,10 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Capaciteit: %1 - volledig opgeladen</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -379,8 +386,8 @@
         <translation>Herstarten</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>Op netstroom</translation>
+        <source>Power</source>
+        <translation>Energie</translation>
     </message>
 </context>
 <context>

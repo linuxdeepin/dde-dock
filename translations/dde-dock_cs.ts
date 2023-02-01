@@ -204,6 +204,13 @@
     </message>
 </context>
 <context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
@@ -297,10 +304,6 @@
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Napájení</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Energie %1, %2 min zbývá</translation>
     </message>
@@ -331,6 +334,10 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Kapacita %1, plně nabito</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -379,8 +386,8 @@
         <translation>Restartovat</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>Napájení z elektrické sítě</translation>
+        <source>Power</source>
+        <translation>Napájení</translation>
     </message>
 </context>
 <context>

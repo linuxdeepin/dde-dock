@@ -204,6 +204,13 @@
     </message>
 </context>
 <context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
@@ -297,10 +304,6 @@
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Energiaellátás</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Akkumulátor töltöttsége %1, %2 perc van még hátra a feltöltésig</translation>
     </message>
@@ -331,6 +334,10 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>Akkumulátor töltöttsége %1, teljesen feltöltve</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -379,8 +386,8 @@
         <translation>Újraindítás</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>Áramforráshoz csatlakoztatva</translation>
+        <source>Power</source>
+        <translation>Energiaellátás</translation>
     </message>
 </context>
 <context>

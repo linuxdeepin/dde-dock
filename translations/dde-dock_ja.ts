@@ -204,6 +204,13 @@
     </message>
 </context>
 <context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
@@ -297,10 +304,6 @@
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>電源</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>バッテリー残量 %1、残り %2 分</translation>
     </message>
@@ -331,6 +334,10 @@
     <message>
         <source>Capacity %1, fully charged</source>
         <translation>バッテリー残量 %1、フル充電済み</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -379,8 +386,8 @@
         <translation>再起動</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>電源接続時</translation>
+        <source>Power</source>
+        <translation>電源</translation>
     </message>
 </context>
 <context>

@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation>Mënyra aeroplan është e aktivizuar</translation>
+        <translation>Mënyra aeroplan e aktivizuar</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation>Mënyra aeroplan është e çaktivizuar</translation>
+        <translation>Mënyra aeroplan e çaktivizuar</translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>%1 connected</source>
-        <translation>%1 u lidh</translation>
+        <translation>%1 e lidhur</translation>
     </message>
     <message>
         <source>Connecting...</source>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation>I çaktivizuar</translation>
+        <translation>Çaktivizuar</translation>
     </message>
 </context>
 <context>
@@ -140,11 +140,11 @@
     <name>DateTimeDisplayer</name>
     <message>
         <source>12-hour time</source>
-        <translation>Orë 12-orëshe</translation>
+        <translation>Kohë 12-orëshe</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>Orë 24-orëshe</translation>
+        <translation>Kohë 24-orëshe</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -159,11 +159,11 @@
     </message>
     <message>
         <source>12-hour time</source>
-        <translation>Orë 12-orëshe</translation>
+        <translation>orë 12-orëshe</translation>
     </message>
     <message>
         <source>24-hour time</source>
-        <translation>Orë 24-orëshe</translation>
+        <translation>orë 24-orëshe</translation>
     </message>
     <message>
         <source>Time settings</source>
@@ -174,14 +174,14 @@
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>
-        <translation type="unfinished"/>
+        <translation>Bashkëpunim me PC</translation>
     </message>
 </context>
 <context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
-        <translation>Jeni i sigurt se doni të zbrazen $1 objekte?</translation>
+        <translation>Jeni i sigurt se doni të zbrazen %1 objekte?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -200,6 +200,13 @@
     <name>DisplaySettingWidget</name>
     <message>
         <source>Multi-Screen Collaboration</source>
+        <translation>Bashkëpunim me Shumë Ekrane</translation>
+    </message>
+</context>
+<context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -207,7 +214,7 @@
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation>E aktivizuar</translation>
+        <translation>Aktivizuar</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -229,15 +236,15 @@
     </message>
     <message>
         <source>Efficient Mode</source>
-        <translation>Mënyra Efikase</translation>
+        <translation>Mënyra Efikasitet</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation>Në Krye</translation>
+        <translation>Në krye</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Në Fund</translation>
+        <translation>Në fund</translation>
     </message>
     <message>
         <source>Left</source>
@@ -291,15 +298,11 @@
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
-        <translation>Onboard</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energji</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Kapacitet %1, edhe %2 min</translation>
@@ -314,7 +317,7 @@
     </message>
     <message>
         <source>Charging %1, %2 hr %3 min until full</source>
-        <translation>Po ngarkohet %1, edhe %2 hr e 3% min deri sa të jetë plot</translation>
+        <translation>Po ngarkohet %1, edhe %2 hr e %3 minuta deri sa të jetë plot</translation>
     </message>
     <message>
         <source>Capacity %1</source>
@@ -326,11 +329,15 @@
     </message>
     <message>
         <source>Capacity %1 ...</source>
-        <translation>Kapacitet %1 …</translation>
+        <translation>Kapacitet %1…</translation>
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Kapacitet 1%, plotësisht e ngarkuar</translation>
+        <translation>Kapacitet %1, plotësisht e ngarkuar</translation>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -368,7 +375,7 @@
     </message>
     <message>
         <source>Switch account</source>
-        <translation>Ndërroni llogari</translation>
+        <translation>Këmbeni llogari</translation>
     </message>
     <message>
         <source>Power settings</source>
@@ -379,8 +386,8 @@
         <translation>Rinisu</translation>
     </message>
     <message>
-        <source>Plugged In</source>
-        <translation>Në Prizë</translation>
+        <source>Power</source>
+        <translation>Energji</translation>
     </message>
 </context>
 <context>
@@ -409,7 +416,7 @@
     </message>
     <message>
         <source>Mute</source>
-        <translation>Pa zë</translation>
+        <translation>Hiqi zërin</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -443,18 +450,18 @@
     </message>
     <message>
         <source>Move to Trash</source>
-        <translation>Shpjere te Hedhurinat</translation>
+        <translation>Shpjere te Hedhurina</translation>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
         <source>Open</source>
-        <translation>Hape</translation>
+        <translation>Hap</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation>E zbrazët</translation>
+        <translation>Zbraze</translation>
     </message>
 </context>
 <context>
@@ -469,7 +476,7 @@
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Paneli gjendet nën Mënyrën e Parrezik, ju lutemi, dilni prej saj, që të shfaqet si duhet</translation>
+        <translation>Paneli gjendet nën mënyrën e parrezik, ju lutemi, dilni prej saj, që të shfaqet si duhet</translation>
     </message>
 </context>
 </TS>
