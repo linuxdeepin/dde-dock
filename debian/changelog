@@ -1,3 +1,17 @@
+dde-dock (6.0.9.1) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * chore: 更新changelog(Task: 227573)(Influence: 版本号)
+  * fix: 修复移除蓝牙设备后任务栏插件不消失的问题(Bug: 181945)(Influence: 插上蓝牙，从控制中心勾选该插件，在任务栏显示，然后移除蓝牙设备，观察任务栏的蓝牙图标是否消失)
+  * fix: 修复从任务栏向上拖动插件引起任务栏崩溃的问题(Bug: 181945)(Influence: 从任务栏向上拖动插件，观察任务栏是否正常)
+  * fix: 修复从托盘拖动图标到任务栏引起崩溃的问题(Bug: 181945)(Influence: 将托盘图标拖动到任务栏)
+  * fix: 修改插件区域出现重复的电池图标问题(Bug: 184085)(Influence: 任务栏-电池图标状态刷新)
+  * fix: 修复高缩放率下图标显示异常的问题(Bug: 183543, 184089)(Influence: 高分屏，高缩放率，观察任务栏插件区域的图标)
+  * fix: 修复系统主题变化后快捷面板电池颜色显示错误的问题(Bug: 184085)(Influence: 打开快捷面板，在控制中心更改系统颜色，观察快捷面板中系统电池图标是否跟随系统颜色变化)
+  * fix: 更新翻译文案(Task: 226203)(Influence: 从笔记本上观察控制中心个性化中电池的文案)
+
+ -- lvpeilong <lvpeilong@uniontech.com>  Wed, 01 Feb 2023 15:26:25 +0800
+
 dde-dock (6.0.8.1) unstable; urgency=medium
 
   [ TagBuilder ]
