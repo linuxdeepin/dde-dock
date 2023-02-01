@@ -158,9 +158,14 @@ void QuickPluginModel::initConfig()
 
 void QuickPluginModel::saveConfig()
 {
+    QStringList pluginNames;
+    for (PluginsItemInterface *item : m_dockedPluginsItems) {
+        pluginNames << item->pluginName();
+    }
     QStringList plugins;
     for (auto it = m_dockedPluginIndex.begin(); it != m_dockedPluginIndex.end(); it++) {
-        plugins << it.key();
+        if (pluginNames.contains(it.key()))
+            plugins << it.key();
     }
     std::sort(plugins.begin(), plugins.end(), [ this ](const QString &p1, const QString &p2) {
         return m_dockedPluginIndex.value(p1) < m_dockedPluginIndex.value(p2);
