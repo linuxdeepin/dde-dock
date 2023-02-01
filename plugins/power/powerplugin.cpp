@@ -52,12 +52,8 @@ PowerPlugin::PowerPlugin(QObject *parent)
     , m_preChargeTimer(new QTimer(this))
     , m_quickPanel(nullptr)
 {
-    m_tipsLabel->setVisible(false);
-    m_tipsLabel->setObjectName("power");
-    m_preChargeTimer->setInterval(DELAYTIME);
-    m_preChargeTimer->setSingleShot(true);
-    initQuickPanel();
-    connect(m_preChargeTimer,&QTimer::timeout,this,&PowerPlugin::refreshTipsData);
+    initUi();
+    initConnection();
 }
 
 const QString PowerPlugin::pluginName() const
@@ -67,7 +63,7 @@ const QString PowerPlugin::pluginName() const
 
 const QString PowerPlugin::pluginDisplayName() const
 {
-    return tr("Power");
+    return tr("Battery");
 }
 
 QWidget *PowerPlugin::itemWidget(const QString &itemKey)
@@ -100,6 +96,8 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     loadPlugin();
+
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 }
 
 const QString PowerPlugin::itemCommand(const QString &itemKey)
@@ -149,13 +147,12 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 
 QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
     // 快捷面板使用m_quickPanel
     if (dockPart == DockPart::QuickPanel) {
-        m_imageLabel->setPixmap(pixmap);
         return QIcon();
     }
 
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
     static QIcon batteryIcon;
     batteryIcon.detach();
     batteryIcon.addPixmap(pixmap);
@@ -289,8 +286,19 @@ void PowerPlugin::refreshTipsData()
     }
 }
 
-void PowerPlugin::initQuickPanel()
+void PowerPlugin::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
+    m_imageLabel->setPixmap(pixmap);
+}
+
+void PowerPlugin::initUi()
+{
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setObjectName("power");
+    m_preChargeTimer->setInterval(DELAYTIME);
+    m_preChargeTimer->setSingleShot(true);
+
     m_quickPanel = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(m_quickPanel);
     layout->setAlignment(Qt::AlignVCenter);
@@ -309,4 +317,10 @@ void PowerPlugin::initQuickPanel()
     layout->addWidget(m_imageLabel);
     layout->addSpacing(7);
     layout->addWidget(m_labelText);
+}
+
+void PowerPlugin::initConnection()
+{
+    connect(m_preChargeTimer,&QTimer::timeout,this,&PowerPlugin::refreshTipsData);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PowerPlugin::onThemeTypeChanged);
 }

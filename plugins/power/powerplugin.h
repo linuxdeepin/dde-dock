@@ -61,8 +61,12 @@ private:
     void updateBatteryVisible();
     void loadPlugin();
     void onGSettingsChanged(const QString &key);
+    void initUi();
+    void initConnection();
+
+private slots:
     void refreshTipsData();
-    void initQuickPanel();
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     bool m_pluginLoaded;
