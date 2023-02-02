@@ -26,6 +26,7 @@
 #include "dtkwidget_global.h"
 
 #include <DListView>
+#include <DGuiApplicationHelper>
 
 #include <QWidget>
 
@@ -64,6 +65,7 @@ private Q_SLOTS:
     void onShowChildWidget(QWidget *childWidget);
     void onResizeView();
     void onPluginUpdated(PluginsItemInterface *itemInter, const DockPart dockPart);
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     // 加载UI

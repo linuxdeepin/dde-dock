@@ -362,6 +362,7 @@ void QuickSettingContainer::initConnection()
     });
     connect(m_pluginController, &DockPluginController::pluginRemoved, this, &QuickSettingContainer::onPluginRemove);
     connect(m_pluginController, &DockPluginController::pluginUpdated, this, &QuickSettingContainer::onPluginUpdated);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &QuickSettingContainer::onThemeTypeChanged);
 
     connect(m_childPage, &PluginChildPage::back, this, [ this ] {
         showPage(m_mainWidget);
@@ -412,4 +413,10 @@ void QuickSettingContainer::onPluginUpdated(PluginsItemInterface *itemInter, con
         settingItem->doUpdate();
         break;
     }
+}
+
+void QuickSettingContainer::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    for (QuickSettingItem *settingItem : m_quickSettings)
+        settingItem->doUpdate();
 }
