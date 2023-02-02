@@ -1,3 +1,11 @@
+dde-dock (6.0.9.2) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复拖动插件到任务栏后所有插件都显示的问题(Bug: 181945)(Influence: 默认所有的快捷面板中的插件都在任务栏显示，从控制中心取消所有插件的勾选，然后从快捷面板拖动一个插件到任务栏，观察任务栏插件显示情况)
+  * fix: 修复切换主题快捷面板插件主题颜色没有变化(Bug: 184085)(Influence: 打开快捷面板，切换主题，观察图标颜色显示是否正常)
+
+ -- lvpeilong <lvpeilong@uniontech.com>  Thu, 02 Feb 2023 13:30:36 +0800
+
 dde-dock (6.0.9.1) unstable; urgency=medium
 
   [ TagBuilder ]
