@@ -91,6 +91,9 @@ private:
     TrayGridView *m_trayView;                       // 托盘区域视图
     TrayModel *m_model;                             // 托盘区域的model
     TrayDelegate *m_delegate;                       // 托盘区域的视图代理
+    QWidget *m_toolFrontSpaceWidget;                // 用于显示桌面和回收站中间的间隔
+    QWidget *m_toolBackSpaceWidget;                 // 用于回收站和时间日期分割线中间的间隔
+    QWidget *m_dateTimeSpaceWidget;                 // 用于时间日期分割线和时间日期中间的间隔
 };
 
 #endif // DOCKTRAYWINDOW_H

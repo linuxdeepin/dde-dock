@@ -38,7 +38,7 @@
 
 #define FRONTSPACING 18
 #define SPLITERSIZE 2
-#define SPLITESPACE 10
+#define SPLITESPACE 5
 
 DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     : QWidget(parent)
@@ -56,6 +56,9 @@ DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     , m_trayView(new TrayGridView(this))
     , m_model(TrayModel::getDockModel())
     , m_delegate(new TrayDelegate(m_trayView, this))
+    , m_toolFrontSpaceWidget(new QWidget(this))
+    , m_toolBackSpaceWidget(new QWidget(this))
+    , m_dateTimeSpaceWidget(new QWidget(this))
 {
     initUi();
     initConnection();
@@ -90,10 +93,12 @@ QSize DockTrayWindow::suitableSize(const Dock::Position &position, const int &, 
 {
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
         // 左右的尺寸
-        int height = FRONTSPACING
+        int height = m_showDesktopWidget->height()
+                + m_toolFrontSpaceWidget->height()
                 + m_toolWidget->height()
-                + (SPLITESPACE * 2)
-                + SPLITERSIZE
+                + m_toolBackSpaceWidget->height()
+                + m_toolLineLabel->height()
+                + m_dateTimeSpaceWidget->height()
                 + m_dateTimeWidget->suitableSize(position).height()
                 + m_systemPuginWidget->suitableSize(position).height()
                 + m_quickIconWidget->suitableSize(position).height()
@@ -102,10 +107,12 @@ QSize DockTrayWindow::suitableSize(const Dock::Position &position, const int &, 
         return QSize(-1, height);
     }
     // 上下的尺寸
-    int width = FRONTSPACING
+    int width = m_showDesktopWidget->width()
+            + m_toolFrontSpaceWidget->width()
             + m_toolWidget->width()
-            + (SPLITESPACE * 2)
-            + SPLITERSIZE
+            + m_toolBackSpaceWidget->width()
+            + m_toolLineLabel->width()
+            + m_dateTimeSpaceWidget->width()
             + m_dateTimeWidget->width()
             + m_systemPuginWidget->width()
             + m_quickIconWidget->width()
@@ -281,7 +288,9 @@ void DockTrayWindow::updateToolWidget()
 {
     m_toolWidget->setVisible(m_toolLayout->count() > 0);
     m_toolLineLabel->setVisible(m_toolLayout->count() > 0);
-    m_showDesktopWidget->setVisible(m_toolLayout->count() > 0);
+    m_toolFrontSpaceWidget->setVisible(m_toolLayout->count() > 0);
+    m_toolBackSpaceWidget->setVisible(m_toolLayout->count() > 0);
+    m_dateTimeSpaceWidget->setVisible(m_toolLayout->count() > 0);
 }
 
 void DockTrayWindow::initUi()
@@ -293,10 +302,11 @@ void DockTrayWindow::initUi()
     m_mainBoxLayout->setContentsMargins(0, 0, 0, 0);
     m_mainBoxLayout->setSpacing(0);
     m_mainBoxLayout->addWidget(m_showDesktopWidget);
+    m_mainBoxLayout->addWidget(m_toolFrontSpaceWidget);
     m_mainBoxLayout->addWidget(m_toolWidget);
-    m_mainBoxLayout->addSpacing(SPLITESPACE);
+    m_mainBoxLayout->addWidget(m_toolBackSpaceWidget);
     m_mainBoxLayout->addWidget(m_toolLineLabel);
-    m_mainBoxLayout->addSpacing(SPLITESPACE);
+    m_mainBoxLayout->addWidget(m_dateTimeSpaceWidget);
     m_mainBoxLayout->addWidget(m_dateTimeWidget);
     m_mainBoxLayout->addWidget(m_systemPuginWidget);
     m_mainBoxLayout->addWidget(m_quickIconWidget);
@@ -369,6 +379,9 @@ void DockTrayWindow::onUpdateComponentSize()
         m_systemPuginWidget->setFixedSize(QWIDGETSIZE_MAX, m_systemPuginWidget->suitableSize().height());
         m_quickIconWidget->setFixedSize(QWIDGETSIZE_MAX, m_quickIconWidget->suitableSize().height());
         m_trayView->setFixedSize(QWIDGETSIZE_MAX, m_trayView->suitableSize().height());
+        m_toolFrontSpaceWidget->setFixedSize(QWIDGETSIZE_MAX, SPLITESPACE);
+        m_toolBackSpaceWidget->setFixedSize(QWIDGETSIZE_MAX, SPLITESPACE);
+        m_dateTimeSpaceWidget->setFixedSize(QWIDGETSIZE_MAX, SPLITESPACE);
         break;
     case Dock::Position::Top:
     case Dock::Position::Bottom:
@@ -378,6 +391,9 @@ void DockTrayWindow::onUpdateComponentSize()
         m_systemPuginWidget->setFixedSize(m_systemPuginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_trayView->setFixedSize(m_trayView->suitableSize().width(), QWIDGETSIZE_MAX);
+        m_toolFrontSpaceWidget->setFixedSize(SPLITESPACE, QWIDGETSIZE_MAX);
+        m_toolBackSpaceWidget->setFixedSize(SPLITESPACE, QWIDGETSIZE_MAX);
+        m_dateTimeSpaceWidget->setFixedSize(SPLITESPACE, QWIDGETSIZE_MAX);
         break;
     }
     Q_EMIT requestUpdate();
