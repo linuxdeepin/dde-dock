@@ -235,7 +235,7 @@ QRect WindowManager::geometry() const
             if (!mainWindow->isVisible())
                 continue;
 
-            QRect windowRect = mainWindow->rect();
+            QRect windowRect = mainWindow->geometry();
             if (i == 0 || x > windowRect.x())
                 x = windowRect.x();
             if (i == 0) {
@@ -253,7 +253,7 @@ QRect WindowManager::geometry() const
         if (!mainWindow->isVisible())
             continue;
 
-        QRect windowRect = mainWindow->rect();
+        QRect windowRect = mainWindow->geometry();
         if (i == 0 || y > windowRect.y())
             y = windowRect.y();
 
@@ -660,6 +660,7 @@ void WindowManager::onChangeDockPosition(QString fromScreen, QString toScreen, c
         showAniFinish();
         m_multiScreenWorker->setStates(MultiScreenWorker::ChangePositionAnimationStart, false);
         animationFinish(true);
+        emit panelGeometryChanged();
     });
 
     for (QParallelAnimationGroup *ani : animations) {
