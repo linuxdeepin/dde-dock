@@ -63,8 +63,8 @@ TEST_F(Test_DockPopupWindow, onGlobMouseRelease)
 
     ASSERT_TRUE(window->model());
 
-    window->onGlobMouseRelease(QPoint(0, 0), DRegionMonitor::WatchedFlags::Button_Middle);
-    window->onGlobMouseRelease(QPoint(0, 0), DRegionMonitor::WatchedFlags::Button_Left);
+    window->onGlobMouseRelease(QPoint(0, 0), DTK_GUI_NAMESPACE::DRegionMonitor::WatchedFlags::Button_Middle);
+    window->onGlobMouseRelease(QPoint(0, 0), DTK_GUI_NAMESPACE::DRegionMonitor::WatchedFlags::Button_Left);
 
     qApp->processEvents();
     QTest::qWait(10);
