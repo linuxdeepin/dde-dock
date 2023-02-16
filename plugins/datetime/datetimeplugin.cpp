@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -25,7 +26,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     , m_pluginLoaded(false)
 {
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
-    sessionBus.connect("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
+    sessionBus.connect("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", "org.freedesktop.DBus.Properties",  "PropertiesChanged", this, SLOT(propertiesChanged()));
 }
 
 PluginsItemInterface::PluginSizePolicy DatetimePlugin::pluginSizePolicy() const
@@ -132,7 +133,7 @@ const QString DatetimePlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return "dbus-send --print-reply --dest=com.deepin.Calendar /com/deepin/Calendar com.deepin.Calendar.RaiseWindow";
+    return "dbus-send --print-reply --dest=org.deepin.dde.Widgets1 /org/deepin/dde/Widgets1 org.deepin.dde.Widgets1.Toggle";
 }
 
 const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
@@ -174,10 +175,10 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "open") {
         DDBusSender()
-                .service("com.deepin.dde.ControlCenter")
-                .interface("com.deepin.dde.ControlCenter")
-                .path("/com/deepin/dde/ControlCenter")
-                .method(QString("ShowModule"))
+                .service("org.deepin.dde.ControlCenter1")
+                .interface("org.deepin.dde.ControlCenter1")
+                .path("/org/deepin/dde/ControlCenter1")
+                .method(QString("ShowPage"))
                 .arg(QString("datetime"))
                 .call();
     } else {
@@ -204,9 +205,10 @@ void DatetimePlugin::updateCurrentTimeString()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
 
-    // 实时刷新日期，防止日期显示错误
-    m_centralWidget->updateDateTimeString();
-    m_dateTipsLabel->setText(m_centralWidget->getDateTime());
+    if (m_centralWidget->is24HourFormat())
+        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
+    else
+        m_dateTipsLabel->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss A"));
 
     const QString currentString = currentDateTime.toString("yyyy/MM/dd hh:mm");
 
@@ -240,11 +242,11 @@ void DatetimePlugin::propertiesChanged()
 QDBusInterface* DatetimePlugin::timedateInterface()
 {
     if (!m_interface) {
-        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("com.deepin.daemon.Timedate")) {
-            m_interface = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate", QDBusConnection::sessionBus(), this);
+        if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.deepin.dde.Timedate1")) {
+            m_interface = new QDBusInterface("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", "org.deepin.dde.Timedate1", QDBusConnection::sessionBus(), this);
         } else {
-            const QString path = QString("/com/deepin/daemon/Accounts/User%1").arg(QString::number(getuid()));
-            QDBusInterface * systemInterface = new QDBusInterface("com.deepin.daemon.Accounts", path, "com.deepin.daemon.Accounts.User",
+            const QString path = QString("/org/deepin/dde/Accounts1/User%1").arg(QString::number(getuid()));
+            QDBusInterface * systemInterface = new QDBusInterface("org.deepin.dde.Accounts1", path, "org.deepin.dde.Accounts1.User",
                                                                   QDBusConnection::systemBus(), this);
             return systemInterface;
         }

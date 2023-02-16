@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fa" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fa">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -7,9 +7,57 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AirplaneModeApplet</name>
     <message>
-        <source>Remove</source>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>خاموش کردن</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>روشن کردن</translation>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation>باز کردن</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -52,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>بلوتوث</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>روشن کردن</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>خاموش کردن</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>بلوتوث</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>روشن کردن</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>خاموش کردن</translation>
     </message>
 </context>
 <context>
@@ -63,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>اضافه کردن طرح بندی صفحه کلید</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>زمان 12-ساعته</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>زمان 24-ساعته</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>تنظیمات زمان</translation>
     </message>
 </context>
 <context>
@@ -85,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -104,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>دستگاه ناشناخته</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>حجم ناشناخته</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>دیسک</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>باز کردن</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>خارج کردن همه</translation>
+        <source>Disabled</source>
+        <translation>غیر فعال</translation>
     </message>
 </context>
 <context>
@@ -134,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>لانچر</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -202,19 +279,7 @@
         <translation>وضعیت </translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>پلاگین ها</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show the Dock</source>
+        <source>Dock settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -235,21 +300,9 @@
         <source>Onboard</source>
         <translation>روی صفحه</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>تنظیمات</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>منبع قدرت</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>تنظیمات برق</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>ظرفیت %1, %2 دقیقه باقی مانده است</translation>
@@ -282,6 +335,10 @@
         <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ShowDesktopPlugin</name>
@@ -296,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>منبع قدرت</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>خاموش شدن</translation>
@@ -332,12 +385,27 @@
         <source>Reboot</source>
         <translation>راه اندازی مجدد</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>منبع قدرت</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>دستگاه</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>تنظیمات صدا</translation>
     </message>
 </context>
 <context>
@@ -394,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>خالی</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

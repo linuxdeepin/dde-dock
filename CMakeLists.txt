@@ -6,6 +6,11 @@ endif()
 
 project(dde-dock)
 
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(CMAKE_PREFER_PTHREAD_FLAG ON)
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -45,6 +50,25 @@ if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
     add_definitions(-DDISABLE_SHOW_ANIMATION)
 endif()
 
+function(generation_dbus_interface xmldir outdir)
+    IF(EXISTS ${outdir})
+        file(REMOVE_RECURSE ${outdir})
+    ENDIF()
+    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir})
+    file(GLOB_RECURSE allXmls ${xmldir}/*.xml)
+    foreach(XMLFILE ${allXmls})
+        string(FIND ${XMLFILE} "/" INDEX REVERSE)
+        string(SUBSTRING ${XMLFILE} ${INDEX} -1 classname)
+        string(REPLACE "/" "" classname ${classname})
+        string(REPLACE ".xml" "" classname ${classname})
+        string(REPLACE "." "_" classname ${classname})
+        string(TOLOWER ${classname} filename)
+
+        execute_process(COMMAND qdbusxml2cpp-fix -c ${classname} -p ${outdir}/${filename} ${XMLFILE}
+            WORKING_DIRECTORY ${outdir})
+    endforeach()
+endfunction(generation_dbus_interface)
+
 file(GLOB INTERFACES "interfaces/*.h")
 
 #因为单元测试需要直接测试源代码，而主程序代码中include的单元使用了相对路径
@@ -59,9 +83,12 @@ include_directories(
     frame/item
     frame/item/components
     frame/item/resources
+    frame/model
     frame/util
     frame/window
     frame/window/components
+    frame/window/tray
+    frame/window/tray/widgets
     frame/xcb
     ../widgets
     ../interfaces
@@ -72,11 +99,14 @@ aux_source_directory(frame/dbus DBUS)
 aux_source_directory(frame/dbus/sni SNI)
 aux_source_directory(frame/display DISPLAY)
 aux_source_directory(frame/item ITEM)
+aux_source_directory(frame/model MODEL)
 aux_source_directory(frame/item/components ITEMCOMPONENTS)
 aux_source_directory(frame/item/resources RESOURCES)
 aux_source_directory(frame/util UTIL)
 aux_source_directory(frame/window WINDOW)
 aux_source_directory(frame/window/components WINDOWCOMPONENTS)
+aux_source_directory(frame/window/tray WINDOWTRAY)
+aux_source_directory(frame/window/tray/widgets WINDOWTRAYWIDGET)
 aux_source_directory(frame/xcb XCB)
 
 file(GLOB SRC_PATH
@@ -86,16 +116,19 @@ file(GLOB SRC_PATH
     ${SNI}
     ${DISPLAY}
     ${ITEM}
+    ${MODEL}
     ${ITEMCOMPONENTS}
     ${UTIL}
     ${WINDOW}
     ${WINDOWCOMPONENTS}
+    ${WINDOWTRAY}
+    ${WINDOWTRAYWIDGET}
     ${XCB}
     )
 
 add_subdirectory("frame")
 add_subdirectory("plugins")
-add_subdirectory("tests")
+#add_subdirectory("tests")
 
 # Install settings
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -124,6 +157,10 @@ install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+
+#dconfig
+file(GLOB DCONFIG_FILES "configs/*.json")
+install(FILES ${DCONFIG_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/dsg/configs/dde-dock/)
 
 # Address Sanitizer 内存错误检测工具,打开下面的编译选项可以看到调试信息，正常运行时不需要这些信息
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -8,47 +9,58 @@
 #include "dockitem.h"
 #include "previewcontainer.h"
 #include "appdrag.h"
-#include "dbusclientmanager.h"
 #include "../widgets/tipswidget.h"
+#include "dbusutil.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
 #include <DGuiApplicationHelper>
 
-#include <com_deepin_dde_daemon_dock_entry.h>
-
-using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
 class QGSettings;
+class ScreenSpliter;
 
 class AppItem : public DockItem
 {
     Q_OBJECT
 
 public:
-    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
     const QString appId() const;
+    QString name() const;
     bool isValid() const;
     void updateWindowIconGeometries();
     void undock();
     QWidget *appDragWidget();
     void setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry);
+    void setDraging(bool drag) override;
 
+    void startSplit(const QRect &rect);
+    bool supportSplitWindow();
+    bool splitWindowOnScreen(ScreenSpliter::SplitDirection direction);
+    int mode() const;
+    DockEntryInter *itemEntryInter() const;
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     virtual QString accessibleName() override;
-    inline quint32 getAppItemWindowId() const { return  m_currentWindowId; }
+    void requestDock();
+    bool isDocked() const;
+    qint64 appOpenMSecs() const;
+    void updateMSecs();
+    const WindowInfoMap &windowsMap() const;
 
 signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
     void dragReady(QWidget *dragWidget);
+
     void requestUpdateEntryGeometries() const;
-    void requestUpdateItemMinimizedGeometry(const QRect) const;
+    void windowCountChanged() const;
+    void modeChanged(int) const;
 
 private:
     void moveEvent(QMoveEvent *e) override;
@@ -68,6 +80,7 @@ private:
     void invokedMenuItem(const QString &itemId, const bool checked) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
+    void startDrag();
     bool hasAttention() const;
 
     QPoint appIconPosition() const;
@@ -102,11 +115,9 @@ private:
 
     QPointer<AppDrag> m_drag;
 
-    bool m_dragging;
     bool m_active;
     int m_retryTimes;
     bool m_iconValid;
-    quint32 m_currentWindowId;
     quint64 m_lastclickTimes;
 
     WindowInfoMap m_windowInfos;
@@ -124,8 +135,12 @@ private:
     QDate m_curDate;                    // 保存当前icon的日期来判断是否需要更新日历APP的ICON
 
     DGuiApplicationHelper::ColorType m_themeType;
+    qint64 m_createMSecs;
 
     static QPoint MousePressPos;
+
+    ScreenSpliter *m_screenSpliter;
+    DockInter *m_dockInter;
 };
 
 #endif // APPITEM_H

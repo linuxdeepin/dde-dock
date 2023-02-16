@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,20 +10,21 @@
 #include "pluginproxyinterface.h"
 #include "util/abstractpluginscontroller.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
 #include <QDBusConnectionInterface>
 
 class PluginsItemInterface;
+class ProxyPluginController;
+
 class SystemTraysController : public AbstractPluginsController
 {
     Q_OBJECT
 
 public:
     explicit SystemTraysController(QObject *parent = nullptr);
+    ~SystemTraysController() override;
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey) override;
@@ -38,12 +40,13 @@ public:
     const QVariant getValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant& fallback = QVariant());
     void saveValueSystemTrayItem(const QString &itemKey, const QString &key, const QVariant &value);
 
-    void startLoader();
-
 signals:
     void pluginItemAdded(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemRemoved(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
     void pluginItemUpdated(const QString &itemKey, AbstractTrayWidget *pluginItem) const;
+
+private:
+    void loadPlugins(ProxyPluginController *proxyController);
 };
 
 #endif // SYSTEMTRAYSCONTROLLER_H

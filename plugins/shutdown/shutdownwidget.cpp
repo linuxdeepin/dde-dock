@@ -1,9 +1,9 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "shutdownwidget.h"
-#include "../frame/util/imageutil.h"
 
 #include <QSvgRenderer>
 #include <QPainter>
@@ -29,6 +29,16 @@ ShutdownWidget::ShutdownWidget(QWidget *parent)
         update();
     });
     m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
+}
+
+QPixmap ShutdownWidget::loadPixmap() const
+{
+    QString iconName = "system-shutdown";
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    return loadSvg(iconName, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE));
 }
 
 void ShutdownWidget::paintEvent(QPaintEvent *e)
@@ -100,8 +110,7 @@ const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size
     const auto ratio = devicePixelRatioF();
 
     QPixmap pixmap;
-    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : (size * ratio);
-    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(pixmapSize);
+    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(size * ratio);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;

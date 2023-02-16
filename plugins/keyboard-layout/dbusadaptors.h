@@ -1,26 +1,24 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef DBUSADAPTORS_H
 #define DBUSADAPTORS_H
 
-#include "fcitxinterface.h"
-
 #include <QMenu>
 #include <QtDBus/QtDBus>
+#include "org_deepin_dde_inputdevice1_keyboard.h"
 
-#include <com_deepin_daemon_inputdevice_keyboard.h>
-
-using Keyboard = com::deepin::daemon::inputdevice::Keyboard;
+using Keyboard = org::deepin::dde::inputdevice1::Keyboard;
 class QGSettings;
 
 class DBusAdaptors : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Keyboard")
+    Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.Dock1.KeyboardLayout")
 //    Q_CLASSINFO("D-Bus Introspection", ""
-//                "  <interface name=\"com.deepin.dde.Keyboard\">\n"
+//                "  <interface name=\"org.deepin.dde.Dock1.KeyboardLayout\">\n"
 //                "    <property access=\"read\" type=\"s\" name=\"layout\"/>\n"
 //                "    <signal name=\"layoutChanged\">"
 //                "        <arg name=\"layout\" type=\"s\"/>"
@@ -34,10 +32,8 @@ public:
 
 public:
     Q_PROPERTY(QString layout READ layout WRITE setLayout NOTIFY layoutChanged)
-    Q_PROPERTY(bool fcitxRunning READ isFcitxRunning NOTIFY fcitxStatusChanged)
     QString layout() const;
     void setLayout(const QString &str);
-    bool isFcitxRunning() const;
 
     Keyboard *getCurrentKeyboard();
 
@@ -46,7 +42,6 @@ public slots:
 
 signals:
     void layoutChanged(QString text);
-    void fcitxStatusChanged(bool running);
 
 private slots:
     void onCurrentLayoutChanged(const QString & value);
@@ -58,22 +53,12 @@ private slots:
 
 private slots:
     void onGSettingsChanged(const QString &key);
-    void onFcitxConnected(const QString &service);
-    void onFcitxDisconnected(const QString &service);
-    void onPropertyChanged(QString name, QVariantMap map, QStringList list);
 
 private:
     QString duplicateCheck(const QString &kb);
-    void setKeyboardLayoutGsettings();
-    void initFcitxWatcher();
 
 private:
     Keyboard *m_keyboard;
-    bool m_fcitxRunning;
-    FcitxInputMethodProxy *m_inputmethod;
-    QDBusServiceWatcher *m_fcitxWatcher;
-    QGSettings *m_keybingEnabled;
-    QGSettings *m_dccSettings;
     QMenu *m_menu;
     QAction *m_addLayoutAction;
 

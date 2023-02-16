@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,8 +8,12 @@
 
 #include "constants.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QWidget>
 #include <QIcon>
+
+DGUI_USE_NAMESPACE
 
 class OnboardItem : public QWidget
 {
@@ -16,6 +21,7 @@ class OnboardItem : public QWidget
 
 public:
     explicit OnboardItem(QWidget *parent = nullptr);
+    QPixmap iconPixmap(QSize size, DGuiApplicationHelper::ColorType themeType) const;
 
 protected:
     void paintEvent(QPaintEvent *e) override;

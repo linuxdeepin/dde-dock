@@ -1,16 +1,16 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef MENUWORKER_H
 #define MENUWORKER_H
-#include <QObject>
 
 #include "constants.h"
+#include "dbusutil.h"
 
-#include <com_deepin_dde_daemon_dock.h>
+#include <QObject>
 
-using DBusDock = com::deepin::dde::daemon::Dock;
 class QMenu;
 class QGSettings;
 /**
@@ -20,26 +20,18 @@ class MenuWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuWorker(DBusDock *dockInter,QWidget *parent = nullptr);
+    explicit MenuWorker(DockInter *dockInter, QObject *parent = nullptr);
 
-    void showDockSettingsMenu(QMenu *menu);
-
-signals:
-    void autoHideChanged(const bool autoHide) const;
-
-public slots:
-    void setAutoHide(const bool autoHide);
-    void onNotifyDaemonInterfaceUpdate(DBusDock *dockInter);
+    void exec();
 
 private:
-    QMenu *createMenu(QMenu *settingsMenu);
+    void createMenu(QMenu *settingsMenu);
 
 private slots:
     void onDockSettingsTriggered();
 
 private:
-    DBusDock *m_dockInter;
-    bool m_autoHide;
+    DockInter *m_dockInter;
 };
 
 #endif // MENUWORKER_H

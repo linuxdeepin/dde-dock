@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -21,24 +22,26 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
 {
 //    QIcon::setThemeName("deepin");
 
-    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(m_powerInter, &DBusPower::OnBatteryChanged, this, static_cast<void (PowerStatusWidget::*)()>(&PowerStatusWidget::update));
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        refreshIcon();
-    });
+    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(m_powerInter, &DBusPower::BatteryStateChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(m_powerInter, &DBusPower::OnBatteryChanged, this, &PowerStatusWidget::refreshIcon);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PowerStatusWidget::refreshIcon);
 }
 
 void PowerStatusWidget::refreshIcon()
 {
     update();
+    Q_EMIT iconChanged();
 }
 
 void PowerStatusWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const QPixmap icon = getBatteryIcon();
+    int themeType = DGuiApplicationHelper::instance()->themeType();
+    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && themeType == DGuiApplicationHelper::LightType)
+        themeType = DGuiApplicationHelper::DarkType;
+    const QPixmap icon = getBatteryIcon(themeType);
     const auto ratio = devicePixelRatioF();
 
     QPainter painter(this);
@@ -47,7 +50,7 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rf.center() - rfp.center() / ratio, icon);
 }
 
-QPixmap PowerStatusWidget::getBatteryIcon()
+QPixmap PowerStatusWidget::getBatteryIcon(int themeType)
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint value = uint(qMin(100.0, qMax(0.0, data.value("Display"))));
@@ -92,13 +95,12 @@ QPixmap PowerStatusWidget::getBatteryIcon()
                   .arg(plugged ? "plugged-symbolic" : "symbolic");
     }
 
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+    if (themeType == DGuiApplicationHelper::ColorType::LightType)
         iconStr.append(PLUGIN_MIN_ICON_NAME);
 
     const auto ratio = devicePixelRatioF();
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
-    QPixmap pix = QIcon::fromTheme(iconStr,
-                                   QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(pixmapSize);
+    QPixmap pix = QIcon::fromTheme(iconStr, QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(pixmapSize);
     pix.setDevicePixelRatio(ratio);
 
     return pix;

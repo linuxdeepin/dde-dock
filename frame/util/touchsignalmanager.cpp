@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -15,7 +15,7 @@ TouchSignalManager *TouchSignalManager::m_touchManager = nullptr;
 
 TouchSignalManager::TouchSignalManager(QObject *parent)
     : QObject(parent)
-    , m_gestureInter(new Gesture("com.deepin.daemon.Gesture", "/com/deepin/daemon/Gesture", QDBusConnection::systemBus(), this))
+    , m_gestureInter(new Gesture("org.deepin.dde.Gesture1", "/org/deepin/dde/Gesture1", QDBusConnection::systemBus(), this))
     , m_dragIconPressed(false)
 {
     // 处理后端触屏信号

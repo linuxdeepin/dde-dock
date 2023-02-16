@@ -1,28 +1,26 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef APPSNAPSHOT_H
 #define APPSNAPSHOT_H
 
-#include <QWidget>
-#include <QDebug>
-#include <QTimer>
+#include "dbusutil.h"
 
 #include <DIconButton>
 #include <DWindowManagerHelper>
 #include <DPushButton>
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
+#include <QWidget>
+#include <QDebug>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 #define SNAP_WIDTH       200
 #define SNAP_HEIGHT      130
-#define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
-#define SNAP_WIDTH_WITHOUT_COMPOSITE       300
 
 #define SNAP_CLOSE_BTN_WIDTH     (24)
 #define SNAP_CLOSE_BTN_MARGIN    (5)
@@ -39,8 +37,6 @@ struct SHMInfo;
 struct _XImage;
 typedef _XImage XImage;
 
-using DockDaemonInter = com::deepin::dde::daemon::Dock;
-
 namespace Dock {
 class TipsWidget;
 }
@@ -50,14 +46,13 @@ class AppSnapshot : public QWidget
     Q_OBJECT
 
 public:
-    explicit AppSnapshot(const WId wid, QWidget *parent = 0);
+    explicit AppSnapshot(const WId wid, QWidget *parent = Q_NULLPTR);
 
     inline WId wid() const { return m_wid; }
     inline bool attentioned() const { return m_windowInfo.attention; }
     inline bool closeAble() const { return m_closeAble; }
     inline void setCloseAble(const bool value) { m_closeAble = value; }
-    inline const QImage snapshot() const { return m_snapshot; }
-    inline const QRectF snapshotGeometry() const { return m_snapshotSrcRect; }
+    inline const QPixmap snapshot() const { return m_pixmap; }
     inline const QString title() const { return m_windowInfo.title; }
     void setWindowState();
     void setTitleVisible(bool bVisible);
@@ -96,8 +91,7 @@ private:
 
     bool m_closeAble;
     bool m_isWidowHidden;
-    QImage m_snapshot;
-    QRectF m_snapshotSrcRect;
+    QPixmap m_pixmap;
 
     Dock::TipsWidget *m_title;
     DPushButton *m_3DtitleBtn;
@@ -105,7 +99,7 @@ private:
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
-    DockDaemonInter *m_dockDaemonInter;
+    DockInter *m_dockDaemonInter;
 };
 
 #endif // APPSNAPSHOT_H

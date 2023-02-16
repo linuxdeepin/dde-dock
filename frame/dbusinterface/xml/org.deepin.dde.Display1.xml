@@ -1,0 +1,83 @@
+     <interface name="org.deepin.dde.Display1">
+          <method name="ApplyChanges"></method>
+          <method name="AssociateTouch">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="AssociateTouchByUUID">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="ChangeBrightness">
+               <arg type="b" direction="in"></arg>
+          </method>
+          <method name="DeleteCustomMode">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="GetRealDisplayMode">
+               <arg type="y" direction="out"></arg>
+          </method>
+          <method name="ListOutputNames">
+               <arg type="as" direction="out"></arg>
+          </method>
+          <method name="ListOutputsCommonModes">
+               <arg type="a(uqqd)" direction="out"></arg>
+               <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="ResolutionList"/>
+          </method>
+          <method name="ModifyConfigName">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="RefreshBrightness"></method>
+          <method name="Reset"></method>
+          <method name="ResetChanges"></method>
+          <method name="Save"></method>
+          <method name="SetAndSaveBrightness">
+               <arg type="s" direction="in"></arg>
+               <arg type="d" direction="in"></arg>
+          </method>
+          <method name="SetBrightness">
+               <arg type="s" direction="in"></arg>
+               <arg type="d" direction="in"></arg>
+          </method>
+          <method name="SetPrimary">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="SwitchMode">
+               <arg type="y" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="SetMethodAdjustCCT">
+               <arg type="i" direction="in"></arg>
+          </method>
+          <method name="SetColorTemperature">
+               <arg type="i" direction="in"></arg>
+          </method>
+          <property name="HasChanged" type="b" access="read"></property>
+          <property name="DisplayMode" type="y" access="read"></property>
+          <property name="ScreenWidth" type="q" access="read"></property>
+          <property name="ScreenHeight" type="q" access="read"></property>
+          <property name="Primary" type="s" access="read"></property>
+          <property name="CurrentCustomId" type="s" access="read"></property>
+          <property name="CustomIdList" type="as" access="read"></property>
+          <property name="MaxBacklightBrightness" type="u" access="read"></property>
+          <property name="PrimaryRect" type="(nnqq)" access="read">
+              <annotation name="org.qtproject.QtDBus.QtTypeName" value="ScreenRect"/>
+          </property>
+          <property name="Monitors" type="ao" access="read"></property>
+          <property name="Brightness" type="a{sd}" access="read">
+              <annotation name="org.qtproject.QtDBus.QtTypeName" value="BrightnessMap"/>
+          </property>
+          <property name="Touchscreens" type="a(isss)" access="read">
+              <annotation name="org.qtproject.QtDBus.QtTypeName" value="TouchscreenInfoList"/>
+          </property>
+          <property name="TouchscreensV2" type="a(issss)" access="read">
+              <annotation name="org.qtproject.QtDBus.QtTypeName" value="TouchscreenInfoList_V2"/>
+          </property>
+          <property name="TouchMap" type="a{ss}" access="read">
+              <annotation name="org.qtproject.QtDBus.QtTypeName" value="TouchscreenMap"/>
+          </property>
+          <property name="ColorTemperatureMode" type="i" access="read"></property>
+          <property name="ColorTemperatureManual" type="i" access="read"></property>
+     </interface>
+

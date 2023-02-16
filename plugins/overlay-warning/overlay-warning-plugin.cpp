@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -13,7 +14,7 @@
 
 #define PLUGIN_STATE_KEY    "enable"
 #define OverlayFileSystemType    "overlay"
-#define AuthAgentDbusService "com.deepin.Polkit1AuthAgent"
+#define AuthAgentDbusService "org.deepin.dde.Polkit1.AuthAgent"
 
 DWIDGET_USE_NAMESPACE
 
@@ -114,6 +115,11 @@ void OverlayWarningPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
+PluginFlags OverlayWarningPlugin::flags() const
+{
+    return PluginFlag::Type_NoneFlag;
+}
+
 void OverlayWarningPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -174,9 +180,9 @@ void OverlayWarningPlugin::showCloseOverlayDialogPre()
 void OverlayWarningPlugin::showCloseOverlayDialog()
 {
     qDebug() << "start disable overlayroot process";
-    const int result = QProcess::execute("/usr/bin/pkexec /usr/sbin/overlayroot-disable");
+    const int result = QProcess::execute("/usr/bin/pkexec /usr/sbin/overlayroot-disable", QStringList());
     if (result == 0) {
-        QProcess::startDetached("reboot");
+        QProcess::startDetached("reboot", QStringList());
     } else {
         qDebug() << "disable overlayroot failed, the return code is" << result;
     }

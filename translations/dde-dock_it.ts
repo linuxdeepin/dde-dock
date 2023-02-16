@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>I miei dispositivi</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Altri dispositivi</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Attiva</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Disattiva</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Attiva</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Disattiva</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Aggiungi un layout della Tastiera</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>Formato 12 ore</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>Formato 24 ore</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Impostazioni orarie</translation>
     </message>
 </context>
 <context>
@@ -122,66 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Lunedì</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Martedì</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Mercoledì</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Giovedì</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>Venerdì</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Sabato</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Domenica</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>lunedì</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation>martedì</translation>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation>mercoledì</translation>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation>giovedì</translation>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation>venerdì</translation>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation>sabato</translation>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation>domenica</translation>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
-        <translation>%1year%2month%3day</translation>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Dispositivo sconosciuto</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Volume sconosciuto</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Disco</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation>Attivo</translation>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Apri</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Smonta tutto</translation>
+        <source>Disabled</source>
+        <translation>Disabilitato</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Launcher</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Esci dalla modalità provvisoria</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Dock - Modalità provvisoria</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>La Dock è in modalità provvisoria, esci per mostrarla in modo tradizionale</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Dimensioni</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Display multipli</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Area plugin</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Seleziona quali icone appaiono nel Dock</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Modalità Fashion</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Modalità Efficient</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Modalità</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Top</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Sotto</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Sinistra</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Destra</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Posizione</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Mostra sempre</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Nascondi sempre</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Nascondi automaticamente</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Comportamento</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Piccolo</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Grande</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Mostra la Dock</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Sullo schermo dove è presente il cursore</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Solo sullo schermo principale</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,28 +300,16 @@
         <source>Onboard</source>
         <translation>Tastiera</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Impostazioni</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
     <message>
-        <source>Power</source>
-        <translation>Alimentazione</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Impostazioni Alimentazione</translation>
-    </message>
-    <message>
         <source>Capacity %1, %2 min remaining</source>
-        <translation>Carica %1, %2 min. rimanenti</translation>
+        <translation>Autonomia %1, %2 min. rimanenti</translation>
     </message>
     <message>
         <source>Capacity %1, %2 hr %3 min remaining</source>
-        <translation>Carica %1, %2 ore e %3 min. rimanenti</translation>
+        <translation>Autonomia %1, %2 ore e %3 min. rimanenti</translation>
     </message>
     <message>
         <source>Charging %1, %2 min until full</source>
@@ -467,38 +333,11 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
-        <translation>Carica completa %1</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsModule</name>
-    <message>
-        <source>Dock</source>
-        <translation>Dock</translation>
+        <translation>Carica completa, capacità %1</translation>
     </message>
     <message>
-        <source>Mode</source>
-        <translation>Modalità</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Posizione</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Comportamento</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Dimensioni</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Mostra la Dock</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Area plugin</translation>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Alimentazione</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Spegni</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Riavvia</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Alimentazione</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Volume</translation>
+        <source>Device</source>
+        <translation>Dispositivo</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Dispositivo output</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Impostazioni audio</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Volume %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation>Nessun dispositivo di output</translation>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Svuota</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Esci dalla modalità provvisoria</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Dock - Modalità provvisoria</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>La Dock è in modalità provvisoria, esci per mostrarla in modo tradizionale</translation>
     </message>
 </context>
 </TS>

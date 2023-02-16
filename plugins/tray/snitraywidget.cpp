@@ -1,9 +1,11 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "snitraywidget.h"
 #include "util/themeappicon.h"
+#include "util/utils.h"
 #include "../../widgets/tipswidget.h"
 
 #include <dbusmenu-qt5/dbusmenuimporter.h>
@@ -28,10 +30,10 @@ QPointer<DockPopupWindow> SNITrayWidget::PopupWindow = nullptr;
 Dock::Position SNITrayWidget::DockPosition = Dock::Position::Top;
 using namespace Dock;
 SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
-    : AbstractTrayWidget(parent)
-    , m_dbusMenuImporter(nullptr)
-    , m_menu(nullptr)
-    , m_updateIconTimer(new QTimer(this))
+    : AbstractTrayWidget(parent),
+      m_dbusMenuImporter(nullptr),
+      m_menu(nullptr),
+      m_updateIconTimer(new QTimer(this))
     , m_updateOverlayIconTimer(new QTimer(this))
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
@@ -56,6 +58,10 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("snitraypopup");
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
+            arrowRectangle->setWindowFlags(flags);
+        }
         PopupWindow = arrowRectangle;
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
@@ -108,8 +114,6 @@ SNITrayWidget::SNITrayWidget(const QString &sniServicePath, QWidget *parent)
     connect(m_sniInter, &StatusNotifierItem::OverlayIconPixmapChanged, this, &SNITrayWidget::onSNIOverlayIconPixmapChanged);
     connect(m_sniInter, &StatusNotifierItem::StatusChanged, this, &SNITrayWidget::onSNIStatusChanged);
 
-    connect(this, &SNITrayWidget::requestShowMenu, this, &SNITrayWidget::showContextMenu);
-
     // the following signals can be emit automatically
     // need refresh cached properties in these slots
     connect(m_sniInter, &StatusNotifierItem::NewIcon, [ = ] {
@@ -153,8 +157,7 @@ void SNITrayWidget::updateIcon()
 void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     switch (mouseButton) {
-    case XCB_BUTTON_INDEX_1:
-    {
+    case XCB_BUTTON_INDEX_1: {
         QFuture<void> future = QtConcurrent::run([ = ] {
             StatusNotifierItem inter(m_dbusService, m_dbusPath, QDBusConnection::sessionBus());
             QDBusPendingReply<> reply = inter.Activate(x, y);
@@ -162,7 +165,7 @@ void SNITrayWidget::sendClick(uint8_t mouseButton, int x, int y)
             // primarily work for apps using libappindicator.
             reply.waitForFinished();
             if (reply.isError()) {
-                Q_EMIT requestShowMenu(x, y);
+                showContextMenu(x,y);
             }
         });
     }
@@ -273,8 +276,6 @@ void SNITrayWidget::initMenu()
     qDebug() << "generate the sni menu object";
 
     m_menu = m_dbusMenuImporter->menu();
-    if (m_menu && !m_menu->parentWidget())
-        m_menu->setParent(topLevelWidget(), Qt::Popup);
 
     qDebug() << "the sni menu obect is:" << m_menu;
 }
@@ -598,7 +599,7 @@ void SNITrayWidget::handleMouseRelease()
     Q_ASSERT(sender() == m_handleMouseReleaseTimer);
 
     // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
-    if (trayType() == SystemTray)
+    if (trayTyep() == SystemTray)
         return;
 
     const QPoint point(m_lastMouseReleaseData.first - rect().center());

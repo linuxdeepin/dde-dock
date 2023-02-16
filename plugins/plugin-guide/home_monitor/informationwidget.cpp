@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -37,7 +37,7 @@ InformationWidget::InformationWidget(QWidget *parent)
     refreshInfo();
 }
 
-void InformationWidget::refreshInfo()
+const QString InformationWidget::textContent() const
 {
     // 获取分区总容量
     const double total = m_storageInfo->bytesTotal();
@@ -45,7 +45,11 @@ void InformationWidget::refreshInfo()
     const double available = m_storageInfo->bytesAvailable();
     // 得到可用百分比
     const int percent = qRound(available / total * 100);
+    return QString("Home:\n%1\%").arg(percent);
+}
 
+void InformationWidget::refreshInfo()
+{
     // 更新内容
-    m_infoLabel->setText(QString("Home:\n%1\%").arg(percent));
+    m_infoLabel->setText(textContent());
 }

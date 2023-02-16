@@ -1,0 +1,61 @@
+<interface name="org.kde.StatusNotifierItem">
+    <property access="read" type="s" name="Category"/>
+    <property access="read" type="s" name="Id"/>
+    <property access="read" type="s" name="Title"/>
+    <property access="read" type="s" name="Status"/>
+    <property access="read" type="i" name="WindowId"/>
+    <!-- An additional path to add to the theme search path to find the icons specified above. -->
+    <property access="read" type="s" name="IconThemePath"/>
+    <property access="read" type="o" name="Menu"/>
+    <property access="read" type="b" name="ItemIsMenu"/>
+    <!-- main icon -->
+    <!-- names are preferred over pixmaps -->
+    <property access="read" type="s" name="IconName"/>
+    <!--struct containing width, height and image data-->
+    <property access="read" type="a(iiay)" name="IconPixmap">
+        <annotation value="DBusImageList" name="org.qtproject.QtDBus.QtTypeName"/>
+    </property>
+    <property access="read" type="s" name="OverlayIconName"/>
+    <property access="read" type="a(iiay)" name="OverlayIconPixmap">
+        <annotation value="DBusImageList" name="org.qtproject.QtDBus.QtTypeName"/>
+    </property>
+    <!-- Requesting attention icon -->
+    <property access="read" type="s" name="AttentionIconName"/>
+    <!--same definition as image-->
+    <property access="read" type="a(iiay)" name="AttentionIconPixmap">
+        <annotation value="DBusImageList" name="org.qtproject.QtDBus.QtTypeName"/>
+    </property>
+    <property access="read" type="s" name="AttentionMovieName"/>
+    <!-- tooltip data -->
+    <!--(iiay) is an image-->
+    <property access="read" type="(sa(iiay)ss)" name="ToolTip">
+        <annotation value="DBusToolTip" name="org.qtproject.QtDBus.QtTypeName"/>
+    </property>
+    <!-- interaction: the systemtray wants the application to do something -->
+    <method name="ContextMenu">
+        <!-- we're passing the coordinates of the icon, so the app knows where to put the popup window -->
+        <arg direction="in" type="i" name="x"/>
+        <arg direction="in" type="i" name="y"/>
+    </method>
+    <method name="Activate">
+        <arg direction="in" type="i" name="x"/>
+        <arg direction="in" type="i" name="y"/>
+    </method>
+    <method name="SecondaryActivate">
+        <arg direction="in" type="i" name="x"/>
+        <arg direction="in" type="i" name="y"/>
+    </method>
+    <method name="Scroll">
+        <arg direction="in" type="i" name="delta"/>
+        <arg direction="in" type="s" name="orientation"/>
+    </method>
+    <!-- Signals: the client wants to change something in the status-->
+    <signal name="NewTitle"/>
+    <signal name="NewIcon"/>
+    <signal name="NewAttentionIcon"/>
+    <signal name="NewOverlayIcon"/>
+    <signal name="NewToolTip"/>
+    <signal name="NewStatus">
+        <arg type="s" name="status"/>
+    </signal>
+</interface>

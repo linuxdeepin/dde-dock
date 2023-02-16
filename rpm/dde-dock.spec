@@ -4,13 +4,14 @@ Name:           dde-dock
 Version:        5.4.9
 Release:        1
 Summary:        Deepin desktop-environment - Dock module
-License:        LGPL-3.0-or-later
+License:        GPLv3
 URL:            http://shuttle.corp.deepin.com/cache/repos/eagle/release-candidate/RERFNS4wLjAuNjU3NQ/pool/main/d/dde-dock/
 Source0:        %{name}-%{version}.orig.tar.xz	
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(dbusmenu-qt5)
+BuildRequires:  pkgconfig(dde-network-utils)
 BuildRequires:  dtkwidget-devel >= 5.1
 BuildRequires:  dtkcore-devel >= 5.1
 BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
@@ -32,6 +33,7 @@ BuildRequires:  qt5-linguist
 BuildRequires:  gtest-devel
 BuildRequires:  gmock-devel
 Requires:       dbusmenu-qt5
+Requires:       dde-network-utils
 Requires:       dde-qt-dbus-factory
 Requires:       xcb-util-wm
 Requires:       xcb-util-image
@@ -86,7 +88,7 @@ export PATH=%{_qt5_bindir}:$PATH
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
 %{_datarootdir}/glib-2.0/schemas/com.deepin.dde.dock.module.gschema.xml
-%{_datarootdir}/polkit-1/actions/com.deepin.dde.dock.overlay.policy
+%{_datarootdir}/polkit-1/actions/org.deepin.dde.dock.overlay.policy
 
 %files devel
 %{_includedir}/%{name}/

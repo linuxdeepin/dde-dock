@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,6 +8,9 @@
 
 #include "pluginsiteminterface.h"
 #include "sounditem.h"
+
+class SoundWidget;
+class SoundDevicesWidget;
 
 class SoundPlugin : public QObject, PluginsItemInterface
 {
@@ -26,18 +30,23 @@ public:
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     QWidget *itemPopupApplet(const QString &itemKey) override;
-    const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
     void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginMode status() const override;
+    PluginFlags flags() const override;
+    bool eventHandler(QEvent *event) override;
 
 private:
     void refreshPluginItemsVisible();
 
 private:
     QScopedPointer<SoundItem> m_soundItem;
+    QScopedPointer<SoundWidget> m_soundWidget;
+    QScopedPointer<SoundDevicesWidget> m_soundDeviceWidget;
 };
 
 #endif // SOUNDPLUGIN_H

@@ -1,19 +1,16 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "indicatortraywidget.h"
-#include "constants.h"
 #include "util/utils.h"
 
 #include <QLabel>
 #include <QBoxLayout>
-#include <QResizeEvent>
 
 #include <QDBusConnection>
 #include <QDBusInterface>
-#include <DGuiApplicationHelper>
-DGUI_USE_NAMESPACE
 
 IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorName, QWidget *parent, Qt::WindowFlags f)
     : AbstractTrayWidget(parent, f)
@@ -26,14 +23,20 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorName, QWidget *
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     m_label = new QLabel(this);
+
+    QPalette p = m_label->palette();
+    p.setColor(QPalette::Foreground, Qt::white);
+    p.setColor(QPalette::Background, Qt::transparent);
+    m_label->setPalette(p);
+
     m_label->setAttribute(Qt::WA_TranslucentBackground);
 
     layout->addWidget(m_label, 0, Qt::AlignCenter);
     setLayout(layout);
 
     // register dbus
-    auto path = QString("/com/deepin/dde/Dock/Indicator/") + m_indicatorName;
-    auto interface =  QString("com.deepin.dde.Dock.Indicator.") + m_indicatorName;
+    auto path = QString("/org/deepin/dde/Dock1/Indicator/") + m_indicatorName;
+    auto interface =  QString("org.deepin.dde.Dock1.Indicator.") + m_indicatorName;
     auto sessionBus = QDBusConnection::sessionBus();
     sessionBus.registerObject(path,
                               interface,
@@ -47,9 +50,6 @@ IndicatorTrayWidget::IndicatorTrayWidget(const QString &indicatorName, QWidget *
 
         connect(m_gsettings, &QGSettings::changed, this, &IndicatorTrayWidget::onGSettingsChanged);
     }
-
-    updateLabelColor();
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &IndicatorTrayWidget::updateLabelColor);
 }
 
 IndicatorTrayWidget::~IndicatorTrayWidget()
@@ -74,30 +74,26 @@ void IndicatorTrayWidget::sendClick(uint8_t buttonIndex, int x, int y)
 
 void IndicatorTrayWidget::enableLabel(bool enable)
 {
-    m_enableClick = enable;
-    m_label->setEnabled(enable);
-    updateLabelColor();
-}
-
-void IndicatorTrayWidget::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-
-    if (event->size().height() <= PLUGIN_BACKGROUND_MIN_SIZE || event->oldSize().height() <= PLUGIN_BACKGROUND_MIN_SIZE)
-        updateLabelColor();
-}
-
-void IndicatorTrayWidget::updateLabelColor()
-{
     QPalette p = m_label->palette();
-    p.setColor(QPalette::Foreground, m_label->isEnabled() ? Qt::white : Qt::lightGray);
-
-    if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        p.setColor(QPalette::Foreground, m_label->isEnabled() ? Qt::black : Qt::darkGray);
+    if (!enable) {
+        m_enableClick = false;
+        p.setColor(QPalette::Disabled, QPalette::Foreground, Qt::lightGray);
+        p.setColor(QPalette::Disabled, QPalette::Background, Qt::transparent);
+        m_label->setEnabled(enable);
+    } else {
+        m_enableClick = true;
+        p.setColor(QPalette::Normal, QPalette::BrightText, Qt::white);
+        p.setColor(QPalette::Normal, QPalette::Background, Qt::transparent);
+        m_label->setEnabled(enable);
     }
 
     m_label->setPalette(p);
     m_label->update();
+}
+
+void IndicatorTrayWidget::resizeEvent(QResizeEvent *event)
+{
+    return QWidget::resizeEvent(event);
 }
 
 void IndicatorTrayWidget::setPixmapData(const QByteArray &data)

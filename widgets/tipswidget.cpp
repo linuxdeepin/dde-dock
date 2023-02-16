@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,8 +7,6 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
-
-#define PADDING 4
 
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
@@ -32,7 +30,7 @@ void TipsWidget::setText(const QString &text)
     m_text = "བོད་སྐད་ཡིག་གཟུགས་ཚད་ལེན་ཚོད་ལྟའི་སྐོར་གྱི་རྗོད་ཚིག";
 #endif
 
-    setFixedSize(fontMetrics().width(m_text) + 20, fontMetrics().boundingRect(m_text).height() + PADDING);
+    setFixedSize(fontMetrics().horizontalAdvance(m_text) + 20, fontMetrics().boundingRect(m_text).height());
 
     update();
 
@@ -52,11 +50,11 @@ void TipsWidget::setTextList(const QStringList &textList)
     int width = 0;
     int height = 0;
     for (QString text : m_textList) {
-        width = qMax(width, fontMetrics().width(text));
+        width = qMax(width, fontMetrics().horizontalAdvance(text) + 20);
         height += fontMetrics().boundingRect(text).height();
     }
 
-    setFixedSize(width + 20, height + PADDING);
+    setFixedSize(width, height);
 
     update();
 }
@@ -81,18 +79,16 @@ void TipsWidget::paintEvent(QPaintEvent *event)
     }
         break;
     case MultiLine: {
-        int x = rect().x();
-        int y = rect().y();
-        if (m_textList.size() != 1) {
-            x += 10;
+        int y = 0;
+        if (m_textList.size() != 1)
             option.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        }
         for (QString text : m_textList) {
             int lineHeight = fontMetrics().boundingRect(text).height();
-            painter.drawText(QRect(x, y, rect().width(), lineHeight), text, option);
+            painter.drawText(QRect(0, y, rect().width(), lineHeight), text, option);
             y += lineHeight;
         }
-    } break;
+    }
+        break;
     }
 }
 

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -14,13 +15,15 @@
 
 FloatingPreview::FloatingPreview(QWidget *parent)
     : QWidget(parent)
-    , m_closeBtn3D(new DIconButton(DStyle::StandardPixmap::SP_CloseButton, this))
+    , m_closeBtn3D(new DIconButton(this))
     , m_titleBtn(new DPushButton(this))
 {
     m_closeBtn3D->setObjectName("closebutton-3d");
     m_closeBtn3D->setFixedSize(24, 24);
     m_closeBtn3D->setIconSize(QSize(24, 24));
+    m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
     m_closeBtn3D->setFlat(true);
+    m_closeBtn3D->installEventFilter(this);
 
     m_titleBtn->setBackgroundRole(QPalette::Base);
     m_titleBtn->setForegroundRole(QPalette::Text);
@@ -75,6 +78,12 @@ void FloatingPreview::trackWindow(AppSnapshot *const snap)
     // 显示此标题的前提条件：配置了标题跟随鼠标显示
     // 此对象是共用的，鼠标移动到哪个预览图，title就移动到哪里显示，所以他的text统一snap获取，不再重复计算显示长度
     m_titleBtn->setText(snap->appTitle());
+
+    QTimer::singleShot(0, this, [ = ] {
+        // 此处获取的snap->geometry()有可能是错误的，所以做个判断并且在resizeEvent中也做处理
+        if(snap->width() == SNAP_WIDTH)
+            setGeometry(snap->geometry());
+    });
 }
 
 void FloatingPreview::paintEvent(QPaintEvent *e)
@@ -84,7 +93,7 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     if (m_tracked.isNull())
         return;
 
-    const QImage &snapshot = m_tracked->snapshot();
+    const QPixmap &snapshot = m_tracked->snapshot();
 
     if (snapshot.isNull())
         return;
@@ -117,12 +126,27 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
 
 bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
 {
+    if(watched == m_closeBtn3D) {
+        if(watched == m_closeBtn3D && (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverMove)) {
+            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
+        }
+        else if (watched == m_closeBtn3D && event->type() == QEvent::HoverLeave) {
+            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
+        }
+        else if (watched == m_closeBtn3D && event->type() == QEvent::MouseButtonPress) {
+            m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_press.svg"));
+        }
+    }
+
     if (watched == m_tracked) {
         if (event->type() == QEvent::Destroy) {
             // 此处需要置空，否则当Destroy事件响应结束后，会在FloatingPreview::hideEvent使用m_tracked野指针
             m_tracked = nullptr;
             hide();
         }
+
+        if (event->type() == QEvent::Resize && m_tracked->width() == SNAP_WIDTH)
+            setGeometry(m_tracked->geometry());
     }
 
     return QWidget::eventFilter(watched, event);

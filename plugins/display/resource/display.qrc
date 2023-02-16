@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>brightness.svg</file>
+        <file>brightnesshigh.svg</file>
+        <file>brightnesslow.svg</file>
+        <file>broadcast.svg</file>
+        <file>ICON_Device_Headphone_dark.svg</file>
+        <file>ICON_Device_Headphone.svg</file>
+        <file>ICON_Device_Laptop_dark.svg</file>
+        <file>ICON_Device_Laptop.svg</file>
+    </qresource>
+</RCC>

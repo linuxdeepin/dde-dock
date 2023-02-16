@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>-mockplus-</title>
+    <g id="任务栏" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="任务栏-其他插件" transform="translate(-43.000000, -176.000000)" fill="#000000" fill-rule="nonzero">
+            <g id="声音" transform="translate(23.000000, 50.000000)">
+                <g id="-mockplus-" transform="translate(10.000000, 116.000000)">
+                    <g id="-mockplus-" transform="translate(10.000000, 10.000000)">
+                        <g id="ICON" transform="translate(0.000000, 2.000000)">
+                            <path d="M13,0 C14.1045695,-2.02906125e-16 15,0.8954305 15,2 L15,10 L15.5,10 C15.7761424,10 16,10.2238576 16,10.5 C16,10.7761424 15.7761424,11 15.5,11 L0.5,11 C0.223857625,11 3.38176876e-17,10.7761424 0,10.5 C-3.38176876e-17,10.2238576 0.223857625,10 0.5,10 L1,10 L1,2 C1,0.8954305 1.8954305,2.02906125e-16 3,0 L13,0 Z M13,0.999999998 L3,0.999999998 C2.44771525,0.999999998 2,1.44771525 2,2 L2,2 L2,8 C2,8.55228475 2.44771525,9 3,9 L3,9 L13,9 C13.5522847,9 14,8.55228475 14,8 L14,8 L14,2 C14,1.44771525 13.5522847,0.999999998 13,0.999999998 L13,0.999999998 Z" id="形状结合"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

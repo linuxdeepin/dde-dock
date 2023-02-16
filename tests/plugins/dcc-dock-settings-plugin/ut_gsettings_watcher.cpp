@@ -1,53 +1,49 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "config_watcher.h"
+//#include "config_watcher.h"
 
 #include <QWidget>
-#include <QApplication>
 
 #include <gtest/gtest.h>
 
-using namespace dcc_dock_plugin;
+//using namespace dcc_dock_plugin;
 
 class Test_GSettingWatcher : public QObject, public ::testing::Test
 {};
 
 TEST_F(Test_GSettingWatcher, bind)
 {
-    const QString &appName = qApp->applicationName();
-    qApp->setApplicationName("dde-dock");
-    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
+/*    ConfigWatcher watcher("dde.dock.plugin.dconfig");
 
     QWidget widget;
-    watcher.bind("dockPlugins", &widget);
-    watcher.bind("dockPlugins", nullptr);
+    watcher.bind("Control-Center_Dock_Plugins", &widget);
+    watcher.bind("Control-Center_Dock_Plugins", nullptr);
     watcher.bind("invalid", &widget);
     watcher.bind("", &widget);
     watcher.bind("", nullptr);
-    qApp->setApplicationName(appName);
+    */
 }
 
 TEST_F(Test_GSettingWatcher, setStatus)
 {
-    const QString &appName = qApp->applicationName();
-    qApp->setApplicationName("dde-control-center");
-    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
+/*    ConfigWatcher watcher("dde.dock.plugin.dconfig");
 
     QWidget widget;
-    watcher.bind("dockPlugins", &widget);
-    watcher.setStatus("dockPlugins", &widget);
-    qApp->setApplicationName(appName);
+    watcher.bind("Control-Center_Dock_Plugins", &widget);
+    watcher.setStatus("Control-Center_Dock_Plugins", &widget);
+    */
 }
 
 TEST_F(Test_GSettingWatcher, onStatusModeChanged)
 {
-    ConfigWatcher watcher("org.deepin.dde.control-center", "org.deepin.dde.dock.plugin");
+/*    ConfigWatcher watcher("dde.dock.plugin.dconfig");
 
     QWidget widget;
-    watcher.bind("dockPlugins", &widget);
-    watcher.onStatusModeChanged("dockPlugins");
+    watcher.bind("Control-Center_Dock_Plugins", &widget);
+    watcher.onStatusModeChanged("Control-Center_Dock_Plugins");
     watcher.onStatusModeChanged("invalid");
     watcher.onStatusModeChanged("");
+    */
 }

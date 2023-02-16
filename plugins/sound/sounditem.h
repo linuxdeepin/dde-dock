@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -6,14 +7,14 @@
 #define SOUNDITEM_H
 
 #include "soundapplet.h"
-#include <com_deepin_daemon_audio_sink.h>
+#include "org_deepin_dde_audio1_sink.h"
 
 #include <QWidget>
 #include <QIcon>
 
 #define SOUND_KEY "sound-item-key"
 
-using DBusSink = com::deepin::daemon::audio::Sink;
+using DBusSink = org::deepin::dde::audio1::Sink;
 
 namespace Dock {
 class TipsWidget;
@@ -33,6 +34,8 @@ public:
 
     void refreshIcon();
     void refreshTips(const int volume, const bool force = false);
+    QPixmap pixmap() const;
+    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const;
 
 signals:
     void requestContextMenu() const;

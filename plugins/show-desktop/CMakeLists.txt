@@ -4,10 +4,8 @@ set(PLUGIN_NAME "show-desktop")
 project(${PLUGIN_NAME})
 
 # Sources files
-file(GLOB SRCS "*.h" "*.cpp" "../../widgets/*.h" "../../widgets/*.cpp"
-    "../../frame/util/imageutil.h"
-    "../../frame/util/imageutil.cpp"
-    )
+file(GLOB SRCS "*.h" "*.cpp" "../../widgets/tipswidget.h" "../../widgets/tipswidget.cpp"
+"../../frame/util/imageutil.h" "../../frame/util/imageutil.cpp")
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)

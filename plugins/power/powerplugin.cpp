@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,7 +10,9 @@
 
 #include <QIcon>
 #include <QGSettings>
+#include <QHBoxLayout>
 
+#include <DFontSizeManager>
 #include <DDBusSender>
 
 #define PLUGIN_STATE_KEY    "enable"
@@ -31,12 +34,10 @@ PowerPlugin::PowerPlugin(QObject *parent)
     , m_systemPowerInter(nullptr)
     , m_powerInter(nullptr)
     , m_preChargeTimer(new QTimer(this))
+    , m_quickPanel(nullptr)
 {
-    m_tipsLabel->setVisible(false);
-    m_tipsLabel->setObjectName("power");
-    m_preChargeTimer->setInterval(DELAYTIME);
-    m_preChargeTimer->setSingleShot(true);
-    connect(m_preChargeTimer,&QTimer::timeout,this,&PowerPlugin::refreshTipsData);
+    initUi();
+    initConnection();
 }
 
 const QString PowerPlugin::pluginName() const
@@ -46,13 +47,15 @@ const QString PowerPlugin::pluginName() const
 
 const QString PowerPlugin::pluginDisplayName() const
 {
-    return tr("Power");
+    return tr("Battery");
 }
 
 QWidget *PowerPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
         return m_powerStatusWidget.data();
+    if (itemKey == QUICK_ITEM_KEY)
+        return m_quickPanel;
 
     return nullptr;
 }
@@ -76,54 +79,17 @@ void PowerPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable()) {
-        loadPlugin();
-    }
-}
+    loadPlugin();
 
-void PowerPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool PowerPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 }
 
 const QString PowerPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == POWER_KEY)
-        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
+        return QString("dbus-send --print-reply --dest=org.deepin.dde.ControlCenter1 /org/deepin/dde/ControlCenter1 org.deepin.dde.ControlCenter1.ShowPage string:power");
 
     return QString();
-}
-
-const QString PowerPlugin::itemContextMenu(const QString &itemKey)
-{
-    if (itemKey != POWER_KEY) {
-        return QString();
-    }
-
-    QList<QVariant> items;
-    items.reserve(6);
-
-    if (!QFile::exists(ICBC_CONF_FILE)) {
-        QMap<QString, QVariant> power;
-        power["itemId"] = "power";
-        power["itemText"] = tr("Power settings");
-        power["isActive"] = true;
-        items.push_back(power);
-    }
-
-    QMap<QString, QVariant> menu;
-    menu["items"] = items;
-    menu["checkableMenu"] = false;
-    menu["singleCheck"] = false;
-
-    return QJsonDocument::fromVariant(menu).toJson();
 }
 
 void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
@@ -133,10 +99,10 @@ void PowerPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
     if (menuId == "power") {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
+        .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
      }
@@ -163,19 +129,38 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void PowerPlugin::pluginSettingsChanged()
+QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    refreshPluginItemsVisible();
+    // 快捷面板使用m_quickPanel
+    if (dockPart == DockPart::QuickPanel) {
+        return QIcon();
+    }
+
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
+    static QIcon batteryIcon;
+    batteryIcon.detach();
+    batteryIcon.addPixmap(pixmap);
+    return batteryIcon;
+}
+
+PluginFlags PowerPlugin::flags() const
+{
+    // 电池插件在任务栏上面展示，在快捷面板展示，并且可以拖动，可以在其前面插入其他插件，能在控制中心设置是否显示隐藏
+    return PluginFlag::Type_Common
+            | PluginFlag::Attribute_CanDrag
+            | PluginFlag::Attribute_CanInsert
+            | PluginFlag::Attribute_CanSetting
+            | PluginFlag::Quick_Single;
 }
 
 void PowerPlugin::updateBatteryVisible()
 {
     const bool exist = !m_powerInter->batteryPercentage().isEmpty();
 
-    if (!exist)
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    else if (exist && !pluginIsDisable())
+    if (exist)
         m_proxyInter->itemAdded(this, POWER_KEY);
+    else
+        m_proxyInter->itemRemoved(this, POWER_KEY);
 }
 
 void PowerPlugin::loadPlugin()
@@ -188,9 +173,16 @@ void PowerPlugin::loadPlugin()
     m_pluginLoaded = true;
 
     m_powerStatusWidget.reset(new PowerStatusWidget);
+
+    connect(m_powerStatusWidget.get(), &PowerStatusWidget::iconChanged, this, [ this ] {
+        m_proxyInter->updateDockInfo(this, DockPart::QuickPanel);
+        m_proxyInter->updateDockInfo(this, DockPart::QuickShow);
+        m_proxyInter->itemUpdate(this, POWER_KEY);
+    });
+
     m_powerInter = new DBusPower(this);
 
-    m_systemPowerInter = new SystemPowerInter("com.deepin.system.Power", "/com/deepin/system/Power", QDBusConnection::systemBus(), this);
+    m_systemPowerInter = new SystemPowerInter("org.deepin.dde.Power1", "/org/deepin/dde/Power1", QDBusConnection::systemBus(), this);
     m_systemPowerInter->setSync(true);
 
     connect(GSettingsByApp(), &QGSettings::changed, this, &PowerPlugin::onGSettingsChanged);
@@ -207,19 +199,6 @@ void PowerPlugin::loadPlugin()
     updateBatteryVisible();
 
     onGSettingsChanged("showtimetofull");
-}
-
-void PowerPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, POWER_KEY);
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        updateBatteryVisible();
-    }
 }
 
 void PowerPlugin::onGSettingsChanged(const QString &key)
@@ -242,7 +221,7 @@ void PowerPlugin::refreshTipsData()
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
     const QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
-
+    m_labelText->setText(value);
     if (m_preChargeTimer->isActive() && m_showTimeToFull) {
         // 插入电源后，20秒内算作预充电时间，此时计算剩余充电时间是不准确的
         QString tips = tr("Capacity %1 ...").arg(value);
@@ -280,8 +259,7 @@ void PowerPlugin::refreshTipsData()
         if (!m_showTimeToFull) {
             tips = tr("Charging %1").arg(value);
         } else {
-            // 充电时间timeToFull可能不为0是一个很小的数值,转换后取的hour和min为0
-            if (timeToFull == 0 || (hour == 0 && min == 0)) {  // 电量已充満或电量计算中,剩余充满时间会返回0
+            if (timeToFull == 0) {  // 电量已充満或电量计算中,剩余充满时间会返回0
                 tips = tr("Capacity %1 ...").arg(value);
             } else {
                 hour == 0 ? tips = tr("Charging %1, %2 min until full").arg(value).arg(min)
@@ -290,4 +268,43 @@ void PowerPlugin::refreshTipsData()
         }
         m_tipsLabel->setText(tips);
     }
+}
+
+void PowerPlugin::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
+    m_imageLabel->setPixmap(pixmap);
+}
+
+void PowerPlugin::initUi()
+{
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setObjectName("power");
+    m_preChargeTimer->setInterval(DELAYTIME);
+    m_preChargeTimer->setSingleShot(true);
+
+    m_quickPanel = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(m_quickPanel);
+    layout->setAlignment(Qt::AlignVCenter);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    m_imageLabel = new QLabel(m_quickPanel);
+    m_imageLabel->setObjectName("imageLabel");
+    m_imageLabel->setFixedHeight(24);
+    m_imageLabel->setAlignment(Qt::AlignCenter);
+
+    m_labelText = new QLabel(m_quickPanel);
+    m_labelText->setObjectName("textLabel");
+    m_labelText->setFixedHeight(11);
+    m_labelText->setAlignment(Qt::AlignCenter);
+    m_labelText->setFont(Dtk::Widget::DFontSizeManager::instance()->t10());
+    layout->addWidget(m_imageLabel);
+    layout->addSpacing(7);
+    layout->addWidget(m_labelText);
+}
+
+void PowerPlugin::initConnection()
+{
+    connect(m_preChargeTimer,&QTimer::timeout,this,&PowerPlugin::refreshTipsData);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PowerPlugin::onThemeTypeChanged);
 }

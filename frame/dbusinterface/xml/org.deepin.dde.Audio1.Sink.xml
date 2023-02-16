@@ -1,0 +1,38 @@
+  <interface name="org.deepin.dde.Audio1.Sink">
+    <method name="GetMeter">
+      <arg type="o" direction="out"/>
+    </method>
+    <method name="SetBalance">
+      <arg type="d" direction="in"/>
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="SetFade">
+      <arg type="d" direction="in"/>
+    </method>
+    <method name="SetMute">
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="SetPort">
+      <arg type="s" direction="in"/>
+    </method>
+    <method name="SetVolume">
+      <arg type="d" direction="in"/>
+      <arg type="b" direction="in"/>
+    </method>
+    <property name="Name" type="s" access="read"/>\n 
+    <property name="Description" type="s" access="read"/>
+    <property name="BaseVolume" type="d" access="read"/>
+    <property name="Mute" type="b" access="read"/> 
+    <property name="Volume" type="d" access="read"/> 
+    <property name="Balance" type="d" access="read"/>
+    <property name="SupportBalance" type="b" access="read"/>
+    <property name="Fade" type="d" access="read"/>
+    <property name="SupportFade" type="b" access="read"/>
+     <property name="Ports" type="a(ssy)" access="read">
+          <annotation name="org.qtproject.QtDBus.QtTypeName" value="AudioPortList"/>
+     </property>
+     <property name="ActivePort" type="(ssy)" access="read">
+          <annotation name="org.qtproject.QtDBus.QtTypeName" value="AudioPort"/>
+     </property>
+    <property name="Card" type="u" access="read"/>
+  </interface>

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -49,9 +50,8 @@ const QPixmap OverlayWarningWidget::loadSvg(const QString &fileName, const QSize
 {
     const auto ratio = devicePixelRatioF();
 
-    QPixmap pixmap;
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : (size * ratio);
-    pixmap = QIcon::fromTheme(fileName).pixmap(pixmapSize);
+    QPixmap pixmap = QIcon::fromTheme(fileName).pixmap(pixmapSize);
     pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;

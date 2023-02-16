@@ -1,0 +1,63 @@
+<interface name="org.deepin.dde.XEventMonitor1">
+  <method name="RegisterArea">
+    <arg type="i" direction="in"/>
+    <arg type="i" direction="in"/>
+    <arg type="i" direction="in"/>
+    <arg type="i" direction="in"/>
+    <arg type="i" direction="in"/>
+    <arg type="s" direction="out"/>
+  </method>
+  <method name="RegisterAreas">
+    <arg type="a(iiii)" direction="in"/>
+    <arg type="i" direction="in"/>
+    <arg type="s" direction="out"/>
+    <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="AreaList"/>
+  </method>
+  <method name="RegisterFullScreen">
+    <arg type="s" direction="out"/>
+  </method>
+  <method name="UnregisterArea">
+    <arg type="s" direction="in"/>
+    <arg type="b" direction="out"/>
+  </method>
+  <signal name="CursorInto">
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="CursorOut">
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="CursorMove">
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="ButtonPress">
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="ButtonRelease">
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="KeyPress">
+    <arg type="s"/>
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="KeyRelease">
+    <arg type="s"/>
+    <arg type="i"/>
+    <arg type="i"/>
+    <arg type="s"/>
+  </signal>
+  <signal name="CancelAllArea"/>
+</interface>

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -10,10 +11,13 @@
 
 #include <X11/Xcursor/Xcursor.h>
 
-AppDrag::AppDrag(QObject *dragSource)
+AppDrag::AppDrag(QObject *dragSource, AppDragWidget *dragWidget)
     : QDrag(dragSource)
-    , m_appDragWidget(new AppDragWidget)
+    , m_appDragWidget(dragWidget)
 {
+    if (!m_appDragWidget)
+        m_appDragWidget = new AppDragWidget;
+
     // delete by itself
     m_appDragWidget->setVisible(false);
 

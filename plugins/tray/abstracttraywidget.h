@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -22,10 +23,9 @@ public:
     virtual ~AbstractTrayWidget();
 
     virtual QString itemKeyForConfig() = 0;
-    QString accessibleName() {return itemKeyForConfig().replace("sni:", "");}
     virtual void updateIcon() = 0;
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
-    virtual inline TrayType trayType() const { return TrayType::ApplicationTray; } // default is ApplicationTray
+    virtual inline TrayType trayTyep() const { return TrayType::ApplicationTray; } // default is ApplicationTray
     virtual bool isValid() {return true;}
     uint getOwnerPID();
 

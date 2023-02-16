@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Silmək</translation>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Mənim cihazlarım</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Digər cihazlar</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Açmaq</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Söndürmək</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Açmaq</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Söndürmək</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Klaviatura qatı əlavə etmək</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12 saat vaxt formatı</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24 saat vaxt formatı</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Vaxt ayarları</translation>
     </message>
 </context>
 <context>
@@ -122,66 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Bazar ertəsi</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Çərşənbə axşamı</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Çərşənbə</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Cümə axşamı</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>Cümə</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Şənbə</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Bazar</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>bazar ertəsi</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation>çərşənbə axşamı</translation>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation>çərşənbə</translation>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation>cümə axşamı</translation>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation>cümə</translation>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation>şənbə</translation>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation>bazar</translation>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
-        <translation>%1il%2ay%3gün</translation>
+        <source>PC collaboration</source>
+        <translation>PC ilə əməkdaşlıq</translation>
     </message>
 </context>
 <context>
@@ -196,7 +189,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Silmək</translation>
+        <translation>Sil</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Naməlum cihaz</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Naməlum həcm</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation>Çoxekranlı mübadilə</translation>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Disk</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation>Aktivdir</translation>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Aç</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Hamısını çıxartmaq</translation>
+        <source>Disabled</source>
+        <translation>Aktiv deyil</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Başladıcı</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Təhlükəsiz rejimdən çıxın</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Dok - Təhlükəsiz rejim</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Dok təhlükəsiz rejimdədir, onun düzgün göstərilməsi üçün çıxın</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Ölçü</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Çoxsaylı ekran</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Plaqin sahəsi</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Dok paneldə görünəcək nişanları seçin</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Müasir rejim</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Səmərəli rejim</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Rejim</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Yuxarıda</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Aşağıda</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Sol</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Sağ</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Yerləşmə</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Görünsün</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Gizli qalsın</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Ağıllı gizlənmə</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Vəziyyəti</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Kiçik</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Geniş</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Dok paneli göstərmək</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Kursorun olduğu ekranda</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Yalnız əsas ekranda</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>Ekran Klaviaturası</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Tənzimləmələr</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Elektrik qidalanması</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Elektrik enerjisi ayarları</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Tutum %1, %2 dəq qalır</translation>
@@ -469,36 +335,9 @@
         <source>Capacity %1, fully charged</source>
         <translation>Tutum %1, tam yükləndi</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Dok panel</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Rejim</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Yerləşmə</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Vəziyyəti</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Ölçü</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Dok paneli göstərmək</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Plaqin sahəsi</translation>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Elektrik qidalanması</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Sistemi söndür</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Yenidən başlatmaq</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Elektrik qidalanması</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Səs səviyyəsi</translation>
+        <source>Device</source>
+        <translation>Avadanlıq</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Çıxış cihazı</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Səs ayarları</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Səs %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation>Çıxış cihazı tapılmadı</translation>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Boş</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Təhlükəsiz rejimdən çıxın</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Dok - Təhlükəsiz rejim</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Dok təhlükəsiz rejimdədir, onun düzgün göstərilməsi üçün çıxın</translation>
     </message>
 </context>
 </TS>

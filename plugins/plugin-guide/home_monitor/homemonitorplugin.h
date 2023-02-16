@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -34,6 +34,13 @@ public:
 
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
+
+    QIcon icon(const DockPart &) override;
+    PluginMode status() const override;
+    QString description() const override;
+
+    QIcon icon(const DockPart &dockPart, int themeType) override;
+    PluginFlags flags() const override;
 
 private:
     InformationWidget *m_pluginWidget;

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -19,7 +20,7 @@ class Test_MultiScreenWorker : public ::testing::Test
 TEST_F(Test_MultiScreenWorker, coverage_test)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     qDebug() << worker->dockRect("test screen");
 
@@ -30,7 +31,7 @@ TEST_F(Test_MultiScreenWorker, coverage_test)
     worker->updateDaemonDockSize(20);
 
     QDBusMessage msg;
-    worker->handleDBusSignal(msg);
+    worker->handleDbusSignal(msg);
 
     worker->onRegionMonitorChanged(0, 0, worker->m_registerKey);
 
@@ -42,6 +43,7 @@ TEST_F(Test_MultiScreenWorker, coverage_test)
     worker->checkXEventMonitorService();
     worker->showAniFinished();
     worker->hideAniFinished();
+    worker->primaryScreenChanged();
     worker->onRequestUpdateFrontendGeometry();
     worker->isCopyMode();
     worker->onRequestUpdatePosition(Dock::Position::Top, Dock::Position::Bottom);
@@ -56,7 +58,7 @@ TEST_F(Test_MultiScreenWorker, coverage_test)
 TEST_F(Test_MultiScreenWorker, onDisplayModeChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->onDisplayModeChanged(static_cast<DisplayMode>(0));
     worker->m_hideMode = HideMode::KeepShowing;
@@ -81,7 +83,7 @@ TEST_F(Test_MultiScreenWorker, onDisplayModeChanged)
 TEST_F(Test_MultiScreenWorker, displayAnimation_onRequestUpdateRegionMonitor)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->m_position = Dock::Position::Left;
     worker->displayAnimation("primary", MultiScreenWorker::AniAction::Show);
@@ -120,7 +122,7 @@ TEST_F(Test_MultiScreenWorker, displayAnimation_onRequestUpdateRegionMonitor)
 TEST_F(Test_MultiScreenWorker, onTouchPress_onTouchRelease)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     QPoint p(0, 0);
     worker->rawXPosition(p);
@@ -156,7 +158,7 @@ TEST_F(Test_MultiScreenWorker, onTouchPress_onTouchRelease)
 TEST_F(Test_MultiScreenWorker, onDelayAutoHideChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->m_hideMode = HideMode::SmartHide;
     worker->m_hideState = HideState::Show;
@@ -177,7 +179,7 @@ TEST_F(Test_MultiScreenWorker, onDelayAutoHideChanged)
 TEST_F(Test_MultiScreenWorker, onPositionChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->m_hideMode = HideMode::KeepHidden;
     worker->onPositionChanged(static_cast<Position>(0));
@@ -202,7 +204,7 @@ TEST_F(Test_MultiScreenWorker, onPositionChanged)
 TEST_F(Test_MultiScreenWorker, reInitDisplayData)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->reInitDisplayData();
 
@@ -213,7 +215,7 @@ TEST_F(Test_MultiScreenWorker, reInitDisplayData)
 TEST_F(Test_MultiScreenWorker, onRequestUpdateMonitorInfo)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->onRequestUpdateMonitorInfo();
 
@@ -224,7 +226,7 @@ TEST_F(Test_MultiScreenWorker, onRequestUpdateMonitorInfo)
 TEST_F(Test_MultiScreenWorker, updateParentGeometry)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->updateParentGeometry(QRect(0, 0, 10, 10), Position::Top);
     worker->updateParentGeometry(QRect(0, 0, 10, 10), Position::Bottom);
@@ -238,7 +240,7 @@ TEST_F(Test_MultiScreenWorker, updateParentGeometry)
 TEST_F(Test_MultiScreenWorker, onWindowSizeChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->onWindowSizeChanged(-1);
 
@@ -249,7 +251,7 @@ TEST_F(Test_MultiScreenWorker, onWindowSizeChanged)
 TEST_F(Test_MultiScreenWorker, updateDisplay)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->updateDisplay();
 
@@ -260,7 +262,7 @@ TEST_F(Test_MultiScreenWorker, updateDisplay)
 TEST_F(Test_MultiScreenWorker, onExtralRegionMonitorChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->onExtralRegionMonitorChanged(0, 0, "test");
 
@@ -282,7 +284,7 @@ TEST_F(Test_MultiScreenWorker, onExtralRegionMonitorChanged)
 TEST_F(Test_MultiScreenWorker, onRegionMonitorChanged)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->onRegionMonitorChanged(0, 0, "test");
 
@@ -307,7 +309,7 @@ TEST_F(Test_MultiScreenWorker, dockScreen)
 TEST_F(Test_MultiScreenWorker, screenworker_test3)
 {
     MainWindow window;
-    MultiScreenWorker *worker = new MultiScreenWorker(&window);
+    MultiScreenWorker *worker = new MultiScreenWorker(&window, DWindowManagerHelper::instance());
 
     worker->resetDockScreen();
 

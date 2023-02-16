@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -6,6 +7,7 @@
 #include "themeappicon.h"
 #include "utils.h"
 #include "../widgets/tipswidget.h"
+#include "dbusutil.h"
 
 #include <QPainter>
 #include <QProcess>
@@ -84,13 +86,13 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     DDBusSender dbusSender = DDBusSender()
-            .service("com.deepin.dde.Launcher")
-            .path("/com/deepin/dde/Launcher")
-            .interface("com.deepin.dde.Launcher");
+            .service(launcherService)
+            .path(launcherPath)
+            .interface(launcherInterface);
 
     QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
     if (!visibleReply.value())
-       dbusSender.method("Show").call();
+       dbusSender.method("Toggle").call();
 }
 
 QWidget *LauncherItem::popupTips()

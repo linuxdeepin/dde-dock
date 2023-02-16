@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef UTILS
 #define UTILS
-
 #include <QPixmap>
 #include <QImageReader>
 #include <QApplication>
@@ -19,6 +19,19 @@ namespace Utils {
 #define ICBC_CONF_FILE "/etc/deepin/icbc.conf"
 
 const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
+
+inline bool isDraging()
+{
+    if (!qApp->property("isDraging").isValid())
+        return false;
+
+    return qApp->property("isDraging").toBool();
+}
+
+inline void setIsDraging(bool isDraging)
+{
+    qApp->setProperty("isDraging", isDraging);
+}
 
 /**
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
@@ -41,7 +54,7 @@ inline QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path 
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param module 传入QGSettings构造函数时，会添加"com.deepin.dde.dock.module."前缀
  * @param path If non-empty, specifies the path for a relocatable schema
- * @param parent 创建指针的父对象
+ * @param parent 创建指针的付对象
  * @return
  */
 inline const QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr)
@@ -174,8 +187,8 @@ inline int comparePluginApi(const QString &pluginApi1, const QString &pluginApi2
         return 0;
 
     // 拆分版本号
-    QStringList subPluginApis1 = pluginApi1.split(".", QString::SkipEmptyParts, Qt::CaseSensitive);
-    QStringList subPluginApis2 = pluginApi2.split(".", QString::SkipEmptyParts, Qt::CaseSensitive);
+    QStringList subPluginApis1 = pluginApi1.split(".", Qt::SkipEmptyParts, Qt::CaseSensitive);
+    QStringList subPluginApis2 = pluginApi2.split(".", Qt::SkipEmptyParts, Qt::CaseSensitive);
     for (int i = 0; i < subPluginApis1.size(); ++i) {
         auto subPluginApi1 = subPluginApis1[i];
         if (subPluginApis2.size() > i) {

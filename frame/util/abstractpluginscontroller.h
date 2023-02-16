@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,38 +8,42 @@
 
 #include "pluginproxyinterface.h"
 #include "pluginloader.h"
-
-#include <com_deepin_dde_daemon_dock.h>
+#include "dbusutil.h"
 
 #include <QPluginLoader>
 #include <QList>
 #include <QMap>
 #include <QDBusConnectionInterface>
 
-using DockDaemonInter = com::deepin::dde::daemon::Dock;
-
 class PluginsItemInterface;
+class PluginAdapter;
+class PluginManagerInterface;
+
 class AbstractPluginsController : public QObject, PluginProxyInterface
 {
     Q_OBJECT
 
 public:
-    explicit AbstractPluginsController(QObject *parent = 0);
+    explicit AbstractPluginsController(QObject *parent = Q_NULLPTR);
     ~ AbstractPluginsController() override;
 
-    // implements PluginProxyInterface
-    void saveValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant &value) override;
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override;
-    void removeValue(PluginsItemInterface * const itemInter, const QStringList &keyList) override;
+    void updateDockInfo(PluginsItemInterface *const, const DockPart &) override {}
 
-signals:
+Q_SIGNALS:
     void pluginLoaderFinished();
 
 protected:
-    QMap<PluginsItemInterface *, QMap<QString, QObject *>> &pluginsMap();
-    QObject *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
-    PluginsItemInterface *pluginInterAt(const QString &itemKey);
-    PluginsItemInterface *pluginInterAt(QObject *destItem);
+    bool eventFilter(QObject *object, QEvent *event) override;
+
+    PluginManagerInterface *pluginManager() const;
+
+private:
+    // implements PluginProxyInterface
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override {}
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override {}
+    void saveValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value) override {}
+    void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) override {}
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override { return QVariant(); }
 
 protected Q_SLOTS:
     void startLoader(PluginLoader *loader);
@@ -48,22 +53,15 @@ private slots:
     void positionChanged();
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
-    void refreshPluginSettings();
 
 private:
-    bool eventFilter(QObject *o, QEvent *e) override;
-
-private:
-    QDBusConnectionInterface *m_dbusDaemonInterface;
-    DockDaemonInter *m_dockDaemonInter;
-
-    // interface,  "pluginloader", PluginLoader指针对象
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;
 
     // filepath, interface, loaded
     QMap<QPair<QString, PluginsItemInterface *>, bool> m_pluginLoadMap;
 
     QJsonObject m_pluginSettingsObject;
+    PluginManagerInterface *m_pluginManager;
 };
 
 #endif // ABSTRACTPLUGINSCONTROLLER_H

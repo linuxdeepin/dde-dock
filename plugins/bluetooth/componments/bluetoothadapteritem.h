@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -14,9 +15,9 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-#include <com_deepin_daemon_bluetooth.h>
+#include "org_deepin_dde_bluetooth1.h"
 
-using  DBusBluetooth = com::deepin::daemon::Bluetooth;
+using  DBusBluetooth = org::deepin::dde::Bluetooth1;
 
 DWIDGET_USE_NAMESPACE
 
@@ -84,7 +85,6 @@ public:
     ~BluetoothAdapterItem();
     Adapter *adapter() { return m_adapter; }
     QStringList connectedDevicesName();
-    void setStateBtnEnabled(bool);
 
 public slots:
     // 添加蓝牙设备
@@ -126,7 +126,6 @@ private:
     RefreshButton *m_refreshBtn;
     DBusBluetooth *m_bluetoothInter;
     bool m_showUnnamedDevices;
-    bool m_stateBtnEnabled;
 
     QMap<QString, BluetoothDeviceItem *> m_deviceItems;
     HorizontalSeperator *m_seperator;

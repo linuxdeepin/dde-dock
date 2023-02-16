@@ -1,14 +1,24 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "bluetoothplugin.h"
+#include "adaptersmanager.h"
+#include "bluetoothmainwidget.h"
+#include "imageutil.h"
+
+#include <DGuiApplicationHelper>
 
 #define STATE_KEY  "enable"
 
+DGUI_USE_NAMESPACE
+
 BluetoothPlugin::BluetoothPlugin(QObject *parent)
-    : QObject(parent),
-      m_bluetoothItem(nullptr)
+    : QObject(parent)
+    , m_adapterManager(new AdaptersManager(this))
+    , m_bluetoothItem(nullptr)
+    , m_bluetoothWidget(nullptr)
 {
 }
 
@@ -29,33 +39,27 @@ void BluetoothPlugin::init(PluginProxyInterface *proxyInter)
     if (m_bluetoothItem)
         return;
 
-    m_bluetoothItem.reset(new BluetoothItem);
+    m_bluetoothItem.reset(new BluetoothItem(m_adapterManager));
 
-    connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [&] {
-        m_enableState = true;
-        refreshPluginItemsVisible();
-    });
-    connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [&] {
-        m_enableState = false;
-        refreshPluginItemsVisible();
-    });
+    m_bluetoothWidget.reset(new BluetoothMainWidget(m_adapterManager));
 
-    m_enableState = m_bluetoothItem->hasAdapter();
-
-    if (!pluginIsDisable())
+    connect(m_bluetoothItem.data(), &BluetoothItem::justHasAdapter, [ this ] {
         m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
-}
+    });
+    connect(m_bluetoothItem.data(), &BluetoothItem::requestHide, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+    });
+    connect(m_bluetoothItem.data(), &BluetoothItem::noAdapter, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
+        m_proxyInter->requestSetAppletVisible(this, BLUETOOTH_KEY, false);
+        m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
+    });
+    connect(m_bluetoothWidget.data(), &BluetoothMainWidget::requestExpand, this, [ this ] {
+        m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, true);
+    });
 
-void BluetoothPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool BluetoothPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, STATE_KEY, m_enableState).toBool();
+    if (m_bluetoothItem->hasAdapter())
+        m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
 }
 
 QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
@@ -63,6 +67,9 @@ QWidget *BluetoothPlugin::itemWidget(const QString &itemKey)
     if (itemKey == BLUETOOTH_KEY) {
         return m_bluetoothItem.data();
     }
+
+    if (itemKey == QUICK_ITEM_KEY)
+        return m_bluetoothWidget.data();
 
     return nullptr;
 }
@@ -82,16 +89,11 @@ QWidget *BluetoothPlugin::itemPopupApplet(const QString &itemKey)
         return m_bluetoothItem->popupApplet();
     }
 
-    return nullptr;
-}
-
-const QString BluetoothPlugin::itemContextMenu(const QString &itemKey)
-{
-    if (itemKey == BLUETOOTH_KEY) {
-        return m_bluetoothItem->contextMenu();
+    if (itemKey == QUICK_ITEM_KEY) {
+        return m_bluetoothItem->popupApplet();
     }
 
-    return QString();
+    return nullptr;
 }
 
 void BluetoothPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
@@ -122,15 +124,51 @@ void BluetoothPlugin::refreshIcon(const QString &itemKey)
     }
 }
 
-void BluetoothPlugin::pluginSettingsChanged()
+QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    refreshPluginItemsVisible();
+    if (dockPart == DockPart::QuickPanel)
+        return QIcon();
+
+    QString iconFile;
+    if (themeType == DGuiApplicationHelper::ColorType::DarkType)
+        iconFile = ":/bluetooth-active-symbolic.svg";
+    else
+        iconFile = ":/bluetooth-active-symbolic-dark.svg";
+
+    switch (dockPart) {
+    case DockPart::DCCSetting:
+        return ImageUtil::loadSvg(iconFile, QSize(18, 18));
+    case DockPart::QuickShow:
+        return ImageUtil::loadSvg(iconFile, QSize(18, 16));
+    default:
+        break;
+    }
+
+    return QIcon();
 }
 
-void BluetoothPlugin::refreshPluginItemsVisible()
+PluginsItemInterface::PluginMode BluetoothPlugin::status() const
 {
-    if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, BLUETOOTH_KEY);
-    else
-        m_proxyInter->itemAdded(this, BLUETOOTH_KEY);
+    if (m_bluetoothItem.data()->isPowered())
+        return PluginMode::Active;
+
+    return PluginMode::Deactive;
 }
+
+QString BluetoothPlugin::description() const
+{
+    if (m_bluetoothItem.data()->isPowered())
+        return tr("Turn on");
+
+    return tr("Turn off");
+}
+
+PluginFlags BluetoothPlugin::flags() const
+{
+    return PluginFlag::Type_Common
+            | PluginFlag::Quick_Multi
+            | PluginFlag::Attribute_CanDrag
+            | PluginFlag::Attribute_CanInsert
+            | PluginFlag::Attribute_CanSetting;
+}
+

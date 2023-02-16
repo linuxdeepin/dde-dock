@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="deepin-virtualkeyboard-c" x1="50%" x2="50%" y1="0%" y2="98.139%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#EDEDED"/>
+    </linearGradient>
+    <rect id="deepin-virtualkeyboard-b" width="52" height="50" x="6" y="7" rx="10.097"/>
+    <filter id="deepin-virtualkeyboard-a" width="119.2%" x="-9.6%" y="-8%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1.5"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0"/>
+    </filter>
+    <linearGradient id="deepin-virtualkeyboard-d" x1="50%" x2="50%" y1="35.61%" y2="100%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#93A0A5"/>
+    </linearGradient>
+    <linearGradient id="deepin-virtualkeyboard-g" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#4A4A4A"/>
+      <stop offset="97.645%" stop-color="#363636"/>
+    </linearGradient>
+    <path id="deepin-virtualkeyboard-f" d="M44,24 L48,24 L48,28 L44,28 L44,24 Z M38,24 L42,24 L42,28 L38,28 L38,24 Z M32,24 L36,24 L36,28 L32,28 L32,24 Z M38,30 L38,34 L34,34 L34,30 L38,30 Z M26,24 L30,24 L30,28 L26,28 L26,24 Z M32,30 L32,34 L28,34 L28,30 L32,30 Z M16,24 L24,24 L24,28 L16,28 L16,24 Z M16,30 L26,30 L26,34 L16,34 L16,30 Z M42,40 L24,40 L24,36 L42,36 L42,40 Z M22,40 L16,40 L16,36 L22,36 L22,40 Z M48,34 L40,34 L40,30 L48,30 L48,34 Z M48,40 L44,40 L44,36 L48,36 L48,40 Z"/>
+    <filter id="deepin-virtualkeyboard-e" width="103.1%" height="112.5%" x="-1.6%" y="-3.1%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0"/>
+    </filter>
+    <filter id="deepin-virtualkeyboard-h" width="103.1%" height="112.5%" x="-1.6%" y="-3.1%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetInner1"/>
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1"/>
+      <feColorMatrix in="shadowInnerInner1" result="shadowMatrixInner1" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.05 0"/>
+      <feOffset dy="-1" in="SourceAlpha" result="shadowOffsetInner2"/>
+      <feComposite in="shadowOffsetInner2" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner2"/>
+      <feColorMatrix in="shadowInnerInner2" result="shadowMatrixInner2" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0"/>
+      <feMerge>
+        <feMergeNode in="shadowMatrixInner1"/>
+        <feMergeNode in="shadowMatrixInner2"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <use fill="#000" filter="url(#deepin-virtualkeyboard-a)" xlink:href="#deepin-virtualkeyboard-b"/>
+    <use fill="url(#deepin-virtualkeyboard-c)" xlink:href="#deepin-virtualkeyboard-b"/>
+    <path fill="url(#deepin-virtualkeyboard-d)" fill-rule="nonzero" d="M16.0970874,8 C11.0729048,8 7,12.0729048 7,17.0970874 L7,46.9029126 C7,51.9270952 11.0729048,56 16.0970874,56 L47.9029126,56 C52.9270952,56 57,51.9270952 57,46.9029126 L57,17.0970874 C57,12.0729048 52.9270952,8 47.9029126,8 L16.0970874,8 Z M16.0970874,7 L47.9029126,7 C53.47938,7 58,11.52062 58,17.0970874 L58,46.9029126 C58,52.47938 53.47938,57 47.9029126,57 L16.0970874,57 C10.52062,57 6,52.47938 6,46.9029126 L6,17.0970874 C6,11.52062 10.52062,7 16.0970874,7 Z"/>
+    <g fill-rule="nonzero">
+      <use fill="#000" filter="url(#deepin-virtualkeyboard-e)" xlink:href="#deepin-virtualkeyboard-f"/>
+      <use fill="url(#deepin-virtualkeyboard-g)" xlink:href="#deepin-virtualkeyboard-f"/>
+      <use fill="#000" filter="url(#deepin-virtualkeyboard-h)" xlink:href="#deepin-virtualkeyboard-f"/>
+    </g>
+  </g>
+</svg>

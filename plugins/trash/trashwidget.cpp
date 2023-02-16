@@ -1,9 +1,12 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "constants.h"
 #include "trashwidget.h"
+
+#include <DDBusSender>
 
 #include <QPainter>
 #include <QIcon>
@@ -138,7 +141,7 @@ void TrashWidget::dragLeaveEvent(QDragLeaveEvent *e)
 void TrashWidget::dropEvent(QDropEvent *e)
 {
     if (e->mimeData()->hasFormat("RequestDock"))
-        return removeApp(e->mimeData()->data("AppKey"));
+        return removeApp(e->mimeData()->data("DesktopPath"));
 
     if (!e->mimeData()->hasUrls()) {
         return e->ignore();
@@ -155,8 +158,8 @@ void TrashWidget::dropEvent(QDropEvent *e)
     qApp->postEvent(this->parent(), new QEvent(QEvent::Leave));
 
     const QMimeData *mime = e->mimeData();
-    // 这里需要取到所有url然后一次性移动到回收站。
-    moveToTrash(mime->urls());
+    for (auto url : mime->urls())
+        moveToTrash(url);
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)
@@ -191,13 +194,13 @@ void TrashWidget::updateIcon()
             size = PLUGIN_BACKGROUND_MAX_SIZE;
     }
 
-
     QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
 
     const auto ratio = devicePixelRatioF();
     int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
     m_icon = icon.pixmap(pixmapSize, pixmapSize);
     m_icon.setDevicePixelRatio(ratio);
+    m_icon = m_icon.scaled(pixmapSize * ratio, pixmapSize * ratio);
 }
 
 void TrashWidget::updateIconAndRefresh()
@@ -218,22 +221,20 @@ void TrashWidget::setDragging(bool state)
 
 void TrashWidget::removeApp(const QString &appKey)
 {
-    const QString cmd("dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.UninstallApp string:\"" + appKey + "\"");
-
-    QProcess *proc = new QProcess;
-    proc->start(cmd);
-    proc->waitForFinished();
-
-    proc->deleteLater();
+    DDBusSender().service("org.deepin.dde.Launcher1")
+            .path("/org/deepin/dde/Launcher1")
+            .interface("org.deepin.dde.Launcher1")
+            .method("UninstallApp")
+            .arg(appKey)
+            .call();
 }
 
-void TrashWidget::moveToTrash(const QList<QUrl> &urlList)
+void TrashWidget::moveToTrash(const QUrl &url)
 {
+    const QFileInfo info = url.toLocalFile();
+
     QStringList argumentList;
-    for (const QUrl &url : urlList) {
-        const QFileInfo& info = url.toLocalFile();
-        argumentList << info.absoluteFilePath();
-    }
+    argumentList << info.absoluteFilePath();
 
     m_fileManagerInter->Trash(argumentList);
 }

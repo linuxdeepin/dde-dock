@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -31,7 +32,7 @@ void Test_AppItem::SetUp()
     activeSettings = Utils::ModuleSettingsPtr("activeapp");
     dockedSettings = Utils::ModuleSettingsPtr("dockapp");
 
-    appItem = new AppItem(appSettings, activeSettings, dockedSettings, QDBusObjectPath("/com/deepin/dde/daemon/Dock/entries/e0T6045b766"));
+    appItem = new AppItem(appSettings, activeSettings, dockedSettings, QDBusObjectPath("/org/deepin/dde/daemon/Dock1/entries/e0T6045b766"));
 }
 
 void Test_AppItem::TearDown()
@@ -93,6 +94,7 @@ TEST_F(Test_AppItem, coverage_test)
     appItem->checkGSettingsControl();
     appItem->showHoverTips();
     appItem->popupTips();
+    appItem->startDrag();
     appItem->playSwingEffect();
     appItem->invokedMenuItem("invalid", true);
     appItem->contextMenu();

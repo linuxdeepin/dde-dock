@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -70,7 +71,7 @@ bool ShowDesktopPlugin::pluginIsDisable()
 const QString ShowDesktopPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == pluginName())
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
 
     return QString();
 }
@@ -110,7 +111,7 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     Q_UNUSED(checked)
 
     if (menuId == "show-desktop") {
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     } else if (menuId == "remove") {
         pluginStateSwitched();
     }
@@ -145,6 +146,11 @@ void ShowDesktopPlugin::pluginSettingsChanged()
 PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 {
     return PluginType::Fixed;
+}
+
+PluginFlags ShowDesktopPlugin::flags() const
+{
+    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
 }
 
 void ShowDesktopPlugin::updateVisible()

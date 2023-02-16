@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -8,8 +9,20 @@
 #include <QPainter>
 #include <QCursor>
 #include <QDebug>
+#include <QPainterPath>
+#include <QRegion>
+#include <QBitmap>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QFile>
+#include <QDBusUnixFileDescriptor>
+#include <QDir>
 
 #include <X11/Xcursor/Xcursor.h>
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <iosfwd>
 
 const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPath, const int size, const qreal ratio)
 {
@@ -18,7 +31,9 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
     if (!icon.isNull()) {
         QPixmap pixmap = icon.pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(ratio);
-        return pixmap;
+        if (ratio == 1)
+            return pixmap;
+        return pixmap.scaled(size * ratio, size * ratio);
     }
 
     QPixmap pixmap(pixmapSize, pixmapSize);
@@ -32,15 +47,26 @@ const QPixmap ImageUtil::loadSvg(const QString &iconName, const QString &localPa
     painter.end();
     pixmap.setDevicePixelRatio(ratio);
 
-    return pixmap;
+    if (ratio == 1)
+        return pixmap;
+
+    return pixmap.scaled(size * ratio, size * ratio);
 }
 
 const QPixmap ImageUtil::loadSvg(const QString &iconName, const QSize size, const qreal ratio)
 {
     QIcon icon = QIcon::fromTheme(iconName);
     if (!icon.isNull()) {
-        QPixmap pixmap = icon.pixmap(size*ratio);
+        QPixmap pixmap = icon.pixmap(QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : QSize(size * ratio));
         pixmap.setDevicePixelRatio(ratio);
+        if (ratio == 1)
+            return pixmap;
+
+        if (pixmap.size().width() > size.width() * ratio)
+            pixmap = pixmap.scaledToWidth(size.width() * ratio);
+        if (pixmap.size().height() > size.height() * ratio)
+            pixmap = pixmap.scaledToHeight(size.height() * ratio);
+
         return pixmap;
     }
     return QPixmap();
@@ -63,4 +89,68 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
     QCursor *cursor = new QCursor(pixmap, images->images[0]->xhot, images->images[0]->yhot);
     XcursorImagesDestroy(images);
     return cursor;
+}
+
+QPixmap ImageUtil::loadWindowThumb(const QString &winInfoId)
+{
+    // 在tmp下创建临时目录，用来存放缩略图
+    QString thumbPath(imagePath());
+    QDir dir(thumbPath);
+    if (!dir.exists())
+        dir.mkpath(thumbPath);
+
+    QString fileName = QString("%1/%2").arg(thumbPath).arg(winInfoId);
+    int fileId = open(fileName.toLocal8Bit().data(), O_CREAT | O_RDWR, S_IWUSR | S_IRUSR);
+    if (fileId < 0) {
+        //打开文件失败
+        return QPixmap();
+    }
+
+    QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/org/kde/KWin/ScreenShot2"), QStringLiteral("org.kde.KWin.ScreenShot2"));
+    // 第一个参数，winID或者UUID
+    QList<QVariant> args;
+    args << QVariant::fromValue(winInfoId);
+    // 第二个参数，需要截图的选项
+    QVariantMap option;
+    option["include-decoration"] = true;
+    option["include-cursor"] = false;
+    option["native-resolution"] = true;
+    args << QVariant::fromValue(option);
+    // 第三个参数，文件描述符
+    args << QVariant::fromValue(QDBusUnixFileDescriptor(fileId));
+
+    QDBusReply<QVariantMap> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("CaptureWindow"), args);
+    if(!reply.isValid()) {
+        close(fileId);
+        qDebug() << "get current workspace background error: "<< reply.error().message();
+        return QPixmap();
+    }
+
+    QVariantMap imageInfo = reply.value();
+    int imageWidth = imageInfo.value("width").toUInt();
+    int imageHeight = imageInfo.value("height").toUInt();
+    int imageStride = imageInfo.value("stride").toUInt();
+    int imageFormat = imageInfo.value("format").toUInt();
+
+    QFile file;
+    if (!file.open(fileId, QIODevice::ReadOnly)) {
+        close(fileId);
+        return QPixmap();
+    }
+
+    if (file.size() == 0) {
+        file.close();
+        return QPixmap();
+    }
+
+    QByteArray fileContent = file.readAll();
+    QImage image(reinterpret_cast<uchar *>(fileContent.data()), imageWidth, imageHeight, imageStride, static_cast<QImage::Format>(imageFormat));
+    QPixmap pixmap = QPixmap::fromImage(image);
+    close(fileId);
+    return pixmap;
+}
+
+QString ImageUtil::imagePath()
+{
+    return QString("%1/dde-dock/windowthumb").arg(QDir::tempPath());
 }

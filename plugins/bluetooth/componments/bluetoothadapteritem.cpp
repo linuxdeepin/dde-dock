@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -26,7 +27,7 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     , m_labelAction(nullptr)
     , m_stateAction(nullptr)
     , m_connAction(nullptr)
-    , m_loading(new DSpinner(parent->viewport()))
+    , m_loading(new DSpinner(parent))
     , m_iconWidget(new QWidget(parent->viewport()))
     , m_connButton(new StateButton(m_iconWidget))
 {
@@ -106,25 +107,20 @@ void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
 {
     m_labelAction->setText(m_device->alias());
-
-    m_connAction->setVisible(state == Device::StateConnected);
-    m_stateAction->setVisible(state == Device::StateAvailable);
-
     if (state == Device::StateAvailable) {
         m_loading->start();
+        m_stateAction->setVisible(true);
+        m_connAction->setVisible(false);
     } else if (state == Device::StateConnected) {
         m_loading->stop();
+        m_stateAction->setVisible(false);
+        m_connAction->setVisible(true);
         emit requestTopDeviceItem(m_standarditem);
-
-        /* 已连接的Item插入到首位后，其设置的 DViewItemAction 对象的位置未更新，导致还是显示在原位置
-        手动设置其位置到首位，触发 DViewItemAction 对象的位置更新，规避该问题，该问题待后期DTK优化 */
-        QRect loadingRect = m_loading->geometry();
-        loadingRect.setY(0);
-        m_loading->setGeometry(loadingRect);
     } else {
         m_loading->stop();
+        m_stateAction->setVisible(false);
+        m_connAction->setVisible(false);
     }
-
     emit deviceStateChanged(m_device);
 }
 
@@ -137,9 +133,8 @@ BluetoothAdapterItem::BluetoothAdapterItem(Adapter *adapter, QWidget *parent)
     , m_itemDelegate(new DStyledItemDelegate(m_deviceListview))
     , m_deviceModel(new QStandardItemModel(m_deviceListview))
     , m_refreshBtn(new RefreshButton(this))
-    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth", "/com/deepin/daemon/Bluetooth", QDBusConnection::sessionBus(), this))
+    , m_bluetoothInter(new DBusBluetooth("org.deepin.dde.Bluetooth1", "/org/deepin/dde/Bluetooth1", QDBusConnection::sessionBus(), this))
     , m_showUnnamedDevices(false)
-    , m_stateBtnEnabled(true)
     , m_seperator(new HorizontalSeperator(this))
 {
     initData();
@@ -175,11 +170,10 @@ void BluetoothAdapterItem::onTopDeviceItem(DStandardItem *item)
     if (!item || item->row() == -1 || item->row() == 0)
         return;
 
-    int row = item->row();
-    // 先获取，再移除，后插入
-    QStandardItem *sItem = m_deviceModel->takeItem(row, 0);
-    m_deviceModel->removeRow(row);
-    m_deviceModel->insertRow(0, sItem);
+    int index1 = item->row();
+    QStandardItem *index = m_deviceModel->takeItem(index1, 0);
+    m_deviceModel->removeRow(index1);
+    m_deviceModel->insertRow(0, index);
 }
 
 void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
@@ -189,17 +183,10 @@ void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
 
 void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 {
-    QPalette widgetBackgroud;
-    if (type == DGuiApplicationHelper::LightType) {
-        m_refreshBtn->setRotateIcon(":/refresh_dark.svg");
-        widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
-    } else {
-        widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
-        m_refreshBtn->setRotateIcon(":/refresh.svg");
-    }
-
-    m_adapterLabel->label()->setAutoFillBackground(true);
-    m_adapterLabel->label()->setPalette(widgetBackgroud);
+    if (type == DGuiApplicationHelper::LightType)
+        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+    else
+        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
 }
 
 QSize BluetoothAdapterItem::sizeHint() const
@@ -227,22 +214,10 @@ QStringList BluetoothAdapterItem::connectedDevicesName()
     return devsName;
 }
 
-void BluetoothAdapterItem::setStateBtnEnabled(bool enable)
-{
-    if (m_stateBtnEnabled != enable) {
-        m_stateBtnEnabled = enable;
-    }
-
-    if (m_adapterStateBtn) {
-        m_adapterStateBtn->setEnabled(m_stateBtnEnabled);
-    }
-}
-
 void BluetoothAdapterItem::initData()
 {
     m_showUnnamedDevices = m_bluetoothInter->displaySwitch();
-
-    if (m_adapter && !m_adapter->powered())
+    if (!m_adapter->powered())
         return;
 
     foreach (const auto device, m_adapter->devices()) {
@@ -272,31 +247,20 @@ void BluetoothAdapterItem::onDeviceAdded(const Device *device)
         }
     });
 
-    if (!m_showUnnamedDevices && device->name().isEmpty())
+    m_deviceItems.insert(device->id(), item);
+    if (!m_showUnnamedDevices && device->name().isEmpty() && Device::StateConnected != device->state())
         return;
 
-    m_deviceItems.insert(device->id(), item);
     m_deviceModel->insertRow(insertRow, item->standardItem());
     emit deviceCountChanged();
 }
 
 void BluetoothAdapterItem::onDeviceRemoved(const Device *device)
 {
-    if (m_deviceItems.isEmpty())
+    if (m_deviceItems.isEmpty() || !m_deviceItems.keys().contains(device->id()))
         return;
 
-    int row = -1;
-    if (!m_deviceItems.value(device->id()))
-        return;
-
-    row = m_deviceItems.value(device->id())->standardItem()->row();
-    if ((row < 0) || (row > m_deviceItems.size() - 1)) {
-        m_deviceItems.value(device->id())->deleteLater();
-        m_deviceItems.remove(device->id());
-        return;
-    }
-
-    m_deviceModel->removeRow(row);
+    m_deviceModel->removeRow(m_deviceItems.value(device->id())->standardItem()->row());
     m_deviceItems.value(device->id())->deleteLater();
     m_deviceItems.remove(device->id());
     emit deviceCountChanged();
@@ -393,7 +357,7 @@ void BluetoothAdapterItem::initConnect()
         m_deviceListview->setVisible(state);
         m_seperator->setVisible(state);
         m_adapterStateBtn->setChecked(state);
-        m_adapterStateBtn->setEnabled(m_stateBtnEnabled);
+        m_adapterStateBtn->setEnabled(true);
         emit adapterPowerChanged();
     });
     connect(m_adapterStateBtn, &DSwitchButton::clicked, this, [ = ](bool state) {
@@ -442,6 +406,7 @@ void BluetoothAdapterItem::setUnnamedDevicesVisible(bool isShow)
 
         return;
     }
+
 
     for (i = m_deviceItems.begin(); i != m_deviceItems.end(); ++i) {
         BluetoothDeviceItem *deviceItem = i.value();

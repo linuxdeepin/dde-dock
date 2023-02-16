@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -10,9 +11,11 @@
 
 #include <DSysInfo>
 #include <DDBusSender>
+#include <DGuiApplicationHelper>
 
 #include <QIcon>
 #include <QSettings>
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY "enable"
 #define GSETTING_SHOW_SUSPEND "showSuspend"
@@ -20,16 +23,8 @@
 #define GSETTING_SHOW_SHUTDOWN "showShutdown"
 #define GSETTING_SHOW_LOCK "showLock"
 
-const QString MENU_SHUTDONW = "Shutdown";
-const QString MENU_REBOOT = "Reboot";
-const QString MENU_SUSPEND = "Suspend";
-const QString MENU_HIBERNATE = "Hibernate";
-const QString MENU_LOCK = "Lock";
-const QString MENU_LOGOUT = "Logout";
-const QString MENU_SWITCH_USER = "SwitchUser";
-const QString MENU_POWER_SETTINGS = "PowerSettings";
-
 DCORE_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 using namespace Dock;
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
@@ -37,10 +32,9 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     , m_pluginLoaded(false)
     , m_shutdownWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
-    , m_powerManagerInter(new DBusPowerManager("com.deepin.daemon.PowerManager", "/com/deepin/daemon/PowerManager", QDBusConnection::systemBus(), this))
+    , m_powerManagerInter(new DBusPowerManager("org.deepin.dde.PowerManager1", "/org/deepin/dde/PowerManager1", QDBusConnection::systemBus(), this))
     , m_gsettings(Utils::ModuleSettingsPtr("shutdown", QByteArray(), this))
     , m_sessionShellGsettings(Utils::SettingsPtr("com.deepin.dde.session-shell", "/com/deepin/dde/session-shell/", this))
-    , m_dconfig(DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock.plugin.power", QString(), this))
 {
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setAccessibleName("shutdown");
@@ -92,8 +86,6 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 void ShutdownPlugin::pluginStateSwitched()
 {
     m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
-
-    refreshPluginItemsVisible();
 }
 
 bool ShutdownPlugin::pluginIsDisable()
@@ -105,47 +97,29 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    return QString("dbus-send --print-reply --dest=org.deepin.dde.ShutdownFront1 /org/deepin/dde/ShutdownFront1 org.deepin.dde.ShutdownFront1.Show");
 }
 
 const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    QStringList contextMenu = {
-        MENU_SHUTDONW,
-        MENU_REBOOT,
-        MENU_SUSPEND,
-        MENU_HIBERNATE,
-        MENU_LOCK,
-        MENU_LOGOUT,
-        MENU_SWITCH_USER,
-        MENU_POWER_SETTINGS
-    };
-
-    if (m_dconfig.data()->isValid()) {
-        contextMenu = m_dconfig.data()->value("contextMenu", contextMenu).toStringList();
-    }
-
     QList<QVariant> items;
     items.reserve(6);
 
     QMap<QString, QVariant> shutdown;
-    if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SHUTDOWN) && m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool())) && contextMenu.contains(MENU_SHUTDONW)) {
+    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SHUTDOWN) && m_gsettings->get(GSETTING_SHOW_SHUTDOWN).toBool())) {
         shutdown["itemId"] = "Shutdown";
         shutdown["itemText"] = tr("Shut down");
         shutdown["isActive"] = true;
         items.push_back(shutdown);
     }
 
-    if (contextMenu.contains(MENU_REBOOT)) {
-        QMap<QString, QVariant> reboot;
-        reboot["itemId"] = "Restart";
-        reboot["itemText"] = tr("Reboot");
-        reboot["isActive"] = true;
-        items.push_back(reboot);
-    }
-
+    QMap<QString, QVariant> reboot;
+    reboot["itemId"] = "Restart";
+    reboot["itemText"] = tr("Reboot");
+    reboot["isActive"] = true;
+    items.push_back(reboot);
 
 #ifndef DISABLE_POWER_OPTIONS
 
@@ -156,9 +130,7 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     ;
     if (can_sleep) {
         QMap<QString, QVariant> suspend;
-        if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SUSPEND)
-        && m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool()))
-        && contextMenu.contains(MENU_SUSPEND)) {
+        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_SUSPEND) && m_gsettings->get(GSETTING_SHOW_SUSPEND).toBool())) {
             suspend["itemId"] = "Suspend";
             suspend["itemText"] = tr("Suspend");
             suspend["isActive"] = true;
@@ -166,13 +138,12 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
     }
 
-    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ?
-        QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool() : m_powerManagerInter->CanHibernate();
+    bool can_hibernate = enviromentVar.contains("POWER_CAN_HIBERNATE") ? QVariant(enviromentVar.value("POWER_CAN_HIBERNATE")).toBool()
+                         : checkSwap() && m_powerManagerInter->CanHibernate();
 
     if (can_hibernate) {
         QMap<QString, QVariant> hibernate;
-        if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_HIBERNATE) && m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool()))
-        && contextMenu.contains(MENU_HIBERNATE)) {
+        if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_HIBERNATE) && m_gsettings->get(GSETTING_SHOW_HIBERNATE).toBool())) {
             hibernate["itemId"] = "Hibernate";
             hibernate["itemText"] = tr("Hibernate");
             hibernate["isActive"] = true;
@@ -183,24 +154,21 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
 #endif
 
     QMap<QString, QVariant> lock;
-    if ((!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_LOCK) && m_gsettings->get(GSETTING_SHOW_LOCK).toBool()))
-    && contextMenu.contains(MENU_LOCK)) {
+    if (!m_gsettings || (m_gsettings->keys().contains(GSETTING_SHOW_LOCK) && m_gsettings->get(GSETTING_SHOW_LOCK).toBool())) {
         lock["itemId"] = "Lock";
         lock["itemText"] = tr("Lock");
         lock["isActive"] = true;
         items.push_back(lock);
     }
 
-    if (contextMenu.contains(MENU_LOGOUT)) {
-        QMap<QString, QVariant> logout;
-        logout["itemId"] = "Logout";
-        logout["itemText"] = tr("Log out");
-        logout["isActive"] = true;
-        items.push_back(logout);
-    }
+    QMap<QString, QVariant> logout;
+    logout["itemId"] = "Logout";
+    logout["itemText"] = tr("Log out");
+    logout["isActive"] = true;
+    items.push_back(logout);
 
     if (!QFile::exists(ICBC_CONF_FILE)) {
-        // 读取com.deepin.dde.session-shell切换用户配置项
+        // com.deepin.dde.session-shell切换用户配置项
         enum SwitchUserConfig {
             AlwaysShow = 0,
             OnDemand,
@@ -212,10 +180,9 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
 
         // 和登录锁屏界面的逻辑保持一致
-        if ((AlwaysShow == switchUserConfig ||
+        if (AlwaysShow == switchUserConfig ||
                  (OnDemand == switchUserConfig &&
-                 (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer)))
-                 && contextMenu.contains(MENU_SWITCH_USER)) {
+                 (DBusAccount().userList().count() > 1 || DSysInfo::uosType() == DSysInfo::UosType::UosServer))) {
             QMap<QString, QVariant> switchUser;
             switchUser["itemId"] = "SwitchUser";
             switchUser["itemText"] = tr("Switch account");
@@ -224,13 +191,11 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         }
 
 #ifndef DISABLE_POWER_OPTIONS
-        if (contextMenu.contains(MENU_POWER_SETTINGS)) {
-            QMap<QString, QVariant> power;
-            power["itemId"] = "power";
-            power["itemText"] = tr("Power settings");
-            power["isActive"] = true;
-            items.push_back(power);
-        }
+        QMap<QString, QVariant> power;
+        power["itemId"] = "power";
+        power["itemText"] = tr("Power settings");
+        power["isActive"] = true;
+        items.push_back(power);
 #endif
     }
 
@@ -254,15 +219,15 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "power") {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
+        .method(QString("ShowPage"))
         .arg(QString("power"))
         .call();
     } else if (menuId == "Lock") {
         if (QFile::exists(ICBC_CONF_FILE)) {
-            QDBusMessage send = QDBusMessage::createMethodCall("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "SwitchTTYAndShow");
+            QDBusMessage send = QDBusMessage::createMethodCall("org.deepin.dde.LockFront1", "/org/deepin/dde/LockFront1", "org.deepin.dde.LockFront1", "SwitchTTYAndShow");
             QDBusConnection conn = QDBusConnection::connectToBus("unix:path=/run/user/1000/bus", "unix:path=/run/user/1000/bus");
             QDBusMessage reply = conn.call(send);
 #ifdef QT_DEBUG
@@ -271,17 +236,17 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
         } else {
             DDBusSender()
-            .service("com.deepin.dde.lockFront")
-            .interface("com.deepin.dde.lockFront")
-            .path("/com/deepin/dde/lockFront")
+            .service("org.deepin.dde.LockFront1")
+            .interface("org.deepin.dde.LockFront1")
+            .path("/org/deepin/dde/LockFront1")
             .method(QString("Show"))
             .call();
         }
     } else
         DDBusSender()
-        .service("com.deepin.dde.shutdownFront")
-        .interface("com.deepin.dde.shutdownFront")
-        .path("/com/deepin/dde/shutdownFront")
+        .service("org.deepin.dde.ShutdownFront1")
+        .interface("org.deepin.dde.ShutdownFront1")
+        .path("/org/deepin/dde/ShutdownFront1")
         .method(QString(menuId))
         .call();
 }
@@ -307,9 +272,35 @@ void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void ShutdownPlugin::pluginSettingsChanged()
+QIcon ShutdownPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    refreshPluginItemsVisible();
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/resources/icons/dcc_shutdown.svg");
+
+        QPixmap pixmap(":/icons/resources/icons/dcc_shutdown.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+
+        return pixmap;
+    }
+
+    QString iconName = "system-shutdown";
+
+    if (themeType == DGuiApplicationHelper::LightType)
+        iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    const auto ratio = qApp->devicePixelRatio();
+    QPixmap pixmap;
+    pixmap = QIcon::fromTheme(iconName, QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg")).pixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE) * ratio);
+    pixmap.setDevicePixelRatio(ratio);
+    return pixmap;
+}
+
+PluginFlags ShutdownPlugin::flags() const
+{
+    return PluginFlag::Type_System | PluginFlag::Attribute_CanSetting;
 }
 
 void ShutdownPlugin::loadPlugin()
@@ -357,15 +348,34 @@ qint64 ShutdownPlugin::get_power_image_size()
     return size;
 }
 
-void ShutdownPlugin::refreshPluginItemsVisible()
+bool ShutdownPlugin::checkSwap()
 {
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
+    if (!valueByQSettings<bool>("Power", "hibernate", true))
+        return false;
+
+    bool hasSwap = false;
+    QFile file("/proc/swaps");
+    if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
+        const QString &body = file.readAll();
+        QTextStream    stream(body.toUtf8());
+        while (!stream.atEnd()) {
+            const std::pair<bool, qint64> result =
+                checkIsPartitionType(stream.readLine().simplified().split(" ", Qt::SkipEmptyParts));
+            qint64 image_size{ get_power_image_size() };
+
+            if (result.first) {
+                hasSwap = image_size < result.second;
+            }
+
+            if (hasSwap) {
+                break;
+            }
         }
-        m_proxyInter->itemAdded(this, pluginName());
+
+        file.close();
+    } else {
+        qDebug() << "open /proc/swaps failed! please check permission!!!";
     }
+
+    return hasSwap;
 }

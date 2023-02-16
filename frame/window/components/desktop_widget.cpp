@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -13,12 +13,8 @@ DesktopWidget::DesktopWidget(QWidget *parent)
     : QWidget (parent)
     , m_isHover(false)
     , m_needRecoveryWin(false)
-    ,m_timer(new QTimer(this))
 {
     setMouseTracking(true);
-    m_timer->setInterval(0);
-    m_timer->setSingleShot(true);
-    connect(m_timer, &QTimer::timeout, this, &DesktopWidget::toggleDesktop);
 }
 
 void DesktopWidget::paintEvent(QPaintEvent *event)
@@ -45,9 +41,7 @@ void DesktopWidget::enterEvent(QEvent *event)
 {
     if (checkNeedShowDesktop()) {
         m_needRecoveryWin = true;
-//        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-        if (m_timer)
-            m_timer->start();
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     }
 
     m_isHover = true;
@@ -60,10 +54,7 @@ void DesktopWidget::leaveEvent(QEvent *event)
 {
     // 鼠标移入时隐藏了窗口，移出时恢复
     if (m_needRecoveryWin) {
-        if (m_timer->isActive())
-            m_timer->stop();
-        else
-            toggleDesktop();
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
     }
 
     m_isHover = false;
@@ -80,23 +71,11 @@ void DesktopWidget::mousePressEvent(QMouseEvent *event)
             m_needRecoveryWin = false;
         } else {
             // 需求调整，鼠标移入，预览桌面时再点击显示桌面保持显示桌面状态，再点击才切换桌面显、隐状态
-            toggleDesktop();
+            QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
         }
     }
 
     QWidget::mousePressEvent(event);
-}
-
-void DesktopWidget::toggleDesktop()
-{
-    QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
-}
-
-void DesktopWidget::setToggleDesktopInterval(int ms)
-{
-    if (m_timer) {
-        m_timer->setInterval(ms);
-    }
 }
 
 /**

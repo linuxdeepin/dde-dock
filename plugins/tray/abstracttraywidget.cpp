@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -60,7 +61,7 @@ void AbstractTrayWidget::handleMouseRelease()
     Q_ASSERT(sender() == m_handleMouseReleaseTimer);
 
     // do not dealwith all mouse event of SystemTray, class SystemTrayItem will handle it
-    if (trayType() == SystemTray)
+    if (trayTyep() == SystemTray)
         return;
 
     const QPoint point(m_lastMouseReleaseData.first - rect().center());

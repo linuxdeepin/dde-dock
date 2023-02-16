@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -16,15 +17,13 @@
 
 #define DIS_INS DisplayManager::instance()
 
-MenuWorker::MenuWorker(DBusDock *dockInter,QWidget *parent)
-    : QObject (parent)
+MenuWorker::MenuWorker(DockInter *dockInter, QObject *parent)
+    : QObject(parent)
     , m_dockInter(dockInter)
-    , m_autoHide(true)
 {
-
 }
 
-QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
+void MenuWorker::createMenu(QMenu *settingsMenu)
 {
     settingsMenu->setAccessibleName("settingsmenu");
     settingsMenu->setTitle("Settings Menu");
@@ -137,51 +136,29 @@ QMenu *MenuWorker::createMenu(QMenu *settingsMenu)
     }
 
     delete menuSettings;
-    menuSettings = nullptr;
-    return settingsMenu;
 }
 
 void MenuWorker::onDockSettingsTriggered()
 {
-    DDBusSender().service("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
+    DDBusSender().service(controllCenterService)
+            .path(controllCenterPath)
+            .interface(controllCenterInterface)
             .method("ShowPage")
-            .arg(QString("personalization"))
-            .arg(QString("Dock"))
+            .arg(QString("personalization/desktop/dock"))
             .call();
 }
 
-void MenuWorker::showDockSettingsMenu(QMenu *menu)
+void MenuWorker::exec()
 {
     // 菜单功能被禁用
-    static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray(), this);
+    static const QGSettings *setting = Utils::ModuleSettingsPtr("menu", QByteArray());
     if (setting && setting->keys().contains("enable") && !setting->get("enable").toBool()) {
         return;
     }
 
-    // 菜单将要被打开
-    setAutoHide(false);
-
-    menu = createMenu(menu);
-    menu->exec(QCursor::pos());
-
-    // 菜单已经关闭
-    setAutoHide(true);
-    delete menu;
-    menu = nullptr;
-}
-
-void MenuWorker::setAutoHide(const bool autoHide)
-{
-    if (m_autoHide == autoHide)
-        return;
-
-    m_autoHide = autoHide;
-    emit autoHideChanged(m_autoHide);
-}
-
-void MenuWorker::onNotifyDaemonInterfaceUpdate(DBusDock *dockInter)
-{
-    m_dockInter = dockInter;
+    QMenu menu;
+    if (Utils::IS_WAYLAND_DISPLAY)
+        menu.setWindowFlag(Qt::FramelessWindowHint);
+    createMenu(&menu);
+    menu.exec(QCursor::pos());
 }

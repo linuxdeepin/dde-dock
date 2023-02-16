@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -18,6 +18,7 @@ public:
     explicit InformationWidget(QWidget *parent = nullptr);
 
     inline QStorageInfo * storageInfo() { return m_storageInfo; }
+    const QString textContent() const;
 
 private slots:
     // 用于更新数据的槽函数

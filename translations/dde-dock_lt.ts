@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Šalinti</translation>
+        <source>Open</source>
+        <translation>Atverti</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Mano įrenginiai</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Kiti įrenginiai</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Įjungti</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Išjungti</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Įjungti</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Išjungti</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Pridėti klaviatūros išdėstymą</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12 valandų laikas</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24 valandų laikas</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Laiko nustatymai</translation>
     </message>
 </context>
 <context>
@@ -122,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DevCollaborationWidget</name>
+    <message>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DialogManager</name>
     <message>
         <source>Are you sure you want to empty %1 items?</source>
@@ -141,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Nežinomas įrenginys</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Nežinomas tomas</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Diskas</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Atverti</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Atjungti visus</translation>
+        <source>Disabled</source>
+        <translation>Išjungta</translation>
     </message>
 </context>
 <context>
@@ -171,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Leistukas</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -244,93 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Dydis</translation>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Keli ekranai</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Madinga veiksena</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Efektyvi veiksena</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Veiksena</translation>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Viršus</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Apačia</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Kairė</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Dešinė</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Vieta</translation>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Laikyti paslėptą</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Išmaniai slėpti</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Būsena</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Mažas</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Didelis</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -347,21 +300,9 @@
         <source>Onboard</source>
         <translation>Onboard</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Nustatymai</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energija</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Energijos nustatymai</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Talpa %1, liko %2 min.</translation>
@@ -394,13 +335,9 @@
         <source>Capacity %1, fully charged</source>
         <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Dokas</translation>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -416,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energija</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Išjungti</translation>
@@ -452,12 +385,27 @@
         <source>Reboot</source>
         <translation>Paleisti iš naujo</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Energija</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
         <source>Device</source>
         <translation>Įrenginys</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Garso nustatymai</translation>
     </message>
 </context>
 <context>
@@ -514,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Išvalyti</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
