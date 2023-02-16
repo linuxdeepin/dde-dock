@@ -11,7 +11,6 @@
 
 #include <QIcon>
 
-#define PLUGIN_STATE_KEY    "enable"
 DGUI_USE_NAMESPACE
 
 using namespace Dock;
@@ -121,7 +120,7 @@ void MultitaskingPlugin::invokedMenuItem(const QString &itemKey, const QString &
         .arg(1)
         .call();
     } else if (menuId == "remove") {
-        pluginStateSwitched();
+        m_proxyInter->itemRemoved(this, PLUGIN_KEY);
     }
 }
 
@@ -153,5 +152,5 @@ PluginsItemInterface::PluginType MultitaskingPlugin::type()
 
 PluginFlags MultitaskingPlugin::flags() const
 {
-    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
+    return PluginFlag::Type_Fixed | Attribute_CanSetting;
 }
