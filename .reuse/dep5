@@ -57,3 +57,8 @@ License: CC0-1.0
 Files: frame/dbus/* plugins/disk-mount/dbus/dbusdiskmount.* plugins/power/dbus/dbuspower.* plugins/shutdown/dbus/dbuspowermanager.* plugins/tray/dbus/dbustraymanager.*
 Copyright: The Qt Company Ltd.
 License: CC0-1.0
+
+# policy kit
+Files: plugins/overlay-warning/org.deepin.dde.dock.overlay.policy
+Copyright: UnionTech Software Technology Co., Ltd.
+License: LGPL-3.0-or-later

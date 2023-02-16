@@ -1,14 +1,15 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "multitaskingwidget.h"
 #include "multitaskingplugin.h"
-#include "imageutil.h"
 
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+#include <imageutil.h>
 
 MultitaskingWidget::MultitaskingWidget(QWidget *parent)
     : QWidget(parent)

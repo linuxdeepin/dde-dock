@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,13 +8,13 @@
 
 #include "../abstracttraywidget.h"
 
+#include "org_deepin_dde_gesture1.h"
+
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPointer>
 
-#include <com_deepin_daemon_gesture.h>
-
-using Gesture = com::deepin::daemon::Gesture;
+using Gesture = org::deepin::dde::Gesture1;
 
 #define TRAY_ITEM_DRAG_MIMEDATA "TrayItemDragDrop"
 

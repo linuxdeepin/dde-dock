@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -10,9 +11,6 @@
 
 #include <QLabel>
 #include <QScopedPointer>
-
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
 
 namespace Dock {
 class TipsWidget;
@@ -37,7 +35,6 @@ public:
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     const QString itemCommand(const QString &itemKey) override;
-    const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
@@ -45,6 +42,9 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
 
     void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginMode status() const override;
+    QString description() const override;
 
 private:
     void loadPlugin();

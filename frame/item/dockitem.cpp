@@ -1,20 +1,22 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dockitem.h"
 #include "pluginsitem.h"
+#include "utils.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
 #include <QCursor>
 #include <QApplication>
+#include <QMenu>
 
 #define PLUGIN_MARGIN  10
 #define ITEM_MAXSIZE    100
 
 Position DockItem::DockPosition = Position::Top;
-int DockItem::DockSize = 40;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 QPointer<DockPopupWindow> DockItem::PopupWindow(nullptr);
 
@@ -24,18 +26,23 @@ DockItem::DockItem(QWidget *parent)
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_draging(false)
+    , m_contextMenu(new QMenu(this))
     , m_popupTipsDelayTimer(new QTimer(this))
     , m_popupAdjustDelayTimer(new QTimer(this))
 {
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(20);
-        arrowRectangle->setRadius(6);
+        arrowRectangle->setRadius(18);
         arrowRectangle->setShadowYOffset(2);
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("apppopup");
+        if (Utils::IS_WAYLAND_DISPLAY) {
+            Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
+            arrowRectangle->setWindowFlags(flags);
+        }
         PopupWindow = arrowRectangle;
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
@@ -48,7 +55,7 @@ DockItem::DockItem(QWidget *parent)
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
     connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition, Qt::QueuedConnection);
-    connect(&m_contextMenu, &QMenu::triggered, this, &DockItem::menuActionClicked);
+    connect(m_contextMenu, &QMenu::triggered, this, &DockItem::menuActionClicked);
 
     grabGesture(Qt::TapAndHoldGesture);
 
@@ -76,11 +83,6 @@ QString DockItem::accessibleName()
 void DockItem::setDockPosition(const Position side)
 {
     DockPosition = side;
-}
-
-void DockItem::setDockSize(const int size)
-{
-    DockSize = size;
 }
 
 void DockItem::setDockDisplayMode(const DisplayMode mode)
@@ -222,7 +224,7 @@ void DockItem::showContextMenu()
 
     QJsonObject jsonMenu = jsonDocument.object();
 
-    qDeleteAll(m_contextMenu.actions());
+    qDeleteAll(m_contextMenu->actions());
 
     QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
     for (auto item : jsonMenuItems) {
@@ -232,16 +234,13 @@ void DockItem::showContextMenu()
         action->setChecked(itemObj.value("checked").toBool());
         action->setData(itemObj.value("itemId").toString());
         action->setEnabled(itemObj.value("isActive").toBool());
-        m_contextMenu.addAction(action);
+        m_contextMenu->addAction(action);
     }
 
     hidePopup();
     emit requestWindowAutoHide(false);
 
-    if (!m_contextMenu.parentWidget())
-        m_contextMenu.setParent(topLevelWidget(), Qt::Popup);
-
-    m_contextMenu.exec(QCursor::pos());
+    m_contextMenu->exec(QCursor::pos());
 
     onContextMenuAccepted();
 }
@@ -270,9 +269,13 @@ void DockItem::showHoverTips()
     showPopupWindow(content);
 }
 
-void DockItem::showPopupWindow(QWidget *const content, const bool model, const int radius)
+void DockItem::showPopupWindow(QWidget *const content, const bool model)
 {
-    PopupWindow->setRadius(radius);
+    if(itemType() == App){
+        PopupWindow->setRadius(18);
+    }else {
+        PopupWindow->setRadius(6);
+    }
 
     m_popupShown = true;
     m_lastPopupWidget = content;

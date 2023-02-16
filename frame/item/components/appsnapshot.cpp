@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -6,6 +7,7 @@
 #include "previewcontainer.h"
 #include "../widgets/tipswidget.h"
 #include "utils.h"
+#include "imageutil.h"
 
 #include <DStyle>
 
@@ -20,6 +22,7 @@
 #include <QVBoxLayout>
 #include <QSizeF>
 #include <QTimer>
+#include <QPainterPath>
 
 struct SHMInfo {
     long shmid;
@@ -48,10 +51,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     , m_waitLeaveTimer(new QTimer(this))
     , m_closeBtn2D(new DIconButton(this))
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_dockDaemonInter(new DockDaemonInter("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
+    , m_dockDaemonInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
     m_closeBtn2D->setFixedSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH);
     m_closeBtn2D->setIconSize(QSize(SNAP_CLOSE_BTN_WIDTH, SNAP_CLOSE_BTN_WIDTH));
     m_closeBtn2D->setObjectName("closebutton-2d");
@@ -68,6 +69,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
 
     setLayout(centralLayout);
     setAcceptDrops(true);
+    resize(SNAP_WIDTH / 2, SNAP_HEIGHT / 2);
 
     connect(m_closeBtn2D, &DIconButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
@@ -100,7 +102,7 @@ void AppSnapshot::updateTitle()
     }
 
     QFontMetrics fm(m_3DtitleBtn->font());
-    int textWidth = fm.width(title()) + 10 + BTN_TITLE_MARGIN;
+    int textWidth = fm.horizontalAdvance(title()) + 10 + BTN_TITLE_MARGIN;
     int titleWidth = SNAP_WIDTH - (TITLE_MARGIN * 2  + BORDER_MARGIN);
 
     if (textWidth  < titleWidth) {
@@ -166,18 +168,8 @@ void AppSnapshot::setWindowInfo(const WindowInfo &info)
 {
     m_windowInfo = info;
     QFontMetrics fm(m_title->font());
-    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, SNAP_WIDTH_WITHOUT_COMPOSITE - SNAP_CLOSE_BTN_WIDTH - 2 *SNAP_CLOSE_BTN_MARGIN);
+    QString strTtile = m_title->fontMetrics().elidedText(m_windowInfo.title, Qt::ElideRight, SNAP_WIDTH - SNAP_CLOSE_BTN_WIDTH - SNAP_CLOSE_BTN_MARGIN);
     m_title->setText(strTtile);
-    m_title->adjustSize();
-
-    // 设置单个预览界面大小
-    if (m_wmHelper->hasComposite()) {
-        setMinimumSize(SNAP_WIDTH, SNAP_HEIGHT);
-        setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
-    } else {
-        setMinimumSize(m_title->width() + SNAP_CLOSE_BTN_WIDTH + 2 * SNAP_CLOSE_BTN_MARGIN, SNAP_HEIGHT_WITHOUT_COMPOSITE);
-    }
-
     updateTitle();
 
     // 只有在X11下，才能通过XGetWindowProperty获取窗口属性
@@ -199,92 +191,49 @@ void AppSnapshot::fetchSnapshot()
     if (!m_wmHelper->hasComposite())
         return;
 
-    QImage qimage;
     SHMInfo *info = nullptr;
     uchar *image_data = nullptr;
     XImage *ximage = nullptr;
 
-    do {
-        // 优先使用窗管进行窗口截图
-        if (isKWinAvailable()) {
-            QDBusInterface interface(QStringLiteral("org.kde.KWin"), QStringLiteral("/Screenshot"), QStringLiteral("org.kde.kwin.Screenshot"));
-            qDebug() << "windowsID:"<< m_wid;
-
-            QList<QVariant> args;
-            args << QVariant::fromValue(m_wid);
-            args << QVariant::fromValue(quint32(SNAP_WIDTH));
-            args << QVariant::fromValue(quint32(SNAP_HEIGHT));
-
-            QDBusReply<QString> reply = interface.callWithArgumentList(QDBus::Block,QStringLiteral("screenshotForWindowExtend"), args);
-            if(reply.isValid()){
-                const QString tmpFile = reply.value();
-                if (QFile::exists(tmpFile)) {
-                    m_snapshot.load(tmpFile);
-                    m_snapshotSrcRect = m_snapshot.rect();
-                    qDebug() << "reply: " << tmpFile;
-                    QFile::remove(tmpFile);
+    // 优先使用窗管进行窗口截图
+    if (isKWinAvailable()) {
+        const QString windowInfoId = Utils::IS_WAYLAND_DISPLAY ? m_windowInfo.uuid : QString::number(m_wid);
+        m_pixmap = ImageUtil::loadWindowThumb(windowInfoId);
+    } else {
+        do {
+            // get window image from shm(only for deepin app)
+            QImage qimage;
+            info = getImageDSHM();
+            if (info) {
+                qDebug() << "get Image from dxcbplugin SHM...";
+                image_data = (uchar *)shmat(info->shmid, 0, 0);
+                if ((qint64)image_data != -1) {
+                    qimage = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
                     break;
-                }  else {
-                    qDebug() << "get current workspace bckground error, file does not exist : " << tmpFile;
                 }
-            } else {
-                qDebug() << "get current workspace bckground error: "<< reply.error().message();
+                qDebug() << "invalid pointer of shm!";
+                image_data = nullptr;
             }
-        }
 
-        // get window image from shm(only for deepin app)
-        info = getImageDSHM();
-        if (info) {
-            qDebug() << "get Image from dxcbplugin SHM...";
-            image_data = (uchar *)shmat(info->shmid, 0, 0);
-            if ((qint64)image_data != -1) {
-                m_snapshot = QImage(image_data, info->width, info->height, info->bytesPerLine, (QImage::Format)info->format);
-                m_snapshotSrcRect = QRect(info->rect.x, info->rect.y, info->rect.width, info->rect.height);
-                break;
+            if (!image_data || qimage.isNull()) {
+                // get window image from XGetImage(a little slow)
+                qDebug() << "get Image from dxcbplugin SHM failed!";
+                qDebug() << "get Image from Xlib...";
+                // guoyao note：这里会造成内存泄漏，而且是通过demo在X环境经过验证，改用xcb库同样会有内存泄漏，这里暂时未找到解决方案，所以优先使用kwin提供的接口
+                ximage = getImageXlib();
+                if (!ximage) {
+                    qDebug() << "get Image from Xlib failed! giving up...";
+                    emit requestCheckWindow();
+                    return;
+                }
+                qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
             }
-            qDebug() << "invalid pointer of shm!";
-            image_data = nullptr;
-        }
 
-        if (!Utils::IS_WAYLAND_DISPLAY && (!image_data || qimage.isNull())) {
-            // get window image from XGetImage(a little slow)
-            qDebug() << "get Image from dxcbplugin SHM failed!";
-            qDebug() << "get Image from Xlib...";
-            // guoyao note：这里会造成内存泄漏，而且是通过demo在X环境经过验证，改用xcb库同样会有内存泄漏，这里暂时未找到解决方案，所以优先使用kwin提供的接口
-            ximage = getImageXlib();
-            if (!ximage) {
-                qDebug() << "get Image from Xlib failed! giving up...";
-                emit requestCheckWindow();
-                return;
-            }
-            qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+            Q_ASSERT(!qimage.isNull());
 
-            if (!qimage.isNull()) {
-                m_snapshot = qimage;
-                // remove shadow frame
-                m_snapshotSrcRect = rectRemovedShadow(qimage, nullptr);
-            } else {
-                qDebug() << "can not get QImage! giving up...";
-            }
-        }
-    } while(false);
-
-    // 如果m_snapshot或m_snapshotSrcRect为空，说明三种方式均失败，返回不做处理
-    if (m_snapshot.isNull() || m_snapshotSrcRect.isNull()) {
-        qWarning() << "can not get QImage or QRectF! giving up...";
-        return;
+            m_pixmap = QPixmap::fromImage(qimage);
+        } while (false);
     }
-
-    QSizeF size(rect().marginsRemoved(QMargins(8, 8, 8, 8)).size());
-    const auto ratio = devicePixelRatioF();
-    size = m_snapshotSrcRect.size().scaled(size * ratio, Qt::KeepAspectRatio);
-    qreal scale = qreal(size.width()) / m_snapshotSrcRect.width();
-    m_snapshot = m_snapshot.scaled(qRound(m_snapshot.width() * scale), qRound(m_snapshot.height() * scale),
-                                   Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    m_snapshotSrcRect.moveTop(m_snapshotSrcRect.top() * scale + 0.5);
-    m_snapshotSrcRect.moveLeft(m_snapshotSrcRect.left() * scale + 0.5);
-    m_snapshotSrcRect.setWidth(size.width() - 0.5);
-    m_snapshotSrcRect.setHeight(size.height() - 0.5);
 
     if (image_data) shmdt(image_data);
     if (ximage) XDestroyImage(ximage);
@@ -328,7 +277,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         return;
     }
 
-    if (m_snapshot.isNull())
+    if (m_pixmap.isNull())
         return;
 
     const auto ratio = devicePixelRatioF();
@@ -340,22 +289,16 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         painter.drawRoundedRect(rect(), 5, 5);
     }
 
-    // draw image
-    const QImage &im = m_snapshot;
-
-    const qreal offset_x = width() / 2.0 - m_snapshotSrcRect.width() / ratio / 2 - m_snapshotSrcRect.left() / ratio;
-    const qreal offset_y = height() / 2.0 - m_snapshotSrcRect.height() / ratio / 2 - m_snapshotSrcRect.top() / ratio;
-
     DStyleHelper dstyle(style());
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
-    QBrush brush;
-    brush.setTextureImage(im);
-    painter.setBrush(brush);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QRect imageRect(8, 8, width() - 16, height() - 16);
     painter.setPen(Qt::NoPen);
-    painter.scale(1 / ratio, 1 / ratio);
-    painter.translate(QPoint(offset_x * ratio, offset_y * ratio));
-    painter.drawRoundedRect(m_snapshotSrcRect, radius * ratio, radius * ratio);
+    QPainterPath path;
+    path.addRoundedRect(imageRect, radius * ratio, radius * ratio);
+    painter.setClipPath(path);
+    painter.drawPixmap(imageRect, m_pixmap, m_pixmap.rect());
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)

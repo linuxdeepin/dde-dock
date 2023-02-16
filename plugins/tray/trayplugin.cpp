@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -94,7 +95,6 @@ void TrayPlugin::init(PluginProxyInterface *proxyInter)
 
     // 加载sni，xem，自定义indicator协议以及其他托盘插件
     QTimer::singleShot(0, this, &TrayPlugin::loadIndicator);
-    QTimer::singleShot(0, m_systemTraysController, &SystemTraysController::startLoader);
     QTimer::singleShot(0, this, &TrayPlugin::initSNI);
     QTimer::singleShot(0, this, &TrayPlugin::initXEmbed);
 }
@@ -260,7 +260,7 @@ bool TrayPlugin::isSystemTrayItem(const QString &itemKey)
 {
     AbstractTrayWidget *const trayWidget = m_trayMap.value(itemKey, nullptr);
 
-    if (trayWidget && trayWidget->trayType() == AbstractTrayWidget::TrayType::SystemTray) {
+    if (trayWidget && trayWidget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         return true;
     }
 
@@ -376,7 +376,7 @@ void TrayPlugin::addTrayWidget(const QString &itemKey, AbstractTrayWidget *trayW
         return;
     }
 
-    if (m_trayMap.values().contains(trayWidget)) {
+    if (m_trayMap.contains(itemKey) || m_trayMap.values().contains(trayWidget)) {
         return;
     }
 
@@ -420,17 +420,13 @@ void TrayPlugin::traySNIAdded(const QString &itemKey, const QString &sniServiceP
             return;
         }
 
-        std::lock_guard<std::mutex> lock(m_sniMutex);
-        if (m_trayMap.contains(itemKey) || m_passiveSNITrayMap.contains(itemKey)) {
-            return;
-        }
-
         SNITrayWidget *trayWidget = new SNITrayWidget(sniServicePath);
 
         // TODO(lxz): 在future里已经对dbus进行过检查了，这里应该不需要再次检查。
         if (!trayWidget->isValid())
             return;
 
+        std::lock_guard<std::mutex> lock(m_sniMutex);
         if (trayWidget->status() == SNITrayWidget::ItemStatus::Passive) {
             m_passiveSNITrayMap.insert(itemKey, trayWidget);
         } else {
@@ -533,11 +529,10 @@ void TrayPlugin::trayRemoved(const QString &itemKey, const bool deleteObject)
 
     // only delete tray object when it is a tray of applications
     // set the parent of the tray object to avoid be deconstructed by parent(DockItem/PluginsItem/TrayPluginsItem)
-    if (widget->trayType() == AbstractTrayWidget::TrayType::SystemTray) {
+    if (widget->trayTyep() == AbstractTrayWidget::TrayType::SystemTray) {
         widget->setParent(nullptr);
     } else if (deleteObject) {
         widget->deleteLater();
-        widget = nullptr;
     }
 }
 

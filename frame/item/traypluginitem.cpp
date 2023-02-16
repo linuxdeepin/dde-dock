@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,8 +8,8 @@
 
 #include <QEvent>
 
-TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, const QString &pluginApi, QWidget *parent)
-    : PluginsItem(pluginInter, itemKey, pluginApi, parent)
+TrayPluginItem::TrayPluginItem(PluginsItemInterface * const pluginInter, const QString &itemKey, const QJsonObject &metaData, QWidget *parent)
+    : PluginsItem(pluginInter, itemKey, metaData, parent)
 {
     centralWidget()->installEventFilter(this);
 }

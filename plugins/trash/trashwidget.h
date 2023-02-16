@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,13 +8,13 @@
 
 #include "popupcontrolwidget.h"
 
+#include "org_freedesktop_filemanager.h"
+
 #include <QWidget>
 #include <QPixmap>
-#include <QMenu>
 #include <QAction>
 #include <QIcon>
 
-#include <org_freedesktop_filemanager1.h>
 using  DBusFileManager1 = org::freedesktop::FileManager1;
 
 class TrashWidget : public QWidget
@@ -45,7 +46,7 @@ protected:
 
 private slots:
     void removeApp(const QString &appKey);
-    void moveToTrash(const QList<QUrl> &urlList);
+    void moveToTrash(const QUrl &url);
 
 private:
     PopupControlWidget *m_popupApplet;

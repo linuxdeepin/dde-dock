@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -11,11 +12,12 @@
 #include <QFrame>
 #include <QPointer>
 #include <QGestureEvent>
-#include <QMenu>
 
 #include <memory>
 
 using namespace Dock;
+
+class QMenu;
 
 class DockItem : public QWidget
 {
@@ -23,12 +25,15 @@ class DockItem : public QWidget
 
 public:
     enum ItemType {
-        Launcher,
-        App,
-        Plugins,
-        FixedPlugin,
+        Launcher,               // 启动器
+        App,                    // 任务栏区域的应用
+        Plugins,                // 插件区域图标
+        FixedPlugin,            // 固定区域图标，例如多任务试图
         Placeholder,
-        TrayPlugin,
+        TrayPlugin,             // 托盘插件
+        QuickSettingPlugin,     // 快捷设置区域插件
+        StretchPlugin,          // 时尚模式下的固定在最右侧的插件，例如开关机插件
+        AppMultiWindow          // APP的多开应用的窗口
     };
 
 public:
@@ -36,10 +41,9 @@ public:
     ~DockItem() override;
 
     static void setDockPosition(const Position side);
-    static void setDockSize(const int size);
     static void setDockDisplayMode(const DisplayMode mode);
 
-    inline virtual ItemType itemType() const {return App;}
+    inline virtual ItemType itemType() const = 0;
 
     QSize sizeHint() const override;
     virtual QString accessibleName();
@@ -72,7 +76,7 @@ protected:
 
     void hideNonModel();
     void popupWindowAccept();
-    virtual void showPopupWindow(QWidget *const content, const bool model = false, const int radius = 6);
+    virtual void showPopupWindow(QWidget *const content, const bool model = false);
     virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
@@ -94,7 +98,7 @@ protected:
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     QPointer<QWidget> m_lastPopupWidget;
 
@@ -102,7 +106,6 @@ protected:
     QTimer *m_popupAdjustDelayTimer;
 
     static Position DockPosition;
-    static int DockSize;
     static DisplayMode DockDisplayMode;
     static QPointer<DockPopupWindow> PopupWindow;
 };

@@ -1,17 +1,17 @@
 {
     "data": {
         "text": {
-            "dbus_service": "com.deepin.dde.Keyboard",
-            "dbus_path": "/com/deepin/dde/Keyboard",
-            "dbus_interface": "com.deepin.dde.Keyboard",
+            "dbus_service": "org.deepin.dde.Dock1.KeyboardLayout",
+            "dbus_path": "/org/deepin/dde/Dock1/KeyboardLayout",
+            "dbus_interface": "org.deepin.dde.Dock1.KeyboardLayout",
             "dbus_properties": "layout"
         }
     },
     "action": {
         "trigger": {
-            "dbus_service": "com.deepin.dde.Keyboard",
-            "dbus_path": "/com/deepin/dde/Keyboard",
-            "dbus_interface": "com.deepin.dde.Keyboard",
+            "dbus_service": "org.deepin.dde.Dock1.KeyboardLayout",
+            "dbus_path": "/org/deepin/dde/Dock1/KeyboardLayout",
+            "dbus_interface": "org.deepin.dde.Dock1.KeyboardLayout",
             "dbus_method": "onClicked"
         }
     }

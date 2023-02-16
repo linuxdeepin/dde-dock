@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Poista</translation>
+        <source>Open</source>
+        <translation>Avaa</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Omat laitteet</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Muut laitteet</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Kytke käyttöön</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Poista käytöstä</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Kytke käyttöön</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Poista käytöstä</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Lisää näppäimistön asettelu</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12h aika</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24h aika</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Aika-asetukset</translation>
     </message>
 </context>
 <context>
@@ -122,66 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Maanantai</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Tiistai</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Keskiviikko</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Torstai</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>Perjantai</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Lauantai</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Sunnuntai</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>maanantai</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation>tiistai</translation>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation>keskiviikko</translation>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation>torstai</translation>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation>perjantai</translation>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation>lauantai</translation>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation>sunnuntai</translation>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
-        <translation>%3day%2month%1year</translation>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Tuntematon laite</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Tuntematon asema</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Levy</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Avaa</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Irroita kaikki</translation>
+        <source>Disabled</source>
+        <translation>Suljettu</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Käynnistin</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Poistu vikasietotilasta</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Paneeli - vikasietotila</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Paneeli on vikasietotilassa. Poistu nähtyäsi sen toimivan oikein</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Koko</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Useita näyttöjä</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Laajennusalue</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Valitse mitkä kuvakkeet näkyvät telakassa</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Muodikas </translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Tehokas</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Tila</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Ylhäällä</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Alhaalla</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Vasen</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Oikea</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Sijainti</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Näytä aina</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Pidä piilossa</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Älykäs piilotus</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Tila</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Pieni</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Suuri</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Näytä telakka</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Näytöllä, jossa kohdistin on</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Vain päänäytöllä</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>Näppäimistö</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Asetukset</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Virta</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Asetukset virta</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Akku %1, %2 min jäljellä</translation>
@@ -469,36 +335,9 @@
         <source>Capacity %1, fully charged</source>
         <translation>Varaus %1, täyteen ladattu</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Telakka</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Tila</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Sijainti</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Tila</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Koko</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Näytä telakka</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Laajennusalue</translation>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Virta</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Sammuta</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Käynnistä</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Virta</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Voimakkuus</translation>
+        <source>Device</source>
+        <translation>Laite</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Ulostulon laite</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Ääniasetukset</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Voimakkuus: %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation>Ei ulostulon laitteita</translation>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Tyhjennä</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Poistu vikasietotilasta</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Paneeli - vikasietotila</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Paneeli on vikasietotilassa. Poistu nähtyäsi sen toimivan oikein</translation>
     </message>
 </context>
 </TS>

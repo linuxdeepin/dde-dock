@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -29,7 +30,7 @@ void KeyboardPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
     if (!m_dbusAdaptors) {
 
-        QString serverName = "com.deepin.daemon.InputDevices";
+        QString serverName = "org.deepin.dde.InputDevices1";
         QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
 
         if (!ifc->isServiceRegistered(serverName)) {
@@ -45,8 +46,8 @@ void KeyboardPlugin::init(PluginProxyInterface *proxyInter)
             m_dbusAdaptors = new DBusAdaptors(this);
         }
 
-        QDBusConnection::sessionBus().registerService("com.deepin.dde.Keyboard");
-        QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Keyboard", "com.deepin.dde.Keyboard", this);
+        QDBusConnection::sessionBus().registerService("org.deepin.dde.Dock1.KeyboardLayout");
+        QDBusConnection::sessionBus().registerObject("/org/deepin/dde/Dock1/KeyboardLayout", "org.deepin.dde.Dock1.KeyboardLayout", this);
     }
 }
 

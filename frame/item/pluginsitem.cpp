@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -6,6 +7,8 @@
 #include "pluginsitem.h"
 #include "pluginsiteminterface.h"
 #include "utils.h"
+
+#include <DFontSizeManager>
 
 #include <QPainter>
 #include <QBoxLayout>
@@ -18,28 +21,30 @@
 
 QPoint PluginsItem::MousePressPoint = QPoint();
 
-PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent)
+PluginsItem::PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &jsonData, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_centralWidget(m_pluginInter->itemWidget(itemKey))
-    , m_pluginApi(plginApi)
+    , m_jsonData(jsonData)
     , m_itemKey(itemKey)
     , m_dragging(false)
     , m_gsettings(Utils::ModuleSettingsPtr(pluginInter->pluginName(), QByteArray(), this))
 {
     qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
 
-    m_centralWidget->setParent(this);
-    m_centralWidget->setVisible(true);
-    m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
-    m_centralWidget->installEventFilter(this);
+    if (m_centralWidget) {
+        m_centralWidget->setParent(this);
+        m_centralWidget->setVisible(true);
+        m_centralWidget->setObjectName(pluginInter->pluginName() + "-centralwidget");
+        m_centralWidget->installEventFilter(this);
 
-    QBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(m_centralWidget);
-    hLayout->setSpacing(0);
-    hLayout->setMargin(0);
+        QBoxLayout *hLayout = new QHBoxLayout;
+        hLayout->addWidget(m_centralWidget);
+        hLayout->setSpacing(0);
+        hLayout->setMargin(0);
 
-    setLayout(hLayout);
+        setLayout(hLayout);
+    }
     setAccessibleName(pluginInter->pluginName());
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -76,7 +81,7 @@ QString PluginsItem::pluginName() const
 PluginsItemInterface::PluginSizePolicy PluginsItem::pluginSizePolicy() const
 {
     // 插件版本大于 1.2.2 才能使用 PluginsItemInterface::pluginSizePolicy 函数
-    if (Utils::comparePluginApi(m_pluginApi, "1.2.2") > 0) {
+    if (Utils::comparePluginApi(pluginApi(), "1.2.2") > 0) {
         return m_pluginInter->pluginSizePolicy();
     } else {
         return PluginsItemInterface::System;
@@ -139,7 +144,7 @@ void PluginsItem::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton) {
         if (perfectIconRect().contains(e->pos())) {
-            return (m_gsettings && m_gsettings->keys().contains("menuEnable") && !m_gsettings->get("menuEnable").toBool()) ? void() : showContextMenu();
+            return (m_gsettings && (!m_gsettings->keys().contains("menuEnable") || m_gsettings->get("menuEnable").toBool())) ? showContextMenu() : void();
         }
     }
 
@@ -242,9 +247,9 @@ void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
     m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
 }
 
-void PluginsItem::showPopupWindow(QWidget *const content, const bool model, const int radius)
+void PluginsItem::showPopupWindow(QWidget *const content, const bool model)
 {
-    DockItem::showPopupWindow(content, model, radius);
+    DockItem::showPopupWindow(content, model);
 }
 
 const QString PluginsItem::contextMenu() const
@@ -289,6 +294,11 @@ bool PluginsItem::checkGSettingsControl() const
     return m_gsettings ? m_gsettings->keys().contains("control") && m_gsettings->get("control").toBool() : false;
 }
 
+QString PluginsItem::pluginApi() const
+{
+    return m_jsonData.value("api").toString();
+}
+
 void PluginsItem::resizeEvent(QResizeEvent *event)
 {
     setMaximumSize(m_centralWidget->maximumSize());
@@ -300,4 +310,9 @@ void PluginsItem::setDraging(bool bDrag)
     DockItem::setDraging(bDrag);
 
     m_centralWidget->setVisible(!bDrag);
+}
+
+PluginsItemInterface *PluginsItem::pluginItem() const
+{
+    return m_pluginInter;
 }

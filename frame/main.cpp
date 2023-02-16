@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,6 +10,8 @@
 #include "themeappicon.h"
 #include "dockitemmanager.h"
 #include "dockapplication.h"
+#include "traymainwindow.h"
+#include "windowmanager.h"
 
 #include <QAccessible>
 #include <QDir>
@@ -19,7 +22,6 @@
 #include <DApplication>
 #include <DLog>
 #include <DGuiApplicationHelper>
-#include <DConfig>
 
 #include <unistd.h>
 #include <string>
@@ -173,16 +175,17 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    // 自动化标记
+    // 自动化标记由此开始
     QAccessible::installFactory(accessibleFactory);
 
     // 设置日志输出到控制台以及文件
+    DLogManager::setLogFormat("%{time}{yyyyMMdd.HH:mm:ss.zzz}[%{type:1}][%{function:-35} %{line:-4}] %{message}\n");
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
     // 启动入参 dde-dock --help可以看到一下内容， -x不加载插件 -r 一般用在startdde启动任务栏
     QCommandLineOption disablePlugOption(QStringList() << "x" << "disable-plugins", "do not load plugins.");
-    QCommandLineOption runOption(QStringList() << "r" << "run-by-startdde", "run by startdde.");
+    QCommandLineOption runOption(QStringList() << "r" << "run-by-stardde", "run by startdde.");
     QCommandLineParser parser;
     parser.setApplicationDescription("DDE Dock");
     parser.addHelpOption();
@@ -202,29 +205,40 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
+    // 在qApp中记录当前是否为安全模式，如果为安全模式，则无需加载插件，在退出安全模式下，才正常加载插件
+    // 此处设置这个属性必须在MainWindow创建之前，因为在mainWindow中会创建加载插件的代理，会在代理中根据这个属性来判断是否需要加载插件
+    bool isSafeMode = IsSaveMode();
+    bool disablePlugin = parser.isSet(disablePlugOption);
+    qApp->setProperty("safeMode", (isSafeMode || disablePlugin));
+
+    MultiScreenWorker multiScreenWorker;
+
+    MainWindow mainWindow(&multiScreenWorker);
+    TrayMainWindow trayMainWindow(&multiScreenWorker);
+
+    WindowManager windowManager(&multiScreenWorker);
+
+    // 保证添加窗口的先后顺序，先添加的窗口显示在左边，后添加的窗口显示在右边
+    windowManager.addWindow(&mainWindow);
+    windowManager.addWindow(&trayMainWindow);
+
     // 注册任务栏的DBus服务
-    MainWindow mw;
-    DBusDockAdaptors adaptor(&mw);
+    DBusDockAdaptors adaptor(&windowManager);
 
-    if(Utils::IS_WAYLAND_DISPLAY) {
-        mw.setAttribute(Qt::WA_NativeWindow);
-        mw.windowHandle()->setProperty("_d_dwayland_window-type", "dock");
-    }
-
-    QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
-    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
+    QDBusConnection::sessionBus().registerService("org.deepin.dde.Dock1");
+    QDBusConnection::sessionBus().registerObject("/org/deepin/dde/Dock1", "org.deepin.dde.Dock1", &windowManager);
 
     // 当任务栏以-r参数启动时，设置CANSHOW未false，之后调用launch不显示任务栏
     qApp->setProperty("CANSHOW", !parser.isSet(runOption));
 
-    mw.launch();
+    windowManager.launch();
+    mainWindow.setVisible(true);
 
     // 判断是否进入安全模式，是否带有入参 -x
-    if (!IsSaveMode() && !parser.isSet(disablePlugOption)) {
-        DockItemManager::instance()->startLoadPlugins();
+    if (!isSafeMode && !disablePlugin) {
         qApp->setProperty("PLUGINSLOADED", true);
     } else {
-        mw.sendNotifications();
+        windowManager.sendNotifications();
     }
 
     return app.exec();

@@ -1,0 +1,35 @@
+<node>
+     <interface name="org.deepin.dde.InputDevice1.Keyboard">
+          <method name="AddLayoutOption">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="AddUserLayout">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="ClearLayoutOption"></method>
+          <method name="DeleteLayoutOption">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="DeleteUserLayout">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="GetLayoutDesc">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="LayoutList">
+               <arg type="a{ss}" direction="out"></arg>
+               <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="KeyboardLayoutList"/>
+          </method>
+          <method name="Reset"></method>
+          <property name="RepeatEnabled" type="b" access="readwrite"></property>
+          <property name="CapslockToggle" type="b" access="readwrite"></property>
+          <property name="CursorBlink" type="i" access="readwrite"></property>
+          <property name="RepeatInterval" type="u" access="readwrite"></property>
+          <property name="RepeatDelay" type="u" access="readwrite"></property>
+          <property name="LayoutScope" type="i" access="readwrite"></property>
+          <property name="CurrentLayout" type="s" access="readwrite"></property>
+          <property name="UserLayoutList" type="as" access="read"></property>
+          <property name="UserOptionList" type="as" access="read"></property>
+     </interface>
+</node>

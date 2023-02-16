@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2020 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2020 ~ 2022 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -15,7 +16,6 @@
 #include <QPainter>
 #include <QJsonDocument>
 #include <QDBusConnection>
-#include <QIcon>
 
 DGUI_USE_NAMESPACE
 
@@ -26,8 +26,8 @@ AirplaneModeItem::AirplaneModeItem(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new Dock::TipsWidget(this))
     , m_applet(new AirplaneModeApplet(this))
-    , m_airplaneModeInter(new DBusAirplaneMode("com.deepin.daemon.AirplaneMode",
-                                               "/com/deepin/daemon/AirplaneMode",
+    , m_airplaneModeInter(new DBusAirplaneMode("org.deepin.dde.AirplaneMode1",
+                                               "/org/deepin/dde/AirplaneMode1",
                                                QDBusConnection::systemBus(),
                                                this))
 {
@@ -92,17 +92,19 @@ void AirplaneModeItem::invokeMenuItem(const QString menuId, const bool checked)
     Q_UNUSED(menuId);
     Q_UNUSED(checked);
 
+    /*  控制中心暂未实现
     if (menuId == SHIFT)
         m_airplaneModeInter->Enable(!m_airplaneModeInter->enabled());
     else if (menuId == SETTINGS)
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
         .method(QString("ShowPage"))
         .arg(QString("network"))
         .arg(QString("Airplane Mode"))
         .call();
+    */
 }
 
 void AirplaneModeItem::refreshIcon()
@@ -113,14 +115,11 @@ void AirplaneModeItem::refreshIcon()
     else
         iconString = "airplane-off";
 
+    const auto ratio = devicePixelRatioF();
+    int iconSize = PLUGIN_ICON_MAX_SIZE;
     if (height() <= PLUGIN_BACKGROUND_MIN_SIZE && DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         iconString.append(PLUGIN_MIN_ICON_NAME);
-
-    const auto ratio = devicePixelRatioF();
-    QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
-    m_iconPixmap = QIcon::fromTheme(iconString, QIcon::fromTheme("://" + iconString + ".svg")).pixmap(pixmapSize);
-    m_iconPixmap.setDevicePixelRatio(ratio);
-
+    m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
     update();
 }
 
@@ -157,10 +156,8 @@ void AirplaneModeItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
-    const auto ratio = devicePixelRatioF();
-
     QPainter painter(this);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_iconPixmap.rect());
-    painter.drawPixmap(rf.center() - rfp.center() / ratio, m_iconPixmap);
+    painter.drawPixmap(rf.center() - rfp.center() / m_iconPixmap.devicePixelRatioF(), m_iconPixmap);
 }

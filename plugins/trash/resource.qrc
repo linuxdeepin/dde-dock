@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>icons/dcc_trash.svg</file>
         <file>icons/user-trash.svg</file>
     </qresource>
 </RCC>

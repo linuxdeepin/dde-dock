@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -8,6 +9,8 @@
 #include "pluginsitem.h"
 #include "traypluginitem.h"
 #include "utils.h"
+#include "appmultiitem.h"
+#include "quicksettingcontroller.h"
 
 #include <QDebug>
 #include <QGSettings>
@@ -21,41 +24,46 @@ const QGSettings *DockItemManager::m_dockedSettings = Utils::ModuleSettingsPtr("
 
 DockItemManager::DockItemManager(QObject *parent)
     : QObject(parent)
-    , m_appInter(new DBusDock("com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", QDBusConnection::sessionBus(), this))
-    , m_pluginsInter(new DockPluginsController(this))
+    , m_appInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    , m_loadFinished(false)
 {
     //固定区域：启动器
     m_itemList.append(new LauncherItem);
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, entry);
+        AppItem *it = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, entry);
         manageItem(it);
 
-        connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
-        connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
-        connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
-        connect(it, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
-            Q_EMIT requestUpdateItemMinimizedGeometry(it, r);
-        });
+        connect(it, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
+        connect(it, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
+        connect(it, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
+        connect(it, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
         m_itemList.append(it);
+        updateMultiItems(it);
     }
 
     // 托盘区域和插件区域 由DockPluginsController获取
+    QuickSettingController *quickController = QuickSettingController::instance();
+    connect(quickController, &QuickSettingController::pluginInserted, this, [ = ](PluginsItemInterface *itemInter, const QuickSettingController::PluginAttribute pluginAttr) {
+        if (pluginAttr != QuickSettingController::PluginAttribute::Fixed)
+            return;
+
+        m_pluginItems << itemInter;
+        pluginItemInserted(quickController->pluginItemWidget(itemInter));
+    });
+
+    connect(quickController, &QuickSettingController::pluginRemoved, this, &DockItemManager::onPluginItemRemoved);
+    connect(quickController, &QuickSettingController::pluginUpdated, this, &DockItemManager::onPluginUpdate);
+    connect(quickController, &QuickSettingController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
     // 应用信号
-    connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemManager::appItemAdded);
-    connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
-    connect(m_appInter, &DBusDock::ServiceRestarted, this, &DockItemManager::reloadAppItems);
-
-    // 插件信号
-    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemManager::pluginItemInserted, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemManager::pluginItemRemoved, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginItemUpdated, this, &DockItemManager::itemUpdated, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::trayVisableCountChanged, this, &DockItemManager::trayVisableCountChanged, Qt::QueuedConnection);
-    connect(m_pluginsInter, &DockPluginsController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
+    connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
+    connect(m_appInter, &DockInter::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
+    connect(m_appInter, &DockInter::ServiceRestarted, this, &DockItemManager::reloadAppItems);
+    connect(m_appInter, &DockInter::ShowMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -63,6 +71,13 @@ DockItemManager::DockItemManager(QObject *parent)
     }
 
     connect(qApp, &QApplication::aboutToQuit, this, &QObject::deleteLater);
+
+    // 读取已经加载的固定区域插件
+    QList<PluginsItemInterface *> plugins = quickController->pluginItems(QuickSettingController::PluginAttribute::Fixed);
+    for (PluginsItemInterface *plugin : plugins) {
+        m_pluginItems << plugin;
+        pluginItemInserted(quickController->pluginItemWidget(plugin));
+    }
 
     // 刷新图标
     QMetaObject::invokeMethod(this, "refreshItemsIcon", Qt::QueuedConnection);
@@ -81,20 +96,9 @@ const QList<QPointer<DockItem>> DockItemManager::itemList() const
     return m_itemList;
 }
 
-const QList<PluginsItemInterface *> DockItemManager::pluginList() const
-{
-    return m_pluginsInter->pluginsMap().keys();
-}
-
 bool DockItemManager::appIsOnDock(const QString &appDesktop) const
 {
     return m_appInter->IsOnDock(appDesktop);
-}
-
-void DockItemManager::startLoadPlugins() const
-{
-    int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
-    QTimer::singleShot(delay, m_pluginsInter, &DockPluginsController::startLoader);
 }
 
 void DockItemManager::refreshItemsIcon()
@@ -184,7 +188,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, path);
+    AppItem *item = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;
@@ -193,23 +197,23 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
 
     manageItem(item);
 
-    connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
-    connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
-    connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
-    connect(item, &AppItem::requestUpdateItemMinimizedGeometry, this, [=](const QRect r){
-        Q_EMIT requestUpdateItemMinimizedGeometry(item, r);
-    });
+    connect(item, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
+    connect(item, &AppItem::requestPreviewWindow, m_appInter, &DockInter::PreviewWindow);
+    connect(item, &AppItem::requestCancelPreview, m_appInter, &DockInter::CancelPreviewWindow);
+    connect(item, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
     connect(this, &DockItemManager::requestUpdateDockItem, item, &AppItem::requestUpdateEntryGeometries);
 
     m_itemList.insert(insertIndex, item);
     m_appIDist.append(item->appId());
 
-    if (index != -1) {
-        emit itemInserted(insertIndex - 1, item);
-        return;
-    }
+    int itemIndex = insertIndex;
+    if (index != -1)
+        itemIndex = insertIndex - 1;
 
-    emit itemInserted(insertIndex, item);
+    // 插入dockItem
+    emit itemInserted(itemIndex, item);
+    // 向后插入多开窗口
+    updateMultiItems(item, true);
 }
 
 void DockItemManager::appItemRemoved(const QString &appId)
@@ -241,6 +245,24 @@ void DockItemManager::appItemRemoved(AppItem *appItem)
         QDrag::cancel();
     }
     appItem->deleteLater();
+}
+
+void DockItemManager::reloadAppItems()
+{
+    // remove old item
+    for (auto item : m_itemList)
+        if (item->itemType() == DockItem::App)
+            appItemRemoved(static_cast<AppItem *>(item.data()));
+
+    // append new item
+    for (auto path : m_appInter->entries())
+        appItemAdded(path, -1);
+}
+
+void DockItemManager::manageItem(DockItem *item)
+{
+    connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
+    connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
 }
 
 void DockItemManager::pluginItemInserted(PluginsItem *item)
@@ -292,44 +314,155 @@ void DockItemManager::pluginItemInserted(PluginsItem *item)
 
     m_itemList.insert(insertIndex, item);
     if(pluginType == DockItem::FixedPlugin)
-    {
         insertIndex ++;
-    }
 
     if (!Utils::SettingValue(QString("com.deepin.dde.dock.module.") + item->pluginName(), QByteArray(), "enable", true).toBool())
         item->setVisible(false);
+    else
+        item->setVisible(true);
 
     emit itemInserted(insertIndex - firstPluginPosition, item);
 }
 
-void DockItemManager::pluginItemRemoved(PluginsItem *item)
+void DockItemManager::onPluginItemRemoved(PluginsItemInterface *itemInter)
 {
+    if (!m_pluginItems.contains(itemInter))
+        return;
+
+    PluginsItem *item = QuickSettingController::instance()->pluginItemWidget(itemInter);
     item->hidePopup();
+    item->hide();
 
     emit itemRemoved(item);
 
     m_itemList.removeOne(item);
+
+    if (m_loadFinished) {
+        updatePluginsItemOrderKey();
+    }
 }
 
-void DockItemManager::reloadAppItems()
+void DockItemManager::onPluginUpdate(PluginsItemInterface *itemInter)
 {
-    // remove old item
-    for (auto item : m_itemList)
-        if (item->itemType() == DockItem::App)
-            appItemRemoved(static_cast<AppItem *>(item.data()));
+    if (!m_pluginItems.contains(itemInter))
+        return;
 
-    // append new item
-    for (auto path : m_appInter->entries())
-        appItemAdded(path, -1);
-}
-
-void DockItemManager::manageItem(DockItem *item)
-{
-    connect(item, &DockItem::requestRefreshWindowVisible, this, &DockItemManager::requestRefershWindowVisible, Qt::UniqueConnection);
-    connect(item, &DockItem::requestWindowAutoHide, this, &DockItemManager::requestWindowAutoHide, Qt::UniqueConnection);
+    Q_EMIT itemUpdated(QuickSettingController::instance()->pluginItemWidget(itemInter));
 }
 
 void DockItemManager::onPluginLoadFinished()
 {
     updatePluginsItemOrderKey();
+    m_loadFinished = true;
+}
+
+void DockItemManager::onAppWindowCountChanged()
+{
+    AppItem *appItem = static_cast<AppItem *>(sender());
+    updateMultiItems(appItem, true);
+}
+
+void DockItemManager::updateMultiItems(AppItem *appItem, bool emitSignal)
+{
+    // 如果系统设置不开启应用多窗口拆分，则无需之后的操作
+    if (!m_appInter->showMultiWindow())
+        return;
+
+    // 如果开启了多窗口拆分，则同步窗口和多窗口应用的信息
+    const WindowInfoMap &windowInfoMap = appItem->windowsMap();
+    QList<AppMultiItem *> removeItems;
+    // 同步当前已经存在的多开窗口的列表，删除不存在的多开窗口
+    for (int i = 0; i < m_itemList.size(); i++) {
+        QPointer<DockItem> dockItem = m_itemList[i];
+        AppMultiItem *multiItem = qobject_cast<AppMultiItem *>(dockItem.data());
+        if (!multiItem || multiItem->appItem() != appItem)
+            continue;
+
+        // 如果查找到的当前的应用的窗口不需要移除，则继续下一个循环
+        if (!needRemoveMultiWindow(multiItem))
+            continue;
+
+        removeItems << multiItem;
+    }
+    // 从itemList中移除多开窗口
+    for (AppMultiItem *dockItem : removeItems)
+        m_itemList.removeOne(dockItem);
+    if (emitSignal) {
+        // 移除发送每个多开窗口的移除信号
+        for (AppMultiItem *dockItem : removeItems)
+            Q_EMIT itemRemoved(dockItem);
+    }
+    qDeleteAll(removeItems);
+
+    // 遍历当前APP打开的所有窗口的列表，如果不存在多开窗口的应用，则新增，同时发送信号
+    for (auto it = windowInfoMap.begin(); it != windowInfoMap.end(); it++) {
+        if (multiWindowExist(it.key()))
+            continue;
+
+        const WindowInfo &windowInfo = it.value();
+        // 如果不存在这个窗口对应的多开窗口，则新建一个窗口，同时发送窗口新增的信号
+        AppMultiItem *multiItem = new AppMultiItem(appItem, it.key(), windowInfo);
+        m_itemList << multiItem;
+        if (emitSignal)
+            Q_EMIT itemInserted(-1, multiItem);
+    }
+}
+
+// 检查对应的窗口是否存在多开窗口
+bool DockItemManager::multiWindowExist(quint32 winId) const
+{
+    for (QPointer<DockItem> dockItem : m_itemList) {
+        AppMultiItem *multiItem = qobject_cast<AppMultiItem *>(dockItem.data());
+        if (!multiItem)
+            continue;
+
+        if (multiItem->winId() == winId)
+            return true;
+    }
+
+    return false;
+}
+
+// 检查当前多开窗口是否需要移除
+// 如果当前多开窗口图标对应的窗口在这个窗口所属的APP中所有打开窗口中不存在，那么则认为该多窗口已经被关闭
+bool DockItemManager::needRemoveMultiWindow(AppMultiItem *multiItem) const
+{
+    // 查找多分窗口对应的窗口在应用所有的打开的窗口中是否存在，只要它对应的窗口存在，就无需删除
+    // 只要不存在，就需要删除
+    AppItem *appItem = multiItem->appItem();
+    const WindowInfoMap &windowInfoMap = appItem->windowsMap();
+    for (auto it = windowInfoMap.begin(); it != windowInfoMap.end(); it++) {
+        if (it.key() == multiItem->winId())
+            return false;
+    }
+
+    return true;
+}
+
+void DockItemManager::onShowMultiWindowChanged()
+{
+    if (m_appInter->showMultiWindow()) {
+        // 如果当前设置支持窗口多开，那么就依次对每个APPItem加载多开窗口
+        for (int i = 0; i < m_itemList.size(); i++) {
+            const QPointer<DockItem> &dockItem = m_itemList[i];
+            if (dockItem->itemType() != DockItem::ItemType::App)
+                continue;
+
+            updateMultiItems(static_cast<AppItem *>(dockItem.data()), true);
+        }
+    } else {
+        // 如果当前设置不支持窗口多开，则删除所有的多开窗口
+        QList<DockItem *> multiWindows;
+        for (const QPointer<DockItem> &dockItem : m_itemList) {
+            if (dockItem->itemType() != DockItem::AppMultiWindow)
+                continue;
+
+            multiWindows << dockItem.data();
+        }
+        for (DockItem *multiItem : multiWindows) {
+            m_itemList.removeOne(multiItem);
+            Q_EMIT itemRemoved(multiItem);
+            multiItem->deleteLater();
+        }
+    }
 }

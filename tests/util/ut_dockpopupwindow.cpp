@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -13,7 +14,7 @@
 
 #include <DRegionMonitor>
 
-DGUI_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
 class Test_DockPopupWindow : public QObject, public ::testing::Test
 {

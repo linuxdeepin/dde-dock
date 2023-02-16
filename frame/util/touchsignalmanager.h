@@ -1,15 +1,16 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef TOUCHSIGNALMANAGER_H
 #define TOUCHSIGNALMANAGER_H
 
+#include "org_deepin_dde_gesture1.h"
+
 #include <QObject>
 
-#include <com_deepin_daemon_gesture.h>
-
-using Gesture = com::deepin::daemon::Gesture;
+using Gesture = org::deepin::dde::Gesture1;
 
 class TouchSignalManager : public QObject
 {

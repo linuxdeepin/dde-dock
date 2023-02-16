@@ -1,17 +1,29 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "onboardplugin.h"
 #include "../widgets/tipswidget.h"
 
+#include "org_deepin_dde_daemon_dock1.h"
+#include "org_deepin_dde_daemon_dock1_entry.h"
+
+#include <DGuiApplicationHelper>
+
 #include <QIcon>
 #include <QSettings>
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY    "enable"
 
-using DBusDock = com::deepin::dde::daemon::Dock;
-using DockEntryInter = com::deepin::dde::daemon::dock::Entry;
+DGUI_USE_NAMESPACE
+
+using DBusDock = org::deepin::dde::daemon::Dock1;
+using DockEntryInter = org::deepin::dde::daemon::dock1::Entry;
+
+static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
+static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
 
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
@@ -38,9 +50,10 @@ const QString OnboardPlugin::pluginDisplayName() const
 
 QWidget *OnboardPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == pluginName())
+        return m_onboardItem.data();
 
-    return m_onboardItem.data();
+    return nullptr;
 }
 
 QWidget *OnboardPlugin::itemTipsWidget(const QString &itemKey)
@@ -68,7 +81,7 @@ void OnboardPlugin::pluginStateSwitched()
 
 bool OnboardPlugin::pluginIsDisable()
 {
-    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, false).toBool());
+    return !(m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool());
 }
 
 const QString OnboardPlugin::itemCommand(const QString &itemKey)
@@ -78,32 +91,14 @@ const QString OnboardPlugin::itemCommand(const QString &itemKey)
     return QString("dbus-send --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible");
 }
 
-const QString OnboardPlugin::itemContextMenu(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    QList<QVariant> items;
-
-    QMap<QString, QVariant> onboardSettings;
-    onboardSettings["itemId"] = "onboard-settings";
-    onboardSettings["itemText"] = tr("Settings");
-    onboardSettings["isActive"] = true;
-    items.push_back(onboardSettings);
-
-    QMap<QString, QVariant> menu;
-    menu["items"] = items;
-    menu["checkableMenu"] = false;
-    menu["singleCheck"] = false;
-
-    return QJsonDocument::fromVariant(menu).toJson();
-}
-
 void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey)
     Q_UNUSED(checked)
 
-    if (menuId != "onboard-settings") return;
+    if (menuId != "onboard-settings")
+        return;
+
     if(!m_startupState) {
         QProcess *process = new QProcess;
         connect(process,&QProcess::started, this, [ = ] {
@@ -119,17 +114,13 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
             process->close();
             process->deleteLater();
         });
-        process->start("onboard-settings");
+        process->start("onboard-settings", QStringList());
     }
 
-    DBusDock DockInter("com.deepin.dde.daemon.Dock",
-                       "/com/deepin/dde/daemon/Dock",
-                       QDBusConnection::sessionBus(), this);
+    DBusDock DockInter(serviceName, servicePath, QDBusConnection::sessionBus(), this);
 
     for (auto entry : DockInter.entries()) {
-        DockEntryInter AppInter("com.deepin.dde.daemon.Dock",
-                                entry.path(),
-                                QDBusConnection::sessionBus(), this);
+        DockEntryInter AppInter(serviceName, entry.path(), QDBusConnection::sessionBus(), this);
         if(AppInter.name() == "Onboard-Settings" && !AppInter.isActive()) {
             AppInter.Activate(0);
             break;
@@ -163,6 +154,35 @@ void OnboardPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
+QIcon OnboardPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+{
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/icon/dcc_keyboard.svg");
+
+        QPixmap pixmap(":/icons/icon/dcc_keyboard.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+        return pixmap;
+    }
+
+    if (dockPart == DockPart::QuickPanel)
+        return m_onboardItem->iconPixmap(QSize(24, 24), themeType);
+
+    return m_onboardItem->iconPixmap(QSize(18, 16), themeType);
+}
+
+PluginsItemInterface::PluginMode OnboardPlugin::status() const
+{
+    return PluginsItemInterface::PluginMode::Active;
+}
+
+QString OnboardPlugin::description() const
+{
+    return pluginDisplayName();
+}
+
 void OnboardPlugin::loadPlugin()
 {
     if (m_pluginLoaded) {
@@ -180,7 +200,8 @@ void OnboardPlugin::loadPlugin()
 
 void OnboardPlugin::refreshPluginItemsVisible()
 {
-    if (pluginIsDisable()) {
+    if (pluginIsDisable())
+    {
         m_proxyInter->itemRemoved(this, pluginName());
     } else {
         if (!m_pluginLoaded) {

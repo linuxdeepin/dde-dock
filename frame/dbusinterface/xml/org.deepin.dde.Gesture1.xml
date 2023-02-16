@@ -1,0 +1,27 @@
+     <interface name="org.deepin.dde.Gesture1">
+          <signal name="TouchSinglePressTimeout">
+               <arg name="time" type="i"></arg>
+               <arg name="scalex" type="d"></arg>
+               <arg name="scaley" type="d"></arg>
+          </signal>
+          <signal name="TouchUpOrCancel">
+               <arg name="scalex" type="d"></arg>
+               <arg name="scaley" type="d"></arg>
+          </signal>
+          <signal name="TouchMoving">
+               <arg name="scalex" type="d"></arg>
+               <arg name="scaley" type="d"></arg>
+          </signal>
+          <signal name="TouchPressTimeout">
+               <arg name="fingers" type="i"></arg>
+               <arg name="time" type="i"></arg>
+               <arg name="scalex" type="d"></arg>
+               <arg name="scaley" type="d"></arg>
+          </signal>
+          <signal name="TouchEdgeEvent">
+               <arg name="direction" type="s"></arg>
+               <arg name="scalex" type="d"></arg>
+               <arg name="scaley" type="d"></arg>
+          </signal>
+     </interface>
+

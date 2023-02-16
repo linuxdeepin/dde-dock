@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,7 +8,11 @@
 
 #include <QWidget>
 
+#include <DGuiApplicationHelper>
+
 #define POWER_KEY "power"
+
+DGUI_USE_NAMESPACE
 
 class DBusPower;
 
@@ -26,18 +31,19 @@ class PowerStatusWidget : public QWidget
 
 public:
     explicit PowerStatusWidget(QWidget *parent = 0);
+    QPixmap getBatteryIcon(int themeType);
 
+public Q_SLOTS:
     void refreshIcon();
 
 signals:
     void requestContextMenu(const QString &itemKey) const;
+    void iconChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *e);
 
-private:
-    QPixmap getBatteryIcon();
 
 private:
     DBusPower *m_powerInter;

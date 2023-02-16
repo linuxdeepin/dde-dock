@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -20,7 +21,6 @@ int main(int argc, char **argv)
 
     DockApplication app(argc, argv);
     // 设置应用名为dde-dock，否则dconfig相关的配置就读不到了
-    // TODO dtk已经有相关接口，待下次修改
     app.setApplicationName("dde-dock");
 
     qApp->setProperty("CANSHOW", true);

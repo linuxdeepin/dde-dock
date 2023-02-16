@@ -20,14 +20,16 @@ Build-Depends: debhelper (>= 8.0.0),
  libdtkcore-dev (>=5.4.14),
  libdtkcore5-bin (>=5.4.14),
  libdtkgui-dev (>=5.4.13),
- libdframeworkdbus-dev (>=5.4.6),
  libgsettings-qt-dev,
  libdbusmenu-qt5-dev,
  libgtest-dev,
  libgmock-dev,
  qttools5-dev,
- dde-control-center-dev,
- libxcursor-dev
+ libxcursor-dev,
+ libqt5waylandclient5-dev,
+ qtwayland5-private-dev,
+ libxdamage-dev,
+ libdwayland-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
@@ -35,20 +37,16 @@ Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
  deepin-desktop-schemas (>=5.9.14),
- libdtkwidget5 (>=5.4.19),
- libdtkcore5 (>=5.4.14),
- libdtkgui5 (>=5.4.13),
- libdframeworkdbus2 (>=5.4.6),
  dde-qt5xcb-plugin (>=5.0.25),
  dde-daemon (>=5.13.12),
  startdde (>=5.8.9),
  lastore-daemon (>=5.2.9),
- qtxdg-dev-tools
+ qtxdg-dev-tools,
+ dbus-bin
 Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,
  dock-network-plugin,
- dcc-dock-plugin,
  dde-network-dialog
 Conflicts:
  dde-workspace (<< 2.90.5),
@@ -71,9 +69,3 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
 Description: deepin desktop-environment - dock plugin for onboard
  Dock plugin for onboard of deepin desktop-environment
-
-Package: dcc-dock-plugin
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, onboard
-Description: deepin desktop-environment - dcc plugin for dock settings
- Dcc plugin for dock settings of deepin desktop-environment

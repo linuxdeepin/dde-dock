@@ -3,5 +3,6 @@
         <file>resources/icons/fashion.svg</file>
         <file>resources/icons/normal.svg</file>
         <file>resources/icons/system-shutdown.svg</file>
+        <file>resources/icons/dcc_shutdown.svg</file>
     </qresource>
 </RCC>

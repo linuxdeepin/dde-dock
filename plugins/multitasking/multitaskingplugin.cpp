@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -16,7 +17,6 @@ DGUI_USE_NAMESPACE
 using namespace Dock;
 MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
     : QObject(parent)
-    , m_pluginLoaded(false)
     , m_multitaskingWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
 {
@@ -24,10 +24,10 @@ MultitaskingPlugin::MultitaskingPlugin(QObject *parent)
     m_tipsLabel->setObjectName("multitasking");
 
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, [ = ] {
-        if (!m_proxyInter || !m_pluginLoaded)
+        if (!m_proxyInter)
             return;
 
-        if (DWindowManagerHelper::instance()->hasComposite() && !pluginIsDisable())
+        if (DWindowManagerHelper::instance()->hasComposite())
             m_proxyInter->itemAdded(this, PLUGIN_KEY);
         else
             m_proxyInter->itemRemoved(this, PLUGIN_KEY);
@@ -63,22 +63,11 @@ QWidget *MultitaskingPlugin::itemTipsWidget(const QString &itemKey)
 void MultitaskingPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+    m_multitaskingWidget.reset(new MultitaskingWidget);
 
-    if (!pluginIsDisable()) {
-        loadPlugin();
+    if (DWindowManagerHelper::instance()->hasComposite()) {
+        m_proxyInter->itemAdded(this, pluginName());
     }
-}
-
-void MultitaskingPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool MultitaskingPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
 }
 
 const QString MultitaskingPlugin::itemCommand(const QString &itemKey)
@@ -157,49 +146,12 @@ void MultitaskingPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void MultitaskingPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
-}
-
 PluginsItemInterface::PluginType MultitaskingPlugin::type()
 {
     return PluginType::Fixed;
 }
 
-void MultitaskingPlugin::updateVisible()
+PluginFlags MultitaskingPlugin::flags() const
 {
-    if (pluginIsDisable() || !DWindowManagerHelper::instance()->hasComposite()) {
-        m_proxyInter->itemRemoved(this, PLUGIN_KEY);
-    } else {
-        m_proxyInter->itemAdded(this, PLUGIN_KEY);
-    }
-}
-
-void MultitaskingPlugin::loadPlugin()
-{
-    if (m_pluginLoaded) {
-        return;
-    }
-
-    m_pluginLoaded = true;
-
-    m_multitaskingWidget.reset(new MultitaskingWidget);
-
-    m_proxyInter->itemAdded(this, pluginName());
-
-    updateVisible();
-}
-
-void MultitaskingPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, PLUGIN_KEY);
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        updateVisible();
-    }
+    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
 }

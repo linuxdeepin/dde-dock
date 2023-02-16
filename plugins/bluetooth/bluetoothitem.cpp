@@ -1,8 +1,10 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "bluetoothitem.h"
+#include "adaptersmanager.h"
 #include "constants.h"
 #include "../widgets/tipswidget.h"
 #include "../frame/util/imageutil.h"
@@ -11,6 +13,7 @@
 #include <DApplication>
 #include <DDBusSender>
 #include <DGuiApplicationHelper>
+#include <adapter.h>
 
 #include <QPainter>
 
@@ -23,10 +26,10 @@ DGUI_USE_NAMESPACE
 
 using namespace Dock;
 
-BluetoothItem::BluetoothItem(QWidget *parent)
+BluetoothItem::BluetoothItem(AdaptersManager *adapterManager, QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
-    , m_applet(new BluetoothApplet(this))
+    , m_applet(new BluetoothApplet(adapterManager, this))
     , m_devState(Device::State::StateUnavailable)
     , m_adapterPowered(m_applet->poweredInitState())
 {
@@ -47,6 +50,7 @@ BluetoothItem::BluetoothItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothItem::refreshIcon);
     connect(m_applet, &BluetoothApplet::noAdapter, this, &BluetoothItem::noAdapter);
     connect(m_applet, &BluetoothApplet::justHasAdapter, this, &BluetoothItem::justHasAdapter);
+    connect(m_applet, &BluetoothApplet::requestHide, this, &BluetoothItem::requestHide);
 }
 
 QWidget *BluetoothItem::tipsWidget()
@@ -100,10 +104,10 @@ void BluetoothItem::invokeMenuItem(const QString menuId, const bool checked)
         m_applet->setAdapterPowered(!m_adapterPowered);
     } else if (menuId == SETTINGS) {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
+        .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
     }
@@ -165,6 +169,19 @@ void BluetoothItem::refreshTips()
 bool BluetoothItem::hasAdapter()
 {
     return m_applet->hasAadapter();
+}
+
+bool BluetoothItem::isPowered()
+{
+    if (!m_applet->hasAadapter())
+        return false;
+
+    QList<const Adapter *> adapters = m_applet->adaptersManager()->adapters();
+    for (const Adapter *adapter : adapters) {
+        if (adapter->powered())
+            return true;
+    }
+    return false;
 }
 
 void BluetoothItem::resizeEvent(QResizeEvent *event)

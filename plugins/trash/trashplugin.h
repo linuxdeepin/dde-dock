@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -40,6 +41,8 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
     void displayModeChanged(const Dock::DisplayMode displayMode) override;
     void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginFlags flags() const override;
 
 private:
     void refreshPluginItemsVisible();

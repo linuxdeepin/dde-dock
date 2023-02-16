@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -26,20 +27,25 @@ OnboardItem::OnboardItem(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
-    m_icon = QIcon::fromTheme(":/icons/icon/keyboard-symbolic.svg");
+    m_icon = QIcon::fromTheme(":/icons/icon/deepin-virtualkeyboard.svg");
+}
+
+QPixmap OnboardItem::iconPixmap(QSize size, DGuiApplicationHelper::ColorType themeType) const
+{
+    QString iconName = "deepin-virtualkeyboard";
+    if (std::min(width(), height()) <= PLUGIN_BACKGROUND_MIN_SIZE
+            || themeType == DGuiApplicationHelper::LightType)
+            iconName.append(PLUGIN_MIN_ICON_NAME);
+
+    return loadSvg(iconName, size);
 }
 
 void OnboardItem::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    QPixmap pixmap;
-    QString iconName = "keyboard-symbolic";
-    int iconSize = PLUGIN_ICON_MAX_SIZE;
-
     QPainter painter(this);
     if (std::min(width(), height()) > PLUGIN_BACKGROUND_MIN_SIZE) {
-
         QColor color;
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
             color = Qt::black;
@@ -78,12 +84,9 @@ void OnboardItem::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
-    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 
-    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
-
+    QPixmap pixmap = iconPixmap(QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE), DGuiApplicationHelper::instance()->themeType());
     painter.setOpacity(1);
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
@@ -94,10 +97,10 @@ const QPixmap OnboardItem::loadSvg(const QString &fileName, const QSize &size) c
 {
     const auto ratio = devicePixelRatioF();
 
-    QPixmap pixmap;
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : (size * ratio);
-    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(pixmapSize);
+    QPixmap pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(pixmapSize);
     pixmap.setDevicePixelRatio(ratio);
+    pixmap = pixmap.scaled(size * ratio);
 
     return pixmap;
 }

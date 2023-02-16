@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,7 +10,7 @@
 #include "abstracttraywidget.h"
 #include "util/dockpopupwindow.h"
 
-#include <org_kde_statusnotifieritem.h>
+#include "org_kde_statusnotifieritem.h"
 
 #include <QMenu>
 #include <QDBusObjectPath>
@@ -19,7 +20,7 @@ class DBusMenuImporter;
 namespace Dock {
 class TipsWidget;
 }
-//using namespace com::deepin::dde;
+
 using namespace org::kde;
 
 /**
@@ -60,7 +61,6 @@ public:
 
 Q_SIGNALS:
     void statusChanged(SNITrayWidget::ItemStatus status);
-    void requestShowMenu(int x, int y);
 
 private Q_SLOTS:
     void initSNIPropertys();

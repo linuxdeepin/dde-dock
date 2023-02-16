@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -11,10 +12,10 @@
 #include "pluginsiteminterface.h"
 
 #include <QGestureEvent>
-#include <QMenu>
 
 class QGSettings;
-class Menu;
+class QMenu;
+
 class SystemTrayItem : public AbstractTrayWidget
 {
     Q_OBJECT
@@ -27,7 +28,7 @@ public:
     QString itemKeyForConfig() override;
     void updateIcon() override;
     void sendClick(uint8_t mouseButton, int x, int y) override;
-    inline TrayType trayType() const override { return TrayType::SystemTray; }
+    inline TrayType trayTyep() const override { return TrayType::SystemTray; }
 
     QWidget *trayTipsWidget();
     QWidget *trayPopupApplet();
@@ -80,7 +81,7 @@ private:
 private:
     bool m_popupShown;
     bool m_tapAndHold;
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     PluginsItemInterface* m_pluginInter;
     QWidget *m_centralWidget;

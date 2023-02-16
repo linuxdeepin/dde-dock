@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -42,13 +43,44 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
     p.setColor(QPalette::Background, Qt::transparent);
     this->setPalette(p);
 
-    m_label->setForegroundRole(QPalette::BrightText);
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+    updateEnabledStatus();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SettingLabel::onThemeTypeChanged);
 }
 
 void SettingLabel::addButton(QWidget *button, int space)
 {
     m_layout->addWidget(button, 0, Qt::AlignRight | Qt::AlignHCenter);
     m_layout->addSpacing(space);
+}
+
+void SettingLabel::updateEnabledStatus()
+{
+    QPalette p = m_label->palette();
+    if (m_label->isEnabled())
+        p.setColor(QPalette::BrightText, QColor(0, 0, 0));
+    else
+        p.setColor(QPalette::BrightText, QColor(51, 51, 51));
+    m_label->setPalette(p);
+}
+
+void SettingLabel::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    QPalette palette = m_label->palette();
+    if (themeType == DGuiApplicationHelper::ColorType::LightType)
+        palette.setColor(QPalette::BrightText, Qt::black);
+    else
+        palette.setColor(QPalette::BrightText, Qt::white);
+
+    m_label->setPalette(palette);
+}
+
+void SettingLabel::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::EnabledChange)
+        updateEnabledStatus();
+
+    QWidget::changeEvent(event);
 }
 
 void SettingLabel::mousePressEvent(QMouseEvent *ev)
@@ -75,20 +107,27 @@ void SettingLabel::paintEvent(QPaintEvent *event)
     return QWidget::paintEvent(event);
 }
 
-BluetoothApplet::BluetoothApplet(QWidget *parent)
+BluetoothApplet::BluetoothApplet(AdaptersManager *adapterManager, QWidget *parent)
     : QWidget(parent)
     , m_scroarea(nullptr)
     , m_contentWidget(new QWidget(this))
-    , m_adaptersManager(new AdaptersManager(this))
+    , m_adaptersManager(adapterManager)
     , m_settingLabel(new SettingLabel(tr("Bluetooth settings"), this))
     , m_mainLayout(new QVBoxLayout(this))
     , m_contentLayout(new QVBoxLayout(m_contentWidget))
     , m_seperator(new HorizontalSeperator(this))
-    , m_airPlaneModeInter(new DBusAirplaneMode("com.deepin.daemon.AirplaneMode", "/com/deepin/daemon/AirplaneMode", QDBusConnection::systemBus(), this))
+    , m_airPlaneModeInter(new DBusAirplaneMode("org.deepin.dde.AirplaneMode1", "/org/deepin/dde/AirplaneMode1", QDBusConnection::systemBus(), this))
     , m_airplaneModeEnable(false)
 {
     initUi();
     initConnect();
+    initAdapters();
+
+    QScroller::grabGesture(m_scroarea, QScroller::LeftMouseButtonGesture);
+    QScrollerProperties propertiesOne = QScroller::scroller(m_scroarea)->scrollerProperties();
+    QVariant overshootPolicyOne = QVariant::fromValue<QScrollerProperties::OvershootPolicy>(QScrollerProperties::OvershootAlwaysOff);
+    propertiesOne.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, overshootPolicyOne);
+    QScroller::scroller(m_scroarea)->setScrollerProperties(propertiesOne);
 }
 
 bool BluetoothApplet::poweredInitState()
@@ -135,13 +174,17 @@ QStringList BluetoothApplet::connectedDevicesName()
     return deviceList;
 }
 
+AdaptersManager *BluetoothApplet::adaptersManager()
+{
+    return m_adaptersManager;
+}
+
 void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 {
-    if (!m_adapterItems.size()) {
-        emit justHasAdapter();
-    }
+    bool needJustHasAdapter = (m_adapterItems.size() == 0);
     if (m_adapterItems.contains(adapter->id())) {
         onAdapterRemoved(m_adapterItems.value(adapter->id())->adapter());
+        needJustHasAdapter = (m_adapterItems.size() == 0);
     }
 
     BluetoothAdapterItem *adapterItem = new BluetoothAdapterItem(adapter, this);
@@ -154,14 +197,13 @@ void BluetoothApplet::onAdapterAdded(Adapter *adapter)
 
     m_adapterItems.insert(adapter->id(), adapterItem);
 
-    // 如果开启了飞行模式，置灰蓝牙适配器使能开关
-    foreach (const auto item, m_adapterItems) {
-        item->setStateBtnEnabled(!m_airPlaneModeInter->enabled());
-    }
-
-    m_contentLayout->insertWidget(0, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
+    // 将最新的设备插入到蓝牙设置前面
+    m_contentLayout->insertWidget(m_contentLayout->count() - 1, adapterItem, Qt::AlignTop | Qt::AlignVCenter);
     updateBluetoothPowerState();
     updateSize();
+
+    if (needJustHasAdapter)
+        emit justHasAdapter();
 }
 
 void BluetoothApplet::onAdapterRemoved(Adapter *adapter)
@@ -210,19 +252,14 @@ void BluetoothApplet::initUi()
     m_contentLayout->addWidget(m_settingLabel, 0, Qt::AlignBottom | Qt::AlignVCenter);
 
     m_scroarea = new QScrollArea(this);
-    m_scroarea->setWidgetResizable(true);
-    m_scroarea->setWidget(m_contentWidget);
-    m_scroarea->setFrameShape(QFrame::NoFrame);
-    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_scroarea->setAutoFillBackground(true);
-    m_scroarea->viewport()->setAutoFillBackground(true);
 
-    QScroller::grabGesture(m_scroarea->viewport(), QScroller::LeftMouseButtonGesture);
-    QScroller *scroller = QScroller::scroller(m_scroarea);
-    QScrollerProperties sp;
-    sp.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-    scroller->setScrollerProperties(sp);
+    m_scroarea->setWidgetResizable(true);
+    m_scroarea->setFrameStyle(QFrame::NoFrame);
+    m_scroarea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroarea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+    m_scroarea->setContentsMargins(0, 0, 0, 0);
+    m_scroarea->setWidget(m_contentWidget);
 
     updateIconTheme();
 
@@ -233,29 +270,26 @@ void BluetoothApplet::initUi()
     updateSize();
 
     setAirplaneModeEnabled(m_airPlaneModeInter->enabled());
+    setDisabled(m_airPlaneModeInter->enabled());
 }
 
 void BluetoothApplet::initConnect()
 {
     connect(m_adaptersManager, &AdaptersManager::adapterIncreased, this, &BluetoothApplet::onAdapterAdded);
     connect(m_adaptersManager, &AdaptersManager::adapterDecreased, this, &BluetoothApplet::onAdapterRemoved);
-
     connect(m_settingLabel, &SettingLabel::clicked, this, [ = ] {
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
+        .method(QString("ShowPage"))
         .arg(QString("bluetooth"))
         .call();
+        emit requestHide();
     });
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
-    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, [this](bool enabled) {
-        foreach (const auto item, m_adapterItems) {
-            item->setStateBtnEnabled(!enabled);
-        }
-    });
+    connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setDisabled);
 }
 
 /**
@@ -275,6 +309,13 @@ void BluetoothApplet::updateIconTheme()
     scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);
     m_scroarea->setAutoFillBackground(true);
     m_scroarea->setPalette(scroareaBackgroud);
+}
+
+void BluetoothApplet::initAdapters()
+{
+    QList<const Adapter *> adapters = m_adaptersManager->adapters();
+    for (const Adapter *adapter : adapters)
+        onAdapterAdded(const_cast<Adapter *>(adapter));
 }
 
 void BluetoothApplet::setAirplaneModeEnabled(bool enable)

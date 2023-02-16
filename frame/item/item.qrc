@@ -13,6 +13,10 @@
         <file>resources/arrow-right.svg</file>
         <file>resources/arrow-left.svg</file>
         <file>resources/arrow-down.svg</file>
+        <file>resources/arrow-up-dark.svg</file>
+        <file>resources/arrow-right-dark.svg</file>
+        <file>resources/arrow-left-dark.svg</file>
+        <file>resources/arrow-down-dark.svg</file>
         <file>resources/application-x-desktop.svg</file>
         <file>resources/close_round_hover.svg</file>
         <file>resources/close_round_press.svg</file>
@@ -67,5 +71,17 @@
         <file>resources/week5.svg</file>
         <file>resources/week6.svg</file>
         <file>resources/week7.svg</file>
+        <file>resources/audio-volume-high-dark.svg</file>
+        <file>resources/audio-volume-high.svg</file>
+        <file>resources/audio-volume-low-dark.svg</file>
+        <file>resources/audio-volume-low.svg</file>
+        <file>resources/audio-volume-medium.svg</file>
+        <file>resources/audio-volume-muted-dark.svg</file>
+        <file>resources/audio-volume-muted.svg</file>
+        <file>resources/audio-volume-medium-dark.svg</file>
+        <file>resources/laptop.svg</file>
+        <file>resources/volume.svg</file>
+        <file>resources/dcc_dock_plug_in.svg</file>
+        <file>resources/broadcast.svg</file>
     </qresource>
 </RCC>

@@ -1,0 +1,36 @@
+<interface name="org.deepin.dde.Power1">
+  <method name="GetBatteries">
+    <arg name="batteries" type="ao" direction="out"/>
+  </method>
+  <method name="Refresh"/>
+  <method name="SetMode">
+    <arg name="mode" type="s" direction="in"></arg>
+  </method>
+  <method name="RefreshBatteries"/>
+  <method name="RefreshMains"/>
+  <signal name="BatteryDisplayUpdate">
+    <arg name="timestamp" type="x"/>
+  </signal>
+  <signal name="BatteryAdded">
+    <arg name="objpath" type="o"/>
+  </signal>
+  <signal name="BatteryRemoved">
+    <arg name="objpath" type="o"/>
+  </signal>
+  <signal name="LidClosed"/>
+  <signal name="LidOpened"/>
+  <property name="OnBattery" type="b" access="read"/>
+  <property name="BatteryTimeToEmpty" type="t" access="read"/>
+  <property name="BatteryTimeToFull" type="t" access="read"/>
+  <property name="PowerSavingModeEnabled" type="b" access="readwrite"/>
+  <property name="HasLidSwitch" type="b" access="read"/>
+  <property name="HasBattery" type="b" access="read"/>
+  <property name="BatteryPercentage" type="d" access="read"/>
+  <property name="BatteryStatus" type="u" access="read"/>
+  <property name="PowerSavingModeAuto" type="b" access="readwrite"/>
+  <property name="PowerSystemAutoToSleepWhenFree" type="b" access="readwrite"/>
+  <property name="PowerSavingModeAutoWhenBatteryLow" type="b" access="readwrite"/>
+  <property name="PowerSavingModeBrightnessDropPercent" type="u" access="readwrite"/>
+  <property name="IsHighPerformanceSupported" type="b" access="read"/>
+  <property name="Mode" type="s" access="read"/>
+</interface>

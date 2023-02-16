@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -13,8 +14,8 @@
 
 AdaptersManager::AdaptersManager(QObject *parent)
     : QObject(parent)
-    , m_bluetoothInter(new DBusBluetooth("com.deepin.daemon.Bluetooth",
-                                         "/com/deepin/daemon/Bluetooth",
+    , m_bluetoothInter(new DBusBluetooth("org.deepin.dde.Bluetooth1",
+                                         "/org/deepin/dde/Bluetooth1",
                                          QDBusConnection::sessionBus(),
                                          this))
 {
@@ -47,9 +48,9 @@ AdaptersManager::AdaptersManager(QObject *parent)
     });
 #endif
 
-    QDBusInterface inter("com.deepin.daemon.Bluetooth",
-                         "/com/deepin/daemon/Bluetooth",
-                         "com.deepin.daemon.Bluetooth",
+    QDBusInterface inter("org.deepin.dde.Bluetooth1",
+                         "/org/deepin/dde/Bluetooth1",
+                         "org.deepin.dde.Bluetooth1",
                          QDBusConnection::sessionBus());
     QDBusReply<QString> reply = inter.call(QDBus::Block, "GetAdapters");
     const QString replyStr = reply.value();
@@ -155,6 +156,7 @@ void AdaptersManager::onRemoveAdapter(const QString &json)
     Adapter *adapter = const_cast<Adapter *>(result);
     if (adapter) {
         m_adapters.remove(id);
+        m_adapterIds.removeOne(id);
         emit adapterDecreased(adapter);
         adapter->deleteLater();
     }
@@ -209,28 +211,23 @@ void AdaptersManager::adapterAdd(Adapter *adapter, const QJsonObject &adpterObj)
     QDBusObjectPath dPath(adpterObj["Path"].toString());
     QDBusPendingCall call = m_bluetoothInter->GetDevices(dPath);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, adapter, call, watcher] {
-        if (adapter) {
-            if (!call.isError()) {
-                QDBusReply<QString> reply = call.reply();
-                const QString replyStr = reply.value();
-                QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
-                adapter->initDevicesList(doc);
-                emit this->adapterIncreased(adapter);
-            } else {
-                qWarning() << call.error().message();
-            }
+    connect(watcher, &QDBusPendingCallWatcher::finished, watcher, &QDBusPendingCallWatcher::deleteLater);
+    connect(watcher, &QDBusPendingCallWatcher::finished, [ this, adapter, call ] {
+        if (!call.isError()) {
+            QDBusReply<QString> reply = call.reply();
+            const QString replyStr = reply.value();
+            QJsonDocument doc = QJsonDocument::fromJson(replyStr.toUtf8());
+            adapter->initDevicesList(doc);
+            emit this->adapterIncreased(adapter);
+        } else {
+            qWarning() << call.error().message();
         }
-        delete watcher;
     });
 
     QString id = adapter->id();
-    if (!id.isEmpty()) {
-        if (!m_adapters.contains(id)) {
-            m_adapters[id] = adapter;
-        } else if (m_adapters[id] == nullptr) {
-            m_adapters[id] = adapter;
-        }
+    if (!id.isEmpty() && (!m_adapters.contains(id) || !m_adapters[id])) {
+        m_adapters[id] = adapter;
+        m_adapterIds << id;
     }
 }
 
@@ -254,4 +251,13 @@ void AdaptersManager::adapterRefresh(const Adapter *adapter)
 {
     QDBusObjectPath dPath(adapter->id());
     m_bluetoothInter->RequestDiscovery(dPath);
+}
+
+QList<const Adapter *> AdaptersManager::adapters()
+{
+    QList<const Adapter *> allAdapter = m_adapters.values();
+    std::sort(allAdapter.begin(), allAdapter.end(), [ & ](const Adapter *adapter1, const Adapter *adapter2) {
+        return m_adapterIds.indexOf(adapter1->id()) < m_adapterIds.indexOf(adapter2->id());
+    });
+    return allAdapter;
 }

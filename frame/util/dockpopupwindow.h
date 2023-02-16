@@ -1,15 +1,21 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
+#include "org_deepin_dde_xeventmonitor1.h"
+
 #include <darrowrectangle.h>
-#include <DRegionMonitor>
+#include <dregionmonitor.h>
 #include <DWindowManagerHelper>
 
+DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
+
+using XEventMonitor = org::deepin::dde::XEventMonitor1;
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 {
@@ -22,6 +28,8 @@ public:
     bool model() const;
 
     void setContent(QWidget *content);
+    void setExtendWidget(QWidget *widget);
+    QWidget *extengWidget() const;
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
@@ -38,22 +46,43 @@ signals:
 
 protected:
     void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *event);
     void enterEvent(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
     void blockButtonRelease();
 
 private slots:
-    void onGlobMouseRelease(const QPoint &mousePos, const int flag);
     void compositeChanged();
     void ensureRaised();
+    void onButtonPress(int type, int x, int y, const QString &key);
 
 private:
     bool m_model;
     QPoint m_lastPoint;
 
-    DRegionMonitor *m_regionInter;
+    XEventMonitor *m_eventMonitor;
+    QString m_eventKey;
     DWindowManagerHelper *m_wmHelper;
     bool m_enableMouseRelease;
+    QWidget *m_extendWidget;
+};
+
+class PopupSwitchWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit PopupSwitchWidget(QWidget *parent = nullptr);
+    ~PopupSwitchWidget();
+
+    void pushWidget(QWidget *widget);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
+    QVBoxLayout *m_containerLayout;
+    QWidget *m_topWidget;
 };
 
 #endif // DOCKPOPUPWINDOW_H

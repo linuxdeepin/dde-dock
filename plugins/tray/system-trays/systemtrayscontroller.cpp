@@ -1,10 +1,12 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "systemtrayscontroller.h"
 #include "pluginsiteminterface.h"
 #include "utils.h"
+#include "proxyplugincontroller.h"
 
 #include <QDebug>
 #include <QDir>
@@ -13,6 +15,22 @@ SystemTraysController::SystemTraysController(QObject *parent)
     : AbstractPluginsController(parent)
 {
     setObjectName("SystemTray");
+
+    // 将当前对象添加进代理对象列表中，代理对象在加载插件成功后，会调用列表中所有对象的itemAdded方法来添加插件
+    ProxyPluginController::instance(PluginType::QuickPlugin)->addProxyInterface(this);
+    ProxyPluginController::instance(PluginType::SystemTrays)->addProxyInterface(this);
+
+    QMetaObject::invokeMethod(this, [ this ] {
+        // 在加载当前的tray插件之前，所有的插件已经加载，因此此处需要获取代理中已经加载过的插件来加载到当前布局中
+        loadPlugins(ProxyPluginController::instance(PluginType::QuickPlugin));
+        loadPlugins(ProxyPluginController::instance(PluginType::SystemTrays));
+    }, Qt::QueuedConnection);
+}
+
+SystemTraysController::~SystemTraysController()
+{
+    ProxyPluginController::instance(PluginType::QuickPlugin)->removeProxyInterface(this);
+    ProxyPluginController::instance(PluginType::SystemTrays)->removeProxyInterface(this);
 }
 
 void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
@@ -28,11 +46,10 @@ void SystemTraysController::itemAdded(PluginsItemInterface * const itemInter, co
     connect(item, &SystemTrayItem::itemVisibleChanged, this, [=] (bool visible){
         if (visible) {
             emit pluginItemAdded(itemKey, item);
-        }
-        else {
+        } else {
             emit pluginItemRemoved(itemKey, item);
         }
-    });
+    }, Qt::QueuedConnection);
 
     mPluginsMap[itemInter][itemKey] = item;
 
@@ -69,10 +86,7 @@ void SystemTraysController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->centralWidget()->setParent(nullptr);
 
     // just delete our wrapper object(PluginsItem)
-    // 直接删除，item被用到的地方太多，且很多地方没判断是否为空，不应该用deleteLater
-    //    item->deleteLater();
-    delete item;
-    item = nullptr;
+    item->deleteLater();
 }
 
 void SystemTraysController::requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide)
@@ -100,21 +114,6 @@ void SystemTraysController::requestSetAppletVisible(PluginsItemInterface * const
         return;
 
     if (visible) {
-        // 在弹出界面前先隐藏其他插件的tips
-        QMap<PluginsItemInterface *, QMap<QString, QObject *>> &mPluginsMap = pluginsMap();
-        foreach (auto interface, mPluginsMap.keys()) {
-            if (interface != itemInter) {
-                foreach (auto oldItemKey, mPluginsMap[interface].keys()) {
-                    if (oldItemKey != "pluginloader") {
-                        SystemTrayItem *oldItem = qobject_cast<SystemTrayItem *>(pluginItemAt(interface, oldItemKey));
-                        if (oldItem) {
-                            oldItem->hidePopup();
-                        }
-                    }
-                }
-            }
-        }
-
         item->showPopupApplet(itemInter->itemPopupApplet(itemKey));
     } else {
         item->hidePopup();
@@ -125,9 +124,8 @@ int SystemTraysController::systemTrayItemSortKey(const QString &itemKey)
 {
     auto inter = pluginInterAt(itemKey);
 
-    if (!inter) {
+    if (!inter)
         return -1;
-    }
 
     return inter->itemSortKey(itemKey);
 }
@@ -136,9 +134,8 @@ void SystemTraysController::setSystemTrayItemSortKey(const QString &itemKey, con
 {
     auto inter = pluginInterAt(itemKey);
 
-    if (!inter) {
+    if (!inter)
         return;
-    }
 
     inter->setSortKey(itemKey, order);
 }
@@ -147,9 +144,8 @@ const QVariant SystemTraysController::getValueSystemTrayItem(const QString &item
 {
     auto inter = pluginInterAt(itemKey);
 
-    if (!inter) {
+    if (!inter)
         return QVariant();
-    }
 
     return getValue(inter, key, fallback);
 }
@@ -158,20 +154,16 @@ void SystemTraysController::saveValueSystemTrayItem(const QString &itemKey, cons
 {
     auto inter = pluginInterAt(itemKey);
 
-    if (!inter) {
+    if (!inter)
         return;
-    }
 
     saveValue(inter, key, value);
 }
 
-void SystemTraysController::startLoader()
+void SystemTraysController::loadPlugins(ProxyPluginController *proxyController)
 {
-    QString pluginsDir("../plugins/system-trays");
-    if (!QDir(pluginsDir).exists()) {
-        pluginsDir = "/usr/lib/dde-dock/plugins/system-trays";
-    }
-    qDebug() << "using system tray plugins dir:" << pluginsDir;
-
-    AbstractPluginsController::startLoader(new PluginLoader(pluginsDir, this));
+    // 加载已有插件，并将其添加到当前的插件中
+    const QList<PluginsItemInterface *> &pluginsItems = proxyController->pluginsItems();
+    for (PluginsItemInterface *itemInter : pluginsItems)
+        itemAdded(itemInter, proxyController->itemKey(itemInter));
 }

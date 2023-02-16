@@ -1,0 +1,46 @@
+  <interface name="org.deepin.dde.Audio1">
+    <method name="Reset"/>
+    <method name="SetDefaultSink">
+      <arg type="s" direction="in"/>
+    </method>
+    <method name="SetDefaultSource">
+      <arg type="s" direction="in"/>
+    </method>
+    <method name="SetBluetoothAudioMode">
+      <arg type="s" direction="in"/>
+    </method>
+    <method name="SetPort">
+      <arg type="u" direction="in"/>
+      <arg type="s" direction="in"/>
+      <arg type="i" direction="in"/>
+    </method>
+    <method name="SetPortEnabled">
+      <arg type="u" direction="in"/>
+      <arg type="s" direction="in"/>
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="IsPortEnabled">
+      <arg type="u" direction="in"/>
+      <arg type="s" direction="in"/>
+      <arg type="b" direction="out"/>
+    </method>
+    <signal name="PortEnabledChanged">
+     <arg type="u"></arg>
+     <arg type="s"></arg>
+     <arg type="b"></arg>
+    </signal>
+    <property name="SinkInputs" type="ao" access="read"/>
+    <property name="Sinks" type="ao" access="read"/>
+    <property name="Sources" type="ao" access="read"/>
+    <property name="BluetoothAudioModeOpts" type="as" access="read">
+        <annotation name="org.qtproject.QtDBus.QtTypeName" value="QStringList"/>
+    </property>
+    <property name="BluetoothAudioMode" type="s" access="read"/>
+    <property name="Cards" type="s" access="read"/>
+    <property name="CardsWithoutUnavailable" type="s" access="read"/>
+    <property name="DefaultSink" type="o" access="read"/>
+    <property name="DefaultSource" type="o" access="read"/>
+    <property name="MaxUIVolume" type="d" access="read"/>
+    <property name="IncreaseVolume" type="b" access="readwrite"/>
+    <property name="ReduceNoise" type="b" access="readwrite"/>
+  </interface>

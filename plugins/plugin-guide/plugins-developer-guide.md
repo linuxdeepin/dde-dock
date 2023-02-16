@@ -27,6 +27,8 @@ dde-dock 插件是根据 Qt 插件标准所开发的共享库文件(`so`)，通�
 
 PluginsItemInterface 中定义的接口除了displayMode 和 position（历史遗留），从插件的角度来看都是被动的，只能等待被任务栏的插件机制调用。
 
+另外定义了DockPart枚举，用于表示返回图标的位置，分别有快捷插件显示区域，快捷图标区域和系统插件显示区域，主要用于区域插件在不同的位置的显示。
+
 |名称|简介|
 |-|-|
 |pluginName | 返回插件名称，用于在 dde-dock 内部管理插件时使用 `必须实现`|
@@ -51,6 +53,10 @@ PluginsItemInterface 中定义的接口除了displayMode 和 position（历史�
 |refreshIcon | 当插件控件的图标需要更新时此接口被调用|
 |displayMode | 用于插件主动获取 dde-dock 当前的显示模式|
 |position | 用于插件主动获取 dde-dock 当前的位置|
+|icon | 用于返回当前插件在快捷设置面板、快捷设置图标区域，系统插件显示区域等和不同的系统主题（主题黑色，主题白色）的图标，正常状态下显示的图标即可 |
+|status | 用于返回当前快捷设置插件的状态，激活状态还是禁用状态 |
+|description | 用于返回插件的描述（快捷设置面板中isPrimary为true的时候有用） |
+|flags | 用于返回插件的属性，例如插件显示的位置，插件占几列，插件是否支持拖动等 |
 
 ### PluginProxyInterface
 
@@ -61,6 +67,7 @@ PluginsItemInterface 中定义的接口除了displayMode 和 position（历史�
 |itemAdded | 向 dde-dock 添加新的主控件（一个插件可以添加多个主控件它们之间使用`ItemKey`区分）|
 |itemUpdate | 通知 dde-dock 有主控件需要更新|
 |itemRemoved | 从 dde-dock 移除主控件|
+|updateDockInfo | 当插件图标发生变化的时候，响应该函数 |
 |requestWindowAutoHide | 设置 dde-dock 是否允许隐藏，通常被用在任务栏被设置为智能隐藏或始终隐藏而插件又需要让 dde-dock 保持显示状态来显示一些重要信息的场景下|
 |requestRefreshWindowVisible |  通知 dde-dock 更新隐藏状态|
 |requestSetAppletVisible |  通知 dde-dock 显示或隐藏插件的弹出面板（鼠标左键点击后弹出的控件）|
@@ -219,18 +226,30 @@ install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
 
 ``` json
 {
-    "api": "1.2"
+    "api": "2.0.0"
 }
 ```
 
-另外（可选的）还支持指定一个 dbus 服务，dock 在加载插件时会检查此插件所依赖的 dbus 服务，如果服务没有启动则不会初始化这个插件，直到服务启动，如下表示依赖 dbus 地址为 "com.deepin.daemon.Network" 的 dbus 服务。
+另外（可选的）还支持指定一个 dbus 服务，dock 在加载插件时会检查此插件所依赖的 dbus 服务，如果服务没有启动则不会初始化这个插件，直到服务启动，如下表示依赖 dbus 地址为 "org.deepin.dde.Network1" 的 dbus 服务。
 
 ``` json
 {
-    "api": "1.2",
-    "depends-daemon-dbus-service": "com.deepin.daemon.Network"
+    "api": "2.0.0",
+    "depends-daemon-dbus-service": "org.deepin.dde.Network1"
 }
 ```
+
+当插件在快捷面板中展示的时候，不同的插件之间支持按照一定的顺序进行排序，dock在加载该插件的时候会检查该插件的元数据文件中是否存在order字段，如果存在该字段，就会按照该字段指定的顺序进行排序，如果不存在该字段，那么该插件就会插入到已经指定该字段的插件的后面，同时按照加载的先后顺序进行排序
+
+```json
+{
+    "api": "2.0.0",
+    "order": 1,
+    "depends-daemon-dbus-service": "org.deepin.dde.Audio1"
+}
+```
+
+
 
 ### 插件核心类
 
@@ -265,6 +284,11 @@ public:
 
     // 返回插件的 widget
     QWidget *itemWidget(const QString &itemKey) override;
+    PluginMode status() const override;
+    QString description() const override;
+
+    QIcon icon(const DockPart &dockPart, int themeType) override;
+    PluginFlags flags() const override;
 };
 
 #endif // HOMEMONITORPLUGIN_H
@@ -298,6 +322,29 @@ QWidget *HomeMonitorPlugin::itemWidget(const QString &itemKey)
     // 这里暂时返回空指针，这意味着插件会被 dde-dock 加载
     // 但是不会有任何东西被添加到 dde-dock 上
     return nullptr;
+}
+
+
+QIcon HomeMonitorPlugin::icon(const DockPart &dockPart, int themeType)
+{
+    if (dockPart == DockPart::QuickShow) {
+        QIcon icon;
+        return icon;
+    }
+
+    return QIcon();
+}
+
+PluginFlags HomeMonitorPlugin::flags() const
+{
+    // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
+    // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
+    // Attribute_CanSetting该插件支持在控制中心设置显示或隐藏
+    return PluginFlags::Type_Common
+        | PluginFlags::Quick_Multi
+        | PluginFlags::Attribute_CanDrag
+        | PluginFlags::Attribute_CanInsert
+        | PluginFlags::Attribute_CanSetting;
 }
 ```
 
@@ -499,20 +546,55 @@ void HomeMonitorPlugin::init(PluginProxyInterface *proxyInter)
 }
 ```
 
-在调用 `itemAdded` 之后，dde-dock 会在合适的时机调用插件的`itemWidget`接口以获取需要显示的控件。如果插件提供了多个主控件到 dde-dock 上，那么插件核心类应该在 itemWidget 接口中分析参数 itemKey，并返回与之对应的控件对象，当插件只有一个可显示项目时，itemKey 可以忽略 (但不建议忽略)。
+在调用 `itemAdded` 之后，dde-dock 会将该控件在任务栏插件区域显示出来，在展开快捷面板的时候，会将该插件的大图标显示在快捷面板上，快捷面板上显示的内容可以通过如下两种方式来显示
+
+1、调用插件类的icon方法、status方法、description方法来获取插件的显示的图标、文本描述和状态等
+
+```c++
+QIcon icon(const DockPart &dockPart, int themeType)；
+// 其中，判断dockPart==DockPart::QuickPanel，此时显示在快捷面板上面的图标，themeType表示主题类型，对应于dtk中的DGuiApplicationHelper::ColorType类型的枚举值，分别表示黑色或白色的主题，根据不同的主题返回不同的图标
+PluginMode status() const;
+// 插件当前的状态，返回值为激活、禁用和没有激活状态，任务栏会根据这个值将图标自动变成不同的颜色
+QString description() const;
+// 插件的描述，这个一般是在插件区域显示的文本，例如网络插件，这个返回当前连接的网络的名称等
+
+// 在点击快捷面板的这个插件的图标的时候，会自动执行插件返回的命令字符串，见以下函数
+const QString itemCommand(const QString &itemKey);
+
+// 在插件需要改变图标或文字的时候，请调用PluginProxyInterface类的updateDockInfo方法，第一个参数传入this即可，如下
+void updateDockInfo(PluginsItemInterface *const, const DockPart &);
+// updateDockInfo为代理类PluginProxyInterface的方法DockPart为需要刷新的位置
+```
+
+2、第一个方法的灵活性不是太好，因此建议使用第二种方法
 
 ``` c++
 QWidget *HomeMonitorPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
-
-    return m_pluginWidget;
+    if (itemKey == QUICK_ITEM_KEY)
+    	return m_pluginWidget;
+    
+    return nullptr;
 }
+判断itemKey == QUICK_ITEM_KEY(QUICK_ITEM_KEY为插件基类中定义的一个宏)，返回在快捷面板区域的展示。一般在该插件需要在快捷面板区域响应复杂的操作，例如蓝牙插件或网络插件需要通过该面板进行开关等操作，此时建议用这种方法
 ```
 
-现在再根据“测试插件加载”一节中的步骤，编译、安装、重启 dde-dock，就可以看到主控件在 dde-dock 面板上出现了，如下图所示：
+任务栏使用哪种显示方式的逻辑是，先通过第一种方法中的获取图标的接口，判断是否存在图标，如果存在图标，就用第一种方法来显示，如果不存在，就用第二种方法来显示
 
-![central-widget](images/central-widget.png)
+任务栏插件 图标的显示
+
+在任务栏上不同的插件都会有自己的图标，在不同的主题下显示的图标也不相同，不同的位置显示的图标也会有所区别，因此我们需要实现如下的接口
+
+```c++
+QIcon icon(const DockPart &dockPart, int themeType);
+其中dockPart表示该插件图标所在的位置，有如下取值
+enum class DockPart {
+    QuickShow = 0,    // 快捷插件显示区域
+    QuickPanel,       // 快捷面板的图标
+    SystemPanel,      // 系统插件显示区域(例如电源插件)
+    DCCSetting        // 显示在控制中心个性化设置的图标
+};
+```
 
 ## 支持禁用插件
 
@@ -577,12 +659,6 @@ void HomeMonitorPlugin::init(PluginProxyInterface *proxyInter)
     }
 }
 ```
-
-重新编译、安装、重启 dde-dock，然后 dde-dock 面板上点击鼠标右键查看“插件”子菜单就会看到空白项，点击它将禁用插件，再次点击则启用插件。
-
-不过为什么是空白项呢？是因为有一个接口还没有实现：pluginDisplayName
-
-在相应文件中分别添加如下内容，来修复这个问题：
 
 ``` c++
 // homemonitorplugin.h
@@ -661,8 +737,6 @@ QWidget *HomeMonitorPlugin::itemTipsWidget(const QString &itemKey)
 
 dde-dock 在发现鼠标悬停在插件的控件上时就会调用这个接口拿到相应的控件并显示出来。
 
-![tips-widget](images/tips-widget.png)
-
 ## 支持 applet
 
 上面的 tips 显示的控件在鼠标移开之后就会消失，如果插件需要长时间显示一个窗体及时鼠标离开也会保持显示状态来做一些提示或功能的话那就需要使用 applet，applet 控件在左键点击后显示，点击控件以外的其他地方后消失。
@@ -699,6 +773,13 @@ void HomeMonitorPlugin::init(PluginProxyInterface *proxyInter)
 }
 ```
 
+如果需要点击快捷面板中的图标弹出applet，需要调用一下接口
+
+```c++
+void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible);
+// 其中,itemInter传入this, itemKey在此处传入一个制定的字符串，那么在下方的itemPopupApplet接口的方法中就需要根据这个指定的itemKey返回对应的QWidget来显示，visible传true
+```
+
 接着实现 applet 相关的接口 itemPopupApplet：
 
 ``` c++
@@ -727,9 +808,7 @@ QWidget *HomeMonitorPlugin::itemPopupApplet(const QString &itemKey)
 }
 ```
 
-编译，安装，重启 dde-dock 之后点击主控件即可看到弹出的 applet 控件。
 
-![applet-widget](images/applet-widget.png)
 
 ## 支持右键菜单
 
@@ -790,6 +869,37 @@ void HomeMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &m
 
 编译，安装，重启 dde-dock 之后右键点击主控件即可看到弹出右键菜单。
 
-![context-menu](images/context-menu.png)
+## 插件类型和属性
+
+在flag接口中返回当前插件的位置和属性的信息，实现如下接口
+
+```c++
+PluginFlags HomeMonitorPlugin::flags() const;
+{
+    return PluginFlag::Type_Common
+        | Quick_Multi
+        | Attribute_CanDrag
+        | Attribute_CanInsert
+        | Attribute_CanSetting;
+}
+// 返回值有如下
+enum PluginFlag {
+    Type_NoneFlag = 0x1,                 // 插件类型-没有任何的属性，不在任何地方显示
+    Type_Common = 0x2,                   // 插件类型-快捷插件区
+    Type_Tool = 0x4,                     // 插件类型-工具插件，例如回收站
+    Type_System = 0x8,                   // 插件类型-系统插件，例如关机插件
+    Type_Tray = 0x10,                    // 插件类型-托盘区，例如U盘插件
+    Type_Fixed = 0x20,                   // 插件类型-固定区域,例如多任务视图和显示桌面
+    Quick_Single = 0x40,                 // 当插件类型为Common时,快捷插件区域只有一列的那种插件
+    Quick_Multi = 0x80,                  // 当插件类型为Common时,快捷插件区占两列的那种插件
+    Quick_Full = 0x100,                  // 当插件类型为Common时,快捷插件区占用4列的那种插件，例如声音、亮度设置和音乐等
+    Attribute_CanDrag = 0x200,           // 插件属性-是否支持拖动
+    Attribute_CanInsert = 0x400,         // 插件属性-是否支持在其前面插入其他的插件，普通的快捷插件是支持的
+    Attribute_CanSetting = 0x800,        // 插件属性-是否可以在控制中心设置显示或隐藏
+
+    FlagMask = 0xffffffff                // 掩码
+};
+// 在此根据自己插件的类型返回相应的属性，这里可以是组合，但是插件类型的组合只能是其中的一种，快捷插件区域的显示列也只能是其中一种，插件的属性可以混合显示
+```
 
 至此，一个包含基本功能的插件就完成了。

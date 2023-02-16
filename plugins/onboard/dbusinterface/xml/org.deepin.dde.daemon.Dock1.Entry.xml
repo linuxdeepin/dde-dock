@@ -1,0 +1,8 @@
+<interface name="org.deepin.dde.daemon.Dock1.Entry">
+     <method name="Activate">
+          <arg type="u" direction="in"></arg>
+     </method>
+     <property name="Id" type="s" access="read"></property>
+     <property name="IsActive" type="b" access="read"></property>
+     <property name="Name" type="s" access="read"></property>
+</interface>

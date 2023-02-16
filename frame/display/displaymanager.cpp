@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Uniontech Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -47,6 +48,17 @@ QScreen *DisplayManager::screen(const QString &screenName) const
     for (auto s : m_screens) {
         if (s->name() == screenName)
             return s;
+    }
+
+    return nullptr;
+}
+
+QScreen *DisplayManager::screenAt(const QPoint &pos) const
+{
+    for (QScreen *screen : m_screens) {
+        QRect screenGeometry = screen->geometry();
+        if (screenGeometry.contains(pos))
+            return screen;
     }
 
     return nullptr;
@@ -128,6 +140,8 @@ bool DisplayManager::isCopyMode()
  */
 void DisplayManager::updateScreenDockInfo()
 {
+    // TODO 目前仅仅支持双屏，如果超过双屏，会出现异常，这里可以考虑做成通用的处理规则
+
     // 先清除原先的数据，然后再更新
     m_screenPositionMap.clear();
 
@@ -163,7 +177,7 @@ void DisplayManager::updateScreenDockInfo()
         return;
     }
 
-    // 适配任意多个屏幕的情况
+    // 适配多个屏幕的情况
     for(auto s : m_screens) {
         QList<QScreen *> otherScreens = m_screens;
         otherScreens.removeAll(s);
@@ -264,7 +278,6 @@ void DisplayManager::screenCountChanged()
     for (auto s : to_remove_list) {
         disconnect(s);
         m_screens.removeOne(s);
-        Q_EMIT screenRemoved(s);
     }
 
     // 创建关联
@@ -287,7 +300,6 @@ void DisplayManager::screenCountChanged()
         connect(s, &QScreen::refreshRateChanged, this, &DisplayManager::dockInfoChanged);
 
         m_screens.append(s);
-        Q_EMIT screenAdded(s);
     }
 
     // 屏幕数量发生变化，应该刷新一下任务栏的显示

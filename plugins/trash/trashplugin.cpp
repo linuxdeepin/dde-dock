@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,10 +8,14 @@
 
 #include <DApplication>
 #include <DDesktopServices>
+#include <DGuiApplicationHelper>
+
+#include <QPainter>
 
 #define PLUGIN_STATE_KEY    "enable"
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 using namespace Dock;
 
@@ -121,7 +126,7 @@ void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId,
 
 bool TrashPlugin::pluginIsDisable()
 {
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, false).toBool();
+    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
 }
 
 void TrashPlugin::pluginStateSwitched()
@@ -164,6 +169,28 @@ void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 void TrashPlugin::pluginSettingsChanged()
 {
     refreshPluginItemsVisible();
+}
+
+QIcon TrashPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+{
+    if (dockPart == DockPart::DCCSetting) {
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return QIcon(":/icons/dcc_trash.svg");
+
+        QPixmap pixmap(":/icons/dcc_trash.svg");
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+        return pixmap;
+    }
+
+    return QIcon();
+}
+
+PluginFlags TrashPlugin::flags() const
+{
+    return PluginFlag::Type_Tool
+            | PluginFlag::Attribute_CanSetting;
 }
 
 void TrashPlugin::refreshPluginItemsVisible()

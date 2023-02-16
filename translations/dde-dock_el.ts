@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Αφαίρεση</translation>
+        <source>Open</source>
+        <translation>Άνοιγμα</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Οι Συσκευές μου</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Άλλες Συσκευές</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Απενεργοποίηση</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Ενεργοποίηση</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Απενεργοποίηση</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Προσθήκη διάταξης πληκτρολογίου</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12-ωρη ώρα</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24-ωρη ώρα</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Ρυθμίσεις ώρας </translation>
     </message>
 </context>
 <context>
@@ -122,65 +171,9 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Δευτέρα</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Τρίτη</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Τετάρτη</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Πέμπτη</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>Παρασκευή</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Σάββατο</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Κυριακή</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>Δευτέρα</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
+        <source>PC collaboration</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Άγνωστη συσκευή</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Άγνωστος τόμος</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Δίσκος</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Άνοιγμα</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Αποπροσάρτηση όλων </translation>
+        <source>Disabled</source>
+        <translation>Απενεργοποιημένο</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Πρόγραμμα εκκίνησης</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Έξοδος Ασφαλής Λειτουργίας</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Γραμμή Εργασιών - Ασφαλής Λειτουργία</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Η Γραμμή Εργασιών είναι σε ασφαλή λειτουργία, παρακαλώ αποχωρήστε για να εμφανιστεί σωστά</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Μέγεθος</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Πολλαπλές Οθόνες</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation type="unfinished"/>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Μοντέρνα λειτουργία</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Αποτελεσματική λειτουργία</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Λειτουργία</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Πάνω μέρος</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Κάτω μέρος</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Αριστερά</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Δεξιά</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Τοποθεσία</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Κρατήστε κρυφό</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Έξυπνη απόκρυψη</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Κατάσταση</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Μικρό</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Μεγάλο</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>Στην οθόνη όπου βρίσκεται ο κέρσορας</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Μόνο στην κύρια οθόνη</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>Onboard</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Ρυθμίσεις</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Ενέργεια</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Ρυθμίσεις ενέργειας</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Χωρητικότητα %1, απομένουν %2 λεπτά</translation>
@@ -469,35 +335,8 @@
         <source>Capacity %1, fully charged</source>
         <translation>Χωρητικότητα %1, πλήρης φόρτιση</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Προσθήκη στην γραμμή εργασιών</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Λειτουργία</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Τοποθεσία</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Κατάσταση</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Μέγεθος</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Area</source>
+        <source>Battery</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Ενέργεια</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Τερματισμός λειτουργίας</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Επανεκκίνηση</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Ενέργεια</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Ένταση</translation>
+        <source>Device</source>
+        <translation>Συσκευή</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Συσκευή Εξόδου</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Ρυθμίσεις ήχου</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Ένταση %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Κενό</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Έξοδος Ασφαλής Λειτουργίας</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Γραμμή Εργασιών - Ασφαλής Λειτουργία</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Η Γραμμή Εργασιών είναι σε ασφαλή λειτουργία, παρακαλώ αποχωρήστε για να εμφανιστεί σωστά</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,11 +10,6 @@
 #include "shutdownwidget.h"
 
 #include <QLabel>
-#include <QSharedPointer>
-
-#include <DConfig>
-
-DCORE_USE_NAMESPACE
 
 class DBusPowerManager;
 
@@ -48,7 +44,8 @@ public:
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
 
-    void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginFlags flags() const override;
 
     // 休眠待机配置，保持和sessionshell一致
     const QStringList session_ui_configs {
@@ -93,7 +90,7 @@ public:
 
 private:
     void loadPlugin();
-    void refreshPluginItemsVisible();
+    bool checkSwap();
 
 private:
     bool m_pluginLoaded;
@@ -103,7 +100,6 @@ private:
     DBusPowerManager* m_powerManagerInter;
     const QGSettings *m_gsettings;
     const QGSettings *m_sessionShellGsettings;
-    QSharedPointer<DConfig> m_dconfig;
 };
 
 #endif // SHUTDOWNPLUGIN_H

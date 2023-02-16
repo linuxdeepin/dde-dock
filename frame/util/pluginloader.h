@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -13,13 +14,6 @@ class PluginLoader : public QThread
 
 public:
     explicit PluginLoader(const QString &pluginDirPath, QObject *parent);
-    static QString libUsedDtkCoreFileName(const QString &fileName);
-    /**
-     * @brief realFileName 获取软连接的真实文件的路径
-     * @param fileName 文件地址
-     * @return
-     */
-    static QString realFileName(QString fileName);
 
 signals:
     void finished() const;
@@ -27,8 +21,6 @@ signals:
 
 protected:
     void run();
-
-    QString dtkCoreFileName();
 
 private:
     QString m_pluginDirPath;

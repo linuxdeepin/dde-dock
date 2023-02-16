@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Elimină</translation>
+        <source>Open</source>
+        <translation>Deschide</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Dispozitivele mele</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Alte dispozitive</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Pornește</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Oprește</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Pornește</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Oprește</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Adăugare aspect  tastatură</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>Format 12-ore</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>Format 24-ore</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Configurări pentru timp</translation>
     </message>
 </context>
 <context>
@@ -122,65 +171,9 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Luni</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Marţi</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Miercuri</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Joi</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>Vineri</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Sâmbătă</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Duminică</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>luni</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
+        <source>PC collaboration</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Dispozitiv necunoscut</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Volum necunoscut</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Disc</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Deschide</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Demontați-le pe toate</translation>
+        <source>Disabled</source>
+        <translation>Dezactivat</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Lansator</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Dimensiune</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Afișaje multiple</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation type="unfinished"/>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Mod fashion</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Mod eficient</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Mod</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Sus</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Jos</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Stânga</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Dreapta</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Locație</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Păstraţi ascuns</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Ascundere inteligentă</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Stare</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Mic</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Mare</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>La bord</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Setări</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energie</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Setări pentru administrare de energie</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Capacitate %1, %2 Min rămase</translation>
@@ -469,35 +335,8 @@
         <source>Capacity %1, fully charged</source>
         <translation>Capacitate %1, complet încărcat</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Dock</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Mod</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Locație</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Stare</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Dimensiune</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Area</source>
+        <source>Battery</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Energie</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Închidere</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Repornire</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Energie</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Volum</translation>
+        <source>Device</source>
+        <translation>Dispozitiv</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Dispozitiv de ieșire</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Setări Sunet</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Volum %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Gol</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

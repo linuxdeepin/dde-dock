@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,12 +10,14 @@
 #include "pluginsiteminterface.h"
 
 class QGSettings;
+
 class PluginsItem : public DockItem
 {
     Q_OBJECT
 
+    friend class QuickSettingController;
+
 public:
-    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QString &plginApi, QWidget *parent = nullptr);
     ~PluginsItem() override;
 
     int itemSortKey() const;
@@ -34,8 +37,13 @@ public:
 
     virtual void setDraging(bool bDrag) override;
 
+    PluginsItemInterface *pluginItem() const;
+
 public slots:
     void refreshIcon() override;
+
+protected:
+    explicit PluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, const QJsonObject &jsonData, QWidget *parent = nullptr);
 
 private slots:
     void onGSettingsChanged(const QString &key);
@@ -50,7 +58,7 @@ protected:
     void showEvent(QShowEvent *event) override;
 
     void invokedMenuItem(const QString &itemId, const bool checked) override;
-    void showPopupWindow(QWidget *const content, const bool model = false, const int radius = 6) override;
+    void showPopupWindow(QWidget *const content, const bool model = false) override;
     const QString contextMenu() const override;
     QWidget *popupTips() override;
     void resizeEvent(QResizeEvent *event) override;
@@ -59,12 +67,13 @@ private:
     void startDrag();
     void mouseClicked();
     bool checkGSettingsControl() const;
+    QString pluginApi() const;
 
 private:
     PluginsItemInterface *const m_pluginInter;
     QWidget *m_centralWidget;
 
-    const QString m_pluginApi;
+    QJsonObject m_jsonData;
     const QString m_itemKey;
     bool m_dragging;
 

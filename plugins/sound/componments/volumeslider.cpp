@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -54,8 +55,7 @@ void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
-    {
+    if (e->button() == Qt::LeftButton) {
         m_pressed = false;
         emit requestPlaySoundEffect();
     }
@@ -67,7 +67,7 @@ void VolumeSlider::wheelEvent(QWheelEvent *e)
 
     m_timer->start();
 
-    DSlider::setValue(value() + (e->delta() > 0 ? 2 : -2));
+    DSlider::setValue(value() + (e->angleDelta().y() > 0 ? 2 : -2));
 }
 
 void VolumeSlider::onTimeout()

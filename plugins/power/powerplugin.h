@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,11 +10,11 @@
 #include "powerstatuswidget.h"
 #include "dbus/dbuspower.h"
 
-#include <com_deepin_system_systempower.h>
+#include "org_deepin_dde_systempower1.h"
 
 #include <QLabel>
 
-using SystemPowerInter = com::deepin::system::Power;
+using SystemPowerInter = org::deepin::dde::Power1;
 namespace Dock {
 class TipsWidget;
 }
@@ -29,25 +30,27 @@ public:
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
-    void pluginStateSwitched() override;
     bool pluginIsAllowDisable() override { return true; }
-    bool pluginIsDisable() override;
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     const QString itemCommand(const QString &itemKey) override;
-    const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     void refreshIcon(const QString &itemKey) override;
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
-    void pluginSettingsChanged() override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
+    PluginFlags flags() const override;
 
 private:
     void updateBatteryVisible();
     void loadPlugin();
-    void refreshPluginItemsVisible();
     void onGSettingsChanged(const QString &key);
+    void initUi();
+    void initConnection();
+
+private slots:
     void refreshTipsData();
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     bool m_pluginLoaded;
@@ -59,6 +62,9 @@ private:
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
     QTimer *m_preChargeTimer;
+    QWidget *m_quickPanel;
+    QLabel *m_imageLabel;
+    QLabel *m_labelText;
 };
 
 #endif // POWERPLUGIN_H

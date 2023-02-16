@@ -1,0 +1,21 @@
+<interface name="org.deepin.dde.Launcher1">
+  <property name="Visible" type="b" access="read"/>
+  <signal name="Closed"></signal>
+  <signal name="Shown"></signal>
+  <signal name="VisibleChanged">
+    <arg name="visible" type="b" direction="out"/>
+  </signal>
+  <method name="Exit"></method>
+  <method name="Hide"></method>
+  <method name="Show"></method>
+  <method name="ShowByMode">
+    <arg name="in0" type="x" direction="in"/>
+  </method>
+  <method name="UninstallApp">
+    <arg name="appKey" type="s" direction="in"/>
+  </method>
+  <method name="Toggle"></method>
+  <method name="IsVisible">
+    <arg type="b" direction="out"/>
+  </method>
+</interface>

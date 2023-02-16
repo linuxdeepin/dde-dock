@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -10,9 +11,10 @@
 namespace Dock {
 
 #define DOCK_PLUGIN_MIME    "dock/plugin"
-#define DOCK_PLUGIN_API_VERSION    "1.2.3"
+#define DOCK_PLUGIN_API_VERSION    "2.0.0"
 
 #define PROP_DISPLAY_MODE   "DisplayMode"
+#define PROP_DOCK_DRAGING   "isDraging"
 
 #define PLUGIN_BACKGROUND_MAX_SIZE 40
 #define PLUGIN_BACKGROUND_MIN_SIZE 20
@@ -20,12 +22,18 @@ namespace Dock {
 #define PLUGIN_ICON_MAX_SIZE 20
 #define PLUGIN_ITEM_WIDTH 300
 
+#define QUICK_PATH "/plugins/quick-trays"
+#define PLUGIN_PATH "/plugins"
+#define TRAY_PATH "/plugins/system-trays"
+
 // 需求变更成插件图标始终保持20x20,但16x16的资源还在。所以暂时保留此宏
 #define PLUGIN_ICON_MIN_SIZE 20
 
 // 插件最小尺寸，图标采用深色
 #define PLUGIN_MIN_ICON_NAME "-dark"
 
+// dock最小尺寸
+#define DOCK_MIN_SIZE 40
 // dock最大尺寸
 #define DOCK_MAX_SIZE 100
 ///
@@ -47,7 +55,7 @@ enum DisplayMode {
 enum HideMode {
     KeepShowing     = 0,
     KeepHidden      = 1,
-    SmartHide       = 3,
+    SmartHide       = 2
 };
 
 #define PROP_POSITION       "Position"
@@ -73,6 +81,11 @@ enum HideState {
     Unknown     = 0,
     Show        = 1,
     Hide        = 2,
+};
+
+enum class AniAction {
+    Show = 0,
+    Hide
 };
 
 #define IS_TOUCH_STATE "isTouchState"

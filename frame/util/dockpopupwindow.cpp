@@ -1,10 +1,12 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dockpopupwindow.h"
 #include "imageutil.h"
 #include "utils.h"
+#include "dbusutil.h"
 
 #include <QScreen>
 #include <QApplication>
@@ -17,10 +19,11 @@
 DWIDGET_USE_NAMESPACE
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
-    : DArrowRectangle(ArrowBottom, parent),
-      m_model(false),
-      m_regionInter(new DRegionMonitor(this)),
-      m_enableMouseRelease(true)
+    : DArrowRectangle(ArrowBottom, parent)
+    , m_model(false)
+    , m_eventMonitor(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
+    , m_enableMouseRelease(true)
+    , m_extendWidget(nullptr)
 {
     setMargin(0);
     m_wmHelper = DWindowManagerHelper::instance();
@@ -30,14 +33,16 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
     if (Utils::IS_WAYLAND_DISPLAY) {
         setAttribute(Qt::WA_NativeWindow);
-        // 谨慎修改层级，特别要注意对锁屏的影响
-        windowHandle()->setProperty("_d_dwayland_window-type", "dock");
+        windowHandle()->setProperty("_d_dwayland_window-type", "override");
     } else {
         setAttribute(Qt::WA_InputMethodEnabled, false);
     }
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
-    connect(m_regionInter, &DRegionMonitor::buttonRelease, this, &DockPopupWindow::onGlobMouseRelease);
+    connect(m_eventMonitor, &XEventMonitor::ButtonPress, this, &DockPopupWindow::onButtonPress);
+
+    if (Utils::IS_WAYLAND_DISPLAY)
+        QDBusConnection::sessionBus().connect("com.deepin.dde.lockFront", "/com/deepin/dde/lockFront", "com.deepin.dde.lockFront", "Visible", "b", this, SLOT(hide()));
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -65,6 +70,17 @@ void DockPopupWindow::setContent(QWidget *content)
     DArrowRectangle::setContent(content);
 }
 
+void DockPopupWindow::setExtendWidget(QWidget *widget)
+{
+    m_extendWidget = widget;
+    connect(widget, &QWidget::destroyed, this, [ this ] { m_extendWidget = nullptr; }, Qt::UniqueConnection);
+}
+
+QWidget *DockPopupWindow::extengWidget() const
+{
+    return m_extendWidget;
+}
+
 void DockPopupWindow::show(const QPoint &pos, const bool model)
 {
     m_model = model;
@@ -72,13 +88,15 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
     show(pos.x(), pos.y());
 
-    if (m_regionInter->registered()) {
-        m_regionInter->unregisterRegion();
+    if (!m_eventKey.isEmpty()) {
+        m_eventMonitor->UnregisterArea(m_eventKey);
+        m_eventKey.clear();
     }
 
     if (m_model) {
-        m_regionInter->registerRegion();
+        m_eventKey = m_eventMonitor->RegisterFullScreen();
     }
+
     blockButtonRelease();
 }
 
@@ -101,8 +119,10 @@ void DockPopupWindow::blockButtonRelease()
 
 void DockPopupWindow::hide()
 {
-    if (m_regionInter->registered())
-        m_regionInter->unregisterRegion();
+    if (!m_eventKey.isEmpty()) {
+        m_eventMonitor->UnregisterArea(m_eventKey);
+        m_eventKey.clear();
+    }
 
     DArrowRectangle::hide();
 }
@@ -115,6 +135,12 @@ void DockPopupWindow::showEvent(QShowEvent *e)
     }
 
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
+}
+
+void DockPopupWindow::hideEvent(QHideEvent *event)
+{
+    m_extendWidget = nullptr;
+    Dtk::Widget::DArrowRectangle::hideEvent(event);
 }
 
 void DockPopupWindow::enterEvent(QEvent *e)
@@ -133,8 +159,7 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
         return false;
 
     // FIXME: ensure position move after global mouse release event
-    if (isVisible())
-    {
+    if (isVisible()) {
         QTimer::singleShot(10, this, [=] {
             // NOTE(sbw): double check is necessary, in this time, the popup maybe already hided.
             if (isVisible())
@@ -143,27 +168,6 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
     }
 
     return false;
-}
-
-void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
-{
-    Q_ASSERT(m_model);
-
-    if (!m_enableMouseRelease)
-        return;
-
-    if (!((flag == DRegionMonitor::WatchedFlags::Button_Left) ||
-          (flag == DRegionMonitor::WatchedFlags::Button_Right))) {
-        return;
-    }
-
-    const QRect rect = QRect(pos(), size());
-    if (rect.contains(mousePos))
-        return;
-
-    emit accept();
-
-    m_regionInter->unregisterRegion();
 }
 
 void DockPopupWindow::compositeChanged()
@@ -176,12 +180,65 @@ void DockPopupWindow::compositeChanged()
 
 void DockPopupWindow::ensureRaised()
 {
-    if (isVisible()) {
-        QWidget *content = getContent();
-        if (!content || !content->isVisible()) {
-            this->setVisible(false);
-        } else {
-            raise();
-        }
+    if (isVisible())
+        raise();
+}
+
+void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
+{
+    if (!m_enableMouseRelease)
+        return;
+
+    QRect popupRect(pos() * qApp->devicePixelRatio(), size() * qApp->devicePixelRatio()) ;
+    if (popupRect.contains(x, y))
+        return;
+
+    if (m_extendWidget) {
+        // 计算额外添加的区域，如果鼠标的点击点在额外的区域内，也无需隐藏
+        QPoint extendPoint = m_extendWidget->mapToGlobal(QPoint(0, 0));
+        QRect extendRect(extendPoint * qApp->devicePixelRatio(), m_extendWidget->size() * qApp->devicePixelRatio());
+        if (extendRect.contains(QPoint(x, y)))
+            return;
     }
+
+    emit accept();
+    hide();
+}
+
+PopupSwitchWidget::PopupSwitchWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_containerLayout(new QVBoxLayout(this))
+    , m_topWidget(nullptr)
+{
+    m_containerLayout->setContentsMargins(0, 0, 0, 0);
+    m_containerLayout->setSpacing(0);
+}
+
+PopupSwitchWidget::~PopupSwitchWidget()
+{
+}
+
+void PopupSwitchWidget::pushWidget(QWidget *widget)
+{
+    // 首先将界面其他的窗体移除
+    for (int i = m_containerLayout->count() - 1; i >= 0; i--) {
+        QLayoutItem *item = m_containerLayout->itemAt(i);
+        item->widget()->removeEventFilter(this);
+        item->widget()->hide();
+        m_containerLayout->removeItem(item);
+    }
+    m_topWidget = widget;
+    setFixedSize(widget->size());
+    widget->installEventFilter(this);
+    m_containerLayout->addWidget(widget);
+    widget->show();
+}
+
+bool PopupSwitchWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_topWidget && event->type() == QEvent::Resize) {
+        setFixedSize(m_topWidget->size());
+    }
+
+    return QWidget::eventFilter(watched, event);
 }

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2016 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -10,8 +11,9 @@
 #include <QStandardItemModel>
 
 #include <dtkwidget_global.h>
+#include <DGuiApplicationHelper>
 
-#include <com_deepin_daemon_airplanemode.h>
+#include "org_deepin_dde_airplanemode1.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -29,8 +31,9 @@ class DListView;
 DWIDGET_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
-using DBusAirplaneMode = com::deepin::daemon::AirplaneMode;
+using DBusAirplaneMode = org::deepin::dde::AirplaneMode1;
 
 class SettingLabel : public QWidget
 {
@@ -46,6 +49,12 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *ev) override;
     void paintEvent(QPaintEvent *event) override;
+    void changeEvent(QEvent *event) override;
+
+    void updateEnabledStatus();
+
+private Q_SLOTS:
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 private:
     DLabel *m_label;
@@ -56,7 +65,7 @@ class BluetoothApplet : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BluetoothApplet(QWidget *parent = nullptr);
+    explicit BluetoothApplet(AdaptersManager *adapterManager, QWidget *parent = nullptr);
     bool poweredInitState();
     // 当前是否有蓝牙适配器
     bool hasAadapter();
@@ -68,12 +77,15 @@ public:
     QStringList connectedDevicesName();
 
     inline bool airplaneModeEnable() const { return m_airplaneModeEnable;}
+    // 返回蓝牙适配器
+    AdaptersManager *adaptersManager();
 
 signals:
     void noAdapter();
     void justHasAdapter();
     void powerChanged(bool state);
     void deviceStateChanged(const Device *device);
+    void requestHide();
 
 public slots:
     // 蓝牙适配器增加
@@ -92,6 +104,7 @@ private:
     // 更新蓝牙插件主界面大小
     void updateSize();
     void updateIconTheme();
+    void initAdapters();
 
 private:
     QScrollArea *m_scroarea;

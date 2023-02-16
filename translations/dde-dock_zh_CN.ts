@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>移除</translation>
+        <source>Open</source>
+        <translation>打开</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>我的设备</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>其他设备</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>蓝牙</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>开启</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>关闭</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>蓝牙</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>开启</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>添加键盘布局</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12小时制</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24小时制</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>时间设置</translation>
     </message>
 </context>
 <context>
@@ -122,66 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>星期一</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>星期二</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>星期三</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>星期四</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>星期五</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>星期六</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>星期日</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>周一</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation>周二</translation>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation>周三</translation>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation>周四</translation>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation>周五</translation>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation>周六</translation>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation>周日</translation>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
-        <translation>%1年%2月%3日</translation>
+        <source>PC collaboration</source>
+        <translation>电脑协同</translation>
     </message>
 </context>
 <context>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>未知的设备</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>容量未知</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation>电脑协同设置</translation>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>磁盘</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation>The plugin %1 is not compatible with the system.</translation>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation>启用</translation>
     </message>
     <message>
-        <source>Open</source>
-        <translation>打开</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>卸载全部</translation>
+        <source>Disabled</source>
+        <translation>已禁用</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>启动器</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>退出安全模式</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>任务栏安全模式</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>任务栏已进入安全模式，退出安全模式后即可正常显示</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>大小</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>多屏显示设置</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>插件区域</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>选择显示在任务栏插件区域的图标</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>时尚模式</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>高效模式</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>模式</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>上</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>下</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>左</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>右</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>位置</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>一直显示</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>一直隐藏</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>智能隐藏</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>状态</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>小</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>大</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>任务栏位置</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>跟随鼠标位置显示</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>仅主屏显示</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>屏幕键盘</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>设置</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>电源</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>电源设置</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>电量%1，剩余%2分钟</translation>
@@ -469,36 +335,9 @@
         <source>Capacity %1, fully charged</source>
         <translation>电量%1，已充满</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>任务栏</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>模式</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>位置</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>状态</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>大小</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>任务栏位置</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>插件区域</translation>
+        <source>Battery</source>
+        <translation>电池</translation>
     </message>
 </context>
 <context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>电源</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>关机</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>重启</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>电源</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>音量</translation>
+        <source>Device</source>
+        <translation>设备</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>输出设备</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>音量设置</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>当前音量 %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation>无声音输出设备</translation>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>清空</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>退出安全模式</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>任务栏安全模式</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>任务栏已进入安全模式，退出安全模式后即可正常显示</translation>
     </message>
 </context>
 </TS>

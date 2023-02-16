@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -7,6 +8,7 @@
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
 #include "utils.h"
+#include "screenspliter.h"
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -31,18 +33,17 @@ DCORE_USE_NAMESPACE
 
 QPoint AppItem::MousePressPos;
 
-AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
     , m_appSettings(appSettings)
     , m_activeAppSettings(activeAppSettings)
     , m_dockedAppSettings(dockedAppSettings)
     , m_appPreviewTips(nullptr)
-    , m_itemEntryInter(new DockEntryInter("com.deepin.dde.daemon.Dock", entry.path(), QDBusConnection::sessionBus(), this))
+    , m_itemEntryInter(new DockEntryInter(dockServiceName(), entry.path(), QDBusConnection::sessionBus(), this))
     , m_swingEffectView(nullptr)
     , m_itemAnimation(nullptr)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_drag(nullptr)
-    , m_dragging(false)
     , m_retryTimes(0)
     , m_iconValid(true)
     , m_lastclickTimes(0)
@@ -51,6 +52,9 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
+    , m_createMSecs(QDateTime::currentMSecsSinceEpoch())
+    , m_screenSpliter(ScreenSpliterFactory::createScreenSpliter(this, m_itemEntryInter))
+    , m_dockInter(dockInter)
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
@@ -62,7 +66,6 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
-    m_currentWindowId = m_itemEntryInter->currentWindow();
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
@@ -77,13 +80,13 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
-
-    connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
+    connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, &AppItem::modeChanged);
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
+    connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
+
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
     updateWindowInfos(m_itemEntryInter->windowInfos());
-    refreshIcon();
 
     if (m_appSettings)
         connect(m_appSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
@@ -111,6 +114,11 @@ const QString AppItem::appId() const
     return m_id;
 }
 
+QString AppItem::name() const
+{
+    return m_itemEntryInter->name();
+}
+
 bool AppItem::isValid() const
 {
     return m_itemEntryInter->isValid() && !m_itemEntryInter->id().isEmpty();
@@ -121,14 +129,12 @@ bool AppItem::isValid() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
+    // wayland没做处理
+    if (Utils::IS_WAYLAND_DISPLAY)
+        return;
+
     const QRect r(mapToGlobal(QPoint(0, 0)),
                   mapToGlobal(QPoint(width(), height())));
-
-    if (Utils::IS_WAYLAND_DISPLAY){
-        Q_EMIT requestUpdateItemMinimizedGeometry(r);
-        return;
-    }
-
     if (!QX11Info::connection()) {
         qWarning() << "QX11Info::connection() is 0x0";
         return;
@@ -164,9 +170,70 @@ void AppItem::setDockInfo(Dock::Position dockPosition, const QRect &dockGeometry
     }
 }
 
+void AppItem::setDraging(bool drag)
+{
+    if (drag == isDragging())
+        return;
+
+    DockItem::setDraging(drag);
+    if (!drag)
+        m_screenSpliter->releaseSplit();
+}
+
+void AppItem::startSplit(const QRect &rect)
+{
+    m_screenSpliter->startSplit(rect);
+}
+
+bool AppItem::supportSplitWindow()
+{
+    return m_screenSpliter->suportSplitScreen();
+}
+
+bool AppItem::splitWindowOnScreen(ScreenSpliter::SplitDirection direction)
+{
+    return m_screenSpliter->split(direction);
+}
+
+int AppItem::mode() const
+{
+    return m_itemEntryInter->mode();
+}
+
+
+DockEntryInter *AppItem::itemEntryInter() const
+{
+    return m_itemEntryInter;
+}
+
 QString AppItem::accessibleName()
 {
     return m_itemEntryInter->name();
+}
+
+void AppItem::requestDock()
+{
+    m_itemEntryInter->RequestDock();
+}
+
+bool AppItem::isDocked() const
+{
+    return m_itemEntryInter->isDocked();
+}
+
+qint64 AppItem::appOpenMSecs() const
+{
+    return m_createMSecs;
+}
+
+void AppItem::updateMSecs()
+{
+    m_createMSecs = QDateTime::currentMSecsSinceEpoch();
+}
+
+const WindowInfoMap &AppItem::windowsMap() const
+{
+    return m_windowInfos;
 }
 
 void AppItem::moveEvent(QMoveEvent *e)
@@ -183,10 +250,8 @@ void AppItem::moveEvent(QMoveEvent *e)
 void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
-    if (m_draging)
-        return;
 
-    if (m_dragging || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
+    if (isDragging() || (m_swingEffectView != nullptr && DockDisplayMode != Fashion))
         return;
 
     QPainter painter(this);
@@ -207,13 +272,21 @@ void AppItem::paintEvent(QPaintEvent *e)
         QPainterPath path;
         path.addRoundedRect(backgroundRect, 8, 8);
 
-        if (m_active) {
-            painter.fillPath(path, QColor(0, 0, 0, 255 * 0.8));
-        } else if (!m_windowInfos.isEmpty()) {
-            if (hasAttention())
-                painter.fillPath(path, QColor(241, 138, 46, 255 * .8));
-            else
-                painter.fillPath(path, QColor(0, 0, 0, 255 * 0.3));
+        // 在没有开启窗口多开的情况下，显示背景色
+        if (!m_dockInter->showMultiWindow()) {
+            if (m_active) {
+                QColor color = Qt::black;
+                color.setAlpha(255 * 0.8);
+                painter.fillPath(path, color);
+            } else if (!m_windowInfos.isEmpty()) {
+                if (hasAttention()) {
+                    painter.fillPath(path, QColor(241, 138, 46, 255 * .8));
+                } else {
+                    QColor color = Qt::black;
+                    color.setAlpha(255 * 0.3);
+                    painter.fillPath(path, color);
+                }
+            }
         }
     } else {
         if (!m_windowInfos.isEmpty()) {
@@ -307,11 +380,16 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
                  << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
 
-        m_itemEntryInter->Activate(QX11Info::getTimestamp());
-
-        // play launch effect
-        if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
-            playSwingEffect();
+        if (m_dockInter->showMultiWindow()) {
+            // 如果开启了多窗口显示，则直接新建一个窗口
+            m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+        } else {
+            // 如果没有开启新窗口显示，则
+            m_itemEntryInter->Activate(QX11Info::getTimestamp());
+            // play launch effect
+            if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
+                playSwingEffect();
+        }
     }
 }
 
@@ -334,6 +412,10 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
 {
     e->accept();
 
+    // handle preview
+    //    if (e->buttons() == Qt::NoButton)
+    //        return showPreview();
+
     // handle drag
     if (e->buttons() != Qt::LeftButton)
         return;
@@ -341,6 +423,10 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     const QPoint pos = e->pos();
     if (!rect().contains(pos))
         return;
+
+    const QPoint distance = pos - MousePressPos;
+    if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
+        return startDrag();
 }
 
 void AppItem::wheelEvent(QWheelEvent *e)
@@ -449,7 +535,7 @@ QWidget *AppItem::popupTips()
     if (checkGSettingsControl())
         return nullptr;
 
-    if (m_dragging)
+    if (isDragging())
         return nullptr;
 
     static TipsWidget appNameTips(topLevelWidget());
@@ -457,13 +543,65 @@ QWidget *AppItem::popupTips()
     appNameTips.setObjectName(m_itemEntryInter->name());
 
     if (!m_windowInfos.isEmpty()) {
-        Q_ASSERT(m_windowInfos.contains(m_currentWindowId));
-        appNameTips.setText(m_windowInfos[m_currentWindowId].title.simplified());
+        const quint32 currentWindow = m_itemEntryInter->currentWindow();
+        Q_ASSERT(m_windowInfos.contains(currentWindow));
+        appNameTips.setText(m_windowInfos[currentWindow].title.simplified());
     } else {
         appNameTips.setText(m_itemEntryInter->name().simplified());
     }
 
     return &appNameTips;
+}
+
+void AppItem::startDrag()
+{
+    // 拖拽实现放到mainpanelcontrol
+
+    /*
+    if (!acceptDrops())
+        return;
+
+    if (checkGSettingsControl()) {
+        return;
+    }
+
+    m_dragging = true;
+    update();
+
+    const QPixmap &dragPix = m_appIcon;
+
+    m_drag = new AppDrag(this);
+    m_drag->setMimeData(new QMimeData);
+
+    // handle drag finished here
+    connect(m_drag->appDragWidget(), &AppDragWidget::destroyed, this, [ = ] {
+        m_dragging = false;
+        m_drag.clear();
+        setVisible(true);
+        update();
+    });
+
+    if (m_wmHelper->hasComposite()) {
+        m_drag->setPixmap(dragPix);
+        m_drag->appDragWidget()->setOriginPos(mapToGlobal(appIconPosition()));
+        emit dragStarted();
+        m_drag->exec(Qt::MoveAction);
+    } else {
+        m_drag->QDrag::setPixmap(dragPix);
+        m_drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
+        emit dragStarted();
+        m_drag->QDrag::exec(Qt::MoveAction);
+    }
+
+    // MainPanel will put this item to Item-Container when received this signal(MainPanel::itemDropped)
+    //emit itemDropped(m_drag->target());
+
+    if (!m_wmHelper->hasComposite()) {
+        if (!m_drag->target()) {
+            m_itemEntryInter->RequestUndock();
+        }
+    }
+    */
 }
 
 bool AppItem::hasAttention() const
@@ -488,8 +626,11 @@ QPoint AppItem::appIconPosition() const
 
 void AppItem::updateWindowInfos(const WindowInfoMap &info)
 {
+    // 如果是打开第一个窗口，则更新窗口时间
+    if (m_windowInfos.isEmpty() && !info.isEmpty())
+        updateMSecs();
+
     m_windowInfos = info;
-    m_currentWindowId = info.firstKey();
     if (m_appPreviewTips)
         m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_updateIconGeometryTimer->start();
@@ -503,6 +644,9 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
     }
 
     update();
+
+    // 通知外面窗体数量发生变化，需要更新多开窗口的信息
+    Q_EMIT windowCountChanged();
 }
 
 void AppItem::refreshIcon()
@@ -540,7 +684,9 @@ void AppItem::refreshIcon()
         update();
 
         return;
-    } else if (m_retryTimes > 0) {
+    }
+
+    if (m_retryTimes > 0) {
         // reset times
         m_retryTimes = 0;
     }
@@ -578,7 +724,6 @@ void AppItem::showPreview()
         return;
 
     m_appPreviewTips = new PreviewContainer;
-    m_appPreviewTips->updateDockSize(DockSize);
     m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
@@ -593,19 +738,11 @@ void AppItem::showPreview()
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::onResetPreview);
 
     // 预览标题显示方式的配置
-    DConfig *config = DConfig::create("org.deepin.dde.dock", "org.deepin.dde.dock");
-    if (config->isValid() && config->keyList().contains("showWindowName"))
-        m_appPreviewTips->setTitleDisplayMode(config->value("showWindowName").toInt());
-    delete config;
+    DConfig config(QString("com.deepin.dde.dock.dconfig"), QString());
+    if (config.isValid() && config.keyList().contains("Dock_Show_Window_name"))
+        m_appPreviewTips->setTitleDisplayMode(config.value("Dock_Show_Window_name").toInt());
 
-    // 设置预览界面是否开启左右两边的圆角
-    if (!PopupWindow.isNull() && m_wmHelper->hasComposite()) {
-        PopupWindow->setLeftRightRadius(true);
-    } else {
-        PopupWindow->setLeftRightRadius(false);
-    }
-
-    showPopupWindow(m_appPreviewTips, true, 18);
+    showPopupWindow(m_appPreviewTips, true);
 }
 
 void AppItem::playSwingEffect()

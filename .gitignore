@@ -22,3 +22,7 @@ CMakeLists.txt.user*
 # binary file
 dde-dock
 .vscode
+
+*/dbusinterface/generation_dbus_interface/
+*/*/dbusinterface/generation_dbus_interface/
+.transifexrc

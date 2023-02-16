@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bn" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="bn">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -7,10 +7,148 @@
     </message>
 </context>
 <context>
+    <name>AirplaneModeApplet</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModeItem</name>
+    <message>
+        <source>Airplane mode enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AirplaneModePlugin</name>
+    <message>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation>খুলুন</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ব্লুটুথ</translation>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ব্লুটুথ</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>ব্লুটুথ</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DBusAdaptors</name>
     <message>
         <source>Add keyboard layout</source>
         <translation>কীবোর্ড লেআউট যোগ করুন</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -33,18 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Enable network</source>
-        <translation>নেটওয়ার্ক চালু করুন</translation>
-    </message>
-    <message>
-        <source>Disable network</source>
-        <translation>নেটওয়ার্ক বন্ধ করুন</translation>
-    </message>
-    <message>
-        <source>Network settings</source>
-        <translation>নেটওয়ার্কের সেটিংস</translation>
+        <source>PC collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -67,33 +197,39 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>অপরিচিত ডিভাইস</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>অজানা ভলিউম</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>ডিস্ক</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation>খুলুন</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>সবকিছু আনমাউন্ট করুন</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>অক্ষম</translation>
+    </message>
+</context>
+<context>
+    <name>LauncherItem</name>
+    <message>
+        <source>Launcher</source>
+        <translation>লঞ্চার</translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
     <message>
         <source>Fashion Mode</source>
         <translation>ফ্যাশন মোড</translation>
@@ -143,15 +279,8 @@
         <translation>অবস্থা</translation>
     </message>
     <message>
-        <source>Plugins</source>
-        <translation>প্লাগইন সমূহ</translation>
-    </message>
-</context>
-<context>
-    <name>LauncherItem</name>
-    <message>
-        <source>Launcher</source>
-        <translation>লঞ্চার</translation>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -166,33 +295,14 @@
     </message>
 </context>
 <context>
-    <name>NetworkPlugin</name>
-    <message>
-        <source>Network</source>
-        <translation>নেটওয়ার্ক</translation>
-    </message>
-</context>
-<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
         <translation>ওনবোর্ড</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>সেটিংস</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>পাওয়ার</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>পাওয়ার সেটিংস</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>ধারণ ক্ষমতা %1, %2 min বাকি আছে</translation>
@@ -210,10 +320,6 @@
         <translation>%1 চার্জ হচ্ছে, সম্পূর্ণ হতে %2 hr %3 min বাকি আছে</translation>
     </message>
     <message>
-        <source>Charged</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Capacity %1</source>
         <translation type="unfinished"/>
     </message>
@@ -227,6 +333,10 @@
     </message>
     <message>
         <source>Capacity %1, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Battery</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -243,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>পাওয়ার</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>বন্ধ করুন</translation>
@@ -279,6 +385,10 @@
         <source>Reboot</source>
         <translation>পুনঃরায় চালু করুন</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>পাওয়ার</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
@@ -286,9 +396,16 @@
         <source>Device</source>
         <translation>ডিভাইস</translation>
     </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
     <message>
-        <source>Application</source>
-        <translation>অ্যাপ্লিকেশন</translation>
+        <source>Output Device</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -331,6 +448,10 @@
         <source>Trash - %1 files</source>
         <translation>%1 ফাইল ট্র্যাশ করুন</translation>
     </message>
+    <message>
+        <source>Move to Trash</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TrashWidget</name>
@@ -344,47 +465,18 @@
     </message>
 </context>
 <context>
-    <name>TrayPlugin</name>
+    <name>WindowManager</name>
     <message>
-        <source>System Tray</source>
-        <translation>সিস্টেম ট্রে</translation>
-    </message>
-</context>
-<context>
-    <name>WiredItem</name>
-    <message>
-        <source>Unknown</source>
-        <translation>অজানা</translation>
-    </message>
-    <message>
-        <source>Wired connection: %1</source>
-        <translation>তারের সংযোগঃ %1</translation>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <source>No Network</source>
-        <translation>নেটওয়ার্ক নেই</translation>
-    </message>
-    <message>
-        <source>Connected but no Internet access</source>
-        <translation>সংযুক্ত কিন্তু কোনো ইন্টারনেট এক্সেস নেই</translation>
-    </message>
-    <message>
-        <source>Wireless connection: %1</source>
+        <source>Exit Safe Mode</source>
         <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>WirelessList</name>
     <message>
-        <source>Wireless Network</source>
-        <translation>ওয়্যারলেস নেটওয়ার্ক</translation>
+        <source>Dock - Safe Mode</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wireless Network %1</source>
-        <translation>ওয়্যারলেস নেটওয়ার্ক %1</translation>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2018 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2018 ~ 2020 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,15 +10,18 @@
 #include "utils.h"
 #include "dockitem.h"
 #include "xcb_misc.h"
+#include "dbusutil.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_api_xeventmonitor.h>
-#include <com_deepin_dde_launcher.h>
+#include "org_deepin_dde_xeventmonitor1.h"
+#include "org_deepin_dde_launcher1.h"
+#include "org_deepin_dde_appearance1.h"
+
+#include <DWindowManagerHelper>
 
 #include <QObject>
 #include <QFlag>
-#include <QDebug>
 
+#define WINDOWMARGIN ((m_displayMode == Dock::Efficient) ? 0 : 10)
 #define ANIMATIONTIME 300
 #define FREE_POINT(p) if (p) {\
         delete p;\
@@ -30,9 +34,13 @@ DGUI_USE_NAMESPACE
  * 之前测试出的诸多问题都是在切换任务栏位置，切换屏幕，主屏更改，分辨率更改等情况发生后
  * 任务栏的鼠标唤醒区域或任务栏的大小没更新或者更新时的大小还是按照原来的屏幕信息计算而来的，
  */
-using DBusDock = com::deepin::dde::daemon::Dock;
-using XEventMonitor = ::com::deepin::api::XEventMonitor;
-using DBusLuncher = ::com::deepin::dde::Launcher;
+
+#define DRAG_AREA_SIZE (5)
+#define DOCKSPACE (WINDOWMARGIN * 2)
+
+using XEventMonitor = ::org::deepin::dde::XEventMonitor1;
+using DBusLuncher = ::org::deepin::dde::Launcher1;
+using Appearance = org::deepin::dde::Appearance1;
 
 using namespace Dock;
 class QVariantAnimation;
@@ -40,58 +48,18 @@ class QWidget;
 class QTimer;
 class MainWindow;
 class QGSettings;
-class ScreenChangeMonitor;
-
-/**
- * @brief The DockScreen class
- * 保存任务栏的屏幕信息
- */
-class DockScreen
-{
-public:
-    explicit DockScreen(const QString &primary)
-        : m_currentScreen(primary)
-        , m_lastScreen(primary)
-        , m_primary(primary)
-    {}
-    inline const QString &current() const {return m_currentScreen;}
-    inline const QString &last() const {return m_lastScreen;}
-    inline const QString &primary() const {return m_primary;}
-
-    void updateDockedScreen(const QString &screenName)
-    {
-        qInfo() << "update docked screen" << screenName;
-        m_lastScreen = m_currentScreen;
-        m_currentScreen = screenName;
-    }
-
-    void updatePrimary(const QString &primary)
-    {
-        m_primary = primary;
-        if (m_currentScreen.isEmpty()) {
-            updateDockedScreen(primary);
-        }
-    }
-
-private:
-    QString m_currentScreen;
-    QString m_lastScreen;
-    QString m_primary;
-};
+class TrayMainWindow;
+class MenuWorker;
 
 class MultiScreenWorker : public QObject
 {
     Q_OBJECT
+
 public:
     enum Flag {
         Motion = 1 << 0,
         Button = 1 << 1,
         Key    = 1 << 2
-    };
-
-    enum AniAction {
-        Show = 0,
-        Hide
     };
 
     enum RunState {
@@ -102,7 +70,6 @@ public:
         MousePress = 0x10,                  // 当前鼠标是否被按下
         TouchPress = 0x20,                  // 当前触摸屏下是否按下
         LauncherDisplay = 0x40,             // 启动器是否显示
-        DockIsShowing = 0x80,               // 任务栏正在显示
 
         // 如果要添加新的状态，可以在上面添加
         RunState_Mask = 0xffffffff,
@@ -110,84 +77,63 @@ public:
 
     typedef QFlags<RunState> RunStates;
 
-    MultiScreenWorker(QWidget *parent);
+    explicit MultiScreenWorker(QObject *parent = Q_NULLPTR);
+    ~MultiScreenWorker() override;
 
-    void initShow();
-
-    DBusDock *dockInter() { return m_dockInter; }
+    DockInter *dockInter() { return m_dockInter; }
+    void updateDaemonDockSize(const int &dockSize);
 
     inline bool testState(RunState state) { return (m_state & state); }
     void setStates(RunStates state, bool on = true);
 
-    inline const QString &lastScreen() { return m_ds.last(); }
-    inline const QString &deskScreen() { return m_ds.current(); }
     inline const Position &position() { return m_position; }
     inline const DisplayMode &displayMode() { return m_displayMode; }
     inline const HideMode &hideMode() { return m_hideMode; }
     inline const HideState &hideState() { return m_hideState; }
     inline quint8 opacity() { return m_opacity * 255; }
 
-    QRect dockRect(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
-    QRect dockRect(const QString &screenName);
-    QRect getDockShowMinGeometry(const QString &screenName);
-
-    bool launcherVisible();
-    void setLauncherVisble(bool isVisible);
-
 signals:
     void opacityChanged(const quint8 value) const;
-    void displayModeChanegd();
+    void displayModeChanged(const Dock::DisplayMode &);
 
     // 更新监视区域
     void requestUpdateRegionMonitor();                          // 更新监听区域
     void requestUpdateFrontendGeometry();                       //!!! 给后端的区域不能为是或宽度为0的区域,否则会带来HideState死循环切换的bug
     void requestNotifyWindowManager();
     void requestUpdatePosition(const Position &fromPos, const Position &toPos);
-    void requestUpdateLayout();                                 //　界面需要根据任务栏更新布局的方向
-    void requestUpdateDragArea();                               //　更新拖拽区域
     void requestUpdateMonitorInfo();                            //　屏幕信息发生变化，需要更新任务栏大小，拖拽区域，所在屏幕，监控区域，通知窗管，通知后端，
 
-    void requestStopShowAni();
-    void requestStopHideAni();
+    // 用来通知WindowManager的信号
+    void requestUpdateDockGeometry(const Dock::HideMode &hideMode);
+    void positionChanged(const Dock::Position &position);
 
-    void requestUpdateDockEntry();
-    void notifyDaemonInterfaceUpdate();
+    void requestPlayAnimation(const QString &screenName, const Position &position, const Dock::AniAction &animation, bool containMouse = false, bool updatePos = false);
+    void requestChangeDockPosition(const QString &fromScreen, const QString &toScreen, const Position &fromPos, const Position &toPos);
+
+    // 服务重新启动的信号
+    void serviceRestart();
 
 public slots:
-    void onAutoHideChanged(bool autoHide);
-    void updateDaemonDockSize(int dockSize);
+    void onAutoHideChanged(const bool autoHide);
     void onRequestUpdateRegionMonitor();
 
 private slots:
-    void handleDBusSignal(QDBusMessage);
-
     // Region Monitor
     void onRegionMonitorChanged(int x, int y, const QString &key);
     void onExtralRegionMonitorChanged(int x, int y, const QString &key);
 
-    // Animation
-    void showAniFinished();
-    void hideAniFinished();
-
     void updateDisplay();
 
     void onWindowSizeChanged(uint value);
-    void primaryScreenChanged(QScreen *screen);
-    void updateParentGeometry(const QVariant &value, const Position &pos);
-    void updateParentGeometry(const QVariant &value);
+    void onPrimaryScreenChanged();
 
     // 任务栏属性变化
-    void onPositionChanged(const Position &position);
-    void onDisplayModeChanged(const DisplayMode &displayMode);
-    void onHideModeChanged(const HideMode &hideMode);
-    void onHideStateChanged(const Dock::HideState &state);
+    void onPositionChanged(int position);
+    void onDisplayModeChanged(int displayMode);
+    void onHideModeChanged(int hideMode);
+    void onHideStateChanged(int state);
     void onOpacityChanged(const double value);
 
-    // 通知后端任务栏所在位置
-    void onRequestUpdateFrontendGeometry();
-
-    void onRequestUpdateLayout();
-    void onRequestNotifyWindowManager();
     void onRequestUpdatePosition(const Position &fromPos, const Position &toPos);
     void onRequestUpdateMonitorInfo();
     void onRequestDelayShowDock();
@@ -199,66 +145,50 @@ private slots:
     void onDelayAutoHideChanged();
 
 private:
-    MainWindow *parent();
-
     // 初始化数据信息
     void initMembers();
-    void initDBus();
+    void initDockMode();
     void initConnection();
-    void initUI();
+
     void initDisplayData();
     void reInitDisplayData();
-
-    void displayAnimation(const QString &screen, const Position &pos, AniAction act);
-    void displayAnimation(const QString &screen, AniAction act);
 
     void tryToShowDock(int eventX, int eventY);
     void changeDockPosition(QString fromScreen, QString toScreen, const Position &fromPos, const Position &toPos);
 
-    QString getValidScreen(const Position &pos);
     void resetDockScreen();
 
     void checkDaemonDockService();
     void checkXEventMonitorService();
 
-    QRect dockRectWithoutScale(const QString &screenName, const Position &pos, const HideMode &hideMode, const DisplayMode &displayMode);
+    QString getValidScreen(const Position &pos);
 
-    QRect getDockShowGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
-    QRect getDockHideGeometry(const QString &screenName, const Position &pos, const DisplayMode &displaymode, bool withoutScale = false);
     bool isCursorOut(int x, int y);
 
-    QScreen *screenByName(const QString &screenName);
     bool onScreenEdge(const QString &screenName, const QPoint &point);
     const QPoint rawXPosition(const QPoint &scaledPos);
     static bool isCopyMode();
-    QRect getScreenRect(QScreen *s);
 
 private:
-    QWidget *m_parent;
-
     // monitor screen
     XEventMonitor *m_eventInter;
     XEventMonitor *m_extralEventInter;
     XEventMonitor *m_touchEventInter;
 
     // DBus interface
-    DBusDock *m_dockInter;
+    DockInter *m_dockInter;
     DBusLuncher *m_launcherInter;
+    Appearance *m_appearanceInter;
 
     // update monitor info
     QTimer *m_monitorUpdateTimer;
-    QTimer *m_delayWakeOnScreenSwitchTimer;     // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
-    QTimer *m_delayWakeOnHideTimer;             // 任务栏在同一个屏幕隐藏后再唤出时，需要短暂延时
-
-    DockScreen m_ds;                            // 屏幕名称信息
-    ScreenChangeMonitor *m_screenMonitor;       // 用于监视屏幕是否为系统先拔再插
+    QTimer *m_delayWakeTimer;                   // sp3需求，切换屏幕显示延时，默认2秒唤起任务栏
 
     // 任务栏属性
     double m_opacity;
     Position m_position;
     HideMode m_hideMode;
     HideState m_hideState;
-    HideState m_currentHideState;
     DisplayMode m_displayMode;
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
@@ -272,40 +202,6 @@ private:
     QString m_delayScreen;                      // 任务栏将要切换到的屏幕名
     RunStates m_state;
     /*****************************************************************/
-};
-
-/**
- * 在控制中心设置了自动关闭显示器，等一段时间后，显示器会自动关闭。在多显示器的情况下，此时系统会自动禁用主屏
- * 马上又开启主屏（底层系统是这么设计的），唤醒后，在禁用主屏后，后端会改变主屏为另外一个显示器，再开启主屏，
- * 后端又改变主屏为原来的主屏，这样就会导致的问题是：本来任务栏在主屏，由于瞬间触发了删除主屏幕的操作，引起了
- * 任务栏显示到副屏的问题，开启主屏后，由于任务栏已经在副屏了，就再也回不到主屏，因此，增加了这个类用于专门来
- * 处理这种异常情况
- */
-class ScreenChangeMonitor : public QObject
-{
-    Q_OBJECT
-
-public:
-    ScreenChangeMonitor(DockScreen *ds, QObject *parent);
-    ~ScreenChangeMonitor();
-
-    bool needUsedLastScreen() const;
-    const QString lastScreen();
-
-private:
-    bool changedInSeconds();
-
-private:
-    QString m_lastScreenName;
-
-    QString m_changePrimaryName;
-    QDateTime m_changeTime;
-
-    QString m_newScreenName;
-    QDateTime m_newTime;
-
-    QString m_removeScreenName;
-    QDateTime m_removeTime;
 };
 
 #endif // MULTISCREENWORKER_H

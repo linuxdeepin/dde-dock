@@ -3,7 +3,7 @@
     <name>AbstractPluginsController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>Плагін %1 не сумісний із системою.</translation>
+        <translation>Додаток %1 не сумісний із системою.</translation>
     </message>
 </context>
 <context>
@@ -44,10 +44,21 @@
     </message>
 </context>
 <context>
-    <name>AppDragWidget</name>
+    <name>AppMultiItem</name>
     <message>
-        <source>Remove</source>
-        <translation>Видалити</translation>
+        <source>Open</source>
+        <translation>Відкрити</translation>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
+        <translation>Мої пристрої</translation>
+    </message>
+    <message>
+        <source>Other Devices</source>
+        <translation>Інші пристрої</translation>
     </message>
 </context>
 <context>
@@ -89,10 +100,33 @@
     </message>
 </context>
 <context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Увімкнути</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Вимкнути</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPlugin</name>
     <message>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation>Увімкнути</translation>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation>Вимкнути</translation>
     </message>
 </context>
 <context>
@@ -100,6 +134,21 @@
     <message>
         <source>Add keyboard layout</source>
         <translation>Додати розкладку клавіатури</translation>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>12-hour time</source>
+        <translation>12-годинний час</translation>
+    </message>
+    <message>
+        <source>24-hour time</source>
+        <translation>24-годинний час</translation>
+    </message>
+    <message>
+        <source>Time settings</source>
+        <translation>Параметри часу</translation>
     </message>
 </context>
 <context>
@@ -122,66 +171,10 @@
     </message>
 </context>
 <context>
-    <name>DatetimeWidget</name>
+    <name>DevCollaborationWidget</name>
     <message>
-        <source>Monday</source>
-        <translation>Понеділок</translation>
-    </message>
-    <message>
-        <source>Tuesday</source>
-        <translation>Вівторок</translation>
-    </message>
-    <message>
-        <source>Wednesday</source>
-        <translation>Середа</translation>
-    </message>
-    <message>
-        <source>Thursday</source>
-        <translation>Четвер</translation>
-    </message>
-    <message>
-        <source>Friday</source>
-        <translation>П&apos;ятниця</translation>
-    </message>
-    <message>
-        <source>Saturday</source>
-        <translation>Субота</translation>
-    </message>
-    <message>
-        <source>Sunday</source>
-        <translation>Неділя</translation>
-    </message>
-    <message>
-        <source>monday</source>
-        <translation>Понеділок</translation>
-    </message>
-    <message>
-        <source>tuesday</source>
-        <translation>вівторок</translation>
-    </message>
-    <message>
-        <source>wednesday</source>
-        <translation>середа</translation>
-    </message>
-    <message>
-        <source>thursday</source>
-        <translation>четвер</translation>
-    </message>
-    <message>
-        <source>friday</source>
-        <translation>п&apos;ятниця</translation>
-    </message>
-    <message>
-        <source>saturday</source>
-        <translation>субота</translation>
-    </message>
-    <message>
-        <source>sunday</source>
-        <translation>неділя</translation>
-    </message>
-    <message>
-        <source>%1year%2month%3day</source>
-        <translation>%1рік%2місяць%3день</translation>
+        <source>PC collaboration</source>
+        <translation>Взаємодія ПК</translation>
     </message>
 </context>
 <context>
@@ -196,7 +189,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Видалити</translation>
+        <translation>Вилучити</translation>
     </message>
     <message>
         <source>This action cannot be restored</source>
@@ -204,29 +197,28 @@
     </message>
 </context>
 <context>
-    <name>DiskControlItem</name>
+    <name>DisplaySettingWidget</name>
     <message>
-        <source>Unknown device</source>
-        <translation>Невідомий пристрій</translation>
-    </message>
-    <message>
-        <source>Unknown volume</source>
-        <translation>Невідомий том</translation>
+        <source>Multi-Screen Collaboration</source>
+        <translation>Сумісне використання декількох екранів</translation>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>DockPluginController</name>
     <message>
-        <source>Disk</source>
-        <translation>Диск</translation>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>HomeMonitorPlugin</name>
+    <message>
+        <source>Enabled</source>
+        <translation>Увімкнено</translation>
     </message>
     <message>
-        <source>Open</source>
-        <translation>Відкрити</translation>
-    </message>
-    <message>
-        <source>Unmount all</source>
-        <translation>Відмонтувати все</translation>
+        <source>Disabled</source>
+        <translation>Вимкнено</translation>
     </message>
 </context>
 <context>
@@ -234,21 +226,6 @@
     <message>
         <source>Launcher</source>
         <translation>Запускач</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Exit Safe Mode</source>
-        <translation>Вийти з безпечного режиму</translation>
-    </message>
-    <message>
-        <source>Dock - Safe Mode</source>
-        <translation>Док-станція — безпечний режим</translation>
-    </message>
-    <message>
-        <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation>Док-станція перебуває у безпечному режимі — будь ласка, вийдіть з нього для належного показу</translation>
     </message>
 </context>
 <context>
@@ -307,105 +284,6 @@
     </message>
 </context>
 <context>
-    <name>ModuleWidget</name>
-    <message>
-        <source>Size</source>
-        <translation>Розмір</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Multiple Displays</source>
-        <translation>Кілька дисплеїв</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Область додатків</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Select which icons appear in the Dock</source>
-        <translation>Виберіть, які піктограми буде показано на бічній панелі</translation>
-    </message>
-    <message>
-        <source>Fashion mode</source>
-        <translation>Модний режим</translation>
-    </message>
-    <message>
-        <source>Efficient mode</source>
-        <translation>Ефективний режим</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Режим</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Top</source>
-        <translation>Вгорі</translation>
-    </message>
-    <message>
-        <source>Bottom</source>
-        <translation>Внизу</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Ліворуч</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Праворуч</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Розташування</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Keep shown</source>
-        <translation>Показувати постійно</translation>
-    </message>
-    <message>
-        <source>Keep hidden</source>
-        <translation>Залишати прихованим</translation>
-    </message>
-    <message>
-        <source>Smart hide</source>
-        <translation>Розумне приховування</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Стан</translation>
-        <extra-child_page>Dock</extra-child_page>
-        <extra-contents_path>/personalization/Dock</extra-contents_path>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation>Малий</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Великий</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Показувати панель</translation>
-    </message>
-    <message>
-        <source>On screen where the cursor is</source>
-        <translation>На екрані, де перебуває вказівник</translation>
-    </message>
-    <message>
-        <source>Only on main screen</source>
-        <translation>Лише на головному екрані</translation>
-    </message>
-</context>
-<context>
     <name>MultitaskingPlugin</name>
     <message>
         <source>Multitasking View</source>
@@ -422,21 +300,9 @@
         <source>Onboard</source>
         <translation>Клавіатура</translation>
     </message>
-    <message>
-        <source>Settings</source>
-        <translation>Налаштування</translation>
-    </message>
 </context>
 <context>
     <name>PowerPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Живлення</translation>
-    </message>
-    <message>
-        <source>Power settings</source>
-        <translation>Параметри живлення</translation>
-    </message>
     <message>
         <source>Capacity %1, %2 min remaining</source>
         <translation>Батарея %1, %2 хв залишилося</translation>
@@ -469,36 +335,9 @@
         <source>Capacity %1, fully charged</source>
         <translation>Ємність %1, повністю заряджено</translation>
     </message>
-</context>
-<context>
-    <name>SettingsModule</name>
     <message>
-        <source>Dock</source>
-        <translation>Панель</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation>Режим</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation>Розташування</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Стан</translation>
-    </message>
-    <message>
-        <source>Size</source>
-        <translation>Розмір</translation>
-    </message>
-    <message>
-        <source>Show Dock</source>
-        <translation>Показувати панель</translation>
-    </message>
-    <message>
-        <source>Plugin Area</source>
-        <translation>Область додатків</translation>
+        <source>Battery</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -514,10 +353,6 @@
 </context>
 <context>
     <name>ShutdownPlugin</name>
-    <message>
-        <source>Power</source>
-        <translation>Живлення</translation>
-    </message>
     <message>
         <source>Shut down</source>
         <translation>Вимкнути</translation>
@@ -550,12 +385,27 @@
         <source>Reboot</source>
         <translation>Перезавантажити</translation>
     </message>
+    <message>
+        <source>Power</source>
+        <translation>Живлення</translation>
+    </message>
 </context>
 <context>
     <name>SoundApplet</name>
     <message>
-        <source>Volume</source>
-        <translation>Гучність</translation>
+        <source>Device</source>
+        <translation>Пристрій</translation>
+    </message>
+</context>
+<context>
+    <name>SoundDevicesWidget</name>
+    <message>
+        <source>Output Device</source>
+        <translation>Пристрій виведення</translation>
+    </message>
+    <message>
+        <source>Sound settings</source>
+        <translation>Параметри звуку</translation>
     </message>
 </context>
 <context>
@@ -575,10 +425,6 @@
     <message>
         <source>Volume %1</source>
         <translation>Гучність %1</translation>
-    </message>
-    <message>
-        <source>No output devices</source>
-        <translation>Немає пристроїв виведення</translation>
     </message>
 </context>
 <context>
@@ -616,6 +462,21 @@
     <message>
         <source>Empty</source>
         <translation>Пусто</translation>
+    </message>
+</context>
+<context>
+    <name>WindowManager</name>
+    <message>
+        <source>Exit Safe Mode</source>
+        <translation>Вийти з безпечного режиму</translation>
+    </message>
+    <message>
+        <source>Dock - Safe Mode</source>
+        <translation>Док-станція — безпечний режим</translation>
+    </message>
+    <message>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
+        <translation>Док-станція перебуває у безпечному режимі — будь ласка, вийдіть з нього для належного показу</translation>
     </message>
 </context>
 </TS>

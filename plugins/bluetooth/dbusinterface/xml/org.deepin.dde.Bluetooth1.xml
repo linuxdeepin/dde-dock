@@ -1,0 +1,155 @@
+<interface name="org.deepin.dde.Bluetooth1">
+    <method name="CancelTransferSession">
+        <arg name="sessionPath" type="o" direction="in"></arg>
+    </method>
+    <method name="ClearUnpairedDevice"></method>
+    <method name="Confirm">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="accept" type="b" direction="in"></arg>
+    </method>
+    <method name="ConnectDevice">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="adapter" type="o" direction="in"></arg>
+    </method>
+    <method name="DebugInfo">
+        <arg name="info" type="s" direction="out"></arg>
+    </method>
+    <method name="DisconnectDevice">
+        <arg name="device" type="o" direction="in"></arg>
+    </method>
+    <method name="FeedPasskey">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="accept" type="b" direction="in"></arg>
+        <arg name="passkey" type="u" direction="in"></arg>
+    </method>
+    <method name="FeedPinCode">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="accept" type="b" direction="in"></arg>
+        <arg name="pinCode" type="s" direction="in"></arg>
+    </method>
+    <method name="GetAdapters">
+        <arg name="adaptersJSON" type="s" direction="out"></arg>
+    </method>
+    <method name="GetDevices">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="devicesJSON" type="s" direction="out"></arg>
+    </method>
+    <method name="RemoveDevice">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="device" type="o" direction="in"></arg>
+    </method>
+    <method name="RequestDiscovery">
+        <arg name="adapter" type="o" direction="in"></arg>
+    </method>
+    <method name="SendFiles">
+        <arg name="device" type="s" direction="in"></arg>
+        <arg name="files" type="as" direction="in"></arg>
+        <arg name="sessionPath" type="o" direction="out"></arg>
+    </method>
+    <method name="SetAdapterAlias">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="alias" type="s" direction="in"></arg>
+    </method>
+    <method name="SetAdapterDiscoverable">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="discoverable" type="b" direction="in"></arg>
+    </method>
+    <method name="SetAdapterDiscoverableTimeout">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="timeout" type="u" direction="in"></arg>
+    </method>
+    <method name="SetAdapterDiscovering">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="discovering" type="b" direction="in"></arg>
+    </method>
+    <method name="SetAdapterPowered">
+        <arg name="adapter" type="o" direction="in"></arg>
+        <arg name="powered" type="b" direction="in"></arg>
+    </method>
+    <method name="SetDeviceAlias">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="alias" type="s" direction="in"></arg>
+    </method>
+    <method name="SetDeviceTrusted">
+        <arg name="device" type="o" direction="in"></arg>
+        <arg name="trusted" type="b" direction="in"></arg>
+    </method>
+    <signal name="AdapterAdded">
+        <arg name="adapterJSON" type="s"></arg>
+    </signal>
+    <signal name="AdapterRemoved">
+        <arg name="adapterJSON" type="s"></arg>
+    </signal>
+    <signal name="AdapterPropertiesChanged">
+        <arg name="adapterJSON" type="s"></arg>
+    </signal>
+    <signal name="DeviceAdded">
+        <arg name="devJSON" type="s"></arg>
+    </signal>
+    <signal name="DeviceRemoved">
+        <arg name="devJSON" type="s"></arg>
+    </signal>
+    <signal name="DevicePropertiesChanged">
+        <arg name="devJSON" type="s"></arg>
+    </signal>
+    <signal name="DisplayPinCode">
+        <arg name="device" type="o"></arg>
+        <arg name="pinCode" type="s"></arg>
+    </signal>
+    <signal name="DisplayPasskey">
+        <arg name="device" type="o"></arg>
+        <arg name="passkey" type="u"></arg>
+        <arg name="entered" type="u"></arg>
+    </signal>
+    <signal name="RequestConfirmation">
+        <arg name="device" type="o"></arg>
+        <arg name="passkey" type="s"></arg>
+    </signal>
+    <signal name="RequestAuthorization">
+        <arg name="device" type="o"></arg>
+    </signal>
+    <signal name="RequestPinCode">
+        <arg name="device" type="o"></arg>
+    </signal>
+    <signal name="RequestPasskey">
+        <arg name="device" type="o"></arg>
+    </signal>
+    <signal name="Cancelled">
+        <arg name="device" type="o"></arg>
+    </signal>
+    <signal name="ObexSessionCreated">
+        <arg name="sessionPath" type="o"></arg>
+    </signal>
+    <signal name="ObexSessionRemoved">
+        <arg name="sessionPath" type="o"></arg>
+    </signal>
+    <signal name="ObexSessionProgress">
+        <arg name="sessionPath" type="o"></arg>
+        <arg name="totalSize" type="t"></arg>
+        <arg name="transferred" type="t"></arg>
+        <arg name="currentIdx" type="i"></arg>
+    </signal>
+    <signal name="TransferCreated">
+        <arg name="file" type="s"></arg>
+        <arg name="transferPath" type="o"></arg>
+        <arg name="sessionPath" type="o"></arg>
+    </signal>
+    <signal name="TransferRemoved">
+        <arg name="file" type="s"></arg>
+        <arg name="transferPath" type="o"></arg>
+        <arg name="sessionPath" type="o"></arg>
+        <arg name="done" type="b"></arg>
+    </signal>
+    <signal name="TransferFailed">
+        <arg name="file" type="s"></arg>
+        <arg name="sessionPath" type="o"></arg>
+        <arg name="errInfo" type="s"></arg>
+    </signal>
+    <signal name="ConnectFailed">
+        <arg name="device" type="o"></arg>
+    </signal>
+    <property name="State" type="u" access="read"></property>
+    <property name="DisplaySwitch" type="b" access="readwrite"></property>
+    <property name="Transportable" type="b" access="read"></property>
+    <property name="CanSendFile" type="b" access="read"></property>
+</interface>

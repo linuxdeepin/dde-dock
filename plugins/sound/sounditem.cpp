@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2011 ~ 2018 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -71,15 +72,16 @@ const QString SoundItem::contextMenu()
 
     QMap<QString, QVariant> open;
     open["itemId"] = MUTE;
+
+    // 如果没有可用输出设备，直接显示静音菜单不可用
     if (!m_applet->existActiveOutputDevice()) {
         open["itemText"] = tr("Unmute");
         open["isActive"] = false;
+    } else if (m_sinkInter->mute()) {
+        open["itemText"] = tr("Unmute");
+        open["isActive"] = true;
     } else {
-        if (m_sinkInter->mute()) {
-            open["itemText"] = tr("Unmute");
-        } else {
-            open["itemText"] = tr("Mute");
-        }
+        open["itemText"] = tr("Mute");
         open["isActive"] = true;
     }
     items.push_back(open);
@@ -111,10 +113,10 @@ void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
         m_sinkInter->SetMuteQueued(!m_sinkInter->mute());
     else if (menuId == SETTINGS)
         DDBusSender()
-        .service("com.deepin.dde.ControlCenter")
-        .interface("com.deepin.dde.ControlCenter")
-        .path("/com/deepin/dde/ControlCenter")
-        .method(QString("ShowModule"))
+        .service("org.deepin.dde.ControlCenter1")
+        .interface("org.deepin.dde.ControlCenter1")
+        .path("/org/deepin/dde/ControlCenter1")
+        .method(QString("ShowPage"))
         .arg(QString("sound"))
         .call();
 }
@@ -138,7 +140,7 @@ void SoundItem::resizeEvent(QResizeEvent *e)
 
 void SoundItem::wheelEvent(QWheelEvent *e)
 {
-    QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
+    QWheelEvent *event = new QWheelEvent(e->position(), e->angleDelta().y(), e->buttons(), e->modifiers());
     qApp->postEvent(m_applet->mainSlider(), event);
 
     e->accept();
@@ -167,7 +169,7 @@ void SoundItem::refreshIcon()
 
     const double volmue = m_applet->volumeValue();
     const double maxVolmue = m_applet->maxVolumeValue();
-    const bool mute = m_sinkInter->name().startsWith("auto_null") ? true : m_sinkInter->mute();
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
     const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
 
     QString iconString;
@@ -188,9 +190,9 @@ void SoundItem::refreshIcon()
             volumeString = "muted";
         else if (int(volmue) == 0)
             volumeString = "off";
-        else if (volmue / maxVolmue > 0.6)
+        else if (volmue / maxVolmue > double(2) / 3)
             volumeString = "high";
-        else if (volmue / maxVolmue > 0.3)
+        else if (volmue / maxVolmue > double(1) / 3)
             volumeString = "medium";
         else
             volumeString = "low";
@@ -213,15 +215,61 @@ void SoundItem::refreshTips(const int volume, const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    if (!m_applet->existActiveOutputDevice()) {
-        m_tipsLabel->setText(QString(tr("No output devices")));
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
+    if (mute) {
+        m_tipsLabel->setText(QString(tr("Mute")));
     } else {
-        if (m_sinkInter->mute()) {
-            m_tipsLabel->setText(QString(tr("Mute")));
-        } else {
-            m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
-        }
+        m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
     }
+}
+
+QPixmap SoundItem::pixmap() const
+{
+    return m_iconPixmap;
+}
+
+QPixmap SoundItem::pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const
+{
+    const Dock::DisplayMode displayMode = Dock::DisplayMode::Efficient;
+
+    const double volmue = m_applet->volumeValue();
+    const double maxVolmue = m_applet->maxVolumeValue();
+    const bool mute = m_applet->existActiveOutputDevice() ? (m_sinkInter && m_sinkInter->mute()) : true;
+
+    QString iconString;
+    if (displayMode == Dock::Fashion) {
+        QString volumeString;
+        if (volmue >= 1000)
+            volumeString = "100";
+        else
+            volumeString = QString("0") + ('0' + int(volmue / 100)) + "0";
+
+        iconString = "audio-volume-" + volumeString;
+
+        if (mute)
+            iconString += "-muted";
+    } else {
+        QString volumeString;
+        if (mute)
+            volumeString = "muted";
+        else if (int(volmue) == 0)
+            volumeString = "off";
+        else if (volmue / maxVolmue > double(2) / 3)
+            volumeString = "high";
+        else if (volmue / maxVolmue > double(1) / 3)
+            volumeString = "medium";
+        else
+            volumeString = "low";
+
+        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+    }
+
+    if (colorType == DGuiApplicationHelper::LightType)
+        iconString.append(PLUGIN_MIN_ICON_NAME);
+
+    iconString.append(".svg");
+
+    return ImageUtil::loadSvg(":/" + iconString, QSize(iconWidth, iconHeight));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)

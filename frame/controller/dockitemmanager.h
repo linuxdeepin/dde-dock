@@ -1,21 +1,21 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef DOCKITEMMANAGER_H
 #define DOCKITEMMANAGER_H
 
-#include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
 #include "dockitem.h"
 #include "appitem.h"
 #include "placeholderitem.h"
-
-#include <com_deepin_dde_daemon_dock.h>
+#include "dbusutil.h"
 
 #include <QObject>
 
-using DBusDock = com::deepin::dde::daemon::Dock;
+class AppMultiItem;
+class PluginsItem;
 
 /**
  * @brief The DockItemManager class
@@ -29,9 +29,7 @@ public:
     static DockItemManager *instance(QObject *parent = nullptr);
 
     const QList<QPointer<DockItem> > itemList() const;
-    const QList<PluginsItemInterface *> pluginList() const;
     bool appIsOnDock(const QString &appDesktop) const;
-    void startLoadPlugins() const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;
@@ -40,8 +38,8 @@ signals:
     void trayVisableCountChanged(const int &count) const;
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
+
     void requestUpdateDockItem() const;
-    void requestUpdateItemMinimizedGeometry(AppItem *item, const QRect) const;
 
 public slots:
     void refreshItemsIcon();
@@ -50,26 +48,36 @@ public slots:
 
 private Q_SLOTS:
     void onPluginLoadFinished();
+    void onPluginItemRemoved(PluginsItemInterface *itemInter);
+    void onPluginUpdate(PluginsItemInterface *itemInter);
+
+    void onAppWindowCountChanged();
+    void onShowMultiWindowChanged();
 
 private:
     explicit DockItemManager(QObject *parent = nullptr);
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
     void appItemRemoved(AppItem *appItem);
-    void pluginItemInserted(PluginsItem *item);
-    void pluginItemRemoved(PluginsItem *item);
     void updatePluginsItemOrderKey();
     void reloadAppItems();
     void manageItem(DockItem *item);
+    void pluginItemInserted(PluginsItem *item);
+
+    void updateMultiItems(AppItem *appItem, bool emitSignal = false);
+    bool multiWindowExist(quint32 winId) const;
+    bool needRemoveMultiWindow(AppMultiItem *multiItem) const;
 
 private:
-    DBusDock *m_appInter;
-    DockPluginsController *m_pluginsInter;
+    DockInter *m_appInter;
 
     static DockItemManager *INSTANCE;
 
     QList<QPointer<DockItem>> m_itemList;
     QList<QString> m_appIDist;
+    QList<PluginsItemInterface *> m_pluginItems;
+
+    bool m_loadFinished; // 记录所有插件是否加载完成
 
     static const QGSettings *m_appSettings;
     static const QGSettings *m_activeSettings;
