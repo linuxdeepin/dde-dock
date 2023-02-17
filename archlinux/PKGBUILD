@@ -11,7 +11,8 @@ depends=('qt5-svg' 'deepin-daemon-git' 'deepin-qt5integration-git'
 makedepends=('git' 'cmake' 'ninja' 'qt5-tools' 'gtest' 'gmock' 
              'dtkcommon-git' 'dtkcore-git' 'deepin-qt5integration-git'
              'deepin-qt-dbus-factory' 'libdbusmenu-qt5'
-             'deepin-control-center-git')
+             'deepin-control-center-git' 'dwayland-git' 'extra-cmake-modules'
+            )
 conflicts=('deepin-dock')
 provides=('deepin-dock')
 optdepends=('deepin-network-core-git')

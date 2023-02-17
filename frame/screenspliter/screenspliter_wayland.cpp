@@ -17,13 +17,13 @@
 #include <private/qwaylandcursor_p.h>
 #undef private
 
-#include <registry.h>
-#include <ddeshell.h>
-#include <event_queue.h>
-#include <plasmashell.h>
-#include <compositor.h>
-#include <clientmanagement.h>
-#include <connection_thread.h>
+#include <DWayland/Client/registry.h>
+#include <DWayland/Client/ddeshell.h>
+#include <DWayland/Client/event_queue.h>
+#include <DWayland/Client/plasmashell.h>
+#include <DWayland/Client/compositor.h>
+#include <DWayland/Client/clientmanagement.h>
+#include <DWayland/Client/connection_thread.h>
 
 SplitWindowManager *ScreenSpliter_Wayland::m_splitManager = nullptr;
 
