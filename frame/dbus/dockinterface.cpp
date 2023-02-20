@@ -96,7 +96,7 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(in0);
-        return asyncCallWithArgumentList(QStringLiteral("CancelPreviewWindow"), argumentList);
+        return asyncCallWithArgumentList(QStringLiteral("PreviewWindow"), argumentList);
     }
 
 private:
