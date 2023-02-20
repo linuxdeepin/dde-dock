@@ -10,6 +10,10 @@
 #include "basetraywidget.h"
 #include "dbusutil.h"
 
+#include <DBlurEffectWidget>
+
+DWIDGET_USE_NAMESPACE
+
 class TrayGridView;
 class TrayModel;
 class TrayDelegate;
@@ -43,7 +47,7 @@ private:
 };
 
 // 绘制圆角窗体
-class TrayGridWidget : public QWidget
+class TrayGridWidget : public DBlurEffectWidget
 {
     Q_OBJECT
 
@@ -57,7 +61,6 @@ public:
     void resetPosition();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
