@@ -124,7 +124,7 @@ home_monitor
 # https://cmake.org/cmake/help/latest/
 
 # 设置运行被配置所需的 cmake 最低版本
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 
 # 使用 set 命令设置一个变量
 set(PLUGIN_NAME "home_monitor")

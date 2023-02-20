@@ -29,7 +29,8 @@ Build-Depends: debhelper (>= 8.0.0),
  libqt5waylandclient5-dev,
  qtwayland5-private-dev,
  libxdamage-dev,
- libdwayland-dev
+ libdwayland-dev,
+ extra-cmake-modules
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
