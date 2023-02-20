@@ -177,7 +177,7 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
 Dock::Position TrayGridWidget::m_position = Dock::Position::Bottom;
 
 TrayGridWidget::TrayGridWidget(QWidget *parent)
-    : QWidget (parent)
+    : DBlurEffectWidget (parent)
     , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_trayGridView(nullptr)
     , m_referGridView(nullptr)
@@ -241,24 +241,10 @@ void TrayGridWidget::resetPosition()
     move(ptPos);
 }
 
-void TrayGridWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    QPainterPath path;
-    path.addRoundedRect(rect(), 18, 18);
-    painter.setCompositionMode(QPainter::CompositionMode_Xor);
-    painter.setClipPath(path);
-
-    painter.fillPath(path, maskColor());
-}
-
 void TrayGridWidget::showEvent(QShowEvent *event)
 {
     m_regionInter->registerRegion();
-    QWidget::showEvent(event);
+    DBlurEffectWidget::showEvent(event);
 }
 
 void TrayGridWidget::hideEvent(QHideEvent *event)
@@ -266,7 +252,7 @@ void TrayGridWidget::hideEvent(QHideEvent *event)
     m_regionInter->unregisterRegion();
     // 在当前托盘区域隐藏后，需要设置任务栏区域的展开按钮的托盘为隐藏状态
     TrayModel::getDockModel()->updateOpenExpand(false);
-    QWidget::hideEvent(event);
+    DBlurEffectWidget::hideEvent(event);
 }
 
 void TrayGridWidget::initMember()
