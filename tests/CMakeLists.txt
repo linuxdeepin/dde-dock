@@ -1,6 +1,6 @@
 ADD_COMPILE_OPTIONS(-fno-access-control)
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.16)
 
 set(BIN_NAME dde_dock_unit_test)
 

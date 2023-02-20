@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.16)
 
 set(BIN_NAME dde-dock)
 
@@ -23,16 +23,19 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5WaylandClient REQUIRED)
 find_package(Qt5XkbCommonSupport REQUIRED)
+find_package(DtkGui REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(DtkCMake REQUIRED)
 find_package(dbusmenu-qt5 REQUIRED)
+find_package(ECM REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+find_package(DWayland REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor)
-pkg_check_modules(QGSettings REQUIRED gsettings-qt)
-pkg_check_modules(DtkGUI REQUIRED dtkgui)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
-set(Wayland_INCLUDE_DIRS /usr/include/DWayland/Client)
-set(Wayland_LIBRARIES /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/libDWaylandClient.so)
+pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor)
+pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 
 # driver-manager
 add_executable(${BIN_NAME}
@@ -50,7 +53,6 @@ target_include_directories(${BIN_NAME} PUBLIC
     ${DtkGUI_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${dbusmenu-qt5_INCLUDE_DIRS}
-    ${Wayland_INCLUDE_DIRS}
     ${Qt5WaylandClient_INCLUDE_DIRS}
     ${Qt5WaylandClient_PRIVATE_INCLUDE_DIRS}
     ${Qt5XkbCommonSupport_PRIVATE_INCLUDE_DIRS}
@@ -86,21 +88,21 @@ target_include_directories(${BIN_NAME} PUBLIC
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    ${XCB_EWMH_LIBRARIES}
     ${DtkWidget_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5Gui_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
-    ${Qt5X11Extras_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${QGSettings_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
-    ${Wayland_LIBRARIES}
-    ${Qt5Wayland_LIBRARIES}
-    ${Qt5WaylandClient_LIBRARIES}
-    ${Qt5XkbCommonSupport_LIBRARIES}
-    -lpthread -lm
+    PkgConfig::QGSettings
+    PkgConfig::XCB_EWMH
+    Dtk::Gui
+    Qt5::Widgets
+    Qt5::Gui
+    Qt5::Concurrent
+    Qt5::X11Extras
+    Qt5::DBus
+    Qt5::Svg
+    Qt5::WaylandClient
+    Qt5::XkbCommonSupport
+    DWaylandClient
+    Threads::Threads
+    -lm
 )
 
 if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")
@@ -116,4 +118,4 @@ if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
 endif()
 
 # bin
-install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
