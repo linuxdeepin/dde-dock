@@ -15,6 +15,11 @@
 #include <QLabel>
 
 using SystemPowerInter = org::deepin::dde::Power1;
+
+DCORE_BEGIN_NAMESPACE
+class DConfig;
+DCORE_END_NAMESPACE
+
 namespace Dock {
 class TipsWidget;
 }
@@ -61,6 +66,7 @@ private:
 
     SystemPowerInter *m_systemPowerInter;
     DBusPower *m_powerInter;
+    Dtk::Core::DConfig *m_dconfig; // 配置
     QTimer *m_preChargeTimer;
     QWidget *m_quickPanel;
     QLabel *m_imageLabel;

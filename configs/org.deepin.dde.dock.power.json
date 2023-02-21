@@ -1,0 +1,46 @@
+{
+    "magic": "dsg.config.meta",
+    "version": "1.0",
+    "contents": {
+        "control": {
+            "value": false,
+            "serial": 0,
+            "flags": [],
+            "name": "contorl",
+            "name[zh_CN]": "控制",
+            "description": "阻止鼠标事件",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "enable": {
+            "value": true,
+            "serial": 0,
+            "flags": [],
+            "name": "enable",
+            "name[zh_CN]": "使能",
+            "description": "使能电源管理模块。",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "showtimetofull":{
+            "value": true,
+            "serial": 0,
+            "flags": [],
+            "name": "showtimetofull",
+            "name[zh_CN]": "显示完整时间",
+            "description": "是否显示电池使用时间/剩余充电时间。",
+            "permissions": "readwrite",
+            "visibility": "public"
+        },
+        "menu-enable":{
+            "value": true,
+            "serial": 0,
+            "flags": [],
+            "name": "menu-enable",
+            "name[zh_CN]": "使能菜单",
+            "description": "使能菜单。",
+            "permissions": "readwrite",
+            "visibility": "private"
+        }
+    }
+}

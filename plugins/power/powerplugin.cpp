@@ -14,16 +14,13 @@
 
 #include <DFontSizeManager>
 #include <DDBusSender>
+#include <DConfig>
 
 #define PLUGIN_STATE_KEY    "enable"
 #define DELAYTIME           (20 * 1000)
 
+DCORE_USE_NAMESPACE
 using namespace Dock;
-static QGSettings *GSettingsByApp()
-{
-    static QGSettings settings("com.deepin.dde.dock.module.power");
-    return &settings;
-}
 
 PowerPlugin::PowerPlugin(QObject *parent)
     : QObject(parent)
@@ -33,6 +30,7 @@ PowerPlugin::PowerPlugin(QObject *parent)
     , m_tipsLabel(new TipsWidget)
     , m_systemPowerInter(nullptr)
     , m_powerInter(nullptr)
+    , m_dconfig(new DConfig(QString("org.deepin.dde.dock.power"), QString()))
     , m_preChargeTimer(new QTimer(this))
     , m_quickPanel(nullptr)
 {
@@ -185,7 +183,7 @@ void PowerPlugin::loadPlugin()
     m_systemPowerInter = new SystemPowerInter("org.deepin.dde.Power1", "/org/deepin/dde/Power1", QDBusConnection::systemBus(), this);
     m_systemPowerInter->setSync(true);
 
-    connect(GSettingsByApp(), &QGSettings::changed, this, &PowerPlugin::onGSettingsChanged);
+    connect(m_dconfig, &DConfig::valueChanged, this, &PowerPlugin::onGSettingsChanged);
     connect(m_systemPowerInter, &SystemPowerInter::BatteryStatusChanged, [&](uint  value) {
         if (value == BatteryState::CHARGING)
             m_preChargeTimer->start();
@@ -207,10 +205,8 @@ void PowerPlugin::onGSettingsChanged(const QString &key)
         return;
     }
 
-    if (GSettingsByApp()->keys().contains("showtimetofull")) {
-        const bool isEnable = GSettingsByApp()->keys().contains("showtimetofull") && GSettingsByApp()->get("showtimetofull").toBool();
-        m_showTimeToFull = isEnable && GSettingsByApp()->get("showtimetofull").toBool();
-    }
+    if (m_dconfig->isValid())
+        m_showTimeToFull = m_dconfig->value("showtimetofull").toBool();
 
     refreshTipsData();
 }
