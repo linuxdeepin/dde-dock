@@ -66,7 +66,7 @@ void PopupControlWidget::clearTrashFloder()
 {
     QString ClearTrashMutliple = qApp->translate("DialogManager", "Are you sure you want to empty %1 items?");
 
-    // show confrim dialog
+    // show confirm dialog
     DDialog d;
     QStringList buttonTexts;
     buttonTexts << qApp->translate("DialogManager", "Cancel") << qApp->translate("DialogManager", "Delete");
