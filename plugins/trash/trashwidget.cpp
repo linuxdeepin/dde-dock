@@ -86,11 +86,11 @@ void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 {
     if (e->mimeData()->hasFormat("RequestDock")) {
-        // accept prevent the event from being propgated to the dock main panel
+        // accept prevent the event from being propagated to the dock main panel
         // which also takes drag event;
 
         if (!e->mimeData()->hasFormat("Removable")) {
-            // show the forbit dropping cursor.
+            // show the forbid dropping cursor.
             e->setDropAction(Qt::IgnoreAction);
         } else {
             e->setDropAction(Qt::MoveAction);
