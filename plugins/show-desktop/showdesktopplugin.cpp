@@ -9,11 +9,9 @@
 #include <QIcon>
 #include <QDebug>
 
-#define PLUGIN_STATE_KEY    "enable"
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
     : QObject(parent)
-    , m_pluginLoaded(false)
     , m_showDesktopWidget(nullptr)
     , m_tipsLabel(new TipsWidget)
 {
@@ -51,21 +49,8 @@ void ShowDesktopPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (!pluginIsDisable()) {
-        loadPlugin();
-    }
-}
-
-void ShowDesktopPlugin::pluginStateSwitched()
-{
-    m_proxyInter->saveValue(this, PLUGIN_STATE_KEY, pluginIsDisable());
-
-    refreshPluginItemsVisible();
-}
-
-bool ShowDesktopPlugin::pluginIsDisable()
-{
-    return !m_proxyInter->getValue(this, PLUGIN_STATE_KEY, true).toBool();
+    m_showDesktopWidget.reset(new ShowDesktopWidget);
+    m_proxyInter->itemAdded(this, pluginName());
 }
 
 const QString ShowDesktopPlugin::itemCommand(const QString &itemKey)
@@ -113,7 +98,7 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     if (menuId == "show-desktop") {
         QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     } else if (menuId == "remove") {
-        pluginStateSwitched();
+        m_proxyInter->itemRemoved(this, pluginName());
     }
 }
 
@@ -138,11 +123,6 @@ void ShowDesktopPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void ShowDesktopPlugin::pluginSettingsChanged()
-{
-    refreshPluginItemsVisible();
-}
-
 PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 {
     return PluginType::Fixed;
@@ -150,41 +130,5 @@ PluginsItemInterface::PluginType ShowDesktopPlugin::type()
 
 PluginFlags ShowDesktopPlugin::flags() const
 {
-    return PluginFlag::Type_Fixed | PluginFlag::Attribute_ForceDock;
-}
-
-void ShowDesktopPlugin::updateVisible()
-{
-    if (pluginIsDisable())
-        m_proxyInter->itemRemoved(this, pluginName());
-    else
-        m_proxyInter->itemAdded(this, pluginName());
-}
-
-void ShowDesktopPlugin::loadPlugin()
-{
-    if (m_pluginLoaded) {
-        return;
-    }
-
-    m_pluginLoaded = true;
-
-    m_showDesktopWidget.reset(new ShowDesktopWidget);
-
-    m_proxyInter->itemAdded(this, pluginName());
-
-    updateVisible();
-}
-
-void ShowDesktopPlugin::refreshPluginItemsVisible()
-{
-    if (pluginIsDisable()) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
-        if (!m_pluginLoaded) {
-            loadPlugin();
-            return;
-        }
-        updateVisible();
-    }
+    return PluginFlag::Type_Fixed | Attribute_CanSetting;
 }

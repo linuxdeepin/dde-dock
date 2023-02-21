@@ -25,9 +25,7 @@ public:
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     void init(PluginProxyInterface *proxyInter) override;
-    void pluginStateSwitched() override;
     bool pluginIsAllowDisable() override { return true; }
-    bool pluginIsDisable() override;
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     const QString itemCommand(const QString &itemKey) override;
@@ -36,18 +34,10 @@ public:
     void refreshIcon(const QString &itemKey) override;
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
-    void pluginSettingsChanged() override;
     PluginType type() override;
     PluginFlags flags() const override;
 
 private:
-    void updateVisible();
-    void loadPlugin();
-    void refreshPluginItemsVisible();
-
-private:
-    bool m_pluginLoaded;
-
     QScopedPointer<ShowDesktopWidget> m_showDesktopWidget;
     QScopedPointer<Dock::TipsWidget> m_tipsLabel;
 };
