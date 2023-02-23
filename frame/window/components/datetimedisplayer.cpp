@@ -353,13 +353,13 @@ QFont DateTimeDisplayer::timeFont() const
 void DateTimeDisplayer::createMenuItem()
 {
     QAction *timeFormatAction = new QAction(this);
-    if (m_timedateInter->use24HourFormat())
-        timeFormatAction->setText(tr("12-hour time"));
-    else
-        timeFormatAction->setText(tr("24-hour time"));
+    m_timedateInter->use24HourFormat() ? timeFormatAction->setText(tr("12-hour time"))
+                                       : timeFormatAction->setText(tr("24-hour time"));
 
     connect(timeFormatAction, &QAction::triggered, this, [ = ] {
         m_timedateInter->setUse24HourFormat(!m_timedateInter->use24HourFormat());
+        m_timedateInter->use24HourFormat() ? timeFormatAction->setText(tr("12-hour time"))
+                                           : timeFormatAction->setText(tr("24-hour time"));
     });
     m_menu->addAction(timeFormatAction);
 
