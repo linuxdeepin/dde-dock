@@ -669,9 +669,9 @@ void WindowManager::onRequestUpdateFrontendGeometry()
         QScreen *screen = DIS_INS->screen(DOCKSCREEN_INS->current());
         if (screen) {
             if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-                x = qMax(0, (int)((screen->handle()->geometry().width() - (rect.width() * qApp->devicePixelRatio())) / 2));
+                x = screen->handle()->geometry().x() + qMax(0, (int)((screen->handle()->geometry().width() - (rect.width() * qApp->devicePixelRatio())) / 2));
             else
-                y = qMax(0, (int)((screen->handle()->geometry().height() - (rect.height() * qApp->devicePixelRatio())) / 2));
+                y = screen->handle()->geometry().y() + qMax(0, (int)((screen->handle()->geometry().height() - (rect.height() * qApp->devicePixelRatio())) / 2));
         }
     }
 
