@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
     }
 
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
+    DockApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     DockApplication app(argc, argv);
 
     //崩溃信号
@@ -172,7 +173,6 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
     app.loadTranslator();
-    app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // 自动化标记由此开始
