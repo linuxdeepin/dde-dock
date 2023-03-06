@@ -289,7 +289,7 @@ Qt::ItemFlags TrayModel::flags(const QModelIndex &index) const
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
     Q_EMIT requestOpenEditor(index);
 
-    return defaultFlags | Qt::ItemIsEditable |  Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    return (defaultFlags | Qt::ItemIsEditable |  Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled) & ~Qt::ItemIsSelectable;
 }
 
 int TrayModel::rowCount(const QModelIndex &parent) const
