@@ -152,7 +152,9 @@ bool IsSaveMode()
 
 int main(int argc, char *argv[])
 {
-    if (QString(getenv("XDG_CURRENT_DESKTOP")).compare("deepin", Qt::CaseInsensitive) == 0) {
+    QString currentDesktop = QString(getenv("XDG_CURRENT_DESKTOP"));
+    if (currentDesktop.compare("DDE", Qt::CaseInsensitive) == 0 ||
+        currentDesktop.compare("deepin", Qt::CaseInsensitive) == 0) {
         qDebug() << "Warning: force enable D_DXCB_FORCE_NO_TITLEBAR now!";
         setenv("D_DXCB_FORCE_NO_TITLEBAR", "1", 1);
     }
