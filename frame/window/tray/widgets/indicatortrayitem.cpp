@@ -5,6 +5,8 @@
 
 #include "indicatortrayitem.h"
 
+#include <cmath>
+
 #include <QLabel>
 #include <QBoxLayout>
 
@@ -12,12 +14,18 @@
 #include <QDBusInterface>
 #include <QFile>
 #include <QDebug>
+#include <QPoint>
+#include <QPainter>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QApplication>
+#include <qnamespace.h>
 #include <thread>
+#include <DFontSizeManager>
+
+DWIDGET_USE_NAMESPACE
 
 IndicatorTrayItem::IndicatorTrayItem(const QString &indicatorName, QWidget *parent, Qt::WindowFlags f)
     : BaseTrayWidget(parent, f)
@@ -25,20 +33,15 @@ IndicatorTrayItem::IndicatorTrayItem(const QString &indicatorName, QWidget *pare
     , m_enableClick(true)
 {
     setAttribute(Qt::WA_TranslucentBackground);
-
-    auto layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    m_label = new QLabel(this);
-
-    QPalette p = m_label->palette();
+    QPalette p = palette();
     p.setColor(QPalette::WindowText, Qt::white);
     p.setColor(QPalette::Window, Qt::transparent);
-    m_label->setPalette(p);
+    setPalette(p);
 
-    m_label->setAttribute(Qt::WA_TranslucentBackground);
-
-    layout->addWidget(m_label, 0, Qt::AlignCenter);
-    setLayout(layout);
+    QFont qf = DFontSizeManager::instance()->t10();
+    // make indicator font size fixed, 16 x 16 is a standard icon size
+    qf.setPixelSize(16);
+    setFont(qf);
 
     // register dbus
     auto path = QString("/org/deepin/dde/Dock1/Indicator/") + m_indicatorName;
@@ -72,26 +75,28 @@ void IndicatorTrayItem::sendClick(uint8_t buttonIndex, int x, int y)
 
 void IndicatorTrayItem::enableLabel(bool enable)
 {
-    QPalette p = m_label->palette();
+    QPalette p = palette();
     if (!enable) {
         m_enableClick = false;
         p.setColor(QPalette::Disabled, QPalette::WindowText, Qt::lightGray);
         p.setColor(QPalette::Disabled, QPalette::Window, Qt::transparent);
-        m_label->setEnabled(enable);
+        setEnabled(enable);
     } else {
         m_enableClick = true;
         p.setColor(QPalette::Normal, QPalette::BrightText, Qt::white);
         p.setColor(QPalette::Normal, QPalette::Window, Qt::transparent);
-        m_label->setEnabled(enable);
+        setEnabled(enable);
     }
 
-    m_label->setPalette(p);
-    m_label->update();
+    setPalette(p);
+    update();
 }
 
 QPixmap IndicatorTrayItem::icon()
 {
-    return QPixmap();
+    auto rawPixmap = QPixmap::fromImage(QImage::fromData(m_pixmapData));
+    rawPixmap.setDevicePixelRatio(devicePixelRatioF());
+    return (rawPixmap);
 }
 
 const QByteArray &IndicatorTrayItem::pixmapData() const
@@ -101,18 +106,34 @@ const QByteArray &IndicatorTrayItem::pixmapData() const
 
 const QString IndicatorTrayItem::text() const
 {
-    return m_label->text();
+    return m_text;
 }
 
 void IndicatorTrayItem::setPixmapData(const QByteArray &data)
 {
     m_pixmapData = data;
-    auto rawPixmap = QPixmap::fromImage(QImage::fromData(data));
-    rawPixmap.setDevicePixelRatio(devicePixelRatioF());
-    m_label->setPixmap(rawPixmap);
 }
 
 void IndicatorTrayItem::setText(const QString &text)
 {
-    m_label->setText(text);
+    m_text = text;
+    Q_EMIT textChanged(m_text);
+    update();
+}
+
+void IndicatorTrayItem::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    QFontMetrics qfm = QFontMetrics(font());
+    QRect tightTextRect = qfm.tightBoundingRect(m_text);
+    QRect textRect = qfm.boundingRect(m_text);
+    QPoint topLeft = textRect.topLeft() - tightTextRect.topLeft();
+    QPoint bottom = textRect.bottomRight() - tightTextRect.bottomRight();
+    QPoint center = QPoint(std::floor((rect().width() - textRect.width()) / 2), std::floor((rect().height() - textRect.height()) / 2)) // this make textRect in center
+                        + (topLeft + bottom) / 2; // this adjust make tightTextRect in center
+    painter.drawText(QRect(center.x(), center.y(), textRect.width() + 1, textRect.height() + 1), (m_text));
+
+    if (m_pixmapData != nullptr) {
+        painter.drawPixmap(rect(), icon());
+    }
 }
