@@ -184,9 +184,9 @@ void BluetoothAdapterItem::onAdapterNameChanged(const QString name)
 void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 {
     if (type == DGuiApplicationHelper::LightType)
-        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh_dark.svg");
+        m_refreshBtn->setRotateIcon(":/refresh_dark.svg");
     else
-        m_refreshBtn->setRotateIcon(":/wireless/resources/wireless/refresh.svg");
+        m_refreshBtn->setRotateIcon(":/refresh.svg");
 }
 
 QSize BluetoothAdapterItem::sizeHint() const
