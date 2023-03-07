@@ -148,11 +148,6 @@ int MainWindowBase::getBorderRadius() const
     if (!DWindowManagerHelper::instance()->hasComposite() || m_multiScreenWorker->displayMode() != DisplayMode::Fashion)
         return 0;
 
-    if (Dtk::Core::DSysInfo::isCommunityEdition()) { // 社区版圆角与专业版不同
-        DPlatformTheme *theme = DGuiApplicationHelper::instance()->systemTheme();
-        return theme->windowRadius(0);
-    }
-
     int size = ((m_position == Dock::Position::Top || m_position == Dock::Position::Bottom) ? height() : width());
     return qMin(MAX_MIN_RADIUS_DIFFVALUE, qMax(size - MIN_RADIUS_WINDOWSIZE, 0)) + MIN_RADIUS;
 }
