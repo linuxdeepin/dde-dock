@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "sounddeviceswidget.h"
-#include "settingdelegate.h"
 #include "imageutil.h"
 #include "slidercontainer.h"
 #include "sounddeviceport.h"
@@ -30,13 +29,14 @@ DWIDGET_USE_NAMESPACE
 #define ITEMSPACE 16
 #define ROWSPACE 10
 #define DESCRIPTIONHEIGHT 15
-#define ITEMRADIUS 12
 #define SLIDERHEIGHT 36
 
 #define AUDIOPORT 0
 #define AUDIOSETTING 1
 
-const int sortRole = itemFlagRole + 1;
+const int deviceObjRole = Dtk::UserRole + 1;
+const int itemTypeRole = Dtk::UserRole + 2;
+const int sortRole = Dtk::UserRole + 3;
 
 SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     : QWidget(parent)
@@ -47,7 +47,6 @@ SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     , m_soundInter(new DBusAudio("org.deepin.dde.Audio1", "/org/deepin/dde/Audio1", QDBusConnection::sessionBus(), this))
     , m_sinkInter(new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this))
     , m_model(new QStandardItemModel(this))
-    , m_delegate(new SettingDelegate(m_deviceList))
 {
     initUi();
     initConnection();
@@ -112,15 +111,14 @@ void SoundDevicesWidget::initUi()
     m_deviceList->setModel(m_model);
     m_deviceList->setViewMode(QListView::ListMode);
     m_deviceList->setMovement(QListView::Free);
-    m_deviceList->setItemRadius(ITEMRADIUS);
     m_deviceList->setWordWrap(false);
     m_deviceList->verticalScrollBar()->setVisible(false);
     m_deviceList->horizontalScrollBar()->setVisible(false);
+    m_deviceList->setBackgroundType(DStyledItemDelegate::BackgroundType::RoundedBackground);
     m_deviceList->setOrientation(QListView::Flow::TopToBottom, false);
     layout->addWidget(m_deviceList);
     m_deviceList->setSpacing(ROWSPACE);
 
-    m_deviceList->setItemDelegate(m_delegate);
     m_model->setSortRole(sortRole);
     m_descriptionLabel->setFixedHeight(DESCRIPTIONHEIGHT);
 
@@ -128,8 +126,8 @@ void SoundDevicesWidget::initUi()
     DStandardItem *settingItem = new DStandardItem;
     settingItem->setText(tr("Sound settings"));
     settingItem->setFlags(Qt::NoItemFlags);
-    settingItem->setData(false, itemCheckRole);
-    settingItem->setData(AUDIOSETTING, itemFlagRole);
+    settingItem->setCheckable(Qt::Unchecked);
+    settingItem->setData(AUDIOSETTING, itemTypeRole);
     m_model->appendRow(settingItem);
 
     m_sliderParent->installEventFilter(this);
@@ -196,7 +194,7 @@ void SoundDevicesWidget::initConnection()
     connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
     connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
     connect(m_soundInter, &DBusAudio::DefaultSinkChanged, this, &SoundDevicesWidget::onDefaultSinkChanged);
-    connect(m_delegate, &SettingDelegate::selectIndexChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
+    connect(m_deviceList->selectionModel(), &QItemSelectionModel::currentChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
     connect(m_soundInter, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_soundInter, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_soundInter, &DBusAudio::MaxUIVolumeChanged, this, [ = ] (double maxValue) {
@@ -239,9 +237,8 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     portItem->setIcon(QIcon(soundIconFile()));
     portItem->setText(deviceName);
     portItem->setTextColorRole(QPalette::BrightText);
-    portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), itemDataRole);
-    portItem->setData(port->isActive(), itemCheckRole);
-    portItem->setData(AUDIOPORT, itemFlagRole);
+    portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), deviceObjRole);
+    portItem->setData(AUDIOPORT, itemTypeRole);
 
     connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
         QString devName = str + "(" + port->cardName() + ")";
@@ -265,7 +262,7 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     int rowCount = m_model->rowCount();
     for (int i = 0; i < rowCount; i++) {
         QStandardItem *item = m_model->item(i);
-        if (item->data(itemFlagRole).toInt() == AUDIOSETTING) {
+        if (item->data(itemTypeRole).toInt() == AUDIOSETTING) {
             item->setData(rowCount - 1, sortRole);
         } else {
             item->setData(row, sortRole);
@@ -285,10 +282,10 @@ void SoundDevicesWidget::removePort(const QString &portId, const uint &cardId)
     int removeRow = -1;
     for (int i = 0; i < m_model->rowCount(); i++) {
         QStandardItem *item = m_model->item(i);
-        if (item->data(itemFlagRole).toInt() != AUDIOPORT)
+        if (item->data(itemTypeRole).toInt() != AUDIOPORT)
             continue;
 
-        const SoundDevicePort *port = item->data(itemDataRole).value<const SoundDevicePort *>();
+        const SoundDevicePort *port = item->data(deviceObjRole).value<const SoundDevicePort *>();
         if (port && port->id() == portId && cardId == port->cardId()) {
             removeRow = i;
             break;
@@ -419,9 +416,9 @@ SoundDevicePort *SoundDevicesWidget::findPort(const QString &portId, const uint 
 
 void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
 {
-    int flag = index.data(itemFlagRole).toInt();
+    int flag = index.data(itemTypeRole).toInt();
     if (flag == AUDIOPORT) {
-        const SoundDevicePort *port = m_model->data(index, itemDataRole).value<const SoundDevicePort *>();
+        const SoundDevicePort *port = m_model->data(index, deviceObjRole).value<const SoundDevicePort *>();
         if (port) {
             m_soundInter->SetPort(port->cardId(), port->id(), int(port->direction()));
             //手动勾选时启用设备
@@ -449,13 +446,18 @@ void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
     uint cardId = m_sinkInter->card();
     activePort(portId, cardId);
 
+    auto *sm = m_deviceList->selectionModel();
     for (int i = 0; i < m_model->rowCount() ; i++) {
         QStandardItem *item = m_model->item(i);
-        if (item->data(itemFlagRole).toInt() != AUDIOPORT)
+        if (item->data(itemTypeRole).toInt() != AUDIOPORT)
             continue;
 
-        const SoundDevicePort *soundPort = item->data(itemDataRole).value<const SoundDevicePort *>();
-        item->setData((soundPort && soundPort->id() == portId && soundPort->cardId() == cardId), itemCheckRole);
+        const SoundDevicePort *soundPort = item->data(deviceObjRole).value<const SoundDevicePort *>();
+        bool checked = soundPort && soundPort->id() == portId && soundPort->cardId() == cardId;
+        item->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+        if (checked) {
+            sm->setCurrentIndex(item->index(), QItemSelectionModel::ClearAndSelect);
+        }
     }
 
     resetVolumeInfo();
