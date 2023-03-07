@@ -149,10 +149,10 @@ install(FILES ${CMAKE_BINARY_DIR}/dde-dock.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake.in 
-    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake 
+    ${CMAKE_SOURCE_DIR}/cmake/DdeDock/DdeDockConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/DdeDockConfig.cmake
     @ONLY)
-install(FILES "cmake/DdeDock/DdeDockConfig.cmake"
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/DdeDockConfig.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DdeDock)
 
 install(FILES gschema/com.deepin.dde.dock.module.gschema.xml
