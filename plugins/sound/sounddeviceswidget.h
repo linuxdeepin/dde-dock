@@ -22,7 +22,6 @@ class QStandardItemModel;
 class QLabel;
 class VolumeModel;
 class AudioSink;
-class SettingDelegate;
 class SoundDevicePort;
 
 using DBusAudio = org::deepin::dde::Audio1;
@@ -81,7 +80,6 @@ private:
     DBusAudio *m_soundInter;
     DBusSink *m_sinkInter;
     QStandardItemModel *m_model;
-    SettingDelegate *m_delegate;
     QList<SoundDevicePort *> m_ports;
 };
 
