@@ -204,6 +204,9 @@ void SoundDevicesWidget::initConnection()
     });
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         m_sinkInter->SetVolume(value * 0.01, true);
+        if (m_sinkInter->mute()) {
+            m_sinkInter->SetMuteQueued(false);
+        }
     });
 }
 
