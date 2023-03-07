@@ -208,6 +208,8 @@ void SoundItem::refreshIcon()
     m_iconPixmap = ImageUtil::loadSvg(iconString, ":/", iconSize, ratio);
 
     update();
+
+    emit iconChanged();
 }
 
 void SoundItem::refreshTips(const int volume, const bool force)

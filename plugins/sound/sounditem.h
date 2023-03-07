@@ -39,6 +39,7 @@ public:
 
 signals:
     void requestContextMenu() const;
+    void iconChanged() const;
 
 protected:
     void resizeEvent(QResizeEvent *e);
