@@ -7,6 +7,7 @@
 
 #include <QScopedPointer>
 #include <QLabel>
+#include <QPaintEvent>
 
 #include "basetraywidget.h"
 
@@ -31,17 +32,21 @@ public:
     const QString text() const;
     bool containsPoint(const QPoint &mouse) override { return false; }
 
+private:
+    void paintEvent(QPaintEvent *) override;
+
 public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapData(const QByteArray &data);
     Q_SCRIPTABLE void setText(const QString &text);
 
 Q_SIGNALS:
     void clicked(uint8_t, int, int);
+    void textChanged(const QString &text);
 
 private:
-    QLabel *m_label;
     QString m_indicatorName;
     bool m_enableClick;              // 置灰时设置为false，不触发click信号
     QByteArray m_pixmapData;
+    QString m_text;
 };
 

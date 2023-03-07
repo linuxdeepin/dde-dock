@@ -86,6 +86,7 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
         TrayModel *dataModel = qobject_cast<TrayModel *>(m_listView->model());
         if (IndicatorTrayItem *sourceIndicatorWidget = dataModel->indicatorWidget(key)) {
             connect(indicatorWidget, &IndicatorTrayItem::clicked, sourceIndicatorWidget, &IndicatorTrayItem::clicked);
+            connect(sourceIndicatorWidget, &IndicatorTrayItem::textChanged, indicatorWidget, &IndicatorTrayItem::setText);
             const QByteArray pixmapData = sourceIndicatorWidget->pixmapData();
             if (!pixmapData.isEmpty())
                 indicatorWidget->setPixmapData(pixmapData);
