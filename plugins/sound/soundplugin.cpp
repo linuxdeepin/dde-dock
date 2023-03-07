@@ -57,6 +57,12 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::requestHide, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
     });
+
+    connect(m_soundItem.data(), &SoundItem::iconChanged, this, [=] {
+        m_proxyInter->updateDockInfo(this, DockPart::QuickPanel);
+        m_proxyInter->updateDockInfo(this, DockPart::QuickShow);
+        m_proxyInter->itemUpdate(this, SOUND_KEY);
+    });
 }
 
 void SoundPlugin::pluginStateSwitched()
