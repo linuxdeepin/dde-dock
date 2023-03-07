@@ -84,6 +84,9 @@ void SoundWidget::initConnection()
 
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         m_defaultSink->SetVolume(value * 0.01, true);
+        if (m_defaultSink->mute()) {
+            m_defaultSink->SetMuteQueued(false);
+        }
     });
 
     connect(m_defaultSink, &DBusSink::MuteChanged, this, [ this ] {
