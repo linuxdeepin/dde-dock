@@ -20,7 +20,7 @@ DGUI_USE_NAMESPACE
 PluginChildPage::PluginChildPage(QWidget *parent)
     : QWidget(parent)
     , m_headerWidget(new QWidget(this))
-    , m_back(new QPushButton(m_headerWidget))
+    , m_back(new DIconButton(QStyle::SP_ArrowBack, this))
     , m_title(new QLabel(m_headerWidget))
     , m_container(new QWidget(this))
     , m_topWidget(nullptr)
@@ -59,8 +59,6 @@ void PluginChildPage::setTitle(const QString &text)
 
 void PluginChildPage::initUi()
 {
-    m_back->setIcon(backPixmap());
-    m_back->setFixedWidth(24);
     m_back->setFlat(true);
     m_title->setAlignment(Qt::AlignCenter);
     QHBoxLayout *headerLayout = new QHBoxLayout(m_headerWidget);
@@ -98,34 +96,4 @@ void PluginChildPage::resetHeight()
     QMargins m = m_containerLayout->contentsMargins();
     m_container->setFixedHeight(m.top() + m.bottom() + (m_topWidget ? m_topWidget->height() : 0));
     setFixedHeight(m_headerWidget->height() + m_container->height());
-}
-
-QPixmap PluginChildPage::backPixmap() const
-{
-    QPixmap pixmap(16, 16);
-    pixmap.fill(Qt::transparent);
-
-    // 设置背景色
-    QColor backColor;
-    if (DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        backColor = Qt::black;
-        backColor.setAlphaF(0.05);
-    } else {
-        backColor = Qt::white;
-        backColor.setAlphaF(0.2);
-    }
-    QPainter painter(&pixmap);
-    painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
-    painter.setPen(Qt::NoPen);
-    QPainterPath path;
-    path.addEllipse(pixmap.rect());
-    painter.fillPath(path, backColor);
-    QSize arrowSize(10, 10);
-    QPixmap arrowPixmap = DStyle::standardIcon(style(), DStyle::SP_ArrowLeave).pixmap(arrowSize);
-    // 让其居中显示
-    QSize backSize = pixmap.size();
-    painter.drawPixmap((backSize.width() - arrowSize.width()) / 2, (backSize.height() - arrowSize.height()) / 2,
-                       arrowSize.width(), arrowSize.height(), arrowPixmap);
-    painter.end();
-    return pixmap;
 }

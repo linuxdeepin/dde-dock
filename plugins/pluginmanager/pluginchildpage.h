@@ -7,10 +7,13 @@
 #define PLUGINCHILDPAGE_H
 
 #include <QWidget>
+#include <DIconButton>
 
 class QPushButton;
 class QLabel;
 class QVBoxLayout;
+
+DWIDGET_USE_NAMESPACE
 
 class PluginChildPage : public QWidget
 {
@@ -32,11 +35,10 @@ private:
     void initUi();
     void initConnection();
     void resetHeight();
-    QPixmap backPixmap() const;
 
 private:
     QWidget *m_headerWidget;
-    QPushButton *m_back;
+    DIconButton *m_back;
     QLabel *m_title;
     QWidget *m_container;
     QWidget *m_topWidget;
