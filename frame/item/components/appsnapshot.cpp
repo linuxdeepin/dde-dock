@@ -44,7 +44,7 @@ using namespace Dock;
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent)
     , m_wid(wid)
-    , m_closeAble(false)
+    , m_closeAble(true)
     , m_isWidowHidden(false)
     , m_title(new TipsWidget(this))
     , m_3DtitleBtn(nullptr)
@@ -311,17 +311,16 @@ void AppSnapshot::mousePressEvent(QMouseEvent *e)
 bool AppSnapshot::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == m_closeBtn2D) {
-        // TODO 判断条件重复
-        if (watched == m_closeBtn2D && (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverMove)) {
+        if (e->type() == QEvent::HoverEnter || e->type() == QEvent::HoverMove) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
-        } else if (watched == m_closeBtn2D && e->type() == QEvent::HoverLeave) {
+        } else if (e->type() == QEvent::HoverLeave) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
-        } else if (watched == m_closeBtn2D && e->type() == QEvent::MouseButtonPress) {
+        } else if (e->type() == QEvent::MouseButtonPress) {
             m_closeBtn2D->setIcon(QIcon(":/icons/resources/close_round_press.svg"));
         }
     }
 
-    return false;
+    return QWidget::eventFilter(watched, e);
 }
 
 void AppSnapshot::resizeEvent(QResizeEvent *event)
