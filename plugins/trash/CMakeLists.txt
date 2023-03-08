@@ -10,6 +10,8 @@ file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
     "../../widgets/tipswidget.h"
     "../../widgets/tipswidget.cpp"
+    "../../frame/util/imageutil.h"
+    "../../frame/util/imageutil.cpp"
     "../../frame/qtdbusextended/*.h"
     "../../frame/qtdbusextended/*.cpp")
 
