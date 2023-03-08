@@ -126,14 +126,14 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
 
 bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == m_closeBtn3D) {
-        if(watched == m_closeBtn3D && (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverMove)) {
+    if (watched == m_closeBtn3D) {
+        if (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverMove) {
             m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_hover.svg"));
         }
-        else if (watched == m_closeBtn3D && event->type() == QEvent::HoverLeave) {
+        else if (event->type() == QEvent::HoverLeave) {
             m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_normal.svg"));
         }
-        else if (watched == m_closeBtn3D && event->type() == QEvent::MouseButtonPress) {
+        else if (event->type() == QEvent::MouseButtonPress) {
             m_closeBtn3D->setIcon(QIcon(":/icons/resources/close_round_press.svg"));
         }
     }
