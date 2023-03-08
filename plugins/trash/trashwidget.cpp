@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "trashwidget.h"
+#include "imageutil.h"
 
 #include <DDBusSender>
 
@@ -176,31 +177,16 @@ void TrashWidget::paintEvent(QPaintEvent *e)
 
 void TrashWidget::updateIcon()
 {
-    //    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    Dock::DisplayMode displayMode = Dock::Fashion;
+    Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
     QString iconString = "user-trash";
     if (!m_popupApplet->empty())
         iconString.append("-full");
-    if (displayMode == Dock::Efficient)
-        iconString.append("-symbolic");
 
-    int size = std::min(width(), height());
-    if (size < PLUGIN_ICON_MIN_SIZE)
-        size = PLUGIN_ICON_MIN_SIZE;
-    if (size > PLUGIN_BACKGROUND_MAX_SIZE) {
-        size *= ((Dock::Fashion == qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>()) ? 0.8 : 0.7);
-        if (size < PLUGIN_BACKGROUND_MAX_SIZE)
-            size = PLUGIN_BACKGROUND_MAX_SIZE;
-    }
+    int size = qMin(width(), height());
+    size = qMax(PLUGIN_ICON_MIN_SIZE, static_cast<int>(size * ((Dock::Efficient == displayMode) ? 0.7 : 0.8)));
 
-    QIcon icon = QIcon::fromTheme(iconString, m_defaulticon);
-
-    const auto ratio = devicePixelRatioF();
-    int pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? size : int(size * ratio);
-    m_icon = icon.pixmap(pixmapSize, pixmapSize);
-    m_icon.setDevicePixelRatio(ratio);
-    m_icon = m_icon.scaled(pixmapSize * ratio, pixmapSize * ratio);
+    m_icon = ImageUtil::loadSvg(iconString, QSize(size, size), devicePixelRatioF());
 }
 
 void TrashWidget::updateIconAndRefresh()
