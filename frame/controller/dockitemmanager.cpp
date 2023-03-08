@@ -41,7 +41,9 @@ DockItemManager::DockItemManager(QObject *parent)
         connect(it, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
 
-        m_itemList.append(it);
+        // 屏蔽Deepin Lock
+        if (it->name() != QStringLiteral("Deepin Lock"))
+            m_itemList.append(it);
         updateMultiItems(it);
     }
 
