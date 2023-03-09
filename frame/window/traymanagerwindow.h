@@ -11,6 +11,7 @@
 
 #include "org_deepin_dde_timedate1.h"
 
+#include <QPainterPath>
 #include <QWidget>
 
 namespace Dtk { namespace Widget { class DBlurEffectWidget; } }
@@ -72,6 +73,7 @@ private:
 
 private Q_SLOTS:
     void onTrayCountChanged();
+    void updateHighlightArea(const QRect &rect);
 
 private:
     QWidget *m_appPluginDatetimeWidget;
@@ -90,6 +92,7 @@ private:
     QLabel *m_splitLine;
     bool m_singleShow;                              // 用于记录当前日期时间和插件区域是显示一行还是显示多行
     int m_borderRadius;                             // 圆角的值
+    QPainterPath m_highlightArea;
 };
 
 #endif // PLUGINWINDOW_H

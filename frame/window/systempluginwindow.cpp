@@ -208,7 +208,6 @@ StretchPluginsItem::StretchPluginsItem(DockInter *dockInter, PluginsItemInterfac
     , m_itemKey(itemKey)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_dockInter(dockInter)
-    , m_isEnter(false)
 {
 }
 
@@ -266,12 +265,6 @@ void StretchPluginsItem::paintEvent(QPaintEvent *event)
         rctPixmap.setHeight(ICONSIZE);
     }
 
-    if (m_isEnter) {
-        QColor backColor = DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType() ? QColor(20, 20, 20) : Qt::white;
-        backColor.setAlphaF(0.2);
-        // 鼠标进入的时候，绘制底色
-        painter.fillRect(rect(), backColor);
-    }
     // 绘制图标
     int iconSize = static_cast<int>(ICONSIZE * (QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? 1 : qApp->devicePixelRatio()));
     painter.drawPixmap(rctPixmap, icon.pixmap(iconSize, iconSize));
@@ -393,14 +386,17 @@ void StretchPluginsItem::mouseReleaseEvent(QMouseEvent *e)
 
 void StretchPluginsItem::enterEvent(QEvent *event)
 {
-    m_isEnter = true;
+    if (auto view = qobject_cast<SystemPluginWindow *>(parentWidget()))
+        view->requestDrawBackground(rect());
+
     update();
     DockItem::enterEvent(event);
 }
 
 void StretchPluginsItem::leaveEvent(QEvent *event)
 {
-    m_isEnter = false;
+    if (auto view = qobject_cast<SystemPluginWindow *>(parentWidget()))
+        view->requestDrawBackground(QRect());
     update();
     DockItem::leaveEvent(event);
 }

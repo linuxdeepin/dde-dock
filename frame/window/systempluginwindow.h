@@ -35,6 +35,7 @@ public:
 Q_SIGNALS:
     void itemChanged();
     void requestDrop(QDropEvent *dropEvent);
+    void requestDrawBackground(const QRect &rect);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -99,7 +100,6 @@ private:
     static Dock::Position m_position;
     QPoint m_mousePressPoint;
     DockInter *m_dockInter;
-    bool m_isEnter;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H
