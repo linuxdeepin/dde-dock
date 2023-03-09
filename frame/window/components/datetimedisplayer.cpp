@@ -40,7 +40,6 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     , m_currentSize(0)
     , m_oneRow(false)
     , m_showMultiRow(showMultiRow)
-    , m_isEnter(false)
 {
     m_tipPopupWindow.reset(new DockPopupWindow);
     // 日期格式变化的时候，需要重绘
@@ -271,14 +270,6 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(palette().brightText(), 1));
 
-    // 绘制背景色
-    if (m_isEnter) {
-        QColor backColor = DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType() ? QColor(20, 20, 20) : Qt::white;
-        backColor.setAlphaF(0.2);
-        // 鼠标进入的时候，绘制底色
-        painter.fillRect(rect(), backColor);
-    }
-
     int timeAlignFlag = Qt::AlignCenter;
     int dateAlignFlag = Qt::AlignCenter;
 
@@ -395,7 +386,7 @@ QRect DateTimeDisplayer::textRect(const QRect &sourceRect) const
 void DateTimeDisplayer::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    m_isEnter = true;
+    Q_EMIT requestDrawBackground(rect());
     update();
     m_tipPopupWindow->show(tipsPoint());
 }
@@ -403,7 +394,7 @@ void DateTimeDisplayer::enterEvent(QEvent *event)
 void DateTimeDisplayer::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
-    m_isEnter = false;
+    Q_EMIT requestDrawBackground(QRect());
     update();
     m_tipPopupWindow->hide();
 }

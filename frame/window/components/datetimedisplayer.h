@@ -42,6 +42,7 @@ public:
 
 Q_SIGNALS:
     void requestUpdate();         // 当日期时间格式发生变化的时候，需要通知外面来更新窗口尺寸
+    void requestDrawBackground(const QRect &rect);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -83,7 +84,6 @@ private:
     int m_currentSize;
     bool m_oneRow;
     bool m_showMultiRow;
-    bool m_isEnter;
 };
 
 #endif // DATETIMEDISPLAYER_H

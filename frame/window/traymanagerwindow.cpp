@@ -241,6 +241,37 @@ void TrayManagerWindow::onTrayCountChanged()
     Q_EMIT requestUpdate();
 }
 
+void TrayManagerWindow::updateHighlightArea(const QRect &rect)
+{
+    do {
+        m_highlightArea.clear();
+        if (!rect.isValid())
+            break;
+
+        auto widget = qobject_cast<QWidget *>(sender());
+        Q_ASSERT(widget);
+
+        QRect tmp = rect;
+        tmp.moveTopLeft(widget->mapTo(this, rect.topLeft()));
+
+        const auto radius = pathRadius();
+        m_highlightArea.addRoundedRect(tmp, radius, radius);
+        if (widget == m_dateTimeWidget) {
+            if (!m_singleShow) {
+                QPainterPath path;
+                if(m_position == Dock::Position::Top)
+                    path.addRect(tmp.adjusted(0, radius, 0, 0));
+                else
+                    path.addRect(tmp.adjusted(0, 0, 0, -radius));
+
+                m_highlightArea += path;
+            }
+        }
+    } while (false);
+
+    update();
+}
+
 void TrayManagerWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
@@ -302,6 +333,7 @@ void TrayManagerWindow::initConnection()
 
         Q_EMIT requestUpdate();
     });
+    connect(m_systemPluginWidget, &SystemPluginWindow::requestDrawBackground, this, &TrayManagerWindow::updateHighlightArea);
 
     connect(m_trayView, &TrayGridView::dragLeaved, m_delegate, [ this ]{
         Q_EMIT m_delegate->requestDrag(true);
@@ -313,6 +345,7 @@ void TrayManagerWindow::initConnection()
 
     connect(m_model, &TrayModel::rowCountChanged, m_trayView, &TrayGridView::onUpdateEditorView);
     connect(m_dateTimeWidget, &DateTimeDisplayer::requestUpdate, this, &TrayManagerWindow::requestUpdate);
+    connect(m_dateTimeWidget, &DateTimeDisplayer::requestDrawBackground, this, &TrayManagerWindow::updateHighlightArea);
 
     m_trayView->installEventFilter(this);
     m_quickIconWidget->installEventFilter(this);
@@ -508,6 +541,17 @@ void TrayManagerWindow::paintEvent(QPaintEvent *event)
     painter.setPen(maskColor(110));
     painter.drawPath(path);
     painter.restore();
+
+    // draw highlight background for special path.
+    if (!m_highlightArea.isEmpty()) {
+        painter.save();
+        QColor backColor = DGuiApplicationHelper::ColorType::DarkType == DGuiApplicationHelper::instance()->themeType() ? QColor(20, 20, 20) : Qt::white;
+        backColor.setAlphaF(0.2);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(backColor);
+        painter.drawPath(m_highlightArea);
+        painter.restore();
+    }
 }
 
 QColor TrayManagerWindow::maskColor(uint8_t alpha) const
