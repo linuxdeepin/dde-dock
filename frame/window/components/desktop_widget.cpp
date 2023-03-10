@@ -54,7 +54,7 @@ void DesktopWidget::leaveEvent(QEvent *event)
 {
     // 鼠标移入时隐藏了窗口，移出时恢复
     if (m_needRecoveryWin) {
-        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+        QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", {});
     }
 
     m_isHover = false;
@@ -71,7 +71,7 @@ void DesktopWidget::mousePressEvent(QMouseEvent *event)
             m_needRecoveryWin = false;
         } else {
             // 需求调整，鼠标移入，预览桌面时再点击显示桌面保持显示桌面状态，再点击才切换桌面显、隐状态
-            QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle");
+            QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", {});
         }
     }
 

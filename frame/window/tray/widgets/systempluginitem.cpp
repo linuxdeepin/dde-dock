@@ -262,7 +262,7 @@ void SystemPluginItem::mouseReleaseEvent(QMouseEvent *event)
     showPopupApplet(trayPopupApplet());
 
     if (!trayClickCommand().isEmpty()) {
-        QProcess::startDetached(trayClickCommand());
+        QProcess::startDetached(trayClickCommand(), {});
     }
 
     BaseTrayWidget::mouseReleaseEvent(event);

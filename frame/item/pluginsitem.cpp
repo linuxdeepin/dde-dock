@@ -278,9 +278,9 @@ void PluginsItem::mouseClicked()
     if (!command.isEmpty()) {
         QProcess *proc = new QProcess(this);
 
-        connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+        connect(proc, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
-        proc->startDetached(command);
+        proc->startDetached(command, {});
         return;
     }
 

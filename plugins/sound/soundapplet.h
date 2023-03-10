@@ -13,7 +13,7 @@
 
 #include <DIconButton>
 #include <DListView>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -24,6 +24,7 @@ DWIDGET_USE_NAMESPACE
 
 using DBusAudio = org::deepin::dde::Audio1;
 using DBusSink = org::deepin::dde::audio1::Sink;
+using DTK_NAMESPACE::Gui::DGuiApplicationHelper;
 
 class HorizontalSeperator;
 class QGSettings;
@@ -44,7 +45,7 @@ protected:
     {
         QPainter painter(this);
         painter.setPen(Qt::NoPen);
-        if (DApplicationHelper::instance()->themeType() == DApplicationHelper::LightType) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
             painter.setBrush(QColor(0, 0, 0, 0.03 * 255));
         } else {
             painter.setBrush(QColor(255, 255, 255, 0.03 * 255));
