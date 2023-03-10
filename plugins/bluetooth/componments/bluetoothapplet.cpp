@@ -11,7 +11,7 @@
 #include "bluetoothadapteritem.h"
 #include "horizontalseperator.h"
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DDBusSender>
 #include <DLabel>
 #include <DSwitchButton>
@@ -97,7 +97,7 @@ void SettingLabel::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::LightType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
         painter.setBrush(QColor(0, 0, 0, 0.03 * 255));
     } else {
         painter.setBrush(QColor(255, 255, 255, 0.03 * 255));
@@ -287,7 +287,7 @@ void BluetoothApplet::initConnect()
         .call();
         emit requestHide();
     });
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothApplet::updateIconTheme);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setAirplaneModeEnabled);
     connect(m_airPlaneModeInter, &DBusAirplaneMode::EnabledChanged, this, &BluetoothApplet::setDisabled);
 }

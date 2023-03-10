@@ -46,7 +46,7 @@ QPixmap AppDrag::pixmap() const
 Qt::DropAction AppDrag::start(Qt::DropActions supportedActions)
 {
     m_appDragWidget->show();
-    return QDrag::start(supportedActions);
+    return QDrag::exec(supportedActions);
 }
 
 Qt::DropAction AppDrag::exec(Qt::DropActions supportedActions)

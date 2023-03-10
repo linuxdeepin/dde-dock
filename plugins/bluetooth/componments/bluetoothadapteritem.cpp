@@ -15,7 +15,7 @@
 #include <DSwitchButton>
 #include <DListView>
 #include <DSpinner>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QBoxLayout>
 #include <QStandardItemModel>
@@ -81,7 +81,7 @@ void BluetoothDeviceItem::initActionList()
 
 void BluetoothDeviceItem::initConnect()
 {
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothDeviceItem::updateIconTheme);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothDeviceItem::updateIconTheme);
     connect(m_device, &Device::stateChanged, this, &BluetoothDeviceItem::updateDeviceState);
     connect(m_iconWidget, &QWidget::destroyed, [ this ] { this->m_iconWidget = nullptr; });
 }
@@ -333,7 +333,7 @@ void BluetoothAdapterItem::initUi()
 
 void BluetoothAdapterItem::initConnect()
 {
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &BluetoothAdapterItem::updateIconTheme);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BluetoothAdapterItem::updateIconTheme);
     connect(m_adapter, &Adapter::deviceAdded, this, &BluetoothAdapterItem::onDeviceAdded);
     connect(m_adapter, &Adapter::deviceRemoved, this, &BluetoothAdapterItem::onDeviceRemoved);
     connect(m_adapter, &Adapter::deviceNameUpdated, this, &BluetoothAdapterItem::onDeviceNameUpdated);
