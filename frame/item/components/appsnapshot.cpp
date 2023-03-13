@@ -226,7 +226,7 @@ void AppSnapshot::fetchSnapshot()
                     emit requestCheckWindow();
                     return;
                 }
-                qimage = QImage((const uchar *)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+                qimage = QImage(reinterpret_cast<uchar*>(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32).copy();
             }
 
             Q_ASSERT(!qimage.isNull());
