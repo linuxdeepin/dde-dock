@@ -59,6 +59,8 @@ public:
 
     static void setDockPostion(const Dock::Position pos) { DockPosition = pos; }
 
+    bool containsPoint(const QPoint& mouse) override;
+
     QPixmap icon() override;
 
 Q_SIGNALS:
