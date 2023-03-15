@@ -779,3 +779,15 @@ void SNITrayItemWidget::setMouseData(QMouseEvent *e)
 
     m_handleMouseReleaseTimer->start();
 }
+
+bool SNITrayItemWidget::containsPoint(const QPoint &pos) {
+    QPoint ptGlobal = mapToGlobal(QPoint(0, 0));
+    QRect rectGlobal(ptGlobal, this->size());
+    if (rectGlobal.contains(pos)) return true;
+
+    // 如果菜单列表隐藏，则认为不在区域内
+    if (!m_menu->isVisible()) return false;
+
+    // 判断鼠标是否在菜单区域
+    return m_menu->geometry().contains(pos);
+}

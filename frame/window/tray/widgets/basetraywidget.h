@@ -32,6 +32,7 @@ public:
     virtual bool needShow();
     virtual void setNeedShow(bool needShow);
     virtual QPixmap icon() = 0;
+    virtual bool containsPoint(const QPoint& mouse) = 0;
 
 Q_SIGNALS:
     void iconChanged();

@@ -32,6 +32,7 @@ public:
     static bool isXEmbedKey(const QString &itemKey);
     virtual bool isValid() override {return m_valid;}
     QPixmap icon() override;
+    bool containsPoint(const QPoint &mouse) override { return false; }
 
 private:
     void showEvent(QShowEvent *e) override;

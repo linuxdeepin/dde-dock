@@ -36,6 +36,7 @@ public:
     void updateIcon() override {}
     QPixmap icon() override;
     static TrayGridWidget *popupTrayView();
+    bool containsPoint(const QPoint &mouse) override { return false; }
 
 protected:
     void paintEvent(QPaintEvent *event) override;

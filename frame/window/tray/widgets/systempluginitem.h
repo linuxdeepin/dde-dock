@@ -46,7 +46,7 @@ public:
 
     void showPopupApplet(QWidget * const applet);
     void hidePopup();
-    bool containsPoint(QPoint pos);
+    bool containsPoint(const QPoint& mouse) override;
 
 signals:
     void itemVisibleChanged(bool visible);

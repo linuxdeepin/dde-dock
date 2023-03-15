@@ -369,7 +369,7 @@ void SystemPluginItem::hidePopup()
     emit requestWindowAutoHide(true);
 }
 
-bool SystemPluginItem::containsPoint(QPoint pos)
+bool SystemPluginItem::containsPoint(const QPoint& pos)
 {
     QPoint ptGlobal = mapToGlobal(QPoint(0, 0));
     QRect rectGlobal(ptGlobal, this->size());

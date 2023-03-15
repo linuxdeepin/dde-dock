@@ -132,7 +132,7 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
     TrayModel *trayModel = TrayModel::getIconModel();
     gridParentView->setTrayGridView(trayView);
 
-    gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     trayView->setModel(trayModel);
     trayView->setItemDelegate(trayDelegate);
     trayView->setSpacing(ITEM_SPACING);
@@ -294,7 +294,7 @@ void TrayGridWidget::initMember()
         QAbstractItemModel *dataModel = m_trayGridView->model();
         for (int i = 0; i < dataModel->rowCount(); i++) {
             QModelIndex index = dataModel->index(i, 0);
-            SystemPluginItem *widget = qobject_cast<SystemPluginItem *>(m_trayGridView->indexWidget(index));
+            BaseTrayWidget *widget = qobject_cast<BaseTrayWidget *>(m_trayGridView->indexWidget(index));
             if (widget && widget->containsPoint(mousePos))
                 return;
         }
