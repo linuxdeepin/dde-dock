@@ -22,8 +22,6 @@ public:
     // 加载窗口的预览图
     static QPixmap loadWindowThumb(const QString &winInfoId);                      // 加载图片，参数为windowId或者窗口的UUID
 
-private:
-    static QString imagePath();
 };
 
 #endif // IMAGEUTIL_H
