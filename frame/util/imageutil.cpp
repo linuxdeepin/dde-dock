@@ -16,7 +16,6 @@
 #include <QDBusReply>
 #include <QFile>
 #include <QDBusUnixFileDescriptor>
-#include <QDir>
 
 #include <X11/Xcursor/Xcursor.h>
 
@@ -93,16 +92,12 @@ QCursor* ImageUtil::loadQCursorFromX11Cursor(const char* theme, const char* curs
 
 QPixmap ImageUtil::loadWindowThumb(const QString &winInfoId)
 {
-    // 在tmp下创建临时目录，用来存放缩略图
-    QString thumbPath(imagePath());
-    QDir dir(thumbPath);
-    if (!dir.exists())
-        dir.mkpath(thumbPath);
 
-    QString fileName = QString("%1/%2").arg(thumbPath).arg(winInfoId);
-    int fileId = open(fileName.toLocal8Bit().data(), O_CREAT | O_RDWR, S_IWUSR | S_IRUSR);
-    if (fileId < 0) {
-        //打开文件失败
+    // pipe read write fd
+    int fd[2];
+
+    if (pipe(fd) < 0) {
+        qDebug() << "failed to create pipe";
         return QPixmap();
     }
 
@@ -117,14 +112,18 @@ QPixmap ImageUtil::loadWindowThumb(const QString &winInfoId)
     option["native-resolution"] = true;
     args << QVariant::fromValue(option);
     // 第三个参数，文件描述符
-    args << QVariant::fromValue(QDBusUnixFileDescriptor(fileId));
+    args << QVariant::fromValue(QDBusUnixFileDescriptor(fd[1]));
 
     QDBusReply<QVariantMap> reply = interface.callWithArgumentList(QDBus::Block, QStringLiteral("CaptureWindow"), args);
     if(!reply.isValid()) {
-        close(fileId);
+        close(fd[1]);
+        close(fd[0]);
         qDebug() << "get current workspace background error: "<< reply.error().message();
         return QPixmap();
     }
+
+    // close write
+    close(fd[1]);
 
     QVariantMap imageInfo = reply.value();
     int imageWidth = imageInfo.value("width").toUInt();
@@ -133,24 +132,21 @@ QPixmap ImageUtil::loadWindowThumb(const QString &winInfoId)
     int imageFormat = imageInfo.value("format").toUInt();
 
     QFile file;
-    if (!file.open(fileId, QIODevice::ReadOnly)) {
-        close(fileId);
-        return QPixmap();
-    }
-
-    if (file.size() == 0) {
+    if (!file.open(fd[0], QIODevice::ReadOnly)) {
         file.close();
+        close(fd[0]);
         return QPixmap();
     }
 
-    QByteArray fileContent = file.readAll();
-    QImage image(reinterpret_cast<uchar *>(fileContent.data()), imageWidth, imageHeight, imageStride, static_cast<QImage::Format>(imageFormat));
-    QPixmap pixmap = QPixmap::fromImage(image);
-    close(fileId);
-    return pixmap;
-}
+    QImage::Format qimageFormat = static_cast<QImage::Format>(imageFormat);
+    int bitsCountPerPixel = QImage::toPixelFormat(qimageFormat).bitsPerPixel();
 
-QString ImageUtil::imagePath()
-{
-    return QString("%1/dde-dock/windowthumb").arg(QDir::tempPath());
+    QByteArray fileContent = file.read(imageHeight * imageWidth * bitsCountPerPixel / 8);
+    QImage image(reinterpret_cast<uchar *>(fileContent.data()), imageWidth, imageHeight, imageStride, qimageFormat);
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    // close read
+    close(fd[0]);
+
+    return pixmap;
 }
