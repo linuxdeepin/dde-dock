@@ -98,6 +98,9 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
     if (watcher == m_nameLabel && event->type() == QEvent::Resize) {
         m_nameLabel->setText(QFontMetrics(m_nameLabel->font()).elidedText(tr("Bluetooth"), Qt::TextElideMode::ElideRight, m_nameLabel->width()));
     }
+    if (watcher == m_stateLabel && event->type() == QEvent::Resize) {
+        m_stateLabel->setText(QFontMetrics(m_stateLabel->font()).elidedText(m_stateLabel->text(), Qt::TextElideMode::ElideRight, m_stateLabel->width()));
+    }
     return QWidget::eventFilter(watcher, event);
 }
 
@@ -119,6 +122,7 @@ void BluetoothMainWidget::initUi()
 
     m_stateLabel->setParent(textWidget);
     m_stateLabel->setFont(DFontSizeManager::instance()->t10());
+    m_stateLabel->setFixedWidth(76);
     textLayout->addWidget(m_nameLabel);
     textLayout->addWidget(m_stateLabel);
 
@@ -130,7 +134,8 @@ void BluetoothMainWidget::initUi()
     expandLayout->addWidget(m_expandLabel);
 
     // 设置图标和文本
-    m_nameLabel->setText(tr("Bluetooth"));
+    m_nameLabel->setText(QFontMetrics{m_nameLabel->font()}.elidedText(tr("Bluetooth"), Qt::TextElideMode::ElideRight, m_nameLabel->width()));
+    m_stateLabel->setText(QFontMetrics{m_stateLabel->font()}.elidedText(isOpen() ? tr("Turn on") : tr("Turn off"), Qt::TextElideMode::ElideRight,m_stateLabel->width()));
     updateExpandIcon();
 
     // 将所有的窗体都添加到主布局中
@@ -189,6 +194,8 @@ QString BluetoothMainWidget::bluetoothIcon(bool isOpen) const
 void BluetoothMainWidget::onAdapterChanged()
 {
     bool bluetoothIsOpen = isOpen();
-    m_stateLabel->setText(bluetoothIsOpen ? tr("Turn on") : tr("Turn off"));
+    const QString& text = bluetoothIsOpen ? tr("Turn on") : tr("Turn off");
+    QFontMetrics fmt{m_stateLabel->font()};
+    m_stateLabel->setText(fmt.elidedText(text, Qt::TextElideMode::ElideRight,m_stateLabel->width()));
     m_iconWidget->update();
 }
