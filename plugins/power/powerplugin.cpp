@@ -215,8 +215,10 @@ void PowerPlugin::refreshTipsData()
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
     const uint percentage = qMin(100.0, qMax(0.0, data.value("Display")));
-    const QString value = QString("%1%").arg(std::round(percentage));
+    QString value = QString("%1%").arg(std::round(percentage));
     const int batteryState = m_powerInter->batteryState()["Display"];
+    QFontMetrics ftm(m_labelText->font());
+    value = ftm.elidedText(value, Qt::TextElideMode::ElideMiddle, m_labelText->width());
     m_labelText->setText(value);
     if (m_preChargeTimer->isActive() && m_showTimeToFull) {
         // 插入电源后，20秒内算作预充电时间，此时计算剩余充电时间是不准确的
@@ -291,7 +293,7 @@ void PowerPlugin::initUi()
 
     m_labelText = new QLabel(m_quickPanel);
     m_labelText->setObjectName("textLabel");
-    m_labelText->setFixedHeight(11);
+    m_labelText->setFixedHeight(15);
     m_labelText->setAlignment(Qt::AlignCenter);
     m_labelText->setFont(Dtk::Widget::DFontSizeManager::instance()->t10());
     layout->addWidget(m_imageLabel);

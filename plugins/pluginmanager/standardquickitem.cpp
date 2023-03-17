@@ -13,9 +13,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#define ICONHEIGHT 24
-#define ICONWIDTH 24
-#define TEXTHEIGHT 11
+static constexpr int ICONHEIGHT = 24;
+static constexpr int ICONWIDTH = 24;
+static constexpr int TEXTHEIGHT = 20;
 
 DWIDGET_USE_NAMESPACE
 
@@ -96,6 +96,7 @@ QWidget *StandardQuickItem::iconWidget(QWidget *parent)
         QLabel *labelText = new QLabel(widget);
         labelText->setObjectName("textLabel");
         labelText->setFixedHeight(TEXTHEIGHT);
+        labelText->setFixedWidth(this->width());
         updatePluginName(labelText);
         labelText->setAlignment(Qt::AlignCenter);
         labelText->setFont(DFontSizeManager::instance()->t10());
@@ -152,12 +153,16 @@ void StandardQuickItem::updatePluginName(QLabel *textLabel)
 {
     if (!textLabel)
         return;
-
     QString text = pluginItem()->description();
     if (text.isEmpty())
         text = pluginItem()->pluginDisplayName();
     QFontMetrics ftm(textLabel->font());
-    text = ftm.elidedText(text, Qt::TextElideMode::ElideRight, textLabel->width());
+    if (ftm.boundingRect(text).width() > textLabel->width()) {
+        this->setToolTip(text);
+    } else {
+        this->setToolTip("");
+    }
+    text = ftm.elidedText(text, Qt::TextElideMode::ElideMiddle, textLabel->width());
     textLabel->setText(text);
 }
 
