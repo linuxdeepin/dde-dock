@@ -91,6 +91,7 @@ class DBusDockAdaptors: public QDBusAbstractAdaptor
                                        "        <arg name=\"visible\" type=\"b\" direction=\"in\"/>"
                                        "    </method>"
                                        "    <method name=\"setItemOnDock\">"
+                                       "        <arg name=\"settingKey\" type=\"s\" direction=\"in\"/>"
                                        "        <arg name=\"itemKey\" type=\"s\" direction=\"in\"/>"
                                        "        <arg name=\"visible\" type=\"b\" direction=\"in\"/>"
                                        "    </method>"
