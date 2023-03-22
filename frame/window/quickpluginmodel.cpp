@@ -155,6 +155,11 @@ void QuickPluginModel::saveConfig()
     std::sort(plugins.begin(), plugins.end(), [ this ](const QString &p1, const QString &p2) {
         return m_dockedPluginIndex.value(p1) < m_dockedPluginIndex.value(p2);
     });
+
+    for (const auto &originalPlugin : SETTINGCONFIG->value(PLUGINNAMEKEY).toStringList()) {
+        if (!plugins.contains(originalPlugin)) plugins.append(originalPlugin);
+    }
+
     SETTINGCONFIG->setValue(PLUGINNAMEKEY, plugins);
 }
 
