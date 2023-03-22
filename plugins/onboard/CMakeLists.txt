@@ -29,10 +29,9 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${Qt5DBus_INCLUDE_DIRS}
     ./dbusinterface/generation_dbus_interface)
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${DtkGui_LIBRARIES}
     ${DtkWidget_LIBRARIES}
-)
+    Qt5::Widgets
+    Qt5::DBus
+    Dtk::Gui)
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

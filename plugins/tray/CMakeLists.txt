@@ -56,11 +56,6 @@ add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} tray.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
-                                                 ${Qt5DBus_INCLUDE_DIRS}
-                                                 ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-                                                 ${XCB_LIBS_INCLUDE_DIRS}
-                                                 ${QGSettings_INCLUDE_DIRS}
-                                                 ${dbusmenu-qt5_INCLUDE_DIRS}
                                                  ../../interfaces
                                                  ../../frame
                                                  ../../frame/qtdbusextended
@@ -69,14 +64,13 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5X11Extras_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
-    ${XCB_LIBS_LIBRARIES}
-    ${QGSettings_LIBRARIES}
-    pthread
-)
+    PkgConfig::QGSettings
+    PkgConfig::XCB_LIBS
+    Qt5::Concurrent
+    Qt5::X11Extras
+    Qt5::Widgets
+    Qt5::DBus
+    Qt5::Svg
+    pthread)
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

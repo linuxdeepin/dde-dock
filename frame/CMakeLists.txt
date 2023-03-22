@@ -46,16 +46,8 @@ add_executable(${BIN_NAME}
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
-    ${XCB_EWMH_INCLUDE_DIRS}
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${PROJECT_BINARY_DIR}
-    ${QGSettings_INCLUDE_DIRS}
-    ${DtkGUI_INCLUDE_DIRS}
-    ${Qt5Svg_INCLUDE_DIRS}
-    ${dbusmenu-qt5_INCLUDE_DIRS}
-    ${Qt5WaylandClient_INCLUDE_DIRS}
     ${Qt5WaylandClient_PRIVATE_INCLUDE_DIRS}
-    ${Qt5XkbCommonSupport_PRIVATE_INCLUDE_DIRS}
     ../interfaces
     ../widgets
     ./dbusinterface/generation_dbus_interface

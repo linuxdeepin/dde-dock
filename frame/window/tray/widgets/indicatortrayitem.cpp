@@ -31,8 +31,8 @@ IndicatorTrayItem::IndicatorTrayItem(const QString &indicatorName, QWidget *pare
     m_label = new QLabel(this);
 
     QPalette p = m_label->palette();
-    p.setColor(QPalette::Foreground, Qt::white);
-    p.setColor(QPalette::Background, Qt::transparent);
+    p.setColor(QPalette::WindowText, Qt::white);
+    p.setColor(QPalette::Window, Qt::transparent);
     m_label->setPalette(p);
 
     m_label->setAttribute(Qt::WA_TranslucentBackground);
@@ -75,13 +75,13 @@ void IndicatorTrayItem::enableLabel(bool enable)
     QPalette p = m_label->palette();
     if (!enable) {
         m_enableClick = false;
-        p.setColor(QPalette::Disabled, QPalette::Foreground, Qt::lightGray);
-        p.setColor(QPalette::Disabled, QPalette::Background, Qt::transparent);
+        p.setColor(QPalette::Disabled, QPalette::WindowText, Qt::lightGray);
+        p.setColor(QPalette::Disabled, QPalette::Window, Qt::transparent);
         m_label->setEnabled(enable);
     } else {
         m_enableClick = true;
         p.setColor(QPalette::Normal, QPalette::BrightText, Qt::white);
-        p.setColor(QPalette::Normal, QPalette::Background, Qt::transparent);
+        p.setColor(QPalette::Normal, QPalette::Window, Qt::transparent);
         m_label->setEnabled(enable);
     }
 

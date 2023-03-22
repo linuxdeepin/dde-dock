@@ -140,7 +140,8 @@ void SoundItem::resizeEvent(QResizeEvent *e)
 
 void SoundItem::wheelEvent(QWheelEvent *e)
 {
-    QWheelEvent *event = new QWheelEvent(e->position(), e->angleDelta().y(), e->buttons(), e->modifiers());
+    QWheelEvent *event = new QWheelEvent(e->position(), e->globalPosition(), e->pixelDelta(), e->angleDelta(),
+                                            e->buttons(), e->modifiers(), e->phase(), e->inverted());
     qApp->postEvent(m_applet->mainSlider(), event);
 
     e->accept();
