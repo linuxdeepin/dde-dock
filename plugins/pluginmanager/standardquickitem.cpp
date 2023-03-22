@@ -95,11 +95,11 @@ QWidget *StandardQuickItem::iconWidget(QWidget *parent)
 
         QLabel *labelText = new QLabel(widget);
         labelText->setObjectName("textLabel");
-        labelText->setFixedHeight(TEXTHEIGHT);
-        labelText->setFixedWidth(this->width());
-        updatePluginName(labelText);
         labelText->setAlignment(Qt::AlignCenter);
         labelText->setFont(DFontSizeManager::instance()->t10());
+        labelText->setFixedHeight(TEXTHEIGHT);
+        labelText->setFixedWidth(70);
+        updatePluginName(labelText);
         layout->addWidget(imageLabel);
         layout->addSpacing(7);
         layout->addWidget(labelText);
@@ -157,13 +157,14 @@ void StandardQuickItem::updatePluginName(QLabel *textLabel)
     if (text.isEmpty())
         text = pluginItem()->pluginDisplayName();
     QFontMetrics ftm(textLabel->font());
-    if (ftm.boundingRect(text).width() > textLabel->width()) {
+    if (ftm.boundingRect(text).width() > 70) {
         this->setToolTip(text);
     } else {
         this->setToolTip("");
     }
-    text = ftm.elidedText(text, Qt::TextElideMode::ElideMiddle, textLabel->width());
+    text = ftm.elidedText(text, Qt::TextElideMode::ElideMiddle, 70);
     textLabel->setText(text);
+    qInfo() << "text update to: " << text;
 }
 
 void StandardQuickItem::doUpdate()
