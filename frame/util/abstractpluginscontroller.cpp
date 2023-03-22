@@ -156,15 +156,8 @@ void AbstractPluginsController::initPlugin(PluginsItemInterface *interface)
             m_pluginLoadMap.insert(pair, true);
     }
 
-    bool loaded = true;
-    for (int i = 0; i < m_pluginLoadMap.keys().size(); ++i) {
-        if (!m_pluginLoadMap.values()[i]) {
-            loaded = false;
-            break;
-        }
-    }
-
     qDebug() << objectName() << "init plugin finished: " << interface->pluginName();
+
 }
 
 bool AbstractPluginsController::eventFilter(QObject *object, QEvent *event)

@@ -10,12 +10,6 @@
 #include <QApplication>
 #include <QX11Info>
 #include <QtWaylandClient>
-#define private public
-#include <private/qwaylandintegration_p.h>
-#include <private/qwaylandshellsurface_p.h>
-#include <private/qwaylandwindow_p.h>
-#include <private/qwaylandcursor_p.h>
-#undef private
 
 #include <DWayland/Client/registry.h>
 #include <DWayland/Client/ddeshell.h>
@@ -58,7 +52,7 @@ void ScreenSpliter_Wayland::setMaskVisible(const QRect &rect, bool visible)
         DPalette palette = DGuiApplicationHelper::instance()->applicationPalette();
         QColor backColor = palette.color(QPalette::Highlight);
         backColor.setAlpha(255 * 0.3);
-        palette.setBrush(QPalette::ColorRole::Background, backColor);
+        palette.setBrush(QPalette::ColorRole::Window, backColor);
         desktopWidget->setPalette(palette);
         desktopWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     }

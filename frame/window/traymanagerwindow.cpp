@@ -290,7 +290,7 @@ void TrayManagerWindow::initUi()
     QPalette pal;
     QColor lineColor(Qt::black);
     lineColor.setAlpha(static_cast<int>(255 * 0.1));
-    pal.setColor(QPalette::Background, lineColor);
+    pal.setColor(QPalette::Window, lineColor);
     m_splitLine->setAutoFillBackground(true);
     m_splitLine->setPalette(pal);
 

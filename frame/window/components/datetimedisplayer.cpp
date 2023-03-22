@@ -241,9 +241,9 @@ void DateTimeDisplayer::onTimeChanged()
     const QDateTime currentDateTime = QDateTime::currentDateTime();
 
     if (m_timedateInter->use24HourFormat())
-        m_tipsWidget->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" HH:mm:ss"));
+        m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" HH:mm:ss"));
     else
-        m_tipsWidget->setText(currentDateTime.date().toString(Qt::SystemLocaleLongDate) + currentDateTime.toString(" hh:mm:ss AP"));
+        m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" hh:mm:ss AP"));
 
     // 如果时间和日期有一个不等，则实时刷新界面
     if (m_lastDateString != getDateString() || m_lastTimeString != getTimeString())

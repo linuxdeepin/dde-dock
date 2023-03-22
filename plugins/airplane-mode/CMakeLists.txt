@@ -21,15 +21,14 @@ find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11 xcursor)
-pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
+pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} resources/airplane_mode.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ..)
 
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
-  ${QGSettings_INCLUDE_DIRS}
   ../../interfaces
   ../../widgets
   ../../frame
@@ -38,11 +37,11 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
   ./dbusinterface/generation_dbus_interface)
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
-  ${XCB_EWMH_LIBRARIES}
   ${DtkWidget_LIBRARIES}
-  ${QGSettings_LIBRARIES}
-  ${Qt5DBus_LIBRARIES}
-  ${Qt5Widgets_LIBRARIES}
-  ${Qt5Svg_LIBRARIES})
+  PkgConfig::QGSettings
+  PkgConfig::XCB_LIBS
+  Qt5::Widgets
+  Qt5::DBus
+  Qt5::Svg)
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)

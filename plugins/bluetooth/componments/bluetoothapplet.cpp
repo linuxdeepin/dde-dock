@@ -40,7 +40,7 @@ SettingLabel::SettingLabel(QString text, QWidget *parent)
 
     setAutoFillBackground(true);
     QPalette p = this->palette();
-    p.setColor(QPalette::Background, Qt::transparent);
+    p.setColor(QPalette::Window, Qt::transparent);
     this->setPalette(p);
 
     onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
@@ -300,13 +300,13 @@ void BluetoothApplet::updateIconTheme()
     QPalette widgetBackgroud;
     QPalette scroareaBackgroud;
     if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        widgetBackgroud.setColor(QPalette::Background, QColor(255, 255, 255, 0.03 * 255));
+        widgetBackgroud.setColor(QPalette::Window, QColor(255, 255, 255, 0.03 * 255));
     else
-        widgetBackgroud.setColor(QPalette::Background, QColor(0, 0, 0, 0.03 * 255));
+        widgetBackgroud.setColor(QPalette::Window, QColor(0, 0, 0, 0.03 * 255));
 
     m_contentWidget->setAutoFillBackground(true);
     m_contentWidget->setPalette(widgetBackgroud);
-    scroareaBackgroud.setColor(QPalette::Background, Qt::transparent);
+    scroareaBackgroud.setColor(QPalette::Window, Qt::transparent);
     m_scroarea->setAutoFillBackground(true);
     m_scroarea->setPalette(scroareaBackgroud);
 }
