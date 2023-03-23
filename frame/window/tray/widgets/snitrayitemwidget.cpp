@@ -32,9 +32,10 @@ Dock::Position SNITrayItemWidget::DockPosition = Dock::Position::Bottom;
 using namespace Dock;
 
 SNITrayItemWidget::SNITrayItemWidget(const QString &sniServicePath, QWidget *parent)
-    : BaseTrayWidget(parent),
-      m_menu(nullptr),
-      m_updateIconTimer(new QTimer(this))
+    : BaseTrayWidget(parent)
+    , m_dbusMenuImporter(nullptr)
+    , m_menu(nullptr)
+    , m_updateIconTimer(new QTimer(this))
     , m_updateOverlayIconTimer(new QTimer(this))
     , m_updateAttentionIconTimer(new QTimer(this))
     , m_sniServicePath(sniServicePath)
@@ -784,6 +785,16 @@ bool SNITrayItemWidget::containsPoint(const QPoint &pos) {
     QPoint ptGlobal = mapToGlobal(QPoint(0, 0));
     QRect rectGlobal(ptGlobal, this->size());
     if (rectGlobal.contains(pos)) return true;
+
+    if (!m_menu) {
+        if (m_dbusMenuImporter) {
+            qInfo() << "importer exists: " << m_dbusMenuImporter;
+            m_menu = m_dbusMenuImporter->menu();
+        } else {
+            qInfo() << "importer not exists.";
+            initMenu();
+        }
+    }
 
     // 如果菜单列表隐藏，则认为不在区域内
     if (!m_menu->isVisible()) return false;
