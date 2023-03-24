@@ -127,6 +127,7 @@ private:
     QPixmap m_verticalIndicator;
     QPixmap m_activeHorizontalIndicator;
     QPixmap m_activeVerticalIndicator;
+    QColor m_activeColor;
 
     QTimer *m_updateIconGeometryTimer;
     QTimer *m_retryObtainIconTimer;
