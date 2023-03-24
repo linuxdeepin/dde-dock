@@ -24,6 +24,7 @@
 #include <QGSettings>
 
 #include <DGuiApplicationHelper>
+#include <DPlatformTheme>
 #include <DConfig>
 
 DGUI_USE_NAMESPACE
@@ -48,6 +49,7 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     , m_iconValid(true)
     , m_lastclickTimes(0)
     , m_appIcon(QPixmap())
+    , m_activeColor(DGuiApplicationHelper::instance()->systemTheme()->activeColor())
     , m_updateIconGeometryTimer(new QTimer(this))
     , m_retryObtainIconTimer(new QTimer(this))
     , m_refershIconTimer(new QTimer(this))
@@ -96,6 +98,8 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
         connect(m_activeAppSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppItem::onThemeTypeChanged);
+    connect(DGuiApplicationHelper::instance()->systemTheme(), &DPlatformTheme::activeColorChanged, this,
+            [this](const auto &color) { m_activeColor = color; });
 
     /** 日历 1S定时判断是否刷新icon的处理 */
     connect(m_refershIconTimer, &QTimer::timeout, this, &AppItem::onRefreshIcon);
@@ -301,7 +305,9 @@ void AppItem::paintEvent(QPaintEvent *e)
                 m_verticalIndicator = QPixmap(":/indicator/resources/indicator_ver.svg");
             }
             m_activeHorizontalIndicator = QPixmap(":/indicator/resources/indicator_active.svg");
+            m_activeHorizontalIndicator.fill(m_activeColor);
             m_activeVerticalIndicator = QPixmap(":/indicator/resources/indicator_active_ver.svg");
+            m_activeVerticalIndicator.fill(m_activeColor);
             switch (DockPosition) {
             case Top:
                 pixmap = m_horizontalIndicator;
