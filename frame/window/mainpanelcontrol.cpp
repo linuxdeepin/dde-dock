@@ -813,7 +813,7 @@ void MainPanelControl::startDrag(DockItem *dockItem)
             appItem->setDraging(false);
             appItem->undock();
         }
-    } else if (m_dragIndex == -1) {
+    } else {
         m_appDragWidget = nullptr;
         item->setDraging(false);
         item->update();
