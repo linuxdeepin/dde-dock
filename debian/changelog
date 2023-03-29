@@ -1,3 +1,23 @@
+dde-dock (6.0.10) unstable; urgency=medium
+
+  [ bugfix ]
+  * fix: dock active color not follow dde-control-center
+  * fix: tray overhanging text
+  * fix: tray always reset while dragging quickItem to tray
+  * fix: splash preview container
+  * fix: unmute when changed volume
+  * fix: expandwidget tray item can be selected
+  * fix: plugin back button not support hiDPI
+  * fix: bluetooth not refresh button
+  * fix: Icon of trashs  is too large in small dock
+  * fix: radius for tray background
+  * fix: abnormal display of sound output device list
+  * fix: launcher shown in a wrong location while multi screens connected
+  * fix: multitasking unable to remove
+  * fix: unable call selected app preview window
+
+ -- Tsic404 <liuheng@deepin.org>  Wed, 29 Mar 2023 13:19:37 +0800
+
 dde-dock (6.0.9.2) unstable; urgency=medium
 
   [ TagBuilder ]
