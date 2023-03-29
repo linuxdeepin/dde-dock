@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[deepin-desktop-environment.dde-dock]
+[o:linuxdeepin:p:deepin-desktop-environment:r:dde-dock]
 file_filter = translations/dde-dock_<lang>.ts
 minimum_perc = 0
 source_file = translations/dde-dock.ts
