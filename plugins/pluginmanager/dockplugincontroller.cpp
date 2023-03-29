@@ -701,7 +701,7 @@ void DockPluginController::onConfigChanged(const QString &key, const QVariant &v
             // 如果当前配置中包含当前插件，但是当前插件并未加载，那么就加载该插件
             addPluginItem(plugin, itemKey);
             // 只有工具插件是通过QWidget的方式进行显示的，因此，这里只处理工具插件
-            if (plugin->flags() & PluginFlag::Type_Tool) {
+            if ((plugin->flags() & PluginFlag::Type_Tool) or (plugin->flags() & PluginFlag::Type_Fixed)){
                 QWidget *itemWidget = plugin->itemWidget(itemKey);
                 if (itemWidget)
                     itemWidget->setVisible(true);
