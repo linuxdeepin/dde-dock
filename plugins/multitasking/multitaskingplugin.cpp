@@ -72,7 +72,13 @@ void MultitaskingPlugin::init(PluginProxyInterface *proxyInter)
 const QString MultitaskingPlugin::itemCommand(const QString &itemKey)
 {
     if (itemKey == PLUGIN_KEY)
-        return "dbus-send --session --dest=com.deepin.wm --print-reply /com/deepin/wm com.deepin.wm.PerformAction int32:1";
+        DDBusSender()
+            .service("com.deepin.wm")
+            .interface("com.deepin.wm")
+            .path("/com/deepin/wm")
+            .method(QString("PerformAction"))
+            .arg(1)
+            .call();
 
     return "";
 }
