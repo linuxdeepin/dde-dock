@@ -260,6 +260,10 @@ void DockPluginController::removePluginItem(PluginsItemInterface * const itemInt
     PluginInfo *pluginInfo = static_cast<PluginInfo *>(interfaceData[PLUGININFO]);
     // 将是否在任务栏显示的标记改为不显示
     pluginInfo->m_visible = false;
+
+    if (QWidget * popup = itemInter->itemPopupApplet(itemKey))
+        popup->hide();
+
     m_proxyInter->itemRemoved(itemInter, itemKey);
 }
 
