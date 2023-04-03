@@ -155,16 +155,27 @@ void DockPopupWindow::enterEvent(QEvent *e)
 
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 {
-    if (o != getContent() || e->type() != QEvent::Resize)
+    if (o != getContent())
         return false;
 
-    // FIXME: ensure position move after global mouse release event
-    if (isVisible()) {
-        QTimer::singleShot(10, this, [=] {
-            // NOTE(sbw): double check is necessary, in this time, the popup maybe already hided.
-            if (isVisible())
-                show(m_lastPoint, m_model);
-        });
+    switch(e->type()) {
+    case QEvent::Resize: {
+        // FIXME: ensure position move after global mouse release event
+        if (isVisible()) {
+            QTimer::singleShot(10, this, [=] {
+                // NOTE(sbw): double check is necessary, in this time, the popup maybe already hided.
+                if (isVisible())
+                    show(m_lastPoint, m_model);
+            });
+        }
+        break;
+    }
+    case QEvent::Hide: {
+        this->hide();
+        break;
+    }
+    default:
+        break;
     }
 
     return false;
