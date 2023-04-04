@@ -52,6 +52,7 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     connect(m_timedateInter, &Timedate::TimeUpdate, this, static_cast<void (QWidget::*)()>(&DateTimeDisplayer::update));
     // 连接定时器和时间显示的tips信号,一秒钟触发一次，显示时间
     connect(m_tipsTimer, &QTimer::timeout, this, &DateTimeDisplayer::onTimeChanged);
+    QMetaObject::invokeMethod(this, "onDateTimeFormatChanged");
     m_tipsTimer->setInterval(1000);
     m_tipsTimer->start();
     updatePolicy();
@@ -152,11 +153,10 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
 QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
 {
     QString tFormat = QString("hh:mm");
-    int type = m_timedateInter->shortTimeFormat();
-    if (timeFormat.contains(type))
-        tFormat = timeFormat[type];
+    if (timeFormat.contains(m_shortDateFormat))
+        tFormat = timeFormat[m_shortDateFormat];
 
-    if (!m_timedateInter->use24HourFormat()) {
+    if (!m_use24HourFormat) {
         if (position == Dock::Top || position == Dock::Bottom)
             tFormat = tFormat.append(" AP");
         else
@@ -173,10 +173,9 @@ QString DateTimeDisplayer::getDateString() const
 
 QString DateTimeDisplayer::getDateString(const Dock::Position &position) const
 {
-    int type = m_timedateInter->shortDateFormat();
     QString shortDateFormat = "yyyy-MM-dd";
-    if (dateFormat.contains(type))
-        shortDateFormat = dateFormat.value(type);
+    if (dateFormat.contains(m_shortDateFormat))
+        shortDateFormat = dateFormat.value(m_shortDateFormat);
     // 如果是左右方向，则不显示年份
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
         static QStringList yearStrList{"yyyy/", "yyyy-", "yyyy.", "yy/", "yy-", "yy."};
@@ -240,7 +239,7 @@ void DateTimeDisplayer::onTimeChanged()
 {
     const QDateTime currentDateTime = QDateTime::currentDateTime();
 
-    if (m_timedateInter->use24HourFormat())
+    if (m_use24HourFormat)
         m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" HH:mm:ss"));
     else
         m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" hh:mm:ss AP"));
@@ -253,6 +252,8 @@ void DateTimeDisplayer::onTimeChanged()
 void DateTimeDisplayer::onDateTimeFormatChanged()
 {
     int lastSize = m_currentSize;
+    m_shortDateFormat = m_timedateInter->shortDateFormat();
+    m_use24HourFormat = m_timedateInter->use24HourFormat();
     // 此处需要强制重绘，因为在重绘过程中才会改变m_currentSize信息，方便在后面判断是否需要调整尺寸
     repaint();
     // 如果日期时间的格式发生了变化，需要通知外部来调整日期时间的尺寸
@@ -344,13 +345,13 @@ QFont DateTimeDisplayer::timeFont() const
 void DateTimeDisplayer::createMenuItem()
 {
     QAction *timeFormatAction = new QAction(this);
-    m_timedateInter->use24HourFormat() ? timeFormatAction->setText(tr("12-hour time"))
-                                       : timeFormatAction->setText(tr("24-hour time"));
+    timeFormatAction->setText(m_use24HourFormat ? tr("12-hour time"): tr("24-hour time"));
 
     connect(timeFormatAction, &QAction::triggered, this, [ = ] {
-        m_timedateInter->setUse24HourFormat(!m_timedateInter->use24HourFormat());
-        m_timedateInter->use24HourFormat() ? timeFormatAction->setText(tr("12-hour time"))
-                                           : timeFormatAction->setText(tr("24-hour time"));
+        bool use24hourformat = !m_use24HourFormat;
+        // 此时调用 dbus 更新时间格式但是本地 m_use24HourFormat 未更新，所以需要使用新变量，设置新格式
+        m_timedateInter->setUse24HourFormat(use24hourformat);
+        timeFormatAction->setText(use24hourformat ? tr("12-hour time") : tr("24-hour time"));
     });
     m_menu->addAction(timeFormatAction);
 
