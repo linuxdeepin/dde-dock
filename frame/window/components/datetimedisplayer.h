@@ -84,6 +84,8 @@ private:
     int m_currentSize;
     bool m_oneRow;
     bool m_showMultiRow;
+    int m_shortDateFormat;
+    bool m_use24HourFormat;
 };
 
 #endif // DATETIMEDISPLAYER_H
