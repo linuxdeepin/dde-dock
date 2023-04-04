@@ -251,13 +251,12 @@ void XEmbedTrayItemWidget::wrapWindow()
 
     xcb_flush(c);
 
-    if (isVisible()) {
-        xcb_map_window(c, m_containerWid);
 
-        xcb_reparent_window(c, m_windowId,
-                            m_containerWid,
-                            0, 0);
-    }
+    xcb_map_window(c, m_containerWid);
+
+    xcb_reparent_window(c, m_windowId,
+                        m_containerWid,
+                        0, 0);
 
     /*
      * Render the embedded window offscreen
