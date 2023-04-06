@@ -263,17 +263,25 @@ void SliderProxyStyle::drawRoundSlider(QPainter *painter, QRect rectGroove, QRec
 {
     // 深色背景下，滑块和滑动条白色，浅色背景下，滑块和滑动条黑色
     QColor color = wigdet->isEnabled() ? (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType() ? Qt::white : Qt::black) : Qt::gray;
-
-    QBrush brush(color);
     // 此处中绘制圆形滑动条，需要绘制圆角，圆角大小为其高度的一半
-    QPainterPath pathGroove;
     int radius = rectGroove.height() / 2;
+    
+    // 此处绘制滑条的全长
+    QBrush allBrush(QColor(190,190,190));
+    QPainterPath allPathGroove;
+    allPathGroove.addRoundedRect(rectGroove, radius, radius);
+    painter->fillPath(allPathGroove, allBrush);
+
+    // 已经滑动过的区域
+    QBrush brush(color);
+    QPainterPath pathGroove;
+    int handleSize = qMin(rectHandle.width(), rectHandle.height());
+    rectGroove.setWidth(rectHandle.x() + (rectHandle.width() - handleSize) / 2);
     pathGroove.addRoundedRect(rectGroove, radius, radius);
     painter->fillPath(pathGroove, brush);
 
     // 绘制滑块,因为滑块是正圆形，而它本来的区域是一个长方形区域，因此，需要计算当前
     // 区域的正中心区域，将其作为一个正方形区域来绘制圆形滑块
-    int handleSize = qMin(rectHandle.width(), rectHandle.height());
     int x = rectHandle.x() + (rectHandle.width() - handleSize) / 2;
     int y = rectHandle.y() + (rectHandle.height() - handleSize) / 2;
     rectHandle.setX(x);
