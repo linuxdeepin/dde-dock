@@ -124,20 +124,7 @@ void QuickPluginWindow::setPositon(Position position)
     } else {
         m_mainLayout->setDirection(QBoxLayout::BottomToTop);
     }
-    switch(m_position) {
-    case Dock::Position::Top:
-        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowTop);
-        break;
-    case Dock::Position::Right:
-        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowRight);
-        break;
-    case Dock::Position::Bottom:
-        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowBottom);
-        break;
-    case Dock::Position::Left:
-        getPopWindow()->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowLeft);
-        break;
-    }
+    getPopWindow()->setPosition(m_position);
 }
 
 void QuickPluginWindow::dragPlugin(PluginsItemInterface *item)
@@ -368,7 +355,7 @@ void QuickPluginWindow::onRequestUpdate()
             DockPopupWindow *popupWindow = getPopWindow();
             if (popupWindow->isVisible()) {
                 // 该插件被移除的情况下，判断弹出窗口是否在当前的插件中打开的，如果是，则隐藏该窗口
-                if (popupWindow->extengWidget() == dockItem)
+                if (popupWindow->extendWidget() == dockItem)
                     popupWindow->hide();
             }
             // 如果该插件不在任务栏上，则先删除
@@ -413,24 +400,24 @@ QPoint QuickPluginWindow::popupPoint(QWidget *widget) const
     case Dock::Position::Bottom: {
         // 在下方的时候，Y坐标设置在顶层窗口的y值，保证下方对齐
         pointCurrent.setX(pointCurrent.x() + itemWidget->width() / 2);
-        pointCurrent.setY(topLevelWidget()->y());
+        pointCurrent.setY(topLevelWidget()->y() - POPUP_PADDING);
         break;
     }
     case Dock::Position::Top: {
         // 在上面的时候，Y坐标设置为任务栏的下方，保证上方对齐
         pointCurrent.setX(pointCurrent.x() + itemWidget->width() / 2);
-        pointCurrent.setY(topLevelWidget()->y() + topLevelWidget()->height());
+        pointCurrent.setY(topLevelWidget()->y() + topLevelWidget()->height() + POPUP_PADDING);
         break;
     }
     case Dock::Position::Left: {
         // 在左边的时候，X坐标设置在顶层窗口的最右侧，保证左对齐
-        pointCurrent.setX(topLevelWidget()->x() + topLevelWidget()->width());
+        pointCurrent.setX(topLevelWidget()->x() + topLevelWidget()->width() + POPUP_PADDING);
         pointCurrent.setY(pointCurrent.y() + itemWidget->height() / 2);
         break;
     }
     case Dock::Position::Right: {
         // 在右边的时候，X坐标设置在顶层窗口的最左侧，保证右对齐
-        pointCurrent.setX(topLevelWidget()->x());
+        pointCurrent.setX(topLevelWidget()->x() - POPUP_PADDING);
         pointCurrent.setY(pointCurrent.y() + itemWidget->height() / 2);
     }
     }
@@ -579,23 +566,6 @@ QList<QuickDockItem *> QuickPluginWindow::quickDockItems()
     return dockItems;
 }
 
-// 根据位置获取箭头的方向
-static DArrowRectangle::ArrowDirection getDirection(const Dock::Position &position)
-{
-    switch (position) {
-    case Dock::Position::Top:
-        return DArrowRectangle::ArrowDirection::ArrowTop;
-    case Dock::Position::Left:
-        return DArrowRectangle::ArrowDirection::ArrowLeft;
-    case Dock::Position::Right:
-        return DArrowRectangle::ArrowDirection::ArrowRight;
-    default:
-        return DArrowRectangle::ArrowDirection::ArrowBottom;
-    }
-
-    return DArrowRectangle::ArrowDirection::ArrowBottom;
-}
-
 DockPopupWindow *QuickPluginWindow::getPopWindow() const
 {
     static DockPopupWindow *popWindow = nullptr;
@@ -603,13 +573,8 @@ DockPopupWindow *QuickPluginWindow::getPopWindow() const
         return popWindow;
 
     popWindow = new DockPopupWindow;
-    popWindow->setShadowBlurRadius(20);
     popWindow->setRadius(18);
-    popWindow->setShadowYOffset(2);
-    popWindow->setShadowXOffset(0);
-    popWindow->setArrowWidth(18);
-    popWindow->setArrowHeight(10);
-    popWindow->setArrowDirection(getDirection(m_position));
+    popWindow->setPosition(m_position);
     popWindow->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     PopupSwitchWidget *content = new PopupSwitchWidget(popWindow);
     popWindow->setContent(content);
@@ -902,21 +867,7 @@ void QuickDockItem::enterEvent(QEvent *event)
     if (tipWidget->parentWidget() != m_popupWindow)
         m_tipParent = tipWidget->parentWidget();
 
-    switch (m_position) {
-    case Top:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowTop);
-        break;
-    case Bottom:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowBottom);
-        break;
-    case Left:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowLeft);
-        break;
-    case Right:
-        m_popupWindow->setArrowDirection(DockPopupWindow::ArrowRight);
-        break;
-    }
-
+    m_popupWindow->setPosition(m_position);
     m_popupWindow->resize(tipWidget->sizeHint());
     m_popupWindow->setContent(tipWidget);
 
@@ -1013,12 +964,7 @@ void QuickDockItem::initUi()
 
 void QuickDockItem::initAttribute()
 {
-    m_popupWindow->setShadowBlurRadius(20);
     m_popupWindow->setRadius(6);
-    m_popupWindow->setShadowYOffset(2);
-    m_popupWindow->setShadowXOffset(0);
-    m_popupWindow->setArrowWidth(18);
-    m_popupWindow->setArrowHeight(10);
     m_popupWindow->setObjectName("quickitempopup");
     if (Utils::IS_WAYLAND_DISPLAY) {
         Qt::WindowFlags flags = m_popupWindow->windowFlags() | Qt::FramelessWindowHint;
@@ -1103,16 +1049,16 @@ QPoint QuickDockItem::popupMarkPoint() const
     const QRect r = rect();
     switch (m_position) {
     case Top:
-        p += QPoint(r.width() / 2, r.height());
+        p += QPoint(r.width() / 2, r.height() + POPUP_PADDING);
         break;
     case Bottom:
-        p += QPoint(r.width() / 2, 0);
+        p += QPoint(r.width() / 2, -POPUP_PADDING);
         break;
     case Left:
-        p += QPoint(r.width(), r.height() / 2);
+        p += QPoint(r.width() + POPUP_PADDING, r.height() / 2);
         break;
     case Right:
-        p += QPoint(0, r.height() / 2);
+        p += QPoint(-POPUP_PADDING, r.height() / 2);
         break;
     }
     return p;

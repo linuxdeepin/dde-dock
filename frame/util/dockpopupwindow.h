@@ -7,17 +7,22 @@
 #define DOCKPOPUPWINDOW_H
 
 #include "org_deepin_dde_xeventmonitor1.h"
+#include "constants.h"
 
-#include <darrowrectangle.h>
+#include <DBlurEffectWidget>
 #include <dregionmonitor.h>
 #include <DWindowManagerHelper>
+
+#include <QVBoxLayout>
+#include <QPainter>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 using XEventMonitor = org::deepin::dde::XEventMonitor1;
 
-class DockPopupWindow : public Dtk::Widget::DArrowRectangle
+class DockPopupWindow : public Dtk::Widget::DBlurEffectWidget
 {
     Q_OBJECT
 
@@ -27,9 +32,11 @@ public:
 
     bool model() const;
 
+    QWidget *getContent();
     void setContent(QWidget *content);
     void setExtendWidget(QWidget *widget);
-    QWidget *extengWidget() const;
+    void setPosition(Dock::Position position);
+    QWidget *extendWidget() const;
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
@@ -52,19 +59,20 @@ protected:
     void blockButtonRelease();
 
 private slots:
-    void compositeChanged();
     void ensureRaised();
     void onButtonPress(int type, int x, int y, const QString &key);
 
 private:
     bool m_model;
     QPoint m_lastPoint;
+    Dock::Position m_position;
 
     XEventMonitor *m_eventMonitor;
     QString m_eventKey;
     DWindowManagerHelper *m_wmHelper;
     bool m_enableMouseRelease;
     QWidget *m_extendWidget;
+    QPointer<QWidget> m_lastWidget;
 };
 
 class PopupSwitchWidget : public QWidget

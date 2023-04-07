@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QPainterPath>
+#include <QPainter>
 
 #include <xcb/xcb_icccm.h>
 #include <X11/Xlib.h>

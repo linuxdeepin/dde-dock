@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QMetaObject>
 #include <QGuiApplication>
+#include <QPainter>
 
 #define MAXICONSIZE 48
 #define MINICONSIZE 24

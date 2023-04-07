@@ -18,6 +18,7 @@
 #include <QFont>
 #include <QMenu>
 #include <QPainterPath>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -84,32 +85,19 @@ void DateTimeDisplayer::setOneRow(bool oneRow)
 
 void DateTimeDisplayer::updatePolicy()
 {
-    switch (m_position) {
-    case Dock::Position::Top: {
+    switch(m_position) {
+    case Dock::Position::Top:
+    case Dock::Position::Bottom:
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowTop);
-        m_tipPopupWindow->setContent(m_tipsWidget);
         break;
-    }
-    case Dock::Position::Bottom: {
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowBottom);
-        m_tipPopupWindow->setContent(m_tipsWidget);
-        break;
-    }
-    case Dock::Position::Left: {
+    case Dock::Position::Left:
+    case Dock::Position::Right:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowLeft);
-        m_tipPopupWindow->setContent(m_tipsWidget);
         break;
     }
-    case Dock::Position::Right: {
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        m_tipPopupWindow->setArrowDirection(DArrowRectangle::ArrowDirection::ArrowRight);
-        m_tipPopupWindow->setContent(m_tipsWidget);
-        break;
-    }
-    }
+
+    m_tipPopupWindow->setPosition(m_position);
+    m_tipPopupWindow->setContent(m_tipsWidget);
 }
 
 QSize DateTimeDisplayer::suitableSize() const
@@ -296,15 +284,15 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
 
 QPoint DateTimeDisplayer::tipsPoint() const
 {
-    QPoint pointInTopWidget = parentWidget()->mapTo(topLevelWidget(), pos());
+    QPoint pointInTopWidget = parentWidget()->mapTo(window(), pos());
     switch (m_position) {
     case Dock::Position::Left: {
-        pointInTopWidget.setX(topLevelWidget()->x() + topLevelWidget()->width());
+        pointInTopWidget.setX(window()->x() + window()->width());
         pointInTopWidget.setY(pointInTopWidget.y() + height() / 2);
         break;
     }
     case Dock::Position::Top: {
-        pointInTopWidget.setY(y() + topLevelWidget()->y() + topLevelWidget()->height());
+        pointInTopWidget.setY(y() + window()->y() + window()->height());
         pointInTopWidget.setX(pointInTopWidget.x() + width() / 2);
         break;
     }
@@ -314,12 +302,12 @@ QPoint DateTimeDisplayer::tipsPoint() const
         break;
     }
     case Dock::Position::Bottom: {
-        pointInTopWidget.setY(0);
+        pointInTopWidget.setY(-POPUP_PADDING);
         pointInTopWidget.setX(pointInTopWidget.x() + width() / 2);
         break;
     }
     }
-    return topLevelWidget()->mapToGlobal(pointInTopWidget);
+    return window()->mapToGlobal(pointInTopWidget);
 }
 
 QFont DateTimeDisplayer::timeFont() const

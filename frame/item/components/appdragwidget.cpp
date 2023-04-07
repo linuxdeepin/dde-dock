@@ -32,12 +32,6 @@ AppDragWidget::AppDragWidget(QWidget *parent)
     , m_item(nullptr)
     , m_dockScreen(nullptr)
 {
-    m_popupWindow->setShadowBlurRadius(20);
-    m_popupWindow->setRadius(18);
-    m_popupWindow->setShadowYOffset(2);
-    m_popupWindow->setShadowXOffset(0);
-    m_popupWindow->setArrowWidth(18);
-    m_popupWindow->setArrowHeight(10);
     m_popupWindow->setRadius(18);
 
     m_scene->addItem(m_object.get());

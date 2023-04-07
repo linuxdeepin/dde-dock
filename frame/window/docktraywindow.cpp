@@ -20,6 +20,7 @@
 
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPainter>
 
 #define FRONTSPACING 18
 #define SPLITERSIZE 2
