@@ -82,7 +82,7 @@ bool SoundDevicesWidget::eventFilter(QObject *watcher, QEvent *event)
 void SoundDevicesWidget::initUi()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(10, 0, 10, 0);
     layout->setSpacing(6);
 
     m_sliderParent->setFixedHeight(SLIDERHEIGHT);
@@ -103,7 +103,7 @@ void SoundDevicesWidget::initUi()
     sliderLayout->addWidget(m_sliderContainer);
 
     QHBoxLayout *topLayout = new QHBoxLayout(this);
-    topLayout->setContentsMargins(10, 0, 10, 0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
     topLayout->addWidget(m_sliderParent);
 
@@ -238,20 +238,19 @@ void SoundDevicesWidget::startRemovePort(const QString &portId, const uint &card
 void SoundDevicesWidget::addPort(const SoundDevicePort *port)
 {
     DStandardItem *portItem = new DStandardItem;
-    QString deviceName = port->name() + "(" + port->cardName() + ")";
+    QString deviceName = port->name();
     portItem->setIcon(QIcon(soundIconFile()));
     portItem->setText(deviceName);
     portItem->setTextColorRole(QPalette::BrightText);
     portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), DeviceObjRole);
     portItem->setData(AUDIOPORT, ItemTypeRole);
+    portItem->setToolTip(port->cardName());
 
     connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
-        QString devName = str + "(" + port->cardName() + ")";
-        portItem->setText(devName);
+        portItem->setText(str);
     });
     connect(port, &SoundDevicePort::cardNameChanged, this, [ = ](const QString &str) {
-        QString devName = port->name() + "(" + str + ")";
-        portItem->setText(devName);
+        portItem->setToolTip(str);
     });
     connect(port, &SoundDevicePort::isActiveChanged, this, [ = ](bool isActive) {
         portItem->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);

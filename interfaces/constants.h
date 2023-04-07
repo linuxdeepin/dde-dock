@@ -89,6 +89,7 @@ enum class AniAction {
 };
 
 #define IS_TOUCH_STATE "isTouchState"
+#define POPUP_PADDING 10
 
 }
 

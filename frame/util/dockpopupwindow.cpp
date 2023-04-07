@@ -19,18 +19,17 @@
 DWIDGET_USE_NAMESPACE
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
-    : DArrowRectangle(ArrowBottom, parent)
+    : DBlurEffectWidget(parent)
     , m_model(false)
     , m_eventMonitor(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_enableMouseRelease(true)
     , m_extendWidget(nullptr)
+    , m_lastWidget(nullptr)
 {
-    setMargin(0);
+    setContentsMargins(0, 0, 0, 0);
     m_wmHelper = DWindowManagerHelper::instance();
 
-    compositeChanged();
-
-    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+    setWindowFlags(Qt::ToolTip | Qt::WindowStaysOnTopHint);
     if (Utils::IS_WAYLAND_DISPLAY) {
         setAttribute(Qt::WA_NativeWindow);
         windowHandle()->setProperty("_d_dwayland_window-type", "override");
@@ -38,7 +37,6 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
         setAttribute(Qt::WA_InputMethodEnabled, false);
     }
 
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
     connect(m_eventMonitor, &XEventMonitor::ButtonPress, this, &DockPopupWindow::onButtonPress);
 
     if (Utils::IS_WAYLAND_DISPLAY)
@@ -54,11 +52,15 @@ bool DockPopupWindow::model() const
     return isVisible() && m_model;
 }
 
+QWidget *DockPopupWindow::getContent()
+{
+    return m_lastWidget;
+}
+
 void DockPopupWindow::setContent(QWidget *content)
 {
-    QWidget *lastWidget = getContent();
-    if (lastWidget)
-        lastWidget->removeEventFilter(this);
+    if (m_lastWidget)
+        m_lastWidget->removeEventFilter(this);
     content->installEventFilter(this);
 
     QAccessibleEvent event(this, QAccessible::NameChanged);
@@ -67,7 +69,10 @@ void DockPopupWindow::setContent(QWidget *content)
     if (!content->objectName().trimmed().isEmpty())
         setAccessibleName(content->objectName() + "-popup");
 
-    DArrowRectangle::setContent(content);
+    m_lastWidget = content;
+    content->setParent(this);
+    content->show();
+    resize(content->sizeHint());
 }
 
 void DockPopupWindow::setExtendWidget(QWidget *widget)
@@ -76,7 +81,12 @@ void DockPopupWindow::setExtendWidget(QWidget *widget)
     connect(widget, &QWidget::destroyed, this, [ this ] { m_extendWidget = nullptr; }, Qt::UniqueConnection);
 }
 
-QWidget *DockPopupWindow::extengWidget() const
+void DockPopupWindow::setPosition(Dock::Position position)
+{
+    m_position = position;
+}
+
+QWidget *DockPopupWindow::extendWidget() const
 {
     return m_extendWidget;
 }
@@ -84,8 +94,6 @@ QWidget *DockPopupWindow::extengWidget() const
 void DockPopupWindow::show(const QPoint &pos, const bool model)
 {
     m_model = model;
-    m_lastPoint = pos;
-
     show(pos.x(), pos.y());
 
     if (!m_eventKey.isEmpty()) {
@@ -102,10 +110,26 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
 void DockPopupWindow::show(const int x, const int y)
 {
+    QPoint displayPoint;
     m_lastPoint = QPoint(x, y);
+    switch (m_position) {
+        case Dock::Position::Left:
+            displayPoint = m_lastPoint + QPoint(0, -m_lastWidget->height() / 2);
+            break;
+        case Dock::Position::Right:
+            displayPoint = m_lastPoint + QPoint(-m_lastWidget->width(), -m_lastWidget->height() / 2);
+            break;
+        case Dock::Position::Top:
+            displayPoint = m_lastPoint + QPoint(-m_lastWidget->width() / 2, 0);
+            break;
+        case Dock::Position::Bottom:
+            displayPoint = m_lastPoint + QPoint(-m_lastWidget->width() / 2, -m_lastWidget->height());
+            break;
+    }
     blockButtonRelease();
-
-    DArrowRectangle::show(x, y);
+    move(displayPoint);
+    resize(m_lastWidget->size());
+    DBlurEffectWidget::show();
 }
 
 void DockPopupWindow::blockButtonRelease()
@@ -124,12 +148,12 @@ void DockPopupWindow::hide()
         m_eventKey.clear();
     }
 
-    DArrowRectangle::hide();
+    DBlurEffectWidget::hide();
 }
 
 void DockPopupWindow::showEvent(QShowEvent *e)
 {
-    DArrowRectangle::showEvent(e);
+    DBlurEffectWidget::showEvent(e);
     if (Utils::IS_WAYLAND_DISPLAY) {
         Utils::updateCursor(this);
     }
@@ -140,12 +164,12 @@ void DockPopupWindow::showEvent(QShowEvent *e)
 void DockPopupWindow::hideEvent(QHideEvent *event)
 {
     m_extendWidget = nullptr;
-    Dtk::Widget::DArrowRectangle::hideEvent(event);
+    Dtk::Widget::DBlurEffectWidget::hideEvent(event);
 }
 
 void DockPopupWindow::enterEvent(QEvent *e)
 {
-    DArrowRectangle::enterEvent(e);
+    DBlurEffectWidget::enterEvent(e);
     if (Utils::IS_WAYLAND_DISPLAY) {
         Utils::updateCursor(this);
     }
@@ -179,14 +203,6 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
     }
 
     return false;
-}
-
-void DockPopupWindow::compositeChanged()
-{
-    if (m_wmHelper->hasComposite())
-        setBorderColor(QColor(255, 255, 255, 255 * 0.05));
-    else
-        setBorderColor(QColor("#2C3238"));
 }
 
 void DockPopupWindow::ensureRaised()

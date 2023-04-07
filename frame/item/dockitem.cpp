@@ -31,19 +31,14 @@ DockItem::DockItem(QWidget *parent)
     , m_popupAdjustDelayTimer(new QTimer(this))
 {
     if (PopupWindow.isNull()) {
-        DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
-        arrowRectangle->setShadowBlurRadius(20);
-        arrowRectangle->setRadius(18);
-        arrowRectangle->setShadowYOffset(2);
-        arrowRectangle->setShadowXOffset(0);
-        arrowRectangle->setArrowWidth(18);
-        arrowRectangle->setArrowHeight(10);
-        arrowRectangle->setObjectName("apppopup");
+        DockPopupWindow *blurRectangle = new DockPopupWindow(nullptr);
+        blurRectangle->setRadius(18);
+        blurRectangle->setObjectName("apppopup");
         if (Utils::IS_WAYLAND_DISPLAY) {
-            Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
-            arrowRectangle->setWindowFlags(flags);
+            Qt::WindowFlags flags = blurRectangle->windowFlags() | Qt::FramelessWindowHint;
+            blurRectangle->setWindowFlags(flags);
         }
-        PopupWindow = arrowRectangle;
+        PopupWindow = blurRectangle;
         connect(qApp, &QApplication::aboutToQuit, PopupWindow, &DockPopupWindow::deleteLater);
     }
 
@@ -271,9 +266,9 @@ void DockItem::showHoverTips()
 
 void DockItem::showPopupWindow(QWidget *const content, const bool model)
 {
-    if(itemType() == App){
+    if (itemType() == App) {
         PopupWindow->setRadius(18);
-    }else {
+    } else {
         PopupWindow->setRadius(6);
     }
 
@@ -288,13 +283,8 @@ void DockItem::showPopupWindow(QWidget *const content, const bool model)
     if (lastContent)
         lastContent->setVisible(false);
 
-    switch (DockPosition) {
-    case Top:   popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
-    case Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
-    case Left:  popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
-    case Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
-    }
     popup->resize(content->sizeHint());
+    popup->setPosition(DockPosition);
     popup->setContent(content);
 
     const QPoint p = popupMarkPoint();
@@ -359,16 +349,16 @@ const QPoint DockItem::popupMarkPoint()
     const QRect r = rect();
     switch (DockPosition) {
     case Top:
-        p += QPoint(r.width() / 2, r.height());
+        p += QPoint(r.width() / 2, r.height() + POPUP_PADDING);
         break;
     case Bottom:
-        p += QPoint(r.width() / 2, 0);
+        p += QPoint(r.width() / 2, -POPUP_PADDING);
         break;
     case Left:
-        p += QPoint(r.width(), r.height() / 2);
+        p += QPoint(r.width() + POPUP_PADDING, r.height() / 2);
         break;
     case Right:
-        p += QPoint(0, r.height() / 2);
+        p += QPoint(-POPUP_PADDING, r.height() / 2);
         break;
     }
     return p;

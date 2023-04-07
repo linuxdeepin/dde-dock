@@ -50,12 +50,7 @@ SystemPluginItem::SystemPluginItem(PluginsItemInterface *const pluginInter, cons
 
     if (PopupWindow.isNull()) {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
-        arrowRectangle->setShadowBlurRadius(20);
         arrowRectangle->setRadius(6);
-        arrowRectangle->setShadowYOffset(2);
-        arrowRectangle->setShadowXOffset(0);
-        arrowRectangle->setArrowWidth(18);
-        arrowRectangle->setArrowHeight(10);
         arrowRectangle->setObjectName("systemtraypopup");
         if (Utils::IS_WAYLAND_DISPLAY) {
             Qt::WindowFlags flags = arrowRectangle->windowFlags() | Qt::FramelessWindowHint;
@@ -428,12 +423,7 @@ void SystemPluginItem::showPopupWindow(QWidget *const content, const bool model)
     if (lastContent)
         lastContent->setVisible(false);
 
-    switch (DockPosition) {
-    case Dock::Position::Top:   popup->setArrowDirection(DockPopupWindow::ArrowTop);     break;
-    case Dock::Position::Bottom: popup->setArrowDirection(DockPopupWindow::ArrowBottom);  break;
-    case Dock::Position::Left:  popup->setArrowDirection(DockPopupWindow::ArrowLeft);    break;
-    case Dock::Position::Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
-    }
+    popup->setPosition(DockPosition);
     popup->resize(content->sizeHint());
     popup->setContent(content);
 
