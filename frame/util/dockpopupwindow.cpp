@@ -213,6 +213,11 @@ void DockPopupWindow::ensureRaised()
 
 void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
 {
+    // if there is something focus on widget, return
+    if (auto focus = qApp->focusWidget()) {
+        qDebug() << "PopupWindow not hide, focus className is" << focus->metaObject()->className();
+        return;
+    }
     if (!m_enableMouseRelease)
         return;
     QRect screenRect = this->screen()->geometry();

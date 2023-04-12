@@ -52,10 +52,10 @@ signals:
     void unusedSignal();
 
 protected:
-    void showEvent(QShowEvent *e);
-    void hideEvent(QHideEvent *event);
-    void enterEvent(QEvent *e);
-    bool eventFilter(QObject *o, QEvent *e);
+    void showEvent(QShowEvent *e) override;
+    void hideEvent(QHideEvent *event) override;
+    void enterEvent(QEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
     void blockButtonRelease();
 
 private slots:
