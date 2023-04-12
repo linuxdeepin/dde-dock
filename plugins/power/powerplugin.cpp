@@ -129,11 +129,6 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 
 QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    // 快捷面板使用m_quickPanel
-    if (dockPart == DockPart::QuickPanel) {
-        return QIcon();
-    }
-
     const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
     static QIcon batteryIcon;
     batteryIcon.detach();

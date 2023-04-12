@@ -126,9 +126,6 @@ void BluetoothPlugin::refreshIcon(const QString &itemKey)
 
 QIcon BluetoothPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    if (dockPart == DockPart::QuickPanel)
-        return QIcon();
-
     QString iconFile;
     if (themeType == DGuiApplicationHelper::ColorType::DarkType)
         iconFile = ":/bluetooth-active-symbolic.svg";
