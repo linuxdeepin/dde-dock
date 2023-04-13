@@ -373,7 +373,8 @@ void DockTrayWindow::onUpdateComponentSize()
     case Dock::Position::Bottom:
         m_toolLineLabel->setFixedSize(SPLITERSIZE, height() * 0.6);
         m_showDesktopWidget->setFixedSize(FRONTSPACING, QWIDGETSIZE_MAX);
-        m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), QWIDGETSIZE_MAX);
+        // FIXME: in some cases, m_dateTimeWidget QWIDGETSIZE_MAX get a huge height.
+        m_dateTimeWidget->setFixedSize(m_dateTimeWidget->suitableSize().width(), qMin(QWIDGETSIZE_MAX, this->height()));
         m_systemPuginWidget->setFixedSize(m_systemPuginWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_quickIconWidget->setFixedSize(m_quickIconWidget->suitableSize().width(), QWIDGETSIZE_MAX);
         m_trayView->setFixedSize(m_trayView->suitableSize().width(), QWIDGETSIZE_MAX);

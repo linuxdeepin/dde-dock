@@ -50,6 +50,7 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     void updatePolicy();
@@ -75,6 +76,7 @@ private:
     Timedate *m_timedateInter;
     Dock::Position m_position;
     QFont m_dateFont;
+    QFont m_timeFont;
     Dock::TipsWidget *m_tipsWidget;
     QMenu *m_menu;
     QSharedPointer<DockPopupWindow> m_tipPopupWindow;
