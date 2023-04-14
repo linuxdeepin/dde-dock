@@ -94,8 +94,8 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     QColor backColor(Qt::white);
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
         backColor = Qt::black;
-        backColor.setAlphaF(0.5);
     }
+    backColor.setAlphaF(0.5);
     DPalette dpa = DPaletteHelper::instance()->palette(this);
     painter.fillRect(rect(), backColor);
 }
