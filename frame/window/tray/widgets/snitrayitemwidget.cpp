@@ -168,7 +168,7 @@ void SNITrayItemWidget::sendClick(uint8_t mouseButton, int x, int y)
             // primarily work for apps using libappindicator.
             reply.waitForFinished();
             if (reply.isError()) {
-                showContextMenu(x,y);
+                QMetaObject::invokeMethod(this, "showContextMenu", Q_ARG(int,x), Q_ARG(int, y));
             }
         });
     }
