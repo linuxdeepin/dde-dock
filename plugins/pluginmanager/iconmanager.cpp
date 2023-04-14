@@ -50,7 +50,7 @@ QPixmap IconManager::pixmap(DGuiApplicationHelper::ColorType colorType) const
     QPainter pa(&pixmap);
     pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
     pa.fillRect(pixmap.rect(), foreColor);
-    return pixmap.scaled(pixmap.size() / qApp->devicePixelRatio());
+    return pixmap;
 }
 
 PluginsItemInterface *IconManager::findPlugin(const QString &pluginName) const
