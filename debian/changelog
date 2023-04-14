@@ -1,3 +1,22 @@
+dde-dock (6.0.11) unstable; urgency=medium
+
+  * fix: timedate display widget size error
+  * fix: when there is focus on dockpopupwindow, it hide
+  * fix: modify the color of the area not covered by the slider
+  * fix: dont hide all close button(Task: 3608)
+  * fix: abnormally display battery plug-in in the quick-trays
+  * fix: when multiscreen connected non-primary display unable to click popupwindow
+  * fix: xembed tray flew out
+  * fix: dont hide all close button
+  * fix: timedate alway request timedate format
+  * fix: multitasking no response sometime
+  * fix: FixedLlugin disapprear after drag
+  * fix: disk popup does not hide(Issue: 3813)
+
+  feat: DockPopupWindow reimplemeted by DBlurEffectWidget
+
+ -- Tsic404 <liuheng@deepin.org>  Fri, 14 Apr 2023 11:30:52 +0800
+
 dde-dock (6.0.10) unstable; urgency=medium
 
   [ bugfix ]
