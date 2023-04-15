@@ -343,6 +343,8 @@ qint64 ShutdownPlugin::get_power_image_size()
     if (file.open(QIODevice::Text | QIODevice::ReadOnly)) {
         size = file.readAll().trimmed().toLongLong();
         file.close();
+    } else {
+        qDebug() << "open /sys/power/image_size failed! please check permission!!!";
     }
 
     return size;

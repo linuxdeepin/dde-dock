@@ -145,11 +145,14 @@ bool OverlayWarningPlugin::isOverlayRoot()
 {
     // ignore live/recovery mode
     QFile cmdline("/proc/cmdline");
-    cmdline.open(QFile::ReadOnly);
+    if (cmdline.open(QIODevice::ReadOnly)) {
     QString content(cmdline.readAll());
     cmdline.close();
     if (content.contains("boot=live")) {
         return false;
+    }
+    } else {
+        qDebug() << "open /proc/cmdline failed! please check permission!!!";
     }
 
     return QString(QStorageInfo::root().fileSystemType()) == OverlayFileSystemType;
