@@ -576,8 +576,9 @@ QWidget *HomeMonitorPlugin::itemWidget(const QString &itemKey)
     
     return nullptr;
 }
-判断itemKey == QUICK_ITEM_KEY(QUICK_ITEM_KEY为插件基类中定义的一个宏)，返回在快捷面板区域的展示。一般在该插件需要在快捷面板区域响应复杂的操作，例如蓝牙插件或网络插件需要通过该面板进行开关等操作，此时建议用这种方法
 ```
+
+判断itemKey == QUICK_ITEM_KEY(QUICK_ITEM_KEY为插件基类中定义的一个宏)，返回在快捷面板区域的展示。一般在该插件需要在快捷面板区域响应复杂的操作，例如蓝牙插件或网络插件需要通过该面板进行开关等操作，此时建议用这种方法
 
 任务栏使用哪种显示方式的逻辑是，先通过第一种方法中的获取图标的接口，判断是否存在图标，如果存在图标，就用第一种方法来显示，如果不存在，就用第二种方法来显示
 
@@ -741,7 +742,7 @@ dde-dock 在发现鼠标悬停在插件的控件上时就会调用这个接口�
 
 上面的 tips 显示的控件在鼠标移开之后就会消失，如果插件需要长时间显示一个窗体及时鼠标离开也会保持显示状态来做一些提示或功能的话那就需要使用 applet，applet 控件在左键点击后显示，点击控件以外的其他地方后消失。
 
-applet 控件其实跟 tip 控件一样都是一个普通的 widget，但是可以在 applet 控件中显示交互性的内容，比如按钮，输入框等等。出于篇幅原因这里的 applet 控件就不添加交互性的功能了，只用来显示一些文字，所以依然使用一个 lable 控件。
+applet 控件其实跟 tip 控件一样都是一个普通的 widget，但是可以在 applet 控件中显示交互性的内容，比如按钮，输入框等等。出于篇幅原因这里的 applet 控件就不添加交互性的功能了，只用来显示一些文字，所以依然使用一个 label 控件。
 
 在插件核心类中添加一个文本控件作为 applet 控件：
 
@@ -777,8 +778,9 @@ void HomeMonitorPlugin::init(PluginProxyInterface *proxyInter)
 
 ```c++
 void requestSetAppletVisible(PluginsItemInterface * const itemInter, const QString &itemKey, const bool visible);
-// 其中,itemInter传入this, itemKey在此处传入一个制定的字符串，那么在下方的itemPopupApplet接口的方法中就需要根据这个指定的itemKey返回对应的QWidget来显示，visible传true
 ```
+
+其中,itemInter传入this, itemKey在此处传入一个制定的字符串，那么在下方的itemPopupApplet接口的方法中就需要根据这个指定的itemKey返回对应的QWidget来显示，visible传true
 
 接着实现 applet 相关的接口 itemPopupApplet：
 
