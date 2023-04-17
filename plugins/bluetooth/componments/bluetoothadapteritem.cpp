@@ -88,20 +88,13 @@ void BluetoothDeviceItem::initConnect()
 
 void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
 {
-    if (type == DGuiApplicationHelper::LightType) {
-        if (!m_device->deviceType().isEmpty()) {
-            m_deviceIcon = LightString.arg(m_device->deviceType());
-        } else {
-            m_deviceIcon = LightString.arg("other");
-        }
-    } else {
-        if (!m_device->deviceType().isEmpty()) {
-            m_deviceIcon = DarkString.arg(m_device->deviceType());
-        } else {
-            m_deviceIcon = DarkString.arg("other");
-        }
+    if (!m_device->deviceType().isEmpty()) {
+        m_deviceIcon = m_device->deviceType();
+        m_labelAction->setIcon(QIcon::fromTheme(m_deviceIcon));
+        return;
     }
-    m_labelAction->setIcon(QIcon(m_deviceIcon));
+    m_deviceIcon = type == DGuiApplicationHelper::LightType ? LightString.arg("other") : DarkString.arg("other");
+    m_labelAction->setIcon(QIcon::fromTheme(m_deviceIcon));
 }
 
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
