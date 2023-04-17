@@ -21,9 +21,6 @@ public:
     };
     Q_ENUM(State)
 
-private:
-    static QMap<QString, QString> deviceType2Icon;
-
 public:
     explicit Device(QObject *parent = nullptr);
     ~Device();

@@ -8,25 +8,6 @@
 #include <DStyleHelper>
 #include <QDateTime>
 
-QMap<QString, QString> Device::deviceType2Icon = {
-    {"unknow", "other"},
-    {"computer", "pc"},
-    {"phone", "phone"},
-    {"video-display", "vidicon"},
-    {"multimedia-player", "tv"},
-    {"scanner", "scaner"},
-    {"input-keyboard", "keyboard"},
-    {"input-mouse", "mouse"},
-    {"input-gaming", "other"},
-    {"input-tablet", "touchpad"},
-    {"audio-card", "pheadset"},
-    {"network-wireless", "lan"},
-    {"camera-video", "vidicon"},
-    {"printer", "print"},
-    {"camera-photo", "camera"},
-    {"modem", "other"}
-};
-
 Device::Device(QObject *parent)
     : QObject(parent)
     , m_paired(false)
@@ -97,7 +78,7 @@ void Device::setRssi(int rssi)
 
 void Device::setDeviceType(const QString &deviceType)
 {
-    m_deviceType = deviceType2Icon[deviceType];
+    m_deviceType = deviceType;
 }
 
 QDebug &operator<<(QDebug &stream, const Device *device)

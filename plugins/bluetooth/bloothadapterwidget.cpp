@@ -103,9 +103,8 @@ void BloothAdapterWidget::onOtherClicked(const QModelIndex &index)
     if (!device || device->state() == Device::State::StateConnected)
         return;
 
-    if (device->deviceType() == "audio-card"
-        && device->state() == Device::State::StateAvailable
-        && device->deviceType() == "pheadset") {
+    if ((device->deviceType() == "audio-headset" || device->deviceType() == "audio-headphones")
+        && device->state() == Device::State::StateAvailable) {
         return;
     }
 
