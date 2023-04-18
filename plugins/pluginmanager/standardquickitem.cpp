@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMouseEvent>
 
 static constexpr int ICONHEIGHT = 24;
 static constexpr int ICONWIDTH = 24;
@@ -38,7 +39,9 @@ QuickSettingItem::QuickItemStyle StandardQuickItem::type() const
 
 void StandardQuickItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
     QStringList commandArgument = pluginItem()->itemCommand(itemKey()).split(" ");
     if (commandArgument.size() > 0) {
         QString command = commandArgument.first();

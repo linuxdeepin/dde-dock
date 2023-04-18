@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPainter>
+#include <QMouseEvent>
 
 #define BGSIZE 36
 #define ICONWIDTH 24
@@ -73,6 +74,10 @@ bool LargerQuickItem::eventFilter(QObject *obj, QEvent *event)
 
     switch (event->type()) {
     case QEvent::MouseButtonRelease: {
+        QMouseEvent *mouseevent = static_cast<QMouseEvent *>(event);
+        if (mouseevent->button() != Qt::LeftButton) {
+            return QuickSettingItem::eventFilter(obj, event);
+        }
         if (obj->objectName() == "expandLabel") {
             // 如果是鼠标的按下事件
             QWidget *widget = pluginItem()->itemPopupApplet(QUICK_ITEM_KEY);
