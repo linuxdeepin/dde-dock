@@ -10,12 +10,13 @@
 
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
+#include <DStyle>
 
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QPainterPath>
-#include <DStyle>
+#include <QMouseEvent>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -81,6 +82,10 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
             break;
         }
         case QEvent::MouseButtonRelease: {
+            QMouseEvent *mouseevent = static_cast<QMouseEvent *>(event);
+            if (mouseevent->button() != Qt::LeftButton) {
+                return QWidget::eventFilter(watcher, event);
+            }
             bool status = !(isOpen());
             for (const Adapter *adapter : m_adapterManager->adapters())
                 m_adapterManager->setAdapterPowered(adapter, status);
