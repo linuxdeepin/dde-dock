@@ -328,7 +328,7 @@ void TrayManagerWindow::initConnection()
     connect(m_systemPluginWidget, &SystemPluginWindow::itemChanged, this, [ this ] {
         if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
             m_systemPluginWidget->setFixedWidth(m_systemPluginWidget->suitableSize().width());
-         else
+        else
             m_systemPluginWidget->setFixedHeight(m_systemPluginWidget->suitableSize().height());
 
         Q_EMIT requestUpdate();
@@ -355,12 +355,6 @@ void TrayManagerWindow::initConnection()
 
 void TrayManagerWindow::resetChildWidgetSize()
 {
-    int count = 0;
-    for (int i = 0; i < m_model->rowCount(); i++) {
-        if (!m_trayView->isRowHidden(i))
-            count++;
-    }
-
     switch (m_position) {
     case Dock::Position::Top:
     case Dock::Position::Bottom: {
