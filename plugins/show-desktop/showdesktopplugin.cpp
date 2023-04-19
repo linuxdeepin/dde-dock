@@ -8,6 +8,7 @@
 
 #include <QIcon>
 #include <QDebug>
+#include <DDBusSender>
 
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
@@ -98,7 +99,16 @@ void ShowDesktopPlugin::invokedMenuItem(const QString &itemKey, const QString &m
     if (menuId == "show-desktop") {
         QProcess::startDetached("/usr/lib/deepin-daemon/desktop-toggle", QStringList());
     } else if (menuId == "remove") {
-        m_proxyInter->itemRemoved(this, pluginName());
+        // m_proxyInter->itemRemoved(this, pluginName());
+        DDBusSender()
+            .service("org.deepin.dde.Dock1")
+            .interface("org.deepin.dde.Dock1")
+            .path("/org/deepin/dde/Dock1")
+            .method(QString("setItemOnDock"))
+            .arg(QString("Dock_Quick_Plugins"))
+            .arg(QString("show-desktop"))
+            .arg(false)
+            .call();
     }
 }
 

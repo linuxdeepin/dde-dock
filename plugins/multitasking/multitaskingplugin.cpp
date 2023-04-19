@@ -119,14 +119,23 @@ void MultitaskingPlugin::invokedMenuItem(const QString &itemKey, const QString &
 
     if (menuId == "multitasking") {
         DDBusSender()
-        .service("com.deepin.wm")
-        .interface("com.deepin.wm")
-        .path("/com/deepin/wm")
-        .method(QString("PerformAction"))
-        .arg(1)
-        .call();
+            .service("com.deepin.wm")
+            .interface("com.deepin.wm")
+            .path("/com/deepin/wm")
+            .method(QString("PerformAction"))
+            .arg(1)
+            .call();
     } else if (menuId == "remove") {
-        m_proxyInter->itemRemoved(this, PLUGIN_KEY);
+        // m_proxyInter->itemRemoved(this, PLUGIN_KEY);
+        DDBusSender()
+            .service("org.deepin.dde.Dock1")
+            .interface("org.deepin.dde.Dock1")
+            .path("/org/deepin/dde/Dock1")
+            .method(QString("setItemOnDock"))
+            .arg(QString("Dock_Quick_Plugins"))
+            .arg(QString("multitasking"))
+            .arg(false)
+            .call();
     }
 }
 
