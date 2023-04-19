@@ -241,6 +241,7 @@ int main(int argc, char *argv[])
         qApp->setProperty("PLUGINSLOADED", true);
     } else {
         windowManager.sendNotifications();
+        adaptor.setConnectToNotifications();
     }
 
     return app.exec();

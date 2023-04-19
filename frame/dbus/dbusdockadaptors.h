@@ -128,13 +128,19 @@ public: // PROPERTIES
 
     bool showInPrimary() const;
     void setShowInPrimary(bool showInPrimary);
+    void setConnectToNotifications();
 
 signals:
     void geometryChanged(QRect geometry);
     void showInPrimaryChanged(bool);
     void pluginVisibleChanged(const QString &pluginName, bool visible);
 
+
+private slots:
+    void notifyActionInvoked(uint, QString);
+
 private:
+    void disconnectToNotifications();
     bool isPluginValid(const QString &name);
     QList<PluginsItemInterface *> localPlugins() const;
     QIcon getSettingIcon(PluginsItemInterface *plugin, QSize &pixmapSize, DGuiApplicationHelper::ColorType colorType) const;

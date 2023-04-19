@@ -120,6 +120,36 @@ DBusDockAdaptors::~DBusDockAdaptors()
 
 }
 
+void DBusDockAdaptors::setConnectToNotifications() {
+    QDBusConnection::sessionBus().connect(QStringLiteral("org.freedesktop.Notifications"),
+                                          QStringLiteral("/org/freedesktop/Notifications"),
+                                          QStringLiteral("org.freedesktop.Notifications"),
+                                          QStringLiteral("ActionInvoked"),
+                                          this,
+                                          SLOT(notifyActionInvoked(uint, QString)));
+    QTimer::singleShot(16000, [ this ] {
+        disconnectToNotifications();
+    });
+}
+void DBusDockAdaptors::disconnectToNotifications() {
+    QDBusConnection::sessionBus().disconnect(QStringLiteral("org.freedesktop.Notifications"),
+                                             QStringLiteral("/org/freedesktop/Notifications"),
+                                             QStringLiteral("org.freedesktop.Notifications"),
+                                             QStringLiteral("ActionInvoked"),
+                                             this,
+                                             SLOT(notifyActionInvoked(uint, QString)));
+
+}
+
+void DBusDockAdaptors::notifyActionInvoked(uint id, QString name) {
+    Q_UNUSED(id)
+    if (name == "reload") {
+        qApp->setProperty("PLUGINSLOADED", true);
+        ReloadPlugins();
+        disconnectToNotifications();
+    }
+}
+
 void DBusDockAdaptors::callShow()
 {
     m_windowManager->callShow();
@@ -127,7 +157,7 @@ void DBusDockAdaptors::callShow()
 
 void DBusDockAdaptors::ReloadPlugins()
 {
-    if (qApp->property("PLUGINSLOADED").toBool())
+    if (!qApp->property("PLUGINSLOADED").toBool())
         return;
 
     // 发送事件，通知代理来加载插件
