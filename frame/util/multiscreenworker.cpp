@@ -937,6 +937,7 @@ void MultiScreenWorker::onDelayAutoHideChanged()
  */
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
+    DockItem::setDockPosition(m_position);
     if (qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
         qWarning() << "dock is draging or animation is running";
         return;
