@@ -27,6 +27,7 @@
 #include "quicksettingcontroller.h"
 
 #include <QDrag>
+#include <QUrl>
 #include <QTimer>
 #include <QStandardPaths>
 #include <QString>
@@ -483,7 +484,9 @@ void MainPanelControl::dropEvent(QDropEvent *e)
 {
     if (m_placeholderItem) {
 
-        emit itemAdded(e->mimeData()->data(m_draggingMimeKey), m_appAreaSonLayout->indexOf(m_placeholderItem));
+        QUrl desktopPath = QUrl::fromUserInput(e->mimeData()->data(m_draggingMimeKey));
+
+        emit itemAdded(desktopPath.toLocalFile(), m_appAreaSonLayout->indexOf(m_placeholderItem));
 
         removeAppAreaItem(m_placeholderItem);
         m_placeholderItem->deleteLater();
