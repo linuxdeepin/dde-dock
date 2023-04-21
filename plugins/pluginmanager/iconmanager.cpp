@@ -44,13 +44,7 @@ void IconManager::setDisplayMode(Dock::DisplayMode displayMode)
 QPixmap IconManager::pixmap(DGuiApplicationHelper::ColorType colorType) const
 {
     // 缺省图标
-    QPixmap pixmap = QIcon::fromTheme("dock-control-panel").pixmap(ITEMSIZE, ITEMSIZE);
-    QColor foreColor = (colorType == DGuiApplicationHelper::ColorType::DarkType ? Qt::white : Qt::black);
-    foreColor.setAlphaF(0.8);
-    QPainter pa(&pixmap);
-    pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    pa.fillRect(pixmap.rect(), foreColor);
-    return pixmap;
+    return QIcon::fromTheme("dock-control-panel").pixmap(ITEMSIZE, ITEMSIZE);
 }
 
 PluginsItemInterface *IconManager::findPlugin(const QString &pluginName) const
