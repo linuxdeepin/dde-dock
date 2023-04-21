@@ -1,3 +1,11 @@
+dde-dock (6.0.13) unstable; urgency=medium
+
+  * fix appitem indicator wrong position
+  * fix fixed_plugin unable to show after click undock
+  * fix desktopfile unable drag into dock and make it docked
+
+ -- Tsic404 <liuheng@deepin.org>  Fri, 21 Apr 2023 09:39:23 +0800
+
 dde-dock (6.0.12) unstable; urgency=medium
 
   * fix sni tray unable to click after first left click
