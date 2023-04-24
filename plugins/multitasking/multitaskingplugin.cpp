@@ -139,6 +139,14 @@ void MultitaskingPlugin::invokedMenuItem(const QString &itemKey, const QString &
     }
 }
 
+QIcon MultitaskingPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+{
+    if (dockPart == DockPart::DCCSetting)
+        return  QIcon::fromTheme("dcc-multitasking-view",QIcon(":/icons/icons/dcc-multitasking-view.svg"));
+
+    return QIcon();
+}
+
 void MultitaskingPlugin::refreshIcon(const QString &itemKey)
 {
     if (itemKey == PLUGIN_KEY) {

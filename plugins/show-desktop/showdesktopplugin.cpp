@@ -119,6 +119,16 @@ void ShowDesktopPlugin::refreshIcon(const QString &itemKey)
     }
 }
 
+QIcon ShowDesktopPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+{
+
+    if (dockPart == DockPart::DCCSetting) {
+        return QIcon::fromTheme("dcc-show-desktop", QIcon(":/icons/icons/dcc-show-desktop.svg"));
+    }
+
+    return QIcon();
+}
+
 int ShowDesktopPlugin::itemSortKey(const QString &itemKey)
 {
     const QString key = QString("pos_%1_%2").arg(itemKey).arg(Dock::Efficient);
