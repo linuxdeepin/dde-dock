@@ -36,6 +36,7 @@ public:
     void setSortKey(const QString &itemKey, const int order) override;
     PluginType type() override;
     PluginFlags flags() const override;
+    QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
 
 private:
     QScopedPointer<ShowDesktopWidget> m_showDesktopWidget;
