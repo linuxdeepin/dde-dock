@@ -382,8 +382,10 @@ void QuickPluginWindow::onRequestUpdate()
         m_mainLayout->addWidget(itemWidget);
     }
 
-    if (countChanged)
+    if (countChanged) {
+        m_dragInfo->dockItem = nullptr;
         Q_EMIT itemCountChanged();
+    }
 }
 
 QPoint QuickPluginWindow::popupPoint(QWidget *widget) const
