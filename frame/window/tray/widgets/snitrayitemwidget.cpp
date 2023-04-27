@@ -476,21 +476,30 @@ QPixmap SNITrayItemWidget::newIconPixmap(IconType iconType)
     do {
         // load icon from sni dbus
         if (!dbusImageList.isEmpty() && !dbusImageList.first().pixels.isEmpty()) {
-            for (DBusImage dbusImage : dbusImageList) {
-                char *image_data = dbusImage.pixels.data();
+            auto best = dbusImageList.begin();
+            for (auto i = dbusImageList.begin() + 1; i < dbusImageList.end(); i++) {
+                auto &dbusImage = *i;
+                if (dbusImage.width > best->width) {
+                    best = i;
+                }
+
+                if (best->width >= iconSizeScaled) {
+                    break;
+                }
+            }
+
+            if (best != dbusImageList.end()) {
+                char *image_data = best->pixels.data();
 
                 if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
-                    for (int i = 0; i < dbusImage.pixels.size(); i += 4) {
+                    for (int i = 0; i < best->pixels.size(); i += 4) {
                         *(qint32 *)(image_data + i) = qFromBigEndian(*(qint32 *)(image_data + i));
                     }
                 }
 
-                QImage image((const uchar *)dbusImage.pixels.constData(), dbusImage.width, dbusImage.height, QImage::Format_ARGB32);
+                QImage image((const uchar *)best->pixels.constData(), best->width, best->height, QImage::Format_ARGB32);
                 pixmap = QPixmap::fromImage(image.scaled(iconSizeScaled, iconSizeScaled, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 pixmap.setDevicePixelRatio(ratio);
-                if (!pixmap.isNull()) {
-                    break;
-                }
             }
         }
 
