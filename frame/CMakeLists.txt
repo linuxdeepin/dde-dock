@@ -34,8 +34,9 @@ find_package(DWayland REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor)
+pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor xkbcommon)
 pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
+pkg_check_modules(WAYLAND REQUIRED IMPORTED_TARGET wayland-client wayland-cursor wayland-egl)
 
 # driver-manager
 add_executable(${BIN_NAME}
@@ -83,6 +84,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     PkgConfig::QGSettings
     PkgConfig::XCB_EWMH
+    PkgConfig::WAYLAND
     Dtk::Gui
     Qt5::Widgets
     Qt5::Gui
