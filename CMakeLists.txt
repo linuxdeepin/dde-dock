@@ -31,6 +31,10 @@ endif()
 # generate a compile commands file as complete database for vim-YouCompleteMe or some other similar tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Install settings
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif ()
 include(GNUInstallDirs)
 
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
@@ -129,11 +133,6 @@ file(GLOB SRC_PATH
 add_subdirectory("frame")
 add_subdirectory("plugins")
 #add_subdirectory("tests")
-
-# Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")

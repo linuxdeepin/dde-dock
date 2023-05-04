@@ -94,8 +94,5 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DdeDockInterface_LIBRARIES}
 )
 
-# 设置安装路径的前缀(默认为"/usr/local")
-set(CMAKE_INSTALL_PREFIX "/usr")
-
 # 设置执行 make install 时哪个目标应该被 install 到哪个位置
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
