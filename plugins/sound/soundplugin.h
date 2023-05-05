@@ -7,7 +7,6 @@
 #define SOUNDPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "sounditem.h"
 
 class SoundWidget;
 class SoundDevicesWidget;
@@ -30,10 +29,8 @@ public:
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     QWidget *itemPopupApplet(const QString &itemKey) override;
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
     int itemSortKey(const QString &itemKey) override;
     void setSortKey(const QString &itemKey, const int order) override;
-    void refreshIcon(const QString &itemKey) override;
     void pluginSettingsChanged() override;
     QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType) override;
     PluginMode status() const override;
@@ -44,7 +41,6 @@ private:
     void refreshPluginItemsVisible();
 
 private:
-    QScopedPointer<SoundItem> m_soundItem;
     QScopedPointer<SoundWidget> m_soundWidget;
     QScopedPointer<SoundDevicesWidget> m_soundDeviceWidget;
 };
