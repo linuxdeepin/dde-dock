@@ -98,7 +98,6 @@ private:
     DPlatformWindowHandle m_platformWindowHandle;
     QTimer *m_shadowMaskOptimizeTimer;
     bool m_isShow;
-    int m_borderRadius;
     int m_order;
 };
 

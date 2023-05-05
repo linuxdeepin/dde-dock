@@ -45,7 +45,6 @@ MainWindowBase::MainWindowBase(MultiScreenWorker *multiScreenWorker, QWidget *pa
     , m_platformWindowHandle(this)
     , m_shadowMaskOptimizeTimer(new QTimer(this))
     , m_isShow(false)
-    , m_borderRadius(0)
     , m_order(0)
 {
     initUi();
@@ -109,9 +108,6 @@ void MainWindowBase::initConnection()
 {
     connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_shadowMaskOptimizeTimer, &QTimer::timeout, this, &MainWindowBase::adjustShadowMask, Qt::QueuedConnection);
-
-    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(&m_platformWindowHandle, &DPlatformWindowHandle::windowRadiusChanged, m_shadowMaskOptimizeTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_dragWidget, &DragWidget::dragFinished, this, [ = ] {
         Utils::setIsDraging(false);
@@ -339,7 +335,7 @@ void MainWindowBase::adjustShadowMask()
     if (!m_isShow || m_shadowMaskOptimizeTimer->isActive())
         return;
 
-    m_platformWindowHandle.setWindowRadius(m_borderRadius);
+    m_platformWindowHandle.setWindowRadius(getBorderRadius());
 }
 
 void MainWindowBase::onCompositeChanged()
@@ -579,12 +575,6 @@ void MainWindowBase::initUi()
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
     updateDragGeometry();
-
-    int borderRadius = getBorderRadius();
-    if (borderRadius != m_borderRadius) {
-        m_borderRadius = borderRadius;
-        updateRadius(m_borderRadius);
-    }
 
     m_shadowMaskOptimizeTimer->start();
 
