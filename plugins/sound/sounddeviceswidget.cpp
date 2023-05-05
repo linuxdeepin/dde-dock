@@ -4,16 +4,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "sounddeviceswidget.h"
+#include "constants.h"
 #include "imageutil.h"
 #include "slidercontainer.h"
 #include "sounddeviceport.h"
+#include "../widgets/tipswidget.h"
 
 #include <DListView>
 #include <DPushButton>
 #include <DLabel>
 #include <DGuiApplicationHelper>
 #include <DDBusSender>
-#include <DBlurEffectWidget>
 #include <DPaletteHelper>
 
 #include <QVBoxLayout>
@@ -22,13 +23,16 @@
 #include <QProcess>
 #include <QDBusInterface>
 #include <QDBusConnection>
+#include <QtConcurrent>
+#include <QIcon>
+#include <QPixmap>
 
 DWIDGET_USE_NAMESPACE
 
 #define HEADERHEIGHT 30
 #define ITEMSPACE 16
-#define ROWSPACE 10
-#define DESCRIPTIONHEIGHT 15
+#define ROWSPACE 5
+#define DESCRIPTIONHEIGHT 20
 #define SLIDERHEIGHT 36
 
 #define AUDIOPORT 0
@@ -40,10 +44,13 @@ enum ItemRole {
     SortRole,
 };
 
+using namespace Dock;
+
 SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     : QWidget(parent)
-    , m_sliderParent(new QWidget(this))
-    , m_sliderContainer(new SliderContainer(m_sliderParent))
+    , m_tipsLabel(new TipsWidget(this))
+    , m_titleLabel(new QLabel(tr("Sound"), this))
+    , m_sliderContainer(new SliderContainer(this))
     , m_descriptionLabel(new QLabel(tr("Output Device"), this))
     , m_deviceList(new DListView(this))
     , m_soundInter(new DBusAudio("org.deepin.dde.Audio1", "/org/deepin/dde/Audio1", QDBusConnection::sessionBus(), this))
@@ -66,14 +73,14 @@ SoundDevicesWidget::~SoundDevicesWidget()
 
 bool SoundDevicesWidget::eventFilter(QObject *watcher, QEvent *event)
 {
-    if ((watcher == m_sliderParent) && (event->type() == QEvent::Paint)) {
-        QPainter painter(m_sliderParent);
+    if ((watcher == m_sliderContainer) && (event->type() == QEvent::Paint)) {
+        QPainter painter(m_sliderContainer);
         painter.setRenderHint(QPainter::Antialiasing); // 抗锯齿
         painter.setPen(Qt::NoPen);
 
-        DPalette dpa = DPaletteHelper::instance()->palette(m_sliderParent);
-        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
-        painter.drawRoundedRect(m_sliderParent->rect(), 10, 10);
+        QStandardItem *item = m_model->item(m_model->rowCount() - 1);
+        painter.setBrush(item->background());
+        painter.drawRoundedRect(m_sliderContainer->rect(), 10, 10);
     }
 
     return QWidget::eventFilter(watcher, event);
@@ -81,31 +88,33 @@ bool SoundDevicesWidget::eventFilter(QObject *watcher, QEvent *event)
 
 void SoundDevicesWidget::initUi()
 {
+    m_tipsLabel->setAccessibleName("soundtips");
+    m_tipsLabel->setVisible(false);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(10, 0, 10, 0);
-    layout->setSpacing(6);
 
-    m_sliderParent->setFixedHeight(SLIDERHEIGHT);
+    m_titleLabel->setFixedHeight(HEADERHEIGHT);
+    m_titleLabel->setAlignment(Qt::AlignCenter);
 
-    QHBoxLayout *sliderLayout = new QHBoxLayout(m_sliderParent);
-    sliderLayout->setContentsMargins(11, 0, 11, 0);
-    sliderLayout->setSpacing(0);
-
-    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(24, 24));
+    QPixmap leftPixmap = QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(m_sinkInter->mute() ? "muted" : "off")).pixmap(18, 18);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 5);
-    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(24, 24));
+    QPixmap rightPixmap = QIcon::fromTheme("audio-volume-high-symbolic").pixmap(18, 18);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(), 7);
 
     SliderProxyStyle *proxy = new SliderProxyStyle(SliderProxyStyle::Normal);
     m_sliderContainer->setSliderProxyStyle(proxy);
     m_sliderContainer->setRange(0, std::round(m_soundInter->maxUIVolume() * 100.00));
     m_sliderContainer->setPageStep(2);
-    sliderLayout->addWidget(m_sliderContainer);
 
-    QHBoxLayout *topLayout = new QHBoxLayout(this);
-    topLayout->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout *topLayout = new QVBoxLayout(this);
+
+    topLayout->setContentsMargins(7, 0, 7, 0);
     topLayout->setSpacing(0);
-    topLayout->addWidget(m_sliderParent);
+
+    topLayout->addWidget(m_titleLabel);
+    topLayout->addWidget(m_sliderContainer);
+    m_descriptionLabel->setMargin(5);
 
     layout->addLayout(topLayout);
     layout->addWidget(m_descriptionLabel);
@@ -118,21 +127,22 @@ void SoundDevicesWidget::initUi()
     m_deviceList->horizontalScrollBar()->setVisible(false);
     m_deviceList->setBackgroundType(DStyledItemDelegate::BackgroundType::RoundedBackground);
     m_deviceList->setOrientation(QListView::Flow::TopToBottom, false);
-    layout->addWidget(m_deviceList);
     m_deviceList->setSpacing(ROWSPACE);
 
+    layout->addWidget(m_deviceList);
+
     m_model->setSortRole(SortRole);
-    m_descriptionLabel->setFixedHeight(DESCRIPTIONHEIGHT);
 
     // 增加音量设置
     DStandardItem *settingItem = new DStandardItem;
     settingItem->setText(tr("Sound settings"));
-    settingItem->setFlags(Qt::NoItemFlags);
+    settingItem->setTextColorRole(QPalette::BrightText);
+    settingItem->setFlags(settingItem->flags() & ~Qt::ItemIsEditable & ~Qt::ItemIsSelectable);
     settingItem->setCheckable(Qt::Unchecked);
     settingItem->setData(AUDIOSETTING, ItemTypeRole);
     m_model->appendRow(settingItem);
 
-    m_sliderParent->installEventFilter(this);
+    m_sliderContainer->installEventFilter(this);
 }
 
 void SoundDevicesWidget::onAudioDevicesChanged()
@@ -196,17 +206,19 @@ void SoundDevicesWidget::initConnection()
     connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
     connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
     connect(m_soundInter, &DBusAudio::DefaultSinkChanged, this, &SoundDevicesWidget::onDefaultSinkChanged);
-    connect(m_deviceList->selectionModel(), &QItemSelectionModel::currentChanged, this, &SoundDevicesWidget::onSelectIndexChanged);
+    connect(m_deviceList, &DListView::clicked, this, &SoundDevicesWidget::onSelectIndexChanged);
     connect(m_soundInter, &DBusAudio::PortEnabledChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_soundInter, &DBusAudio::CardsWithoutUnavailableChanged, this, &SoundDevicesWidget::onAudioDevicesChanged);
     connect(m_soundInter, &DBusAudio::MaxUIVolumeChanged, this, [ = ] (double maxValue) {
         m_sliderContainer->setRange(0, std::round(maxValue * 100.00));
+        emit iconChanged();
     });
     connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
         m_sinkInter->SetVolume(value * 0.01, true);
         if (m_sinkInter->mute()) {
             m_sinkInter->SetMuteQueued(false);
         }
+        emit iconChanged();
     });
 }
 
@@ -239,12 +251,15 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
 {
     DStandardItem *portItem = new DStandardItem;
     QString deviceName = port->name();
-    portItem->setIcon(QIcon(soundIconFile()));
+    // TODO: get right icon
+    portItem->setIcon(QIcon());
     portItem->setText(deviceName);
+    portItem->setFlags(portItem->flags() & ~Qt::ItemIsSelectable);
     portItem->setTextColorRole(QPalette::BrightText);
     portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), DeviceObjRole);
     portItem->setData(AUDIOPORT, ItemTypeRole);
     portItem->setToolTip(port->cardName());
+    static QBrush oldBackGroundStyle = portItem->background();
 
     connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
         portItem->setText(str);
@@ -254,6 +269,11 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     });
     connect(port, &SoundDevicePort::isActiveChanged, this, [ = ](bool isActive) {
         portItem->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+        if (isActive) {
+            portItem->setBackground(DPaletteHelper::instance()->palette(this).highlight());
+        } else {
+            portItem->setBackground(oldBackGroundStyle);
+        }
     });
 
     if (port->isActive()) {
@@ -324,32 +344,6 @@ void SoundDevicesWidget::deviceEnabled(bool enable)
 {
     m_sliderContainer->setEnabled(enable);
     Q_EMIT enableChanged(enable);
-}
-
-QString SoundDevicesWidget::leftIcon()
-{
-    QString iconLeft = QString(":/icons/resources/audio-volume-%1").arg(m_sinkInter->mute() ? "muted" : "low");
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        iconLeft.append("-dark");
-
-    return iconLeft;
-}
-
-QString SoundDevicesWidget::rightIcon()
-{
-    QString iconRight = QString(":/icons/resources/audio-volume-high");
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        iconRight.append("-dark");
-
-    return iconRight;
-}
-
-const QString SoundDevicesWidget::soundIconFile() const
-{
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        return QString(":/icons/resources/ICON_Device_Laptop_dark.svg");
-
-    return QString(":/icons/resources/ICON_Device_Laptop.svg");
 }
 
 void SoundDevicesWidget::resizeHeight()
@@ -431,10 +425,12 @@ void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
         }
     } else {
         // 如果是点击声音设置，则打开控制中心的声音模块
-        DDBusSender().service("org.deepin.dde.ControlCenter1")
+        QtConcurrent::run([=] {
+            DDBusSender().service("org.deepin.dde.ControlCenter1")
                 .path("/org/deepin/dde/ControlCenter1")
                 .interface("org.deepin.dde.ControlCenter1")
                 .method("ShowPage").arg(QString("sound")).call();
+         });
         emit requestHide();
     }
 }
@@ -443,8 +439,15 @@ void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
 {
     delete m_sinkInter;
     m_sinkInter = new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this);
-    connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) { m_sliderContainer->updateSliderValue(value * 100); });
-    connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100); });
+    connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) {
+        m_sliderContainer->updateSliderValue(value * 100);
+        emit iconChanged();
+    });
+
+    connect(m_sinkInter, &DBusSink::MuteChanged, this, [ = ] {
+        m_sliderContainer->updateSliderValue(m_sinkInter->volume() * 100);
+        emit iconChanged();
+    });
 
     QString portId = m_sinkInter->activePort().name;
     uint cardId = m_sinkInter->card();
@@ -466,4 +469,48 @@ void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
 
     resetVolumeInfo();
     m_deviceList->update();
+    emit iconChanged();
+}
+
+QWidget* SoundDevicesWidget::tipsWidget()
+{
+    if (m_sinkInter)
+        refreshTips(std::min(150, qRound(m_sinkInter->volume() * 100.0)), true);
+
+    m_tipsLabel->resize(m_tipsLabel->sizeHint().width() + 10,
+                        m_tipsLabel->sizeHint().height());
+
+    return m_tipsLabel;
+}
+
+void SoundDevicesWidget::refreshTips(const int volume, const bool force)
+{
+    if (!force && !m_tipsLabel->isVisible())
+        return;
+
+    m_tipsLabel->setText(QString(tr("Volume %1").arg(QString::number(volume) + '%')));
+}
+
+QPixmap SoundDevicesWidget::pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const
+{
+    const double volmue = m_sinkInter->volume();
+    const bool mute = m_sinkInter->mute();
+    const double maxVolmue = m_soundInter->maxUIVolume();
+
+    QPixmap leftPixmap = QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(m_sinkInter->mute() ? "muted" : "off")).pixmap(18, 18);
+    m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 5);
+
+    QString volumeString;
+    if (mute)
+        volumeString = "muted";
+    else if (0.0 == volmue)
+        volumeString = "off";
+    else if (volmue > maxVolmue * 2 / 3)
+        volumeString = "high";
+    else if (volmue > maxVolmue * 1 / 3)
+        volumeString = "medium";
+    else
+        volumeString = "low";;
+
+    return QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(volumeString)).pixmap(iconWidth, iconHeight);
 }

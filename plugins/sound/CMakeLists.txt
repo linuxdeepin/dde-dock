@@ -18,16 +18,14 @@ file(GLOB_RECURSE SRCS "*.h"
     "../../frame/qtdbusextended/*.cpp")
 
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Svg REQUIRED)
-find_package(Qt5DBus REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Concurrent DBus Svg Widgets)
 find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
 pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS} resources/sound.qrc)
+add_library(${PLUGIN_NAME} SHARED ${SRCS})
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../quick-trays)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
     ./dbusinterface
@@ -43,6 +41,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}
     PkgConfig::QGSettings
     PkgConfig::XCB_LIBS
+    Qt5::Concurrent
     Qt5::Widgets
     Qt5::DBus
     Qt5::Svg)

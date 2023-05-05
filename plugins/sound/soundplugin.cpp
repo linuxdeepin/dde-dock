@@ -2,7 +2,6 @@
 // SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
-
 #include "soundplugin.h"
 #include "soundaccessible.h"
 #include "soundwidget.h"
@@ -14,11 +13,12 @@
 #include <QAccessible>
 
 #define STATE_KEY  "enable"
+#define SOUND_KEY "sound-item-key"
 
 SoundPlugin::SoundPlugin(QObject *parent)
     : QObject(parent)
-    , m_soundItem(nullptr)
     , m_soundWidget(nullptr)
+    , m_soundDeviceWidget(nullptr)
 {
     QAccessible::installFactory(soundAccessibleFactory);
 }
@@ -37,10 +37,8 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    if (m_soundItem)
-        return;
+    if (m_soundWidget) return;
 
-    m_soundItem.reset(new SoundItem);
     m_soundWidget.reset(new SoundWidget);
     m_soundWidget->setFixedHeight(60);
 
@@ -58,7 +56,7 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
     });
 
-    connect(m_soundItem.data(), &SoundItem::iconChanged, this, [=] {
+    connect(m_soundDeviceWidget.data(), &SoundDevicesWidget::iconChanged, this, [=] {
         m_proxyInter->updateDockInfo(this, DockPart::QuickPanel);
         m_proxyInter->updateDockInfo(this, DockPart::QuickShow);
         m_proxyInter->itemUpdate(this, SOUND_KEY);
@@ -79,9 +77,6 @@ bool SoundPlugin::pluginIsDisable()
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 {
-    if (itemKey == SOUND_KEY)
-        return m_soundItem.data();
-
     if (itemKey == QUICK_ITEM_KEY)
         return m_soundWidget.data();
 
@@ -91,27 +86,17 @@ QWidget *SoundPlugin::itemWidget(const QString &itemKey)
 QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
 {
     if (itemKey == SOUND_KEY)
-        return m_soundItem->tipsWidget();
+        return m_soundDeviceWidget->tipsWidget();
 
     return nullptr;
 }
 
 QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
 {
-    if (itemKey == SOUND_KEY)
-        return m_soundItem->popupApplet();
-
     if (itemKey == QUICK_ITEM_KEY)
         return m_soundDeviceWidget.data();
 
     return nullptr;
-}
-
-void SoundPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
-{
-    if (itemKey == SOUND_KEY) {
-        m_soundItem->invokeMenuItem(menuId, checked);
-    }
 }
 
 int SoundPlugin::itemSortKey(const QString &itemKey)
@@ -128,13 +113,6 @@ void SoundPlugin::setSortKey(const QString &itemKey, const int order)
     m_proxyInter->saveValue(this, key, order);
 }
 
-void SoundPlugin::refreshIcon(const QString &itemKey)
-{
-    if (itemKey == SOUND_KEY) {
-        m_soundItem->refreshIcon();
-    }
-}
-
 void SoundPlugin::pluginSettingsChanged()
 {
     refreshPluginItemsVisible();
@@ -144,9 +122,9 @@ QIcon SoundPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorTy
 {
     switch (dockPart) {
     case DockPart::QuickShow:
-        return m_soundItem->pixmap(themeType, 18, 16);
+        return m_soundDeviceWidget->pixmap(themeType, 18, 16);
     case DockPart::DCCSetting:
-        return m_soundItem->pixmap(themeType, 18, 18);
+        return m_soundDeviceWidget->pixmap(themeType, 18, 18);
     default:
         break;
     }

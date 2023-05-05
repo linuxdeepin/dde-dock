@@ -12,10 +12,14 @@
 #include <DStyledItemDelegate>
 
 #include <QWidget>
+#include <DGuiApplicationHelper>
 
 namespace Dtk { namespace Widget { class DListView; } }
 
 using namespace Dtk::Widget;
+namespace Dock {
+class TipsWidget;
+}
 
 class SliderContainer;
 class QStandardItemModel;
@@ -35,9 +39,14 @@ public:
     explicit SoundDevicesWidget(QWidget *parent = nullptr);
     ~SoundDevicesWidget() override;
 
+    QWidget* tipsWidget();
+    QPixmap pixmap() const;
+    QPixmap pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const;
+
 Q_SIGNALS:
     void enableChanged(bool);
     void requestHide();
+    void iconChanged();
 
 protected:
     bool eventFilter(QObject *watcher, QEvent *event) override;
@@ -45,9 +54,6 @@ protected:
 private:
     void initUi();
     void initConnection();
-    QString leftIcon();
-    QString rightIcon();
-    const QString soundIconFile() const;
 
     void resizeHeight();
 
@@ -67,13 +73,17 @@ private:
 
     void deviceEnabled(bool enable);
 
+
+    void refreshTips(const int volume, const bool force);
+
 private Q_SLOTS:
     void onSelectIndexChanged(const QModelIndex &index);
     void onDefaultSinkChanged(const QDBusObjectPath & value);
     void onAudioDevicesChanged();
 
 private:
-    QWidget *m_sliderParent;
+    Dock::TipsWidget *m_tipsLabel;
+    QLabel *m_titleLabel;
     SliderContainer *m_sliderContainer;
     QLabel *m_descriptionLabel;
     DListView *m_deviceList;
