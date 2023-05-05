@@ -213,11 +213,6 @@ void DockPopupWindow::ensureRaised()
 
 void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
 {
-    // if there is something focus on widget, return
-    if (auto focus = qApp->focusWidget()) {
-        qDebug() << "PopupWindow not hide, focus className is" << focus->metaObject()->className();
-        return;
-    }
     if (!m_enableMouseRelease)
         return;
     QRect screenRect = this->screen()->geometry();
@@ -231,6 +226,16 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
         QRect extendRect(((extendPoint - screenRect.topLeft()) * qApp->devicePixelRatio() + screenRect.topLeft()), m_extendWidget->size() * qApp->devicePixelRatio());
         if (extendRect.contains(QPoint(x, y)))
             return;
+    }
+
+    // if there is something focus on widget, return
+    if (auto focus = qApp->focusWidget()) {
+        auto className = QString(focus->metaObject()->className());
+        qDebug() << "Find focused widget, focus className is" << className;
+        if (className == "QLineEdit") {
+            qDebug() << "PopupWindow window will not be hidden";
+            return;
+        }
     }
 
     emit accept();
