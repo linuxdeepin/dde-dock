@@ -60,8 +60,6 @@ void ToolAppHelper::appendToToolArea(int index, DockItem *dockItem)
         boxLayout->insertWidget(index, dockItem);
     else
         boxLayout->addWidget(dockItem);
-
-    Q_EMIT requestUpdate();
 }
 
 bool ToolAppHelper::removeToolArea(PluginsItemInterface *itemInter)
