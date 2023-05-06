@@ -89,13 +89,15 @@ private Q_SLOTS:
     void onCompositeChanged();
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
+protected:
+    DPlatformWindowHandle m_platformWindowHandle;
+
 private:
     Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
     DragWidget *m_dragWidget;
     MultiScreenWorker *m_multiScreenWorker;
     QTimer *m_updateDragAreaTimer;
-    DPlatformWindowHandle m_platformWindowHandle;
     QTimer *m_shadowMaskOptimizeTimer;
     bool m_isShow;
     int m_order;

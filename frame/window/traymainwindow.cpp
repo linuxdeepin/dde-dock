@@ -121,11 +121,6 @@ int TrayMainWindow::dockSpace() const
     return 0;
 }
 
-void TrayMainWindow::updateRadius(int borderRadius)
-{
-    m_trayManager->updateBorderRadius(borderRadius);
-}
-
 QSize TrayMainWindow::suitableSize(const Dock::Position &pos, const int &, const double &) const
 {
     return m_trayManager->suitableSize(pos);
@@ -134,11 +129,15 @@ QSize TrayMainWindow::suitableSize(const Dock::Position &pos, const int &, const
 void TrayMainWindow::initUI()
 {
     m_trayManager->move(0, 0);
+    m_trayManager->updateBorderRadius(MainWindowBase::m_platformWindowHandle.windowRadius());
 }
 
 void TrayMainWindow::initConnection()
 {
     connect(m_trayManager, &TrayManagerWindow::requestUpdate, this, &TrayMainWindow::onRequestUpdate);
+    connect(&(MainWindowBase::m_platformWindowHandle), &DTK_NAMESPACE::Widget::DPlatformWindowHandle::windowRadiusChanged, m_trayManager, [=]{
+        m_trayManager->updateBorderRadius(MainWindowBase::m_platformWindowHandle.windowRadius());
+    });
 }
 
 void TrayMainWindow::onRequestUpdate()

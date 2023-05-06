@@ -34,7 +34,6 @@ public:
 
 protected:
     int dockSpace() const override;
-    void updateRadius(int borderRadius) override;
 
 private:
     void initUI();
