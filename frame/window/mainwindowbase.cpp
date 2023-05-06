@@ -37,12 +37,12 @@ DGUI_USE_NAMESPACE
 
 MainWindowBase::MainWindowBase(MultiScreenWorker *multiScreenWorker, QWidget *parent)
     : DBlurEffectWidget(parent)
+    , m_platformWindowHandle(this)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
     , m_dragWidget(new DragWidget(this))
     , m_multiScreenWorker(multiScreenWorker)
     , m_updateDragAreaTimer(new QTimer(this))
-    , m_platformWindowHandle(this)
     , m_shadowMaskOptimizeTimer(new QTimer(this))
     , m_isShow(false)
     , m_order(0)
