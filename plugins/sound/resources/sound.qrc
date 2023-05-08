@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/dsg">
+        <file>built-in-icons/audio-volume-high-symbolic.dci</file>
+        <file>built-in-icons/audio-volume-low-symbolic.dci</file>
+        <file>built-in-icons/audio-volume-medium-symbolic.dci</file>
+        <file>built-in-icons/audio-volume-muted-symbolic.dci</file>
+        <file>built-in-icons/audio-volume-off-symbolic.dci</file>
+    </qresource>
+</RCC>

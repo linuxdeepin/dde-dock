@@ -24,7 +24,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 
 # png svg
-Files: plugins/*.png plugins/*.svg frame/*.svg tests/*.png tests/*.svg
+Files: plugins/*.png plugins/*.svg frame/*.svg tests/*.png tests/*.svg plugins/*.dci
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
 

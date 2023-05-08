@@ -25,7 +25,7 @@ pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
 pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
+add_library(${PLUGIN_NAME} SHARED ${SRCS} resources/sound.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../quick-trays)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
     ./dbusinterface

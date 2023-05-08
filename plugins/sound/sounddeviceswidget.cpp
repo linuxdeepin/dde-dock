@@ -29,7 +29,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-#define HEADERHEIGHT 30
+#define HEADERHEIGHT 10
 #define ITEMSPACE 16
 #define ROWSPACE 5
 #define DESCRIPTIONHEIGHT 20
@@ -49,7 +49,6 @@ using namespace Dock;
 SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     : QWidget(parent)
     , m_tipsLabel(new TipsWidget(this))
-    , m_titleLabel(new QLabel(tr("Sound"), this))
     , m_sliderContainer(new SliderContainer(this))
     , m_descriptionLabel(new QLabel(tr("Output Device"), this))
     , m_deviceList(new DListView(this))
@@ -94,9 +93,6 @@ void SoundDevicesWidget::initUi()
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(10, 0, 10, 0);
 
-    m_titleLabel->setFixedHeight(HEADERHEIGHT);
-    m_titleLabel->setAlignment(Qt::AlignCenter);
-
     QPixmap leftPixmap = QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(m_sinkInter->mute() ? "muted" : "off")).pixmap(18, 18);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 5);
     QPixmap rightPixmap = QIcon::fromTheme("audio-volume-high-symbolic").pixmap(18, 18);
@@ -112,7 +108,6 @@ void SoundDevicesWidget::initUi()
     topLayout->setContentsMargins(7, 0, 7, 0);
     topLayout->setSpacing(0);
 
-    topLayout->addWidget(m_titleLabel);
     topLayout->addWidget(m_sliderContainer);
     m_descriptionLabel->setMargin(5);
 
@@ -219,6 +214,25 @@ void SoundDevicesWidget::initConnection()
             m_sinkInter->SetMuteQueued(false);
         }
         emit iconChanged();
+    });
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        // 更新右icon，左icon放在pixmap跟随refreshIcon一起更新
+        QPixmap rightPixmap = QIcon::fromTheme("audio-volume-high-symbolic").pixmap(18, 18);
+        m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(), 7);
+        // 主题变更时更新checked的背景色
+        for (int i =0; i < m_model->rowCount() -1; i++) {
+            auto item = m_model->item(i);
+            if (item->checkState() == Qt::Checked) {
+                item->setBackground(DPaletteHelper::instance()->palette(this).highlight());
+            }
+        }
+    });
+
+    connect(m_sliderContainer, &SliderContainer::iconClicked, this, [ this ](const SliderContainer::IconPosition icon) {
+        if (SliderContainer::IconPosition::LeftIcon == icon) {
+            m_sinkInter->SetMute(!m_sinkInter->mute());
+        }
     });
 }
 

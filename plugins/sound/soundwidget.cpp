@@ -23,6 +23,8 @@
 #include <QHBoxLayout>
 #include <QMetaMethod>
 #include <QPainter>
+#include <QIcon>
+#include <QPixmap>
 
 DGUI_USE_NAMESPACE
 
@@ -73,7 +75,11 @@ void SoundWidget::initConnection()
 
         m_defaultSink = new DBusSink("org.deepin.dde.Audio1", value.path(), QDBusConnection::sessionBus(), this);
         connect(m_defaultSink, &DBusSink::VolumeChanged, this, [ this ](double value) { m_sliderContainer->updateSliderValue(std::round(value * 100.00)); });
-        connect(m_defaultSink, &DBusSink::MuteChanged, this, [ = ] { m_sliderContainer->updateSliderValue(m_defaultSink->volume() * 100); });
+        connect(m_defaultSink, &DBusSink::MuteChanged, this, [ = ] {
+            m_sliderContainer->updateSliderValue(m_defaultSink->volume() * 100);
+            m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon,
+            QIcon::fromTheme(leftIcon()).pixmap(ICON_SIZE, ICON_SIZE), QSize(), 10);
+        });
 
         m_sliderContainer->updateSliderValue(std::round(m_defaultSink->volume() * 100.00));
     });
@@ -90,7 +96,8 @@ void SoundWidget::initConnection()
     });
 
     connect(m_defaultSink, &DBusSink::MuteChanged, this, [ this ] {
-        m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, QIcon(leftIcon()));
+        m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon,
+            QIcon::fromTheme(leftIcon()).pixmap(ICON_SIZE, ICON_SIZE), QSize(), 10);
     });
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SoundWidget::onThemeTypeChanged);
@@ -114,21 +121,13 @@ void SoundWidget::initConnection()
 const QString SoundWidget::leftIcon()
 {
     const bool mute = existActiveOutputDevice() ? m_defaultSink->mute() : true;
-    if (mute) {
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
-            return QString(":/audio-volume-muted-symbolic-dark.svg");
-
-        return QString(":/audio-volume-muted-symbolic.svg");
-    }
-
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
-        return QString(":/audio-volume-medium-symbolic-dark.svg");
-
-    return QString(":/audio-volume-medium-symbolic.svg");
+    return QString("audio-volume-%1-symbolic").arg(mute? "muted": "medium");
 }
 
 const QString SoundWidget::rightIcon()
 {
+    // TODO: broadcast ???
+    // svg from display plugins
     return QString(":/icons/resources/broadcast.svg");
 }
 
@@ -171,8 +170,8 @@ bool SoundWidget::existActiveOutputDevice() const
 
 void SoundWidget::onThemeTypeChanged()
 {
-    QPixmap leftPixmap = ImageUtil::loadSvg(leftIcon(), QSize(ICON_SIZE, ICON_SIZE));
-    QPixmap rightPixmap = ImageUtil::loadSvg(rightIcon(), QSize(ICON_SIZE, ICON_SIZE));
+    QPixmap leftPixmap = QIcon::fromTheme(leftIcon()).pixmap(ICON_SIZE, ICON_SIZE);
+    QPixmap rightPixmap = QIcon::fromTheme(rightIcon()).pixmap(ICON_SIZE, ICON_SIZE);
     convertThemePixmap(rightPixmap);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::LeftIcon, leftPixmap, QSize(), 10);
     m_sliderContainer->setIcon(SliderContainer::IconPosition::RightIcon, rightPixmap, QSize(BACKSIZE, BACKSIZE), 12);
