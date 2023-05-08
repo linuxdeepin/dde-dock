@@ -83,7 +83,6 @@ private Q_SLOTS:
 
 private:
     Dock::TipsWidget *m_tipsLabel;
-    QLabel *m_titleLabel;
     SliderContainer *m_sliderContainer;
     QLabel *m_descriptionLabel;
     DListView *m_deviceList;
