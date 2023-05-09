@@ -11,7 +11,7 @@ url="https://github.com/linuxdeepin/dde-dock"
 license=('LGPL-3.0-or-later')
 depends=('qt5-svg' 'deepin-daemon-git' 'deepin-qt5integration-git'
          'deepin-qt-dbus-factory-git' 'libdbusmenu-qt5' 'dtkcommon-git'
-         'dtkcore-git' 'deepin-qt5integration-git' 'deepin-qt-dbus-factory'
+         'dtkcore-git' 'deepin-qt5integration-git'
          'libdbusmenu-qt5' 'deepin-control-center-git' 'dwayland-git')
 makedepends=('git' 'cmake' 'ninja' 'qt5-tools' 'gtest' 'gmock' 'extra-cmake-modules')
 conflicts=('deepin-dock')
