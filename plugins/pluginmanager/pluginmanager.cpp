@@ -9,11 +9,13 @@
 #include "iconmanager.h"
 
 #include <QResizeEvent>
+#include <qglobal.h>
 
 PluginManager::PluginManager(QObject *parent)
     : m_dockController(nullptr)
     , m_iconManager(nullptr)
 {
+    Q_UNUSED(parent)
 }
 
 const QString PluginManager::pluginName() const

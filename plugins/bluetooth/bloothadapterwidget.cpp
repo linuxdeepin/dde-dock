@@ -9,6 +9,7 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
+#include <qglobal.h>
 
 #define ITEMHEIGHT 45
 
@@ -93,6 +94,7 @@ void BloothAdapterWidget::onDeviceNameUpdated(const Device *device) const
 
 void BloothAdapterWidget::onPoweredChanged(const bool powered)
 {
+    Q_UNUSED(powered)
     initDevice();
     updateDeviceVisible();
 }

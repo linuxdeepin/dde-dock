@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QBitmap>
 #include <QPainterPath>
+#include <qglobal.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -402,6 +403,7 @@ void QuickSettingContainer::onPluginUpdated(PluginsItemInterface *itemInter, con
 
 void QuickSettingContainer::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
+    Q_UNUSED(themeType)
     for (QuickSettingItem *settingItem : m_quickSettings)
         settingItem->doUpdate();
 }

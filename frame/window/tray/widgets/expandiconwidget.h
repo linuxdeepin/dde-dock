@@ -11,6 +11,7 @@
 #include "dbusutil.h"
 
 #include <DBlurEffectWidget>
+#include <qglobal.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,7 +37,7 @@ public:
     void updateIcon() override {}
     QPixmap icon() override;
     static TrayGridWidget *popupTrayView();
-    bool containsPoint(const QPoint &mouse) override { return false; }
+    bool containsPoint(const QPoint &mouse) override { Q_UNUSED(mouse) return false; }
 
 protected:
     void paintEvent(QPaintEvent *event) override;

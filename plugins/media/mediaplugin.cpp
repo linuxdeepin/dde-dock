@@ -6,6 +6,7 @@
 #include "mediaplugin.h"
 #include "mediawidget.h"
 #include "mediaplayermodel.h"
+#include <qglobal.h>
 
 MediaPlugin::MediaPlugin(QObject *parent)
     : QObject(parent)
@@ -57,11 +58,13 @@ QWidget *MediaPlugin::itemWidget(const QString &itemKey)
 
 QWidget *MediaPlugin::itemTipsWidget(const QString &itemKey)
 {
+    Q_UNUSED(itemKey)
     return nullptr;
 }
 
 QWidget *MediaPlugin::itemPopupApplet(const QString &itemKey)
 {
+    Q_UNUSED(itemKey)
     return nullptr;
 }
 

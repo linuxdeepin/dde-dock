@@ -17,6 +17,7 @@
 #include <QAccessibleEvent>
 #include <QCursor>
 #include <QGSettings>
+#include <qglobal.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -226,6 +227,8 @@ void DockPopupWindow::ensureRaised()
 
 void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
 {
+    Q_UNUSED(type)
+    Q_UNUSED(key)
     if (!m_enableMouseRelease)
         return;
     QScreen *screen = DIS_INS->screen(DOCK_SCREEN->current());
@@ -247,9 +250,7 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
     // if there is something focus on widget, return
     if (auto focus = qApp->focusWidget()) {
         auto className = QString(focus->metaObject()->className());
-        qDebug() << "Find focused widget, focus className is" << className;
         if (className == "QLineEdit") {
-            qDebug() << "PopupWindow window will not be hidden";
             return;
         }
     }

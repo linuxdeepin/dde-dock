@@ -17,6 +17,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include <qglobal.h>
 #include <xcb/xproto.h>
 
 DGUI_USE_NAMESPACE
@@ -71,6 +72,7 @@ QPixmap ExpandIconWidget::icon()
 
 void ExpandIconWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
     QPainter painter(this);
     QPixmap pixmap = ImageUtil::loadSvg(dropIconFile(), QSize(ICON_SIZE, ICON_SIZE));
     QRect rectOfPixmap(rect().x() + (rect().width() - ICON_SIZE) / 2,

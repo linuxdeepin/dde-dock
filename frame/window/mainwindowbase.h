@@ -15,6 +15,7 @@
 
 #include <QEvent>
 #include <QMouseEvent>
+#include <qglobal.h>
 #include <utils.h>
 
 class DragWidget;
@@ -49,7 +50,7 @@ public:
     virtual void resetPanelGeometry() {}                        // 重置内部区域，为了让内部区域和当前区域始终保持一致
     virtual int dockSpace() const;                              // 与后面窗体之间的间隔
     virtual void serviceRestart() {}                            // 服务重新启动后的操作
-    virtual void animationFinished(bool showOrHide) {}
+    virtual void animationFinished(bool showOrHide) { Q_UNUSED(showOrHide)}
 
 Q_SIGNALS:
     void requestUpdate();
@@ -68,7 +69,7 @@ protected:
 
     bool isDraging() const;
 
-    virtual void updateRadius(int borderRadius) {}
+    virtual void updateRadius(int borderRadius) { Q_UNUSED(borderRadius) }
     virtual QSize suitableSize(const Dock::Position &pos, const int &screenSize, const double &deviceRatio) const = 0;
 
 private:

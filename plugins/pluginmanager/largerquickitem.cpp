@@ -14,6 +14,7 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QMouseEvent>
+#include <qglobal.h>
 
 #define BGSIZE 36
 #define ICONWIDTH 24
@@ -119,6 +120,7 @@ bool LargerQuickItem::eventFilter(QObject *obj, QEvent *event)
 
 void LargerQuickItem::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event)
     QWidget *itemWidget = pluginItem()->itemWidget(QUICK_ITEM_KEY);
     if (pluginItem()->icon(DockPart::QuickPanel).isNull() && itemWidget) {
         itemWidget->setParent(this);

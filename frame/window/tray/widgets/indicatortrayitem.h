@@ -7,6 +7,7 @@
 
 #include <QScopedPointer>
 #include <QLabel>
+#include <qglobal.h>
 
 #include "basetraywidget.h"
 
@@ -29,7 +30,7 @@ public:
     QPixmap icon() override;
     const QByteArray &pixmapData() const;
     const QString text() const;
-    bool containsPoint(const QPoint &mouse) override { return false; }
+    bool containsPoint(const QPoint &mouse) override { Q_UNUSED(mouse) return false; }
 
 public Q_SLOTS:
     Q_SCRIPTABLE void setPixmapData(const QByteArray &data);

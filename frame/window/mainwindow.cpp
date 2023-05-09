@@ -156,6 +156,7 @@ void MainWindow::serviceRestart()
 
 void MainWindow::animationFinished(bool showOrHide)
 {
+    Q_UNUSED(showOrHide)
     if (m_needUpdateUi) {
         // 在动画执行结束后，如果收到需要更新UI的标记，那么则需要重新请求更新界面，在更新结束后，再将更新UI标记为false,那么在下次进来的时候，无需再次更新UI
         Q_EMIT requestUpdate();

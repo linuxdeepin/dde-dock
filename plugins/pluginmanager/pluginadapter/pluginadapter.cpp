@@ -6,6 +6,7 @@
 #include "pluginadapter.h"
 
 #include <QWidget>
+#include <qglobal.h>
 
 #define ICONWIDTH 24
 #define ICONHEIGHT 24
@@ -150,6 +151,7 @@ PluginsItemInterface::PluginSizePolicy PluginAdapter::pluginSizePolicy() const
 
 QIcon PluginAdapter::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
+    Q_UNUSED(themeType)
     QWidget *itemWidget = m_pluginInter->itemWidget(m_itemKey);
     if (!itemWidget)
         return QIcon();

@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QPainterPath>
+#include <qglobal.h>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -97,6 +98,7 @@ void MediaWidget::initUi()
 void MediaWidget::initConnection()
 {
     connect(m_model, &MediaPlayerModel::startStop, this, [ this ](bool startOrStop) {
+        Q_UNUSED(startOrStop)
         m_nextButton->setEnabled(m_model->canGoNext());
         onUpdateMediaInfo();
         statusChanged(m_model->status());

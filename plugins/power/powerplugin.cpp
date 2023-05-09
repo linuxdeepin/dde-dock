@@ -15,6 +15,7 @@
 #include <DFontSizeManager>
 #include <DDBusSender>
 #include <DConfig>
+#include <qglobal.h>
 
 #define PLUGIN_STATE_KEY    "enable"
 #define DELAYTIME           (20 * 1000)
@@ -129,6 +130,8 @@ void PowerPlugin::setSortKey(const QString &itemKey, const int order)
 
 QIcon PowerPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
+    Q_UNUSED(dockPart)
+    Q_UNUSED(themeType)
     const QPixmap pixmap = m_powerStatusWidget->getBatteryIcon(themeType);
     static QIcon batteryIcon;
     batteryIcon.detach();

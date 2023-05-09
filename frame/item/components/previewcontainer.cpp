@@ -14,6 +14,7 @@
 #include <QDesktopWidget>
 #include <QCursor>
 #include <QGSettings>
+#include <qglobal.h>
 
 #define SPACING           0
 #define MARGIN            0
@@ -49,6 +50,8 @@ PreviewContainer::PreviewContainer(QWidget *parent)
 
 void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowList &allowClose)
 {
+    Q_UNUSED(infos)
+    Q_UNUSED(allowClose)
     // check removed window
     for (auto it(m_snapshots.begin()); it != m_snapshots.end();) {
         //初始化预览界面边距

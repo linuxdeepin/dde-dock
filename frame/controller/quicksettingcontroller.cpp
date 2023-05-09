@@ -9,6 +9,7 @@
 
 #include <QMetaObject>
 #include <customevent.h>
+#include <qglobal.h>
 
 QuickSettingController::QuickSettingController(QObject *parent)
     : AbstractPluginsController(parent)
@@ -44,6 +45,7 @@ void QuickSettingController::startLoader()
 
 void QuickSettingController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    Q_UNUSED(itemKey)
     // 根据读取到的metaData数据获取当前插件的类型，提供给外部
     PluginAttribute pluginAttr = pluginAttribute(itemInter);
     m_quickPlugins[pluginAttr] << itemInter;

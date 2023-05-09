@@ -10,6 +10,7 @@
 #include <DDBusSender>
 
 #include <QIcon>
+#include <qglobal.h>
 
 DGUI_USE_NAMESPACE
 
@@ -141,6 +142,8 @@ void MultitaskingPlugin::invokedMenuItem(const QString &itemKey, const QString &
 
 QIcon MultitaskingPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
+    Q_UNUSED(dockPart)
+    Q_UNUSED(themeType)
     if (dockPart == DockPart::DCCSetting)
         return  QIcon::fromTheme("dcc-multitasking-view",QIcon(":/icons/icons/dcc-multitasking-view.svg"));
 

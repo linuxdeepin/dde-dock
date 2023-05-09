@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "basetraywidget.h"
 
+#include <qglobal.h>
 #include <xcb/xproto.h>
 #include <QMouseEvent>
 #include <QDebug>
@@ -128,6 +129,7 @@ bool BaseTrayWidget::needShow()
 
 void BaseTrayWidget::setNeedShow(bool needShow)
 {
+    Q_UNUSED(needShow)
 #ifdef QT_DEBUG
     if (m_needShow == needShow)
         return;

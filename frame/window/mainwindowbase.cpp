@@ -18,6 +18,7 @@
 
 #include <QScreen>
 #include <QX11Info>
+#include <qglobal.h>
 #include <qpa/qplatformscreen.h>
 #include <qpa/qplatformnativeinterface.h>
 
@@ -574,6 +575,7 @@ void MainWindowBase::initUi()
 
 void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event)
     updateDragGeometry();
 
     m_shadowMaskOptimizeTimer->start();

@@ -9,6 +9,7 @@
 #include <QIcon>
 #include <QDebug>
 #include <DDBusSender>
+#include <qglobal.h>
 
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
@@ -121,7 +122,8 @@ void ShowDesktopPlugin::refreshIcon(const QString &itemKey)
 
 QIcon ShowDesktopPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-
+    Q_UNUSED(dockPart)
+    Q_UNUSED(themeType)
     if (dockPart == DockPart::DCCSetting) {
         return QIcon::fromTheme("dcc-show-desktop", QIcon(":/icons/icons/dcc-show-desktop.svg"));
     }

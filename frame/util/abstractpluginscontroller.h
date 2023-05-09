@@ -14,6 +14,7 @@
 #include <QList>
 #include <QMap>
 #include <QDBusConnectionInterface>
+#include <qglobal.h>
 
 class PluginsItemInterface;
 class PluginAdapter;
@@ -39,11 +40,11 @@ protected:
 
 private:
     // implements PluginProxyInterface
-    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override {}
-    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override {}
-    void saveValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value) override {}
-    void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) override {}
-    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override { return QVariant(); }
+    void requestWindowAutoHide(PluginsItemInterface * const itemInter, const QString &itemKey, const bool autoHide) override { Q_UNUSED(itemInter) Q_UNUSED(itemKey) Q_UNUSED(autoHide) }
+    void requestRefreshWindowVisible(PluginsItemInterface * const itemInter, const QString &itemKey) override { Q_UNUSED(itemInter) Q_UNUSED(itemKey) }
+    void saveValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &value) override { Q_UNUSED(itemInter) Q_UNUSED(key) Q_UNUSED(value) }
+    void removeValue(PluginsItemInterface *const itemInter, const QStringList &keyList) override { Q_UNUSED(itemInter) Q_UNUSED(keyList) Q_UNUSED(keyList) }
+    const QVariant getValue(PluginsItemInterface *const itemInter, const QString &key, const QVariant& fallback = QVariant()) override { Q_UNUSED(itemInter) Q_UNUSED(key) Q_UNUSED(fallback) return QVariant(); }
 
 protected Q_SLOTS:
     void startLoader(PluginLoader *loader);

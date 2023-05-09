@@ -26,4 +26,6 @@ dde-dock
 */dbusinterface/generation_dbus_interface/
 */*/dbusinterface/generation_dbus_interface/
 .transifexrc
+
+#clangd
 .cache

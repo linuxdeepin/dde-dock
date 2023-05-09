@@ -12,6 +12,7 @@
 
 #include <QIcon>
 #include <QtCore>
+#include <qglobal.h>
 
 DGUI_USE_NAMESPACE
 
@@ -287,7 +288,7 @@ public:
     /// the icon for the plugin
     /// themeType {0:UnknownType 1:LightType 2:DarkType}
     ///
-    virtual QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) { return QIcon(); }
+    virtual QIcon icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType()) { Q_UNUSED(dockPart) Q_UNUSED(themeType) return QIcon(); }
 
     ///
     /// \brief m_proxyInter
@@ -299,7 +300,7 @@ public:
     /// \brief m_proxyInter
     ///
     ///
-    virtual bool eventHandler(QEvent *event) { return false; }
+    virtual bool eventHandler(QEvent *event) { Q_UNUSED(event) return false; }
 
 protected:
     ///

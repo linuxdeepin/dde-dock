@@ -26,6 +26,7 @@
 #include <QtConcurrent>
 #include <QIcon>
 #include <QPixmap>
+#include <qglobal.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -451,6 +452,7 @@ void SoundDevicesWidget::onSelectIndexChanged(const QModelIndex &index)
 
 void SoundDevicesWidget::onDefaultSinkChanged(const QDBusObjectPath &value)
 {
+    Q_UNUSED(value)
     delete m_sinkInter;
     m_sinkInter = new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this);
     connect(m_sinkInter, &DBusSink::VolumeChanged, this, [ = ](double value) {
@@ -507,6 +509,7 @@ void SoundDevicesWidget::refreshTips(const int volume, const bool force)
 
 QPixmap SoundDevicesWidget::pixmap(DGuiApplicationHelper::ColorType colorType, int iconWidth, int iconHeight) const
 {
+    Q_UNUSED(colorType)
     const double volmue = m_sinkInter->volume();
     const bool mute = m_sinkInter->mute();
     const double maxVolmue = m_soundInter->maxUIVolume();

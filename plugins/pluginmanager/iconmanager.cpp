@@ -14,6 +14,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <qglobal.h>
 
 #define ITEMSPACE 6
 #define IMAGESIZE 12
@@ -43,6 +44,7 @@ void IconManager::setDisplayMode(Dock::DisplayMode displayMode)
 
 QPixmap IconManager::pixmap(DGuiApplicationHelper::ColorType colorType) const
 {
+    Q_UNUSED(colorType)
     // 缺省图标
     return QIcon::fromTheme("dock-control-panel").pixmap(ITEMSIZE, ITEMSIZE);
 }
