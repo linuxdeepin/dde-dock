@@ -1,7 +1,7 @@
 dde-dock (6.0.14) unstable; urgency=medium
 
-  * fix: trash do not display when dock hide and trash readded into dock
-  * fix: popupwindow need click destkop twice to hide 
+  * fix: trash do not display when dock hide and trash readied into dock
+  * fix: popupwindow need click desktop twice to hide 
   * fix: sound plugin style adjust
   * fix: window radius
   * fix: coredump after screen recorder finished, when drag something
