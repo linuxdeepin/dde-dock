@@ -189,6 +189,11 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
     info.m_time = getTimeString(position);
     info.m_date = getDateString(position);
 
+    if (m_showMultiRow && m_dateFont.pixelSize() + m_timeFont.pixelSize() > height() - 8) {
+        m_dateFont.setPixelSize(height() / 2 - 5);
+        m_timeFont.setPixelSize(height() / 2 - 3);
+    }
+
     // 如果是左右方向
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
         int textWidth = rect().width();
@@ -205,7 +210,7 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
     if (m_showMultiRow) {
         // 日期时间多行显示（一般是高效模式下，向下和向上偏移2个像素）
         info.m_timeRect = QRect(0, 2, timeWidth, rHeight / 2);
-        info.m_dateRect = QRect(0, rHeight / 2 -2, dateWidth, rHeight / 2);
+        info.m_dateRect = QRect(0, rHeight / 2 - 2, dateWidth, rHeight / 2);
     } else {
         // 3:时间和日期3部分间隔
         if (rect().width() > (ITEMSPACE * 3 + timeWidth + dateWidth)) {
@@ -323,12 +328,12 @@ QFont DateTimeDisplayer::timeFont() const
         return DFontSizeManager::instance()->t10();
     }
 
-    QList<QFont> dateFontSize = { DFontSizeManager::instance()->t7(),
+    QList<QFont> dateFontSize = { DFontSizeManager::instance()->t8(),
+                DFontSizeManager::instance()->t7(),
                 DFontSizeManager::instance()->t6(),
-                DFontSizeManager::instance()->t5(),
-                DFontSizeManager::instance()->t4() };
+                DFontSizeManager::instance()->t5() };
     
-    // dock size >= 70 get max font(t4) size
+    // dock size >= 70 get max font(t5) size
     int index = qMin(qMax(((rect().height() - MINHEIGHT) / 10), 0), dateFontSize.size() - 1);
     return dateFontSize[index];
 }
