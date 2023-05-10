@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Gerät</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Ausgabegerät</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Toneinstellungen</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Stummschalten aufheben</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Stummschalten</translation>
     </message>
     <message>
         <source>Sound settings</source>

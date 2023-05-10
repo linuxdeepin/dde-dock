@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Ibenk</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Ibenk n tuffɣa</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Iɣewwaren n yimesli</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Serreḥ i yimesli</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Gzem imesli</translation>
     </message>
     <message>
         <source>Sound settings</source>

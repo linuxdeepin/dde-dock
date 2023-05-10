@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Pajisje</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Pajisje Në Dalje</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Rregullime zëri</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Ktheji zërin</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Hiqi zërin</translation>
     </message>
     <message>
         <source>Sound settings</source>

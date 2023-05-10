@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Device</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Output Device</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Sound settings</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Unmute</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Mute</translation>
     </message>
     <message>
         <source>Sound settings</source>

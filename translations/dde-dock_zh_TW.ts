@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>裝置</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>輸出裝置</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>音量設定</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>取消靜音</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>靜音</translation>
     </message>
     <message>
         <source>Sound settings</source>

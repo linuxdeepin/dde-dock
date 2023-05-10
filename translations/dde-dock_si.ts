@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>උපාංගය</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>ශබ්ද සැකසුම්</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>හඩ ක්‍රියාත්මක කරන්න</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>නිහඬ කරන්න</translation>
     </message>
     <message>
         <source>Sound settings</source>

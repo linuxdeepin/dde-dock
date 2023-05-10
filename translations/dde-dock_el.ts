@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Συσκευή</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Συσκευή Εξόδου</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Ρυθμίσεις ήχου</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Διακοπή σίγασης</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Σίγαση</translation>
     </message>
     <message>
         <source>Sound settings</source>

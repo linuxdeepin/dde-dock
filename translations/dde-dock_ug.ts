@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>ئۈسكۈنە</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>چىقىرىش ئۈسكۈنىلىرى</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>ئاۋاز تەڭشىكى</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>ئاۋازلىق</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>ئاۋازسىز</translation>
     </message>
     <message>
         <source>Sound settings</source>

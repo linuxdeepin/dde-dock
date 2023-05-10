@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Aygıt</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Çıkış Cihazı</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Ses ayarları</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Sesi aç</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Sesi kapat</translation>
     </message>
     <message>
         <source>Sound settings</source>

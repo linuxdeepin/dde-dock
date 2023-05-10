@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Zařízení</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Výstupní zařízení</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Nastavení zvuku</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Zrušit ztlumení</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Ztlumit</translation>
     </message>
     <message>
         <source>Sound settings</source>

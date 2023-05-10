@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Laite</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Ulostulon laite</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Ääniasetukset</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Ääntä</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Vaienna</translation>
     </message>
     <message>
         <source>Sound settings</source>
