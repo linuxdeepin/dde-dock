@@ -75,8 +75,8 @@ private Q_SLOTS:
 private:
     Timedate *m_timedateInter;
     Dock::Position m_position;
-    QFont m_dateFont;
-    QFont m_timeFont;
+    mutable QFont m_dateFont;
+    mutable QFont m_timeFont;
     Dock::TipsWidget *m_tipsWidget;
     QMenu *m_menu;
     QSharedPointer<DockPopupWindow> m_tipPopupWindow;
