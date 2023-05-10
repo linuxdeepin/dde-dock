@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Пристрій</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Пристрій виведення</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Параметри звуку</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Увімкнути звук</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Вимкнути звук</translation>
     </message>
     <message>
         <source>Sound settings</source>

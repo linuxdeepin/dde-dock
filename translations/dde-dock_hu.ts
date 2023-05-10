@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Eszköz</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Kimeneti eszköz</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Hang beállítások</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Némítás visszavonása</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Némítás</translation>
     </message>
     <message>
         <source>Sound settings</source>

@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>장치</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>사운드 설정</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>음소거 해제</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>음소거</translation>
     </message>
     <message>
         <source>Sound settings</source>

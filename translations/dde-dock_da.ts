@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Enhed</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Udgående Enhed</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Lydindstillinger</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Lyd til</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Lydløs</translation>
     </message>
     <message>
         <source>Sound settings</source>

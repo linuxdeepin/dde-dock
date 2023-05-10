@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Peranti</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Peranti output</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Tetapan bunyi</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Suarakan</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Senyap</translation>
     </message>
     <message>
         <source>Sound settings</source>

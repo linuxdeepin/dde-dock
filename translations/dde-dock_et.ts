@@ -384,32 +384,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Seade</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Heli seaded</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Eemalda vaigistus</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Vaigista</translation>
     </message>
     <message>
         <source>Sound settings</source>

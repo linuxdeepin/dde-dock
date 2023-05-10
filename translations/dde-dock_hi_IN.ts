@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>उपकरण</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>ध्वनि सेटिंग्स</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>ध्वनि चालू करें</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>ध्वनि बंद करें</translation>
     </message>
     <message>
         <source>Sound settings</source>

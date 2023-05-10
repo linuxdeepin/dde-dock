@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Périphérique</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Périphérique de sortie</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Paramètres sonores</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Réactiver le son</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Muet</translation>
     </message>
     <message>
         <source>Sound settings</source>

@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>Dispositiu</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>Dispositiu de sortida</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>Configuració del so</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>Activa el so</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>Silencia</translation>
     </message>
     <message>
         <source>Sound settings</source>

@@ -391,32 +391,10 @@
     </message>
 </context>
 <context>
-    <name>SoundApplet</name>
-    <message>
-        <source>Device</source>
-        <translation>デバイス</translation>
-    </message>
-</context>
-<context>
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
         <translation>出力デバイス</translation>
-    </message>
-    <message>
-        <source>Sound settings</source>
-        <translation>サウンドの設定</translation>
-    </message>
-</context>
-<context>
-    <name>SoundItem</name>
-    <message>
-        <source>Unmute</source>
-        <translation>消音を解除</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation>ミュート</translation>
     </message>
     <message>
         <source>Sound settings</source>
