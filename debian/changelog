@@ -1,3 +1,9 @@
+dde-dock (6.0.16) unstable; urgency=medium
+
+  * fix: blank in the plugin area after recorder screen 
+
+ -- tsic404 <liuheng@deepin.org>  Thu, 11 May 2023 17:30:39 +0800
+
 dde-dock (6.0.15) unstable; urgency=medium
 
   * update translate
