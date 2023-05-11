@@ -136,7 +136,7 @@ void DockPopupWindow::show(const int x, const int y)
     if (!screen)
         return;
     QRect screenRect = screen->geometry();
-    if (getContent()->width() > screenRect.width()) {
+    if (getContent()->width() <= screenRect.width()) {
         displayPoint.setX(qMax(screenRect.x(), displayPoint.x()));
         displayPoint.setX(qMin(screenRect.x() + screenRect.width() - getContent()->width(), displayPoint.x()));
     }
