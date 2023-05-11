@@ -1,3 +1,11 @@
+dde-dock (6.0.15) unstable; urgency=medium
+
+  * update translate
+  * fix: timedate size is too full
+  * fix: popupwindow is out of bounds at the edge of the screen 
+
+ -- Tsic404 <liuheng@deepin.org>  Thu, 11 May 2023 15:02:33 +0800
+
 dde-dock (6.0.14) unstable; urgency=medium
 
   * fix: trash do not display when dock hide and trash readded into dock
