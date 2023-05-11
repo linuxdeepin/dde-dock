@@ -703,6 +703,11 @@ void DockPluginController::onConfigChanged(const QString &key, const QVariant &v
                 itemWidget->setVisible(false);
         } else if (canDock && !isPluginLoaded(plugin)) {
             // 如果当前配置中包含当前插件，但是当前插件并未加载，那么就加载该插件
+            if (!pluginNames.contains(plugin->pluginName())) {
+                // deepin-screen-recorder has Attribute_ForceDock flag
+                // FIX https://github.com/linuxdeepin/developer-center/issues/4215
+                continue;
+            }
             addPluginItem(plugin, itemKey);
             // 工具|固定区域 插件是通过QWidget的方式进行显示的
             if (plugin->flags() & (PluginFlag::Type_Tool | PluginFlag::Type_Fixed)) {
