@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
-    app.setApplicationVersion("2.0");
+    app.setApplicationVersion(CVERSION);
     app.loadTranslator();
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
