@@ -7,6 +7,8 @@
 #include "imageutil.h"
 #include "utils.h"
 #include "dbusutil.h"
+#include "dockscreen.h"
+#include "displaymanager.h"
 
 #include <QScreen>
 #include <QApplication>
@@ -17,6 +19,9 @@
 #include <QGSettings>
 
 DWIDGET_USE_NAMESPACE
+
+#define DOCK_SCREEN DockScreen::instance()
+#define DIS_INS DisplayManager::instance()
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -127,6 +132,14 @@ void DockPopupWindow::show(const int x, const int y)
             break;
     }
     blockButtonRelease();
+    QScreen *screen = DIS_INS->screen(DOCK_SCREEN->current());
+    if (!screen)
+        return;
+    QRect screenRect = screen->geometry();
+    if (getContent()->width() > screenRect.width()) {
+        displayPoint.setX(qMax(screenRect.x(), displayPoint.x()));
+        displayPoint.setX(qMin(screenRect.x() + screenRect.width() - getContent()->width(), displayPoint.x()));
+    }
     move(displayPoint);
     resize(m_lastWidget->size());
     DBlurEffectWidget::show();
@@ -215,7 +228,10 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
 {
     if (!m_enableMouseRelease)
         return;
-    QRect screenRect = this->screen()->geometry();
+    QScreen *screen = DIS_INS->screen(DOCK_SCREEN->current());
+    if (!screen)
+        return;
+    QRect screenRect = screen->geometry();
     QRect popupRect(((pos() - screenRect.topLeft()) * qApp->devicePixelRatio() + screenRect.topLeft()), size() * qApp->devicePixelRatio());
     if (popupRect.contains(QPoint(x, y)))
         return;
