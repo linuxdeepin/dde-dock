@@ -367,7 +367,7 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
         return;
 
     m_sendHoverEvent->stop();
-    auto c = QX11Info::connection();
+    auto c = IS_WAYLAND_DISPLAY ? m_xcbCnn :QX11Info::connection();
     if (!c) {
         qWarning() << "QX11Info::connection() is " << c;
         return;
@@ -379,7 +379,7 @@ void XEmbedTrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 
     Display *display = IS_WAYLAND_DISPLAY ? m_display : QX11Info::display();
 
-    if (m_injectMode == XTest) {
+    if (m_injectMode == XTest || IS_WAYLAND_DISPLAY) {
         XTestFakeMotionEvent(display, 0, p.x(), p.y(), CurrentTime);
         XFlush(display);
         XTestFakeButtonEvent(display, mouseButton, true, CurrentTime);
