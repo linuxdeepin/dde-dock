@@ -419,6 +419,7 @@ bool DateTimeDisplayer::event(QEvent *event)
         m_timeFont = timeFont();
         Q_EMIT requestUpdate();
     } else if (event->type() == QEvent::Resize) {
+        m_dateFont = DFontSizeManager::instance()->t10();
         m_timeFont = timeFont();
     }
     return QWidget::event(event);
