@@ -106,7 +106,7 @@ QWidget *TrayDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
     }
 
     if (trayWidget)
-        trayWidget->setFixedSize(16, 16);
+        trayWidget->setFixedSize(ICON_SIZE, ICON_SIZE);
 
     return trayWidget;
 }

@@ -21,7 +21,6 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QApplication>
-#include <qnamespace.h>
 #include <thread>
 #include <DFontSizeManager>
 
