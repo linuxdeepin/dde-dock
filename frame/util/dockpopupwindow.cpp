@@ -143,6 +143,7 @@ void DockPopupWindow::show(const int x, const int y)
     move(displayPoint);
     resize(m_lastWidget->size());
     DBlurEffectWidget::show();
+    activateWindow();
 }
 
 void DockPopupWindow::blockButtonRelease()
