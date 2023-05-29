@@ -22,6 +22,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
+pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 add_library(${PLUGIN_NAME} SHARED ${SRCS} resource.qrc)
@@ -38,6 +39,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
     PkgConfig::XCB_LIBS
     Qt5::Widgets
     Qt5::DBus
-    Qt5::Svg)
+    Qt5::Svg
+    PkgConfig::GIO)
 
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-dock/plugins)
