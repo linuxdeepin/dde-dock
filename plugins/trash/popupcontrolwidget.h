@@ -6,8 +6,9 @@
 #ifndef POPUPCONTROLWIDGET_H
 #define POPUPCONTROLWIDGET_H
 
+#include "trashhelper.h"
+
 #include <QWidget>
-#include <QFileSystemWatcher>
 
 class PopupControlWidget : public QWidget
 {
@@ -38,7 +39,7 @@ private:
     bool m_empty;
     int m_trashItemsCount;
 
-    QFileSystemWatcher *m_fsWatcher;
+    TrashHelper *m_trashHelper;
 };
 
 #endif // POPUPCONTROLWIDGET_H
