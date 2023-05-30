@@ -4,7 +4,7 @@
 
 #ifndef SOUNDACCESSIBLE_H
 #define SOUNDACCESSIBLE_H
-#include "accessibledefine.h"
+#include <QAccessibleInterface>
 
 QAccessibleInterface *soundAccessibleFactory(const QString &classname, QObject *object)
 {

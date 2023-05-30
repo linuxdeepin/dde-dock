@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "mainwindow.h"
-#include "accessible.h"
 #include "dbusdockadaptors.h"
 #include "utils.h"
 #include "themeappicon.h"
@@ -13,7 +12,6 @@
 #include "traymainwindow.h"
 #include "windowmanager.h"
 
-#include <QAccessible>
 #include <QDir>
 #include <QStandardPaths>
 #include <QDateTime>
@@ -176,9 +174,6 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(CVERSION);
     app.loadTranslator();
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
-    // 自动化标记由此开始
-    QAccessible::installFactory(accessibleFactory);
 
     // 设置日志输出到控制台以及文件
     DLogManager::setLogFormat("%{time}{yyyyMMdd.HH:mm:ss.zzz}[%{type:1}][%{function:-35} %{line:-4}] %{message}\n");
