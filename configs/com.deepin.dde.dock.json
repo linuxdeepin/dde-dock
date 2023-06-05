@@ -1,0 +1,197 @@
+{
+	"magic": "dsg.config.meta",
+	"version": "1.0",
+	"contents": {
+		"Window_Size_Fashion": {
+			"value": 48,
+			"serial": 0,
+			"flags": [],
+			"name": "Window_Size_Fashion",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Icon_Size": {
+			"value": 36,
+			"serial": 0,
+			"flags": [],
+			"name": "Icon_Size",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Position": {
+			"value": "bottom",
+			"serial": 0,
+			"flags": [],
+			"name": "Position",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Hide_Timeout": {
+			"value": 0,
+			"serial": 0,
+			"flags": [],
+			"name": "Hide_Timeout",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Hide_Mode": {
+			"value": "keep-showing",
+			"serial": 0,
+			"flags": [],
+			"name": "Hide_Mode",
+			"name[zh_CN]": "*****",
+			"description": "The value will influence when the dock is shown or hidden.",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Show_Timeout": {
+			"value": 100,
+			"serial": 0,
+			"flags": [],
+			"name": "Show_Timeout",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Window_Size_Efficient": {
+			"value": 40,
+			"serial": 0,
+			"flags": [],
+			"name": "Window_Size_Efficient",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Plugin_Settings": {
+			"value": "{}",
+			"serial": 0,
+			"flags": [],
+			"name": "Plugin_Settings",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Docked_Apps": {
+			"value": ["/usr/share/applications/dde-file-manager", "/usr/share/applications/uos-browser", "/usr/share/applications/org.deepin.browser", "/usr/share/applications/deepin-appstore", "/usr/share/applications/deepin-app-store", "/usr/share/applications/com.deepin.store.intranet", "/usr/share/applications/deepin-album", "/usr/share/applications/deepin-music", "/usr/share/applications/deepin-contacts", "/usr/share/applications/dde-calendar", "/usr/share/applications/dde-control-center"],
+			"serial": 0,
+			"flags": [],
+			"name": "Docked_Apps",
+			"name[zh_CN]": "*****",
+			"description": "The default apps which is docked when dock is started.",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Win_Icon_Preferred_Apps": {
+			"value": ["apps.com.qq.im", "deepin.com.qq.im", "apps.com.qq.im.light", "apps.com.qq.b.eim", "apps.com.qq.rtxclient"],
+			"serial": 0,
+			"flags": [],
+			"name": "Win_Icon_Preferred_Apps",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Delay_Plugins_Time": {
+			"value": 0,
+			"serial": 0,
+			"flags": [],
+			"name": "Delay_Plugins_Time",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Force_Quit_App": {
+			"value": "enabled",
+			"serial": 0,
+			"flags": [],
+			"name": "Force_Quit_App",
+			"name[zh_CN]": "*****",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Display_Mode": {
+			"value": "",
+			"serial": 0,
+			"flags": [],
+			"name": "Display_Mode",
+			"name[zh_CN]": "*****",
+			"description": "The dock gets different display mode, for instance, dock looks like win7 taskbar on classic mode.",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Recent_App": {
+			"value": [],
+			"serial": 0,
+			"flags": [],
+			"name": "Recent_App",
+			"name[zh_CN]": "*****",
+			"description": "The apps which has been opened recently when dock is started",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Show_Recent": {
+			"value": false,
+			"serial": 0,
+			"flags": [],
+			"name": "Show_Recent",
+			"name[zh_CN]": "*****",
+			"description": "show or hide recent app in dock",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Show_MultiWindow": {
+			"value": false,
+			"serial": 0,
+			"flags": [],
+			"name": "Show_MultiWindow",
+			"name[zh_CN]": "*****",
+			"description": "show or hide Multi Window in dock when the Entry has subWindow",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Dock_Show_Window_name":{
+            "value":0,
+            "serial":0,
+            "flags":"",
+            "name":"小窗口显示窗口名称",
+            "name[zh_CN]":"小窗口显示窗口名称",
+            "description[zh_CN]": "提供鼠标悬停小窗口标题显示配置，默认为悬停显示： \n 当配置为全部显示时，鼠标悬停在任务栏图标位置时所有预览窗口显示标题信息； \n 当配置为悬停显示时，鼠标仅在悬停在预览小窗口时在当前窗口显示标题信息； \n当配置为不显示时，鼠标悬停应用位置和预览小窗口位置时都不显示标题信息；",
+            "description":"0 Mouse over show;1 Always show; 2 Always hide",
+            "permissions":"readwrite",
+            "visibility":"public"
+        },
+		"Dock_Quick_Plugins": {
+            "value": ["power", "network", "shutdown", "trash", "show-desktop", "multitasking"],
+			"serial": 0,
+			"flags": [],
+			"name": "Quick Plugins show on dock",
+			"name[zh_CN]": "显示在任务栏上的快捷插件",
+			"description": "记录哪些插件的图标在任务栏启动的时候显示在任务栏上",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
+		"Dock_Quick_Tray_Name": {
+			"value": ["fcitx", "indicator:keybord_layout"],
+			"serial": 0,
+			"flags": [],
+			"name": "Tray icons show on dock",
+			"name[zh_CN]": "任务栏上固定的托盘图标",
+			"description": "记录哪些托盘的图标在任务栏启动的时候显示在任务栏上",
+			"permissions": "readwrite",
+			"visibility": "private"
+		}
+	}
+}

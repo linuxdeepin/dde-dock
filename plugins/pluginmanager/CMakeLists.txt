@@ -5,7 +5,8 @@ project(${PLUGIN_NAME})
 
 # Sources files
 file(GLOB_RECURSE SRCS "*.h" "*.cpp" "*.qrc" "../../frame/drag/quickdragcore.h" "../../frame/drag/quickdragcore.cpp"
-"../../frame/util/settingconfig.h" "../../frame/util/settingconfig.cpp"
+"../../frame/util/docksettings.h" "../../frame/util/docksettings.cpp"
+"../../frame/util/settings.h" "../../frame/util/settings.cpp"
 "../../frame/util/pluginloader.h" "../../frame/util/pluginloader.cpp"
 "../../frame/dbus/dockinterface.h" "../../frame/dbus/dockinterface.cpp"
 "../../frame/dbusinterface/generation_dbus_interface/org_deepin_dde_daemon_dock1.h"

@@ -25,7 +25,8 @@
 #include "windowmanager.h"
 #include "quicksettingcontroller.h"
 #include "pluginsitem.h"
-#include "settingconfig.h"
+#include "docksettings.h"
+#include "common.h"
 #include "customevent.h"
 
 #include <DGuiApplicationHelper>
@@ -174,7 +175,7 @@ DockItemInfos DBusDockAdaptors::plugins()
     // 获取本地加载的插件
     QList<PluginsItemInterface *> allPlugin = localPlugins();
     DockItemInfos pluginInfos;
-    QStringList quickSettingKeys = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
+    QStringList quickSettingKeys = DockSettings::instance()->getQuickPlugins();
     for (PluginsItemInterface *plugin : allPlugin) {
         DockItemInfo info;
         info.name = plugin->pluginName();
@@ -271,13 +272,12 @@ void DBusDockAdaptors::setPluginVisible(const QString &pluginName, bool visible)
 
 void DBusDockAdaptors::setItemOnDock(const QString settingKey, const QString &itemKey, bool visible)
 {
-    QStringList settings = SETTINGCONFIG->value(settingKey).toStringList();
-    if (visible && !settings.contains(itemKey))
-        settings << itemKey;
-    else if (!visible && settings.contains(itemKey))
-        settings.removeOne(itemKey);
-
-    SETTINGCONFIG->setValue(settingKey, settings);
+    DockSettings *settings = DockSettings::instance();
+    if ( keyQuickTrayName == settingKey) {
+        visible? settings->setTrayItemOnDock(itemKey) : settings->removeTrayItemOnDock(itemKey);
+    } else if (keyQuickPlugins == settingKey) {
+        visible? settings->setQuickPlugin(itemKey) : settings->removeQuickPlugin(itemKey);
+    }
 }
 
 QRect DBusDockAdaptors::geometry() const

@@ -6,7 +6,6 @@
 #include "abstractpluginscontroller.h"
 #include "pluginsiteminterface.h"
 #include "utils.h"
-#include "settingconfig.h"
 #include "pluginmanagerinterface.h"
 
 #include <DNotifySender>
