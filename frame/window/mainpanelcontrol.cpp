@@ -23,6 +23,7 @@
 #include "mainwindow.h"
 #include "appmultiitem.h"
 #include "dockscreen.h"
+#include "docksettings.h"
 #include "docktraywindow.h"
 #include "quicksettingcontroller.h"
 
@@ -83,6 +84,7 @@ MainPanelControl::MainPanelControl(DockInter *dockInter, QWidget *parent)
     , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, m_dockInter, this))
     , m_toolHelper(new ToolAppHelper(m_toolSonAreaWidget, this))
     , m_multiHelper(new MultiWindowHelper(m_appAreaSonWidget, m_multiWindowWidget, this))
+    , m_showRecent(false)
 {
     initUI();
     initConnection();
@@ -182,6 +184,9 @@ void MainPanelControl::initConnection()
     connect(m_toolHelper, &ToolAppHelper::toolVisibleChanged, this, &MainPanelControl::onToolVisibleChanged);
     connect(m_multiHelper, &MultiWindowHelper::requestUpdate, this, &MainPanelControl::requestUpdate);
     connect(m_tray, &DockTrayWindow::requestUpdate, this, &MainPanelControl::onTrayRequestUpdate);
+    connect(DockSettings::instance(), &DockSettings::showRecentChanged, this, [=] (bool show) {
+        m_showRecent = show;
+    });
 }
 
 /**
@@ -299,7 +304,7 @@ void MainPanelControl::dockRecentApp(DockItem *dockItem)
         return;
 
     // 如果控制中心设置不开启最近应用，则不让其驻留
-    if (!m_dockInter->showRecent())
+    if (!m_showRecent)
         return;
 
     // 如果控制中心开启了最近应用并且当前应用是未驻留应用，则可以驻留

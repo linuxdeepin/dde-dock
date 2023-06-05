@@ -4,11 +4,11 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dockplugincontroller.h"
+#include "docksettings.h"
 #include "pluginsiteminterface.h"
 #include "pluginsiteminterface_v20.h"
 #include "pluginadapter.h"
 #include "utils.h"
-#include "settingconfig.h"
 
 #include <DNotifySender>
 #include <DSysInfo>
@@ -19,7 +19,6 @@
 #include <QPluginLoader>
 
 #define PLUGININFO "pluginInfo"
-#define DOCK_QUICK_PLUGINS "Dock_Quick_Plugins"
 
 static const QStringList CompatiblePluginApiList {
     "1.1.1",
@@ -48,7 +47,7 @@ DockPluginController::DockPluginController(PluginProxyInterface *proxyInter, QOb
 
     refreshPluginSettings();
 
-    connect(SETTINGCONFIG, &SettingConfig::valueChanged, this, &DockPluginController::onConfigChanged);
+    connect(DockSettings::instance(), &DockSettings::quickPluginsChanged, this, &DockPluginController::onConfigChanged);
     connect(m_dockDaemonInter, &DockInter::PluginSettingsSynced, this, &DockPluginController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
@@ -649,7 +648,7 @@ bool DockPluginController::eventFilter(QObject *object, QEvent *event)
 
 bool DockPluginController::pluginCanDock(PluginsItemInterface *plugin) const
 {
-    const QStringList configPlugins = SETTINGCONFIG->value(DOCK_QUICK_PLUGINS).toStringList();
+    const QStringList configPlugins = DockSettings::instance()->getQuickPlugins();
     return pluginCanDock(configPlugins, plugin);
 }
 
@@ -685,12 +684,8 @@ void DockPluginController::updateDockInfo(PluginsItemInterface * const itemInter
     Q_EMIT pluginUpdated(itemInter, part);
 }
 
-void DockPluginController::onConfigChanged(const QString &key, const QVariant &value)
+void DockPluginController::onConfigChanged(const QStringList &pluginNames)
 {
-    if (key != DOCK_QUICK_PLUGINS)
-        return;
-
-    QStringList pluginNames = value.toStringList();
     // 这里只处理工具插件(回收站)和系统插件(电源插件)
     for (PluginsItemInterface *plugin : plugins()) {
         QString itemKey = this->itemKey(plugin);

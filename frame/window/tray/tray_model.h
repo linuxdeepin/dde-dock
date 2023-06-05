@@ -125,7 +125,7 @@ private Q_SLOTS:
     void onSystemTrayAdded(PluginsItemInterface *itemInter);
     void onSystemTrayRemoved(PluginsItemInterface *itemInter);
 
-    void onSettingChanged(const QString &key, const QVariant &value);
+    void onSettingChanged(const QStringList &value);
 
 protected:
     QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;

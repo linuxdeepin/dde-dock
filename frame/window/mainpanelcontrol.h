@@ -125,6 +125,7 @@ private:
     RecentAppHelper *m_recentHelper;
     ToolAppHelper *m_toolHelper;
     MultiWindowHelper *m_multiHelper;
+    bool m_showRecent;
 };
 
 #endif // MAINPANELCONTROL_H

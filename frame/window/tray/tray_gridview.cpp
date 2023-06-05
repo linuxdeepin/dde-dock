@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "tray_gridview.h"
-#include "settingconfig.h"
 #include "expandiconwidget.h"
 #include "tray_model.h"
 #include "basetraywidget.h"

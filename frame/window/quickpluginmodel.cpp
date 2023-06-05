@@ -6,11 +6,9 @@
 #include "quickpluginmodel.h"
 #include "pluginsiteminterface.h"
 #include "quicksettingcontroller.h"
-#include "settingconfig.h"
+#include "docksettings.h"
 
 #include <QWidget>
-
-#define PLUGINNAMEKEY "Dock_Quick_Plugins"
 
 QuickPluginModel *QuickPluginModel::instance()
 {
@@ -136,7 +134,7 @@ void QuickPluginModel::initConnection()
 void QuickPluginModel::initConfig()
 {
     // 此处用于读取dConfig配置，记录哪些插件是固定在任务栏上面的
-    QStringList dockPluginsName = SETTINGCONFIG->value(PLUGINNAMEKEY).toStringList();
+    QStringList dockPluginsName = DockSettings::instance()->getQuickPlugins();
     for (int i = 0; i < dockPluginsName.size(); i++)
         m_dockedPluginIndex[dockPluginsName[i]]  = i;
 }
@@ -156,11 +154,11 @@ void QuickPluginModel::saveConfig()
         return m_dockedPluginIndex.value(p1) < m_dockedPluginIndex.value(p2);
     });
 
-    for (const auto &originalPlugin : SETTINGCONFIG->value(PLUGINNAMEKEY).toStringList()) {
+    for (const auto &originalPlugin : DockSettings::instance()->getQuickPlugins()) {
         if (!plugins.contains(originalPlugin)) plugins.append(originalPlugin);
     }
 
-    SETTINGCONFIG->setValue(PLUGINNAMEKEY, plugins);
+    DockSettings::instance()->updateQuickPlugins(plugins);
 }
 
 int QuickPluginModel::getCurrentIndex(PluginsItemInterface *itemInter)

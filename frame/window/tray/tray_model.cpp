@@ -10,7 +10,7 @@
 #include "indicatorplugin.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
-#include "settingconfig.h"
+#include "docksettings.h"
 #include "platformutils.h"
 
 #include <QMimeData>
@@ -67,9 +67,9 @@ TrayModel::TrayModel(bool isIconTray, QObject *parent)
     connect(m_monitor, &TrayMonitor::systemTrayRemoved, this, &TrayModel::onSystemTrayRemoved);
 
     connect(m_monitor, &TrayMonitor::requestUpdateIcon, this, &TrayModel::requestUpdateIcon);
-    connect(SETTINGCONFIG, &SettingConfig::valueChanged, this, &TrayModel::onSettingChanged);
+    connect(DockSettings::instance(), &DockSettings::quickPluginsChanged, this, &TrayModel::onSettingChanged);
 
-    m_fixedTrayNames = SETTINGCONFIG->value(DOCKQUICKTRAYNAME).toStringList();
+    m_fixedTrayNames = DockSettings::instance()->getTrayItemsOnDock();
     m_fixedTrayNames.removeDuplicates();
 }
 
@@ -431,7 +431,7 @@ void TrayModel::saveConfig(int index, const WinInfo &winInfo)
         }
     }
 
-    SETTINGCONFIG->setValue(DOCKQUICKTRAYNAME, m_fixedTrayNames);
+    DockSettings::instance()->updateTrayItemsOnDock(m_fixedTrayNames);
 }
 
 void TrayModel::removeWinInfo(WinInfo winInfo)
@@ -689,53 +689,10 @@ void TrayModel::onSystemTrayRemoved(PluginsItemInterface *itemInter)
     }
 }
 
-void TrayModel::onSettingChanged(const QString &key, const QVariant &value)
+void TrayModel::onSettingChanged(const QStringList &value)
 {
-    if (key != DOCKQUICKTRAYNAME)
-        return;
-
     // 先将其转换为任务栏上的图标列表
-    m_fixedTrayNames = value.toStringList();
-    // 依次获取所有的图盘图标，判断当前图标是否可以保持在当前的view中，
-    // 如果可以保留，则添加到view上显示，否则，移除显示
-    QList<quint32> trayWinIds = m_monitor->trayWinIds();
-    for (quint32 trayId : trayWinIds) {
-        if (xembedCanExport(trayId))
-            onXEmbedTrayAdded(trayId);
-        else
-            onXEmbedTrayRemoved(trayId);
-    }
-
-    QStringList sniServices = m_monitor->sniServices();
-    for (const QString &sniService : sniServices) {
-        if (sniCanExport(sniService))
-            onSniTrayAdded(sniService);
-        else
-            onSniTrayRemoved(sniService);
-    }
-
-    QStringList indicators = m_monitor->indicatorNames();
-    for (const QString &indicatorName : indicators) {
-        if (!m_indicatorMap.contains(indicatorName))
-            continue;
-
-        IndicatorPlugin *plugin = m_indicatorMap[indicatorName];
-        if (!plugin->isLoaded())
-            continue;
-
-        if (indicatorCanExport(indicatorName))
-            onIndicatorAdded(indicatorName);
-        else
-            onIndicatorRemoved(indicatorName);
-    }
-
-    QList<PluginsItemInterface *> pluginItems = m_monitor->systemTrays();
-    for (PluginsItemInterface *plugin : pluginItems) {
-        if (systemItemCanExport(plugin->pluginName()))
-            onSystemTrayAdded(plugin);
-        else
-            onSystemTrayRemoved(plugin);
-    }
+    m_fixedTrayNames = value;
 }
 
 void TrayModel::removeRow(const QString &itemKey)

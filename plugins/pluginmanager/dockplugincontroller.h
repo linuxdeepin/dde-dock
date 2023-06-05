@@ -80,7 +80,7 @@ private Q_SLOTS:
     void loadPlugin(const QString &pluginFile);
     void initPlugin(PluginsItemInterface *interface);
     void refreshPluginSettings();
-    void onConfigChanged(const QString &key, const QVariant &value);
+    void onConfigChanged(const QStringList &pluginNames);
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
