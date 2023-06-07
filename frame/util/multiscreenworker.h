@@ -80,7 +80,6 @@ public:
     explicit MultiScreenWorker(QObject *parent = Q_NULLPTR);
     ~MultiScreenWorker() override;
 
-    DockInter *dockInter() { return m_dockInter; }
     void updateDaemonDockSize(const int &dockSize);
 
     inline bool testState(RunState state) { return (m_state & state); }
@@ -158,7 +157,6 @@ private:
 
     void resetDockScreen();
 
-    void checkDaemonDockService();
     void checkXEventMonitorService();
 
     QString getValidScreen(const Position &pos);
@@ -176,7 +174,6 @@ private:
     XEventMonitor *m_touchEventInter;
 
     // DBus interface
-    DockInter *m_dockInter;
     DBusLuncher *m_launcherInter;
     Appearance *m_appearanceInter;
 
@@ -190,6 +187,8 @@ private:
     HideMode m_hideMode;
     HideState m_hideState;
     DisplayMode m_displayMode;
+    uint m_windowFashionSize;
+    uint m_windowEfficientSize;
 
     /***************不和其他流程产生交互,尽量不要动这里的变量***************/
     QString m_registerKey;

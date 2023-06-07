@@ -12,11 +12,11 @@
 #define ENTRY_NORMAL    1
 #define ENTRY_RECENT    2
 
-RecentAppHelper::RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, DockInter *dockInter, QObject *parent)
+RecentAppHelper::RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObject *parent)
     : QObject(parent)
     , m_appWidget(appWidget)
     , m_recentWidget(recentWidget)
-    , m_dockInter(dockInter)
+    , m_dockInter(new DockInter("org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", QDBusConnection::sessionBus(), this))
 {
     m_appWidget->installEventFilter(this);
     m_recentWidget->installEventFilter(this);
@@ -69,11 +69,6 @@ bool RecentAppHelper::dockAppIsVisible() const
 {
     return (m_displayMode == Dock::DisplayMode::Efficient
             || m_appWidget->layout()->count() > 0);
-}
-
-void RecentAppHelper::updateDockInter(DockInter *dockInter)
-{
-    m_dockInter = dockInter;
 }
 
 bool RecentAppHelper::eventFilter(QObject *watched, QEvent *event)

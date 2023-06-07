@@ -6,6 +6,7 @@
 #include "appitem.h"
 #include "appmultiitem.h"
 #include "imageutil.h"
+#include "screenspliter.h"
 #include "themeappicon.h"
 
 #include <QBitmap>
@@ -23,7 +24,6 @@ AppMultiItem::AppMultiItem(AppItem *appItem, WId winId, const WindowInfo &window
     : DockItem(parent)
     , m_appItem(appItem)
     , m_windowInfo(windowInfo)
-    , m_entryInter(appItem->itemEntryInter())
     , m_winId(winId)
     , m_menu(new QMenu(this))
 {
@@ -70,12 +70,12 @@ void AppMultiItem::initMenu()
 
 void AppMultiItem::initConnection()
 {
-    connect(m_entryInter, &DockEntryInter::CurrentWindowChanged, this, &AppMultiItem::onCurrentWindowChanged);
+    connect(m_appItem, &AppItem::onCurrentWindowChanged, this, &AppMultiItem::onCurrentWindowChanged);
 }
 
 void AppMultiItem::onOpen()
 {
-    m_entryInter->ActiveWindow(m_winId);
+    m_appItem->activeWindow(m_winId);
 }
 
 void AppMultiItem::onCurrentWindowChanged(uint32_t value)
@@ -103,7 +103,7 @@ void AppMultiItem::paintEvent(QPaintEvent *)
     path.addRoundedRect(rect(), radius, radius);
     painter.fillPath(path, Qt::transparent);
 
-    if (m_entryInter->currentWindow() == m_winId) {
+    if (m_appItem->currentWindow() == m_winId) {
         QColor backColor = Qt::black;
         backColor.setAlpha(255 * 0.8);
         painter.fillPath(path, backColor);
@@ -117,7 +117,7 @@ void AppMultiItem::paintEvent(QPaintEvent *)
     painter.drawPixmap(QRect(x, y, itemWidth, itemHeight), m_pixmap);
 
     QPixmap pixmapAppIcon;
-    ThemeAppIcon::getIcon(pixmapAppIcon, m_entryInter->icon(), qMin(width(), height()) * 0.8);
+    ThemeAppIcon::getIcon(pixmapAppIcon, m_appItem->appId(), qMin(width(), height()) * 0.8);
     if (!pixmapAppIcon.isNull()) {
         // 绘制下方的图标，下方的小图标大约为应用图标的三分之一的大小
         //pixmap = pixmap.scaled(pixmap.width() * 0.3, pixmap.height() * 0.3);
@@ -135,7 +135,7 @@ void AppMultiItem::paintEvent(QPaintEvent *)
 void AppMultiItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        m_entryInter->ActiveWindow(m_winId);
+        m_appItem->activeWindow(m_winId);
     } else {
         QPoint currentPoint = QCursor::pos();
         m_menu->exec(currentPoint);

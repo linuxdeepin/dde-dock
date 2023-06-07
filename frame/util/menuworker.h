@@ -20,7 +20,7 @@ class MenuWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuWorker(DockInter *dockInter, QObject *parent = nullptr);
+    explicit MenuWorker(QObject *parent = nullptr);
 
     void exec();
 
@@ -31,7 +31,9 @@ private slots:
     void onDockSettingsTriggered();
 
 private:
-    DockInter *m_dockInter;
+    Dock::DisplayMode m_displaymode;
+    Dock::Position m_position;
+    Dock::HideMode m_hideMode;
 };
 
 #endif // MENUWORKER_H

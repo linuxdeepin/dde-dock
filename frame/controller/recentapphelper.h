@@ -24,14 +24,13 @@ class RecentAppHelper : public QObject
     Q_OBJECT
 
 public:
-    explicit RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, DockInter *dockInter, QObject *parent = nullptr);
+    explicit RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObject *parent = nullptr);
     void setDisplayMode(Dock::DisplayMode displayMode);
     void resetAppInfo();
     void addAppItem(int index, DockItem *appItem);
     void removeAppItem(DockItem *dockItem);
     bool recentIsVisible() const;
     bool dockAppIsVisible() const;
-    void updateDockInter(DockInter *dockInter);
 
 Q_SIGNALS:
     void requestUpdate();

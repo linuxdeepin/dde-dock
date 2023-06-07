@@ -14,10 +14,9 @@ bool ScreenSpliter::releaseSplit()
     return true;
 }
 
-ScreenSpliter::ScreenSpliter(AppItem *appItem, DockEntryInter *entryInter, QObject *parent)
+ScreenSpliter::ScreenSpliter(AppItem *appItem, QObject *parent)
     : QObject(parent)
     , m_appItem(appItem)
-    , m_entryInter(entryInter)
 {
 }
 
@@ -31,15 +30,10 @@ AppItem *ScreenSpliter::appItem() const
     return m_appItem;
 }
 
-DockEntryInter *ScreenSpliter::entryInter() const
-{
-    return m_entryInter;
-}
-
-ScreenSpliter *ScreenSpliterFactory::createScreenSpliter(AppItem *appItem, DockEntryInter *entryInter)
+ScreenSpliter *ScreenSpliterFactory::createScreenSpliter(AppItem *appItem)
 {
     if (Utils::IS_WAYLAND_DISPLAY)
-        return new ScreenSpliter_Wayland(appItem, entryInter, appItem);
+        return new ScreenSpliter_Wayland(appItem, appItem);
 
-    return new ScreenSpliter_Xcb(appItem, entryInter, appItem);
+    return new ScreenSpliter_Xcb(appItem, appItem);
 }

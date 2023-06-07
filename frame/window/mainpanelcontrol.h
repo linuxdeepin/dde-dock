@@ -10,6 +10,7 @@
 #include "dbusutil.h"
 
 #include <QWidget>
+#include <sys/types.h>
 
 using namespace Dock;
 
@@ -30,12 +31,11 @@ class MainPanelControl : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainPanelControl(DockInter *dockInter, QWidget *parent = nullptr);
+    explicit MainPanelControl(QWidget *parent = nullptr);
 
     void setPositonValue(Position position);
     void setDisplayMode(DisplayMode dislayMode);
     void resizeDockIcon();
-    void updateDockInter(DockInter *dockInter);
 
     QSize suitableSize(const Position &position, int screenSize, double deviceRatio) const;
 
@@ -121,7 +121,6 @@ private:
     DockTrayWindow *m_tray;
     int m_dragIndex = -1;           // 记录应用区域被拖拽图标的位置
 
-    DockInter *m_dockInter;
     RecentAppHelper *m_recentHelper;
     ToolAppHelper *m_toolHelper;
     MultiWindowHelper *m_multiHelper;

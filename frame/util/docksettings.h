@@ -253,6 +253,12 @@ Q_SIGNALS:
     void windowNameShowModeChanged(int mode);
     // 显示在任务栏上的快捷插件改变
     void quickPluginsChanged(QStringList plugins);
+    // 时尚模式下，dock尺寸信息改变
+    void windowSizeFashionChanged(uint size);
+    // 高效模式dock尺寸改变
+    void windowSizeEfficientChanged(uint size);
+    // 透明度改变
+    void opacityChanged(double opacity);
 
 private:
     DockSettings(QObject *paret = nullptr);

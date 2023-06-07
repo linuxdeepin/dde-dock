@@ -5,6 +5,7 @@
 
 #include "menuworker.h"
 #include "dockitemmanager.h"
+#include "docksettings.h"
 #include "utils.h"
 #include "displaymanager.h"
 
@@ -17,10 +18,21 @@
 
 #define DIS_INS DisplayManager::instance()
 
-MenuWorker::MenuWorker(DockInter *dockInter, QObject *parent)
+MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
-    , m_dockInter(dockInter)
+    , m_displaymode(DockSettings::instance()->getDisplayMode())
+    , m_position(DockSettings::instance()->getPositionMode())
+    , m_hideMode(DockSettings::instance()->getHideMode())
 {
+    connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, [=] (Position mod) {
+        m_position = mod;
+    });
+    connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, [=] (DisplayMode mod) {
+        m_displaymode = mod;
+    });
+    connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, [=] (HideMode mod) {
+        m_hideMode = mod;
+    });
 }
 
 void MenuWorker::createMenu(QMenu *settingsMenu)
@@ -31,8 +43,6 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
     // 模式
     const QGSettings *menuSettings = Utils::ModuleSettingsPtr("menu");
     if (!menuSettings || !menuSettings->keys().contains("modeVisible") || menuSettings->get("modeVisible").toBool()) {
-        const DisplayMode displayMode = static_cast<DisplayMode>(m_dockInter->displayMode());
-
         QMenu *modeSubMenu = new QMenu(settingsMenu);
         modeSubMenu->setAccessibleName("modesubmenu");
 
@@ -42,11 +52,11 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
         fashionModeAct->setCheckable(true);
         efficientModeAct->setCheckable(true);
 
-        fashionModeAct->setChecked(displayMode == Fashion);
-        efficientModeAct->setChecked(displayMode == Efficient);
+        fashionModeAct->setChecked(m_displaymode == Fashion);
+        efficientModeAct->setChecked(m_displaymode == Efficient);
 
-        connect(fashionModeAct, &QAction::triggered, this, [ = ]{ m_dockInter->setDisplayMode(DisplayMode::Fashion); });
-        connect(efficientModeAct, &QAction::triggered, this, [ = ]{ m_dockInter->setDisplayMode(DisplayMode::Efficient); });
+        connect(fashionModeAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setDisplayMode(DisplayMode::Fashion); });
+        connect(efficientModeAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setDisplayMode(DisplayMode::Efficient); });
 
         modeSubMenu->addAction(fashionModeAct);
         modeSubMenu->addAction(efficientModeAct);
@@ -59,8 +69,6 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
 
     // 位置
     if (!menuSettings || !menuSettings->keys().contains("locationVisible") || menuSettings->get("locationVisible").toBool()) {
-        const Position position = static_cast<Position>(m_dockInter->position());
-
         QMenu *locationSubMenu = new QMenu(settingsMenu);
         locationSubMenu->setAccessibleName("locationsubmenu");
 
@@ -74,15 +82,15 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
         leftPosAct->setCheckable(true);
         rightPosAct->setCheckable(true);
 
-        topPosAct->setChecked(position == Top);
-        bottomPosAct->setChecked(position == Bottom);
-        leftPosAct->setChecked(position == Left);
-        rightPosAct->setChecked(position == Right);
+        topPosAct->setChecked(m_position == Top);
+        bottomPosAct->setChecked(m_position == Bottom);
+        leftPosAct->setChecked(m_position == Left);
+        rightPosAct->setChecked(m_position == Right);
 
-        connect(topPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Top); });
-        connect(bottomPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Bottom); });
-        connect(leftPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Left); });
-        connect(rightPosAct, &QAction::triggered, this, [ = ]{ m_dockInter->setPosition(Right); });
+        connect(topPosAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setPositionMode(Position::Top); });
+        connect(bottomPosAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setPositionMode(Position::Bottom); });
+        connect(leftPosAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setPositionMode(Position::Left); });
+        connect(rightPosAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setPositionMode(Position::Right); });
 
         locationSubMenu->addAction(topPosAct);
         locationSubMenu->addAction(bottomPosAct);
@@ -97,7 +105,6 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
 
     // 状态
     if (!menuSettings || !menuSettings->keys().contains("statusVisible") || menuSettings->get("statusVisible").toBool()) {
-        const HideMode hideMode = static_cast<HideMode>(m_dockInter->hideMode());
 
         QMenu *statusSubMenu = new QMenu(settingsMenu);
         statusSubMenu->setAccessibleName("statussubmenu");
@@ -110,13 +117,13 @@ void MenuWorker::createMenu(QMenu *settingsMenu)
         keepHiddenAct->setCheckable(true);
         smartHideAct->setCheckable(true);
 
-        keepShownAct->setChecked(hideMode == KeepShowing);
-        keepHiddenAct->setChecked(hideMode == KeepHidden);
-        smartHideAct->setChecked(hideMode == SmartHide);
+        keepShownAct->setChecked(m_hideMode == KeepShowing);
+        keepHiddenAct->setChecked(m_hideMode == KeepHidden);
+        smartHideAct->setChecked(m_hideMode == SmartHide);
 
-        connect(keepShownAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepShowing); });
-        connect(keepHiddenAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(KeepHidden); });
-        connect(smartHideAct, &QAction::triggered, this, [ = ]{ m_dockInter->setHideMode(SmartHide); });
+        connect(keepShownAct,  &QAction::triggered, this, [ = ]{ DockSettings::instance()->setHideMode(HideMode::KeepShowing); });
+        connect(keepHiddenAct, &QAction::triggered, this, [ = ]{ DockSettings::instance()->setHideMode(HideMode::KeepHidden);  });
+        connect(smartHideAct,  &QAction::triggered, this, [ = ]{ DockSettings::instance()->setHideMode(HideMode::SmartHide);   });
 
         statusSubMenu->addAction(keepShownAct);
         statusSubMenu->addAction(keepHiddenAct);

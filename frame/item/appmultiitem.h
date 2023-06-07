@@ -43,7 +43,6 @@ private Q_SLOTS:
 private:
     AppItem *m_appItem;
     WindowInfo m_windowInfo;
-    DockEntryInter *m_entryInter;
     QPixmap m_pixmap;
     WId m_winId;
     QMenu *m_menu;

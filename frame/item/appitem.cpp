@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "appitem.h"
+#include "docksettings.h"
 #include "themeappicon.h"
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
@@ -26,6 +27,9 @@
 #include <DGuiApplicationHelper>
 #include <DPlatformTheme>
 #include <DConfig>
+#include <cstdint>
+#include <qobjectdefs.h>
+#include <sys/types.h>
 
 DGUI_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -34,7 +38,7 @@ DCORE_USE_NAMESPACE
 
 QPoint AppItem::MousePressPos;
 
-AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent)
     , m_appSettings(appSettings)
     , m_activeAppSettings(activeAppSettings)
@@ -48,6 +52,7 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     , m_retryTimes(0)
     , m_iconValid(true)
     , m_lastclickTimes(0)
+    , m_showMultiWindow(DockSettings::instance()->showMultiWindow())
     , m_appIcon(QPixmap())
     , m_activeColor(DGuiApplicationHelper::instance()->systemTheme()->activeColor())
     , m_updateIconGeometryTimer(new QTimer(this))
@@ -55,19 +60,24 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     , m_refershIconTimer(new QTimer(this))
     , m_themeType(DGuiApplicationHelper::instance()->themeType())
     , m_createMSecs(QDateTime::currentMSecsSinceEpoch())
-    , m_screenSpliter(ScreenSpliterFactory::createScreenSpliter(this, m_itemEntryInter))
-    , m_dockInter(dockInter)
+    , m_screenSpliter(ScreenSpliterFactory::createScreenSpliter(this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
 
-    setObjectName(m_itemEntryInter->name());
     setAcceptDrops(true);
     setLayout(centralLayout);
 
     m_id = m_itemEntryInter->id();
     m_active = m_itemEntryInter->isActive();
+    m_name = m_itemEntryInter->name();
+    m_icon = m_itemEntryInter->icon();
+    m_mode = m_itemEntryInter->mode();
+    m_isDocked = m_itemEntryInter->isDocked();
+    m_menu = m_itemEntryInter->menu();
+
+    setObjectName(m_name);
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
@@ -81,10 +91,25 @@ AppItem::AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSe
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
     connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
+    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, [=](QString icon) { 
+        if (!icon.isEmpty() && icon != m_icon)
+            m_icon = icon;
+    });
     connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
-    connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, &AppItem::modeChanged);
+    connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, [=] (int32_t mode) { m_mode = mode; Q_EMIT modeChanged(m_mode);});
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
+    connect(DockSettings::instance(), &DockSettings::showMultiWindowChanged, this, [=] (bool show) {
+        m_showMultiWindow = show;
+    });
+    connect(m_itemEntryInter, &DockEntryInter::NameChanged, this, [=](const QString& name){ m_name = name; });
+    connect(m_itemEntryInter, &DockEntryInter::DesktopFileChanged, this, [=](const QString& desktopfile){ m_desktopfile = desktopfile; });
+    connect(m_itemEntryInter, &DockEntryInter::IsDockedChanged, this, [=](bool docked){ m_isDocked = docked; });
+    connect(m_itemEntryInter, &DockEntryInter::MenuChanged, this, [=](const QString& menu){ m_menu = menu; });
+    connect(m_itemEntryInter, &DockEntryInter::CurrentWindowChanged, this, [=](uint32_t currentWindow){ 
+        m_currentWindow = currentWindow;
+        Q_EMIT onCurrentWindowChanged(m_currentWindow);
+    });
 
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
@@ -120,12 +145,12 @@ const QString AppItem::appId() const
 
 QString AppItem::name() const
 {
-    return m_itemEntryInter->name();
+    return m_name;
 }
 
 bool AppItem::isValid() const
 {
-    return m_itemEntryInter->isValid() && !m_itemEntryInter->id().isEmpty();
+    return m_itemEntryInter->isValid() && !m_id.isEmpty();
 }
 
 // Update _NET_WM_ICON_GEOMETRY property for windows that every item
@@ -201,7 +226,7 @@ bool AppItem::splitWindowOnScreen(ScreenSpliter::SplitDirection direction)
 
 int AppItem::mode() const
 {
-    return m_itemEntryInter->mode();
+    return m_mode;
 }
 
 
@@ -212,7 +237,7 @@ DockEntryInter *AppItem::itemEntryInter() const
 
 QString AppItem::accessibleName()
 {
-    return m_itemEntryInter->name();
+    return m_name;
 }
 
 void AppItem::requestDock()
@@ -222,7 +247,7 @@ void AppItem::requestDock()
 
 bool AppItem::isDocked() const
 {
-    return m_itemEntryInter->isDocked();
+    return m_isDocked;
 }
 
 qint64 AppItem::appOpenMSecs() const
@@ -277,7 +302,7 @@ void AppItem::paintEvent(QPaintEvent *e)
         path.addRoundedRect(backgroundRect, 8, 8);
 
         // 在没有开启窗口多开的情况下，显示背景色
-        if (!m_dockInter->showMultiWindow()) {
+        if (!m_showMultiWindow) {
             if (m_active) {
                 QColor color = Qt::black;
                 color.setAlpha(255 * 0.8);
@@ -383,10 +408,10 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
             return;
         }
 
-        qDebug() << "app item clicked, name:" << m_itemEntryInter->name()
-                 << "id:" << m_itemEntryInter->id() << "my-id:" << m_id << "icon:" << m_itemEntryInter->icon();
+        qDebug() << "app item clicked, name:" << m_name
+                 << "id:" << m_id << "my-id:" << m_id << "icon:" << m_icon;
 
-        if (m_dockInter->showMultiWindow()) {
+        if (m_showMultiWindow) {
             // 如果开启了多窗口显示，则直接新建一个窗口
             m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
         } else {
@@ -533,7 +558,7 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 
 const QString AppItem::contextMenu() const
 {
-    return m_itemEntryInter->menu();
+    return m_menu;
 }
 
 QWidget *AppItem::popupTips()
@@ -546,14 +571,14 @@ QWidget *AppItem::popupTips()
 
     static TipsWidget appNameTips(topLevelWidget());
     appNameTips.setAccessibleName("tip");
-    appNameTips.setObjectName(m_itemEntryInter->name());
+    appNameTips.setObjectName(m_name);
 
     if (!m_windowInfos.isEmpty()) {
-        const quint32 currentWindow = m_itemEntryInter->currentWindow();
+        const quint32 currentWindow = m_currentWindow;
         Q_ASSERT(m_windowInfos.contains(currentWindow));
         appNameTips.setText(m_windowInfos[currentWindow].title.simplified());
     } else {
-        appNameTips.setText(m_itemEntryInter->name().simplified());
+        appNameTips.setText(m_name.simplified());
     }
 
     return &appNameTips;
@@ -660,22 +685,21 @@ void AppItem::refreshIcon()
     if (!isVisible())
         return;
 
-    const QString icon = m_itemEntryInter->icon();
     const int iconSize = qMin(width(), height());
 
     if (DockDisplayMode == Efficient)
-        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.7, !m_iconValid);
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, m_icon, iconSize * 0.7, !m_iconValid);
     else
-        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, icon, iconSize * 0.8, !m_iconValid);
+        m_iconValid = ThemeAppIcon::getIcon(m_appIcon, m_icon, iconSize * 0.8, !m_iconValid);
 
-    if (!m_refershIconTimer->isActive() && m_itemEntryInter->icon() == "dde-calendar") {
+    if (!m_refershIconTimer->isActive() && m_icon == "dde-calendar") {
         m_refershIconTimer->start();
     }
 
     if (!m_iconValid) {
         if (m_retryTimes < 10) {
             m_retryTimes++;
-            qDebug() << m_itemEntryInter->name() << "obtain app icon(" << icon << ")failed, retry times:" << m_retryTimes;
+            qDebug() << m_name << "obtain app icon(" << m_icon << ")failed, retry times:" << m_retryTimes;
             // Maybe the icon was installed after we loaded the caches.
             // QIcon::setThemeSearchPaths will force Qt to re-check the gtk cache validity.
             QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
@@ -809,7 +833,7 @@ void AppItem::onGSettingsChanged(const QString &key)
         return;
     }
 
-    const QGSettings *setting = m_itemEntryInter->isDocked()
+    const QGSettings *setting = m_isDocked
             ? m_dockedAppSettings
             : m_activeAppSettings;
 
@@ -821,7 +845,7 @@ void AppItem::onGSettingsChanged(const QString &key)
 
 bool AppItem::checkGSettingsControl() const
 {
-    const QGSettings *setting = m_itemEntryInter->isDocked()
+    const QGSettings *setting = m_isDocked
             ? m_dockedAppSettings
             : m_activeAppSettings;
 
@@ -850,4 +874,9 @@ void AppItem::showEvent(QShowEvent *e)
     });
 
     refreshIcon();
+}
+
+void AppItem::activeWindow(WId wid)
+{
+    m_itemEntryInter->ActiveWindow(wid);
 }

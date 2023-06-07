@@ -30,9 +30,9 @@ void DockSettings::init()
                 if (key == keyHideMode) {
                     Q_EMIT 
                 } else if(key == keyDisplayMode) {
-                    Q_EMIT displayModeChanged(DisplayMode(m_dockSettings->value(key).toInt()));
+                    Q_EMIT displayModeChanged(DisplayMode(DisplayModeHandler(m_dockSettings->value(key).toString()).toEnum()));
                 } else if (key == keyPosition) {
-                    Q_EMIT positionModeChanged(Position(m_dockSettings->value(key).toInt()));
+                    Q_EMIT positionModeChanged(Position(PositionModeHandler(m_dockSettings->value(key).toString()).toEnum()));
                 } else if (key == keyForceQuitApp){
                     QString mode = m_dockSettings->value(key).toString();
                     Q_EMIT forceQuitAppChanged(ForceQuitAppModeHandler(mode).toEnum());
@@ -46,6 +46,12 @@ void DockSettings::init()
                     Q_EMIT windowNameShowModeChanged(m_dockSettings->value(keyShowWindowName).toInt());
                 } else if ( key == keyQuickPlugins) {
                     Q_EMIT quickPluginsChanged(m_dockSettings->value(keyQuickPlugins).toStringList());
+                } else if ( key == keyWindowSizeFashion) {
+                    Q_EMIT windowSizeFashionChanged(m_dockSettings->value(keyWindowSizeFashion).toUInt());
+                } else if ( key == keyWindowSizeEfficient) {
+                    Q_EMIT windowSizeEfficientChanged(m_dockSettings->value(keyWindowSizeEfficient).toUInt());
+                } else if ( key == keyOpacity) {
+                    Q_EMIT opacityChanged(m_dockSettings->value(keyOpacity).toDouble());
                 }
             });
     }

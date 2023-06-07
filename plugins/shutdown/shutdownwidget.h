@@ -27,13 +27,9 @@ protected:
     void leaveEvent(QEvent *event) override;
 
 private:
-    const QPixmap loadSvg(const QString &fileName, const QSize &size) const;
-
-private:
     Dock::DisplayMode m_displayMode;
     bool m_hover;
     bool m_pressed;
-    QIcon m_icon;
 };
 
 #endif // PLUGINWIDGET_H
