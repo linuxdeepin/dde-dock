@@ -16,7 +16,7 @@ typedef QMap<quint32, WindowInfo> WindowInfoMap;
 class ScreenSpliter_Xcb : public ScreenSpliter
 {
 public:
-    explicit ScreenSpliter_Xcb(AppItem *appItem, DockEntryInter *entryInter, QObject *parent = nullptr);
+    explicit ScreenSpliter_Xcb(AppItem *appItem, QObject *parent = nullptr);
 
     void startSplit(const QRect &rect) override;
     bool split(ScreenSpliter::SplitDirection direction) override;

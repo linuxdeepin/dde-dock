@@ -37,20 +37,18 @@ public:
     virtual bool releaseSplit();                                     // 释放分屏
 
 protected:
-    explicit ScreenSpliter(AppItem *appItem, DockEntryInter *entryInter, QObject *parent = nullptr);
+    explicit ScreenSpliter(AppItem *appItem, QObject *parent = nullptr);
     virtual ~ScreenSpliter();
     AppItem *appItem() const;
-    DockEntryInter *entryInter() const;
 
 private:
     AppItem *m_appItem;
-    DockEntryInter *m_entryInter;
 };
 
 class ScreenSpliterFactory
 {
 public:
-    static ScreenSpliter *createScreenSpliter(AppItem *appItem, DockEntryInter *entryInter);
+    static ScreenSpliter *createScreenSpliter(AppItem *appItem);
 };
 
 #endif // SCREENSPLITER_H

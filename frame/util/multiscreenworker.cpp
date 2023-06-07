@@ -13,6 +13,7 @@
 #include "windowmanager.h"
 #include "dockitemmanager.h"
 #include "dockscreen.h"
+#include "docksettings.h"
 
 #include <QWidget>
 #include <QScreen>
@@ -42,7 +43,6 @@ MultiScreenWorker::MultiScreenWorker(QObject *parent)
     , m_eventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_extralEventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
     , m_touchEventInter(new XEventMonitor(xEventMonitorService, xEventMonitorPath, QDBusConnection::sessionBus(), this))
-    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_launcherInter(new DBusLuncher(launcherService, launcherPath, QDBusConnection::sessionBus(), this))
     , m_appearanceInter(new Appearance("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", QDBusConnection::sessionBus(), this))
     , m_monitorUpdateTimer(new QTimer(this))
@@ -65,11 +65,10 @@ MultiScreenWorker::~MultiScreenWorker()
 
 void MultiScreenWorker::updateDaemonDockSize(const int &dockSize)
 {
-    m_dockInter->setWindowSize(uint(dockSize));
     if (m_displayMode == Dock::DisplayMode::Fashion)
-        m_dockInter->setWindowSizeFashion(uint(dockSize));
+        DockSettings::instance()->setWindowSizeFashion(dockSize);
     else
-        m_dockInter->setWindowSizeEfficient(uint(dockSize));
+        DockSettings::instance()->setWindowSizeEfficient(dockSize);
 }
 
 /**
@@ -307,7 +306,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     const static int flags = Motion | Button | Key;
     const static int monitorHeight = static_cast<int>(15 * qApp->devicePixelRatio());
     // 后端认为的任务栏大小(无缩放因素影响)
-    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10 /*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient()) * qApp->devicePixelRatio());
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? (int)m_windowFashionSize + 2 * 10 /*上下的边距各10像素*/ : (int)m_windowFashionSize) * qApp->devicePixelRatio());
 
     // 任务栏唤起区域
     m_monitorRectList.clear();
@@ -545,7 +544,6 @@ void MultiScreenWorker::initMembers()
     setStates(LauncherDisplay, m_launcherInter->isValid() ? m_launcherInter->visible() : false);
 
     // init check
-    checkDaemonDockService();
     checkXEventMonitorService();
 }
 
@@ -563,22 +561,30 @@ void MultiScreenWorker::initConnection()
 
     // 刷新所有显示的内容，布局，方向，大小，位置等
     connect(m_monitorUpdateTimer, &QTimer::timeout, this, &MultiScreenWorker::updateDisplay);
+
+    connect(DockSettings::instance(), &DockSettings::windowSizeEfficientChanged, this, [=]( uint size){ m_windowEfficientSize = size; });
+    connect(DockSettings::instance(), &DockSettings::windowSizeFashionChanged, this, [=]( uint size){ m_windowFashionSize = size; });
+
+    connect(DockSettings::instance(), &DockSettings::windowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+    connect(DockSettings::instance(), &DockSettings::windowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
+    connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, &MultiScreenWorker::onPositionChanged);
+    connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
+    connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
+    // connect(DockSettings::instance(), &DockSettings::hideStateChange, this, &MultiScreenWorker::onHideStateChanged);
 }
 
 void MultiScreenWorker::initDockMode()
 {
-    if (m_dockInter->isValid()) {
-        onPositionChanged(dockInter()->position());
-        onDisplayModeChanged(dockInter()->displayMode());
-        onHideModeChanged(dockInter()->hideMode());
-        onHideStateChanged(m_dockInter->hideState());
-        onOpacityChanged(m_dockInter->opacity());
+        onPositionChanged(DockSettings::instance()->getPositionMode());
+        onDisplayModeChanged(DockSettings::instance()->getDisplayMode());
+        onHideModeChanged(DockSettings::instance()->getHideMode());
+        // onHideStateChanged(m_dockInter->hideState());
+        onOpacityChanged(DockSettings::instance()->getOpacity());
 
         DockItem::setDockPosition(m_position);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
         DockItem::setDockDisplayMode(m_displayMode);
         qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
-    }
 }
 
 /**
@@ -666,66 +672,9 @@ void MultiScreenWorker::resetDockScreen()
     Q_EMIT requestUpdateDockGeometry(m_hideMode);
 }
 
-/**
- * @brief checkDaemonDockService
- * org.deepin.dde.daemon.Dock1服务比dock晚启动，导致dock启动后的状态错误
- */
-void MultiScreenWorker::checkDaemonDockService()
-{
-    auto connectionInit = [ = ](DockInter * dockInter) {
-        connect(dockInter, &DockInter::ServiceRestarted, this, [ = ] {
-            resetDockScreen();
-
-            emit requestUpdateFrontendGeometry();
-        });
-        connect(m_appearanceInter, &Appearance::Changed, this, [ this ](const QString &ty, const QString &value) {
-            if (ty == "windowopacity")
-                onOpacityChanged(value.toDouble());
-        });
-        connect(dockInter, &DockInter::WindowSizeEfficientChanged, this, &MultiScreenWorker::onWindowSizeChanged);
-        connect(dockInter, &DockInter::WindowSizeFashionChanged, this, &MultiScreenWorker::onWindowSizeChanged);
-        connect(dockInter, &DockInter::PositionChanged, this, &MultiScreenWorker::onPositionChanged);
-        connect(dockInter, &DockInter::DisplayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
-        connect(dockInter, &DockInter::HideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
-        connect(dockInter, &DockInter::HideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
-    };
-
-    QDBusConnectionInterface *ifc = QDBusConnection::sessionBus().interface();
-
-    if (!ifc->isServiceRegistered(dockServiceName())) {
-        connect(ifc, &QDBusConnectionInterface::serviceOwnerChanged, this, [ = ](const QString & name, const QString & oldOwner, const QString & newOwner) {
-            Q_UNUSED(oldOwner)
-            if (name == dockServiceName() && !newOwner.isEmpty()) {
-                FREE_POINT(m_dockInter);
-
-                m_dockInter = new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this);
-                // connect
-                connectionInit(m_dockInter);
-
-                // 通知主窗体服务已经重启了，需要重新获取DockInter
-                emit serviceRestart();
-
-                // reinit data
-                reInitDisplayData();
-
-                // operation
-                onPositionChanged(dockInter()->position());
-                onDisplayModeChanged(dockInter()->displayMode());
-                onHideModeChanged(dockInter()->hideMode());
-                onHideStateChanged(dockInter()->hideState());
-                onOpacityChanged(m_appearanceInter->opacity());
-
-                disconnect(ifc);
-            }
-        });
-    } else {
-        connectionInit(m_dockInter);
-    }
-}
-
 bool MultiScreenWorker::isCursorOut(int x, int y)
 {
-    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_dockInter->windowSizeFashion() + 2 * 10 /*上下的边距各10像素*/ : m_dockInter->windowSizeEfficient()) * qApp->devicePixelRatio());
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? (int)m_windowFashionSize + 2 * 10 /*上下的边距各10像素*/ : (int)m_windowEfficientSize) * qApp->devicePixelRatio());
     for (auto s : DIS_INS->screens()) {
         // 屏幕此位置不可停靠时,不用监听这块区域
         if (!DIS_INS->canDock(s, m_position))

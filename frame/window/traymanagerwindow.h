@@ -77,7 +77,6 @@ private Q_SLOTS:
 
 private:
     QWidget *m_appPluginDatetimeWidget;
-    DockInter *m_dockInter;
     SystemPluginWindow *m_systemPluginWidget;
     QWidget *m_appPluginWidget;
     QuickPluginWindow *m_quickIconWidget;
@@ -92,6 +91,7 @@ private:
     QLabel *m_splitLine;
     bool m_singleShow;                              // 用于记录当前日期时间和插件区域是显示一行还是显示多行
     int m_borderRadius;                             // 圆角的值
+    uint m_windowFashionSize;
     QPainterPath m_highlightArea;
 };
 

@@ -38,7 +38,7 @@ class ScreenSpliter_Wayland : public ScreenSpliter
     Q_OBJECT
 
 public:
-    explicit ScreenSpliter_Wayland(AppItem *appItem, DockEntryInter *entryInter, QObject *parent);
+    explicit ScreenSpliter_Wayland(AppItem *appItem, QObject *parent);
     ~ScreenSpliter_Wayland() override;
 
     void startSplit(const QRect &rect) override;

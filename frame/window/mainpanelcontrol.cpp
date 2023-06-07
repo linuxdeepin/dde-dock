@@ -56,7 +56,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-MainPanelControl::MainPanelControl(DockInter *dockInter, QWidget *parent)
+MainPanelControl::MainPanelControl(QWidget *parent)
     : QWidget(parent)
     , m_mainPanelLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
     , m_fixedAreaWidget(new QWidget(this))
@@ -79,9 +79,8 @@ MainPanelControl::MainPanelControl(DockInter *dockInter, QWidget *parent)
     , m_placeholderItem(nullptr)
     , m_appDragWidget(nullptr)
     , m_displayMode(Efficient)
-    , m_tray(new DockTrayWindow(dockInter, this))
-    , m_dockInter(dockInter)
-    , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, m_dockInter, this))
+    , m_tray(new DockTrayWindow(this))
+    , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, this))
     , m_toolHelper(new ToolAppHelper(m_toolSonAreaWidget, this))
     , m_multiHelper(new MultiWindowHelper(m_appAreaSonWidget, m_multiWindowWidget, this))
     , m_showRecent(false)
@@ -931,12 +930,6 @@ void MainPanelControl::moveAppSonWidget()
     m_appAreaSonWidget->move(rect.x(), rect.y());
 }
 
-void MainPanelControl::updateDockInter(DockInter *dockInter)
-{
-    m_dockInter = dockInter;
-    m_recentHelper->updateDockInter(dockInter);
-}
-
 QSize MainPanelControl::suitableSize(const Position &position, int screenSize, double deviceRatio) const
 {
     if (screenSize <= 0)
@@ -946,9 +939,7 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
     if (ratio <= 0)
         ratio = qApp->devicePixelRatio();
 
-    // 如果当前任务栏正在调整大小，就以当前任务栏的实际尺寸作为它的尺寸，否则，就以后端存储的尺寸作为它计算宽度（上下）或高度（左右）的参考
-    int dockSize = Utils::isDraging() ? ((position == Position::Top || position == Position::Bottom) ? height() : width())
-                                      : (static_cast<int>((m_displayMode == DisplayMode::Efficient ? m_dockInter->windowSizeEfficient() : m_dockInter->windowSizeFashion())));
+    int dockSize = (position == Position::Top || position == Position::Bottom) ? height() : width();
     if (m_displayMode == DisplayMode::Efficient) {
         // 如果是高效模式
         if (position == Position::Top || position == Position::Bottom)

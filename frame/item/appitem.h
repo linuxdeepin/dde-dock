@@ -16,6 +16,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
 #include <DGuiApplicationHelper>
+#include <cstdint>
 
 class QGSettings;
 class ScreenSpliter;
@@ -25,7 +26,7 @@ class AppItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit AppItem(DockInter *dockInter, const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
@@ -45,12 +46,14 @@ public:
     DockEntryInter *itemEntryInter() const;
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
+    uint32_t currentWindow(){ return m_currentWindow; }
     virtual QString accessibleName() override;
     void requestDock();
     bool isDocked() const;
     qint64 appOpenMSecs() const;
     void updateMSecs();
     const WindowInfoMap &windowsMap() const;
+    void activeWindow(WId wid);
 
 signals:
     void requestActivateWindow(const WId wid) const;
@@ -61,6 +64,7 @@ signals:
     void requestUpdateEntryGeometries() const;
     void windowCountChanged() const;
     void modeChanged(int) const;
+    void onCurrentWindowChanged(uint32_t currentWindow);
 
 private:
     void moveEvent(QMoveEvent *e) override;
@@ -116,13 +120,24 @@ private:
     QPointer<AppDrag> m_drag;
 
     bool m_active;
+    bool m_isDocked;
+    WindowInfoMap m_windowInfos;
+    int32_t m_mode;
+    QString m_desktopfile;
+    QString m_icon;
+    QString m_id;
+    QString m_menu;
+    QString m_name;
+    uint32_t m_currentWindow;
+
     int m_retryTimes;
     bool m_iconValid;
     quint64 m_lastclickTimes;
+    bool m_showMultiWindow;
 
-    WindowInfoMap m_windowInfos;
-    QString m_id;
     QPixmap m_appIcon;
+
+    // 统一样式？
     QPixmap m_horizontalIndicator;
     QPixmap m_verticalIndicator;
     QPixmap m_activeHorizontalIndicator;
@@ -141,7 +156,6 @@ private:
     static QPoint MousePressPos;
 
     ScreenSpliter *m_screenSpliter;
-    DockInter *m_dockInter;
 };
 
 #endif // APPITEM_H

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "systempluginwindow.h"
+#include "docksettings.h"
 #include "systempluginitem.h"
 #include "quicksettingcontroller.h"
 #include "utils.h"
@@ -16,18 +17,18 @@
 #include <QMetaObject>
 #include <QGuiApplication>
 #include <QPainter>
+#include <sys/types.h>
 
 #define MAXICONSIZE 48
 #define MINICONSIZE 24
 #define ICONMARGIN 8
 
-SystemPluginWindow::SystemPluginWindow(DockInter *dockInter, QWidget *parent)
+SystemPluginWindow::SystemPluginWindow(QWidget *parent)
     : QWidget(parent)
     , m_listView(new DListView(this))
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_position(Dock::Position::Bottom)
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
-    , m_dockInter(dockInter)
 {
     initUi();
     initConnection();
@@ -154,7 +155,7 @@ StretchPluginsItem *SystemPluginWindow::findPluginItemWidget(PluginsItemInterfac
 
 void SystemPluginWindow::pluginAdded(PluginsItemInterface *plugin)
 {
-    StretchPluginsItem *item = new StretchPluginsItem(m_dockInter, plugin, QuickSettingController::instance()->itemKey(plugin));
+    StretchPluginsItem *item = new StretchPluginsItem(plugin, QuickSettingController::instance()->itemKey(plugin));
     item->setDisplayMode(m_displayMode);
     item->setPosition(m_position);
     item->installEventFilter(this);
@@ -203,13 +204,16 @@ void SystemPluginWindow::onPluginItemUpdated(PluginsItemInterface *pluginItem)
 
 Dock::Position StretchPluginsItem::m_position = Dock::Position::Bottom;
 
-StretchPluginsItem::StretchPluginsItem(DockInter *dockInter, PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
+StretchPluginsItem::StretchPluginsItem(PluginsItemInterface * const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent)
     , m_pluginInter(pluginInter)
     , m_itemKey(itemKey)
     , m_displayMode(Dock::DisplayMode::Efficient)
-    , m_dockInter(dockInter)
+    , m_windowSizeFashion(DockSettings::instance()->getWindowSizeFashion())
 {
+    connect(DockSettings::instance(), &DockSettings::windowSizeFashionChanged, this, [=](uint size) {
+        m_windowSizeFashion = size;
+    });
 }
 
 StretchPluginsItem::~StretchPluginsItem()
@@ -328,7 +332,7 @@ bool StretchPluginsItem::needShowText() const
 
     // 任务栏在上方或者下方显示的时候，根据设计图，只有在当前区域高度大于50的时候才同时显示文本和图标
     if (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom)
-        return ((Utils::isDraging() ? topLevelWidget()->height() : m_dockInter->windowSizeFashion()) >=
+        return ((Utils::isDraging() ? topLevelWidget()->height() : m_windowSizeFashion) >=
                                     (OUTMARGIN * 2 + SPACEMARGIN * 3 + ICONSIZE + TEXTSIZE));
 
     return true;

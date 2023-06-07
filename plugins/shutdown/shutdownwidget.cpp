@@ -28,26 +28,18 @@ ShutdownWidget::ShutdownWidget(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         update();
     });
-    m_icon = QIcon::fromTheme(":/icons/resources/icons/system-shutdown.svg");
 }
 
 QPixmap ShutdownWidget::loadPixmap() const
 {
-    QString iconName = "system-shutdown";
-
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        iconName.append(PLUGIN_MIN_ICON_NAME);
-
-    return loadSvg(iconName, QSize(PLUGIN_ICON_MAX_SIZE, PLUGIN_ICON_MAX_SIZE));
+    const QString iconName = "system-shutdown";
+    const auto ratio = devicePixelRatioF();
+    return QIcon::fromTheme(iconName).pixmap(PLUGIN_ICON_MAX_SIZE * ratio);
 }
 
 void ShutdownWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
-
-    QPixmap pixmap;
-    QString iconName = "system-shutdown";
-    int iconSize = PLUGIN_ICON_MAX_SIZE;
 
     QPainter painter(this);
 
@@ -91,29 +83,15 @@ void ShutdownWidget::paintEvent(QPaintEvent *e)
 
         path.addRoundedRect(rc, radius, radius);
         painter.fillPath(path, color);
-    } else if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-        // 最小尺寸时，不画背景，采用深色图标
-        iconName.append(PLUGIN_MIN_ICON_NAME);
     }
 
     painter.setOpacity(1);
 
-    pixmap = loadSvg(iconName, QSize(iconSize, iconSize));
+    QPixmap pixmap = loadPixmap();
 
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(pixmap.rect());
     painter.drawPixmap(rf.center() - rfp.center() / pixmap.devicePixelRatioF(), pixmap);
-}
-
-const QPixmap ShutdownWidget::loadSvg(const QString &fileName, const QSize &size) const
-{
-    const auto ratio = devicePixelRatioF();
-
-    QPixmap pixmap;
-    pixmap = QIcon::fromTheme(fileName, m_icon).pixmap(size * ratio);
-    pixmap.setDevicePixelRatio(ratio);
-
-    return pixmap;
 }
 
 void ShutdownWidget::mousePressEvent(QMouseEvent *event)

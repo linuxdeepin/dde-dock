@@ -27,7 +27,7 @@ class DockTrayWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit DockTrayWindow(DockInter *dockInter, QWidget *parent = nullptr);
+    explicit DockTrayWindow(QWidget *parent = nullptr);
 
     void setPositon(const Dock::Position &position);
     void setDisplayMode(const Dock::DisplayMode &displayMode);
@@ -62,7 +62,6 @@ private Q_SLOTS:
     void onDropIcon(QDropEvent *dropEvent);
 
 private:
-    DockInter *m_dockInter;
     Dock::Position m_position;
     Dock::DisplayMode m_displayMode;
     QBoxLayout *m_mainBoxLayout;

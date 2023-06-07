@@ -26,9 +26,8 @@
 #define SPLITERSIZE 2
 #define SPLITESPACE 5
 
-DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
+DockTrayWindow::DockTrayWindow(QWidget *parent)
     : QWidget(parent)
-    , m_dockInter(dockInter)
     , m_position(Dock::Position::Bottom)
     , m_displayMode(Dock::DisplayMode::Efficient)
     , m_mainBoxLayout(new QBoxLayout(QBoxLayout::Direction::RightToLeft, this))
@@ -37,7 +36,7 @@ DockTrayWindow::DockTrayWindow(DockInter *dockInter, QWidget *parent)
     , m_toolLayout(new QBoxLayout(QBoxLayout::RightToLeft, m_toolWidget))
     , m_toolLineLabel(new QLabel(this))
     , m_dateTimeWidget(new DateTimeDisplayer(true, this))
-    , m_systemPuginWidget(new SystemPluginWindow(dockInter, this))
+    , m_systemPuginWidget(new SystemPluginWindow(this))
     , m_quickIconWidget(new QuickPluginWindow(Dock::DisplayMode::Efficient, this))
     , m_trayView(new TrayGridView(this))
     , m_model(TrayModel::getDockModel())

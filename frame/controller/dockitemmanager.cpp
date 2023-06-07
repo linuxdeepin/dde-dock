@@ -9,6 +9,7 @@
 #include "pluginsitem.h"
 #include "traypluginitem.h"
 #include "utils.h"
+#include "docksettings.h"
 #include "appmultiitem.h"
 #include "quicksettingcontroller.h"
 
@@ -32,7 +33,7 @@ DockItemManager::DockItemManager(QObject *parent)
 
     // 应用区域
     for (auto entry : m_appInter->entries()) {
-        AppItem *it = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, entry);
+        AppItem *it = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, entry);
         manageItem(it);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DockInter::ActivateWindow, Qt::QueuedConnection);
@@ -63,7 +64,7 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(m_appInter, &DockInter::EntryAdded, this, &DockItemManager::appItemAdded);
     connect(m_appInter, &DockInter::EntryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
     connect(m_appInter, &DockInter::ServiceRestarted, this, &DockItemManager::reloadAppItems);
-    connect(m_appInter, &DockInter::ShowMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
+    connect(DockSettings::instance(), &DockSettings::showMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
 
     DApplication *app = qobject_cast<DApplication *>(qApp);
     if (app) {
@@ -188,7 +189,7 @@ void DockItemManager::appItemAdded(const QDBusObjectPath &path, const int index)
                 ++insertIndex;
     }
 
-    AppItem *item = new AppItem(m_appInter, m_appSettings, m_activeSettings, m_dockedSettings, path);
+    AppItem *item = new AppItem(m_appSettings, m_activeSettings, m_dockedSettings, path);
 
     if (m_appIDist.contains(item->appId())) {
         delete item;

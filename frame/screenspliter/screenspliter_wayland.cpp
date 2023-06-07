@@ -25,8 +25,8 @@ SplitWindowManager *ScreenSpliter_Wayland::m_splitManager = nullptr;
  * @brief ScreenSpliter_Wayland::ScreenSpliter_Wayland
  * @param parent
  */
-ScreenSpliter_Wayland::ScreenSpliter_Wayland(AppItem *appItem, DockEntryInter *entryInter, QObject *parent)
-    : ScreenSpliter(appItem, entryInter, parent)
+ScreenSpliter_Wayland::ScreenSpliter_Wayland(AppItem *appItem, QObject *parent)
+    : ScreenSpliter(appItem, parent)
 {
     if (!m_splitManager)
         m_splitManager = new SplitWindowManager;
@@ -68,7 +68,7 @@ bool ScreenSpliter_Wayland::split(SplitDirection direction)
    if (!suportSplitScreen())
        return false;
 
-   WindowInfoMap windowInfos = entryInter()->windowInfos();
+   WindowInfoMap windowInfos = appItem()->windowsMap();
    m_splitManager->requestSplitWindow(windowInfos.first().uuid.toStdString().c_str(), direction);
 
    return true;
@@ -82,7 +82,7 @@ bool ScreenSpliter_Wayland::windowSupportSplit(const QString &uuid) const
 bool ScreenSpliter_Wayland::suportSplitScreen()
 {
     // 判断所有打开的窗口列表，只要有一个窗口支持分屏，就认为它支持分屏
-    const WindowInfoMap &windowsInfo = entryInter()->windowInfos();
+    const WindowInfoMap &windowsInfo = appItem()->windowsMap();
     for (const WindowInfo &windowInfo : windowsInfo) {
         if (windowSupportSplit(windowInfo.uuid))
             return true;

@@ -10,6 +10,7 @@
 #include "dockpopupwindow.h"
 #include "imageutil.h"
 #include "systempluginitem.h"
+#include "docksettings.h"
 
 #include <DGuiApplicationHelper>
 #include <DRegionMonitor>
@@ -17,6 +18,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include <qobjectdefs.h>
 #include <xcb/xproto.h>
 
 DGUI_USE_NAMESPACE
@@ -178,13 +180,18 @@ Dock::Position TrayGridWidget::m_position = Dock::Position::Bottom;
 
 TrayGridWidget::TrayGridWidget(QWidget *parent)
     : DBlurEffectWidget (parent)
-    , m_dockInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_trayGridView(nullptr)
     , m_referGridView(nullptr)
     , m_regionInter(new RegionMonitor(this))
 {
     initMember();
     setAttribute(Qt::WA_TranslucentBackground);
+    connect(DockSettings::instance(), &DockSettings::opacityChanged, this, [=] (double opacity) {
+        m_maskAlpha = static_cast<int> (opacity);
+    });
+    QMetaObject::invokeMethod(this, [=] {
+        m_maskAlpha = static_cast<int> (DockSettings::instance()->getOpacity());
+    });
 }
 
 void TrayGridWidget::setPosition(const Dock::Position &position)
@@ -306,8 +313,7 @@ void TrayGridWidget::initMember()
 QColor TrayGridWidget::maskColor() const
 {
     QColor color = DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::instance()->themeType()).window().color();
-    int maskAlpha(static_cast<int>(255 * m_dockInter->opacity()));
-    color.setAlpha(maskAlpha);
+    color.setAlpha(m_maskAlpha);
     return color;
 }
 

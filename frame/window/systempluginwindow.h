@@ -25,7 +25,7 @@ class SystemPluginWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit SystemPluginWindow(DockInter *dockInter, QWidget *parent = nullptr);
+    explicit SystemPluginWindow(QWidget *parent = nullptr);
     ~SystemPluginWindow() override;
     void setDisplayMode(const Dock::DisplayMode &displayMode);
     void setPositon(Dock::Position position);
@@ -56,7 +56,6 @@ private:
     Dock::DisplayMode m_displayMode;
     Dock::Position m_position;
     QBoxLayout *m_mainLayout;
-    DockInter *m_dockInter;
 };
 
 class StretchPluginsItem : public DockItem
@@ -64,7 +63,7 @@ class StretchPluginsItem : public DockItem
     Q_OBJECT
 
 public:
-    StretchPluginsItem(DockInter *dockInter, PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
+    StretchPluginsItem(PluginsItemInterface *const pluginInter, const QString &itemKey, QWidget *parent = nullptr);
     ~StretchPluginsItem() override;
     void setDisplayMode(const Dock::DisplayMode &displayMode);
     static void setPosition(Dock::Position position);
@@ -99,7 +98,7 @@ private:
     Dock::DisplayMode m_displayMode;
     static Dock::Position m_position;
     QPoint m_mousePressPoint;
-    DockInter *m_dockInter;
+    uint m_windowSizeFashion;
 };
 
 #endif // SYSTEMPLUGINWINDOW_H

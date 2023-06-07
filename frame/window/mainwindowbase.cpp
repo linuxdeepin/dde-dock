@@ -10,6 +10,7 @@
 #include "touchsignalmanager.h"
 #include "displaymanager.h"
 #include "menuworker.h"
+#include "docksettings.h"
 
 #include <DStyle>
 #include <DWindowManagerHelper>
@@ -546,9 +547,9 @@ Dock::Position MainWindowBase::position() const
 int MainWindowBase::windowSize() const
 {
     if (m_displayMode == Dock::DisplayMode::Efficient)
-        return m_multiScreenWorker->dockInter()->windowSizeEfficient();
+        return DockSettings::instance()->getWindowSizeEfficient();
 
-    return m_multiScreenWorker->dockInter()->windowSizeFashion();
+    return DockSettings::instance()->getWindowSizeFashion();
 }
 
 bool MainWindowBase::isDraging() const
@@ -602,7 +603,7 @@ void MainWindowBase::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && geometry().contains(QCursor::pos())) {
         m_multiScreenWorker->onAutoHideChanged(false);
-        MenuWorker menuWorker(m_multiScreenWorker->dockInter());
+        MenuWorker menuWorker;
         menuWorker.exec();
         m_multiScreenWorker->onAutoHideChanged(true);
     }
