@@ -13,6 +13,7 @@
 *.a
 
 build*/
+obj-*-linux-gnu/
 *.pro.user*
 CMakeLists.txt.user*
 *.DS_Store
@@ -27,3 +28,14 @@ dde-dock
 */*/dbusinterface/generation_dbus_interface/
 .transifexrc
 .cache
+
+# debain
+debian/.debhelper/
+debian/dde-dock/
+debian/dde-dock-dev/
+debian/dde-dock-onboard-plugin/
+debian/tmp/
+debian/*.log
+debian/*.substvars
+debian/debhelper-build-stamp
+debian/files
