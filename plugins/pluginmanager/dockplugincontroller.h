@@ -84,7 +84,6 @@ private Q_SLOTS:
 
 private:
     QDBusConnectionInterface *m_dbusDaemonInterface;
-    DockInter *m_dockDaemonInter;
 
     // interface,  "pluginloader", PluginLoader指针对象
     QMap<PluginsItemInterface *, QMap<QString, QObject *>> m_pluginsMap;

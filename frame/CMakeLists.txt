@@ -34,7 +34,7 @@ find_package(DWayland REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-image xcb-ewmh xcb-composite xtst x11 dbusmenu-qt5 xext xcursor xkbcommon)
+pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET x11 xcb xcb-icccm xcb-image xcb-ewmh xcb-composite xtst dbusmenu-qt5 xext xcursor xkbcommon xres)
 pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 pkg_check_modules(WAYLAND REQUIRED IMPORTED_TARGET wayland-client wayland-cursor wayland-egl)
 
@@ -113,3 +113,5 @@ endif()
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+# window_patterns
+install(FILES taskmanager/window_patterns.json DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-dock/)

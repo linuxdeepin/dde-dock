@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "mainwindow.h"
+#include "taskmanager/entry.h"
 #include "windowmanager.h"
 #include "traymainwindow.h"
 #include "multiscreenworker.h"
@@ -675,8 +676,7 @@ void WindowManager::onRequestUpdateFrontendGeometry()
         }
     }
 
-    DockInter dockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus());
-    dockInter.SetFrontendWindowRect(x, y, uint(rect.width()), uint(rect.height()));
+    TaskManager::instance()->setFrontendWindowRect(x, y, uint(rect.width()), uint(rect.height()));
 }
 
 void WindowManager::onRequestNotifyWindowManager()

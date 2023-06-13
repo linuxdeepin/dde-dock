@@ -205,7 +205,6 @@ public:
     void setDockedApps(const QStringList &apps);
     QStringList getRecentApps() const;
     void setRecentApps(const QStringList &apps);
-    double getOpacity();
     QVector<QString> getWinIconPreferredApps();
     void setShowRecent(bool visible);
     bool showRecent() const;
@@ -257,8 +256,6 @@ Q_SIGNALS:
     void windowSizeFashionChanged(uint size);
     // 高效模式dock尺寸改变
     void windowSizeEfficientChanged(uint size);
-    // 透明度改变
-    void opacityChanged(double opacity);
 
 private:
     DockSettings(QObject *paret = nullptr);

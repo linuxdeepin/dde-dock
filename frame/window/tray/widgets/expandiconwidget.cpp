@@ -186,12 +186,6 @@ TrayGridWidget::TrayGridWidget(QWidget *parent)
 {
     initMember();
     setAttribute(Qt::WA_TranslucentBackground);
-    connect(DockSettings::instance(), &DockSettings::opacityChanged, this, [=] (double opacity) {
-        m_maskAlpha = static_cast<int> (opacity);
-    });
-    QMetaObject::invokeMethod(this, [=] {
-        m_maskAlpha = static_cast<int> (DockSettings::instance()->getOpacity());
-    });
 }
 
 void TrayGridWidget::setPosition(const Dock::Position &position)
@@ -313,7 +307,7 @@ void TrayGridWidget::initMember()
 QColor TrayGridWidget::maskColor() const
 {
     QColor color = DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::instance()->themeType()).window().color();
-    color.setAlpha(m_maskAlpha);
+    color.setAlpha(0);
     return color;
 }
 

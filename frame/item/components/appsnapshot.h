@@ -7,6 +7,7 @@
 #define APPSNAPSHOT_H
 
 #include "dbusutil.h"
+#include "taskmanager/windowinfomap.h"
 
 #include <DIconButton>
 #include <DWindowManagerHelper>
@@ -99,7 +100,6 @@ private:
     QTimer *m_waitLeaveTimer;
     DIconButton *m_closeBtn2D;
     DWindowManagerHelper *m_wmHelper;
-    DockInter *m_dockDaemonInter;
 };
 
 #endif // APPSNAPSHOT_H

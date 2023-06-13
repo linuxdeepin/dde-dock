@@ -75,7 +75,6 @@ private:
     TrayGridView *m_referGridView;
     Dtk::Gui::DRegionMonitor *m_regionInter;
     static Dock::Position m_position;
-    int m_maskAlpha;
 };
 
 #endif // EXPANDICONWIDGET_H

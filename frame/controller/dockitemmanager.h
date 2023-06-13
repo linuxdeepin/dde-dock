@@ -11,6 +11,8 @@
 #include "appitem.h"
 #include "placeholderitem.h"
 #include "dbusutil.h"
+#include "taskmanager/taskmanager.h"
+#include "taskmanager/windowinfobase.h"
 
 #include <QObject>
 
@@ -56,7 +58,7 @@ private Q_SLOTS:
 
 private:
     explicit DockItemManager(QObject *parent = nullptr);
-    void appItemAdded(const QDBusObjectPath &path, const int index);
+    void appItemAdded(const Entry *entry, const int index);
     void appItemRemoved(const QString &appId);
     void appItemRemoved(AppItem *appItem);
     void updatePluginsItemOrderKey();
@@ -69,7 +71,7 @@ private:
     bool needRemoveMultiWindow(AppMultiItem *multiItem) const;
 
 private:
-    DockInter *m_appInter;
+    TaskManager *m_taskmanager;
 
     static DockItemManager *INSTANCE;
 

@@ -6,9 +6,6 @@
 #include "onboardplugin.h"
 #include "../widgets/tipswidget.h"
 
-#include "org_deepin_dde_daemon_dock1.h"
-#include "org_deepin_dde_daemon_dock1_entry.h"
-
 #include <DGuiApplicationHelper>
 
 #include <QIcon>
@@ -18,12 +15,6 @@
 #define PLUGIN_STATE_KEY    "enable"
 
 DGUI_USE_NAMESPACE
-
-using DBusDock = org::deepin::dde::daemon::Dock1;
-using DockEntryInter = org::deepin::dde::daemon::dock1::Entry;
-
-static const QString serviceName = QString("org.deepin.dde.daemon.Dock1");
-static const QString servicePath = QString("/org/deepin/dde/daemon/Dock1");
 
 using namespace Dock;
 OnboardPlugin::OnboardPlugin(QObject *parent)
@@ -117,15 +108,6 @@ void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
         process->start("onboard-settings", QStringList());
     }
 
-    DBusDock DockInter(serviceName, servicePath, QDBusConnection::sessionBus(), this);
-
-    for (auto entry : DockInter.entries()) {
-        DockEntryInter AppInter(serviceName, entry.path(), QDBusConnection::sessionBus(), this);
-        if(AppInter.name() == "Onboard-Settings" && !AppInter.isActive()) {
-            AppInter.Activate(0);
-            break;
-        }
-    }
 }
 
 void OnboardPlugin::displayModeChanged(const Dock::DisplayMode displayMode)

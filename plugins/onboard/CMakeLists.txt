@@ -3,8 +3,6 @@ set(PLUGIN_NAME "onboard")
 
 project(${PLUGIN_NAME})
 
-generation_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/xml ${CMAKE_CURRENT_SOURCE_DIR}/dbusinterface/generation_dbus_interface)
-
 # Sources files
 file(GLOB_RECURSE SRCS "*.h"
     "*.cpp"
@@ -25,8 +23,7 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 
 target_include_directories(${PLUGIN_NAME} PUBLIC ${Qt5DBus_INCLUDE_DIRS}
     ../../interfaces
-    ../../frame/qtdbusextended
-    ./dbusinterface/generation_dbus_interface)
+    ../../frame/qtdbusextended)
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     ${DtkWidget_LIBRARIES}

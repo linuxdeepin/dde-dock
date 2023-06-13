@@ -9,6 +9,7 @@
 #include "screenspliter.h"
 
 #include <QWidget>
+#include <QMap>
 
 namespace KWayland {
 namespace Client {
