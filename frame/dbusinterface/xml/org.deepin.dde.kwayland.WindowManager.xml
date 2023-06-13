@@ -1,0 +1,31 @@
+<interface name="org.deepin.dde.KWayland1.WindowManager">
+    <signal name="InterfaceAboutToBeReleased"/>
+    <signal name="InterfaceAboutToBeDestroyed"/>
+    <signal name="ShowingDesktopChanged">
+        <arg type="b" direction="out"/>
+    </signal>
+    <signal name="WindowCreated">
+        <arg name="dbus" type="s" direction="out"/>
+    </signal>
+    <signal name="WindowRemove">
+        <arg name="dbus" type="s" direction="out"/>
+    </signal>
+    <signal name="ActiveWindowChanged"/>
+    <method name="IsValid">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsShowingDesktop">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="SetShowingDesktop">
+        <arg name="show" type="b" direction="in"/>
+    </method>
+    <method name="ShowDesktop"/>
+    <method name="HideDesktop"/>
+    <method name="Windows">
+        <arg type="av" direction="out"/>
+    </method>
+    <method name="ActiveWindow">
+        <arg type="u" direction="out"/>
+    </method>
+</interface>

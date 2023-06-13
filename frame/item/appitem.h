@@ -11,11 +11,13 @@
 #include "appdrag.h"
 #include "../widgets/tipswidget.h"
 #include "dbusutil.h"
+#include "taskmanager/entry.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QGraphicsItemAnimation>
 #include <DGuiApplicationHelper>
+
 #include <cstdint>
 
 class QGSettings;
@@ -26,7 +28,7 @@ class AppItem : public DockItem
     Q_OBJECT
 
 public:
-    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    explicit AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const Entry *entry, QWidget *parent = nullptr);
     ~AppItem() override;
 
     void checkEntry() override;
@@ -43,7 +45,7 @@ public:
     bool supportSplitWindow();
     bool splitWindowOnScreen(ScreenSpliter::SplitDirection direction);
     int mode() const;
-    DockEntryInter *itemEntryInter() const;
+    Entry *itemEntry() const;
     inline ItemType itemType() const override { return App; }
     QPixmap appIcon(){ return m_appIcon; }
     uint32_t currentWindow(){ return m_currentWindow; }
@@ -52,7 +54,7 @@ public:
     bool isDocked() const;
     qint64 appOpenMSecs() const;
     void updateMSecs();
-    const WindowInfoMap &windowsMap() const;
+    const WindowInfoMap &windowsInfos() const;
     void activeWindow(WId wid);
 
 signals:
@@ -108,9 +110,9 @@ private:
     const QGSettings *m_appSettings;
     const QGSettings *m_activeAppSettings;
     const QGSettings *m_dockedAppSettings;
+    Entry *m_itemEntry;
 
     PreviewContainer *m_appPreviewTips;
-    DockEntryInter *m_itemEntryInter;
 
     QGraphicsView *m_swingEffectView;
     QGraphicsItemAnimation *m_itemAnimation;

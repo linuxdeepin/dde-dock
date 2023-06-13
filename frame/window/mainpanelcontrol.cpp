@@ -83,7 +83,7 @@ MainPanelControl::MainPanelControl(QWidget *parent)
     , m_recentHelper(new RecentAppHelper(m_appAreaSonWidget, m_recentAreaWidget, this))
     , m_toolHelper(new ToolAppHelper(m_toolSonAreaWidget, this))
     , m_multiHelper(new MultiWindowHelper(m_appAreaSonWidget, m_multiWindowWidget, this))
-    , m_showRecent(false)
+    , m_showRecent(DockSettings::instance()->showRecent())
 {
     initUI();
     initConnection();
@@ -723,6 +723,8 @@ void MainPanelControl::mousePressEvent(QMouseEvent *e)
 
 void MainPanelControl::startDrag(DockItem *dockItem)
 {
+    // 每次拖动使m_dragIndex==-1, 表明当前item的位置未发生变化
+    m_dragIndex = -1;
     QPointer<DockItem> item = dockItem;
     const QPixmap pixmap = item->grab();
 

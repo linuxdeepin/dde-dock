@@ -17,7 +17,7 @@
 #include <DWindowManagerHelper>
 
 DWIDGET_USE_NAMESPACE
-
+typedef QList<quint32> WindowList;
 class PreviewContainer : public QWidget
 {
     Q_OBJECT

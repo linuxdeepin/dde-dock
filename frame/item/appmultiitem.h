@@ -8,6 +8,7 @@
 
 #include "dockitem.h"
 #include "dbusutil.h"
+#include "taskmanager/windowinfomap.h"
 
 class AppItem;
 

@@ -68,9 +68,7 @@ void PreviewContainer::setWindowInfos(const WindowInfoMap &infos, const WindowLi
         if (!m_snapshots.contains(key))
             appendSnapWidget(key);
         m_snapshots[key]->setWindowInfo(it.value());
-        // FIXME: "GetAllowedCloseWindows" has remove form dde-daemon
-        // 由于相关接口被移除，暂时无法正确设置 m_closeAble 属性，暂改为默认 true
-        // m_snapshots[key]->setCloseAble(allowClose.contains(key));
+        m_snapshots[key]->setCloseAble(allowClose.contains(key));
     }
 
     if (m_snapshots.isEmpty()) {

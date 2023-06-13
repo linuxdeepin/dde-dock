@@ -31,6 +31,7 @@
 
 const QString MonitorsSwitchTime = "monitorsSwitchTime";
 const QString OnlyShowPrimary = "onlyShowPrimary";
+const double DEFAULTOPACITY = 0.4;
 
 #define DIS_INS DisplayManager::instance()
 #define DOCK_SCREEN DockScreen::instance()
@@ -306,7 +307,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     const static int flags = Motion | Button | Key;
     const static int monitorHeight = static_cast<int>(15 * qApp->devicePixelRatio());
     // 后端认为的任务栏大小(无缩放因素影响)
-    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? (int)m_windowFashionSize + 2 * 10 /*上下的边距各10像素*/ : (int)m_windowFashionSize) * qApp->devicePixelRatio());
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_windowFashionSize + 20 : m_windowEfficientSize) * qApp->devicePixelRatio());
 
     // 任务栏唤起区域
     m_monitorRectList.clear();
@@ -541,6 +542,9 @@ void MultiScreenWorker::initMembers()
 
     m_delayWakeTimer->setSingleShot(true);
 
+    m_windowFashionSize = int(DockSettings::instance()->getWindowSizeFashion() * qApp->devicePixelRatio());
+    m_windowEfficientSize = int(DockSettings::instance()->getWindowSizeEfficient() * qApp->devicePixelRatio());
+
     setStates(LauncherDisplay, m_launcherInter->isValid() ? m_launcherInter->visible() : false);
 
     // init check
@@ -553,6 +557,7 @@ void MultiScreenWorker::initConnection()
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
     connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
+    connect(m_appearanceInter, &Appearance::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
 
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);
     connect(this, &MultiScreenWorker::requestUpdateMonitorInfo, this, &MultiScreenWorker::onRequestUpdateMonitorInfo);
@@ -570,7 +575,7 @@ void MultiScreenWorker::initConnection()
     connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, &MultiScreenWorker::onPositionChanged);
     connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, &MultiScreenWorker::onDisplayModeChanged);
     connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, &MultiScreenWorker::onHideModeChanged);
-    // connect(DockSettings::instance(), &DockSettings::hideStateChange, this, &MultiScreenWorker::onHideStateChanged);
+    connect(TaskManager::instance(), &TaskManager::hideStateChanged, this, &MultiScreenWorker::onHideStateChanged);
 }
 
 void MultiScreenWorker::initDockMode()
@@ -578,8 +583,8 @@ void MultiScreenWorker::initDockMode()
         onPositionChanged(DockSettings::instance()->getPositionMode());
         onDisplayModeChanged(DockSettings::instance()->getDisplayMode());
         onHideModeChanged(DockSettings::instance()->getHideMode());
-        // onHideStateChanged(m_dockInter->hideState());
-        onOpacityChanged(DockSettings::instance()->getOpacity());
+        onHideStateChanged(TaskManager::instance()->getHideState());
+        onOpacityChanged(m_appearanceInter? m_appearanceInter->opacity(): DEFAULTOPACITY);
 
         DockItem::setDockPosition(m_position);
         qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
@@ -674,7 +679,7 @@ void MultiScreenWorker::resetDockScreen()
 
 bool MultiScreenWorker::isCursorOut(int x, int y)
 {
-    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? (int)m_windowFashionSize + 2 * 10 /*上下的边距各10像素*/ : (int)m_windowEfficientSize) * qApp->devicePixelRatio());
+    const int realDockSize = int((m_displayMode == DisplayMode::Fashion ? m_windowFashionSize : m_windowEfficientSize) * qApp->devicePixelRatio());
     for (auto s : DIS_INS->screens()) {
         // 屏幕此位置不可停靠时,不用监听这块区域
         if (!DIS_INS->canDock(s, m_position))

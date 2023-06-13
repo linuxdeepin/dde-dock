@@ -61,7 +61,6 @@ private:
     QWidget *m_appWidget;
     QWidget *m_recentWidget;
     Dock::DisplayMode m_displayMode;
-    DockInter *m_dockInter;
 };
 
 #endif // RECENTAPPHELPER_H

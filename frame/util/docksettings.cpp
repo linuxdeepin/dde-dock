@@ -28,14 +28,13 @@ void DockSettings::init()
     if (m_dockSettings) {
             connect(m_dockSettings, &DConfig::valueChanged, this, [&] (const QString &key) {
                 if (key == keyHideMode) {
-                    Q_EMIT 
+                    Q_EMIT hideModeChanged(HideModeHandler(m_dockSettings->value(keyHideMode).toString()).toEnum());
                 } else if(key == keyDisplayMode) {
                     Q_EMIT displayModeChanged(DisplayMode(DisplayModeHandler(m_dockSettings->value(key).toString()).toEnum()));
                 } else if (key == keyPosition) {
                     Q_EMIT positionModeChanged(Position(PositionModeHandler(m_dockSettings->value(key).toString()).toEnum()));
                 } else if (key == keyForceQuitApp){
-                    QString mode = m_dockSettings->value(key).toString();
-                    Q_EMIT forceQuitAppChanged(ForceQuitAppModeHandler(mode).toEnum());
+                    Q_EMIT forceQuitAppChanged(ForceQuitAppModeHandler(m_dockSettings->value(key).toString()).toEnum());
                 } else if (key == keyShowRecent) {
                     Q_EMIT showRecentChanged(m_dockSettings->value(key).toBool());
                 } else if (key == keyShowMultiWindow) {
@@ -50,8 +49,6 @@ void DockSettings::init()
                     Q_EMIT windowSizeFashionChanged(m_dockSettings->value(keyWindowSizeFashion).toUInt());
                 } else if ( key == keyWindowSizeEfficient) {
                     Q_EMIT windowSizeEfficientChanged(m_dockSettings->value(keyWindowSizeEfficient).toUInt());
-                } else if ( key == keyOpacity) {
-                    Q_EMIT opacityChanged(m_dockSettings->value(keyOpacity).toDouble());
                 }
             });
     }
@@ -247,15 +244,6 @@ QStringList DockSettings::getRecentApps() const
 void DockSettings::setRecentApps(const QStringList &apps)
 {
     saveStringList(keyRecentApp, apps);
-}
-
-double DockSettings::getOpacity()
-{
-    double opacity = 0.4;
-    // if (m_appearanceSettings) {
-    //     opacity = m_appearanceSettings->value(keyOpacity).toDouble();
-    // }
-    return opacity;
 }
 
 QVector<QString> DockSettings::getWinIconPreferredApps()

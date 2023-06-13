@@ -123,7 +123,7 @@
 			"visibility": "private"
 		},
 		"Display_Mode": {
-			"value": "",
+			"value": "fashion",
 			"serial": 0,
 			"flags": [],
 			"name": "Display_Mode",

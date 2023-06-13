@@ -40,7 +40,7 @@ public:
 DockPluginController::DockPluginController(PluginProxyInterface *proxyInter, QObject *parent)
     : QObject(parent)
     , m_dbusDaemonInterface(QDBusConnection::sessionBus().interface())
-    , m_dockDaemonInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
+    // , m_dockDaemonInter(new DockInter(dockServiceName(), dockServicePath(), QDBusConnection::sessionBus(), this))
     , m_proxyInter(proxyInter)
 {
     qApp->installEventFilter(this);
@@ -48,7 +48,7 @@ DockPluginController::DockPluginController(PluginProxyInterface *proxyInter, QOb
     refreshPluginSettings();
 
     connect(DockSettings::instance(), &DockSettings::quickPluginsChanged, this, &DockPluginController::onConfigChanged);
-    connect(m_dockDaemonInter, &DockInter::PluginSettingsSynced, this, &DockPluginController::refreshPluginSettings, Qt::QueuedConnection);
+    // connect(m_dockDaemonInter, &DockInter::PluginSettingsSynced, this, &DockPluginController::refreshPluginSettings, Qt::QueuedConnection);
 }
 
 DockPluginController::~DockPluginController()
@@ -327,7 +327,7 @@ void DockPluginController::savePluginValue(PluginsItemInterface * const itemInte
     }
 
     m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
-    m_dockDaemonInter->MergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
+    DockSettings::instance()->mergePluginSettings(QJsonDocument(remoteObject).toJson(QJsonDocument::JsonFormat::Compact));
 }
 
 const QVariant DockPluginController::getPluginValue(PluginsItemInterface * const itemInter, const QString &key, const QVariant &fallback)
@@ -353,7 +353,7 @@ void DockPluginController::removePluginValue(PluginsItemInterface * const itemIn
         m_pluginSettingsObject.insert(itemInter->pluginName(), localObject);
     }
 
-    m_dockDaemonInter->RemovePluginSettings(itemInter->pluginName(), keyList);
+    DockSettings::instance()->removePluginSettings(itemInter->pluginName(), keyList);
 }
 
 void DockPluginController::startLoadPlugin(const QStringList &dirs)
@@ -576,7 +576,7 @@ void DockPluginController::initPlugin(PluginsItemInterface *interface)
 
 void DockPluginController::refreshPluginSettings()
 {
-    const QString &pluginSettings = m_dockDaemonInter->GetPluginSettings().value();
+    const QString &pluginSettings = DockSettings::instance()->getPluginSettings();
     if (pluginSettings.isEmpty()) {
         qDebug() << "Error! get plugin settings from dbus failed!";
         return;
@@ -604,9 +604,9 @@ void DockPluginController::refreshPluginSettings()
     }
 
     // not notify plugins to refresh settings if this update is not emit by dock daemon
-    if (sender() != m_dockDaemonInter) {
-        return;
-    }
+    // if (sender() != m_dockDaemonInter) {
+    //     return;
+    // }
 
     // notify all plugins to reload plugin settings
     for (PluginsItemInterface *pluginInter : m_pluginsMap.keys()) {

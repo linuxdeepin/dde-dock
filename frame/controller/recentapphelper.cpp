@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "recentapphelper.h"
+#include "dockitemmanager.h"
 #include "appitem.h"
 
 #include <QWidget>
@@ -16,7 +17,6 @@ RecentAppHelper::RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObj
     : QObject(parent)
     , m_appWidget(appWidget)
     , m_recentWidget(recentWidget)
-    , m_dockInter(new DockInter("org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", QDBusConnection::sessionBus(), this))
 {
     m_appWidget->installEventFilter(this);
     m_recentWidget->installEventFilter(this);
@@ -188,7 +188,7 @@ int RecentAppHelper::getEntryIndex(DockItem *dockItem, QWidget *widget) const
         return -1;
 
     // 查找当前的应用在所有的应用中的排序
-    QStringList entryIds = m_dockInter->GetEntryIDs();
+    QStringList entryIds = TaskManager::instance()->getEntryIDs();
     int index = entryIds.indexOf(appItem->appId());
     if (index < 0)
         return -1;

@@ -1,0 +1,146 @@
+<interface name="org.deepin.dde.KWayland1.PlasmaWindow">
+    <signal name="ActiveChanged"/>
+    <signal name="AppIdChanged"/>
+    <signal name="CloseableChanged"/>
+    <signal name="DemandsAttentionChanged"/>
+    <signal name="FullscreenableChanged"/>
+    <signal name="FullscreenChanged"/>
+    <signal name="GeometryChanged"/>
+    <signal name="IconChanged"/>
+    <signal name="KeepAboveChanged"/>
+    <signal name="KeepBelowChanged"/>
+    <signal name="MaximizeableChanged"/>
+    <signal name="MaximizedChanged"/>
+    <signal name="MinimizeableChanged"/>
+    <signal name="MinimizedChanged"/>
+    <signal name="MovableChanged"/>
+    <signal name="OnAllDesktopsChanged"/>
+    <signal name="ParentWindowChanged"/>
+    <signal name="PlasmaVirtualDesktopEntered">
+        <arg name="id" type="s" direction="out"/>
+    </signal>
+    <signal name="PlasmaVirtualDesktopLeft">
+        <arg name="id" type="s" direction="out"/>
+    </signal>
+    <signal name="ResizableChanged"/>
+    <signal name="ShadeableChanged"/>
+    <signal name="ShadedChanged"/>
+    <signal name="SkipSwitcherChanged"/>
+    <signal name="SkipTaskbarChanged"/>
+    <signal name="TitleChanged"/>
+    <signal name="Unmapped"/>
+    <signal name="VirtualDesktopChangeableChanged"/>
+    <signal name="VirtualDesktopChanged"/>
+    <method name="AppId">
+        <arg type="s" direction="out"/>
+    </method>
+    <method name="Destroy"/>
+    <method name="Geometry">
+        <arg type="(iiii)" direction="out"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="DockRect"/>
+    </method>
+    <method name="Icon">
+        <arg type="s" direction="out"/>
+    </method>
+    <method name="InternalId">
+        <arg type="u" direction="out"/>
+    </method>
+    <method name="IsActive">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsCloseable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsDemandingAttention">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsFullscreen">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsFullscreenable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsKeepAbove">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsKeepBelow">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsMaximizeable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsMaximized">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsMinimizeable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsMinimized">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsMovable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsOnAllDesktops">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsResizable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsShadeable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsShaded">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsValid">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="IsVirtualDesktopChangeable">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="Pid">
+        <arg type="u" direction="out"/>
+    </method>
+    <method name="PlasmaVirtualDesktops">
+        <arg type="as" direction="out"/>
+    </method>
+    <method name="Release"/>
+    <method name="RequestActivate"/>
+    <method name="RequestClose"/>
+    <method name="RequestEnterNewVirtualDesktop"/>
+    <method name="RequestEnterVirtualDesktop">
+        <arg name="id" type="s" direction="in"/>
+    </method>
+    <method name="RequestLeaveVirtualDesktop">
+        <arg name="id" type="s" direction="in"/>
+    </method>
+    <method name="RequestMove"/>
+    <method name="RequestResize"/>
+    <method name="RequestToggleKeepAbove"/>
+    <method name="RequestToggleKeepBelow"/>
+    <method name="RequestToggleMaximized"/>
+    <method name="RequestToggleMinimized"/>
+    <method name="RequestToggleShaded"/>
+    <method name="RequestVirtualDesktop">
+        <arg name="desktop" type="u" direction="in"/>
+    </method>
+    <method name="SkipSwitcher">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="SkipTaskbar">
+        <arg type="b" direction="out"/>
+    </method>
+    <method name="Title">
+        <arg type="s" direction="out"/>
+    </method>
+    <method name="VirtualDesktop">
+        <arg type="u" direction="out"/>
+    </method>
+    <method name="WindowId">
+        <arg type="u" direction="out"/>
+    </method>
+    <method name="uuid">
+        <arg type="ay" direction="out"/>
+    </method>
+</interface>

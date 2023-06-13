@@ -79,7 +79,7 @@ bool ScreenSpliter_Xcb::split(ScreenSpliter::SplitDirection direction)
     if (!suportSplitScreen())
         return false;
 
-    quint32 WId = appItem()->windowsMap().keys().first();
+    quint32 WId = appItem()->windowsInfos().keys().first();
     xcb_client_message_event_t xev;
     xev.response_type = XCB_CLIENT_MESSAGE;
     xev.type = internAtom("_DEEPIN_SPLIT_WINDOW", false);
@@ -116,7 +116,7 @@ void ScreenSpliter_Xcb::showSplitScreenEffect(const QRect &rect, bool visible)
     if (!suportSplitScreen())
         return;
 
-    quint32 WId = appItem()->windowsMap().keys().first();
+    quint32 WId = appItem()->windowsInfos().keys().first();
     // 触发分屏的效果
     xcb_client_message_event_t xev;
     xev.response_type = XCB_CLIENT_MESSAGE;
@@ -137,7 +137,7 @@ void ScreenSpliter_Xcb::showSplitScreenEffect(const QRect &rect, bool visible)
 bool ScreenSpliter_Xcb::suportSplitScreen()
 {
     // 判断所有的窗口，只要有一个窗口支持分屏，就认为它支持分屏
-    QList<quint32> winIds = appItem()->windowsMap().keys();
+    QList<quint32> winIds = appItem()->windowsInfos().keys();
     for (const quint32 &winId : winIds) {
         if (windowSupportSplit(winId))
             return true;

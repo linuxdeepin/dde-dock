@@ -5,6 +5,7 @@
 
 #include "appitem.h"
 #include "docksettings.h"
+#include "taskmanager/windowinfobase.h"
 #include "themeappicon.h"
 #include "xcb_misc.h"
 #include "appswingeffectbuilder.h"
@@ -27,8 +28,8 @@
 #include <DGuiApplicationHelper>
 #include <DPlatformTheme>
 #include <DConfig>
+
 #include <cstdint>
-#include <qobjectdefs.h>
 #include <sys/types.h>
 
 DGUI_USE_NAMESPACE
@@ -38,13 +39,13 @@ DCORE_USE_NAMESPACE
 
 QPoint AppItem::MousePressPos;
 
-AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const QDBusObjectPath &entry, QWidget *parent)
+AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSettings, const QGSettings *dockedAppSettings, const Entry *entry, QWidget *parent)
     : DockItem(parent)
     , m_appSettings(appSettings)
     , m_activeAppSettings(activeAppSettings)
     , m_dockedAppSettings(dockedAppSettings)
+    , m_itemEntry(const_cast<Entry*>(entry))
     , m_appPreviewTips(nullptr)
-    , m_itemEntryInter(new DockEntryInter(dockServiceName(), entry.path(), QDBusConnection::sessionBus(), this))
     , m_swingEffectView(nullptr)
     , m_itemAnimation(nullptr)
     , m_wmHelper(DWindowManagerHelper::instance())
@@ -69,13 +70,13 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     setAcceptDrops(true);
     setLayout(centralLayout);
 
-    m_id = m_itemEntryInter->id();
-    m_active = m_itemEntryInter->isActive();
-    m_name = m_itemEntryInter->name();
-    m_icon = m_itemEntryInter->icon();
-    m_mode = m_itemEntryInter->mode();
-    m_isDocked = m_itemEntryInter->isDocked();
-    m_menu = m_itemEntryInter->menu();
+    m_id = m_itemEntry->getId();
+    m_active = m_itemEntry->getIsActive();
+    m_name = m_itemEntry->getName();
+    m_icon = m_itemEntry->getIcon();
+    m_mode = m_itemEntry->mode();
+    m_isDocked = m_itemEntry->getIsDocked();
+    m_menu = m_itemEntry->getMenu();
 
     setObjectName(m_name);
 
@@ -88,32 +89,32 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
     m_refershIconTimer->setInterval(1000);
     m_refershIconTimer->setSingleShot(false);
 
-    connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, &AppItem::activeChanged);
-    connect(m_itemEntryInter, &DockEntryInter::IsActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
-    connect(m_itemEntryInter, &DockEntryInter::WindowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
-    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, [=](QString icon) { 
+    connect(m_itemEntry, &Entry::isActiveChanged, this, &AppItem::activeChanged);
+    connect(m_itemEntry, &Entry::isActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+    connect(m_itemEntry, &Entry::windowInfosChanged, this, &AppItem::updateWindowInfos, Qt::QueuedConnection);
+    connect(m_itemEntry, &Entry::iconChanged, this, [=](QString icon) { 
         if (!icon.isEmpty() && icon != m_icon)
             m_icon = icon;
     });
-    connect(m_itemEntryInter, &DockEntryInter::IconChanged, this, &AppItem::refreshIcon);
-    connect(m_itemEntryInter, &DockEntryInter::ModeChanged, this, [=] (int32_t mode) { m_mode = mode; Q_EMIT modeChanged(m_mode);});
+    connect(m_itemEntry, &Entry::iconChanged, this, &AppItem::refreshIcon);
+    connect(m_itemEntry, &Entry::modeChanged, this, [=] (int32_t mode) { m_mode = mode; Q_EMIT modeChanged(m_mode);});
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
     connect(m_retryObtainIconTimer, &QTimer::timeout, this, &AppItem::refreshIcon, Qt::QueuedConnection);
     connect(DockSettings::instance(), &DockSettings::showMultiWindowChanged, this, [=] (bool show) {
         m_showMultiWindow = show;
     });
-    connect(m_itemEntryInter, &DockEntryInter::NameChanged, this, [=](const QString& name){ m_name = name; });
-    connect(m_itemEntryInter, &DockEntryInter::DesktopFileChanged, this, [=](const QString& desktopfile){ m_desktopfile = desktopfile; });
-    connect(m_itemEntryInter, &DockEntryInter::IsDockedChanged, this, [=](bool docked){ m_isDocked = docked; });
-    connect(m_itemEntryInter, &DockEntryInter::MenuChanged, this, [=](const QString& menu){ m_menu = menu; });
-    connect(m_itemEntryInter, &DockEntryInter::CurrentWindowChanged, this, [=](uint32_t currentWindow){ 
+    connect(m_itemEntry, &Entry::nameChanged, this, [=](const QString& name){ m_name = name; });
+    connect(m_itemEntry, &Entry::desktopFileChanged, this, [=](const QString& desktopfile){ m_desktopfile = desktopfile; });
+    connect(m_itemEntry, &Entry::isDockedChanged, this, [=](bool docked){ m_isDocked = docked; });
+    connect(m_itemEntry, &Entry::menuChanged, this, [=](const QString& menu){ m_menu = menu; });
+    connect(m_itemEntry, &Entry::currentWindowChanged, this, [=](uint32_t currentWindow){ 
         m_currentWindow = currentWindow;
         Q_EMIT onCurrentWindowChanged(m_currentWindow);
     });
 
     connect(this, &AppItem::requestUpdateEntryGeometries, this, &AppItem::updateWindowIconGeometries);
 
-    updateWindowInfos(m_itemEntryInter->windowInfos());
+    updateWindowInfos(m_itemEntry->getExportWindowInfos());
 
     if (m_appSettings)
         connect(m_appSettings, &QGSettings::changed, this, &AppItem::onGSettingsChanged);
@@ -135,7 +136,7 @@ AppItem::AppItem(const QGSettings *appSettings, const QGSettings *activeAppSetti
  */
 void AppItem::checkEntry()
 {
-    m_itemEntryInter->Check();
+    m_itemEntry->check();
 }
 
 const QString AppItem::appId() const
@@ -150,7 +151,7 @@ QString AppItem::name() const
 
 bool AppItem::isValid() const
 {
-    return m_itemEntryInter->isValid() && !m_id.isEmpty();
+    return m_itemEntry->isValid() && !m_id.isEmpty();
 }
 
 // Update _NET_WM_ICON_GEOMETRY property for windows that every item
@@ -180,7 +181,7 @@ void AppItem::updateWindowIconGeometries()
  */
 void AppItem::undock()
 {
-    m_itemEntryInter->RequestUndock();
+    m_itemEntry->requestUndock();
 }
 
 QWidget *AppItem::appDragWidget()
@@ -230,9 +231,9 @@ int AppItem::mode() const
 }
 
 
-DockEntryInter *AppItem::itemEntryInter() const
+Entry *AppItem::itemEntry() const
 {
-    return m_itemEntryInter;
+    return m_itemEntry;
 }
 
 QString AppItem::accessibleName()
@@ -242,7 +243,7 @@ QString AppItem::accessibleName()
 
 void AppItem::requestDock()
 {
-    m_itemEntryInter->RequestDock();
+    m_itemEntry->requestDock();
 }
 
 bool AppItem::isDocked() const
@@ -260,7 +261,7 @@ void AppItem::updateMSecs()
     m_createMSecs = QDateTime::currentMSecsSinceEpoch();
 }
 
-const WindowInfoMap &AppItem::windowsMap() const
+const WindowInfoMap &AppItem::windowsInfos() const
 {
     return m_windowInfos;
 }
@@ -396,7 +397,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     if (e->button() == Qt::MiddleButton) {
-        m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+        m_itemEntry->newInstance(QX11Info::getTimestamp());
 
         // play launch effect
         if (m_windowInfos.isEmpty())
@@ -408,15 +409,12 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
             return;
         }
 
-        qDebug() << "app item clicked, name:" << m_name
-                 << "id:" << m_id << "my-id:" << m_id << "icon:" << m_icon;
-
         if (m_showMultiWindow) {
             // 如果开启了多窗口显示，则直接新建一个窗口
-            m_itemEntryInter->NewInstance(QX11Info::getTimestamp());
+            m_itemEntry->newInstance(QX11Info::getTimestamp());
         } else {
             // 如果没有开启新窗口显示，则
-            m_itemEntryInter->Activate(QX11Info::getTimestamp());
+            m_itemEntry->active(QX11Info::getTimestamp());
             // play launch effect
             if (m_windowInfos.isEmpty() && DGuiApplicationHelper::isSpecialEffectsEnvironment())
                 playSwingEffect();
@@ -469,7 +467,7 @@ void AppItem::wheelEvent(QWheelEvent *e)
     QWidget::wheelEvent(e);
 
     if (qAbs(e->angleDelta().y()) > 20) {
-        m_itemEntryInter->PresentWindows();
+        m_itemEntry->presentWindows();
     }
 }
 
@@ -523,7 +521,7 @@ void AppItem::dropEvent(QDropEvent *e)
     }
 
     qDebug() << "accept drop event with URIs: " << uriList;
-    m_itemEntryInter->HandleDragDrop(QX11Info::getTimestamp(), uriList);
+    m_itemEntry->handleDragDrop(QX11Info::getTimestamp(), uriList);
 }
 
 void AppItem::leaveEvent(QEvent *e)
@@ -553,7 +551,7 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(checked);
 
-    m_itemEntryInter->HandleMenuItem(QX11Info::getTimestamp(), itemId);
+    m_itemEntry->handleMenuItem(QX11Info::getTimestamp(), itemId);
 }
 
 const QString AppItem::contextMenu() const
@@ -663,7 +661,7 @@ void AppItem::updateWindowInfos(const WindowInfoMap &info)
 
     m_windowInfos = info;
     if (m_appPreviewTips)
-        m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
+        m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntry->getAllowedClosedWindowIds().toList());
     m_updateIconGeometryTimer->start();
 
     // process attention effect
@@ -754,14 +752,14 @@ void AppItem::showPreview()
         return;
 
     m_appPreviewTips = new PreviewContainer;
-    m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntryInter->GetAllowedCloseWindows().value());
+    m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntry->getAllowedClosedWindowIds().toList());
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::requestCancelPreview);
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
-    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntryInter, &DockEntryInter::Check);
+    connect(m_appPreviewTips, &PreviewContainer::requestCheckWindows, m_itemEntry, &Entry::check);
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::onResetPreview);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::onResetPreview);
@@ -878,5 +876,5 @@ void AppItem::showEvent(QShowEvent *e)
 
 void AppItem::activeWindow(WId wid)
 {
-    m_itemEntryInter->ActiveWindow(wid);
+    m_itemEntry->activeWindow(wid);
 }

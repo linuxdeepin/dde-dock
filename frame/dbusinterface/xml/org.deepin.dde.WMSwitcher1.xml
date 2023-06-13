@@ -1,0 +1,12 @@
+<interface name="org.deepin.dde.WMSwitcher1">
+    <method name="AllowSwitch">
+        <arg direction="out" type="b" name="outArg0"/>
+    </method>
+    <method name="CurrentWM">
+        <arg direction="out" type="s" name="outArg0"/>
+    </method>
+    <method name="RequestSwitchWM"/>
+    <signal name="WMChanged">
+        <arg type="s" name="wmName"/>
+    </signal>
+</interface>

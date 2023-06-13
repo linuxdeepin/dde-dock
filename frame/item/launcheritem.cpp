@@ -14,6 +14,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QGSettings>
+#include <QtConcurrent>
 #include <QDBusInterface>
 #include <QDBusPendingCall>
 #include <DDBusSender>
@@ -84,15 +85,17 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *e)
 
     if (e->button() != Qt::LeftButton)
         return;
-
-    DDBusSender dbusSender = DDBusSender()
+    
+    QtConcurrent::run([=] {
+        DDBusSender dbusSender = DDBusSender()
             .service(launcherService)
             .path(launcherPath)
             .interface(launcherInterface);
 
-    QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
-    if (!visibleReply.value())
-       dbusSender.method("Toggle").call();
+        QDBusPendingReply<bool> visibleReply = dbusSender.property("Visible").get();
+        if (!visibleReply.value())
+        dbusSender.method("Toggle").call();
+    });
 }
 
 QWidget *LauncherItem::popupTips()
