@@ -17,6 +17,7 @@
 namespace Dtk { namespace Widget { class DListView; } }
 
 using namespace Dtk::Widget;
+using namespace Dtk::Gui;
 namespace Dock {
 class TipsWidget;
 }

@@ -29,7 +29,7 @@ class QGridLayout;
 class DisplaySettingWidget;
 struct QuickDragInfo;
 
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class QuickSettingContainer : public QWidget
 {
