@@ -6,6 +6,8 @@ endif()
 
 project(dde-dock)
 
+find_package(DtkTools REQUIRED)
+
 set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 set(CMAKE_HAVE_THREADS_LIBRARY 1)
 set(CMAKE_USE_PTHREADS_INIT 1)
@@ -68,7 +70,7 @@ function(generation_dbus_interface xmldir outdir)
         string(REPLACE "." "_" classname ${classname})
         string(TOLOWER ${classname} filename)
 
-        execute_process(COMMAND qdbusxml2cpp-fix -c ${classname} -p ${outdir}/${filename} ${XMLFILE}
+        execute_process(COMMAND ${DTK_XML2CPP} -c ${classname} -p ${outdir}/${filename} ${XMLFILE}
             WORKING_DIRECTORY ${outdir})
     endforeach()
 endfunction(generation_dbus_interface)
