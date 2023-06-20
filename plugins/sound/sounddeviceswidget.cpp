@@ -272,14 +272,10 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     portItem->setTextColorRole(QPalette::BrightText);
     portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), DeviceObjRole);
     portItem->setData(AUDIOPORT, ItemTypeRole);
-    portItem->setToolTip(port->cardName());
     static QBrush oldBackGroundStyle = portItem->background();
 
     connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
         portItem->setText(str);
-    });
-    connect(port, &SoundDevicePort::cardNameChanged, this, [ = ](const QString &str) {
-        portItem->setToolTip(str);
     });
     connect(port, &SoundDevicePort::isActiveChanged, this, [ = ](bool isActive) {
         portItem->setCheckState(isActive ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
