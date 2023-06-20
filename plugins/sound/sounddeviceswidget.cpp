@@ -268,6 +268,7 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     // TODO: get right icon
     portItem->setIcon(QIcon());
     portItem->setText(deviceName);
+    portItem->setEditable(false);
     portItem->setFlags(portItem->flags() & ~Qt::ItemIsSelectable);
     portItem->setTextColorRole(QPalette::BrightText);
     portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), DeviceObjRole);
