@@ -273,6 +273,7 @@ void SoundDevicesWidget::addPort(const SoundDevicePort *port)
     portItem->setData(QVariant::fromValue<const SoundDevicePort *>(port), DeviceObjRole);
     portItem->setData(AUDIOPORT, ItemTypeRole);
     portItem->setToolTip(port->cardName());
+    portItem->setEditable(false);
     static QBrush oldBackGroundStyle = portItem->background();
 
     connect(port, &SoundDevicePort::nameChanged, this, [ = ](const QString &str) {
