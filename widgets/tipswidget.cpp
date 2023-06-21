@@ -7,12 +7,17 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
+#include <QGuiApplication>
 
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
     , m_type(SingleLine)
 {
+    connect(qApp, &QGuiApplication::fontChanged, this, [=] {
+        setFont(qApp->font());
+    });
+    setFont(qApp->font());
 }
 
 void TipsWidget::setText(const QString &text)
