@@ -66,7 +66,7 @@ void PluginChildPage::initUi()
     headerLayout->setSpacing(0);
     headerLayout->addWidget(m_back);
     headerLayout->addWidget(m_title);
-    m_headerWidget->setFixedHeight(48);
+    m_headerWidget->setFixedHeight(52);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
