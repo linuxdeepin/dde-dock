@@ -14,6 +14,13 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Brillantor</translation>
+    </message>
+</context>
+<context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>

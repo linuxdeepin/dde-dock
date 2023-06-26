@@ -171,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>明るさ</translation>
+    </message>
+</context>
+<context>
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>
