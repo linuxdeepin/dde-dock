@@ -39,7 +39,8 @@ Copyright: None
 License: CC0-1.0
 
 # xml toml json policy yaml
-Files: gschema/*.xml plugins/*.xml frame/*.xml .clog.toml plugins/*.json configs/*.json .packit.yaml .tx/config .tx/deepin.conf plugins/overlay-warning/com.deepin.dde.dock.overlay.policy plugins/dcc-dock-plugin/.tx/config 
+Files: gschema/*.xml plugins/*.xml frame/*.xml .clog.toml plugins/*.json configs/*.json .packit.yaml .tx/config .tx/deepin.conf plugins/overlay-warning/com.deepin.dde.dock.overlay.policy plugins/dcc-dock-plugin/.tx/config
+ frame/taskmanager/window_patterns.json
 Copyright: None
 License: CC0-1.0
 
