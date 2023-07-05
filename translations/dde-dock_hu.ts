@@ -171,6 +171,13 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Fényerősség</translation>
+    </message>
+</context>
+<context>
     <name>DevCollaborationWidget</name>
     <message>
         <source>PC collaboration</source>

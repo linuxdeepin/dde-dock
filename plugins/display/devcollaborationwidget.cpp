@@ -15,7 +15,7 @@
 #include <QVBoxLayout>
 #include <QStandardItemModel>
 
-#define TITLE_HEIGHT 16
+#define TITLE_HEIGHT 30
 #define ITEM_WIDTH 310
 #define ITEM_HEIGHT 36
 #define LISTVIEW_ITEM_SPACE 5

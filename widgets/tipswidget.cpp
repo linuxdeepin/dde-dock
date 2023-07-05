@@ -7,12 +7,17 @@
 #include <QPainter>
 #include <QAccessible>
 #include <QTextDocument>
+#include <QGuiApplication>
 
 namespace Dock{
 TipsWidget::TipsWidget(QWidget *parent)
     : QFrame(parent)
     , m_type(SingleLine)
 {
+    connect(qApp, &QGuiApplication::fontChanged, this, [=] {
+        setFont(qApp->font());
+    });
+    setFont(qApp->font());
 }
 
 void TipsWidget::setText(const QString &text)
@@ -44,19 +49,25 @@ void TipsWidget::setText(const QString &text)
 
 void TipsWidget::setTextList(const QStringList &textList)
 {
-    m_type = TipsWidget::MultiLine;
-    m_textList = textList;
 
-    int width = 0;
-    int height = 0;
-    for (QString text : m_textList) {
-        width = qMax(width, fontMetrics().horizontalAdvance(text) + 20);
-        height += fontMetrics().boundingRect(text).height();
+    if (textList.size() == 1) {
+        setText(textList.first());
+    } else {
+        int width = 0;
+        int height = 0;
+
+        m_type = TipsWidget::MultiLine;
+        m_textList = textList;
+
+        for (QString &text : m_textList) {
+            width = qMax(width, fontMetrics().horizontalAdvance(text) + 20);
+            height += fontMetrics().boundingRect(text).height();
+        }
+
+        setFixedSize(width + 10, height);
+
+        update();
     }
-
-    setFixedSize(width, height);
-
-    update();
 }
 
 /**
@@ -84,7 +95,7 @@ void TipsWidget::paintEvent(QPaintEvent *event)
             option.setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         for (QString text : m_textList) {
             int lineHeight = fontMetrics().boundingRect(text).height();
-            painter.drawText(QRect(0, y, rect().width(), lineHeight), text, option);
+            painter.drawText(QRect(10, y, rect().width(), lineHeight), text, option);
             y += lineHeight;
         }
     }
