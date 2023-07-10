@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "mainpanelcontrol.h"
+#include "constants.h"
 #include "dockitem.h"
 #include "placeholderitem.h"
 #include "components/appdrag.h"
@@ -941,7 +942,14 @@ QSize MainPanelControl::suitableSize(const Position &position, int screenSize, d
     if (ratio <= 0)
         ratio = qApp->devicePixelRatio();
 
-    int dockSize = (position == Position::Top || position == Position::Bottom) ? height() : width();
+    int dockSize = (m_position == Position::Top || m_position == Position::Bottom) ? height() : width();
+    if (dockSize == 0) {
+        int windowSize = m_displayMode == DisplayMode::Efficient ?
+            DockSettings::instance()->getWindowSizeEfficient() :
+            DockSettings::instance()->getWindowSizeFashion();
+        dockSize = windowSize;
+    }
+
     if (m_displayMode == DisplayMode::Efficient) {
         // 如果是高效模式
         if (position == Position::Top || position == Position::Bottom)
