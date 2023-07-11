@@ -1,3 +1,27 @@
+dde-dock (6.0.17) unstable; urgency=medium
+
+  * fix: dock position changed from left to bottom no date display
+  * fix: DockPopupWindow losing active status(Issue: #172773)
+  * fix: make keyboard layout plugin size fixed
+  * fix: adjust tray icon size to 20
+  * fix: incorrect trash status when deleting file in other partition
+  * fix: imcomplete display when dock plugin's tips text is multi-line
+  * fix: Fix the incomplete display of text when font 20 is scaled to 1.25(Influence: 电脑协同显示区域)
+  * fix: text missing translation(Influence: 文本显示)
+  * fix: 修复'Brightness' 文本裁切问题(Influence: 文本显示)
+  * chore: chore: update translate
+  * chore: update dependencies
+  * fix: tips font size not follow system
+  * fix: 任务栏声音面板中出现异常的悬浮提示 (#876)
+  * fix: the name of sound device shouldn't be edited (#880)
+  * refactor: rewrite encapsulation of the dconfig
+  * refactor: Rewrite the calling method of dock settings
+  * chore: update .gitignore add debian and build ignore
+  * feat: add taskmanager from dde-application-manager
+  * fix: dock size error when dock positon changed
+
+ -- Deepin Packages Builder <packages@deepin.org>  Tue, 11 Jul 2023 09:50:13 +0800
+
 dde-dock (6.0.16) unstable; urgency=medium
 
   * fix: blank in the plugin area after recorder screen 
