@@ -464,4 +464,31 @@
         <translation>Dok je v náhradním režimu – ukončete, aby se zobrazil správně</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Otevřít</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Zavřít vše</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Vynutit ukončení</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Panel</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Zrušit ukotvení</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Všechna okna</translation>
+    </message>
+</context>
 </TS>

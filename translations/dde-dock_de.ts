@@ -464,4 +464,31 @@
         <translation>Das Dock befindet sich im abgesicherten Modus, bitte beenden, um es richtig anzuzeigen</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Öffnen</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Alle schließen</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Beenden erzwingen</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Abdocken</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Alle Fenster</translation>
+    </message>
+</context>
 </TS>

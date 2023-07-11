@@ -464,4 +464,31 @@
         <translation>Док је у безбедном режиму, изађите за нормалан приказ</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Покрени</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Затвори све</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Принудно изађи</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Закачи</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Откачи</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Сви прозори</translation>
+    </message>
+</context>
 </TS>

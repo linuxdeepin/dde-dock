@@ -464,4 +464,31 @@
         <translation type="unfinished"/>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>فتح</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>إغلاق الكل</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>الخروج بالقوة</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>الرف</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>إلغاء الإرساء</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>كل النوافذ</translation>
+    </message>
+</context>
 </TS>
