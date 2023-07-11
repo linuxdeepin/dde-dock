@@ -464,4 +464,31 @@
         <translation>任務欄已進入安全模式，退出安全模式後即可正常顯示</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>打開</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>關閉所有</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>強制退出</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>駐留</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>移除駐留</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>所有視窗</translation>
+    </message>
+</context>
 </TS>

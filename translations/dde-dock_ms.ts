@@ -464,4 +464,31 @@
         <translation>Labuh dalam mod selamat, sila keluar dahulu supaya dapat dipaparkan dengan baik</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Buka</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Tutup Semua</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Paksa Keluar</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Labuh</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Tanggal</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Semua Tetingkap</translation>
+    </message>
+</context>
 </TS>

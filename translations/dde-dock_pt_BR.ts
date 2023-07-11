@@ -464,4 +464,31 @@
         <translation>A Dock está em modo de segurança; saia para exibi-lo corretamente</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Fechar Tudo</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Forçar Saída</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Dock</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Remover da Dock</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Todas as Janelas</translation>
+    </message>
+</context>
 </TS>

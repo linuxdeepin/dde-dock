@@ -464,4 +464,31 @@
         <translation>A Dokkoló biztonságos módban van. Kérjük lépjen ki a megfelelő megjelenítéshez</translation>
     </message>
 </context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Megnyitás</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Összes bezárása</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Kényszerített kilépés</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Kitűzés a Dokkolóra</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Eltávolítás a Dokkolóról</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Összes ablak</translation>
+    </message>
+</context>
 </TS>
