@@ -39,8 +39,6 @@ DUTIL_USE_NAMESPACE
 
 const QString g_cfgPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)[0] + "/dde-cfg.ini";
 
-using namespace std;
-
 /**
  * @brief IsSaveMode
  * @return 判断当前是否应该进入安全模式（安全模式下不加载插件）

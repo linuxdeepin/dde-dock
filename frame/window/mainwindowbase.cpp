@@ -393,7 +393,7 @@ QRect MainWindowBase::getDockGeometry(QScreen *screen, const Dock::Position &pos
         return QRect();
 
     // 对当前窗口前面的所有窗口按照order进行排序
-    sort(lessOrderMainWindows.begin(), lessOrderMainWindows.end(), [](MainWindowBase const *window1, MainWindowBase const *window2) {
+    std::sort(lessOrderMainWindows.begin(), lessOrderMainWindows.end(), [](MainWindowBase const *window1, MainWindowBase const *window2) {
         return window1->order() < window2->order();
     });
     QRect rect;
