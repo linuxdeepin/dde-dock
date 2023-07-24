@@ -11,6 +11,7 @@
 #include "taskmanager.h"
 #include "windowinfok.h"
 #include "dbushandler.h"
+#include "docksettings.h"
 #include "windowinfomap.h"
 #include "windowidentify.h"
 #include "waylandmanager.h"
@@ -638,12 +639,6 @@ void TaskManager::initSettings()
     connect(SETTING, &DockSettings::hideModeChanged, this, [ this ](HideMode mode) {
         this->updateHideState(false);
     });
-    connect(SETTING, &DockSettings::displayModeChanged, this, [](DisplayMode mode) {
-       qInfo() << "display mode change to " << static_cast<int>(mode);
-    });
-    connect(SETTING, &DockSettings::positionModeChanged, this, [](Position mode) {
-       qInfo() << "position mode change to " << static_cast<int>(mode);
-    });
     connect(SETTING, &DockSettings::forceQuitAppChanged, this, [ this ](ForceQuitAppMode mode) {
        qInfo() << "forceQuitApp change to " << int(mode);
        m_forceQuitAppStatus = mode;
@@ -651,6 +646,7 @@ void TaskManager::initSettings()
     });
     connect(SETTING, &DockSettings::showRecentChanged, this, &TaskManager::onShowRecentChanged);
     connect(SETTING, &DockSettings::showMultiWindowChanged, this, &TaskManager::onShowMultiWindowChanged);
+    connect(SETTING, &DockSettings::displayModeChanged, this, &TaskManager::setDisplayMode);
 }
 
 /**
@@ -1402,7 +1398,7 @@ void TaskManager::setDisplayMode(int mode)
 {
     DisplayMode displayMode = static_cast<DisplayMode>(mode);
     SETTING->setDisplayMode(displayMode);
-    // m_entries->setDisplayMode(displayMode);
+    m_entries->setDisplayMode(displayMode);
 }
 
 /**
