@@ -1,3 +1,10 @@
+dde-dock (6.0.18) unstable; urgency=medium
+
+  * fix: dock entries not update after displaymode changed
+  * fix: official chrome unable to be identified
+
+ -- Deepin Packages Builder <liuheng@deepin.org>  Mon, 24 Jul 2023 16:20:32 +0800
+
 dde-dock (6.0.17) unstable; urgency=medium
 
   * fix: dock position changed from left to bottom no date display
