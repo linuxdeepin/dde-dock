@@ -43,9 +43,10 @@ void AppInfo::init(DesktopInfo &info)
     m_fileName = info.getDesktopFilePath();
     m_id = info.getId();
     m_icon = info.getIcon();
-    for (const auto & action : info.getActions()) {
-        m_actions.push_back(action);
-    }
+    m_installed = info.isInstalled();
+    auto actions = info.getActions();
+    std::copy(actions.begin(), actions.end(), std::back_inserter(m_actions));
+
 }
 
 QString AppInfo::genInnerIdWithDesktopInfo(DesktopInfo &info)
