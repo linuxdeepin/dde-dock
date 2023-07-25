@@ -31,7 +31,9 @@ DesktopInfo::DesktopInfo(const QString &desktopfile)
     if (!desktopFileInfo.isAbsolute()) {
         for (auto dir: QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)) {
             QString path = dir.append("/").append(desktopfilepath);
-            if (QFile::exists(path)) desktopFileInfo.setFile(path);
+            if (QFile::exists(path)){
+                desktopFileInfo.setFile(path);
+            }
         }
     }
 
@@ -71,6 +73,16 @@ QString DesktopInfo::getDesktopFilePath()
 bool DesktopInfo::isValidDesktop()
 {
     return m_isValid;
+}
+
+bool DesktopInfo::isInstalled()
+{
+    QFileInfo desktopFileInfo(m_desktopFilePath);
+    QString desktopFileName = desktopFileInfo.fileName();
+    static auto applicationDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+    return std::any_of(applicationDirs.begin(), applicationDirs.end(), [&desktopFileName](auto applicationDir){
+        return QFile::exists(applicationDir+ '/' + desktopFileName);
+    });
 }
 
 /** if return true, item is shown

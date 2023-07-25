@@ -379,7 +379,10 @@ AppInfo *WindowIdentify::identifyWindowByRule(TaskManager *_taskmanager, WindowI
 
     if (matchStr.size() > 4 && matchStr.startsWith("id=")) {
         matchStr.remove(0, 3);
-        ret = new AppInfo(matchStr);
+        AppInfo* tmp = new AppInfo(matchStr);
+        // 匹配到了，但是“无效规则“，匹配到程序未安装（优先匹配商店，但是实际程序是原生软件）
+        if (tmp->isValidApp()) ret = tmp;
+        else delete tmp;
     } else if (matchStr == "env") {
         auto process = winInfo->getProcess();
         if (process) {
