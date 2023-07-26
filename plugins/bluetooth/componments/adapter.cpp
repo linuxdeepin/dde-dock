@@ -37,6 +37,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     const bool paired = deviceObj["Paired"].toBool();
     const int rssi = deviceObj["RSSI"].toInt();
     const Device::State state = Device::State(deviceObj["State"].toInt());
+    const int battery = deviceObj["Battery"].toInt();
     const bool connectState = deviceObj["ConnectState"].toBool();
     const QString bluetoothDeviceType = deviceObj["Icon"].toString();
 
@@ -53,6 +54,7 @@ void Adapter::addDevice(const QJsonObject &deviceObj)
     device->setRssi(rssi);
     device->setAdapterId(m_id);
     device->setDeviceType(bluetoothDeviceType);
+    device->setBattery(battery);
 
     m_devices[id] = device;
 
@@ -80,6 +82,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
     const Device::State state = Device::State(dviceJson["State"].toInt());
     const bool connectState = dviceJson["ConnectState"].toBool();
     const QString bluetoothDeviceType = dviceJson["Icon"].toString();
+    const int battery = dviceJson["Battery"].toInt();
 
     // FIXME: Solve the problem that the device name in the Bluetooth list is blank
     if (name.isEmpty() && alias.isEmpty())
@@ -97,6 +100,7 @@ void Adapter::updateDevice(const QJsonObject &dviceJson)
         device->setConnectState(connectState);
         device->setState(state);
         device->setDeviceType(bluetoothDeviceType);
+        device->setBattery(battery);
         emit deviceNameUpdated(device);
     }
 }

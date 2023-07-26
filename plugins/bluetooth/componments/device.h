@@ -28,6 +28,9 @@ public:
     inline QString id() const { return m_id; }
     void setId(const QString &id);
 
+    inline int battery() const { return m_battery; }
+    inline void setBattery(const int battery) { m_battery = battery; }
+
     inline QString name() const { return m_name; }
     void setName(const QString &name);
 
@@ -76,6 +79,7 @@ private:
     bool m_connectState;
     QString m_adapterId;
     QString m_deviceType;
+    int m_battery = 0;
 };
 
 QDebug &operator<<(QDebug &stream, const Device *device);

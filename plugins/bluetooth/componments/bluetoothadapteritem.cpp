@@ -50,6 +50,7 @@ BluetoothDeviceItem::~BluetoothDeviceItem()
 
 void BluetoothDeviceItem::initActionList()
 {
+    // TODO: how to handle battery
     m_labelAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), false);
     m_stateAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), true);
     m_connAction = new DViewItemAction(Qt::AlignRight | Qt::AlignVCenter, QSize(16, 16), QSize(16, 16), false);
