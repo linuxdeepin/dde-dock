@@ -56,6 +56,9 @@ public:
     inline QString deviceType() const { return m_deviceType; }
     void setDeviceType(const QString &deviceType);
 
+    inline int battery() const { return m_battery; }
+    void setBattery(int battery);
+
 Q_SIGNALS:
     void nameChanged(const QString &name) const;
     void aliasChanged(const QString &alias) const;
@@ -63,6 +66,7 @@ Q_SIGNALS:
     void stateChanged(const State state) const;
     void connectStateChanged(const bool connectState) const;
     void rssiChanged(const int rssi) const;
+    void batteryChanged(const int battery) const;
 
 private:
     QString m_id;
@@ -76,6 +80,7 @@ private:
     bool m_connectState;
     QString m_adapterId;
     QString m_deviceType;
+    int m_battery;
 };
 
 QDebug &operator<<(QDebug &stream, const Device *device);

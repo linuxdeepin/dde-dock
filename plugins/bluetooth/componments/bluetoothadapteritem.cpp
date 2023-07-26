@@ -27,6 +27,7 @@ BluetoothDeviceItem::BluetoothDeviceItem(QStyle *style, const Device *device, DL
     , m_labelAction(nullptr)
     , m_stateAction(nullptr)
     , m_connAction(nullptr)
+    , m_batteryAction(nullptr)
     , m_loading(new DSpinner(parent))
     , m_iconWidget(new QWidget(parent->viewport()))
     , m_connButton(new StateButton(m_iconWidget))
@@ -53,6 +54,7 @@ void BluetoothDeviceItem::initActionList()
     m_labelAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), false);
     m_stateAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(), QSize(), true);
     m_connAction = new DViewItemAction(Qt::AlignRight | Qt::AlignVCenter, QSize(16, 16), QSize(16, 16), false);
+    m_batteryAction = new DViewItemAction(Qt::AlignLeft | Qt::AlignVCenter, QSize(20, 20), QSize(20, 20), false);
 
     m_connButton->setType(StateButton::Check);
     m_connButton->setSwitchFork(true);
@@ -69,14 +71,52 @@ void BluetoothDeviceItem::initActionList()
     m_connAction->setWidget(m_iconWidget);
 
     m_standarditem->setAccessibleText(m_device->alias());
-    m_standarditem->setActionList(Qt::RightEdge, { m_stateAction, m_connAction });
+    m_standarditem->setActionList(Qt::RightEdge, { m_batteryAction, m_stateAction, m_connAction });
     m_standarditem->setActionList(Qt::LeftEdge, { m_labelAction });
 
     //蓝牙列表可用蓝牙设备信息文字显示高亮
     m_labelAction->setTextColorRole(DPalette::BrightText);
     m_labelAction->setText(m_device->alias());
     updateDeviceState(m_device->state());
+
+    m_batteryAction->setIcon(getBatteryIcon(m_device->battery()));
+    m_batteryAction->setVisible(m_device->battery() > 0);
+
     updateIconTheme(DGuiApplicationHelper::instance()->themeType());
+}
+
+QIcon BluetoothDeviceItem::getBatteryIcon(int percentage)
+{
+    /* 0-5%、6-10%、11%-20%、21-30%、31-40%、41-50%、51-60%、61%-70%、71-80%、81-90%、91-100% */
+    QString percentageStr;
+    if (percentage <= 5) {
+        percentageStr = "000";
+    } else if (percentage <= 10) {
+        percentageStr = "010";
+    } else if (percentage <= 20) {
+        percentageStr = "020";
+    } else if (percentage <= 30) {
+        percentageStr = "030";
+    } else if (percentage <= 40) {
+        percentageStr = "040";
+    } else if (percentage <= 50) {
+        percentageStr = "050";
+    } else if (percentage <= 60) {
+        percentageStr = "060";
+    } else if (percentage <= 70) {
+        percentageStr = "070";
+    } else if (percentage <= 80) {
+        percentageStr = "080";
+    } else if (percentage <= 90) {
+        percentageStr = "090";
+    } else if (percentage <= 100) {
+        percentageStr = "100";
+    } else {
+        percentageStr = "unknow";
+    }
+
+    return QIcon::fromTheme(QString("battery-%1-symbolic").arg(percentageStr));
+
 }
 
 void BluetoothDeviceItem::initConnect()
@@ -95,11 +135,17 @@ void BluetoothDeviceItem::updateIconTheme(DGuiApplicationHelper::ColorType type)
     }
     m_deviceIcon = type == DGuiApplicationHelper::LightType ? LightString.arg("other") : DarkString.arg("other");
     m_labelAction->setIcon(QIcon::fromTheme(m_deviceIcon));
+
+    m_batteryAction->setIcon(getBatteryIcon(m_device->battery()));
 }
 
 void BluetoothDeviceItem::updateDeviceState(Device::State state)
 {
     m_labelAction->setText(m_device->alias());
+
+    m_batteryAction->setIcon(getBatteryIcon(m_device->battery()));
+    m_batteryAction->setVisible(m_device->battery() > 0);
+
     if (state == Device::StateAvailable) {
         m_loading->start();
         m_stateAction->setVisible(true);

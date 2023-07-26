@@ -62,6 +62,7 @@ signals:
 private:
     void initActionList();
     void initConnect();
+    QIcon getBatteryIcon(int percentage);
 
     DStyleHelper m_style;
     QString m_deviceIcon;
@@ -71,6 +72,7 @@ private:
     DViewItemAction *m_labelAction;
     DViewItemAction *m_stateAction;
     DViewItemAction *m_connAction;
+    DViewItemAction *m_batteryAction;
     DSpinner *m_loading;
 
     QWidget *m_iconWidget;
