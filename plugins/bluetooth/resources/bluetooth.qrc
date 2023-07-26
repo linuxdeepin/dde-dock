@@ -21,4 +21,30 @@
         <file>dark/buletooth_other_dark.svg</file>
         <file>light/buletooth_other_light.svg</file>
     </qresource>
+    <qresource prefix="/icons/deepin/builtin">
+        <file>dark/icons/battery-000-symbolic_20px.svg</file>
+        <file>dark/icons/battery-010-symbolic_20px.svg</file>
+        <file>dark/icons/battery-020-symbolic_20px.svg</file>
+        <file>dark/icons/battery-030-symbolic_20px.svg</file>
+        <file>dark/icons/battery-040-symbolic_20px.svg</file>
+        <file>dark/icons/battery-050-symbolic_20px.svg</file>
+        <file>dark/icons/battery-060-symbolic_20px.svg</file>
+        <file>dark/icons/battery-070-symbolic_20px.svg</file>
+        <file>dark/icons/battery-080-symbolic_20px.svg</file>
+        <file>dark/icons/battery-090-symbolic_20px.svg</file>
+        <file>dark/icons/battery-100-symbolic_20px.svg</file>
+        <file>dark/icons/battery-unknow-symbolic_20px.svg</file>
+        <file>light/icons/battery-000-symbolic_20px.svg</file>
+        <file>light/icons/battery-010-symbolic_20px.svg</file>
+        <file>light/icons/battery-020-symbolic_20px.svg</file>
+        <file>light/icons/battery-030-symbolic_20px.svg</file>
+        <file>light/icons/battery-040-symbolic_20px.svg</file>
+        <file>light/icons/battery-050-symbolic_20px.svg</file>
+        <file>light/icons/battery-060-symbolic_20px.svg</file>
+        <file>light/icons/battery-070-symbolic_20px.svg</file>
+        <file>light/icons/battery-080-symbolic_20px.svg</file>
+        <file>light/icons/battery-090-symbolic_20px.svg</file>
+        <file>light/icons/battery-100-symbolic_20px.svg</file>
+        <file>light/icons/battery-unknow-symbolic_20px.svg</file>
+    </qresource>
 </RCC>
