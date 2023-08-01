@@ -398,6 +398,7 @@ void DockSettings::setQuickPlugin(QString plugin)
     if (!m_dockSettings)
         return;
     QStringList plugins = m_dockSettings->value(keyQuickPlugins).toStringList();
+    if (plugins.contains(plugin)) return;
     m_dockSettings->setValue(keyQuickPlugins, plugins << plugin);
 }
 
@@ -429,6 +430,7 @@ void DockSettings::setTrayItemOnDock(QString item)
     if (!m_dockSettings)
         return;
     QStringList items = m_dockSettings->value(keyQuickTrayName).toStringList();
+    if (items.contains(item)) return;
     m_dockSettings->setValue(keyQuickTrayName, items << item);
 }
 
