@@ -64,8 +64,8 @@ DockItemManager::DockItemManager(QObject *parent)
     connect(quickController, &QuickSettingController::pluginLoaderFinished, this, &DockItemManager::onPluginLoadFinished, Qt::QueuedConnection);
 
     // 应用信号
-    connect(m_taskmanager, &TaskManager::entryAdded, this, &DockItemManager::appItemAdded);
-    connect(m_taskmanager, &TaskManager::entryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::QueuedConnection);
+    connect(m_taskmanager, &TaskManager::entryAdded, this, &DockItemManager::appItemAdded, Qt::DirectConnection);
+    connect(m_taskmanager, &TaskManager::entryRemoved, this, static_cast<void (DockItemManager::*)(const QString &)>(&DockItemManager::appItemRemoved), Qt::DirectConnection);
     connect(m_taskmanager, &TaskManager::serviceRestarted, this, &DockItemManager::reloadAppItems);
     connect(DockSettings::instance(), &DockSettings::showMultiWindowChanged, this, &DockItemManager::onShowMultiWindowChanged);
 
