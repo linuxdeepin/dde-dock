@@ -297,7 +297,9 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const int radius = dstyle.pixelMetric(DStyle::PM_FrameRadius);
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    QRect imageRect(8, 8, width() - 16, height() - 16);
+    QSize size = m_pixmap.size().scaled(width() - 16, height() - 16, Qt::KeepAspectRatio);
+
+    QRect imageRect((width() - size.width()) / 2, (height() - size.height()) / 2, size.width(), size.height());
     painter.setPen(Qt::NoPen);
     QPainterPath path;
     path.addRoundedRect(imageRect, radius * ratio, radius * ratio);
