@@ -47,6 +47,7 @@ TaskManager::TaskManager(QObject *parent)
  : m_showRecent(DockSettings::instance()->showRecent())
  , m_entriesSum(0)
  , m_hideState(HideState::Unknown)
+ , m_ddeLauncherVisible(false)
  , m_entries(new Entries(this))
  , m_windowIdentify(new WindowIdentify(this))
  , m_dbusHandler(new DBusHandler(this))
@@ -281,6 +282,15 @@ bool TaskManager::shouldShowOnDock(WindowInfoBase *info)
     }
 
     return false;
+}
+
+/**
+ * @brief TaskManager::setDdeLauncherVisible 记录当前启动器是否可见
+ * @param visible
+ */
+void TaskManager::setDdeLauncherVisible(bool visible)
+{
+    m_ddeLauncherVisible = visible;
 }
 
 /**
@@ -863,7 +873,7 @@ Entry *TaskManager::getDockedEntryByDesktopFile(const QString &desktopFile)
  */
 bool TaskManager::shouldHideOnSmartHideMode()
 {
-    if (!m_activeWindow)
+    if (!m_activeWindow || m_ddeLauncherVisible)
         return false;
 
     if (!m_isWayland) {
@@ -963,6 +973,11 @@ QVector<XWindow> TaskManager::getActiveWinGroup(XWindow xid)
  */
 void TaskManager::updateHideState(bool delay)
 {
+    if (m_ddeLauncherVisible) {
+        setPropHideState(HideState::Show);
+        return;
+    }
+
     HideMode mode = SETTING->getHideMode();
     switch (mode) {
     case HideMode::KeepShowing:
@@ -992,7 +1007,7 @@ void TaskManager::setPropHideState(HideState state)
     if (state != m_hideState) {
         qDebug() << "current hide state: " << m_hideState;
         m_hideState = state;
-        Q_EMIT hideStateChanged(static_cast<int>(m_hideState));
+        Q_EMIT hideStateChanged(m_hideState);
     }
 }
 

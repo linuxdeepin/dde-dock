@@ -556,7 +556,7 @@ void MultiScreenWorker::initConnection()
     connect(DIS_INS, &DisplayManager::primaryScreenChanged, this, &MultiScreenWorker::onPrimaryScreenChanged);
     connect(DIS_INS, &DisplayManager::screenInfoChanged, this, &MultiScreenWorker::requestUpdateMonitorInfo);
 
-    connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool) const>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
+    connect(m_launcherInter, static_cast<void (DBusLuncher::*)(bool)>(&DBusLuncher::VisibleChanged), this, [ = ](bool value) { setStates(LauncherDisplay, value); });
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &MultiScreenWorker::onOpacityChanged);
 
     connect(this, &MultiScreenWorker::requestUpdatePosition, this, &MultiScreenWorker::onRequestUpdatePosition);

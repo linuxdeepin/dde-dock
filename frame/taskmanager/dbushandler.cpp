@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dbushandler.h"
+#include "dbusutil.h"
 #include "taskmanager.h"
 #include "common.h"
 #include "entry.h"
@@ -15,6 +16,7 @@ DBusHandler::DBusHandler(TaskManager *taskmanager, QObject *parent)
     , m_wmSwitcher(new org::deepin::dde::WMSwitcher1("org.deepin.dde.WMSwitcher1", "/org/deepin/dde/WMSwitcher1", QDBusConnection::sessionBus(), this))
     , m_kwaylandManager(nullptr)
     , m_xEventMonitor(nullptr)
+    , m_launcher(new org::deepin::dde::Launcher1(launcherService, launcherPath, QDBusConnection::sessionBus(), this))
 {
     connect(m_wmSwitcher, &org::deepin::dde::WMSwitcher1::WMChanged, this, [&](QString name) {m_taskmanager->setWMName(name);});
     if (!isWaylandSession()) {
@@ -22,6 +24,11 @@ DBusHandler::DBusHandler(TaskManager *taskmanager, QObject *parent)
         m_activeWindowMonitorKey = m_xEventMonitor->RegisterFullScreen();
         connect(m_xEventMonitor, &org::deepin::dde::XEventMonitor1::ButtonRelease, this, &DBusHandler::onActiveWindowButtonRelease);
     }
+
+    connect(m_launcher,static_cast<void (org::deepin::dde::Launcher1::*)(bool)>(&org::deepin::dde::Launcher1::VisibleChanged), this, [=] (const bool visible){
+        m_taskmanager->setDdeLauncherVisible(visible);
+        m_taskmanager->updateHideState(true);
+    });
 }
 
 void DBusHandler::listenWaylandWMSignals()
