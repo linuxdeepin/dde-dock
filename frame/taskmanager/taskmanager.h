@@ -174,6 +174,7 @@ private:
     HideState m_hideState;    // 记录任务栏隐藏状态
     QRect m_frontendWindowRect;    // 前端任务栏大小, 用于智能隐藏时判断窗口是否重合
     ForceQuitAppMode m_forceQuitAppStatus; // 强制退出应用状态
+    bool m_ddeLauncherVisible;
 
     Entries *m_entries;   // 所有应用实例
     X11Manager *m_x11Manager;     // X11窗口管理

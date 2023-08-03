@@ -6,6 +6,7 @@
 #define DBUSHANDLER_H
 
 #include "com_deepin_wm.h"
+#include "org_deepin_dde_launcher1.h"
 #include "org_deepin_dde_wmswitcher1.h"
 #include "org_deepin_dde_xeventmonitor1.h"
 #include "org_deepin_dde_kwayland_windowmanager.h"
@@ -70,6 +71,7 @@ private:
     org::deepin::dde::WMSwitcher1 *m_wmSwitcher;
     org::deepin::dde::kwayland1::WindowManager *m_kwaylandManager;
     org::deepin::dde::XEventMonitor1 *m_xEventMonitor;
+    org::deepin::dde::Launcher1 *m_launcher;
 };
 
 #endif // DBUSHANDLER_H
