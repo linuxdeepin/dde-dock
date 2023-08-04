@@ -6,6 +6,11 @@
 #include "tray_monitor.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
+#include "xembedtrayitemwidget.h"
+#include "snitrayitemwidget.h"
+
+#define REGISTERTED_WAY_IS_SNI 1
+#define REGISTERTED_WAY_IS_XEMBED 2
 
 TrayMonitor::TrayMonitor(QObject *parent)
     : QObject(parent)
@@ -79,6 +84,19 @@ QList<PluginsItemInterface *> TrayMonitor::systemTrays() const
 void TrayMonitor::onTrayIconsChanged()
 {
     QList<quint32> wids = m_trayInter->trayIcons();
+
+    // Filter xembed by tray pid
+    QList<quint32> filteredWids;
+    for (auto wid : wids) {
+        uint pid = XEmbedTrayItemWidget::getWindowPID(wid);
+        // filter registered sni tray
+        if (m_trayPids.value(pid, REGISTERTED_WAY_IS_XEMBED) == REGISTERTED_WAY_IS_XEMBED) {
+            m_trayPids.insert(pid, REGISTERTED_WAY_IS_XEMBED);
+            filteredWids.append(wid);
+        }
+    }
+    wids = filteredWids;
+
     if (m_trayWids == wids)
         return;
 
@@ -101,10 +119,23 @@ void TrayMonitor::onSniItemsChanged()
 {
     //TODO 防止同一个进程注册多个sni服务
     const QStringList &sniServices = m_sniWatcher->registeredStatusNotifierItems();
-    if (m_sniServices == sniServices)
+
+    // Filter sni by pid
+    QStringList filteredSniServices;
+    for (auto s : sniServices) {
+        uint pid = SNITrayItemWidget::servicePID(s);
+        // filter registered xembed tray
+        // TODO: Priority use of SNI, need remove registered xembed tray?
+        if (m_trayPids.value(pid, REGISTERTED_WAY_IS_SNI) == REGISTERTED_WAY_IS_SNI) {
+            m_trayPids.insert(pid, REGISTERTED_WAY_IS_SNI);
+            filteredSniServices.append(s);
+        }
+    }
+
+    if (m_sniServices == filteredSniServices)
         return;
 
-    for (auto s : sniServices) {
+    for (auto s : filteredSniServices) {
         if (!m_sniServices.contains(s)) {
             if (s.startsWith("/") || !s.contains("/")) {
                 qWarning() << __FUNCTION__ << "invalid sni service" << s;
@@ -115,12 +146,12 @@ void TrayMonitor::onSniItemsChanged()
     }
 
     for (auto s : m_sniServices) {
-        if (!sniServices.contains(s)) {
+        if (!filteredSniServices.contains(s)) {
             Q_EMIT sniTrayRemoved(s);
         }
     }
 
-    m_sniServices = sniServices;
+    m_sniServices = filteredSniServices;
 }
 
 void TrayMonitor::startLoadIndicators()

@@ -54,6 +54,7 @@ private:
     QStringList m_sniServices;
     QStringList m_indicatorNames;
     QList<PluginsItemInterface *> m_systemTrays;
+    QMap<uint, char> m_trayPids;
 };
 
 #endif // TRAYMONITOR_H
