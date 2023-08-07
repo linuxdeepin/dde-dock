@@ -797,7 +797,7 @@ bool SNITrayItemWidget::containsPoint(const QPoint &pos) {
     }
 
     // 如果菜单列表隐藏，则认为不在区域内
-    if (!m_menu->isVisible()) return false;
+    if (!m_menu || !m_menu->isVisible()) return false;
 
     // 判断鼠标是否在菜单区域
     return m_menu->geometry().contains(pos);
