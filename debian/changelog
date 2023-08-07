@@ -1,3 +1,15 @@
+dde-dock (6.0.19) unstable; urgency=medium
+
+  * fix: no positionModeChanged signal
+  * fix: some app do not display
+  * fix: plugin set show on dock more times, also need same times call unshow
+  * fix: applicationpreview scale not keep aspectratio
+  * fix: click always activate application in TrayGridWidget
+  * fix: not show with launcher when hide
+  * fix: coredump when open jetbrains-toolbox
+
+ -- Tsic404 <liuheng@deepin.org>  Mon, 07 Aug 2023 17:08:30 +0800
+
 dde-dock (6.0.18) unstable; urgency=medium
 
   * fix: dock entries not update after displaymode changed
