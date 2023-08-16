@@ -19,6 +19,23 @@
 #include <QApplication>
 #include <QDebug>
 #include <QTimer>
+#include <qwidget.h>
+
+TrayGridView *TrayGridView::getDockTrayGridView(QWidget *parent)
+{
+    static TrayGridView *view = nullptr;
+    if (!view)
+        view = new TrayGridView(parent);
+    return view;
+}
+
+TrayGridView *TrayGridView::getIconTrayGridView(QWidget *parent)
+{
+    static TrayGridView *view = nullptr;
+    if (!view)
+        view = new TrayGridView(parent);
+    return view;
+}
 
 TrayGridView::TrayGridView(QWidget *parent)
     : DListView(parent)

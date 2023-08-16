@@ -30,6 +30,24 @@
 #include <xcb/xcb_icccm.h>
 #include <X11/Xlib.h>
 
+TrayDelegate *TrayDelegate::getDockTrayDelegate(QListView *view, QObject *parent)
+{
+    static TrayDelegate *delegate = nullptr;
+    if (!delegate) {
+        delegate = new TrayDelegate(view, parent);
+    }
+    return delegate;
+}
+
+TrayDelegate *TrayDelegate::getIconTrayDelegate(QListView *view, QObject *parent)
+{
+    static TrayDelegate *delegate = nullptr;
+    if (!delegate) {
+        delegate = new TrayDelegate(view, parent);
+    }
+    return delegate;
+}
+
 TrayDelegate::TrayDelegate(QListView *view, QObject *parent)
     : QStyledItemDelegate(parent)
     , m_position(Dock::Position::Bottom)
