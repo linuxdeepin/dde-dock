@@ -129,8 +129,8 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
         return gridParentView;
 
     gridParentView = new TrayGridWidget(nullptr);
-    TrayGridView *trayView = new TrayGridView(gridParentView);
-    TrayDelegate *trayDelegate = new TrayDelegate(trayView, trayView);
+    TrayGridView *trayView = TrayGridView::getIconTrayGridView(gridParentView);
+    TrayDelegate *trayDelegate = TrayDelegate::getIconTrayDelegate(trayView, trayView);
     TrayModel *trayModel = TrayModel::getIconModel();
     gridParentView->setTrayGridView(trayView);
 

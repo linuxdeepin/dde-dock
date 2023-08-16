@@ -45,9 +45,9 @@ TrayManagerWindow::TrayManagerWindow(QWidget *parent)
     , m_dateTimeWidget(new DateTimeDisplayer(false, m_appPluginDatetimeWidget))
     , m_appPluginLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
     , m_mainLayout(new QBoxLayout(QBoxLayout::Direction::LeftToRight, this))
-    , m_trayView(new TrayGridView(this))
+    , m_trayView(TrayGridView::getDockTrayGridView(this))
     , m_model(TrayModel::getDockModel())
-    , m_delegate(new TrayDelegate(m_trayView, m_trayView))
+    , m_delegate(TrayDelegate::getDockTrayDelegate(m_trayView, m_trayView))
     , m_position(Dock::Position::Bottom)
     , m_displayMode(Dock::DisplayMode::Fashion)
     , m_splitLine(new QLabel(m_appPluginDatetimeWidget))
@@ -151,6 +151,12 @@ void TrayManagerWindow::setDisplayMode(Dock::DisplayMode displayMode)
     if (displayMode == Dock::DisplayMode::Fashion) {
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
         updateItemLayout(m_windowFashionSize);
+        // TODO: reuse QuickPluginWindow, SystemPluginWindow
+        m_appPluginLayout->addWidget(TrayGridView::getDockTrayGridView());
+        m_appPluginLayout->addWidget(m_quickIconWidget);
+    } else {
+        m_appPluginLayout->removeWidget(TrayGridView::getDockTrayGridView());
+        m_appPluginLayout->removeWidget(m_quickIconWidget);
     }
 }
 

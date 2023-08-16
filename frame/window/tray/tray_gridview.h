@@ -19,8 +19,9 @@ class TrayGridView : public DListView
     Q_OBJECT
 
 public:
-    explicit TrayGridView(QWidget *parent = Q_NULLPTR);
-
+    static TrayGridView *getDockTrayGridView(QWidget *parent = Q_NULLPTR);
+    static TrayGridView *getIconTrayGridView(QWidget *parent = Q_NULLPTR);
+    
     void setPosition(Dock::Position position);
     Dock::Position position() const;
     QSize suitableSize() const;
@@ -58,6 +59,8 @@ protected:
     bool beginDrag(Qt::DropActions supportedActions);
 
 private:
+    explicit TrayGridView(QWidget *parent = Q_NULLPTR);
+
     void initUi();
     void createAnimation(const int pos, const bool moveNext, const bool isLastAni);
     const QModelIndex getIndexFromPos(QPoint currentPoint) const;

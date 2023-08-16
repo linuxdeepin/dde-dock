@@ -25,7 +25,9 @@ class TrayDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    explicit TrayDelegate(QListView *view, QObject *parent = nullptr);
+    static TrayDelegate *getDockTrayDelegate(QListView *view, QObject *parent = nullptr);
+    static TrayDelegate *getIconTrayDelegate(QListView *view, QObject *parent = nullptr);
+
     void setPositon(Dock::Position position);
 
 Q_SIGNALS:
@@ -44,6 +46,8 @@ protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
+    explicit TrayDelegate(QListView *view, QObject *parent = nullptr);
+
     ExpandIconWidget *expandWidget();
     bool isPopupTray() const;
 

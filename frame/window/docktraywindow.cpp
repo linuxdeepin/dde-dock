@@ -38,9 +38,9 @@ DockTrayWindow::DockTrayWindow(QWidget *parent)
     , m_dateTimeWidget(new DateTimeDisplayer(true, this))
     , m_systemPuginWidget(new SystemPluginWindow(this))
     , m_quickIconWidget(new QuickPluginWindow(Dock::DisplayMode::Efficient, this))
-    , m_trayView(new TrayGridView(this))
+    , m_trayView(TrayGridView::getDockTrayGridView(this))
     , m_model(TrayModel::getDockModel())
-    , m_delegate(new TrayDelegate(m_trayView, this))
+    , m_delegate(TrayDelegate::getDockTrayDelegate(m_trayView, this))
     , m_toolFrontSpaceWidget(new QWidget(this))
     , m_toolBackSpaceWidget(new QWidget(this))
     , m_dateTimeSpaceWidget(new QWidget(this))
@@ -70,8 +70,14 @@ void DockTrayWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
     moveToolPlugin();
     updateToolWidget();
     // 如果当前模式为高效模式，则设置当前的trayView为其计算位置的参照
-    if (displayMode == Dock::DisplayMode::Efficient)
+    if (displayMode == Dock::DisplayMode::Efficient) {
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
+        // TODO: reuse QuickPluginWindow, SystemPluginWindow
+        m_mainBoxLayout->addWidget(TrayGridView::getDockTrayGridView());
+    } else {
+        m_mainBoxLayout->removeWidget(TrayGridView::getDockTrayGridView());
+    }
+        
 }
 
 QSize DockTrayWindow::suitableSize(const Dock::Position &position, const int &, const double &) const
