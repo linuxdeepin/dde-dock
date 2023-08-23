@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "expandiconwidget.h"
+#include "taskmanager/taskmanager.h"
 #include "tray_gridview.h"
 #include "tray_model.h"
 #include "tray_delegate.h"
@@ -244,12 +245,16 @@ void TrayGridWidget::resetPosition()
 
 void TrayGridWidget::showEvent(QShowEvent *event)
 {
+    TaskManager::instance()->setTrayGridWidgetVisible(true);
+    TaskManager::instance()->updateHideState(true);
     m_regionInter->registerRegion();
     DBlurEffectWidget::showEvent(event);
 }
 
 void TrayGridWidget::hideEvent(QHideEvent *event)
 {
+    TaskManager::instance()->setTrayGridWidgetVisible(false);
+    TaskManager::instance()->updateHideState(true);
     m_regionInter->unregisterRegion();
     // 在当前托盘区域隐藏后，需要设置任务栏区域的展开按钮的托盘为隐藏状态
     TrayModel::getDockModel()->updateOpenExpand(false);
