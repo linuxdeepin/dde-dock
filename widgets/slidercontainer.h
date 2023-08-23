@@ -41,6 +41,7 @@ public:
 
     void setPageStep(int step);
     void setRange(int min, int max);
+    int getSliderValue();
 
 Q_SIGNALS:
     void iconClicked(const IconPosition &);

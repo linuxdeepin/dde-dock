@@ -13,6 +13,7 @@
 
 #include <QWidget>
 #include <DGuiApplicationHelper>
+#include <QTimer>
 
 namespace Dtk { namespace Widget { class DListView; } }
 
@@ -91,6 +92,7 @@ private:
     DBusSink *m_sinkInter;
     QStandardItemModel *m_model;
     QList<SoundDevicePort *> m_ports;
+    QTimer *m_setVolumeTimer;
 };
 
 #endif // VOLUMEDEVICESWIDGET_H

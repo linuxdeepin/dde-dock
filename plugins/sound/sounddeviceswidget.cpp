@@ -26,6 +26,7 @@
 #include <QtConcurrent>
 #include <QIcon>
 #include <QPixmap>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -55,10 +56,13 @@ SoundDevicesWidget::SoundDevicesWidget(QWidget *parent)
     , m_soundInter(new DBusAudio("org.deepin.dde.Audio1", "/org/deepin/dde/Audio1", QDBusConnection::sessionBus(), this))
     , m_sinkInter(new DBusSink("org.deepin.dde.Audio1", m_soundInter->defaultSink().path(), QDBusConnection::sessionBus(), this))
     , m_model(new QStandardItemModel(this))
+    , m_setVolumeTimer(new QTimer(this))
 {
     initUi();
     initConnection();
     onAudioDevicesChanged();
+    m_setVolumeTimer->setInterval(50);
+    m_setVolumeTimer->setSingleShot(true);
 
     QMetaObject::invokeMethod(this, [ this ] {
         deviceEnabled(m_ports.size() > 0);
@@ -208,12 +212,17 @@ void SoundDevicesWidget::initConnection()
         m_sliderContainer->setRange(0, std::round(maxValue * 100.00));
         emit iconChanged();
     });
-    connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [ this ](int value) {
+    connect(m_setVolumeTimer, &QTimer::timeout, this, [=](){
+        int value = m_sliderContainer->getSliderValue();
         m_sinkInter->SetVolume(value * 0.01, true);
         if (m_sinkInter->mute()) {
             m_sinkInter->SetMuteQueued(false);
         }
         emit iconChanged();
+    });
+    connect(m_sliderContainer, &SliderContainer::sliderValueChanged, this, [=](int value) {
+        Q_UNUSED(value)
+        m_setVolumeTimer->start();
     });
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {

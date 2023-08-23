@@ -193,6 +193,11 @@ void SliderContainer::updateSliderValue(int value)
     m_slider->blockSignals(false);
 }
 
+int SliderContainer::getSliderValue()
+{
+    return m_slider->value();
+}
+
 void SliderContainer::setSliderProxyStyle(QProxyStyle *proxyStyle)
 {
     proxyStyle->setParent(m_slider);
