@@ -1,3 +1,12 @@
+dde-dock (6.0.20) unstable; urgency=medium
+
+  * fix: xebmbedtary click get no response in Efficient mode
+  * fix: add hideModeChanged signal
+  * fix: adjust the slider to set the sound multiple times
+  * fix: dock autohide even trayGridWidget show
+
+ -- tsic404 <liuheng@deepin.org>  Thu, 24 Aug 2023 15:30:37 +0800
+
 dde-dock (6.0.19) unstable; urgency=medium
 
   * fix: no positionModeChanged signal
