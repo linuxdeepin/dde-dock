@@ -19,6 +19,7 @@ DockDaemonDBusAdaptor::DockDaemonDBusAdaptor(QObject *parent)
     connect(TaskManager::instance(), &TaskManager::showMultiWindowChanged, this, &DockDaemonDBusAdaptor::ShowMultiWindowChanged);
     connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, &DockDaemonDBusAdaptor::PositionChanged);
     connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, &DockDaemonDBusAdaptor::HideModeChanged);
+    connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, &DockDaemonDBusAdaptor::DisplayModeChanged);
 }
 
 DockDaemonDBusAdaptor::~DockDaemonDBusAdaptor()
