@@ -20,6 +20,8 @@ DockDaemonDBusAdaptor::DockDaemonDBusAdaptor(QObject *parent)
     connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, &DockDaemonDBusAdaptor::PositionChanged);
     connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, &DockDaemonDBusAdaptor::HideModeChanged);
     connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, &DockDaemonDBusAdaptor::DisplayModeChanged);
+    connect(DockSettings::instance(), &DockSettings::windowSizeEfficientChanged, this, &DockDaemonDBusAdaptor::WindowSizeEfficientChanged);
+    connect(DockSettings::instance(), &DockSettings::windowSizeFashionChanged, this, &DockDaemonDBusAdaptor::WindowSizeFashionChanged);
 }
 
 DockDaemonDBusAdaptor::~DockDaemonDBusAdaptor()
