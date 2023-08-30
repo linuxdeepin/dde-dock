@@ -57,13 +57,13 @@ private:
     DateTimeInfo dateTimeInfo(const Dock::Position &position) const;
     void updateLastData(const DateTimeInfo &info);
 
-    QString getTimeString() const;
+    inline QString getTimeString() const;
     QString getTimeString(const Dock::Position &position) const;
-    QString getDateString() const;
+    inline QString getDateString() const;
     QString getDateString(const Dock::Position &position) const;
 
     QPoint tipsPoint() const;
-    QFont timeFont() const;
+    void updateFont() const;
 
     void createMenuItem();
     QRect textRect(const QRect &sourceRect) const;

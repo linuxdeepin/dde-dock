@@ -19,6 +19,7 @@
 #include <QMenu>
 #include <QPainterPath>
 #include <QMouseEvent>
+#include <QFontMetrics>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -34,8 +35,8 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     : QWidget (parent)
     , m_timedateInter(new Timedate("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", QDBusConnection::sessionBus(), this))
     , m_position(Dock::Position::Bottom)
-    , m_dateFont(DFontSizeManager::instance()->t10())
-    , m_timeFont(timeFont())
+    , m_dateFont(QFont())
+    , m_timeFont(QFont())
     , m_tipsWidget(new Dock::TipsWidget(this))
     , m_menu(new QMenu(this))
     , m_tipsTimer(new QTimer(this))
@@ -197,8 +198,12 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
     // 如果是左右方向
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
         int textWidth = rect().width();
-        info.m_timeRect = QRect(0, 0, textWidth, DATETIMESIZE / 2);
-        info.m_dateRect = QRect(0, DATETIMESIZE / 2 + 1, textWidth, DATETIMESIZE / 2);
+
+        int timeHeight = QFontMetrics(m_timeFont).boundingRect(info.m_time).height() * (info.m_time.count('\n') + 1);
+        int dateHeight = QFontMetrics(m_dateFont).boundingRect(info.m_date).height();
+
+        info.m_timeRect = QRect(0, 0, textWidth, timeHeight);
+        info.m_dateRect = QRect(0, timeHeight, textWidth, dateHeight);
         return info;
     }
     int timeWidth = QFontMetrics(m_timeFont).boundingRect(info.m_time).width() + 2;
@@ -265,7 +270,7 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(palette().brightText(), 1));
+    
 
     int timeAlignFlag = Qt::AlignCenter;
     int dateAlignFlag = Qt::AlignCenter;
@@ -273,16 +278,14 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
     if (m_showMultiRow) {
         timeAlignFlag = Qt::AlignHCenter | Qt::AlignBottom;
         dateAlignFlag = Qt::AlignHCenter | Qt::AlignTop;
-    } else {
-        if (m_timeFont.pixelSize() >= rect().height()) {
-            m_timeFont.setPixelSize(rect().height() - 2);
-            m_dateFont.setPixelSize(rect().height() - 2);
-        }
     }
 
     painter.setFont(m_timeFont);
+    painter.setPen(QPen(palette().brightText(), 2));
     painter.drawText(textRect(info.m_timeRect), timeAlignFlag, info.m_time);
+
     painter.setFont(m_dateFont);
+    painter.setPen(QPen(palette().brightText(), 1));
     painter.drawText(textRect(info.m_dateRect), dateAlignFlag, info.m_date);
 
     updateLastData(info);
@@ -316,26 +319,36 @@ QPoint DateTimeDisplayer::tipsPoint() const
     return window()->mapToGlobal(pointInTopWidget);
 }
 
-QFont DateTimeDisplayer::timeFont() const
+void DateTimeDisplayer::updateFont() const
 {
-    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right)
-        return DFontSizeManager::instance()->t6();
-
-    static constexpr int MINHEIGHT = 40;
-
-    // 如果是上下方向，且当前只有一行，则始终显示小号字体
-    if (m_oneRow && ( Dock::Position::Top == m_position || Dock::Position::Bottom == m_position )) {
-        return DFontSizeManager::instance()->t10();
+    auto info = getTimeString(m_position);
+    // "xx:xx\nAP" 获取到前 xx:xx 部分
+    info = info.left(info.indexOf('\n'));
+    if (m_position == Dock::Position::Left || m_position == Dock::Position::Right) {
+        auto f = QFont();
+        bool caled = false;
+        f.setPixelSize(100);
+        // 左右时根据获取可以全部显示文本的最小的宽度, 且最大只到40
+        while(width() > 0 && f.pixelSize() > 2 &&
+                (QFontMetrics(f).boundingRect(info).width() > qMin(DATETIMESIZE, width()) - 4)) {
+            f.setPixelSize(f.pixelSize() - 1);
+            caled = true;
+        }
+        // 经过正确的计算后才能更新字体大小
+        if (caled) {
+            m_timeFont.setPixelSize(f.pixelSize());
+            m_dateFont.setPixelSize(f.pixelSize() - 2);
+        }
+        return;
     }
 
-    QList<QFont> dateFontSize = { DFontSizeManager::instance()->t8(),
-                DFontSizeManager::instance()->t7(),
-                DFontSizeManager::instance()->t6(),
-                DFontSizeManager::instance()->t5() };
-    
-    // dock size >= 70 get max font(t5) size
-    int index = qMin(qMax(((rect().height() - MINHEIGHT) / 10), 0), dateFontSize.size() - 1);
-    return dateFontSize[index];
+    if ((Dock::Position::Top == m_position || Dock::Position::Bottom == m_position )) {
+        // 单行时保持高度的一半，双行时尽量和高度一致，但最大只到12。
+        auto s = height() / (m_oneRow ? 2 : 1) - 2;
+        m_timeFont.setPixelSize(std::min(s, 12));
+        // 双行时日期比时间字体小两个像素。
+        m_dateFont.setPixelSize(std::min(s, 12) - (m_oneRow ? 0 : 2));
+    }
 }
 
 void DateTimeDisplayer::createMenuItem()
@@ -396,6 +409,11 @@ void DateTimeDisplayer::leaveEvent(QEvent *event)
     m_tipPopupWindow->hide();
 }
 
+QString DateTimeDisplayer::getTimeString() const
+{
+    return getTimeString(m_position);
+}
+
 void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
 {
     m_lastDateString = info.m_date;
@@ -407,20 +425,10 @@ void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
         m_currentSize = dateTimeSize.height();
 }
 
-QString DateTimeDisplayer::getTimeString() const
-{
-    return getTimeString(m_position);
-}
-
 bool DateTimeDisplayer::event(QEvent *event)
 {
-    if (event->type() == QEvent::FontChange) {
-        m_dateFont = DFontSizeManager::instance()->t10();
-        m_timeFont = timeFont();
-        Q_EMIT requestUpdate();
-    } else if (event->type() == QEvent::Resize) {
-        m_dateFont = DFontSizeManager::instance()->t10();
-        m_timeFont = timeFont();
+    if (event->type() == QEvent::Resize) {
+        updateFont();
     }
     return QWidget::event(event);
 }

@@ -182,7 +182,7 @@ int TrayManagerWindow::appDatetimeSize(const Dock::Position &position) const
 
     int trayHeight = m_trayView->suitableSize(position).height();
     int traypluginHeight = trayHeight + m_quickIconWidget->suitableSize(position).height() + m_appPluginLayout->spacing();
-    return traypluginHeight + m_dateTimeWidget->suitableSize(position).height() + 10;
+    return traypluginHeight + m_dateTimeWidget->suitableSize(position).height() + 2;
 }
 
 QSize TrayManagerWindow::suitableSize() const
