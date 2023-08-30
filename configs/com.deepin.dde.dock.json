@@ -174,7 +174,7 @@
             "visibility":"public"
         },
 		"Dock_Quick_Plugins": {
-            "value": ["power", "network", "shutdown", "trash", "show-desktop", "multitasking"],
+            "value": ["power", "network", "shutdown", "show-desktop", "multitasking"],
 			"serial": 0,
 			"flags": [],
 			"name": "Quick Plugins show on dock",
