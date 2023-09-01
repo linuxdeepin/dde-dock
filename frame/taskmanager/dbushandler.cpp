@@ -61,14 +61,48 @@ QString DBusHandler::getCurrentWM()
 
 void DBusHandler::launchApp(QString desktopFile, uint32_t timestamp, QStringList files)
 {
-    QDBusInterface interface = QDBusInterface("org.deepin.dde.Application1.Manager", "/org/deepin/dde/Application1/Manager", "org.deepin.dde.Application1.Manager");
-    interface.call("LaunchApp", desktopFile, timestamp, files);
+    if (newStartManagerAvaliable()) {
+        auto objPath = desktopEscapeToObjectPath(desktopFile);
+        launchAppUsingApplicationManager1(QString{DDEApplicationManager1ObjectPath} + '/' + objPath, timestamp, files);
+    } else {
+        launchAppUsingApplication1Manager(desktopFile, timestamp, files);
+    }
 }
 
 void DBusHandler::launchAppAction(QString desktopFile, QString action, uint32_t timestamp)
 {
+    if (newStartManagerAvaliable()) {
+        auto objPath = desktopEscapeToObjectPath(desktopFile);
+        launchAppActionUsingApplicationManager1(QString{DDEApplicationManager1ObjectPath} + '/' + objPath, action, timestamp);
+    } else {
+        launchAppActionUsingApplication1Manager(desktopFile, action, timestamp);
+    }
+}
+
+void DBusHandler::launchAppUsingApplication1Manager(QString desktopFile, uint32_t timestamp, QStringList files)
+{
+    QDBusInterface interface = QDBusInterface("org.deepin.dde.Application1.Manager", "/org/deepin/dde/Application1/Manager", "org.deepin.dde.Application1.Manager");
+    interface.call("LaunchApp", desktopFile, timestamp, files);
+}
+
+void DBusHandler::launchAppActionUsingApplication1Manager(QString desktopFile, QString action, uint32_t timestamp)
+{
     QDBusInterface interface = QDBusInterface("org.deepin.dde.Application1.Manager", "/org/deepin/dde/Application1/Manager", "org.deepin.dde.Application1.Manager");
     interface.call("LaunchAppAction", desktopFile, action, timestamp);
+}
+
+// 新AM启动接口
+void DBusHandler::launchAppUsingApplicationManager1(QString dbusObjectPath, uint32_t timestamp, QStringList files)
+{
+    QDBusInterface interface = QDBusInterface(ApplicationManager1DBusName, dbusObjectPath, "org.desktopspec.ApplicationManager1.Application");
+    interface.call("Launch", "", QStringList(), QMap<QString, QVariant>());
+}
+
+void DBusHandler::launchAppActionUsingApplicationManager1(QString dbusObjectPath, QString action, uint32_t timestamp)
+{
+    action = action.right(action.size() - strlen(DesktopFileActionKey));
+    QDBusInterface interface = QDBusInterface(ApplicationManager1DBusName, dbusObjectPath, "org.desktopspec.ApplicationManager1.Application");
+    interface.call("Launch", action, QStringList(), QMap<QString, QVariant>());
 }
 
 void DBusHandler::markAppLaunched(const QString &filePath)
@@ -215,4 +249,53 @@ QString DBusHandler::getDesktopFromWindowByBamf(XWindow windowId)
 
 
     return "";
+}
+
+// 新的AM调用
+QString DBusHandler::desktopEscapeToObjectPath(QString desktopFilePath)
+{
+    // to desktop id
+    QString objectPath;
+    decltype(auto) desktopSuffix = ".desktop";
+    auto tmp = desktopFilePath.chopped(sizeof(desktopSuffix) - 1);
+    auto components = tmp.split(QDir::separator());
+    auto it = std::find(components.cbegin(), components.cend(), "applications");
+    if (it == components.cend()) return "_";
+    QString FileId;
+    ++it;
+    while (it != components.cend()) {
+        FileId += (*(it++) + "-");
+    }
+    objectPath = FileId.chopped(1);
+
+    if (objectPath.isEmpty()) {
+        return "_";
+    }
+
+    // desktop id to objectPath
+    QRegularExpression re{R"([^a-zA-Z0-9])"};
+    auto matcher = re.globalMatch(objectPath);
+    while (matcher.hasNext()) {
+        auto replaceList = matcher.next().capturedTexts();
+        replaceList.removeDuplicates();
+        for (const auto &c : replaceList) {
+            auto hexStr = QString::number(static_cast<uint>(c.front().toLatin1()), 16);
+            objectPath.replace(c, QString{R"(_%1)"}.arg(hexStr));
+        }
+    }
+
+    return objectPath;
+}
+
+bool DBusHandler::newStartManagerAvaliable()
+{
+    static bool isAvaiable = false;
+    std::call_once(m_isNewStartManagerAvaliableInited, [=](){
+        auto services = QDBusConnection::sessionBus().interface()->registeredServiceNames().value();
+        isAvaiable = std::any_of(services.begin(), services.end(), [=](const QString &name){
+            return name == ApplicationManager1DBusName;
+        });
+    });
+
+    return isAvaiable;
 }

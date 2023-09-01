@@ -40,6 +40,10 @@ public:
     /************************* StartManager ***************************/
     void launchApp(QString desktopFile, uint32_t timestamp, QStringList files);
     void launchAppAction(QString desktopFile, QString action, uint32_t timestamp);
+    void launchAppUsingApplication1Manager(QString desktopFile, uint32_t timestamp, QStringList files);
+    void launchAppActionUsingApplication1Manager(QString desktopFile, QString action, uint32_t timestamp);
+    void launchAppUsingApplicationManager1(QString desktopFile, uint32_t timestamp, QStringList files);
+    void launchAppActionUsingApplicationManager1(QString desktopFile, QString action, uint32_t timestamp);
 
     /************************* AlRecorder1 ***************************/
     void markAppLaunched(const QString &filePath);
@@ -64,6 +68,10 @@ private Q_SLOTS:
     void onActiveWindowButtonRelease(int type, int x, int y, const QString &key);
 
 private:
+    QString desktopEscapeToObjectPath(QString desktopFilePath);
+    bool newStartManagerAvaliable();
+
+private:
     QString m_activeWindowMonitorKey;
     TaskManager *m_taskmanager;
 
@@ -72,6 +80,8 @@ private:
     org::deepin::dde::kwayland1::WindowManager *m_kwaylandManager;
     org::deepin::dde::XEventMonitor1 *m_xEventMonitor;
     org::deepin::dde::Launcher1 *m_launcher;
+
+    std::once_flag m_isNewStartManagerAvaliableInited;
 };
 
 #endif // DBUSHANDLER_H
