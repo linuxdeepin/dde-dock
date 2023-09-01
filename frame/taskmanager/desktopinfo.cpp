@@ -4,6 +4,7 @@
 
 #include "desktopinfo.h"
 #include "locale.h"
+#include "taskmanager/common.h"
 #include "unistd.h"
 
 #include <QDebug>
@@ -13,7 +14,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QVector>
-#include <qlocale.h>
+#include <QLocale>
 
 QStringList DesktopInfo::currentDesktops;
 static QString desktopFileSuffix = ".desktop";
@@ -162,8 +163,7 @@ QList<DesktopAction> DesktopInfo::getActions()
 {
     QList<DesktopAction> actions;
     for (const auto &mainKey : m_desktopFile->childGroups()) {
-        if (mainKey.startsWith("Desktop Action")
-                || mainKey.endsWith("Shortcut Group")) {
+        if (mainKey.startsWith(DesktopFileActionKey)) {
             DesktopAction action;
             action.name = getLocaleStr(mainKey, KeyName);
             action.exec = m_desktopFile->value(mainKey + '/' + KeyExec).toString();

@@ -30,6 +30,10 @@ const QString keyWindowSizeFashion    = "Window_Size_Fashion";
 const QString keyWindowSizeEfficient  = "Window_Size_Efficient";
 const QString keyWinIconPreferredApps = "Win_Icon_Preferred_Apps";
 
+constexpr auto DesktopFileActionKey = u8"Desktop Action ";
+constexpr auto DDEApplicationManager1ObjectPath = u8"/org/desktopspec/ApplicationManager1";
+constexpr auto ApplicationManager1DBusName= u8"org.desktopspec.ApplicationManager1";
+
 static const QString scratchDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/deepin/dde-dock/scratch/");
 
 const QString desktopHashPrefix = "d:";
