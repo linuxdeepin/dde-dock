@@ -49,8 +49,7 @@ Recommends:
  dde-disk-mount-plugin,
  dde-dock-onboard-plugin,
  dock-network-plugin,
- dde-network-dialog,
- dock-hotspot-plugin
+ dde-network-dialog
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
