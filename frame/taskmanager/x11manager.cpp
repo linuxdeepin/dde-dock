@@ -121,7 +121,7 @@ void X11Manager::listenXEventUseXlib()
             break;
         }
         default:
-            qDebug() << "unused event type " << event.type;
+            //qDebug() << "unused event type " << event.type;
             break;
         }
     }
