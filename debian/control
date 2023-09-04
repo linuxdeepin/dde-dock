@@ -53,7 +53,8 @@ Recommends:
 Conflicts:
  dde-workspace (<< 2.90.5),
  dde-dock-applets,
- dde-trash-plugin
+ dde-trash-plugin,
+ dock-hotspot-plugin
 Replaces:
  dde-dock-applets,
  dde-trash-plugin
