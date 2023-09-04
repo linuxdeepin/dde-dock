@@ -27,6 +27,7 @@ public:
 Q_SIGNALS:
     void primaryChanged(BrightMonitor *);
     void screenVisibleChanged(bool);
+    void monitorLightChanged();
 
 protected Q_SLOTS:
     void primaryScreenChanged(QScreen *screen);

@@ -74,7 +74,9 @@ void BrightnessModel::onPropertyChanged(const QDBusMessage &msg)
         return;
 
     QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-    if (changedProps.contains("Primary")) {
+    if (changedProps.contains("Brightness")) {
+        Q_EMIT monitorLightChanged();
+    } else if (changedProps.contains("Primary")) {
         m_primaryScreenName = changedProps.value("Primary").toString();
         BrightMonitor *defaultMonitor = nullptr;
         for (BrightMonitor *monitor : m_monitor) {
