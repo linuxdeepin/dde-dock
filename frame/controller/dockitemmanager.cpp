@@ -40,6 +40,7 @@ DockItemManager::DockItemManager(QObject *parent)
         manageItem(it);
 
         connect(it, &AppItem::requestPreviewWindow, m_taskmanager, &TaskManager::previewWindow);
+        connect(it, &AppItem::requestActivateWindow, m_taskmanager, &TaskManager::doActiveWindow);
         connect(it, &AppItem::requestCancelPreview, m_taskmanager, &TaskManager::cancelPreviewWindow);
         connect(it, &AppItem::windowCountChanged, this, &DockItemManager::onAppWindowCountChanged);
         connect(this, &DockItemManager::requestUpdateDockItem, it, &AppItem::requestUpdateEntryGeometries);
