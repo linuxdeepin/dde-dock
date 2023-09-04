@@ -95,6 +95,7 @@ private:
     static QStringList currentDesktops;
 
     bool m_isValid;
+    bool m_isInstalled;
 
     QString m_id;
     QString m_name;

@@ -21,6 +21,7 @@ static QString desktopFileSuffix = ".desktop";
 
 DesktopInfo::DesktopInfo(const QString &desktopfile)
     : m_isValid(true)
+    , m_isInstalled(false)
 {
     QString desktopfilepath(desktopfile);
     QFileInfo desktopFileInfo(desktopfilepath);
@@ -29,12 +30,13 @@ DesktopInfo::DesktopInfo(const QString &desktopfile)
         desktopFileInfo.setFile(desktopfilepath);
     }
 
-    if (!desktopFileInfo.isAbsolute()) {
-        for (auto dir: QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)) {
-            QString path = dir.append("/").append(desktopfilepath);
-            if (QFile::exists(path)){
-                desktopFileInfo.setFile(path);
-            }
+    auto desktopFileName = desktopFileInfo.fileName();
+    // 优先加载系统中的desktopfile，而不是用户传递过来的
+    for (auto dir: QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)) {
+        QString path = dir.append("/").append(desktopFileName);
+        if (QFile::exists(path)){
+            desktopFileInfo.setFile(path);
+            m_isInstalled = true;
         }
     }
 
@@ -78,12 +80,7 @@ bool DesktopInfo::isValidDesktop()
 
 bool DesktopInfo::isInstalled()
 {
-    QFileInfo desktopFileInfo(m_desktopFilePath);
-    QString desktopFileName = desktopFileInfo.fileName();
-    static auto applicationDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
-    return std::any_of(applicationDirs.begin(), applicationDirs.end(), [&desktopFileName](auto applicationDir){
-        return QFile::exists(applicationDir+ '/' + desktopFileName);
-    });
+    return m_isInstalled;
 }
 
 /** if return true, item is shown
