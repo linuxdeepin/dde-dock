@@ -69,6 +69,7 @@ void BrightnessWidget::initConnection()
     });
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BrightnessWidget::onThemeTypeChanged);
+    connect(m_model, &BrightnessModel::monitorLightChanged, this, &BrightnessWidget::updateSliderValue);
     updateSliderValue();
 }
 

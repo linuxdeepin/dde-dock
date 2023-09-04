@@ -31,10 +31,10 @@ protected:
 private:
     void initUi();
     void initConnection();
-    void updateSliderValue();
     void convertThemePixmap(QPixmap &pixmap);
 
 private Q_SLOTS:
+    void updateSliderValue();
     void onThemeTypeChanged();
 
 private:
