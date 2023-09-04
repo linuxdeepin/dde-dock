@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // 设置日志输出到控制台以及文件
-    DLogManager::setLogFormat("%{time}{yyyyMMdd.HH:mm:ss.zzz}[%{type:1}][%{function:-35} %{line:-4}] %{message}\n");
+    DLogManager::setLogFormat("%{time}{yyyyMMdd.HH:mm:ss.zzz}[%{type:1}][%{function:-35} %{line:-4}] %{message}");
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
