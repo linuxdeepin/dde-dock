@@ -691,6 +691,10 @@ void TaskManager::loadAppInfos()
             if (!info.isValidDesktop())
                 continue;
 
+            // 新AM接口导致用户自定义的desktopfile不再加载
+            if (m_dbusHandler->newStartManagerAvaliable() && !info.isInstalled())
+                continue;
+
             AppInfo *appInfo = new AppInfo(info);
             Entry *entryObj = new Entry(this, appInfo, appInfo->getInnerId());
             entryObj->setIsDocked(isDocked);

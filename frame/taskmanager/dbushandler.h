@@ -63,13 +63,14 @@ public:
     // XWindow -> desktopFile
     QString getDesktopFromWindowByBamf(XWindow windowId);
 
+    bool newStartManagerAvaliable();
+
 private Q_SLOTS:
     void handleWlActiveWindowChange();
     void onActiveWindowButtonRelease(int type, int x, int y, const QString &key);
 
 private:
     QString desktopEscapeToObjectPath(QString desktopFilePath);
-    bool newStartManagerAvaliable();
 
 private:
     QString m_activeWindowMonitorKey;
