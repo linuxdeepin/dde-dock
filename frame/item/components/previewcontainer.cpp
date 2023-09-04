@@ -255,7 +255,7 @@ void PreviewContainer::onSnapshotClicked(const WId wid)
     Q_EMIT requestActivateWindow(wid);
     m_needActivate = true;
     m_waitForShowPreviewTimer->stop();
-    requestHidePopup();
+    Q_EMIT requestHidePopup();
 }
 
 void PreviewContainer::previewEntered(const WId wid)

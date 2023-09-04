@@ -755,7 +755,7 @@ void AppItem::showPreview()
     m_appPreviewTips->setWindowInfos(m_windowInfos, m_itemEntry->getAllowedClosedWindowIds().toList());
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::activeWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreviewWindow, this, &AppItem::requestCancelPreview);
     connect(m_appPreviewTips, &PreviewContainer::requestHidePopup, this, &AppItem::hidePopup);
