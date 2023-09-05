@@ -16,6 +16,7 @@
 #include "windowidentify.h"
 #include "waylandmanager.h"
 #include "windowinfobase.h"
+#include "dbusutil.h"
 
 #include "org_deepin_dde_kwayland_plasmawindow.h"
 
@@ -23,12 +24,12 @@
 #include <QMap>
 #include <QTimer>
 #include <QList>
+#include <QPixmap>
 
 #include <cstdint>
 #include <iterator>
 #include <memory>
 #include <algorithm>
-#include <qpixmap.h>
 
 #define SETTING DockSettings::instance()
 #define XCB XCBUtils::instance()
@@ -118,57 +119,13 @@ bool TaskManager::dockEntry(Entry *entry, bool moveToEnd)
             return false;
         }
 
-        if (appInfo->getFileName().contains(scratchDir)) {
-            qInfo() << "needScratchDesktop: no, desktop in scratchDir";
-            return false;
-        }
-
         return true;
     };
 
 
     if (needScratchDesktop()) {
-        // 创建scratch Desktop file
-        QDir dir;
-        if (!dir.mkpath(scratchDir)) {
-            qWarning() << "create scratch Desktopfile failed";
-            return false;
-        }
-
-        QFile file;
-        QString newDesktopFile;
-        if (appInfo) {
-            QString newFile = scratchDir + appInfo->getInnerId() + ".desktop";
-            // 在目标文件存在的情况下，先删除，防止出现驻留不成功的情况
-            if (QFile::exists(newFile)) QFile::remove(newFile);
-            if (file.copy(appInfo->getFileName(), newFile))
-                newDesktopFile = newFile;
-        } else {
-            WindowInfoBase *current = entry->getCurrentWindowInfo();
-            if (current) {
-                QString appId = current->getInnerId();
-                QString title = current->getDisplayName();
-                QString icon = current->getIcon();
-                if (icon.isEmpty()) icon = "application-default-icon";
-                QString cmd = entry->getCmdLine() + "%U";
-                QString fileNmae = scratchDir + appId + ".desktop";
-                QString desktopContent = QString(dockedItemTemplate).arg(title).arg(cmd).arg(icon);
-                file.setFileName(fileNmae);
-                if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                    file.write(desktopContent.toStdString().c_str(), desktopContent.size());
-                    file.close();
-                    newDesktopFile = fileNmae;
-                }
-            }
-        }
-
-        if (newDesktopFile.isEmpty())
-            return false;
-
-        appInfo = new AppInfo(newDesktopFile);
-        entry->setAppInfo(appInfo);
-        entry->updateIcon();
-        entry->setInnerId(appInfo->getInnerId());
+        m_dbusHandler->sendFailedDockNotification(entry->getName());
+        return false;
     }
 
     // 如果是最近打开应用，通过右键菜单的方式驻留，且当前是时尚模式，那么就让entry驻留到末尾
@@ -517,6 +474,11 @@ bool TaskManager::requestDock(QString desktopFile, int index)
     AppInfo *app = new AppInfo(desktopFile);
     if (!app || !app->isValidApp()) {
         qInfo() << "RequestDock: invalid desktopFile";
+        return false;
+    }
+
+    if (m_dbusHandler->newStartManagerAvaliable() && !app->isInstalled()) {
+        m_dbusHandler->sendFailedDockNotification(app->getName());
         return false;
     }
 

@@ -9,6 +9,10 @@
 #include "entry.h"
 #include "windowinfok.h"
 
+#include <DDBusSender>
+
+#include <QtConcurrent>
+
 DBusHandler::DBusHandler(TaskManager *taskmanager, QObject *parent)
     : QObject(parent)
     , m_taskmanager(taskmanager)
@@ -298,4 +302,25 @@ bool DBusHandler::newStartManagerAvaliable()
     });
 
     return isAvaiable;
+}
+
+void DBusHandler::sendFailedDockNotification(const QString &appName)
+{
+    QtConcurrent::run(QThreadPool::globalInstance(), [ = ] {
+        DDBusSender()
+                .service(notificationService)
+                .path(notificationPath)
+                .interface(notificationInterface)
+                .method(QString("Notify"))
+                .arg(QString("dde-control-center"))                                            // appname
+                .arg(static_cast<uint>(0))                                                     // id
+                .arg(QString("preferences-system"))                                            // icon
+                .arg(QString(tr("failed to dock ") + appName))                                          // summary
+                .arg(QString(tr("Unrecognized application, unable to dock"))) // content
+                .arg(QStringList())                                                             // actions
+                .arg(QVariantMap())                                                                    // hints
+                .arg(5000)                                                                    // timeout
+                .call();
+    });
+    qInfo() << "unsupported app: " + appName;
 }

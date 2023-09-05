@@ -64,6 +64,7 @@ public:
     QString getDesktopFromWindowByBamf(XWindow windowId);
 
     bool newStartManagerAvaliable();
+    void sendFailedDockNotification(const QString &appName);
 
 private Q_SLOTS:
     void handleWlActiveWindowChange();
