@@ -10,7 +10,8 @@
 #include <QCryptographicHash>
 
 AppInfo::AppInfo(DesktopInfo &info)
- : m_isValid(true)
+ : m_installed(false)
+ , m_isValid(true)
 {
     init(info);
 }

@@ -500,4 +500,15 @@
         <translation>All Windows</translation>
     </message>
 </context>
+<context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>failed to dock </translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Unrecognized application, unable to dock</translation>
+    </message>
+</context>
 </TS>

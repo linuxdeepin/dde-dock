@@ -127,7 +127,7 @@ AppInfo *Entry::getAppInfo()
 
 void Entry::setAppInfo(AppInfo *appinfo)
 {
-    if (m_appInfo.data() == appinfo) {
+    if (m_appInfo.data() == appinfo || appinfo == nullptr) {
         return;
     }
 

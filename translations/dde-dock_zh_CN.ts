@@ -491,4 +491,15 @@
         <translation>所有窗口</translation>
     </message>
 </context>
+<context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>无法驻留 </translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>未能识别的软件，无法进行驻留</translation>
+    </message>
+</context>
 </TS>
