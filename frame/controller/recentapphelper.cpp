@@ -20,6 +20,7 @@ RecentAppHelper::RecentAppHelper(QWidget *appWidget, QWidget *recentWidget, QObj
 {
     m_appWidget->installEventFilter(this);
     m_recentWidget->installEventFilter(this);
+    connect(this, &RecentAppHelper::requestUpdateRecentVisible, this, &RecentAppHelper::updateRecentVisible, Qt::QueuedConnection);
 }
 
 void RecentAppHelper::setDisplayMode(Dock::DisplayMode displayMode)
@@ -170,7 +171,7 @@ void RecentAppHelper::removeRecentAreaItem(DockItem *wdg)
 {
     QBoxLayout *recentLayout = static_cast<QBoxLayout *>(m_recentWidget->layout());
     recentLayout->removeWidget(wdg);
-    updateRecentVisible();
+    Q_EMIT requestUpdateRecentVisible();
 }
 
 void RecentAppHelper::removeAppAreaItem(DockItem *wdg)
