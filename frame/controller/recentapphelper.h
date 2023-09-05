@@ -36,6 +36,7 @@ Q_SIGNALS:
     void requestUpdate();
     void recentVisibleChanged(bool);                    // 最近区域是否可见发生变化的信号
     void dockAppVisibleChanged(bool);                       // 驻留应用区域是否可见发生变化的信号
+    void requestUpdateRecentVisible();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -44,7 +45,6 @@ private:
     bool appInRecent(DockItem *item) const;
     void addAppAreaItem(int index, DockItem *wdg);
     void addRecentAreaItem(int index, DockItem *wdg);
-    void updateRecentVisible();
     void updateDockAppVisible(bool lastVisible);
 
     void removeRecentAreaItem(DockItem *wdg);
@@ -56,6 +56,7 @@ private:
 
 private Q_SLOTS:
     void onModeChanged(int mode);
+    void updateRecentVisible();
 
 private:
     QWidget *m_appWidget;
