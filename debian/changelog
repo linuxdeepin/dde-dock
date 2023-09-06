@@ -1,3 +1,18 @@
+dde-dock (6.0.21) unstable; urgency=medium
+
+  * fix: add lost windowSizeChanged Signal
+  * fix: brightness update, update main view slider
+  * chore: make trash not display in default
+  * fix: click preview container not active window
+  * feat: Remove dock-hotspot-plugin by Conflicts
+  * feat: use new am dbus interface
+  * feat: when new am avaliable do not load custom desktopfile
+  * fix: dock coredump when update recentApp invisible
+  * feat: make unrecongnized application not dock on dde-dock
+  * fix: datetime font size error
+
+ -- tsic404 <liuheng@deepin.org>  Wed, 06 Sep 2023 14:20:11 +0800
+
 dde-dock (6.0.20) unstable; urgency=medium
 
   * fix: xebmbedtary click get no response in Efficient mode
