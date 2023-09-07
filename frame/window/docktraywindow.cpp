@@ -73,7 +73,7 @@ void DockTrayWindow::setDisplayMode(const Dock::DisplayMode &displayMode)
     if (displayMode == Dock::DisplayMode::Efficient) {
         ExpandIconWidget::popupTrayView()->setReferGridView(m_trayView);
         // TODO: reuse QuickPluginWindow, SystemPluginWindow
-        m_mainBoxLayout->addWidget(TrayGridView::getDockTrayGridView());
+        m_mainBoxLayout->insertWidget(m_mainBoxLayout->count() - 2, TrayGridView::getDockTrayGridView());
     } else {
         m_mainBoxLayout->removeWidget(TrayGridView::getDockTrayGridView());
     }
