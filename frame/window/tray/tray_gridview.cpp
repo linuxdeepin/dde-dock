@@ -52,7 +52,12 @@ TrayGridView::TrayGridView(QWidget *parent)
 
 void TrayGridView::setPosition(Dock::Position position)
 {
+    if (m_positon == position) {
+        return;
+    }
     m_positon = position;
+    setOrientation(m_positon == Dock::Position::Top || m_positon == Dock::Position::Bottom ?
+        QListView::Flow::LeftToRight : QListView::Flow::TopToBottom, false);
 }
 
 Dock::Position TrayGridView::position() const

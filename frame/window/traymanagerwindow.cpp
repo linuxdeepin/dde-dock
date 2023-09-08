@@ -128,11 +128,6 @@ void TrayManagerWindow::setPositon(Dock::Position position)
 
     m_position = position;
 
-    if (position == Dock::Position::Top || position == Dock::Position::Bottom)
-        m_trayView->setOrientation(QListView::Flow::LeftToRight, false);
-    else
-        m_trayView->setOrientation(QListView::Flow::TopToBottom, false);
-
     TrayDelegate *delegate = static_cast<TrayDelegate *>(m_trayView->itemDelegate());
     delegate->setPositon(position);
 
