@@ -208,6 +208,7 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
         }
         break;
     }
+    case QEvent::WindowDeactivate:
     case QEvent::Hide: {
         this->hide();
         break;
