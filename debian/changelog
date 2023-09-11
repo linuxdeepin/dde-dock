@@ -1,3 +1,13 @@
+dde-dock (6.0.22) unstable; urgency=medium
+
+  * fix: a space on tray without trash show
+  * fix: coredump empty tray when switch postion
+  * fix: Can't hide when DockPopupWindow deactivate(Issue: https://github.com/linuxdeepin/developer-center/issues/5405)
+  * fix: datetime size error
+  * fix: tool appAreaWidget visible
+
+ -- tsic404 <liuheng@deepin.org>  Mon, 11 Sep 2023 13:14:25 +0800
+
 dde-dock (6.0.21) unstable; urgency=medium
 
   * fix: add lost windowSizeChanged Signal
