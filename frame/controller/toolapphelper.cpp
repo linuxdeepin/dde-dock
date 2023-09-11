@@ -45,6 +45,7 @@ void ToolAppHelper::setPosition(Position position)
 {
     m_toolAreaWidget->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
     m_position = position;
+    updateWidgetStatus();
 }
 
 bool ToolAppHelper::toolIsVisible() const
@@ -140,7 +141,7 @@ void ToolAppHelper::updateWidgetStatus()
         m_toolAreaWidget->setVisible(false);
     } else {
         // 时尚模式
-        m_toolAreaWidget->setVisible(m_toolAreaWidget->layout()->count() > 0);
+        updateToolArea();
     }
     bool visible = toolIsVisible();
     if (oldVisible != visible)
