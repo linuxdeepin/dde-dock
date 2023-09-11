@@ -190,11 +190,6 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
     info.m_time = getTimeString(position);
     info.m_date = getDateString(position);
 
-    if (m_showMultiRow && m_dateFont.pixelSize() + m_timeFont.pixelSize() > height() - 8) {
-        m_dateFont.setPixelSize(height() / 2 - 5);
-        m_timeFont.setPixelSize(height() / 2 - 3);
-    }
-
     // 如果是左右方向
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
         int textWidth = rect().width();
@@ -252,14 +247,10 @@ void DateTimeDisplayer::onTimeChanged()
 
 void DateTimeDisplayer::onDateTimeFormatChanged()
 {
-    int lastSize = m_currentSize;
     m_shortDateFormat = m_timedateInter->shortDateFormat();
     m_use24HourFormat = m_timedateInter->use24HourFormat();
     // 此处需要强制重绘，因为在重绘过程中才会改变m_currentSize信息，方便在后面判断是否需要调整尺寸
     repaint();
-    // 如果日期时间的格式发生了变化，需要通知外部来调整日期时间的尺寸
-    if (lastSize != m_currentSize)
-        Q_EMIT requestUpdate();
 }
 
 void DateTimeDisplayer::paintEvent(QPaintEvent *e)
@@ -416,6 +407,7 @@ QString DateTimeDisplayer::getTimeString() const
 
 void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
 {
+    int lastSize = m_currentSize;
     m_lastDateString = info.m_date;
     m_lastTimeString = info.m_time;
     QSize dateTimeSize = suitableSize();
@@ -423,6 +415,9 @@ void DateTimeDisplayer::updateLastData(const DateTimeInfo &info)
         m_currentSize = dateTimeSize.width();
     else
         m_currentSize = dateTimeSize.height();
+    // 如果日期时间的格式发生了变化，需要通知外部来调整日期时间的尺寸
+    if (lastSize != m_currentSize)
+        Q_EMIT requestUpdate();
 }
 
 bool DateTimeDisplayer::event(QEvent *event)
