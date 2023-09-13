@@ -49,7 +49,7 @@ void DisplayPlugin::init(PluginProxyInterface *proxyInter)
     m_model.reset(new BrightnessModel);
     m_displayWidget.reset(new BrightnessWidget(m_model.data()));
     m_displayWidget->setFixedHeight(60);
-    m_displaySettingWidget.reset(new DisplaySettingWidget);
+    m_displaySettingWidget.reset(new DisplaySettingWidget(m_model.data()));
 
     if (m_model->monitors().size() > 0)
         m_proxyInter->itemAdded(this, pluginName());
@@ -60,8 +60,8 @@ void DisplayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_displaySettingWidget.data(), &DisplaySettingWidget::requestHide, this, [ this ] {
         m_proxyInter->requestSetAppletVisible(this, QUICK_ITEM_KEY, false);
     });
-    connect(m_model.data(), &BrightnessModel::screenVisibleChanged, this, [ this ](bool visible) {
-        if (visible)
+    connect(m_model.data(), &BrightnessModel::monitorChanged, this, [ this ]() {
+        if (m_model->monitors().size() > 0)
             m_proxyInter->itemAdded(this, pluginName());
         else
             m_proxyInter->itemRemoved(this, pluginName());

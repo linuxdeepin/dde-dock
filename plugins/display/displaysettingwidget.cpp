@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "displaysettingwidget.h"
-#include "brightnessadjwidget.h"
 #include "devcollaborationwidget.h"
 
 #include <QPushButton>
@@ -14,9 +13,9 @@
 
 const int ItemSpacing = 10;
 
-DisplaySettingWidget::DisplaySettingWidget(QWidget *parent)
+DisplaySettingWidget::DisplaySettingWidget(BrightnessModel *model, QWidget *parent)
     : QWidget(parent)
-    , m_brightnessAdjWidget(new BrightnessAdjWidget(this))
+    , m_brightnessAdjWidget(new BrightnessAdjWidget(model, this))
     , m_collaborationWidget(new DevCollaborationWidget(this))
     , m_settingBtn(new QPushButton(tr("Multi-Screen Collaboration"), this))
 {
@@ -47,6 +46,8 @@ void DisplaySettingWidget::initUI()
 
     resizeWidgetHeight();
     connect(m_collaborationWidget, &DevCollaborationWidget::sizeChanged,
+            this, &DisplaySettingWidget::resizeWidgetHeight);
+    connect(m_brightnessAdjWidget, &BrightnessAdjWidget::sizeChanged,
             this, &DisplaySettingWidget::resizeWidgetHeight);
 }
 

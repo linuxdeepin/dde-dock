@@ -12,13 +12,14 @@
 
 const int ItemSpacing = 5;
 
-BrightnessAdjWidget::BrightnessAdjWidget(QWidget *parent)
+BrightnessAdjWidget::BrightnessAdjWidget(BrightnessModel *model, QWidget *parent)
     : QWidget(parent)
     , m_mainLayout(new QVBoxLayout(this))
-    , m_brightnessModel(new BrightnessModel(this))
+    , m_brightnessModel(model)
 {
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(ItemSpacing);
+    connect(m_brightnessModel, &BrightnessModel::monitorChanged, this, &BrightnessAdjWidget::loadBrightnessItem);
 
     loadBrightnessItem();
 }
@@ -27,6 +28,11 @@ void BrightnessAdjWidget::loadBrightnessItem()
 {
     QList<BrightMonitor *> monitors = m_brightnessModel->monitors();
     int itemHeight = monitors.count() > 1 ? 56 : 30;
+
+    // 清理之前的widget
+    while(m_mainLayout->count() > 0) {
+        m_mainLayout->takeAt(0)->widget()->deleteLater();
+    }
 
     for (BrightMonitor *monitor : monitors) {
         SliderContainer *sliderContainer = new SliderContainer(this);
@@ -54,5 +60,6 @@ void BrightnessAdjWidget::loadBrightnessItem()
 
     QMargins margins = this->contentsMargins();
     setFixedHeight(margins.top() + margins.bottom() + monitors.count() * itemHeight + monitors.count() * ItemSpacing);
+    Q_EMIT sizeChanged();
 }
 
