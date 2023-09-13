@@ -6,6 +6,8 @@
 #ifndef DISPLAY_SETTING_WIDGET_H
 #define DISPLAY_SETTING_WIDGET_H
 
+#include "brightnessadjwidget.h"
+
 #include <QWidget>
 
 class QPushButton;
@@ -21,7 +23,7 @@ class DisplaySettingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DisplaySettingWidget(QWidget *parent = nullptr);
+    explicit DisplaySettingWidget(BrightnessModel *model, QWidget *parent = nullptr);
 
 Q_SIGNALS:
     void requestHide();

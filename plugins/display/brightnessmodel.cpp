@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QScreen>
+#include <qobjectdefs.h>
 
 static const QString serviceName("org.deepin.dde.Display1");
 static const QString servicePath("/org/deepin/dde/Display1");
@@ -88,14 +89,10 @@ void BrightnessModel::onPropertyChanged(const QDBusMessage &msg)
         if (defaultMonitor)
             Q_EMIT primaryChanged(defaultMonitor);
     } else if (changedProps.contains("Monitors")) {
-        int oldSize = m_monitor.size();
         qDeleteAll(m_monitor);
-        m_monitor = readMonitors(changedProps.value("Monitors").value<QList<QDBusObjectPath>>());
-        if (oldSize == 1 && m_monitor.size() == 0) {
-            Q_EMIT screenVisibleChanged(false);
-        } else if (oldSize == 0 && m_monitor.size() == 1) {
-            Q_EMIT screenVisibleChanged(true);
-        }
+        QDBusInterface dbusInter(serviceName, servicePath, serviceInterface, QDBusConnection::sessionBus());
+        m_monitor = readMonitors(dbusInter.property("Monitors").value<QList<QDBusObjectPath>>());
+        Q_EMIT monitorChanged();
     }
 }
 

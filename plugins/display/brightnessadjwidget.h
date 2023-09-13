@@ -19,9 +19,12 @@ class BrightnessAdjWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BrightnessAdjWidget(QWidget *parent = nullptr);
+    explicit BrightnessAdjWidget(BrightnessModel *model, QWidget *parent = nullptr);
 
-private:
+Q_SIGNALS:
+    void sizeChanged();
+
+private Q_SLOTS:
     void loadBrightnessItem();
 
 private:
