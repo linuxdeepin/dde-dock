@@ -67,7 +67,7 @@ TrayModel::TrayModel(bool isIconTray, QObject *parent)
     connect(m_monitor, &TrayMonitor::systemTrayRemoved, this, &TrayModel::onSystemTrayRemoved);
 
     connect(m_monitor, &TrayMonitor::requestUpdateIcon, this, &TrayModel::requestUpdateIcon);
-    connect(DockSettings::instance(), &DockSettings::quickPluginsChanged, this, &TrayModel::onSettingChanged);
+    connect(DockSettings::instance(), &DockSettings::quickTrayNameChanged, this, &TrayModel::onSettingChanged);
 
     m_fixedTrayNames = DockSettings::instance()->getTrayItemsOnDock();
     m_fixedTrayNames.removeDuplicates();
@@ -449,7 +449,7 @@ void TrayModel::removeWinInfo(WinInfo winInfo)
     }
 }
 
-bool TrayModel::inTrayConfig(const QString itemKey) const
+bool TrayModel::inTrayConfig(const QString &itemKey) const
 {
     if (m_isTrayIcon) {
         // 如果是托盘区域，显示所有不在配置中的应用

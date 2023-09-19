@@ -141,7 +141,7 @@ private:
     QString fileNameByServiceName(const QString &serviceName) const;
     bool isTypeWriting(const QString &servicePath) const;
 
-    bool inTrayConfig(const QString itemKey) const;
+    bool inTrayConfig(const QString &itemKey) const;
     QString xembedItemKey(quint32 winId) const;
     bool xembedCanExport(quint32 winId) const;
     QString sniItemKey(const QString &servicePath) const;
