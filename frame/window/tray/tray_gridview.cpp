@@ -19,7 +19,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QTimer>
-#include <qwidget.h>
 
 TrayGridView *TrayGridView::getDockTrayGridView(QWidget *parent)
 {
@@ -330,7 +329,7 @@ void TrayGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     m_aniStartTime->stop();
     e->accept();
-    dragLeaved();
+    Q_EMIT dragLeaved();
 }
 
 void TrayGridView::dragMoveEvent(QDragMoveEvent *e)
@@ -455,6 +454,15 @@ void TrayGridView::handleDropEvent(QDropEvent *e)
         e->ignore();
         DListView::dropEvent(e);
     }
+    // 拖拽行为后会自动关闭Edtor，导致托盘图标消失
+    QMetaObject::invokeMethod(this, [&] {
+        for (int i = 0; i < model()->rowCount(); i++) {
+            QModelIndex index = model()->index(i, 0);
+            if(!isPersistentEditorOpen(index)) {
+                openPersistentEditor(index);
+            }
+        }
+    }, Qt::QueuedConnection);
 }
 
 void TrayGridView::onUpdateEditorView()
@@ -467,7 +475,7 @@ void TrayGridView::onUpdateEditorView()
     // 因为closePersistentEditor后，异步删除QWidget，在关闭后，如果立即调用openPersistentEditor，在删除的时候，会把
     // 通过openPersistentEditor新建的QWidget给删除，引起bug，因此，在所有的都closePersistentEditor后，异步来调用
     // openPersistentEditor就不会出现这种问题
-    QMetaObject::invokeMethod(this, [ = ] {
+    QMetaObject::invokeMethod(this, [&] {
         for (int i = 0; i < model()->rowCount(); i++) {
             QModelIndex index = model()->index(i, 0);
             openPersistentEditor(index);
