@@ -1,4 +1,4 @@
-// Copyright (C) 2022 ~ 2022 Deepin Technology Co., Ltd.
+// Copyright (C) 2022 ~ 2023 Deepin Technology Co., Ltd.
 // SPDX-FileCopyrightText: 2018 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
@@ -12,6 +12,7 @@
 #include <DFontSizeManager>
 #include <DDBusSender>
 #include <DGuiApplicationHelper>
+#include <DConfig>
 
 #include <QHBoxLayout>
 #include <QPainter>
@@ -31,6 +32,10 @@ static QMap<int, QString> dateFormat{{ 0,"yyyy/M/d" }, { 1,"yyyy-M-d" }, { 2,"yy
                                      { 4,"yyyy-MM-dd" }, { 5,"yyyy.MM.dd" }, { 6,"yy/M/d" }, { 7,"yy-M-d" }, { 8,"yy.M.d" }};
 static QMap<int, QString> timeFormat{{0, "h:mm"}, {1, "hh:mm"}};
 
+const QString localeName_key = "localeName";
+const QString shortDateFormat_key = "shortDateFormat";
+const QString shortTimeFormat_key = "shortTimeFormat";
+
 DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     : QWidget (parent)
     , m_timedateInter(new Timedate("org.deepin.dde.Timedate1", "/org/deepin/dde/Timedate1", QDBusConnection::sessionBus(), this))
@@ -43,6 +48,7 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     , m_currentSize(0)
     , m_oneRow(false)
     , m_showMultiRow(showMultiRow)
+    , m_config(DTK_CORE_NAMESPACE::DConfig::createGeneric("org.deepin.region-format", QString(), this))
 {
     m_tipPopupWindow.reset(new DockPopupWindow);
     // 日期格式变化的时候，需要重绘
@@ -63,6 +69,29 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     if (Utils::IS_WAYLAND_DISPLAY)
         m_tipPopupWindow->setWindowFlags(m_tipPopupWindow->windowFlags() | Qt::FramelessWindowHint);
     m_tipPopupWindow->hide();
+
+    m_locale = QLocale::system();
+    if (!m_config->isValid())
+        return;
+    if (!m_config->isDefaultValue(localeName_key)) {
+        m_locale = QLocale(m_config->value(localeName_key).toString());
+    }
+    if (!m_config->isDefaultValue(shortDateFormat_key)) {
+        m_shortDateFormatStr = m_config->value(shortDateFormat_key).toString();
+    }
+    if (!m_config->isDefaultValue(shortTimeFormat_key)) {
+        m_shortTimeFormatStr = m_config->value(shortTimeFormat_key).toString();
+    }
+    connect(m_config, &DTK_CORE_NAMESPACE::DConfig::valueChanged, this, [this] (const QString &key) {
+        if (key == shortDateFormat_key) {
+            m_shortDateFormatStr = m_config->value(key).toString();
+        } else if (key == shortTimeFormat_key) {
+            m_shortTimeFormatStr = m_config->value(key).toString();
+        } else if (key == localeName_key) {
+            m_locale = QLocale(m_config->value(key).toString());
+        }
+        update();
+    });
 }
 
 DateTimeDisplayer::~DateTimeDisplayer()
@@ -145,7 +174,8 @@ QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
     QString tFormat = QString("hh:mm");
     if (timeFormat.contains(m_shortDateFormat))
         tFormat = timeFormat[m_shortDateFormat];
-
+    if (!m_shortTimeFormatStr.isEmpty())
+        tFormat = m_shortTimeFormatStr;
     if (!m_use24HourFormat) {
         if (position == Dock::Top || position == Dock::Bottom)
             tFormat = tFormat.append(" AP");
@@ -153,7 +183,7 @@ QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
             tFormat = tFormat.append("\nAP");
     }
 
-    return QDateTime::currentDateTime().toString(tFormat);
+    return m_locale.toString(QDateTime::currentDateTime(), tFormat);
 }
 
 QString DateTimeDisplayer::getDateString() const
@@ -166,9 +196,12 @@ QString DateTimeDisplayer::getDateString(const Dock::Position &position) const
     QString shortDateFormat = "yyyy-MM-dd";
     if (dateFormat.contains(m_shortDateFormat))
         shortDateFormat = dateFormat.value(m_shortDateFormat);
+    if (!m_shortDateFormatStr.isEmpty())
+        shortDateFormat = m_shortDateFormatStr;
     // 如果是左右方向，则不显示年份
     if (position == Dock::Position::Left || position == Dock::Position::Right) {
-        static QStringList yearStrList{"yyyy/", "yyyy-", "yyyy.", "yy/", "yy-", "yy."};
+        static QStringList yearStrList{"yyyy/", "/yyyy", "yyyy-", "-yyyy", "yyyy.", ".yyyy",
+                                       "yy/", "/yy", "yy-", "-yy", "yy.", ".yy"};
         for (int i = 0; i < yearStrList.size() ; i++) {
             const QString &yearStr = yearStrList[i];
             if (shortDateFormat.contains(yearStr)) {
@@ -178,7 +211,7 @@ QString DateTimeDisplayer::getDateString(const Dock::Position &position) const
         }
     }
 
-    return QDateTime::currentDateTime().toString(shortDateFormat);
+    return m_locale.toString(QDateTime::currentDateTime(), shortDateFormat);
 }
 
 DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Position &position) const

@@ -13,10 +13,15 @@
 #include <QWidget>
 #include <QFont>
 
+#include <dtkcore_global.h>
+
 namespace Dock { class TipsWidget; }
 
 class DockPopupWindow;
 class QMenu;
+DCORE_BEGIN_NAMESPACE
+class DConfig;
+DCORE_END_NAMESPACE
 
 using Timedate = org::deepin::dde::Timedate1;
 
@@ -88,6 +93,10 @@ private:
     bool m_showMultiRow;
     int m_shortDateFormat;
     bool m_use24HourFormat;
+    DTK_CORE_NAMESPACE::DConfig *m_config;
+    QString m_shortDateFormatStr;
+    QString m_shortTimeFormatStr;
+    QLocale m_locale;
 };
 
 #endif // DATETIMEDISPLAYER_H
