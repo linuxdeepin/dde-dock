@@ -46,9 +46,9 @@ void DockSettings::init()
                 } else if ( key == keyQuickPlugins) {
                     Q_EMIT quickPluginsChanged(m_dockSettings->value(keyQuickPlugins).toStringList());
                 } else if ( key == keyWindowSizeFashion) {
-                    Q_EMIT windowSizeFashionChanged(m_dockSettings->value(keyWindowSizeFashion).toUInt());
+                    Q_EMIT windowSizeFashionChanged(m_dockSettings->value(keyWindowSizeFashion, 48).toUInt());
                 } else if ( key == keyWindowSizeEfficient) {
-                    Q_EMIT windowSizeEfficientChanged(m_dockSettings->value(keyWindowSizeEfficient).toUInt());
+                    Q_EMIT windowSizeEfficientChanged(m_dockSettings->value(keyWindowSizeEfficient, 40).toUInt());
                 }
             });
     }
@@ -176,7 +176,7 @@ uint DockSettings::getWindowSizeEfficient()
 {
     uint size = 40;
     if (m_dockSettings) {
-        size = m_dockSettings->value(keyWindowSizeEfficient).toUInt();
+        size = m_dockSettings->value(keyWindowSizeEfficient, size).toUInt();
     }
     return size;
 }
@@ -192,7 +192,7 @@ uint DockSettings::getWindowSizeFashion()
 {
     uint size = 48;
     if (m_dockSettings) {
-        size = m_dockSettings->value(keyWindowSizeFashion).toUInt();
+        size = m_dockSettings->value(keyWindowSizeFashion, size).toUInt();
     }
     return size;
 }
