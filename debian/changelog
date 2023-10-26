@@ -1,3 +1,13 @@
+dde-dock (6.0.23) unstable; urgency=medium
+
+  * fix: displayplugin disappear when monitor count changed
+  * fix: tray disappear when drag finished
+  * fix: double tray show afeter drag into expandTray and drag back
+  * chore: remove unused dbus
+  * chore: Adapt time format feature(Issue: https://github.com/linuxdeepin/developer-center/issues/5902)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Thu, 26 Oct 2023 17:25:38 +0800
+
 dde-dock (6.0.22) unstable; urgency=medium
 
   * fix: a space on tray without trash show
