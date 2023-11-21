@@ -249,7 +249,7 @@ void DockPopupWindow::onButtonPress(int type, int x, int y, const QString &key)
     // if there is something focus on widget, return
     if (auto focus = qApp->focusWidget()) {
         auto className = QString(focus->metaObject()->className());
-        qDebug() << "Find focused widget, focus className is" << className;
+        //qDebug() << "Find focused widget, focus className is" << className;
         if (className == "QLineEdit") {
             qDebug() << "PopupWindow window will not be hidden";
             return;
