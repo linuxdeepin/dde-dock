@@ -175,7 +175,7 @@ void BrightMonitor::onPropertyChanged(const QDBusMessage &msg)
 
     QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
     if (changedProps.contains("Brightness")) {
-        int brightness = static_cast<int>(changedProps.value("Brightness").value<double>() * 100);
+        int brightness = QVariant(changedProps.value("Brightness").value<double>() * 100).toInt();
         if (brightness != m_brightness) {
             m_brightness = brightness;
             Q_EMIT brightnessChanged(brightness);
