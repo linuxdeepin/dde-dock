@@ -16,6 +16,7 @@
 #include <DListView>
 #include <DSpinner>
 #include <DGuiApplicationHelper>
+#include <DIconTheme>
 
 #include <QBoxLayout>
 #include <QStandardItemModel>
@@ -115,7 +116,9 @@ QIcon BluetoothDeviceItem::getBatteryIcon(int percentage)
         percentageStr = "unknow";
     }
 
-    return QIcon::fromTheme(QString("battery-%1-symbolic").arg(percentageStr));
+    QString iconName = QString("battery-%1-symbolic").arg(percentageStr);
+    QIcon qrcIcon = DIconTheme::findQIcon(iconName, DIconTheme::DontFallbackToQIconFromTheme);
+    return DIconTheme::findQIcon(iconName, qrcIcon, DIconTheme::IgnoreBuiltinIcons);
 
 }
 

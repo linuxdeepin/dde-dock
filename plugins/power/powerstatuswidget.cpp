@@ -95,9 +95,6 @@ QPixmap PowerStatusWidget::getBatteryIcon(int themeType)
                   .arg(plugged ? "plugged-symbolic" : "symbolic");
     }
 
-    if (themeType == DGuiApplicationHelper::ColorType::LightType)
-        iconStr.append(PLUGIN_MIN_ICON_NAME);
-
     const auto ratio = devicePixelRatioF();
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
     QPixmap pix = QIcon::fromTheme(iconStr, QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(pixmapSize);
