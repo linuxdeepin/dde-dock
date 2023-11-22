@@ -12,6 +12,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+#include <DIconTheme>
 
 DGUI_USE_NAMESPACE
 
@@ -95,9 +96,15 @@ QPixmap PowerStatusWidget::getBatteryIcon(int themeType)
                   .arg(plugged ? "plugged-symbolic" : "symbolic");
     }
 
+    if (themeType == DGuiApplicationHelper::ColorType::DarkType) {
+        iconStr.append(PLUGIN_MIN_ICON_NAME);
+    }
+
     const auto ratio = devicePixelRatioF();
     QSize pixmapSize = QCoreApplication::testAttribute(Qt::AA_UseHighDpiPixmaps) ? QSize(20, 20) : (QSize(20, 20) * ratio);
-    QPixmap pix = QIcon::fromTheme(iconStr, QIcon::fromTheme(":/batteryicons/resources/batteryicons/" + iconStr + ".svg")).pixmap(pixmapSize);
+    QIcon qrcIcon = QIcon(":/batteryicons/resources/batteryicons/" + iconStr + ".svg");
+    QIcon finalIcon = DIconTheme::findQIcon(iconStr, qrcIcon, DIconTheme::IgnoreBuiltinIcons);
+    QPixmap pix = finalIcon.pixmap(pixmapSize);
     pix.setDevicePixelRatio(ratio);
 
     return pix;
