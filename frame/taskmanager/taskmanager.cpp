@@ -365,7 +365,7 @@ void TaskManager::doActiveWindow(XWindow xid)
     }
 
     XCB->changeActiveWindow(xid);
-    QTimer::singleShot(50, [&] {
+    QTimer::singleShot(50, [xid] {
         XCB->restackWindow(xid);
     });
 }
