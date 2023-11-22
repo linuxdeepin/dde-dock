@@ -117,8 +117,12 @@ QIcon BluetoothDeviceItem::getBatteryIcon(int percentage)
     }
 
     QString iconName = QString("battery-%1-symbolic").arg(percentageStr);
+
+    auto themeType = DGuiApplicationHelper::instance()->themeType();
+    bool isDarkTheme = themeType == DGuiApplicationHelper::DarkType;
+    QString iconNameFallback = isDarkTheme ? iconName + "-dark" : iconName;
     QIcon qrcIcon = DIconTheme::findQIcon(iconName, DIconTheme::DontFallbackToQIconFromTheme);
-    return DIconTheme::findQIcon(iconName, qrcIcon, DIconTheme::IgnoreBuiltinIcons);
+    return DIconTheme::findQIcon(iconNameFallback, qrcIcon, DIconTheme::IgnoreBuiltinIcons);
 
 }
 
