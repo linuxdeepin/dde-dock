@@ -189,7 +189,7 @@ DockItemInfos DBusDockAdaptors::plugins()
             QBuffer buffer(&info.iconLight);
             if (buffer.open(QIODevice::WriteOnly)) {
                 QPixmap pixmap = lightIcon.pixmap(pixmapSize);
-                pixmap.save(&buffer, "png");
+                pixmap.save(&buffer, "svg");
             }
         }
         QIcon darkIcon = getSettingIcon(plugin, pixmapSize, DGuiApplicationHelper::ColorType::DarkType);
@@ -197,7 +197,7 @@ DockItemInfos DBusDockAdaptors::plugins()
             QBuffer buffer(&info.iconDark);
             if (buffer.open(QIODevice::WriteOnly)) {
                 QPixmap pixmap = darkIcon.pixmap(pixmapSize);
-                pixmap.save(&buffer, "png");
+                pixmap.save(&buffer, "svg");
             }
         }
         pluginInfos << info;
