@@ -1,3 +1,13 @@
+dde-dock (6.0.24) unstable; urgency=medium
+
+  * chore: use system icon first
+  * fix: dcc dock plugin icon pixelated
+  * fix some coredump issue
+  * fix: brightness silder cannot sroll when is 28
+  * tidy up some log
+
+ -- chenhongtao <chenhongtao@deepin.org> Tue, 28 Nov 2023 10:51:52 +0800
+
 dde-dock (6.0.23) unstable; urgency=medium
 
   * fix: displayplugin disappear when monitor count changed
