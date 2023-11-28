@@ -18,6 +18,7 @@
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
