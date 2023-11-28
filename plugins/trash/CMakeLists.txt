@@ -20,6 +20,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
+find_package(DtkGui REQUIRED)
 
 pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
 pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
@@ -29,13 +30,13 @@ add_library(${PLUGIN_NAME} SHARED ${SRCS} resource.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 
 target_include_directories(${PLUGIN_NAME} PUBLIC
-    ${DtkWidget_INCLUDE_DIRS}
     ../../interfaces
     ./dbusinterface/generation_dbus_interface
     ../../frame/qtdbusextended)
 
 target_link_libraries(${PLUGIN_NAME} PRIVATE
-    ${DtkWidget_LIBRARIES}
+    Dtk::Widget
+    Dtk::Gui
     PkgConfig::XCB_LIBS
     Qt5::Widgets
     Qt5::DBus
