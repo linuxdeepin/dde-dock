@@ -5,6 +5,7 @@
 
 #include "trashplugin.h"
 #include "../../widgets/tipswidget.h"
+#include "imageutil.h"
 
 #include <DApplication>
 #include <DDesktopServices>
@@ -174,10 +175,10 @@ void TrashPlugin::pluginSettingsChanged()
 QIcon TrashPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
+        auto pixmap = ImageUtil::loadSvg(":/icons/dcc_trash.svg", QSize(18, 18));
         if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return QIcon(":/icons/dcc_trash.svg");
+            return pixmap;
 
-        QPixmap pixmap(":/icons/dcc_trash.svg");
         QPainter pa(&pixmap);
         pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
         pa.fillRect(pixmap.rect(), Qt::white);

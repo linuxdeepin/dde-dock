@@ -275,10 +275,11 @@ void ShutdownPlugin::setSortKey(const QString &itemKey, const int order)
 QIcon ShutdownPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
     if (dockPart == DockPart::DCCSetting) {
+        QString iconFile(":/icons/resources/icons/dcc_shutdown.svg");
+        auto pixmap = ImageUtil::loadSvg(iconFile, QSize(18, 18));
         if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return QIcon(":/icons/resources/icons/dcc_shutdown.svg");
+            return pixmap;
 
-        QPixmap pixmap(":/icons/resources/icons/dcc_shutdown.svg");
         QPainter pa(&pixmap);
         pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
         pa.fillRect(pixmap.rect(), Qt::white);
