@@ -16,7 +16,7 @@ find_package(DtkWidget REQUIRED)
 pkg_check_modules(XCB_LIBS REQUIRED IMPORTED_TARGET xcursor)
 
 add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
-add_library(${PLUGIN_NAME} SHARED ${SRCS})
+add_library(${PLUGIN_NAME} SHARED ${SRCS} resource.qrc)
 set_target_properties(${PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS} ../../interfaces)
 target_link_libraries(${PLUGIN_NAME} PRIVATE

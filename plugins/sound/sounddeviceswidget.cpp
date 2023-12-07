@@ -530,7 +530,15 @@ QPixmap SoundDevicesWidget::pixmap(DGuiApplicationHelper::ColorType colorType, i
     else if (volmue > maxVolmue * 1 / 3)
         volumeString = "medium";
     else
-        volumeString = "low";;
+        volumeString = "low";
 
-    return QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(volumeString)).pixmap(iconWidth, iconHeight);
+    auto pixmap = QIcon::fromTheme(QString("audio-volume-%1-symbolic").arg(volumeString)).pixmap(iconWidth, iconHeight);
+
+    if (colorType == DGuiApplicationHelper::ColorType::LightType)
+        return pixmap;
+
+    QPainter pa(&pixmap);
+    pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    pa.fillRect(pixmap.rect(), Qt::white);
+    return pixmap;
 }

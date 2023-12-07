@@ -326,7 +326,7 @@ QIcon DBusDockAdaptors::getSettingIcon(PluginsItemInterface *plugin, QSize &pixm
 {
     auto iconSize = [](const QIcon &icon) {
         QList<QSize> iconSizes = icon.availableSizes();
-        if (iconSizes.size() > 0)
+        if (iconSizes.size() > 0 && !iconSizes[0].isNull() )
             return iconSizes[0];
 
         return defaultIconSize;

@@ -4,11 +4,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "showdesktopplugin.h"
+#include "imageutil.h"
 #include "../widgets/tipswidget.h"
 
 #include <QIcon>
 #include <QDebug>
 #include <DDBusSender>
+#include <QPainter>
 
 using namespace Dock;
 ShowDesktopPlugin::ShowDesktopPlugin(QObject *parent)
@@ -121,9 +123,17 @@ void ShowDesktopPlugin::refreshIcon(const QString &itemKey)
 
 QIcon ShowDesktopPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-
     if (dockPart == DockPart::DCCSetting) {
-        return QIcon::fromTheme("dcc-show-desktop", QIcon(":/icons/icons/dcc-show-desktop.svg"));
+        auto loadsvg = []{ return ImageUtil::loadSvg(":/icons/dcc-show-desktop.svg", QSize(18, 18));};
+        auto icon = QIcon::fromTheme("dcc-show-desktop", loadsvg());
+        QPixmap pixmap = icon.pixmap(QSize(18, 18));
+        if (themeType == DGuiApplicationHelper::ColorType::LightType)
+            return pixmap;
+
+        QPainter pa(&pixmap);
+        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        pa.fillRect(pixmap.rect(), Qt::white);
+        return pixmap;
     }
 
     return QIcon();
