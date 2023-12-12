@@ -414,6 +414,8 @@ void BluetoothAdapterItem::initConnect()
         m_seperator->setVisible(false);
         m_adapterStateBtn->setEnabled(false);
         m_refreshBtn->setVisible(state);
+        // FIX #6033 开启蓝牙就开始转动，关闭就停止转动
+        state ? m_refreshBtn->startRotate() : m_refreshBtn->stopRotate();
         emit requestSetAdapterPower(m_adapter, state);
     });
     connect(m_bluetoothInter, &DBusBluetooth::DisplaySwitchChanged, this, [ = ](bool value) {
