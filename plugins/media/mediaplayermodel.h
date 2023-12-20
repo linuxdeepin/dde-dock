@@ -54,10 +54,11 @@ Q_SIGNALS:
 private:
     void initMediaPlayer();
     PlayStatus convertStatus(const QString &stat);
+    void onServiceChanged();
 
 private:
     bool m_isActived;
-    QString m_serviceName;
+    QStringList m_mprisServices;
     QString m_name;
     QString m_icon;
     QString m_album;
