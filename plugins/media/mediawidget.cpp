@@ -115,9 +115,18 @@ void MediaWidget::onUpdateMediaInfo()
 {
     m_musicName->setText(m_model->name());
     QString file = m_model->iconUrl();
-    if (file.startsWith("file:///"))
+    QPixmap pixmap;
+    if (file.startsWith("file:///")) {
         file.replace("file:///", "/");
-    m_musicIcon->setPixmap(QPixmap(file).scaled(m_musicIcon->size()));
+        pixmap = QPixmap(file).scaled(m_musicIcon->size());
+    }
+
+    if (pixmap.isNull()) {
+        // 就算给的文件不存在(e.g. deepin-music..)，也至少 fallback 到 music 图标
+        pixmap = QIcon::fromTheme(file, QIcon::fromTheme("music")).pixmap(m_musicIcon->size());
+    }
+
+    m_musicIcon->setPixmap(pixmap);
     m_musicSinger->setText(m_model->artist());
 }
 
