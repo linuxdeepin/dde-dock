@@ -237,6 +237,10 @@ void BluetoothAdapterItem::updateIconTheme(DGuiApplicationHelper::ColorType type
 
 QSize BluetoothAdapterItem::sizeHint() const
 {
+    // 没有 item 就不去做一些无效的计算了，包括分割线的高度
+    if (m_deviceListview->count() < 1)
+        return QSize(ItemWidth, m_adapterLabel->height());
+
     int visualHeight = 0;
     for (int i = 0; i < m_deviceListview->count(); i++)
         visualHeight += m_deviceListview->visualRect(m_deviceModel->index(i, 0)).height();
@@ -276,6 +280,10 @@ void BluetoothAdapterItem::initData()
 
 void BluetoothAdapterItem::onDeviceAdded(const Device *device)
 {
+    // 关闭蓝牙设备时，不再响应上一个扫描操作的新增的 device
+    if (!m_adapterStateBtn->isChecked())
+        return;
+
     int insertRow = 0;
     foreach (const auto item, m_deviceItems) {
         if (item->device()->connectState()) {
