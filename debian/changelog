@@ -1,3 +1,10 @@
+dde-dock (6.0.26) unstable; urgency=medium
+
+  * release 6.0.26
+  * fix #6033 #5719 #5786 #4331
+
+ -- mike <chenke@deepin.org>  Fri, 29 Dec 2023 11:27:59 +0800
+
 dde-dock (6.0.25) unstable; urgency=medium
 
   * chore: turn on bluetooth loading animation when not start
