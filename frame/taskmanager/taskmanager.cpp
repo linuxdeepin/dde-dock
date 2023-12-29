@@ -50,6 +50,7 @@ TaskManager::TaskManager(QObject *parent)
  , m_hideState(HideState::Unknown)
  , m_ddeLauncherVisible(false)
  , m_trayGridWidgetVisible(false)
+ , m_popupVisible(false)
  , m_entries(new Entries(this))
  , m_windowIdentify(new WindowIdentify(this))
  , m_dbusHandler(new DBusHandler(this))
@@ -248,7 +249,7 @@ bool TaskManager::shouldShowOnDock(WindowInfoBase *info)
  */
 void TaskManager::setDdeLauncherVisible(bool visible)
 {
-    m_trayGridWidgetVisible = visible;
+    m_ddeLauncherVisible = visible;
 }
 
 /**
@@ -257,7 +258,12 @@ void TaskManager::setDdeLauncherVisible(bool visible)
  */
 void TaskManager::setTrayGridWidgetVisible(bool visible)
 {
-    m_ddeLauncherVisible = visible;
+    m_trayGridWidgetVisible = visible;
+}
+
+void TaskManager::setPopupVisible(bool visible)
+{
+    m_popupVisible = visible;
 }
 
 /**
@@ -849,7 +855,7 @@ Entry *TaskManager::getDockedEntryByDesktopFile(const QString &desktopFile)
  */
 bool TaskManager::shouldHideOnSmartHideMode()
 {
-    if (!m_activeWindow || m_ddeLauncherVisible || m_trayGridWidgetVisible)
+    if (!m_activeWindow || m_ddeLauncherVisible || m_trayGridWidgetVisible || m_popupVisible)
         return false;
 
     if (!m_isWayland) {
@@ -949,7 +955,7 @@ QVector<XWindow> TaskManager::getActiveWinGroup(XWindow xid)
  */
 void TaskManager::updateHideState(bool delay)
 {
-    if (m_ddeLauncherVisible || m_trayGridWidgetVisible) {
+    if (m_ddeLauncherVisible || m_trayGridWidgetVisible || m_popupVisible) {
         setPropHideState(HideState::Show);
         return;
     }

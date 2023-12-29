@@ -41,6 +41,7 @@ public:
     bool shouldShowOnDock(WindowInfoBase *info);
     void setDdeLauncherVisible(bool visible);
     void setTrayGridWidgetVisible(bool visible);
+    void setPopupVisible(bool visible);
     QString getWMName();
     void setWMName(QString name);
     void setPropHideState(HideState state);
@@ -177,6 +178,7 @@ private:
     ForceQuitAppMode m_forceQuitAppStatus; // 强制退出应用状态
     bool m_ddeLauncherVisible;
     bool m_trayGridWidgetVisible;
+    bool m_popupVisible;
 
     Entries *m_entries;   // 所有应用实例
     X11Manager *m_x11Manager;     // X11窗口管理

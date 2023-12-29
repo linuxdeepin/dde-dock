@@ -9,6 +9,7 @@
 #include "dbusutil.h"
 #include "dockscreen.h"
 #include "displaymanager.h"
+#include "taskmanager/taskmanager.h"
 
 #include <QScreen>
 #include <QApplication>
@@ -172,12 +173,14 @@ void DockPopupWindow::showEvent(QShowEvent *e)
         Utils::updateCursor(this);
     }
 
+    TaskManager::instance()->setPopupVisible(true);
     QTimer::singleShot(1, this, &DockPopupWindow::ensureRaised);
 }
 
 void DockPopupWindow::hideEvent(QHideEvent *event)
 {
     m_extendWidget = nullptr;
+    TaskManager::instance()->setPopupVisible(false);
     Dtk::Widget::DBlurEffectWidget::hideEvent(event);
 }
 
