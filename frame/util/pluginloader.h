@@ -17,7 +17,7 @@ public:
 
 signals:
     void finished() const;
-    void pluginFounded(const QString &pluginFile) const;
+    void pluginFound(const QString &pluginFile) const;
 
 protected:
     void run();
