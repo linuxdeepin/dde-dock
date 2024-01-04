@@ -302,6 +302,17 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation>Notification</translation>
+    </message>
+    <message>
+        <source>Do Not Disturb</source>
+        <translation>Do Not Disturb</translation>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>

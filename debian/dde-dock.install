@@ -9,4 +9,5 @@ usr/lib/dde-dock/plugins/quick-trays
 usr/lib/dde-dock/plugins/libmultitasking.so
 usr/lib/dde-dock/plugins/libshow-desktop.so
 usr/lib/dde-dock/plugins/libkeyboard-layout.so
+usr/lib/dde-dock/plugins/libnotification.so
 usr/share/dsg/configs/dde-dock/

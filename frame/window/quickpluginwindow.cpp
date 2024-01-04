@@ -1068,5 +1068,5 @@ QPoint QuickDockItem::popupMarkPoint() const
 
 void QuickDockItem::onMenuActionClicked(QAction *action)
 {
-    m_pluginItem->invokedMenuItem(m_itemKey, action->data().toString(), true);
+    m_pluginItem->invokedMenuItem(m_itemKey, action->data().toString(), action->isCheckable() ? action->isChecked() : true);
 }

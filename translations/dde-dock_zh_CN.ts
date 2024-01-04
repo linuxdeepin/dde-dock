@@ -330,6 +330,17 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <source>Do Not Disturb</source>
+        <translation>勿扰模式</translation>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>

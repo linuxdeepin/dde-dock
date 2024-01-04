@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/dsg/built-in-icons">
+        <file alias="notification.dci">icons/notification.dci</file>
+        <file alias="notification-off.dci">icons/notification-off.dci</file>
+    </qresource>
+</RCC>
