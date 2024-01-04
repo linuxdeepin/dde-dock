@@ -163,10 +163,10 @@ void DateTimeDisplayer::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
-    DDBusSender().service("org.deepin.dde.Widgets1")
-            .path("/org/deepin/dde/Widgets1")
-            .interface("org.deepin.dde.Widgets1")
-            .method("Toggle").call();
+    DDBusSender().service("com.deepin.Calendar")
+            .path("/com/deepin/Calendar")
+            .interface("com.deepin.Calendar")
+            .method("RaiseWindow").call();
 }
 
 QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
