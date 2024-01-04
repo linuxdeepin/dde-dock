@@ -417,13 +417,13 @@ PluginsItemInterface *DockPluginController::pluginInterAt(QObject *destItem)
 void DockPluginController::startLoader(PluginLoader *loader)
 {
     connect(loader, &PluginLoader::finished, loader, &PluginLoader::deleteLater, Qt::QueuedConnection);
-    connect(loader, &PluginLoader::pluginFounded, this, [ = ](const QString &pluginFile) {
+    connect(loader, &PluginLoader::pluginFound, this, [ = ](const QString &pluginFile) {
         QPair<QString, PluginsItemInterface *> pair;
         pair.first = pluginFile;
         pair.second = nullptr;
         m_pluginLoadMap.insert(pair, false);
     });
-    connect(loader, &PluginLoader::pluginFounded, this, &DockPluginController::loadPlugin, Qt::QueuedConnection);
+    connect(loader, &PluginLoader::pluginFound, this, &DockPluginController::loadPlugin, Qt::QueuedConnection);
 
     int delay = Utils::SettingValue("com.deepin.dde.dock", "/com/deepin/dde/dock/", "delay-plugins-time", 0).toInt();
     QTimer::singleShot(delay, loader, [ = ] { loader->start(QThread::LowestPriority); });
