@@ -84,7 +84,7 @@ DockItemManager::DockItemManager(QObject *parent)
     }
 
     // 刷新图标
-    QMetaObject::invokeMethod(this, "refreshItemsIcon", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &DockItemManager::refreshItemsIcon, Qt::QueuedConnection);
 }
 
 DockItemManager *DockItemManager::instance(QObject *parent)
