@@ -36,9 +36,9 @@ bool QuickSettingController::eventFilter(QObject *watched, QEvent *event)
 void QuickSettingController::startLoader()
 {
 #ifdef QT_DEBUG
-        AbstractPluginsController::startLoader(new PluginLoader(QString("%1/..%2").arg(qApp->applicationDirPath()).arg("/plugins/loader"), this));
+    AbstractPluginsController::startLoader(new PluginLoader(QString("%1/..%2").arg(qApp->applicationDirPath()).arg("/plugins/loader"), this));
 #else
-        AbstractPluginsController::startLoader(new PluginLoader("/usr/lib/dde-dock/plugins/loader", this));
+    AbstractPluginsController::startLoader(new PluginLoader("/usr/lib/dde-dock/plugins/loader", this));
 #endif
 }
 
