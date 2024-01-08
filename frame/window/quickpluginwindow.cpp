@@ -434,6 +434,7 @@ void QuickPluginWindow::onUpdatePlugin(PluginsItemInterface *itemInter, const Do
 
     QuickDockItem *quickDockItem = getDockItemByPlugin(itemInter);
     if (quickDockItem) {
+        quickDockItem->updateContextMenu();
         updateDockItemSize(quickDockItem);
         quickDockItem->update();
     }
@@ -828,30 +829,12 @@ void QuickDockItem::mousePressEvent(QMouseEvent *event)
     if (event->button() != Qt::RightButton)
         return QWidget::mousePressEvent(event);
 
-    if (m_contextMenu->actions().isEmpty()) {
-        const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
-        if (menuJson.isEmpty())
-            return;
+    static std::once_flag contextMenuInitialized;
+    std::call_once(contextMenuInitialized, &QuickDockItem::updateContextMenu, this);
 
-        QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
-        if (jsonDocument.isNull())
-            return;
-
-        QJsonObject jsonMenu = jsonDocument.object();
-
-        QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
-        for (auto item : jsonMenuItems) {
-            QJsonObject itemObj = item.toObject();
-            QAction *action = new QAction(itemObj.value("itemText").toString());
-            action->setCheckable(itemObj.value("isCheckable").toBool());
-            action->setChecked(itemObj.value("checked").toBool());
-            action->setData(itemObj.value("itemId").toString());
-            action->setEnabled(itemObj.value("isActive").toBool());
-            m_contextMenu->addAction(action);
-        }
+    if (!m_contextMenu->actions().isEmpty()) {
+        m_contextMenu->exec(QCursor::pos());
     }
-
-    m_contextMenu->exec(QCursor::pos());
 }
 
 void QuickDockItem::enterEvent(QEvent *event)
@@ -1015,6 +998,31 @@ int QuickDockItem::iconSize() const
     if (m_pluginItem->displayMode() == Dock::DisplayMode::Efficient)
         return 24;
     return 30;
+}
+
+void QuickDockItem::updateContextMenu()
+{
+    m_contextMenu->clear();
+    const QString menuJson = m_pluginItem->itemContextMenu(m_itemKey);
+    if (menuJson.isEmpty())
+        return;
+
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(menuJson.toLocal8Bit().data());
+    if (jsonDocument.isNull())
+        return;
+
+    QJsonObject jsonMenu = jsonDocument.object();
+
+    QJsonArray jsonMenuItems = jsonMenu.value("items").toArray();
+    for (auto item : jsonMenuItems) {
+        QJsonObject itemObj = item.toObject();
+        QAction *action = new QAction(itemObj.value("itemText").toString());
+        action->setCheckable(itemObj.value("isCheckable").toBool());
+        action->setChecked(itemObj.value("checked").toBool());
+        action->setData(itemObj.value("itemId").toString());
+        action->setEnabled(itemObj.value("isActive").toBool());
+        m_contextMenu->addAction(action);
+    }
 }
 
 QPoint QuickDockItem::topleftPoint() const
