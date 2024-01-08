@@ -95,6 +95,7 @@ public:
     bool canInsert() const;
     bool canMove() const;
     void hideToolTip();
+    void updateContextMenu();
 
     QSize suitableSize() const;
 
