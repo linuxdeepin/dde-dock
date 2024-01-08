@@ -37,7 +37,7 @@ protected:
 
 private:
     QIcon m_icon;
-    QDBusInterface *m_dbus;
+    QScopedPointer<QDBusInterface> m_dbus;
     bool m_dndMode;
 };
 
