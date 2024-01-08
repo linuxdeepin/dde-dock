@@ -29,7 +29,7 @@ Notification::Notification(QWidget *parent)
     setMinimumSize(PLUGIN_BACKGROUND_MIN_SIZE, PLUGIN_BACKGROUND_MIN_SIZE);
     connect(this, &Notification::dndModeChanged, this, &Notification::refreshIcon);
     QtConcurrent::run([this](){
-        m_dbus = new QDBusInterface("org.deepin.dde.Notification1", "/org/deepin/dde/Notification1", "org.deepin.dde.Notification1", QDBusConnection::sessionBus(), this);
+        m_dbus.reset(new QDBusInterface("org.deepin.dde.Notification1", "/org/deepin/dde/Notification1", "org.deepin.dde.Notification1"));
         // Refresh icon for the first time, cause org.deepin.dde.Notification1 might depend on dock's DBus,
         // we should not call org.deepin.dde.Notification1 in the main thread before dock's dbus is initialized.
         // Just refresh icon in the other thread.
