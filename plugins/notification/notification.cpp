@@ -23,6 +23,7 @@ DCORE_USE_NAMESPACE;
 Notification::Notification(QWidget *parent)
     : QWidget(parent)
     , m_icon(QIcon::fromTheme("notification"))
+    , m_notificationCount(0)
     , m_dbus(nullptr)
     , m_dndMode(false)
 {
@@ -36,16 +37,29 @@ Notification::Notification(QWidget *parent)
         QDBusReply<QDBusVariant> dnd = m_dbus->call(QLatin1String("GetSystemInfo"), QVariant::fromValue(0u));
         if (!dnd.isValid()) {
             qCWarning(qLcPluginNotification) << dnd.error();
-            return ;
+        } else {
+            m_dndMode = dnd.value().variant().toBool();
+            refreshIcon();
         }
-        m_dndMode = dnd.value().variant().toBool();
-        refreshIcon();
         QDBusConnection::sessionBus().connect("org.deepin.dde.Notification1",
                                               "/org/deepin/dde/Notification1",
                                               "org.deepin.dde.Notification1",
                                               "SystemInfoChanged",
                                               this,
                                               SLOT(onSystemInfoChanged(quint32,QDBusVariant))
+                                              );
+        auto recordCountVariant = m_dbus->property("recordCount");
+        if (!recordCountVariant.isValid()) {
+            qCWarning(qLcPluginNotification) << dnd.error();
+        } else {
+            setNotificationCount(recordCountVariant.toUInt());
+        }
+        QDBusConnection::sessionBus().connect("org.deepin.dde.Notification1",
+                                              "/org/deepin/dde/Notification1",
+                                              "org.deepin.dde.Notification1",
+                                              "recordCountChanged",
+                                              this,
+                                              SLOT(setNotificationCount(uint))
                                               );
     });
 }
@@ -57,7 +71,7 @@ QIcon Notification::icon() const
 
 void Notification::refreshIcon()
 {
-    m_icon = QIcon::fromTheme(m_dndMode ? "notification-off" : "notification");
+    m_icon = QIcon::fromTheme(dndMode() ? "notification-off" : "notification");
     Q_EMIT iconRefreshed();
 }
 
@@ -71,6 +85,11 @@ void Notification::setDndMode(bool dnd)
     if (m_dbus) {
         m_dbus->call(QLatin1String("SetSystemInfo"), QVariant::fromValue(0u), QVariant::fromValue(QDBusVariant(dnd)));
     }
+}
+
+uint Notification::notificationCount() const
+{
+    return m_notificationCount;
 }
 
 void Notification::paintEvent(QPaintEvent *e)
@@ -87,4 +106,13 @@ void Notification::onSystemInfoChanged(quint32 info, QDBusVariant value)
         m_dndMode = value.variant().toBool();
         Q_EMIT dndModeChanged(m_dndMode);
     }
+}
+
+void Notification::setNotificationCount(uint count)
+{
+    if (m_notificationCount == count) {
+        return;
+    }
+    m_notificationCount = count;
+    Q_EMIT this->notificationCountChanged(count);
 }

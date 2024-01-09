@@ -336,8 +336,24 @@
         <translation>Notification</translation>
     </message>
     <message>
-        <source>Do Not Disturb</source>
-        <translation>Do Not Disturb</translation>
+        <source>No messages</source>
+        <translation>No messages</translation>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation>Notification settings</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation>Turn off DND mode</translation>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation>Turn on DND mode</translation>
     </message>
 </context>
 <context>

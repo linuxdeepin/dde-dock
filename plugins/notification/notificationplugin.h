@@ -43,6 +43,8 @@ public:
 private:
     void loadPlugin();
     void refreshPluginItemsVisible();
+    void updateTipsText(uint notificationCount);
+    QString toggleDndText() const;
 
 private:
     bool m_pluginLoaded;

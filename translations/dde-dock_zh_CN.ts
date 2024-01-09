@@ -336,8 +336,24 @@
         <translation>通知</translation>
     </message>
     <message>
-        <source>Do Not Disturb</source>
-        <translation>勿扰模式</translation>
+        <source>No messages</source>
+        <translation>暂无新消息</translation>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation>通知设置</translation>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation>条通知</translation>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation>关闭勿扰模式</translation>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation>开启勿扰模式</translation>
     </message>
 </context>
 <context>
