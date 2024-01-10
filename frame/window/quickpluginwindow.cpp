@@ -829,8 +829,9 @@ void QuickDockItem::mousePressEvent(QMouseEvent *event)
     if (event->button() != Qt::RightButton)
         return QWidget::mousePressEvent(event);
 
-    static std::once_flag contextMenuInitialized;
-    std::call_once(contextMenuInitialized, &QuickDockItem::updateContextMenu, this);
+    if (m_contextMenu->actions().isEmpty()) {
+        updateContextMenu();
+    }
 
     if (!m_contextMenu->actions().isEmpty()) {
         m_contextMenu->exec(QCursor::pos());
