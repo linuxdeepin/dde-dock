@@ -13,7 +13,7 @@
 
 #include <QDebug>
 #include <QThread>
-#include <qstandardpaths.h>
+#include <QDBusConnection>
 
 #define XCB XCBUtils::instance()
 
@@ -74,11 +74,28 @@ WindowIdentify::WindowIdentify(TaskManager *_taskmanager, QObject *parent)
     m_identifyWindowFuns << qMakePair(QString("FlatpakAppID"), &identifyWindowByFlatpakAppID);
     m_identifyWindowFuns << qMakePair(QString("CrxId"), &identifyWindowByCrxId);
     m_identifyWindowFuns << qMakePair(QString("Rule"), &identifyWindowByRule);
-    m_identifyWindowFuns << qMakePair(QString("Bamf"), &identifyWindowByBamf);
     m_identifyWindowFuns << qMakePair(QString("Pid"), &identifyWindowByPid);
     m_identifyWindowFuns << qMakePair(QString("Scratch"), &identifyWindowByScratch);
     m_identifyWindowFuns << qMakePair(QString("GtkAppId"), &identifyWindowByGtkAppId);
     m_identifyWindowFuns << qMakePair(QString("WmClass"), &identifyWindowByWmClass);
+
+    // should remove bamf identify and turn to new AM
+    auto *dbusWatcher = new QDBusServiceWatcher(QStringLiteral("org.ayatana.bamf"), QDBusConnection::sessionBus(),
+                                                QDBusServiceWatcher::WatchForOwnerChange, this);
+
+    auto ifc = QDBusConnection::sessionBus().interface();
+
+    if (ifc->isServiceRegistered(QStringLiteral("org.ayatana.bamf"))) {
+        m_identifyWindowFuns << qMakePair(QString("Bamf"), &identifyWindowByBamf);
+    }
+
+    connect(dbusWatcher, &QDBusServiceWatcher::serviceRegistered, this, [this](){
+        m_identifyWindowFuns << qMakePair(QString("Bamf"), &identifyWindowByBamf);
+    });
+
+    connect(dbusWatcher, &QDBusServiceWatcher::serviceUnregistered, this, [this](){
+        m_identifyWindowFuns.removeAll(qMakePair(QString("Bamf"), &identifyWindowByBamf));
+    });
 }
 
 AppInfo *WindowIdentify::identifyWindow(WindowInfoBase *winInfo, QString &innerId)
