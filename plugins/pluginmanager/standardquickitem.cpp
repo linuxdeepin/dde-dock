@@ -13,6 +13,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <DApplication>
 
 static constexpr int ICONHEIGHT = 24;
 static constexpr int ICONWIDTH = 24;
@@ -26,6 +27,14 @@ StandardQuickItem::StandardQuickItem(PluginsItemInterface *const pluginInter, co
     , m_needPaint(true)
 {
     initUi();
+    auto app = static_cast<DApplication* >(qApp);
+    if (!app) {
+        return;
+    }
+    connect(app, &DApplication::iconThemeChanged, this, [this] {
+        m_needPaint = true;
+        doUpdate();
+    });
 }
 
 StandardQuickItem::~StandardQuickItem()
