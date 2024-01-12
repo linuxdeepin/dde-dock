@@ -11,6 +11,8 @@
 #include <QIcon>
 #include <QSettings>
 #include <QPainter>
+#include <QDBusConnection>
+#include <QDBusConnectionInterface>
 
 #define PLUGIN_STATE_KEY    "enable"
 
@@ -78,8 +80,14 @@ bool OnboardPlugin::pluginIsDisable()
 const QString OnboardPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-
-    return QString("dbus-send --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible");
+    auto ifc = QDBusConnection::sessionBus().interface();
+    
+    return QStringLiteral(
+        "dbus-send --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.%1"
+    ).arg(
+        ifc->isServiceRegistered(QStringLiteral("org.onboard.Onboard"))
+        ? QStringLiteral("ToggleVisible") : QStringLiteral("Show")
+    );
 }
 
 void OnboardPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
