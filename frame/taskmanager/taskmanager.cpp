@@ -635,6 +635,9 @@ void TaskManager::initSettings()
     connect(SETTING, &DockSettings::showRecentChanged, this, &TaskManager::onShowRecentChanged);
     connect(SETTING, &DockSettings::showMultiWindowChanged, this, &TaskManager::onShowMultiWindowChanged);
     connect(SETTING, &DockSettings::displayModeChanged, this, &TaskManager::setDisplayMode);
+    connect(SETTING, &DockSettings::displayModeChanged, this, [this]() {
+        Q_EMIT windowMarginChanged(windowMargin());
+    });
 }
 
 /**
@@ -1509,6 +1512,11 @@ int TaskManager::getPosition()
 void TaskManager::setPosition(int position)
 {
     SETTING->setPositionMode(Position(position));
+}
+
+uint TaskManager::windowMargin() const
+{
+    return SETTING->getDisplayMode() == Dock::Efficient ? 0 : 10;
 }
 
 /**

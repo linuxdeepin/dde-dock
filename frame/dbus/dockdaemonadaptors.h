@@ -100,6 +100,7 @@ class DockDaemonDBusAdaptor: public QDBusAbstractAdaptor
                                        "    <property access=\"readwrite\" type=\"u\" name=\"HideTimeout\"/>\n"
                                        "    <property access=\"readwrite\" type=\"u\" name=\"WindowSizeEfficient\"/>\n"
                                        "    <property access=\"readwrite\" type=\"u\" name=\"WindowSizeFashion\"/>\n"
+                                       "    <property access=\"read\" type=\"u\" name=\"WindowMargin\"/>\n"
                                        "    <property access=\"read\" type=\"(iiii)\" name=\"FrontendWindowRect\"/>\n"
                                        "    <property access=\"readwrite\" type=\"i\" name=\"HideMode\"/>\n"
                                        "    <property access=\"readwrite\" type=\"i\" name=\"DisplayMode\"/>\n"
@@ -141,6 +142,9 @@ public: // PROPERTIES
     Q_PROPERTY(uint WindowSizeFashion READ windowSizeFashion WRITE setWindowSizeFashion NOTIFY WindowSizeFashionChanged)
     uint windowSizeFashion() const;
     void setWindowSizeFashion(uint value);
+
+    Q_PROPERTY(uint WindowMargin READ windowMargin NOTIFY WindowMarginChanged)
+    uint windowMargin() const;
 
     Q_PROPERTY(QRect FrontendWindowRect READ frontendWindowRect NOTIFY FrontendWindowRectChanged)
     QRect frontendWindowRect() const;
@@ -198,6 +202,7 @@ Q_SIGNALS: // SIGNALS
     void ShowTimeoutChanged(uint value) const;
     void WindowSizeEfficientChanged(uint value) const;
     void WindowSizeFashionChanged(uint value) const;
+    void WindowMarginChanged(uint value) const;
     void showRecentChanged(bool) const;
     void ShowMultiWindowChanged(bool) const;
 };
