@@ -35,6 +35,8 @@ static QMap<int, QString> timeFormat{{0, "h:mm"}, {1, "hh:mm"}};
 const QString localeName_key = "localeName";
 const QString shortDateFormat_key = "shortDateFormat";
 const QString shortTimeFormat_key = "shortTimeFormat";
+const QString longDateFormat_key = "longDateFormat";
+const QString longTimeFormat_key = "longTimeFormat";
 
 DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     : QWidget (parent)
@@ -71,17 +73,34 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
     m_tipPopupWindow->hide();
 
     m_locale = QLocale::system();
+    initDConfig();
+}
+
+void DateTimeDisplayer::initDConfig()
+{
     if (!m_config->isValid())
         return;
+
     if (!m_config->isDefaultValue(localeName_key)) {
         m_locale = QLocale(m_config->value(localeName_key).toString());
     }
+
     if (!m_config->isDefaultValue(shortDateFormat_key)) {
         m_shortDateFormatStr = m_config->value(shortDateFormat_key).toString();
     }
+
     if (!m_config->isDefaultValue(shortTimeFormat_key)) {
         m_shortTimeFormatStr = m_config->value(shortTimeFormat_key).toString();
     }
+
+    if (!m_config->isDefaultValue(longTimeFormat_key)) {
+        m_longTimeFormatStr = m_config->value(longTimeFormat_key).toString();
+    }
+
+    if (!m_config->isDefaultValue(longDateFormat_key)) {
+        m_longDateFormatStr = m_config->value(longDateFormat_key).toString();
+    }
+
     connect(m_config, &DTK_CORE_NAMESPACE::DConfig::valueChanged, this, [this] (const QString &key) {
         if (key == shortDateFormat_key) {
             m_shortDateFormatStr = m_config->value(key).toString();
@@ -89,7 +108,12 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
             m_shortTimeFormatStr = m_config->value(key).toString();
         } else if (key == localeName_key) {
             m_locale = QLocale(m_config->value(key).toString());
+        } else if (key == longDateFormat_key) {
+            m_longDateFormatStr = m_config->value(key).toString();
+        } else if (key == longTimeFormat_key) {
+            m_longTimeFormatStr = m_config->value(key).toString();
         }
+
         update();
     });
 }
@@ -176,12 +200,6 @@ QString DateTimeDisplayer::getTimeString(const Dock::Position &position) const
         tFormat = timeFormat[m_shortDateFormat];
     if (!m_shortTimeFormatStr.isEmpty())
         tFormat = m_shortTimeFormatStr;
-    if (!m_use24HourFormat) {
-        if (position == Dock::Top || position == Dock::Bottom)
-            tFormat = tFormat.append(" AP");
-        else
-            tFormat = tFormat.append("\nAP");
-    }
 
     return m_locale.toString(QDateTime::currentDateTime(), tFormat);
 }
@@ -266,12 +284,7 @@ DateTimeDisplayer::DateTimeInfo DateTimeDisplayer::dateTimeInfo(const Dock::Posi
 
 void DateTimeDisplayer::onTimeChanged()
 {
-    const QDateTime currentDateTime = QDateTime::currentDateTime();
-
-    if (m_use24HourFormat)
-        m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" HH:mm:ss"));
-    else
-        m_tipsWidget->setText(QLocale().toString(currentDateTime.date()) + currentDateTime.toString(" hh:mm:ss AP"));
+    m_tipsWidget->setText(m_locale.toString(QDate::currentDate(), m_longDateFormatStr) + QString(" ") + m_locale.toString(QTime::currentTime(), m_longTimeFormatStr));
 
     // 如果时间和日期有一个不等，则实时刷新界面
     if (m_lastDateString != getDateString() || m_lastTimeString != getTimeString())
@@ -281,7 +294,6 @@ void DateTimeDisplayer::onTimeChanged()
 void DateTimeDisplayer::onDateTimeFormatChanged()
 {
     m_shortDateFormat = m_timedateInter->shortDateFormat();
-    m_use24HourFormat = m_timedateInter->use24HourFormat();
     // 此处需要强制重绘，因为在重绘过程中才会改变m_currentSize信息，方便在后面判断是否需要调整尺寸
     repaint();
 }
@@ -294,7 +306,6 @@ void DateTimeDisplayer::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    
 
     int timeAlignFlag = Qt::AlignCenter;
     int dateAlignFlag = Qt::AlignCenter;
@@ -377,17 +388,6 @@ void DateTimeDisplayer::updateFont() const
 
 void DateTimeDisplayer::createMenuItem()
 {
-    QAction *timeFormatAction = new QAction(this);
-    timeFormatAction->setText(m_use24HourFormat ? tr("12-hour time"): tr("24-hour time"));
-
-    connect(timeFormatAction, &QAction::triggered, this, [ = ] {
-        bool use24hourformat = !m_use24HourFormat;
-        // 此时调用 dbus 更新时间格式但是本地 m_use24HourFormat 未更新，所以需要使用新变量，设置新格式
-        m_timedateInter->setUse24HourFormat(use24hourformat);
-        timeFormatAction->setText(use24hourformat ? tr("12-hour time") : tr("24-hour time"));
-    });
-    m_menu->addAction(timeFormatAction);
-
     if (!QFile::exists(ICBC_CONF_FILE)) {
         QAction *timeSettingAction = new QAction(tr("Time settings"), this);
         connect(timeSettingAction, &QAction::triggered, this, [ = ] {
