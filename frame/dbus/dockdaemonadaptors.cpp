@@ -17,6 +17,7 @@ DockDaemonDBusAdaptor::DockDaemonDBusAdaptor(QObject *parent)
     connect(TaskManager::instance(), &TaskManager::frontendWindowRectChanged, this, &DockDaemonDBusAdaptor::FrontendWindowRectChanged);
     connect(TaskManager::instance(), &TaskManager::showRecentChanged, this, &DockDaemonDBusAdaptor::showRecentChanged);
     connect(TaskManager::instance(), &TaskManager::showMultiWindowChanged, this, &DockDaemonDBusAdaptor::ShowMultiWindowChanged);
+    connect(TaskManager::instance(), &TaskManager::windowMarginChanged, this, &DockDaemonDBusAdaptor::WindowMarginChanged);
     connect(DockSettings::instance(), &DockSettings::positionModeChanged, this, &DockDaemonDBusAdaptor::PositionChanged);
     connect(DockSettings::instance(), &DockSettings::hideModeChanged, this, &DockDaemonDBusAdaptor::HideModeChanged);
     connect(DockSettings::instance(), &DockSettings::displayModeChanged, this, &DockDaemonDBusAdaptor::DisplayModeChanged);
@@ -102,6 +103,11 @@ void DockDaemonDBusAdaptor::setWindowSizeFashion(uint value)
         TaskManager::instance()->setWindowSizeFashion(value);
         Q_EMIT WindowSizeFashionChanged(value);
     }
+}
+
+uint DockDaemonDBusAdaptor::windowMargin() const
+{
+    return TaskManager::instance()->windowMargin();
 }
 
 QRect DockDaemonDBusAdaptor::frontendWindowRect() const

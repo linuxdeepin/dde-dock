@@ -87,6 +87,7 @@ public:
     void setIconSize(uint size);
     int getPosition();
     void setPosition(int position);
+    uint windowMargin() const;
     uint getShowTimeout();
     void setShowTimeout(uint timeout);
     uint getWindowSizeEfficient();
@@ -137,6 +138,7 @@ Q_SIGNALS:
     void frontendWindowRectChanged(const QRect &dockRect);
     void showRecentChanged(bool);
     void showMultiWindowChanged(bool);
+    void windowMarginChanged(uint);
 
 public Q_SLOTS:
     void updateHideState(bool delay);
