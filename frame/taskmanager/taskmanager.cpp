@@ -17,7 +17,6 @@
 #include "waylandmanager.h"
 #include "windowinfobase.h"
 #include "dbusutil.h"
-
 #include "org_deepin_dde_kwayland_plasmawindow.h"
 
 #include <QDir>
@@ -27,9 +26,14 @@
 #include <QPixmap>
 
 #include <cstdint>
+#include <dtkcore_global.h>
 #include <iterator>
 #include <memory>
 #include <algorithm>
+
+#include <dutil.h>
+
+DCORE_USE_NAMESPACE
 
 #define SETTING DockSettings::instance()
 #define XCB XCBUtils::instance()
@@ -91,6 +95,20 @@ TaskManager::TaskManager(QObject *parent)
         connect(m_x11Manager, &X11Manager::requestHandleActiveWindowChange, this, &TaskManager::handleActiveWindowChanged);
         connect(m_x11Manager, &X11Manager::requestAttachOrDetachWindow, this, &TaskManager::attachOrDetachWindow);
     }
+    connect(m_dbusHandler, &DBusHandler::appUninstalled, this, [this] (const QDBusObjectPath &objectPath, const QStringList &interfaces) {
+        Q_UNUSED(interfaces)
+        QString desktopFile = DUtil::unescapeFromObjectPath(objectPath.path());
+        QString desktopName = desktopFile.split('/').last();
+        QList<Entry *> entries = m_entries->getEntries();
+        auto desktopEntryIter = std::find_if(entries.begin(), entries.end(), [desktopName] (Entry *entry) {
+             return entry->getDesktopFile().contains(desktopName);
+        });
+        if (desktopEntryIter != entries.end()) {
+            undockEntry(*desktopEntryIter);
+        } else {
+            qWarning() << "The entry which is to be removed is not found!";
+        }
+    });
 }
 
 TaskManager::~TaskManager()

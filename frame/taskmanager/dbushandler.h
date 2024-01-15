@@ -66,6 +66,9 @@ public:
     bool newStartManagerAvaliable();
     void sendFailedDockNotification(const QString &appName);
 
+Q_SIGNALS:
+    void appUninstalled(const QDBusObjectPath &objectPath, const QStringList &interfaces);
+
 private Q_SLOTS:
     void handleWlActiveWindowChange();
     void onActiveWindowButtonRelease(int type, int x, int y, const QString &key);
