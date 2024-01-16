@@ -181,6 +181,7 @@ void MultiScreenWorker::onPositionChanged(int position)
     qDebug() << "position change from: " << lastPos << " to: " << position;
 #endif
     m_position = static_cast<Position>(position);
+    Q_EMIT positionChanged(m_position);
 
     if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide)) {
         // 这种情况切换位置,任务栏不需要显示
