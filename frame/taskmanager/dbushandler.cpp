@@ -40,6 +40,16 @@ DBusHandler::DBusHandler(TaskManager *taskmanager, QObject *parent)
         m_taskmanager->setDdeLauncherVisible(visible);
         m_taskmanager->updateHideState(true);
     });
+
+    // try to active bamf in another thread
+    QtConcurrent::run([ = ] {
+        QDBusInterface bamfInterface(
+            QStringLiteral("org.ayatana.bamf"),
+            QStringLiteral("/org/ayatana/bamf/matcher"),
+            QStringLiteral("org.ayatana.bamf.matcher"),
+            QDBusConnection::sessionBus()
+        );
+    });
 }
 
 void DBusHandler::listenWaylandWMSignals()
