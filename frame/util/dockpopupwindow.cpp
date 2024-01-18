@@ -78,7 +78,7 @@ void DockPopupWindow::setContent(QWidget *content)
     m_lastWidget = content;
     content->setParent(this);
     content->show();
-    resize(content->sizeHint());
+    setFixedSize(content->sizeHint());
 }
 
 void DockPopupWindow::setExtendWidget(QWidget *widget)
@@ -142,7 +142,7 @@ void DockPopupWindow::show(const int x, const int y)
         displayPoint.setX(qMin(screenRect.x() + screenRect.width() - getContent()->width(), displayPoint.x()));
     }
     move(displayPoint);
-    resize(m_lastWidget->size());
+    setFixedSize(m_lastWidget->size());
     DBlurEffectWidget::show();
     activateWindow();
 }
