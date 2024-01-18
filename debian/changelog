@@ -1,3 +1,15 @@
+dde-dock (6.0.28) unstable; urgency=medium
+
+  * fix: the item that removed is exist yet (https://github.com/linuxdeepin/developer-center/issues/4631)
+  * fix: dock wakeup area not changed (https://github.com/linuxdeepin/developer-center/issues/5831)
+  * fix: onboard not to show on first click (https://github.com/linuxdeepin/developer-center/issues/6675)
+  * fix: timedate tips show error (https://github.com/linuxdeepin/developer-center/issues/6674)
+  * fix: quickpanel icon not follow theme (https://github.com/linuxdeepin/developer-center/issues/6263)
+  * fix: disable resize of dock popup window (https://github.com/linuxdeepin/developer-center/issues/6264)
+  * feat: add dbus property window margin
+
+ -- tsic404 <liuheng@deepin.org>  Thu, 18 Jan 2024 09:57:27 +0800
+
 dde-dock (6.0.27) unstable; urgency=medium
 
   * fix: dock get stucked when launching (https://github.com/linuxdeepin/developer-center/issues/6657)
