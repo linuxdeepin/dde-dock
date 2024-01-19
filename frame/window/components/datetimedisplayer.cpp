@@ -78,27 +78,38 @@ DateTimeDisplayer::DateTimeDisplayer(bool showMultiRow, QWidget *parent)
 
 void DateTimeDisplayer::initDConfig()
 {
+    QLocale currentLocale =  QLocale::system();
     if (!m_config->isValid())
         return;
 
     if (!m_config->isDefaultValue(localeName_key)) {
         m_locale = QLocale(m_config->value(localeName_key).toString());
+    } else {
+        m_locale = currentLocale;
     }
 
     if (!m_config->isDefaultValue(shortDateFormat_key)) {
         m_shortDateFormatStr = m_config->value(shortDateFormat_key).toString();
+    } else {
+        m_shortDateFormatStr = currentLocale.dateFormat(QLocale::ShortFormat);
     }
 
     if (!m_config->isDefaultValue(shortTimeFormat_key)) {
         m_shortTimeFormatStr = m_config->value(shortTimeFormat_key).toString();
+    } else {
+        m_shortTimeFormatStr = currentLocale.timeFormat(QLocale::ShortFormat);
     }
 
     if (!m_config->isDefaultValue(longTimeFormat_key)) {
         m_longTimeFormatStr = m_config->value(longTimeFormat_key).toString();
+    } else {
+        m_longTimeFormatStr = currentLocale.timeFormat(QLocale::LongFormat);
     }
 
     if (!m_config->isDefaultValue(longDateFormat_key)) {
         m_longDateFormatStr = m_config->value(longDateFormat_key).toString();
+    } else {
+        m_longTimeFormatStr = currentLocale.dateFormat(QLocale::LongFormat);
     }
 
     connect(m_config, &DTK_CORE_NAMESPACE::DConfig::valueChanged, this, [this] (const QString &key) {
