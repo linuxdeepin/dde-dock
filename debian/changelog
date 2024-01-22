@@ -1,3 +1,9 @@
+dde-dock (6.0.30) unstable; urgency=medium
+
+  * chore: remove Cooperation in display plugin (https://github.com/linuxdeepin/developer-center/issues/7023)
+
+ -- chenhongtao <chenhongtao@deepin.org>  Mon, 22 Jan 2024 17:27:34 +0800
+
 dde-dock (6.0.29) unstable; urgency=medium
 
   * fix: when no timeformat, tooltip is empty
