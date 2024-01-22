@@ -1,3 +1,9 @@
+dde-dock (6.0.29) unstable; urgency=medium
+
+  * fix: when no timeformat, tooltip is empty
+
+ -- chenhongtao <chenhongtao@deepin.org>  Mon, 22 Jan 2024 09:47:21 +0800
+
 dde-dock (6.0.28) unstable; urgency=medium
 
   * fix: the item that removed is exist yet (https://github.com/linuxdeepin/developer-center/issues/4631)
