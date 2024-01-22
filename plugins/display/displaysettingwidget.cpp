@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "displaysettingwidget.h"
-#include "devcollaborationwidget.h"
 
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -16,18 +15,8 @@ const int ItemSpacing = 10;
 DisplaySettingWidget::DisplaySettingWidget(BrightnessModel *model, QWidget *parent)
     : QWidget(parent)
     , m_brightnessAdjWidget(new BrightnessAdjWidget(model, this))
-    , m_collaborationWidget(new DevCollaborationWidget(this))
-    , m_settingBtn(new QPushButton(tr("Multi-Screen Collaboration"), this))
 {
     initUI();
-
-    connect(m_settingBtn, &QPushButton::clicked, this, [ this ](){
-        DDBusSender().service("org.deepin.dde.ControlCenter1")
-                .path("/org/deepin/dde/ControlCenter1")
-                .interface("org.deepin.dde.ControlCenter1")
-                .method("ShowPage").arg(QString("display")).call();
-        Q_EMIT requestHide();
-    });
 }
 
 void DisplaySettingWidget::initUI()
@@ -38,15 +27,11 @@ void DisplaySettingWidget::initUI()
     mainLayout->setSpacing(ItemSpacing);
 
     mainLayout->addWidget(m_brightnessAdjWidget);
-    mainLayout->addWidget(m_collaborationWidget);
-    mainLayout->addWidget(m_settingBtn);
     mainLayout->addStretch();
 
     setLayout(mainLayout);
 
     resizeWidgetHeight();
-    connect(m_collaborationWidget, &DevCollaborationWidget::sizeChanged,
-            this, &DisplaySettingWidget::resizeWidgetHeight);
     connect(m_brightnessAdjWidget, &BrightnessAdjWidget::sizeChanged,
             this, &DisplaySettingWidget::resizeWidgetHeight);
 }
@@ -54,6 +39,5 @@ void DisplaySettingWidget::initUI()
 void DisplaySettingWidget::resizeWidgetHeight()
 {
     QMargins margins = this->contentsMargins();
-    setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height() +
-                   m_collaborationWidget->height() + m_settingBtn->height() + ItemSpacing * 2);
+    setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height());
 }

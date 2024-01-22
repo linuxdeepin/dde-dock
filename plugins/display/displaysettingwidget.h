@@ -12,7 +12,6 @@
 
 class QPushButton;
 class BrightnessAdjWidget;
-class DevCollaborationWidget;
 
 /*!
  * \brief The DisplaySettingWidget class
@@ -34,8 +33,6 @@ private:
 
 private:
     BrightnessAdjWidget *m_brightnessAdjWidget;     // 亮度调整
-    DevCollaborationWidget *m_collaborationWidget;  // 跨端协同
-    QPushButton *m_settingBtn;                      // 设置按钮
 };
 
 
