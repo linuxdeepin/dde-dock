@@ -1,3 +1,10 @@
+dde-dock (6.0.31) unstable; urgency=medium
+
+  * fix: error datetime tooltip (https://github.com/linuxdeepin/developer-center/issues/7056)
+  * fix: unable get docked entriy by soft link path (https://github.com/linuxdeepin/developer-center/issues/7033)
+
+ -- tsic404 <liuheng@deepin.org>  Tue, 23 Jan 2024 17:43:44 +0800
+
 dde-dock (6.0.30) unstable; urgency=medium
 
   * chore: remove Cooperation in display plugin (https://github.com/linuxdeepin/developer-center/issues/7023)
