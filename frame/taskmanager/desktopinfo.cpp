@@ -40,7 +40,7 @@ DesktopInfo::DesktopInfo(const QString &desktopfile)
         }
     }
 
-    m_desktopFilePath = desktopFileInfo.absoluteFilePath();
+    m_desktopFilePath = desktopFileInfo.canonicalFilePath();
     m_isValid = desktopFileInfo.isAbsolute() && QFile::exists(desktopFileInfo.absoluteFilePath());
     m_desktopFile.reset(new QSettings(m_desktopFilePath, QSettings::IniFormat));
     m_desktopFile->setIniCodec("utf-8");
