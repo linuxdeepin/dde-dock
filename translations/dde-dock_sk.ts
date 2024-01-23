@@ -10,37 +10,37 @@
     <name>AirplaneModeApplet</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Režim lietadlo</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Režim lietadlo zapnutý</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <source>Airplane Mode settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia režimu lietadlo</translation>
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Režim lietadlo vypnutý</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModePlugin</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Režim lietadlo</translation>
     </message>
 </context>
 <context>
@@ -54,41 +54,41 @@
     <name>BloothAdapterWidget</name>
     <message>
         <source>My Devices</source>
-        <translation type="unfinished"/>
+        <translation>Moje zariadenia</translation>
     </message>
     <message>
         <source>Other Devices</source>
-        <translation type="unfinished"/>
+        <translation>Iné zariadenia</translation>
     </message>
 </context>
 <context>
     <name>BluetoothApplet</name>
     <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia bluetooth</translation>
     </message>
 </context>
 <context>
     <name>BluetoothItem</name>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <source>Bluetooth settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia bluetooth</translation>
     </message>
     <message>
         <source>%1 connected</source>
-        <translation type="unfinished"/>
+        <translation>%1 pripojené</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Pripájanie sa...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Turned off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnuté</translation>
     </message>
 </context>
 <context>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
 </context>
 <context>
@@ -122,11 +122,11 @@
     </message>
     <message>
         <source>Turn on</source>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <source>Turn off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
 </context>
 <context>
@@ -137,51 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>zlyhalo pripnutie do panela</translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Nerozpoznaná aplikácia, nie je možné ju pripojiť na panel</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12-hodinový čas</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24-hodinový čas</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Nastavenia času</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Dátum Čas</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>12-hodinový čas</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24-hodinový čas</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Nastavenia času</translation>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Jas</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -204,9 +174,16 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Jas</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
+        <source>Display Settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -214,14 +191,41 @@
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Plugin %1 nie je kompatibilný s týmto systémom.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Otvoriť</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Zavrieť všetko</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Nútené ukončenie</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Panel</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Odopnúť z panela</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Všetky okná</translation>
     </message>
 </context>
 <context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Povolené</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Spúšťač</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -287,7 +298,7 @@
     </message>
     <message>
         <source>Dock settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia panela</translation>
     </message>
 </context>
 <context>
@@ -299,6 +310,33 @@
     <message>
         <source>Undock</source>
         <translation>Odopnúť z panela</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Batéria</translation>
     </message>
 </context>
 <context>
@@ -401,7 +439,7 @@
     <name>SoundDevicesWidget</name>
     <message>
         <source>Output Device</source>
-        <translation type="unfinished"/>
+        <translation>Výstupné zariadenie</translation>
     </message>
     <message>
         <source>Sound settings</source>
@@ -453,42 +491,15 @@
     <name>WindowManager</name>
     <message>
         <source>Exit Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Opustiť núdzový režim</translation>
     </message>
     <message>
         <source>Dock - Safe Mode</source>
-        <translation type="unfinished"/>
+        <translation>Panel - Núdzový režim</translation>
     </message>
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Otvoriť</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Zavrieť všetko</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Nútené ukončenie</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Panel</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Odopnúť z panela</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Všetky okná</translation>
+        <translation>Panel je v núdzovom režime, ukončite ho, aby sa správne zobrazil</translation>
     </message>
 </context>
 </TS>

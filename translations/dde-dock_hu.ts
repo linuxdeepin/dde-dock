@@ -137,51 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>A dokkolás sikertelen</translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Ismeretlen alkalmazás, nem lehet dokkolni</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12 órás időformátum</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 órás időformátum</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Idő beállításai</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Dátum és Idő</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>12 órás időformátum</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 órás időformátum</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Idő beállításai</translation>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Fényerősség</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>PC együttműködés</translation>
     </message>
 </context>
 <context>
@@ -204,17 +174,51 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Fényerősség</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>Többképernyős együttműködés</translation>
+        <source>Display Settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>A %1 bővítmény nem kompatibilis a rendszerrel.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Megnyitás</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Összes bezárása</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Kényszerített kilépés</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Kitűzés a Dokkolóra</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Eltávolítás a Dokkolóról</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Összes ablak</translation>
     </message>
 </context>
 <context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Indító</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation>Ismeretlen</translation>
     </message>
 </context>
 <context>
@@ -263,11 +274,11 @@
     </message>
     <message>
         <source>Keep Shown</source>
-        <translation>Megjelenítve tartás</translation>
+        <translation>Folyamatosan látható</translation>
     </message>
     <message>
         <source>Keep Hidden</source>
-        <translation>Elrejtve tartás</translation>
+        <translation>Rejtett</translation>
     </message>
     <message>
         <source>Smart Hide</source>
@@ -299,6 +310,33 @@
     <message>
         <source>Undock</source>
         <translation>Eltávolítás a Dokkolóról</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Akkumulátor</translation>
     </message>
 </context>
 <context>
@@ -394,7 +432,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation>Energiaellátás</translation>
+        <translation>Kikapcsolás</translation>
     </message>
 </context>
 <context>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation>A Dokkoló biztonságos módban van. Kérjük lépjen ki a megfelelő megjelenítéshez</translation>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Megnyitás</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Összes bezárása</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Kényszerített kilépés</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Kitűzés a Dokkolóra</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Eltávolítás a Dokkolóról</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Összes ablak</translation>
     </message>
 </context>
 </TS>
