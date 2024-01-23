@@ -33,6 +33,7 @@ private:
 
 private:
     BrightnessAdjWidget *m_brightnessAdjWidget;     // 亮度调整
+    QPushButton *m_settingBtn;                      // 设置按钮
 };
 
 
