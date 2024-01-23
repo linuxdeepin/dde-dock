@@ -14,13 +14,6 @@
     </message>
 </context>
 <context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Brillantor</translation>
-    </message>
-</context>
-<context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
@@ -144,44 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>ha fallat acoblar </translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Aplicació no reconeguda, no es pot acoblar.</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12 hores</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 hores</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Configuració de l&apos;hora</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Dia i hora</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>12 hores</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 hores</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Configuració de l&apos;hora</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>Col·laboració de PC</translation>
     </message>
 </context>
 <context>
@@ -204,17 +174,51 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Brillantor</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>Col·laboració multipantalla</translation>
+        <source>Display Settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>El connector %1 no és compatible amb el sistema.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Obre</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Tanca-ho tot</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Força&apos;n la sortida</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Acoblador</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Treu de l&apos;acoblador</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Totes les finestres</translation>
     </message>
 </context>
 <context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Llançador</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation>Desconegut</translation>
     </message>
 </context>
 <context>
@@ -302,6 +313,33 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
 </context>
 <context>
@@ -366,7 +404,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspèn</translation>
+        <translation>Suspèn-te</translation>
     </message>
     <message>
         <source>Hibernate</source>
@@ -390,7 +428,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reinicia</translation>
+        <translation>Reinicia&apos;t</translation>
     </message>
     <message>
         <source>Power</source>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation>L&apos;acoblador està en mode segur. Si us plau, sortiu-ne perquè es mostri adequadament.</translation>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Obre</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Tanca-ho tot</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Força&apos;n la sortida</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Acoblador</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Treu de l&apos;acoblador</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Totes les finestres</translation>
     </message>
 </context>
 </TS>

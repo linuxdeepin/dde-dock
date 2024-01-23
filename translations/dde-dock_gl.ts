@@ -1,414 +1,504 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="gl">
 <context>
-    <name>ContainerItem</name>
+    <name>AbstractPluginsController</name>
     <message>
-        <location filename="../frame/item/containeritem.cpp" line="33"/>
-        <source>Click to display hidden icon</source>
+        <source>The plugin %1 is not compatible with the system.</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DatetimePlugin</name>
+    <name>AirplaneModeApplet</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="55"/>
-        <source>Datetime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="119"/>
-        <source>12 Hour Time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="121"/>
-        <source>24 Hour Time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="127"/>
-        <source>Time Settings</source>
+        <source>Airplane Mode</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DeviceItem</name>
+    <name>AirplaneModeItem</name>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="51"/>
-        <source>Enable network</source>
+        <source>Airplane mode enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="53"/>
-        <source>Disable network</source>
+        <source>Turn off</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/deviceitem.cpp" line="59"/>
-        <source>Network settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DiskControlItem</name>
-    <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="106"/>
-        <source>Unknown device</source>
+        <source>Turn on</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="112"/>
-        <source>Unknown volume</source>
+        <source>Airplane Mode settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Airplane mode disabled</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DiskMountPlugin</name>
+    <name>AirplaneModePlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="40"/>
-        <source>Disk</source>
+        <source>Airplane Mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>AppMultiItem</name>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BloothAdapterWidget</name>
+    <message>
+        <source>My Devices</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="90"/>
+        <source>Other Devices</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothApplet</name>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothItem</name>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1 connected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Connecting...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turned off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothMainWidget</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>BluetoothPlugin</name>
+    <message>
+        <source>Bluetooth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DBusAdaptors</name>
+    <message>
+        <source>Add keyboard layout</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DateTimeDisplayer</name>
+    <message>
+        <source>Time settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DialogManager</name>
+    <message>
+        <source>Are you sure you want to empty %1 items?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This action cannot be restored</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DisplaySettingWidget</name>
+    <message>
+        <source>Display Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>DockPluginController</name>
+    <message>
+        <source>The plugin %1 is not compatible with the system.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
         <source>Open</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="96"/>
-        <source>Unmount all</source>
+        <source>Close All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Windows</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>DockSettings</name>
+    <name>HomeMonitorPlugin</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="46"/>
-        <source>Fashion Mode</source>
+        <source>Enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="47"/>
-        <source>Efficient Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="48"/>
-        <source>Top</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="49"/>
-        <source>Bottom</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="50"/>
-        <source>Left</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="51"/>
-        <source>Right</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="52"/>
-        <source>Large</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="53"/>
-        <source>Medium</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="54"/>
-        <source>Small</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="55"/>
-        <source>Keep Shown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="56"/>
-        <source>Keep Hidden</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="57"/>
-        <source>Smart Hide</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="94"/>
-        <source>Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="102"/>
-        <source>Location</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="109"/>
-        <source>Size</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="116"/>
-        <source>Status</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../frame/util/docksettings.cpp" line="120"/>
-        <source>Plugins</source>
+        <source>Disabled</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>LauncherItem</name>
     <message>
-        <location filename="../frame/item/launcheritem.cpp" line="38"/>
         <source>Launcher</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>NetworkPlugin</name>
+    <name>MediaPlayerModel</name>
     <message>
-        <location filename="../plugins/network/networkplugin.cpp" line="46"/>
-        <source>Network</source>
+        <source>Unknown</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>PopupControlWidget</name>
+    <name>MenuWorker</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Cancel</source>
+        <source>Fashion Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="88"/>
-        <source>Empty</source>
+        <source>Efficient Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="93"/>
-        <source>This action cannot be restored</source>
+        <source>Top</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="95"/>
-        <source>Are you sure to empty 1 item ?</source>
+        <source>Bottom</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="97"/>
-        <source>Are you sure to empty %1 items ?</source>
+        <source>Left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep Shown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Keep Hidden</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Smart Hide</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MultitaskingPlugin</name>
+    <message>
+        <source>Multitasking View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>OnboardPlugin</name>
+    <message>
+        <source>Onboard</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>PowerPlugin</name>
+    <message>
+        <source>Capacity %1, %2 min remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, %2 hr %3 min remaining</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1, %2 hr %3 min until full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Charging %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1 ...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Capacity %1, fully charged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Battery</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ShowDesktopPlugin</name>
+    <message>
+        <source>Show Desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="78"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="148"/>
         <source>Shut down</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="86"/>
-        <source>Remaining Capacity %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="92"/>
-        <source>Charged %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="94"/>
-        <source>Charging %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="154"/>
-        <source>Restart</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="166"/>
-        <source>Lock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="172"/>
-        <source>Log out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="160"/>
         <source>Suspend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
-        <source>Power</source>
+        <source>Hibernate</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="180"/>
+        <source>Lock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Log out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Switch account</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="190"/>
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="56"/>
-        <source>Device</source>
+        <source>Reboot</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="75"/>
-        <source>Application</source>
+        <source>Power</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>SoundItem</name>
+    <name>SoundDevicesWidget</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="79"/>
-        <source>Unmute</source>
+        <source>Output Device</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="81"/>
-        <source>Mute</source>
+        <source>Sound settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="87"/>
-        <source>Audio Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="215"/>
-        <source>Current Volume %1</source>
+        <source>Volume %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SoundPlugin</name>
     <message>
-        <location filename="../plugins/sound/soundplugin.cpp" line="41"/>
         <source>Sound</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>SystemTrayPlugin</name>
-    <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="46"/>
-        <source>System Tray</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="61"/>
+        <source>Trash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Trash - %1 file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="63"/>
         <source>Trash - %1 files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move to Trash</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TrashWidget</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="65"/>
         <source>Open</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="73"/>
         <source>Empty</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
-    <name>WiredItem</name>
+    <name>WindowManager</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="68"/>
-        <source>Unknown</source>
-        <translation>Descoñecido</translation>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="73"/>
-        <source>No Network</source>
+        <source>Exit Safe Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="83"/>
-        <source>Wired connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessItem</name>
-    <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="75"/>
-        <source>No Network</source>
+        <source>Dock - Safe Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/network/item/wirelessitem.cpp" line="85"/>
-        <source>Wireless Connection: %1</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>WirelessList</name>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="55"/>
-        <source>Auto-connect</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="67"/>
-        <source>Connect</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="68"/>
-        <source>Cancel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="174"/>
-        <source>Wireless Network</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="176"/>
-        <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="432"/>
-        <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
+        <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation type="unfinished"/>
     </message>
 </context>

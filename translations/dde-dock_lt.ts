@@ -10,14 +10,14 @@
     <name>AirplaneModeApplet</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Lėktuvo veiksena</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation type="unfinished"/>
+        <translation>Lėktuvo veiksena įjungta</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -29,18 +29,18 @@
     </message>
     <message>
         <source>Airplane Mode settings</source>
-        <translation type="unfinished"/>
+        <translation>Lėktuvo veiksenos nustatymai</translation>
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation type="unfinished"/>
+        <translation>Lėktuvo veiksena išjungta</translation>
     </message>
 </context>
 <context>
     <name>AirplaneModePlugin</name>
     <message>
         <source>Airplane Mode</source>
-        <translation type="unfinished"/>
+        <translation>Lėktuvo veiksena</translation>
     </message>
 </context>
 <context>
@@ -88,7 +88,7 @@
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"/>
+        <translation>Jungiamasi...</translation>
     </message>
     <message>
         <source>Bluetooth</source>
@@ -137,51 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12 valandų laikas</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 valandų laikas</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Laiko nustatymai</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Data ir laikas</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>12 valandų laikas</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24 valandų laikas</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Laiko nustatymai</translation>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Ryškumas</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -204,9 +174,16 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
+        <source>Display Settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -214,7 +191,34 @@
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Įskiepis %1 nėra suderinamas su sistema.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Atverti</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Užverti visus</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Priverstinai išjungti</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Dokas</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Atskirti nuo doko</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Visi langai</translation>
     </message>
 </context>
 <context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Leistukas</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -299,6 +310,33 @@
     <message>
         <source>Undock</source>
         <translation>Atskirti nuo doko</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -409,7 +447,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Garsis %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Atverti</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Užverti visus</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Priverstinai išjungti</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Dokas</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Atskirti nuo doko</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Visi langai</translation>
     </message>
 </context>
 </TS>

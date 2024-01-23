@@ -14,13 +14,6 @@
     </message>
 </context>
 <context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Ndriçim</translation>
-    </message>
-</context>
-<context>
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
@@ -144,44 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>s’u arrit të vihet në panel</translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Aplikacion i panjohur, s’arrihet të vihet në panel</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>Kohë 12-orëshe</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>Kohë 24-orëshe</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Rregullime kohe</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Datë dhe kohë</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>orë 12-orëshe</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>orë 24-orëshe</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Rregullime kohe</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>Bashkëpunim me PC</translation>
     </message>
 </context>
 <context>
@@ -204,17 +174,51 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Ndriçim</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>Bashkëpunim me Shumë Ekrane</translation>
+        <source>Display Settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Shtojca %1 s’është e përputhshme me sistemin.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Hape</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Mbylli Krejt</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Detyro Dalje</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Vëre në panel</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Hiqe nga paneli</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Tërë Dritaret</translation>
     </message>
 </context>
 <context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Nisës</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation>I panjohur</translation>
     </message>
 </context>
 <context>
@@ -302,6 +313,33 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Bateri</translation>
     </message>
 </context>
 <context>
@@ -409,7 +447,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Volumi %1</translation>
+        <translation>Volum %1</translation>
     </message>
 </context>
 <context>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation>Paneli gjendet nën mënyrën e parrezik, ju lutemi, dilni prej saj, që të shfaqet si duhet</translation>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Hape</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Mbylli Krejt</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Detyro Dalje</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Vëre në panel</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Hiqe nga paneli</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Tërë Dritaret</translation>
     </message>
 </context>
 </TS>

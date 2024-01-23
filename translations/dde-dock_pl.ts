@@ -17,7 +17,7 @@
     <name>AirplaneModeItem</name>
     <message>
         <source>Airplane mode enabled</source>
-        <translation>Tryb samolotowy jest aktywny</translation>
+        <translation>Włączono Tryb samolotowy</translation>
     </message>
     <message>
         <source>Turn off</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Airplane mode disabled</source>
-        <translation>Tryb samolotowy jest wyłączony</translation>
+        <translation>Wyłączono Tryb samolotowy</translation>
     </message>
 </context>
 <context>
@@ -137,51 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>nie udało się dodać do doku </translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Nie rozpoznano aplikacji, nie można dodać do doku</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>Format 12-godzinny</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>Format 24-godzinny</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Ustawienia czasu</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Data i czas</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>Format 12-godzinny</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>Format 24-godzinny</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Ustawienia czasu</translation>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Jasność</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>Kolaboracja PC</translation>
     </message>
 </context>
 <context>
@@ -204,17 +174,51 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Jasność</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>Kolaboracja wieloekranowa</translation>
+        <source>Display Settings</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Wtyczka %1 nie jest kompatybilna z systemem.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Otwórz</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Zamknij wszystkie</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Wymuś zakończenie</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Dodaj do doku</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Odepnij</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Wszystkie okna</translation>
     </message>
 </context>
 <context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Program wywołujący</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation>Nieznane</translation>
     </message>
 </context>
 <context>
@@ -302,6 +313,33 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Bateria</translation>
     </message>
 </context>
 <context>
@@ -390,7 +428,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Uruchomienie ponowne</translation>
+        <translation>Uruchom ponownie</translation>
     </message>
     <message>
         <source>Power</source>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation>Dok jest w trybie bezpiecznym, wyjdź z niego, aby wyświetlić go poprawnie</translation>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Otwórz</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Zamknij wszystkie</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Wymuś zakończenie</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Dodaj do doku</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Odepnij</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Wszystkie okna</translation>
     </message>
 </context>
 </TS>

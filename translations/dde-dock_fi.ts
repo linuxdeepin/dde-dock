@@ -137,51 +137,21 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation>telakointi epäonnistui</translation>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation>Tuntematon sovellus, telakointi ei onnistu</translation>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12h aika</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24h aika</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Aika-asetukset</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>Kello</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation>12h aika</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24h aika</translation>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation>Aika-asetukset</translation>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>Kirkkaus</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -204,9 +174,16 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation>Kirkkaus</translation>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
+        <source>Display Settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -214,14 +191,41 @@
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation type="unfinished"/>
+        <translation>Lisäosa %1 ei ole yhteensopiva järjestelmän kanssa.</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>Avaa</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation>Sulje kaikki</translation>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation>Pakota lopetus</translation>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation>Telakka</translation>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>Poista</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
+        <translation>Kaikki ikkunat</translation>
     </message>
 </context>
 <context>
     <name>HomeMonitorPlugin</name>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Käytössä</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>Käynnistin</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation>Tuntematon</translation>
     </message>
 </context>
 <context>
@@ -302,6 +313,33 @@
     </message>
 </context>
 <context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>OnboardPlugin</name>
     <message>
         <source>Onboard</source>
@@ -344,7 +382,7 @@
     </message>
     <message>
         <source>Battery</source>
-        <translation type="unfinished"/>
+        <translation>Akku</translation>
     </message>
 </context>
 <context>
@@ -409,7 +447,7 @@
     </message>
     <message>
         <source>Volume %1</source>
-        <translation>Voimakkuus: %1</translation>
+        <translation>Voimakkuus %1</translation>
     </message>
 </context>
 <context>
@@ -462,33 +500,6 @@
     <message>
         <source>The Dock is in safe mode, please exit to show it properly</source>
         <translation>Paneeli on vikasietotilassa. Poistu nähtyäsi sen toimivan oikein</translation>
-    </message>
-</context>
-<context>
-    <name>Entry</name>
-    <message>
-        <source>Open</source>
-        <translation>Avaa</translation>
-    </message>
-    <message>
-        <source>Close All</source>
-        <translation>Sulje kaikki</translation>
-    </message>
-    <message>
-        <source>Force Quit</source>
-        <translation>Pakota lopetus</translation>
-    </message>
-    <message>
-        <source>Dock</source>
-        <translation>Telakka</translation>
-    </message>
-    <message>
-        <source>Undock</source>
-        <translation>Poista</translation>
-    </message>
-    <message>
-        <source>All Windows</source>
-        <translation>Kaikki ikkunat</translation>
     </message>
 </context>
 </TS>

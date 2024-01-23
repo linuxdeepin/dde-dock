@@ -137,50 +137,20 @@
     </message>
 </context>
 <context>
+    <name>DBusHandler</name>
+    <message>
+        <source>failed to dock </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Unrecognized application, unable to dock</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Time settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DatetimePlugin</name>
-    <message>
-        <source>Datetime</source>
-        <translation>मिति समय</translation>
-    </message>
-    <message>
-        <source>12-hour time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Time settings</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>DisplayPlugin</name>
-    <message>
-        <source>Brightness</source>
-        <translation>चम्किलोपन</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -204,9 +174,16 @@
     </message>
 </context>
 <context>
+    <name>DisplayPlugin</name>
+    <message>
+        <source>Brightness</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
+        <source>Display Settings</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -214,6 +191,33 @@
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
+        <translation>प्लगिन %1  प्रणाली मा समर्थित छैन</translation>
+    </message>
+</context>
+<context>
+    <name>Entry</name>
+    <message>
+        <source>Open</source>
+        <translation>खोल्नुहोस्</translation>
+    </message>
+    <message>
+        <source>Close All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Force Quit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undock</source>
+        <translation>हटाउने</translation>
+    </message>
+    <message>
+        <source>All Windows</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -233,6 +237,13 @@
     <message>
         <source>Launcher</source>
         <translation>लन्चर</translation>
+    </message>
+</context>
+<context>
+    <name>MediaPlayerModel</name>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -299,6 +310,33 @@
     <message>
         <source>Undock</source>
         <translation>हटाउने</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationPlugin</name>
+    <message>
+        <source>Notification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No messages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notification settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notifications</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn off DND mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn on DND mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
