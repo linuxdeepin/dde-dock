@@ -162,9 +162,11 @@ QList<Entry*> Entries::getEntries()
 
 Entry *Entries::getDockedEntryByDesktopFile(const QString &desktopFile)
 {
+    QFileInfo desktopFileInfo(desktopFile);
+
     Entry *ret = nullptr;
     for (auto entry : filterDockedEntries()) {
-        if ((entry->isValid()) && desktopFile == entry->getFileName()) {
+        if ((entry->isValid()) && desktopFileInfo.canonicalFilePath() == entry->getFileName()) {
             ret = entry;
             break;
         }
