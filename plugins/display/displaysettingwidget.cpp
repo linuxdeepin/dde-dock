@@ -15,8 +15,16 @@ const int ItemSpacing = 10;
 DisplaySettingWidget::DisplaySettingWidget(BrightnessModel *model, QWidget *parent)
     : QWidget(parent)
     , m_brightnessAdjWidget(new BrightnessAdjWidget(model, this))
+    , m_settingBtn(new QPushButton(tr("Display Settings"), this))
 {
     initUI();
+        connect(m_settingBtn, &QPushButton::clicked, this, [ this ](){
+        DDBusSender().service("org.deepin.dde.ControlCenter1")
+                .path("/org/deepin/dde/ControlCenter1")
+                .interface("org.deepin.dde.ControlCenter1")
+                .method("ShowPage").arg(QString("display")).call();
+        Q_EMIT requestHide();
+    });
 }
 
 void DisplaySettingWidget::initUI()
@@ -27,6 +35,7 @@ void DisplaySettingWidget::initUI()
     mainLayout->setSpacing(ItemSpacing);
 
     mainLayout->addWidget(m_brightnessAdjWidget);
+    mainLayout->addWidget(m_settingBtn);
     mainLayout->addStretch();
 
     setLayout(mainLayout);
@@ -39,5 +48,6 @@ void DisplaySettingWidget::initUI()
 void DisplaySettingWidget::resizeWidgetHeight()
 {
     QMargins margins = this->contentsMargins();
-    setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height());
+    setFixedHeight(margins.top() + margins.bottom() + m_brightnessAdjWidget->height() +
+                   m_settingBtn->height() + ItemSpacing);
 }

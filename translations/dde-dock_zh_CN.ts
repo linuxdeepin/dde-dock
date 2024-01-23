@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>AbstractPluginsController</name>
     <message>
@@ -152,23 +150,8 @@
 <context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12小时制</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24小时制</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>时间设置</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>电脑协同</translation>
     </message>
 </context>
 <context>
@@ -200,15 +183,15 @@
 <context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>电脑协同设置</translation>
+        <source>Display Settings</source>
+        <translation>显示设置</translation>
     </message>
 </context>
 <context>
     <name>DockPluginController</name>
     <message>
         <source>The plugin %1 is not compatible with the system.</source>
-        <translation>The plugin %1 is not compatible with the system.</translation>
+        <translation>插件%1和系统版本不兼容。</translation>
     </message>
 </context>
 <context>

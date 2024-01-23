@@ -152,23 +152,8 @@
 <context>
     <name>DateTimeDisplayer</name>
     <message>
-        <source>12-hour time</source>
-        <translation>12-hour time</translation>
-    </message>
-    <message>
-        <source>24-hour time</source>
-        <translation>24-hour time</translation>
-    </message>
-    <message>
         <source>Time settings</source>
         <translation>Time settings</translation>
-    </message>
-</context>
-<context>
-    <name>DevCollaborationWidget</name>
-    <message>
-        <source>PC collaboration</source>
-        <translation>PC collaboration</translation>
     </message>
 </context>
 <context>
@@ -200,8 +185,8 @@
 <context>
     <name>DisplaySettingWidget</name>
     <message>
-        <source>Multi-Screen Collaboration</source>
-        <translation>Multi-Screen Collaboration</translation>
+        <source>Display Settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
