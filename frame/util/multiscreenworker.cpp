@@ -4,7 +4,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "multiscreenworker.h"
+#include "constants.h"
 #include "mainwindow.h"
+#include "taskmanager/taskmanager.h"
 #include "utils.h"
 #include "displaymanager.h"
 #include "traymainwindow.h"
@@ -102,6 +104,10 @@ void MultiScreenWorker::onRegionMonitorChanged(int x, int y, const QString &key)
     if (m_registerKey != key || testState(MousePress))
         return;
 
+    if (m_hideMode == HideMode::KeepHidden) {
+        TaskManager::instance()->setPropHideState(HideState::Show);
+    }
+
     tryToShowDock(x, y);
 }
 
@@ -121,6 +127,10 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
 
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
     m_delayWakeTimer->stop();
+
+    if (m_hideMode == HideMode::KeepHidden) {
+        TaskManager::instance()->setPropHideState(HideState::Hide);
+    }
 
     if (m_hideMode == HideMode::KeepShowing
             || ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide) && m_hideState == HideState::Show)) {

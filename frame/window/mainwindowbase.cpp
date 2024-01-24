@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "mainwindowbase.h"
+#include "constants.h"
 #include "dragwidget.h"
 #include "multiscreenworker.h"
 #include "dockscreen.h"
@@ -270,27 +271,30 @@ void MainWindowBase::resetDragWindow()
     if (!screen)
         return;
 
-    QRect currentRect = getDockGeometry(screen, position(), displayMode(), Dock::HideState::Show);
+    if (m_multiScreenWorker->hideState() == Dock::HideState::Show) {
+        QRect currentRect = getDockGeometry(screen, position(), displayMode(), Dock::HideState::Show);
 
-    // 这个时候屏幕有可能是隐藏的，不能直接使用this->width()这种去设置任务栏的高度，而应该保证原值
-    int dockSize = 0;
-    if (m_multiScreenWorker->position() == Position::Left
-            || m_multiScreenWorker->position() == Position::Right) {
-        dockSize = this->width() == 0 ? currentRect.width() : this->width();
-    } else {
-        dockSize = this->height() == 0 ? currentRect.height() : this->height();
+        // 这个时候屏幕有可能是隐藏的，不能直接使用this->width()这种去设置任务栏的高度，而应该保证原值
+        int dockSize = 0;
+        if (m_multiScreenWorker->position() == Position::Left
+                || m_multiScreenWorker->position() == Position::Right) {
+            dockSize = this->width() == 0 ? currentRect.width() : this->width();
+        } else {
+            dockSize = this->height() == 0 ? currentRect.height() : this->height();
+        }
+
+        /** FIX ME
+        * 作用：限制dockSize的值在40～100之间。
+        * 问题1：如果dockSize为39，会导致dock的mainwindow高度变成99，显示的内容高度却是39。
+        * 问题2：dockSize的值在这里不应该为39，但在高分屏上开启缩放后，拉高任务栏操作会概率出现。
+        * 暂时未分析出原因，后面再修改。
+        */
+        dockSize = qBound(DOCK_MIN_SIZE, dockSize, DOCK_MAX_SIZE);
+
+        // 通知窗管和后端更新数据
+        m_multiScreenWorker->updateDaemonDockSize(dockSize);                                // 1.先更新任务栏高度
     }
 
-    /** FIX ME
-     * 作用：限制dockSize的值在40～100之间。
-     * 问题1：如果dockSize为39，会导致dock的mainwindow高度变成99，显示的内容高度却是39。
-     * 问题2：dockSize的值在这里不应该为39，但在高分屏上开启缩放后，拉高任务栏操作会概率出现。
-     * 暂时未分析出原因，后面再修改。
-     */
-    dockSize = qBound(DOCK_MIN_SIZE, dockSize, DOCK_MAX_SIZE);
-
-    // 通知窗管和后端更新数据
-    m_multiScreenWorker->updateDaemonDockSize(dockSize);                                // 1.先更新任务栏高度
     m_multiScreenWorker->requestUpdateFrontendGeometry();                               // 2.再更新任务栏位置,保证先1再2
     m_multiScreenWorker->requestNotifyWindowManager();
     m_multiScreenWorker->requestUpdateRegionMonitor();                                  // 界面发生变化，应更新监控区域
