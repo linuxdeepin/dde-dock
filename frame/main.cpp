@@ -159,6 +159,10 @@ int main(int argc, char *argv[])
     DockApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     DockApplication app(argc, argv);
 
+    // NOTE: dde-shell load dde-dock plugins and mark loader program DS_APP_ID as dde-dock
+    // so need reset DGuiApplication pallette to follow system
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
+
     //崩溃信号
     signal(SIGSEGV, sig_crash);
     signal(SIGILL,  sig_crash);
