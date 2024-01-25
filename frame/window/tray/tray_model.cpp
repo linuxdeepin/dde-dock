@@ -575,15 +575,13 @@ void TrayModel::onSniTrayRemoved(const QString &servicePath)
 
             // 如果为输入法，则无需立刻删除，等100毫秒后再观察是否会删除输入法(因为在100毫秒内如果是切换输入法，就会很快发送add信号)
             if (info.isTypeWriting) {
-                QTimer::singleShot(100, this, [ servicePath, this ] {
-                    for (WinInfo info : m_winInfos) {
-                        if (info.servicePath == servicePath) {
-                            int index = m_winInfos.indexOf(info);
-                            beginRemoveRows(QModelIndex(), index, index);
-                            m_winInfos.removeOne(info);
-                            endRemoveRows();
-                        }
-                    }
+                QTimer::singleShot(100, this, [ info, this ] {
+                    int index = m_winInfos.indexOf(info);
+                    beginRemoveRows(QModelIndex(), index, index);
+                    m_winInfos.removeOne(info);
+                    endRemoveRows();
+
+                    Q_EMIT rowCountChanged();
                 });
             } else {
                 beginRemoveRows(QModelIndex(), index, index);
