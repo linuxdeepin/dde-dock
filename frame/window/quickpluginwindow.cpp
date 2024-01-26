@@ -23,6 +23,8 @@
 #include <QGuiApplication>
 #include <QMenu>
 #include <QDragLeaveEvent>
+#include <algorithm>
+#include <QSize>
 
 #define ITEMSIZE 22
 #define STARTSPACE 6
@@ -707,7 +709,9 @@ void QuickDockItem::setPosition(Dock::Position position)
     if (m_mainLayout) {
         QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
         if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
-            itemWidget->setFixedSize(suitableSize());
+            auto size= suitableSize();
+            auto minSize = std::min(size.height(), size.width());
+            itemWidget->setFixedSize(QSize(minSize, minSize));
         }
     }
 }
@@ -877,7 +881,9 @@ void QuickDockItem::showEvent(QShowEvent *event)
     QWidget *itemWidget = m_pluginItem->itemWidget(m_itemKey);
     if (itemWidget && m_mainLayout->indexOf(itemWidget) < 0) {
         itemWidget->show();
-        itemWidget->setFixedSize(suitableSize());
+        auto size= suitableSize();
+        auto minSize = std::min(size.height(), size.width());
+        itemWidget->setFixedSize(QSize(minSize, minSize));
         m_mainLayout->addWidget(itemWidget);
     }
 }
