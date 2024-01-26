@@ -1,3 +1,9 @@
+dde-dock (6.0.33) unstable; urgency=medium
+
+  * fix: tmp block uosai in quickpanel
+
+ -- tsic404 <liuheng@deepin.org>  Fri, 26 Jan 2024 14:38:06 +0800
+
 dde-dock (6.0.32) unstable; urgency=medium
 
   * fix: dock get max size when positionChanged and KeepHide mode (https://github.com/linuxdeepin/developer-center/issues/7040)
