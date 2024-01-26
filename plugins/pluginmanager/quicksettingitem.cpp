@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include <QFontMetrics>
 #include <QPainter>
+#include <QStringLiteral>
 
 #define ICONWIDTH 24
 #define ICONHEIGHT 24
@@ -115,6 +116,7 @@ QColor QuickSettingItem::foregroundColor() const
 
 QuickSettingItem *QuickSettingFactory::createQuickWidget(PluginsItemInterface * const pluginInter, const QString &itemKey)
 {
+    if (pluginInter->pluginName() == QStringLiteral("uosai")) return nullptr;
     // 如果显示在面板的图标或者Widget为空，则不让显示(例如电池插件)
     if (!(pluginInter->flags() & PluginFlag::Type_Common))
         return nullptr;
