@@ -1,3 +1,13 @@
+dde-dock (6.0.34) unstable; urgency=medium
+
+  * fix: dock animation broken (https://github.com/linuxdeepin/developer-center/issues/7143)
+  * fix: dock plugin calculated to an incorrect size (https://github.com/linuxdeepin/developer-center/issues/7127)
+  * fix: dock will not auto hide after set size (https://github.com/linuxdeepin/developer-center/issues/7129)
+  * fix: dock plugin unable to click when in keep hide (https://github.com/linuxdeepin/developer-center/issues/7132)
+  * fix: dock item indicator not update (https://github.com/linuxdeepin/developer-center/issues/7097)
+
+ -- tsic404 <liuheng@deepin.org>  Tue, 30 Jan 2024 16:17:59 +0800
+
 dde-dock (6.0.33) unstable; urgency=medium
 
   * fix: tmp block uosai in quickpanel
