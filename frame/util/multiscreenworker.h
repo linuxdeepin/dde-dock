@@ -153,6 +153,7 @@ private:
     void reInitDisplayData();
 
     void tryToShowDock(int eventX, int eventY);
+    void tryToHideDock();
     void changeDockPosition(QString fromScreen, QString toScreen, const Position &fromPos, const Position &toPos);
 
     void resetDockScreen();
