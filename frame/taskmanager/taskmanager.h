@@ -129,6 +129,7 @@ public:
 
     void previewWindow(uint xid);
     void cancelPreviewWindow();
+    bool preventDockAutoHide() const;
 
 Q_SIGNALS:
     void serviceRestarted();
