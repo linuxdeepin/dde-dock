@@ -27,6 +27,7 @@
 
 #include <cstdint>
 #include <dtkcore_global.h>
+#include <functional>
 #include <iterator>
 #include <memory>
 #include <algorithm>
@@ -976,7 +977,7 @@ QVector<XWindow> TaskManager::getActiveWinGroup(XWindow xid)
  */
 void TaskManager::updateHideState(bool delay)
 {
-    if (m_ddeLauncherVisible || m_trayGridWidgetVisible || m_popupVisible) {
+    if (preventDockAutoHide()) {
         setPropHideState(HideState::Show);
         return;
     }
@@ -1165,7 +1166,7 @@ void TaskManager::handleActiveWindowChanged(WindowInfoBase *info)
     m_activeWindow = info;
     XWindow winId = m_activeWindow->getXid();
     m_entries->handleActiveWindowChanged(winId);
-    updateHideState(true);
+    QTimer::singleShot(200, std::bind(&TaskManager::updateHideState, this, true));
 }
 
 /**
@@ -1604,4 +1605,9 @@ void TaskManager::cancelPreviewWindow()
 bool TaskManager::showMultiWindow() const
 {
     return m_showMultiWindow;
+}
+
+bool TaskManager::preventDockAutoHide() const
+{
+    return m_ddeLauncherVisible || m_popupVisible || m_trayGridWidgetVisible;
 }

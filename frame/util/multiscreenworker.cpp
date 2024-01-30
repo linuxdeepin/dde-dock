@@ -128,7 +128,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
     // 鼠标移动到任务栏界面之外，停止计时器（延时2秒改变任务栏所在屏幕）
     m_delayWakeTimer->stop();
 
-    if (m_hideMode == HideMode::KeepHidden) {
+    if (m_hideMode == HideMode::KeepHidden && !TaskManager::instance()->preventDockAutoHide()) {
         TaskManager::instance()->setPropHideState(HideState::Hide);
     }
 
