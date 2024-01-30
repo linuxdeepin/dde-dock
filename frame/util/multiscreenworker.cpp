@@ -142,6 +142,7 @@ void MultiScreenWorker::onExtralRegionMonitorChanged(int x, int y, const QString
 
 void MultiScreenWorker::updateDisplay()
 {
+    tryToHideDock();
     //1、屏幕停靠信息，
     //2、任务栏当前显示在哪个屏幕也需要更新
     //3、任务栏高度或宽度调整的拖拽区域，
@@ -548,7 +549,7 @@ void MultiScreenWorker::onRequestDelayShowDock()
 
 void MultiScreenWorker::initMembers()
 {
-    m_monitorUpdateTimer->setInterval(100);
+    m_monitorUpdateTimer->setInterval(1000);
     m_monitorUpdateTimer->setSingleShot(true);
 
     m_delayWakeTimer->setSingleShot(true);
@@ -955,5 +956,18 @@ void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
         if ((m_hideMode == HideMode::KeepHidden || m_hideMode == HideMode::SmartHide)) {
             Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Show);
         }
+    }
+}
+
+void MultiScreenWorker::tryToHideDock()
+{
+    if (hideMode() == HideMode::KeepShowing) {
+        return;
+    }
+
+    auto mousePos = QCursor::pos();
+    const QString &currentScreen = DOCK_SCREEN->current();
+    if (isCursorOut(mousePos.x(), mousePos.y())) {
+        Q_EMIT requestPlayAnimation(currentScreen, m_position, Dock::AniAction::Hide);
     }
 }
