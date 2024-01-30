@@ -192,6 +192,7 @@ void MultiScreenWorker::onPositionChanged(int position)
     qDebug() << "position change from: " << lastPos << " to: " << position;
 #endif
     m_position = static_cast<Position>(position);
+    DockItem::setDockPosition(m_position);
 
     if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide)) {
         // 这种情况切换位置,任务栏不需要显示
@@ -903,7 +904,6 @@ void MultiScreenWorker::onDelayAutoHideChanged()
  */
 void MultiScreenWorker::tryToShowDock(int eventX, int eventY)
 {
-    DockItem::setDockPosition(m_position);
     if (qApp->property("DRAG_STATE").toBool() || testState(ChangePositionAnimationStart)) {
         qWarning() << "dock is draging or animation is running";
         return;
