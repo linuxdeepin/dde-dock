@@ -191,7 +191,6 @@ void MultiScreenWorker::onPositionChanged(int position)
     qDebug() << "position change from: " << lastPos << " to: " << position;
 #endif
     m_position = static_cast<Position>(position);
-    Q_EMIT positionChanged(m_position);
 
     if (m_hideMode == HideMode::KeepHidden || (m_hideMode == HideMode::SmartHide && m_hideState == HideState::Hide)) {
         // 这种情况切换位置,任务栏不需要显示
@@ -203,10 +202,11 @@ void MultiScreenWorker::onPositionChanged(int position)
         // 更新当前屏幕信息,下次显示从目标屏幕显示
         DOCK_SCREEN->updateDockedScreen(getValidScreen(m_position));
         // 需要更新frontendWindowRect接口数据，否则会造成HideState属性值不变
-        emit requestUpdateFrontendGeometry();
+        Q_EMIT requestUpdateFrontendGeometry();
+        Q_EMIT positionChanged(m_position);
     } else {
         // 一直显示的模式才需要显示
-        emit requestUpdatePosition(lastPos, m_position);
+        Q_EMIT requestUpdatePosition(lastPos, m_position);
     }
 }
 
