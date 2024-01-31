@@ -24,6 +24,7 @@ public:
         : QWidget(parent)
         , m_iconSize(QSize(24, 24))
         , m_shadowSize(QSize())
+        , m_isEnter(false)
     {}
 
     void updateData(const QIcon &icon, const QSize &iconSize, const QSize &shadowSize)
@@ -40,6 +41,20 @@ public:
         update();
     }
 
+    void enterEvent(QEvent *event) override
+    {
+        m_isEnter = true;
+        QWidget::enterEvent(event);
+        update();
+    }
+
+    void leaveEvent(QEvent *event) override
+    {
+        m_isEnter = false;
+        QWidget::leaveEvent(event);
+        update();
+    }
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -47,6 +62,7 @@ private:
     QIcon m_icon;
     QSize m_iconSize;
     QSize m_shadowSize;
+    bool m_isEnter;
 };
 
 void SliderIconWidget::paintEvent(QPaintEvent *e)
@@ -60,8 +76,12 @@ void SliderIconWidget::paintEvent(QPaintEvent *e)
         // 绘制圆形背景
         painter.setPen(Qt::NoPen);
         // 获取阴影部分背景颜色
-        DPalette dpa = DPaletteHelper::instance()->palette(this);
-        painter.setBrush(dpa.brush(DPalette::ColorRole::Midlight));
+        QColor backColor = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType ? Qt::black : Qt::white);
+            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType)
+                backColor.setAlphaF(m_isEnter ? 0.2 : 0.1);
+            else
+                backColor.setAlphaF(m_isEnter ? 0.1 : 0.2);
+        painter.setBrush(backColor);
         int x = (rect().width() - m_shadowSize.width() ) / 2;
         int y = (rect().height() - m_shadowSize.height() ) / 2;
         painter.drawEllipse(QRect(x, y, m_shadowSize.width(), m_shadowSize.height()));
@@ -270,23 +290,29 @@ void SliderProxyStyle::drawRoundSlider(QPainter *painter, QRect rectGroove, QRec
     QColor color = wigdet->isEnabled() ? (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType() ? Qt::white : Qt::black) : Qt::gray;
     // 此处中绘制圆形滑动条，需要绘制圆角，圆角大小为其高度的一半
     int radius = rectGroove.height() / 2;
-    
+
     // 此处绘制滑条的全长
-    QBrush allBrush(QColor(190,190,190));
+    QColor allBrush = (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::LightType ? Qt::black : Qt::white);
+    allBrush.setAlphaF( 0.15);
+
     QPainterPath allPathGroove;
     allPathGroove.addRoundedRect(rectGroove, radius, radius);
     painter->fillPath(allPathGroove, allBrush);
 
     // 已经滑动过的区域
-    QBrush brush(color);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
+        color.setAlphaF(0.6);
+    }
+
     QPainterPath pathGroove;
     int handleSize = qMin(rectHandle.width(), rectHandle.height());
     rectGroove.setWidth(rectHandle.x() + (rectHandle.width() - handleSize) / 2);
     pathGroove.addRoundedRect(rectGroove, radius, radius);
-    painter->fillPath(pathGroove, brush);
+    painter->fillPath(pathGroove, color);
 
     // 绘制滑块,因为滑块是正圆形，而它本来的区域是一个长方形区域，因此，需要计算当前
     // 区域的正中心区域，将其作为一个正方形区域来绘制圆形滑块
+    color.setAlphaF(1.0);
     int x = rectHandle.x() + (rectHandle.width() - handleSize) / 2;
     int y = rectHandle.y() + (rectHandle.height() - handleSize) / 2;
     rectHandle.setX(x);
@@ -296,5 +322,5 @@ void SliderProxyStyle::drawRoundSlider(QPainter *painter, QRect rectGroove, QRec
 
     QPainterPath pathHandle;
     pathHandle.addEllipse(rectHandle);
-    painter->fillPath(pathHandle, brush);
+    painter->fillPath(pathHandle, color);
 }

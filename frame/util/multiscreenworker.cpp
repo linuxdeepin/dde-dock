@@ -422,7 +422,7 @@ void MultiScreenWorker::onRequestUpdateRegionMonitor()
     }
 
     // 触屏监控高度固定调整为最大任务栏高度100+任务栏与屏幕边缘间距
-    const int monitHeight = 100 + WINDOWMARGIN;
+    const int monitHeight = 100 + WINDOWMARGIN * qApp->devicePixelRatio();
 
     // 任务栏触屏唤起区域
     m_touchRectList.clear();

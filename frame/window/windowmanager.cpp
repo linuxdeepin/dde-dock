@@ -816,7 +816,7 @@ void WindowManager::onRequestNotifyWindowManager()
         }
 
         XcbMisc::instance()->set_strut_partial(static_cast<xcb_window_t>(mainWindow->winId()), orientation,
-                                               static_cast<uint>(strut + WINDOWMARGIN * ratio),                 // 设置窗口与屏幕边缘距离，需要乘缩放
+                                               static_cast<uint>(strut),                 // 设置窗口与屏幕边缘距离，需要乘缩放
                                                static_cast<uint>(strutStart),                                   // 设置任务栏起点坐标（上下为x，左右为y）
                                                static_cast<uint>(strutEnd));                                    // 设置任务栏终点坐标（上下为x，左右为y）
     }

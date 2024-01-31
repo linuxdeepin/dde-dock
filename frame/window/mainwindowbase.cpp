@@ -431,9 +431,9 @@ QRect MainWindowBase::getDockGeometry(QScreen *screen, const Dock::Position &pos
         }
         int y = 0;
         if (pos == Dock::Position::Top)
-            y = (screenRect.y() + static_cast<int>(margin / ratio));
+            y = (screenRect.y() + static_cast<int>(margin));
         else
-            y = (screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin / ratio)) - dockSize;
+            y = (screenRect.y() + static_cast<int>(screenRect.height() / ratio - margin)) - dockSize;
         rect.setX(x);
         rect.setY(y);
         rect.setWidth(width);
@@ -451,9 +451,9 @@ QRect MainWindowBase::getDockGeometry(QScreen *screen, const Dock::Position &pos
         }
         int x = 0;
         if (pos == Dock::Position::Left)
-            x = screenRect.x() + static_cast<int>(margin / ratio);
+            x = screenRect.x() + static_cast<int>(margin);
         else
-            x = screenRect.x() + static_cast<int>(screenRect.width() /ratio - margin / ratio) - dockSize;
+            x = screenRect.x() + static_cast<int>(screenRect.width() /ratio - margin) - dockSize;
 
         int y = screenRect.y() + static_cast<int>(((screenRect.height() / ratio) - totalSize) / 2);
         // 计算y坐标
