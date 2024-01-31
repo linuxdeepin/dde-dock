@@ -100,6 +100,7 @@ QWidget *StandardQuickItem::iconWidget(QWidget *parent)
         layout->setAlignment(Qt::AlignVCenter);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
+        layout->addSpacing(6);
         QLabel *imageLabel = new QLabel(widget);
         imageLabel->setObjectName("imageLabel");
         imageLabel->setFixedHeight(ICONHEIGHT);
@@ -113,7 +114,7 @@ QWidget *StandardQuickItem::iconWidget(QWidget *parent)
         labelText->setFixedWidth(70);
         updatePluginName(labelText);
         layout->addWidget(imageLabel);
-        layout->addSpacing(7);
+        layout->addSpacing(4);
         layout->addWidget(labelText);
     }
 

@@ -1097,7 +1097,7 @@ int MainPanelControl::trayAreaSize(qreal ratio) const
             length += (m_position == Dock::Position::Top || m_position == Dock::Position::Bottom ? topWindow->width() * ratio : topWindow->height() * ratio);
         }
 
-        length += topWindow->dockSpace() * ratio;
+        length += topWindow->dockSpace();
     }
 
     return length;

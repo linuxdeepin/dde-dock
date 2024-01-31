@@ -93,12 +93,22 @@ void QuickSettingItem::paintEvent(QPaintEvent *e)
     painter.setClipPath(path);
     // 绘制背景色
     QColor backColor(Qt::white);
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
-        backColor = Qt::black;
-    }
-    backColor.setAlphaF(0.5);
+    backColor.setAlphaF(0.1);
+
     DPalette dpa = DPaletteHelper::instance()->palette(this);
     painter.fillRect(rect(), backColor);
+
+    QColor borderColor(Qt::black);
+    borderColor.setAlphaF(0.2);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        borderColor = QColor(Qt::white);
+        borderColor.setAlphaF(0.15);
+    }
+
+    painter.save();
+    painter.setPen(borderColor);
+    painter.drawRoundedRect(rect(), RADIUS, RADIUS);
+    painter.restore();
 }
 
 QColor QuickSettingItem::foregroundColor() const

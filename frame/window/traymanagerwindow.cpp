@@ -393,9 +393,8 @@ void TrayManagerWindow::resetChildWidgetSize()
             int dateTimeHeight = m_appPluginDatetimeWidget->height() - - m.top() - m.bottom() - trayHeight;
             m_dateTimeWidget->setFixedSize(dateTimeWidth, dateTimeHeight);
             m_systemPluginWidget->setFixedSize(m_systemPluginWidget->suitableSize());
-            int contentSpace = qMin(MAXDIFF, qMax(((Utils::isDraging() ? height() : (int)m_windowFashionSize) - MINHIGHT), 0)) + MINSPACE;
-            m_mainLayout->setContentsMargins(contentSpace, contentSpace, contentSpace, contentSpace);
-            m_mainLayout->setSpacing(contentSpace);
+            m_mainLayout->setContentsMargins(SINGLEROWSPACE, SINGLEROWSPACE, SINGLEROWSPACE, SINGLEROWSPACE);
+            m_mainLayout->setSpacing(SINGLEROWSPACE);
 
             // 调整插件和日期窗体的位置显示，这里没有用到布局，是因为在调整任务栏位置的时候，
             // 随着布局方向的改变，显示有很大的问题
@@ -537,8 +536,8 @@ void TrayManagerWindow::paintEvent(QPaintEvent *event)
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipPath(path);
-    painter.fillRect(rect().adjusted(1, 1, -1, -1), maskColor(102));
-    painter.setPen(maskColor(110));
+    painter.fillRect(rect().adjusted(1, 1, -1, -1), maskColor(255 * 0.1));
+    painter.setPen(maskColor(255 * 0.15));
     painter.drawPath(path);
     painter.restore();
 
