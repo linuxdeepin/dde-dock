@@ -1,3 +1,9 @@
+dde-dock (6.0.35) unstable; urgency=medium
+
+  * feat: adjust dock ui
+
+ -- tsic404 <liuheng@deepin.org>  Thu, 01 Feb 2024 10:58:27 +0800
+
 dde-dock (6.0.34) unstable; urgency=medium
 
   * fix: dock animation broken (https://github.com/linuxdeepin/developer-center/issues/7143)
