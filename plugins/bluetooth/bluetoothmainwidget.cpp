@@ -95,8 +95,12 @@ bool BluetoothMainWidget::eventFilter(QObject *watcher, QEvent *event)
         default:
             break;
         }
+
+        return QWidget::eventFilter(watcher, event);
     }
-    if (watcher == m_expandLabel && event->type() == QEvent::MouseButtonRelease) {
+    // else watcher != m_iconWidget
+
+    if (event->type() == QEvent::MouseButtonRelease) {
         Q_EMIT requestExpand();
         return true;
     }
