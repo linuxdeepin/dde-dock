@@ -6,11 +6,15 @@
 #ifndef BLUETOOTHMAINWIDGET_H
 #define BLUETOOTHMAINWIDGET_H
 
+#include <DIconButton>
+
 #include <QWidget>
 
 class AdaptersManager;
 class QLabel;
 class Adapter;
+
+DWIDGET_USE_NAMESPACE
 
 class BluetoothMainWidget : public QWidget
 {
@@ -37,10 +41,11 @@ private:
 
 private Q_SLOTS:
     void onAdapterChanged();
+    void onPaletteChanged();
 
 private:
     AdaptersManager *m_adapterManager;
-    QWidget *m_iconWidget;
+    DIconButton *m_iconButton;
     QLabel *m_nameLabel;
     QLabel *m_stateLabel;
     QLabel *m_expandLabel;
