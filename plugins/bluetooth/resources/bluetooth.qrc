@@ -46,5 +46,7 @@
         <file>light/icons/battery-090-symbolic_20px.svg</file>
         <file>light/icons/battery-100-symbolic_20px.svg</file>
         <file>light/icons/battery-unknow-symbolic_20px.svg</file>
+        <file alias="light/texts/bluetooth_16px.svg">light/buletooth_other_light.svg</file>
+        <file alias="dark/texts/bluetooth_16px.svg">dark/buletooth_other_dark.svg</file>
     </qresource>
 </RCC>
