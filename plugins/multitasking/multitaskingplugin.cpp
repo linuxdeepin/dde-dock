@@ -145,12 +145,6 @@ QIcon MultitaskingPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::
     if (dockPart == DockPart::DCCSetting) {
         auto icon = QIcon::fromTheme("dcc-multitasking-view", QIcon(":/icons/dcc-multitasking-view.svg"));
         QPixmap pixmap = icon.pixmap(QSize(18, 18));
-        if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return pixmap;
-
-        QPainter pa(&pixmap);
-        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        pa.fillRect(pixmap.rect(), Qt::white);
         return pixmap;
     }
 

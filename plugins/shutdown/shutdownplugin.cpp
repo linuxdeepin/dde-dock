@@ -277,13 +277,6 @@ QIcon ShutdownPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::Colo
     if (dockPart == DockPart::DCCSetting) {
         QString iconFile(":/icons/resources/icons/dcc_shutdown.svg");
         auto pixmap = ImageUtil::loadSvg(iconFile, QSize(18, 18));
-        if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return pixmap;
-
-        QPainter pa(&pixmap);
-        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        pa.fillRect(pixmap.rect(), Qt::white);
-
         return pixmap;
     }
 

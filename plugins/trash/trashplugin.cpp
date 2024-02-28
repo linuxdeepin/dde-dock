@@ -172,16 +172,10 @@ void TrashPlugin::pluginSettingsChanged()
     refreshPluginItemsVisible();
 }
 
-QIcon TrashPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
+QIcon TrashPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType )
 {
     if (dockPart == DockPart::DCCSetting) {
         auto pixmap = ImageUtil::loadSvg(":/icons/dcc_trash.svg", QSize(18, 18));
-        if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return pixmap;
-
-        QPainter pa(&pixmap);
-        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        pa.fillRect(pixmap.rect(), Qt::white);
         return pixmap;
     }
 

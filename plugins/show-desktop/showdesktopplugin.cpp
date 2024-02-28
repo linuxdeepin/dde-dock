@@ -127,12 +127,6 @@ QIcon ShowDesktopPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::C
         auto loadsvg = []{ return ImageUtil::loadSvg(":/icons/dcc-show-desktop.svg", QSize(18, 18));};
         auto icon = QIcon::fromTheme("dcc-show-desktop", loadsvg());
         QPixmap pixmap = icon.pixmap(QSize(18, 18));
-        if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return pixmap;
-
-        QPainter pa(&pixmap);
-        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        pa.fillRect(pixmap.rect(), Qt::white);
         return pixmap;
     }
 
