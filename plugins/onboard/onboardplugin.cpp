@@ -146,16 +146,8 @@ void OnboardPlugin::pluginSettingsChanged()
 
 QIcon OnboardPlugin::icon(const DockPart &dockPart, DGuiApplicationHelper::ColorType themeType)
 {
-    if (dockPart == DockPart::DCCSetting) {
-        if (themeType == DGuiApplicationHelper::ColorType::LightType)
-            return QIcon(":/icons/icon/dcc_keyboard.svg");
-
-        QPixmap pixmap(":/icons/icon/dcc_keyboard.svg");
-        QPainter pa(&pixmap);
-        pa.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        pa.fillRect(pixmap.rect(), Qt::white);
-        return pixmap;
-    }
+    if (dockPart == DockPart::DCCSetting)
+        return QIcon(":/icons/icon/dcc_keyboard.svg");
 
     if (dockPart == DockPart::QuickPanel)
         return m_onboardItem->iconPixmap(QSize(24, 24), themeType);
