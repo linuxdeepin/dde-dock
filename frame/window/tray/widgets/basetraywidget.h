@@ -28,7 +28,6 @@ public:
     virtual void sendClick(uint8_t mouseButton, int x, int y) = 0;
     virtual inline TrayType trayType() const { return TrayType::ApplicationTray; } // default is ApplicationTray
     virtual bool isValid() {return true;}
-    uint getOwnerPID();
     virtual bool needShow();
     virtual void setNeedShow(bool needShow);
     virtual QPixmap icon() = 0;
@@ -48,14 +47,12 @@ protected:
     void handleMouseRelease();
     const QRect perfectIconRect() const;
     void resizeEvent(QResizeEvent *event) override;
-    void setOwnerPID(uint PID);
 
 private:
     QTimer *m_handleMouseReleaseTimer;
 
     QPair<QPoint, Qt::MouseButton> m_lastMouseReleaseData;
 
-    uint m_ownerPID;
     bool m_needShow;
 };
 

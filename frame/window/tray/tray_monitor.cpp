@@ -6,6 +6,7 @@
 #include "tray_monitor.h"
 #include "quicksettingcontroller.h"
 #include "pluginsiteminterface.h"
+#include "utils.h"
 
 TrayMonitor::TrayMonitor(QObject *parent)
     : QObject(parent)
@@ -110,6 +111,12 @@ void TrayMonitor::onSniItemsChanged()
                 qWarning() << __FUNCTION__ << "invalid sni service" << s;
                 continue;
             }
+
+            if (!Utils::IS_WAYLAND_DISPLAY && s.contains("/org/ayatana/NotificationItem/")) {
+                qDebug() << "SNI service path created by libayatana-appindicator, duplicate tray with legacy tray";
+                continue;
+            }
+
             Q_EMIT sniTrayAdded(s);
         }
     }

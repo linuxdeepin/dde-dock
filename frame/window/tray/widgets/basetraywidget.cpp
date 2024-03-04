@@ -13,7 +13,6 @@
 BaseTrayWidget::BaseTrayWidget(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
     , m_handleMouseReleaseTimer(new QTimer(this))
-    , m_ownerPID(0)
     , m_needShow(true)
 {
     m_handleMouseReleaseTimer->setSingleShot(true);
@@ -116,11 +115,6 @@ void BaseTrayWidget::resizeEvent(QResizeEvent *event)
     }
 }
 
-uint BaseTrayWidget::getOwnerPID()
-{
-    return this->m_ownerPID;
-}
-
 bool BaseTrayWidget::needShow()
 {
     return m_needShow;
@@ -138,9 +132,4 @@ void BaseTrayWidget::setNeedShow(bool needShow)
 #endif
 
     update();
-}
-
-void BaseTrayWidget::setOwnerPID(uint PID)
-{
-    this->m_ownerPID = PID;
 }

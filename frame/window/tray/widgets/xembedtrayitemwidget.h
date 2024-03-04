@@ -28,7 +28,6 @@ public:
     void sendClick(uint8_t mouseButton, int x, int y) override;
 
     static QString toXEmbedKey(quint32 winId);
-    static uint getWindowPID(quint32 winId);
     static bool isXEmbedKey(const QString &itemKey);
     virtual bool isValid() override {return m_valid;}
     QPixmap icon() override;
