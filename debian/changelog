@@ -1,3 +1,12 @@
+dde-dock (6.0.36) unstable; urgency=medium
+
+  * release 6.0.36
+  * fix linuxdeepin/developer-center#7222
+  * fix linuxdeepin/developer-center#7207
+  * fix linuxdeepin/developer-center#6454
+
+ -- Mike Chen <chenke@deepin.org>  Wed, 06 Mar 2024 16:50:36 +0800
+
 dde-dock (6.0.35) unstable; urgency=medium
 
   * feat: adjust dock ui
