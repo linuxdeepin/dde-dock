@@ -135,7 +135,7 @@ TrayGridWidget *ExpandIconWidget::popupTrayView()
     TrayModel *trayModel = TrayModel::getIconModel();
     gridParentView->setTrayGridView(trayView);
 
-    gridParentView->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+    gridParentView->setWindowFlags(Qt::WindowDoesNotAcceptFocus);
     trayView->setModel(trayModel);
     trayView->setItemDelegate(trayDelegate);
     trayView->setSpacing(ITEM_SPACING);
