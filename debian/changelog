@@ -1,3 +1,10 @@
+dde-dock (6.0.37) unstable; urgency=medium
+
+  * release 6.0.37
+  * fix linuxdeepin/developer-center#7612
+
+ -- Mike Chen <chenke@deepin.org>  Wed, 03 Apr 2024 10:22:29 +0800
+
 dde-dock (6.0.36) unstable; urgency=medium
 
   * release 6.0.36
