@@ -63,3 +63,8 @@ License: CC0-1.0
 Files: plugins/overlay-warning/org.deepin.dde.dock.overlay.policy
 Copyright: UnionTech Software Technology Co., Ltd.
 License: LGPL-3.0-or-later
+
+Files: toolGenerate/**/*
+Copyright: None
+License: CC0-1.0
+
