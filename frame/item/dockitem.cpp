@@ -23,6 +23,7 @@ QPointer<DockPopupWindow> DockItem::PopupWindow(nullptr);
 DockItem::DockItem(QWidget *parent)
     : QWidget(parent)
     , m_hover(false)
+    , m_pressed(false)
     , m_popupShown(false)
     , m_tapAndHold(false)
     , m_draging(false)
@@ -134,12 +135,28 @@ void DockItem::updatePopupPosition()
 
 void DockItem::paintEvent(QPaintEvent *e)
 {
+    if(m_hover && !m_pressed)
+    {
+        QPainter painter(this);
+        painter.setBrush(QBrush(QColor(248, 248, 255)));
+        painter.setPen(Qt::NoPen);
+        QRect tempRect = rect();
+        painter.drawRect(tempRect.x(), tempRect.y(), tempRect.width(), tempRect.height());
+    }else if(m_hover && m_pressed)
+    {
+        QPainter painter(this);
+        painter.setBrush(Qt::gray);
+        painter.setPen(Qt::NoPen);
+        QRect tempRect = rect();
+        painter.drawRect(tempRect.x(), tempRect.y(), tempRect.width(), tempRect.height());
+    }
     QWidget::paintEvent(e);
 }
 
 void DockItem::mousePressEvent(QMouseEvent *e)
 {
     m_popupTipsDelayTimer->stop();
+    m_pressed = true;
     hideNonModel();
 
     if (e->button() == Qt::RightButton) {
@@ -178,6 +195,7 @@ void DockItem::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_hover = false;
+    m_pressed = false;
     //FIXME: 可能是qt的bug，概率性导致崩溃，待修复
 //    m_hoverEffect->setHighlighting(false);
     m_popupTipsDelayTimer->stop();
@@ -186,6 +204,13 @@ void DockItem::leaveEvent(QEvent *e)
     if (m_popupShown && !PopupWindow->model())
         hidePopup();
 
+    update();
+}
+
+void DockItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_pressed = false;
+    QWidget::mouseReleaseEvent(event);
     update();
 }
 

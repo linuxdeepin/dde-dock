@@ -69,6 +69,7 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void enterEvent(QEvent *e) override;
     void leaveEvent(QEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
     const QRect perfectIconRect() const;
     const QPoint popupMarkPoint() ;
@@ -95,6 +96,7 @@ private:
 
 protected:
     bool m_hover;
+    bool m_pressed;
     bool m_popupShown;
     bool m_tapAndHold;
     bool m_draging;
