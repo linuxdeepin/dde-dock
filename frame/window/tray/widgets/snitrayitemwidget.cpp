@@ -381,6 +381,15 @@ void SNITrayItemWidget::onSNIIdChanged(const QString &value)
 void SNITrayItemWidget::onSNIMenuChanged(const QDBusObjectPath &value)
 {
     m_sniMenuPath = value;
+
+    if (m_menu) {
+        delete m_menu;
+        m_menu = nullptr;
+    }
+    if (m_dbusMenuImporter) {
+        delete m_dbusMenuImporter;
+        m_dbusMenuImporter = nullptr;
+    }
 }
 
 void SNITrayItemWidget::onSNIOverlayIconNameChanged(const QString &value)
